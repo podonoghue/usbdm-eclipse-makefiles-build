@@ -1,0 +1,166 @@
+<!--
+Devices using this peripheral: 
+      MK10DZ10
+      MK20DZ10
+      MK30DZ10
+      MK40DZ10
+      MK50DZ10
+      MK51DZ10
+      MK52DZ10
+      MK53DZ10
+      MK60DZ10
+-->
+      <peripheral>
+         <?sourceFile "NVIC_MKDZ" ?>
+         <name>NVIC</name>
+         <description>Nested Vectored Interrupt Controller</description>
+         <prependToName>NVIC</prependToName>
+         <baseAddress>0xE000E100</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x300</offset>
+            <size>0x68</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>ISER%s</name>
+               <description>Interrupt Set Enable Register n</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETENA</name>
+                     <description>Interrupt set enable bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>ICER%s</name>
+               <description>Interrupt Clear Enable Register n</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLRENA</name>
+                     <description>Interrupt clear-enable bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>ISPR%s</name>
+               <description>Interrupt Set Pending Register n</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETPEND</name>
+                     <description>Interrupt set-pending bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>ICPR%s</name>
+               <description>Interrupt Clear Pending Register n</description>
+               <addressOffset>0x180</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLRPEND</name>
+                     <description>Interrupt clear-pending bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>IABR%s</name>
+               <description>Interrupt Active bit Register n</description>
+               <addressOffset>0x200</addressOffset>
+               <fields>
+                  <field>
+                     <name>ACTIVE</name>
+                     <description>Interrupt active flags</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>104</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103</dimIndex>
+               <name>IP%s</name>
+               <description>Interrupt Priority Register n</description>
+               <addressOffset>0x300</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PRI0</name>
+                     <description>Priority of interrupt 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STIR</name>
+               <description>Software Trigger Interrupt Register</description>
+               <addressOffset>0xE00</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTID</name>
+                     <description>Interrupt ID of the interrupt to trigger, in the range 0-239. For example, a value of 0x03 specifies interrupt IRQ3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

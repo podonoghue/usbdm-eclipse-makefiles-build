@@ -1,0 +1,369 @@
+/*!
+  \mainpage USBDM Flash Programmers
+
+ \section introSection Introduction
+   The following suite of programs are intended to be used with USBDM BDM interfaces.\n
+   They provide the ability to program the internal Flash memory of the following Freescale microcontrollers:\n
+   - RS08, HCS08, HCS12, S12Z, Coldfire V1, Coldfire V2, Kinetis and a limited range of MC56F800x microcontrollers.\n
+  
+\section featuresSection Features
+   - GUI usage is available for interactive use.
+   - Command line usage is available for batch files.
+   - Supports most chips - see list below.
+   - Trimming of internal target clock to specified frequency (RS08, HCS08 & CFV1).
+   - Programming of security options to leave the chip unsecured or secured after programming.
+   - May be used to unsecure chips (by mass erase).
+   - The code has been written in a modular fashion.  It should be straightforward to re-use the flash programming code
+     to create other custom programming utilities.
+
+\section sectionCommandLine Command Line
+
+\subsection subsectionUsage Usage:
+  
+  <b>FlashProgrammer \<options\> \<BinaryFilename\> </b> \n
+  If neither of the \b -program or \b -verify options are given then all options are \b ignored and a GUI interface is opened. \n
+  - \b BinaryFilename \n The name of the S19 or ELF binary file to program.\n
+  - \b Options (order is not significant). 
+     -  \b -device=device_name            \n Target device e.g. MC9S08AW16A, MCF51CN128.
+     -  \b -erase=erase_option            \n Selects erase method used (Mass, All, Selective, None).
+     -  \b -execute                       \n Leave target power on & reset to normal mode at completion.
+     -  \b -flexNVM=eeprom,\b partition   \n FlexNVM parameters (eeprom,partition hex values)
+     -  \b -masserase                     \n Equivalent to erase=Mass.
+     -  \b -noerase                       \n Equivalent to erase=None.    
+     -  \b -nvloc=address                 \n Trim non-volatile memory location address (hex).
+     -  \b -power=dur,\b rec              \n Power off duration & recovery times (ms). 
+     -  \b -program                       \n Program and verify flash contents.
+     -  \b -reset=dur,\b rel,\b rec       \n Reset duration, release & recovery times (ms). 
+     -  \b -secure                        \n Leave device secured after programming.
+     -  \b -security=value                \n Explicit security value to use (as hex string)
+     -  \b -speed                         \n Communication speed on some targets (kHz).
+     -  \b -trim=trim_frequency           \n Trim internal clock to frequency (in kHz) e.g. 32.7.
+     -  \b -unsecure                      \n Leave device unsecured after programming.
+     -  \b -vdd=vdd_value                 \n Supply Vdd to target (3V3 or 5V).
+     -  \b -verify                        \n Verify flash contents.\n
+
+  The program sets the error code to 0 on success, non-zero otherwise.\n\n
+  The program will use the first BDM located.  There is no option to select a BDM.
+       
+\subsection subsectionUsageExamples Examples of usage:
+  -   Programming an image with clock trimming:
+   \verbatim FlashProgrammer Image.s19 -vdd=3v3 -device=MC9S08AW16A -trim=243 -secure -program -execute \endverbatim
+   This will program a \b MC9S08AW16A with the contents of the file \b Image.s19 and trim the internal clock
+   to \b 243kHz.  Target Vdd will be 3.3 Volts (if this option applies to the BDM used).  The Flash image will 
+   be modified so that the device will be \b secure after programming.  After programming the device will be left powered 
+   and will be reset into normal mode i.e. will be left running the loaded program.\n\n
+  -   Programming the clock trim in an already programmed chip:
+   \verbatim FlashProgrammer -device=MC9S08QG8 -vdd=3v3 -trim=35.25 -erase=None -program \endverbatim
+   This will trim the internal clock of \b MC9S08QG8 to \b 35.25kHz without erasing the present flash contents.
+   Target Vdd will be 3.3 Volts (if this option applies to the BDM used).  
+   It is necessary that the clock trim locations in flash are still unprogrammed (0xFF) when using
+   the \b -trim option. The target cannot be secured after trimming.\n\n
+  
+  - Programming image with custom security value:
+   \verbatim FlashProgrammer -device=MKL25Z128M4 -vdd=3v3 -erase=mass -program -security=123456789ABCDEF0FFFFFFFFFEFFFFFF Image.elf \endverbatim
+   This will program the device with Image.elf and explicitly set the security area to '123456789ABCDEF0FFFFFFFFFEFFFFFF'.
+   
+   \section sectionGUI Interactive (GUI)
+   If the program is started without the \b -program or \b -verify options then an interactive dialogue is opened to 
+   allow the user to configure the programmer.  The other options are \b ignored.\n
+   
+   The dialogue has three tabs.\n
+   - The first tab is concerned primarily with USBDM interface selection, communication options and general features.
+   - The second tab is specific to a particular target device.
+   - The third tab contains other BDM options that are more advanced or less likely to need modification. 
+
+   \b Note that the programmer uses a buffer to store the image to be programmed to the device.  Some of the 
+   following options will persistently modify this buffer.  This means that, for example, if you choose the \b secure option, 
+   program the device and then select the \b image option then further programming will also result in secured devices.
+      
+<hr>
+<b>Tab 1 - USBDM</b>\n\n
+   <table border="0">
+   <tr>
+   <td>
+   <b>Select BDM - Allows selection between BDMs when multiple are connected</b>
+      - <b> BDM Selection drop-down box - </b> This displays the serial numbers of the connected USBDM-BDMs.  It is 
+         useful if each BDM has a unique serial number as that will allow the automatic re-selection of the same BDM
+         on the next session.\n
+         If the BDM does not support the required target then a suitable message replaces the serial number.  Communication
+         problems will also cause an informative message. \n\n
+      - <b> Detect button - </b> This may be used to scan for changes in the connected BDMs.\n\n
+      - <b> BDM Description - </b> This is the BDM Description obtained from the BDM firmware.\n\n
+      
+   <b>Target Vdd Control - Enables supply of Target Vdd from the USBDM module</b>
+      - <b> Off, 3.3V or 5V -</b> Controls voltage supply to target through BDM Vdd connection.\n\n
+      - <b> Cycle target Vdd on reset -</b> This option will cause the BDM to cycle the target power as part of the reset sequence.\n\n
+      - <b> Cycle target Vdd on connection problems -</b> This option will cause the BDM to cycle the target power when
+         it is having trouble connecting to the target.  \n\n
+      - <b> Leave target powered on exit -</b> The target Vdd supply will be left on when exiting the debugger.\n\n
+         
+   <b>Connection Control - This varies with target</b>
+      - <b> Automatically re-connect -</b> The option causes the BDM to continuously update the interface speed
+         to prevent loss of communication in case the target speed changes.  \n\n
+      - <b> BDM Clock Select -</b> Some targets provide an alternative BDM clock selection which may be at 
+         a lower speed that the default.  This can have advantages when connecting to high speed targets (mostly
+         of use in the JB16 version).  There may be other requirements before the alternative clock will be used.\n\n  
+         Note: it appears that HC12 use the Alt source by default so the Normal option may be of more interest.\n\n  
+      - <b>Use RESET signal</b> - RS08, HCS08 and CFV1 targets do not require a reset signal for programming.   
+         However it is sometimes useful to drive the reset signal to reset other circuitry connected to the target. 
+         Selecting this option will cause the reset signal to be driven.\n\n
+      - <b>Guess speed if no SYNC</b> - Early HCS12s do not support the SYNC feature which allows the BDM interface
+         speed to be determined.  Selecting this option will cause the BDM to attempt to find the communication
+         speed by trial and error.  This can take quite a while and may be unreliable.  Alternatively, set the 
+         target speed in the debugger TBDML menu. \n\n
+      - <b> Monitor PST signal -</b> Some CFVx targets provide a PSTALL or PST0-3 signals that may be used to determine 
+         if the target is running or halted.  If not enabled or not supported by the BDM then a software method is used.
+         The advantage of the PST signal is that it is more reliable in some cases.\n\n
+      - <b> Connection Speed  -</b> This drop-down box allows the communication speed on CFVx, DSC and Kinetis devices
+         to be changed.  There are severe limitations on the actual speed of the BDM for the JTAG based devices since 
+         a software method is used to generate the waveform.
+
+   <td> \image html "FlashProgrammer\USBDMTab(CFV1).png" 
+        \image html "FlashProgrammer\USBDMTab(CFVx)Truncated.png"</td>
+   </tr>
+   </table>
+         
+<hr>
+<b>Tab 2 - Target</b>\n\n
+
+   <table border="0">
+   <tr>
+   <td>
+ - <b>Flash Image Buffer </b>\n
+   The programmer makes use of a Flash Image buffer to contain the information to be programmed to the target device.
+   An image of the target flash contents is created in the buffer by loading hex files.  The buffer contents 
+   may  also be altered by some of the later options (Security & Clock trim options modify particular locations 
+   immediately before programming).
+   -  Load Hex File\n
+      Displays a dialogue to load a Freescale S-format hex file to be programmed to the device. 
+      The image buffer is usually cleared before loading the file.\n
+      The name of the last/currently loaded file is displayed.  
+   - Incremental file load\n
+      Selecting this option prevents the programmer from clearing the buffer before the load of a hex file. This
+      option may be used to \e assemble a number of hex files into a single image to program to the device.  If 
+      the contents of multiple hex file overlap then only the last loaded file's values will be programmed.  No
+      warning of overlap is given.
+   - Auto Reload\n
+      Selecting this option causes the programmer to automatically reload the last loaded file if its modification 
+      date has changed since it was loaded.  It does so without a prompt.  If this option is not selected 
+      then you will prompted to reload each time.
+      
+ - <b>Device Selection </b>\n
+   - Device selection\n
+      The drop down box allows the selection of the device type of the chip to be programmed.  Selecting a
+      device type will cause most of the dialogue to be automatically completed.  
+   - Detect SDID\n
+      This causes the programmer to read the \b System \b Device \b Identification \b Register
+      (\b SDID) from the target chip.  This may be used to partially identify the type of device
+      that is being programmed. A single SDID may be used by more than one device in a related family,
+      for example MC9S08QB4 and MC9S08QB8 have the same SDID. \n
+      Because of this, it will usually be necessary to select a particular device with the 
+      above Device Selection box.   
+   - Filter by SDID\n
+      Once the \b SDID has been read from the chip, this check box allows the list of devices to
+      be restricted to those that have that SDID.
+      
+ - <b>Options for secured devices without SYNC (HCS12 devices only)</b>\n
+   Most devices support the BDM SYNC command that is used to determine the BDM communication speed. The
+   communication speed is then used to determine the target processor bus speed which is needed for 
+   programming. \n
+   If a early HCS12 device doesn't support SYNC then a software alternative is used which gives
+   an accurate target bus speed. \n
+   This method is not usable with secured device so yet another method is used to estimate the
+   communication speed and  hence target bus speed.  This is less accurate and the user will be
+   prompted to check the value supplied here, and modify if necessary, before proceeding.  \n
+   In other circumstances this value is provided for information only.    
+
+ - <b>Clock type and Parameters (RS08, HCS08 & CFV1 devices only)</b>\n
+   The microcontrollers use a range of different clocks.  It is not necessary to know
+   the clock type to program the Flash but this information is necessary to do 
+   clock trimming.\n
+   Note that it is possible to trim an already programmed chip providing the \e trim \e locations
+   have not been previously programmed (i.e. contain 0xFF). \n
+   This information is normally filled in automatically for a known device.        
+   - Clock type \n
+     The clock type used by the target chip.
+   - Clock Module Address \n
+     The address of the 1st register of the clock module.
+   - Trim Frequency \n
+     If the check box is selected then the target chip's clock will be trimmed to
+     the given frequency and the trim parameters programmed to non-volatile memory.
+     The FTRIM value will be <b> combined</b> with the flash image value if not 0xFF.
+   - NVICSTRM\n
+     The address of the non-volatile flash locations to program the clock trim parameters
+     to.  Freescale has nominated particular locations to be used.  It is (usually) the responsibility 
+     of the reset code programmed in the chip to copy these values to the clock registers upon
+     reset.
+     
+ - <b>Security </b>\n
+   The target chip may be secured when programming.  This means that the Flash contents cannot
+   be read back nor can any modification be made except by doing a mass-erase of the entire Flash 
+   memory.  This is controlled through the security locations in the flash memory.\n
+   Note that programming security options will require erasing of the entire flash block containing the 
+   security locations (with collateral erasure).\n
+   The security may also be controlled by the Custom Security options on the Advanced tab.  The options on this 
+   page will then appear disabled.\n
+   Note that the entire security area is controlled by these options (usually ~16 bytes).\n
+   - Image\n
+      The security bits in the Flash memory are programmed with whatever value is contained within the flash 
+      buffer being programmed. \n
+      Note, if the loaded file does not specify a value for the security locations then these locations 
+      will not be programmed.  This may result in the chip being \b secured since a unprogrammed value (0xFF)
+      indicates a secured chip for some devices e.g. HCS08, CFV1+, Kinetis etc.
+   - Secure\n
+     The security bits will be programmed to enable security i.e. the security locations in the flash image buffer will be 
+     modified before programming to the target.
+   - Unsecure\n
+     The security bits will be programmed to disable security i.e. the security locations in the buffer image buffer will be 
+     modified before programming to the target.
+   - Smart\n
+     The security bits will be programmed to disable security where this does not conflict with the present buffer 
+     contents i.e. only unoccupied security area locations will be programmed.  This is useful if the image contains
+     values for part of the security area (e.g. Flash protection) but you still want to have control of the remaining 
+     locations (e.g. securing the chip) through the programmer.       
+   </td>
+   <td>
+   \image html "TargetTab(CFV1).png" "RS08, HCS08, CFV1, DSC, ARM Dialogue."
+   \image html "TargetTab(HCS12).png" "HCS12 Dialogue."
+   </td>
+   </tr>
+   <tr>
+   <td colspan="2">
+ - <b>Device Operations </b>\n
+   - Erase Options\n
+      This option controls the erasing method used before programming:
+      - <b>EraseMass</b> - A device specific mass erase & unsecure operation is done.  This action varies between devices 
+      and may actually NOT leave the device fully erased.  For many devices it is necessary to program security bits
+      to a non-erased state to unsecure the device.  This may conflict with programming security options.  However, 
+      this option must sometimes be used when a device is originally secured.  
+      - <b>EraseAll</b> - All flash arrays are individually bulk erased.
+      - <b>EraseSelective</b> - Any flash blocks used in the flash image are erased.  Unprogrammed blocks are not erased.
+      - <b>EraseNone</b> -  No erasing is done. Any overlap between the image being programmed and the present contents
+      of the Flash will be reported although this may only be detected part-way through the programming.\n 
+      The last two options may allow the incremental programming of a device that has been programmed previously with
+      obvious limitations.  
+   - Trim Value: (RS08,HCS08 & CFV1 only)\n
+      This reports the trim value calculated when programming the target device.\n
+      These values may be useful if you are using a debugger with the particular chip being programmed 
+      and need fixed trim values for the clock initialisation code.\n  
+      The value is given as two parts:
+      - An 8-bit hex value for the ICSTRM/ICGTRM/MCGTRM register
+      - A  1-bit FTRIM value for the lsb of the ICSSC/MCGSC register.
+   - Program Flash\n
+      The Flash of the target device will be programmed.  This may include non-volatile Clock Trim locations
+      and security bits according to selected options.\n
+      The flash memory is verified after programming (even if it is to be secured).
+   - Verify Flash\n
+      The contents of the target flash will be verified against the file image loaded.  Note that if clock trimming
+      is selected then the non-volatile clock trim locations are not verified as they vary from chip-to-chip.\n
+      Only \b Unsecured chips may be verified.
+   - Load and Go\n
+      As for <b>Program Flash</b> but the target is reset into normal (user) mode after programming.  This will result
+      in the target executing the just programmed code.
+   </td>
+   </tr>
+   </table>
+         
+<hr>
+<b>Tab 3 - Advanced</b>\n\n
+   <table border="0">
+   <tr>
+   <td>
+   <b>BDM Parameters</b>
+   - Power Off duration\n
+      The length of time to turn off the power when having difficulty connecting to the target.
+   - Power On Recovery interval\n
+      The length of time to wait after powering on the target before attempting any operation.
+   - Reset duration\n
+      The length of time to apply the reset signal during a hardware reset.
+   - Reset Release interval\n
+      The length of time between releasing reset and releasing associated signals e.g. BKPT & BGND.
+   - Power Off Duration\n
+      The length of time to wait after resetting the target before attempting any operation.\n\n
+
+   <b>FlexNVM Parameters</b>\n
+   Some Coldfire+ and Kinetis devices support emulated EEPROM.  This consists of a region of RAM and an associated
+   backing store of EEPROM.  The Flash controller transparently transfers data to-and-fro between the FlexRAM and 
+   the EEPROM backing store to provide emulation of a small-sector changeable EEPROM.  The Flash controller uses a wear 
+   levelling mechanism to produce an emulated EEPROM with reasonable lifetime that is considerably longer that could 
+   be simply achieved using the large-sector (~1K) EEPROM available in these chips.\n\n
+   These controls allow the programming and initialisation of the EEEPROM in the target.  The EEPROM created would then
+   be used by a target program to preserve changing but persistent data.  It is intended that this configuration would be 
+   only done once over a device lifetime as changing this configuration would probably invalidate the wear-levelling information
+   maintained in the device.  Changes during system development would not be an issue as the number of EEEPROM writes would be
+   unlikely to be a significant portion of those of a deployed system.    
+   - EEEPROM Size\n
+      This determines the size of the Emulated EEPROM located in the FlexRAM.\n
+      Selecting <b>Unchanged/None</b> with the mass erase programming option will disable the EEPROM.\n
+      Use with any other programming option e.g. Selective erase will leave the EEPROM setting of the device unchanged.\n
+      The latter is a useful combination that allows the general flash to be erased and re-programmed without affecting the EEEPROM data.
+   - FlexNVM Partition\n
+      This controls how much of the FlexNVM region is devoted to the EEPROM emulation.  The remaining area may be used
+      as conventional flash.  \n
+      The ratio between the backing EEPROM size and the EEEPROM size greatly affects the effective lifetime of the EEEPROM.   
+   - Estimated EEEPROM lifetime.\n
+      This provides an estimate of the lifetime of the EEEPROM i.e. the expected number of 16/32-bit write cycles to the EEEPROM 
+      before the reliability degrades too much.  Please refer to the target data sheets & reference manuals for details of how 
+      this was calculated.  \n
+      Note that the use of 8-bit writes to the EEEPROM will halve the effective lifetime.\n  
+   </td>
+   <td>
+   \image html "AdvancedTab.png"
+   </td>
+   </tr>
+   <tr>
+   <td colspan="2">
+   Note: The programmer supports programming of the region of FlexNVM used as conventional Flash.  It cannot program the
+   emulated EEPROM.\n\n
+   Note: The programmer can only program this setting if the associated Flash IFR region is blank (unprogrammed).  The only
+   mechanism for erasing the IFR is a device mass-erase.  Unless you know the device is unprogrammed, it is usual to use this
+   setting with the mass-erase option.
+   </td>
+   </tr>   
+   
+   <tr>
+   <td colspan="2">
+   <b>Custom Security Parameters</b>\n
+   This section allows the security area of the target to be programmed to a custom value.
+   -  Enable - Enable the use of a custom value.  \n
+      If this option is selected then the Security options on the <i>Target</i> tab are disabled and security is controlled by the
+      information on this page.\n
+      If not selected then the Custom parameters will be disable and the information on this page will simply describe the
+      security option selected on the <i>Target</i> tab.   
+   - Flash area selector\n
+      This allows selection of the Flash area being customized.  There is usually only a single security area so only
+      a single option will be available.  Devices with multiple Flash areas with <i>individual security</i> e.g. MCF51EM256 will
+      have multiple regions selectable.   
+   - Reset Values\n
+      This will reset all customized values to the default unsecured value.
+   - Custom value entry field\n
+      This allows entering the custom value to be used.  The value will be padded with zeroes on the right to the required
+      security area size.
+   - Information area\n
+      This area shows the security memory address and an abbreviated description of composition of the security value.  
+   </td>
+   </tr>   
+   </table>
+
+ \section licenseSection License
+   \verbatim
+
+   USBDM Flash programmer & Utilties
+   Copyright (C) 2009-13  Peter O'Donoghue
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   \endverbatim
+
+*/

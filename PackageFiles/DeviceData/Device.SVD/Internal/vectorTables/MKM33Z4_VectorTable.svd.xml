@@ -1,0 +1,169 @@
+<!--
+Devices using this vector table: 
+   MKM33Z5
+-->
+      <interrupts>
+         <name>MKM33Z4_VectorTable</name>
+         <description>MKM33Z4 VectorTable</description>
+         <interrupt>
+            <name>DMA0</name>
+            <description>DMA0 Transfer complete</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>DMA1 Transfer complete</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>DMA2 Transfer complete</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>DMA3 Transfer complete</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface 0</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface 1</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>Low-voltage detect, low-voltage warning</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>TMR_0</name>
+            <description>Quad Timer Channel 0</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>TMR_1</name>
+            <description>Quad Timer Channel 1</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>TMR_2</name>
+            <description>Quad Timer Channel 2</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>TMR_3</name>
+            <description>Quad Timer Channel 3</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0_1</name>
+            <description>ORed Interrupt of PITs</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>FTFA</name>
+            <description>FTFA Command complete or error</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0_1</name>
+            <description>ORed Interrupt of PRACMP</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>SLCD</name>
+            <description>ORed Interrupt of SLCD</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC</name>
+            <description>ORed Interrupt from SAR</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>PTx</name>
+            <description>ORed Interrupt from all GPIO (PTx) ports</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>RNGA</name>
+            <description>ORed Interrupt from RNGA</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_1</name>
+            <description>ORed Interrupt UART0 and UART1</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_3</name>
+            <description>ORed Interrupt UART2 and UART3</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>AFE_CH0</name>
+            <description>AFE Channel 0 ORed Interrupt</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>AFE_CH1</name>
+            <description>AFE Channel 1 ORed Interrupt</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>AFE_CH2</name>
+            <description>AFE Channel 2 ORed Interrupt</description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>AFE_CH3</name>
+            <description>AFE Channel 3 ORed Interrupt</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>iRTC</name>
+            <description>iRTC Interrupt</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0_1</name>
+            <description>ORed I2C interrupt</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>EWM</name>
+            <description>External Watchdog Monitor</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>MCG Loss of Clock, Loss of Lock</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>ORed WDOG Interrupt</description>
+            <value>29</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR</name>
+            <description>ORed LPTMR Interrupt</description>
+            <value>30</value>
+         </interrupt>
+         <interrupt>
+            <name>XBAR</name>
+            <description>Peripheral XBAR ORed Interrupt</description>
+            <value>31</value>
+         </interrupt>
+      </interrupts>
+

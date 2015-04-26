@@ -1,0 +1,160 @@
+<!--
+Devices using this peripheral: 
+      MKE02Z2
+      MKE02Z4
+      MKE04Z8M4
+-->
+      <peripheral>
+         <?sourceFile "KBI0_MKE" ?>
+         <name>KBI0</name>
+         <description>Keyboard interrupts</description>
+         <prependToName>KBI0</prependToName>
+         <baseAddress>0x40079000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SC</name>
+               <description>KBI Status and Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KBMOD</name>
+                     <description>KBI Detection Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Edges only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Edges and levels</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBIE</name>
+                     <description>KBI Interrupt Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBACK</name>
+                     <description>KBI Acknowledge\n
+Writing a 1 to KBACK is part of the flag clearing mechanism</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBF</name>
+                     <description>KBI Interrupt Flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PE</name>
+               <description>KBI Pin Enables\n
+Each of the KBIPEn bits enable the corresponding KBI interrupt pin</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KBIPE</name>
+                     <description>KBI Pin Enables</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Detection disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Detection enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ES</name>
+               <description>KBI Edge Selects\n
+Each of the KBEDGn bits selects the falling edge/low-level or rising edge/high-level function of the corresponding pin</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KBEDG</name>
+                     <description>KBI Edge Selects</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Falling edge/low level</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rising edge/high level</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

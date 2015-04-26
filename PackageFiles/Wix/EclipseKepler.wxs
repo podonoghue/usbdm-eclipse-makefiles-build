@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define ECLIPSE_VER="KEPLER" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <Fragment>
+      <!--======================================================
+               Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <Directory Id='D.$(var.ECLIPSE_VER)_APPS' Name="Apps">
+            <!-- Eclipse directory structure-->
+            <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT" Name="Eclipse-$(var.ECLIPSE_VER)">
+               <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
+                  <!-- PE directory structure -->
+                  <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
+                     <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
+                        <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
+                     </Directory>
+                  </Directory>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+               Registry searches
+      =======================================================-->
+     
+      <!-- Check for presence of Eclipse -->
+      <Property Id="P.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
+         <RegistrySearch Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\Eclipse Foundation\Eclipse"
+                    Name="InstallationDirectory"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for Eclipse -->
+      <Property Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
+         <RegistrySearchRef Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT" />
+      </Property>
+      
+      <!--=================================================================================
+           Actions
+      ==================================================================================-->
+      <!-- Refresh Eclipse plugins -->
+      <CustomAction
+         Id="Ca.CreateKDSRefreshPluginsCommand_$(var.ECLIPSE_VER)_$(var.ECLIPSE_VER)"
+         Property="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)"
+         Value="&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipse&quot; -initialize -nosplash"
+         Execute="immediate"/>
+         
+      <CustomAction Id="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <InstallExecuteSequence>
+          <Custom Action="Ca.CreateKDSRefreshPluginsCommand_$(var.ECLIPSE_VER)_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)"                      Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+      </InstallExecuteSequence>
+      
+      <!--======================================================
+               Components
+      =======================================================-->
+      <!-- 
+           USBDM Marker
+      -->
+      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
+         <Component Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' Guid='b9ce25ad-254b-4c05-bc89-de8afde8745c' >
+            <File Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- 
+           Processor Expert plugin support 
+      -->
+      <DirectoryRef Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config_Compiler">
+         <Component Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' Guid='312fda54-8c5e-4a77-bc01-02eca7ddd878' >
+            <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='bin/net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!--======================================================
+            Eclipse feature
+      =======================================================-->
+      <Feature Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT'
+            Title='Eclipse $(var.ECLIPSE_VER) CDT Plugins'
+            Description='Add USBDM CDT support to Eclipse:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
+            ConfigurableDirectory="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.ECLIPSE_$(var.ECLIPSE_VER)_CDT]]>
+         </Condition>
+         <ComponentRef Id='C.ProgramMenuFolder' />
+         <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' />
+         <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />
+         <ComponentRef Id='C.CommonFiles' />
+         <ComponentRef Id='C.GdbServer' />
+         <ComponentGroupRef Id='Cg.EclipsePlugins' />
+         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+         <ComponentGroupRef Id='Cg.StationeryInstall'/>
+      </Feature>
+
+   </Fragment>
+</Wix>

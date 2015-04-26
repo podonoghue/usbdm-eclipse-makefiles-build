@@ -1,0 +1,86 @@
+/*!
+ \page eclipseFlashProgrammingPage Codewarrior - Coldfire V2-V4 Flash programming
+
+ \section EclipseFlashConfiguration Creating a Flash Programming Task in Codewarrior 10.x
+ 
+USBDM does not support the automatic programming of Coldfire V2 - V4 devices as the programming algorithms
+required are too varied between different devices.  This situation is no different from the arrangement 
+that applies to the other Codewarrior supported BDM interfaces.\n
+
+Codewarrior Eclipse allows the creation of Flash programming tasks which may then be automatically executed 
+prior to debugging a device.  The following describes the setting up of a such a task for a MCF52233.\n
+
+Open the Flash Programmer as shown: 
+\image html "Flash_Programming_Task_0.png"
+
+Click on the Green Plus to add a new task
+\image html "Flash_Programming_Task_0a.png"
+
+Choose a suitable name for the Task and complete the required details. 
+	- <b>Run Configuration</b> - Associate with the current task
+	- <b>Task Type</b> - Choose the CFV234 Flash Programmer
+
+\image html "Flash_Programming_Task_1.png"
+
+The dialogue that opens allows the selection of target device and the necessary Flash programming
+Actions to be scheduled as a sequence of steps that will be automatically carried out. 
+\image html "Flash_Programming_Task_2.png"
+
+   - Click on the <b>Add Device</b> button and choose the device to be programmed.\n
+	  You can type a partial device type to reduce the number of alternatives displayed. \n
+	  Select a device and click on the <b>Add Device</b> button to add it.
+
+Click <b>Done</b> to close this dialogue when finished.</td>
+\image html "Flash_Programming_Task_3.png"
+
+Select the <b>Add Erase/Blank Check Action</b> from the <b>Add Action</b> drop-down\n
+\image html AddTask.png
+
+The following actions selected are added to the original dialogue.\n
+- Select <b>Erase All Sectors Using Chip Erase Command</b> checkbox so that actions are applied to the entire Flash.
+- Click on <b>Add Erase Action</b> button to do a mass erase of the device.\n
+- Click on <b>Add Blank Check Action</b> button to add a check for successful erasure.\n
+- Click <b>Done</b> to close this dialogue when finished.</td>
+
+\image html "Flash_Programming_Task_4.png"
+
+ - Select <b>Use File From Launch Configuration</b> checkbox so that target initialization 
+   settings will be taken from the associated debugging Launch Configuration.
+ - Click on <b>Add Program Action</b> button to program the device.\n
+ - Click on <b>Add Verify Action</b> button to add a programming verification.\n
+ - Click <b>Done</b> to close this dialogue when finished.</td>
+
+\image html "Flash_Programming_Task_5.png"
+
+The final step in setting up the Flash programmer is determining a suitable location for the <b>Target RAM</b> buffer required to 
+hold the Flash Programming code and Flash data buffer.  Unfortunately on the Coldfire chips this is movable and depends 
+upon how the target is configured.\n
+The easiest way (that I've found) to determine a suitable location is to inspect the linker configuration for the
+<b>project being debugged</b>.\n
+Look under <i><b>Project_Settings/Linker_Files</b></i> for the appropriate <b>.lcf</b>
+file, in this case <i>MCF52232_Internal_Flash.lcf</i>.\n
+\image html "LinkerFile.png"
+Look for the Memory section as shown and note the settings for the two (RWX) sections.  You can choose a suitable
+RAM buffer from these two.\n
+\image html "Flash_Programming_Task_7a.png"
+In this case I've used all the available RAM from the start of the first section 0x20000000
+for the combined size of 0x8000 since the two sections are contiguous.    
+\image html "Flash_Programming_Task_7.png"
+
+Now that we have created a programming task we need to set up the debug launch configuration so that this task runs automatically
+at the start of a debugging session.\n
+Open the debug launch configuration using the <b>Run->Debug Configurations...</b> menu item. 
+\image html OpenDebugLaunchConfiguration.png
+Locate the launch configuration associated with the Flash target as shown:\n
+Unselect the <b>Perform Standard Download</b> checkbox and select the <b>Execute Task</b> checkbox.\n
+\image html "AddProgramTask.png"
+Click on the <b>Add...</b> button to open a new Download Task dialogue.\n
+Select the <b>Target Task</b> checkbox and select the programming task created earlier.
+Unselect <b>Execute on successive Runs</b> as it is only necessay to program the device once at the start of the debugging 
+sessions - Not every time the session is restarted.
+\image html "AddDownloadTask.png"
+Close the dialog using the <b>OK</b> button and confirm that the task has been correctly added to the Debugger tab. 
+\image html "AddProgramTaskComplete.png"
+
+
+*/  

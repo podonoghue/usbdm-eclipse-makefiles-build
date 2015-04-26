@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Common GNU Build options for EXE project -->
+   <projectActionList id="gnuSettings.staticLib">
+      <applyWhen>
+         <and>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.staticLib$" />
+         </and>
+      </applyWhen>
+   
+      <!-- Creating a library -->
+      <projectOption id="gnu.c.link.option.shared" replace="true">
+         <value>true</value>
+      </projectOption>
+      <projectOption id="gnu.cpp.link.option.shared" replace="true">
+         <value>true</value>
+      </projectOption>
+   
+   </projectActionList>
+</root>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-ping-rtos" root="">
+      <applyWhen>
+         <and>
+            <or>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-ping-rtos" 
+            name="Ping Demo on lwIP TCP/IP Stack (RTOS)" 
+            description=
+"This is a Ping Demo on the lwIP TCP/IP stack which uses the ICMP protocol. The application\n
+on board periodically sends the ICMP echo request to a PC and processes the PC reply.\n
+Type the &quot;ping $board_address&quot; in the PC command window to send an ICMP echo request to the board.\n
+The lwIP stack sends the ICMP echo reply back to the PC."
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+               </or>
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-ping-rtos" />
+            </and>
+         </applyWhen>
+         <deleteResource target="Sources/main.c" />
+         <copy source="usbdm_kds_path/tcpip/lwip"                                 target="lwip"       type="link"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/common/phyksz8081/fsl_phy_driver.c"  target="Sources/fsl_phy_driver.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/lwip_ping_demo/ping_rtos/src/ping.c"  target="Sources/ping.c"           sourcePathType="absolute" />
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/port&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/port/arch&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv4&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv6&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/netif&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/posix&quot;</value>
+            <value>&quot;${usbdm_kds_path}/boards/common/phyksz8081&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/port&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/port/arch&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv4&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv6&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/lwip&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/netif&quot;</value>
+            <value>&quot;${usbdm_kds_path}/tcpip/lwip/src/include/posix&quot;</value>
+            <value>&quot;${usbdm_kds_path}/boards/common/phyksz8081&quot;</value>
+         </projectOption>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other" replace="true">
+            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
+            <value>&quot;--defsym=__heap_size__=0x8000&quot;</value>
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other" replace="true">
+            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
+            <value>&quot;--defsym=__heap_size__=0xA000&quot;</value>
+         </projectOption>
+         <excludeSourceFolder target="lwip/src/core/ipv6" />
+   	</projectActionList>
+   </projectActionList>
+</root>

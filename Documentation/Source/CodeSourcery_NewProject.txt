@@ -1,0 +1,328 @@
+/*!
+\page codeSourceryNewProject Eclipse - USBDM Features
+
+\section usbdmForEclipse USBDM Functions in Eclipse (including Kinetis Design Studio)
+
+The following sections assume that the required software has been installed \ref codeSourceryInstallPage
+   
+After installing the USBDM plugin for Eclipse there will be a new menu item allowing convenient access to the USBDM functions.
+\image html "USBDMMenu.png"
+
+-	<b>New Project...</b> - Create a new USBDM project for a Coldfire or ARM device
+-	<b>Open Peripheral View</b> - Open the USBDM Peripheral register view for use during debugging
+-	<b>New Example...</b> - Create a new USBDM example project
+-	<b>Start ARM GDB Server</b> - Launch the ARM GDB Server
+-	<b>Start CFV1 GDB Server</b> - Launch the Coldfire V1 GDB Server
+-	<b>Start CFV2,3,4 GDB Server</b> - Launch the  Coldfire V2,3,4 GDB Server
+-	<b>Configure</b> - Configure USBDM options within Eclipse
+
+\section creatingEclipseProject Creating an Eclipse Cross-Compiler Project with USBDM
+
+This section provides brief instructions on how to create a C or C++ project for a Coldfire or Kinetis
+target using Eclipse and either ARM Ltd or Codesourcery Lite tools.  
+
+The following example is for an Kinetis target but a similar process is followed for a Coldfire device.\n
+
+- Select <i>USBDM->New Project...</i> from the Menu.\n
+
+\image html USBDMMenuNewProject.png
+
+<b>Create a new USBDM C/C++ Project</b>\n
+	- Type in a Project Name\n
+	- Select the desired Coldfire or Kinetis target in C or C++ versions as preferred. \n
+	- Click <i>Next</i>
+
+\image html 2.USBDMCreateProject.png
+
+<b>Select project parameters</b>
+- USBDM Parameters         	
+	- Select the Build Tools being used (choice only available for Kinetis devices)				
+	- Select the device to be used.  
+- Linker Parameters
+   - Auto-generate linker script - The USBDM Wizard will automatically create a linker script based upon the device's
+     memory map.  The linker script is designed to work with the startup files provided by the Wizard.
+   - Linker Script - This allows selection of a pre-existing linker script instead of automatically generating one.  Codesourcery
+     provides various linker scripts that may be used.  This linker script will be <b>copied</b> into the project 
+     directory.   
+- Click <i>Next</i> 
+
+\image html 3.USBDMProjectParameters.png
+
+<b>Select project options</b>         	
+	- This page is specific to a particular device and the options will vary.			
+	- Choose which optional components (files) to add to the project.  Some of these will require manual customization upon completion of the Wizard.
+	This is often the case for CMSIS on smaller devices where the heap and stack sizes as well as CMSIS options will need to be adjusted for the 
+	very limited amount of RAM available.
+	- Click <i>Next</i> 
+	
+\image html 4.USBDMProjectOptions.png
+
+<b>Select USBDM Tool Settings</b>
+
+These values are used to update system-level settings and affect all existing and new projects.  It is usually
+only necessary to set these value once for Eclipse.  These values may also be accessed from the USBDM menu.
+- ARM Ltd GNU Tools for ARM
+- Codesourcery Tools for Coldfire
+   - The Eclipse tools need to know the target-specific tool prefix.\n
+     The prefix <b>arm-eabi-</b> is usual for ARM targets.\n
+     The prefix <b>m68k-elf-</b> is usual for M68K (Coldfire etc) targets.\n
+   - Eclipse needs to know where to find the GCC Tools.\n  
+   
+   These two options can be conveniently set by using the Browse Button to browse to the 
+   installation location of the XXXXXgcc.exe program included with the tools e.g. arm-eabi-gcc.exe.\n
+   If a particular toolchain is not being used then the entries should be cleared.  
+- Make command \n
+  Under windows it is necessary to provide a GNU make tool to use in project builds.  
+  USBDM includes a copy of the GNU make utility renamed as usbdm-make.  This is a convenient choice.
+- Rm (delete) command \n
+  Under windows it is necessary to provide a usable delete command to use in project builds.  
+  USBDM includes a copy of the GNU rm utility renamed as usbdm-rm.  This is a convenient choice.
+- Click <i>Next</i> 
+
+\image html 5.USBDMToolSettings.png
+
+<b>Project Structure</b>
+
+<table border="0">
+   <tr>
+      <td>
+			\image html ProjectExplorer.png
+      </td>
+      <td>
+			The Wizard will create a basic project with a brief demonstration mainline.\n
+			The project will contain optional components such as CMSIS-RTX if these option were selected.\n
+			Expanding the project will display the project contents as shown:
+			- Project_Headers
+			   - derivative.h - for convenience. Just includes the target-specific header file.
+			   - MK20DX128M5.h - Target specific header file. This may be a place holder if USBDM doesn't
+			     include the required header file.
+			     Freescale provide various header files for their devices.  However it would not
+			     be legal to distribute these with USBDM.
+			     It is possible to add header files to the USBDM installation.  Refer to the skeleton header
+			     file provided for instructions.
+			   - Various other files will be present dependent on the device type and project options chosen.
+			     For example <b>clock_private.h</b> and <b>uart.h</b> may be present.
+			- Source
+			   - This the main source folder.  In this case it contains an example main.cpp and CMSIS_RTX 
+			     configuration file (see below for more details).\n
+			- Startup_Code
+			   - The C compiler assumes certain startup actions to support the C library.  The target
+			     processor also may require some low-level initialization.  These files provide generic examples
+			     that may be modified for a particular target.  They have been tested with a few devices but are
+			     unlikely to be suitable for every target.\n
+			     It also contain a file describing a generic vector table for the device with default handler. \n
+			     These are based on the Codesourcery documentation or provided examples.
+			- cmsis
+			   - The source code for CMSIS-RTX library is included in this folder.  While it is possible to use
+			     libraries to achieve the same thing this arrangement allows more convenient source debugging and
+			     RTX configuration. 
+			- Debug
+			   - This directory contains the compiled files for the Debug target.  These are created by the 
+			     Build operation.
+			- Project_Settings
+			   - The folder contains the target linker files either generated or copied into the project.  It also
+			     contains a default launch configuration for the <b>Debug</b> target for use with the USBDM debugger. 
+      </td>
+   </tr>
+</table>
+
+It should now be possible to build the project using the menu item <b>Project->Build All</b> or by clicking on the hammer icon.
+
+\section eclipseCustomization Customizing options in Eclipse using the Configuration Editor
+Several of the project files (C source & header files and linker files) contain configuration information with mark-up in the comments section
+that allows convenient editing.\n 
+For example the <i>MemoryMapxxx.ld</i> file in the <i>Project_Settings</i> directory has settings for the HEAP and STACK size.  These may
+be edited manually by changing the text of the file or alternatively the file may be opened in the <b>Configuration Editor</B> for a more convenient 
+ways of doing this.  Right-click on the file and choose <i>Configuration Editor</i> from the menu to do this.\n
+The Configuration Editor provides two views of the file.  One is a conventional text editor with simplified syntax highlighting of the 
+mark-up describing the options (in red) and the embedded options in the body of the C code (in blue).  The latter are just strings or numbers 
+that may be modified within the GUI view provided by the editor.\n
+The mark-up used is described here http://www.keil.com/support/man/docs/uv4/uv4_ut_configwizard.htm
+
+<table border="0">
+   <tr>
+      <td>
+			\image html  OpenConfigurationEditor.png
+      </td>
+      <td>
+			\image html ConfigurationEditorLinker.png
+      </td>
+   </tr>
+</table>
+
+<table border="0">
+   <tr>
+      <td>
+			There is extensive customization of the CMSIS-RTX configuration possible in the same way.  \n
+			Open the <i>RTX_Conf_CM.c</i> file located in 
+			the <i>Sources</i> folder using the Configuration Editor to change these settings.\n
+			Refer to the CMSIS-RTX documentation provided by the <i>CMSIS.html</i> link within the project for details
+			of what these various options do.
+      </td>
+      <td>
+			\image html ConfigurationEditorCMSIS.png
+      </td>
+   </tr>
+</table>
+
+\section launchConfigurationColdfire Launch Configuration Settings
+The following describes important dialogues and settings in the launch configuration that will have been created
+by the USBDM Wizard.\n 
+
+- Select <b>Run->Debug Configurations</b> from the menu.
+
+\image html DebugConfiguationBare.png
+
+- Locate the launch configuration corresponding to the project just created.  This will be under USBDM Hardware
+ Debugging item in the left-hand panel.
+  
+- <b>Debugger</b> Tab in the dialogue.\n
+    - USBDM Parameters
+      - Interface - This indicates the target-specific USBDM debugging interface being used.
+      - Target Device - Indicates the device being debugged.
+    - GDB Setup
+       - Build tool: - Selects the build tool being used.  This controls the next two options.  If a build tool
+         is selected the next two options will be automatically set.  Alternatively you may manually select a 
+         GDB debugger command.   
+	       - GDB Command: - The GDB command to be used.
+	       - GDB Bin Path: - Where to look for the above command. 
+       - Command Set - Standard 
+       - Protocol Version - mi
+       - Verbose console mode - Selecting this will generate console messages indicating the GDB communication.
+    - BDM Selection
+		 - Allows selection of a preferred or required BDM interface to use.  A brief description of the BDM will appear below.
+		 - Refresh - Updates the above selection dialogue with a list of the currently connected BDMs.
+		 - Exact - Require use of the selected BDM.  If not checked then the BDM selection is treated as a preferred BDM only.
+    - GDB Server Control
+		 - Port number to use if Socket-based server is used (port will be localhost:<B>portNumber</B>).
+		 - Debug - Use the debug version of the server.  This will create a log of the server actions for debugging USBDM.
+		 - Exit on Close - Causes the Socket server to close when the debug session ends.  Otherwise the the server can be re-used 
+	 	   which will reduce the startup time. This is only possible when using the same device & settings.
+		 - Pipe/Socket - choose Pipe-based or Socket-based server.  The Socket based server is preferred.  This will open as a separate
+	 	   window showing the interaction with the BDM.
+    - Connection Control (Contents vary with target)
+		 - Interface speed - speed for bdm communication
+		 - Timeout - How long to wait for a unresponsive target.  Set this to zero if you are using VLLS or LLS power modes as they 
+		 result in the bdm loosing connection with the target
+		 - Auto reconnect - BDM will continuous resync with target - leave selected
+		 - Drive RESET pin - Usually leave unselected
+		 - Catch VLLSx events - This will cause the debugger to suspend on the reset that wakes the target up after VLLS mode. 
+		 - Use PST signal - Some CFVx devices have PST signals that allow more reliable monitoring of target run state.
+    - Erase Options
+		 - Erase options - USBDM supports several erase methods.  MASS erase is preferred for ARM & Coldfire V1.  ALL is preferred for Coldfire Vx. 
+    - Security Options
+         - This controls how the security field in the target FLash is programmed.
+            - Security field from flash image - The flash will be programmed unchanged from the image.  If the image does not contain security information then
+ 	     	the target may end up secured and be impossible to debug.
+            - Default unsecured configuration - A default value which results in the target being unsecured will be used.
+            - Unsecured if no security field in flash image - If the flash contains security information then that will be used otherwise the
+ 	     	 default unsecured value is used.
+    - Target Vdd
+		 - Some versions of BDM support suppling power to the target through the BDM cable.  This selects the voltage level if controllable.
+    - Internal Clock Trim
+		 - Allows trimming of internal clock if supported.  See programmer manual for more detail.
+
+\image html DebuggerTabKinetis.png
+
+- <b>Startup</b> Tab in the dialogue. 
+	 - Program target before debugging - This option enables programming the target at the start of a debugging session.
+	 - Startup options
+	 	- Load external file - If selected these options may be used to select a external file to load code and symbols from.
+	 	- Set initial program counter to - If selected the program counter is set after loading.  This is useful if debugging a RAM image where
+	 	the reset vector will usually be invalid.
+	 	- Set temporary breakpoint at - If selected this option sets a temporary breakpoint at the given address.  This is usually used
+	 	in conjunction with <b>Start execution after load</b>.
+	 	- Start execution after load - The execution is commenced after loading.
+	 
+	 - Connect to running target - This option allows debugging a target without re-programming the flash.
+	 - Connection options
+	 	- Load external symbol file - If selected these options may be used to select a external file to load symbols from.
+	 	- Reset Target	- The target is reset after connection
+	 	- Reset Target and Continue - The target is reset and then execution resumed
+	 	- Halt Target - The target is halted
+	 	- Target execution is unaffected - The target remains in a halted or executing state.
+	 	- Set temporary breakpoint at - If selected this option sets a temporary breakpoint at the given address.  This is usually used
+	 	in conjunction with <b>Reset Target and Continue</b>.
+	
+	 - Restart options - These options apply when using the restart button during a debugging session.
+	   - Use startup options - If selected the the same options are used for restart and for the initial program load.
+	   - Set initial program counter to - If selected the program counter is set after loading.  This is useful if debugging a RAM image where
+	 	the reset vector will usually be invalid.
+	 	- Set temporary breakpoint at - If selected this option sets a temporary breakpoint at the given address.  This is usually used
+	 	in conjunction with <b>Start execution after restart</b>.
+	 	- Start execution after restart - The execution is commenced after loading.
+
+	 - Initialisation Commands - done before target Execution - This may be used to run custom GDB commands
+	 
+	 - Run Commands - done after Target Execution - This may be used to run custom GDB commands
+	 
+\image html StartupTab.png
+
+\section debugging Debugging
+
+- You can now start a debugging session using the launch configuration above. \n
+   \image html LaunchDebug.png 
+   - With the default launch settings you should find that the follow steps occurring:
+	   - Session starts
+	   - The program is down-loaded to the target
+	   - Execution commences at the program reset location
+	   - Execution stops at the first line of main()
+   
+   - When using the Restart button during a session \image html RestartButton.png 
+   the following sub-sequence will occur:
+	   - The target is reset
+	   - Execution commences at the program reset location
+	   - Execution stops at the first line of main()
+	  
+   You should be able to debug in the usual fashion with breakpoints, single-stepping etc.
+
+\section running Running
+- You may also use the same launch configuration to start a run session.  Its main use is to do a 
+  quick check on programming the target and checking program execution. \n
+   \image html LaunchRun.png 
+	- This differs from the Debugging session by doing the following sequence without any interaction:
+	   - Session starts
+	   - The program is down-loaded to the target
+	   - Execution commences at the program reset location
+	   - The session ends.
+
+\section debugPeripheralView Debug Peripheral View (ARM Targets only)
+
+- The peripheral view provides a register level view of the peripherals in the target when debugging.  
+  This view may be opened from the USBDM menu. Please be aware that the view has to read the register
+  values from the target.  This has two obvious effects:
+  	- Reading some peripheral registers <i>may</i> affect the peripheral's state.  The view uses the debug 
+  	  interface to access the peripheral's registers.  This is not the same as the processor accessing 
+  	  the peripheral and in many cases does NOT affect the state as would be naively expected.  Please 
+  	  refer to the detailed peripheral description to check for any side-effects of debug accesses.
+  	- The peripherals may contain many registers and may require individual accesses to many distinct
+  	  locations.  This can be rather slow so having many registers visible may impact on stepping speed.
+  	  The view intelligently merges accesses to adjacent memory locations where possible.  This improves
+  	  the performance but there are still a few situations where this cannot be done e.g. the USB devices
+  	  appear as many disjoint byte locations so may require individual accesses for each register.  Not 
+  	  much can be done to improve the speed since this basically requires pushing many messages through 
+  	  GDB which is a bottleneck.
+
+         \image html AnnotatedPeripheralView.png
+
+- The peripheral view supports modifying registers interactively but this feature should be used carefully.  
+	When a register or field is changed the updated value is written to the target and then the register
+	(and often adjacent registers) are re-read to obtain updated display values as they may not be consistent 
+	with the value actually written.  For example, writing to the GPIOA_PSOR has no affect on the GPIOA_PSOR 
+	value which	always reads as zero.  It will however change the values of the GPIOA_PDOR register and 
+	probably the GPIOA_PDIR register.  This will be reflected in the view since these register are all re-read.
+
+\section faultStatusDialogue Fault Status Dialogue (ARM Targets only)
+
+- The Fault Status dialogue provides a convenient summary of the fault status of a target being debugged.
+  Its main use would be after the unexpected execution of a fault handler.   \n 
+  This dialogue is opened from the icon bar of the peripheral view.  The same information is available in the 
+  appropriate SCB registers (CFSR, HFSR, DFSR, MMFAR, BFAR) although not in as convenient a form \image html OpenFaultReport.png
+  	
+         \image html FaultStatusDialogue.png
+
+- A couple of useful references relating to handling faults are:
+   - @htmlonly <a href="http://www.keil.com/appnotes/files/apnt209.pdf"><b>Application Note 209 Abstract Introduction - Keil</b></a> @endhtmlonly
+   - @htmlonly <a href="http://community.arm.com/servlet/JiveServlet/previewBody/7835-102-2-12371/Developing%20a%20Generic%20Hard%20Fault%20handler%20for%20ARM.pdf">
+     <b>Developing a Generic Hard Fault handler for ARM.pdf</b></a> @endhtmlonly
+*/

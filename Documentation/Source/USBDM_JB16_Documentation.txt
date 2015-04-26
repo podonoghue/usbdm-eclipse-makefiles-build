@@ -1,0 +1,176 @@
+/*!
+ \mainpage USBDM (combined TBDML/OSBDM code) for JB16 (Obsolete)
+
+ \section introSection Introduction
+<b>
+   Please note that these designs are obsolete.\n\n
+   The JB16 chip used in these designs have a ROM firmware flaw which makes it impossible to reprogram the chip firmware.
+   When the chip is in bootloader mode it fails to enumerate properly under Windows 7 or 8 and later updates of WIN-XP.
+   Because of this it is not possible to update the firmware which make it impractical to support them.\n\n
+   The USBDM software <i>may</i> still work to some extent but I cannot make any guarantees.\n\n
+</b>     
+   The main purpose in providing this version is so that existing users of JB16 based
+   USBDMs or TBDML or OSBDM can upgrade to a system that is usable with the current
+   Codewarrior tools and the USBDM programmers provided. \n\n
+   The attached files provide a port of a combined TBDML/OSBDM code to a MC9S08JB16 processor.  
+   The primary motivation for this was to produce a single BDM that could be used with the HC12
+   and HCS08 microcontrollers without needing to change the firmware in the BDM between uses.  
+   Other features have also been added.\n
+   Some of these features may be gained by using the software alone, others require extended hardware.
+   There are versions of the software provided that are compatible with the several existing versions
+   of the OSBDM hardware that have become available at different times.
+
+ \subsection featureSection Features
+   This version of the code & BDM hardware provides the following features:
+   -	A single BDM interface for programming and debugging of the following targets:
+      -  <b>HCS12</b> (including those without SYNC feature (e.g. 9S12DP256B)
+      -  <b>HCS08</b>
+      -  <b>RS08</b>
+      -  <b>Coldfire V1</b>
+\if Coldfire   -	\b Coldfire \b V2, \b V3 & \b V4 microcontrollers  \endif
+
+   -  Compatible IDEs
+      - Codewarrior V10.1 (Eclipse version)
+        - Tested on Windows-XP-32bit, Windows-7-32bit, Windows-7-64bit
+        - Tested on Ubuntu-32-bit
+      - Codewarrior Legacy versions
+        CodeWarrior Development Studio for HCS12(X) V5.1 & \n
+        CW for Microcontrollers V6.3 (RS08 is not supported\n
+         - Tested on Windows-XP-32bit, Windows-Vista-32bit
+      - Initial support for CodeSourcery Lite for Coldfire
+         - Tested on Windows-XP-32bit
+
+   -  Trimming of target internal clock (Eclipse version or standalone programming tools only).
+   -  Vista compatible
+   -  Linux compatible
+   -  Software triggered in-circuit-programming (ICP) of the microcontroller for update of Firmware.  No links on
+      the hardware are required.
+   -	Hardware is physically small
+       
+\if Power
+   -  Target Vdd supply & control.  This allows the target power to be cycled when required for a reliable reset into BDM mode.
+      It is also (obviously) convenient since it allows debugging small target boards without a separate target power supply.  
+      An external target supply may also be used instead.  The Target supply is protected by a polyfuse and software detection
+      of overload.
+\endif
+   -  HCS12, HCS08, RS08, Coldfire V1 specific features:
+   -  Target reset detection & control (required for HC12 processors).  This allows HC12 processors to be reset into BDM mode
+      as required for debugging.
+\if Power
+   -  Target Vdd monitoring. This allows the hardware to detect changes in the Target supply to provide reliable resetting into
+      BDM modes on HCS08 and RS08 microcontrollers.  It also is used to implement the target power supply protection.
+\endif
+      - A slightly higher BDM interface speed than the existing JB16 OSBDMs. Up to 40MHz. (BDM clock 20MHz).
+      -  Automatic re-connection.  The software has an option to continuously update the interface speed to prevent loss
+         of communication if the target BDM interface speed changes (as may occur with clock changes on some targets).
+      -  Control of BDM clock selection in HC12/HCS08/Coldfire microcontrollers.  Most of these targets provide an alternative
+         BDM clock selection.  This can have advantages when connecting to high speed targets as the alternative clock may 
+         operate at a lower speed.
+\if Power
+      -  Selection of 3.3V and 5V target supply (if hardware supports this).
+\endif
+      -  Trial-and-error determination of communication speed for earlier HC12 targets.
+      -  User prompting for target supply cycling with BKGD low as may be needed for HCS08 targets
+      -  Various bug fixes on the OSBDM code.
+\if Coldfire
+   -  Coldfire V2,3,4 specific features and limitations:
+   -  Higher communication speed with target - The target communication speed may be selected.
+   -  The BDM uses asychronous communication with the target i.e. the BDM signals are not synchronized with the target clock.  
+      This means that the BDM should not be used with early Coldfire targets.  Check the description of the BDM interface
+      timing in the appropriate Coldfire Processor manual to determine if this limitation applies.          
+\endif
+
+ \subsection pictureSection Pictures
+   - <b>Top Image</b>\n
+   \image html USBDM_JB16_Top.jpg
+   - <b>Bottom Image</b>\n
+   \image html USBDM_JB16_Bottom.jpg
+         
+ \section sectionHardwareDesign Hardware Design
+   Please refer to the following documents for hardware design details:
+   - The 'deluxe' USBDM-JB16 is no longer recommended and the PCB designs have been removed.  Please refer to the V3.2 documentation
+     information or consider the JMxx or JS16 versions for more current designs.
+   - @htmlonly <a href="TBDML_JB16_SOIC20[Minimal].pdf">Minimal TBDML 20pin SOIC - Schematic & Assembly Overlays</a> @endhtmlonly 
+   - @htmlonly <a href="TBDML_JB16_SOIC28[Minimal].pdf">Minimal TBDML 28pin SOIC - Schematic & Assembly Overlays</a> @endhtmlonly 
+
+ \section capabilitiesSection Capabilities
+      The software is compatible with several of the TBDML/OSBDM hardware variants that are available.  
+      Capabilities will vary with the actual hardware.
+      The table below summarises the capabilities of the BDM for various hardware options:
+      \verbatim
+      Target       HC12/HCS12  HCS08   RS08  Coldfire V1   Comment
+      TBDML            X         X               X         Designs for minimal versions provided
+      USBDM            X         X       X       X         Design for full USBDM version provided
+      WTBDM08/12       X         X               X         Commercially available
+      OSBDM            X         X               X         Design posted on Freescale OSBDM board
+      HCS08-OSBDM+E              X       X       X         Design posted on Freescale OSBDM board
+      \endverbatim
+      
+      I do not have access to the last 2 hardware alternatives so they HAVE NOT BEEN TESTED! 
+      I also believe the last three have a minor hardware design problem.
+
+ \section sectionCredits Credits
+   -  The original base code is taken from the TBDML, OSBDM and TBLCF projects and I very much appreciate
+      the effort involved in producing the original code.  I hope this extension will be useful.
+
+   -  The hardware interface is based on TBDML and Freescale USBSPYDER08.
+
+ \section sectionReferences References
+   -  Altium Designer (PCB Design) - http://www.altium.com/products/altium-designer/
+   -  Axiom MC56F8006 Demo board - http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MC56F8006DEMO
+   -  Codesourcery - http://www.codesourcery.com/
+   -  Coldfire Flasher - http://www.freescale.com/files/soft_dev_tools/software/programmers/CFFLASHER.zip
+   -  Doxygen Documentation tool - http://www.stack.nl/~dimitri/doxygen/index.html
+   -  I2C voltage level conversion  - Phillips application note http://www.standardics.nxp.com/support/documents/i2c/pdf/an97055.pdf
+   -  LIBUSB-WIN32 - http://libusb-win32.sourceforge.net/
+   -  MAX662 Data sheet - http://www.maxim-ic.com
+   -  OSBDM - http://forums.freescale.com/freescale/board?board.id=OSBDM08
+   -  OSBDM hardware - http://forums.freescale.com/freescale/board/message?board.id=OSBDM08&thread.id=212
+   -  Tasking GDI Spec - http://www.tasking.com/resources/technologies/debuggers/gdikdi.shtml
+   -  Tcl/Tk - http://www.tcl.tk/software/tcltk/8.5.html 
+   -  TBDML - http://forums.freescale.com/freescale/board?board.id=TBDML
+   -  TBDML hardware - http://forums.freescale.com/freescale/board/message?board.id=TBDML&thread.id=2
+   -  USBSPYDER08 - USB mini board for Freescale's Low-End 8-bit Microcontrollers - http://www.freescale.com/
+   -  Ultimate Packer for eXecutables (UPX) has been used to pack DLLs and EXEs - http://upx.sourceforge.net/ 
+   -  WTBDMS08/12 (Witztronics) Hardware - http://www.witztronics.com/
+   -  WxWidgets Cross Platform Library has been used for the GUI - http://www.wxwidgets.org/
+   -  Xerces XML parser - http://xerces.apache.org/xerces-c
+   
+ \section sectionQueries Queries
+   Any queries please post on the Freescale @htmlonly <a href="https://community.freescale.com/community/bdm">OSBDM and TBDML Discussion Board</a>. @endhtmlonly \n
+   
+ \section licenseSection License
+   \verbatim
+   Portions of this software is based on TBLCF software
+   Portions of this software is based on OSBDM software
+   Portions of this software is based on TBDML software
+
+   USBDM
+   Copyright (C) 2007-13  Peter O'Donoghue
+
+   Opensource BDM (OSBDM)
+   Copyright (C) ?
+
+   Turbo BDM Light (TBDML)
+   Copyright (C) 2005  Daniel Malik
+
+   Turbo BDM Light ColdFire (TBLCF)
+   Copyright (C) 2005  Daniel Malik
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   \endverbatim
+
+*/
+

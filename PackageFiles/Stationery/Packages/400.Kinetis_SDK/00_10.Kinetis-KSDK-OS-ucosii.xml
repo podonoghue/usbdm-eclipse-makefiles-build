@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK OS Choice -->
+
+   <projectActionList id="KSDK-operating-system-ucosii" root="" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-SDK-os-ucosii" 
+         name="uC/OS-II"
+         description="uC/OS-II operating system support" 
+         radioGroup="group-ksdk-operating-system">
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+         </applyWhen>
+         <constant id="kdsOperatingSystem" value="ucosii" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_UCOSII</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_UCOSIII</value>
+         </projectOption>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-LIB&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Source&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-LIB&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Source&quot;</value>
+         </projectOption>
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/config/app_hooks.c"          target="ucosii/app_hooks.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_core.c"    target="ucosii/os_core.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_flag.c"    target="ucosii/os_flag.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_mbox.c"    target="ucosii/os_mbox.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_mem.c"     target="ucosii/os_mem.c"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_mutex.c"   target="ucosii/os_mutex.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_q.c"       target="ucosii/os_q.c"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_sem.c"     target="ucosii/os_sem.c"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_task.c"    target="ucosii/os_task.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_time.c"    target="ucosii/os_time.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Source/os_tmr.c"     target="ucosii/os_tmr.c"    type="link" sourcePathType="absolute" />
+         <projectActionList id="KSDK-operating-system-ucosii-cortex-m0" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyIs>CortexM0</deviceFamilyIs>
+                  <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
+               </or>
+            </applyWhen>
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU/ARM-Cortex-M0/GNU&quot;</value>
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU/ARM-Cortex-M0/GNU&quot;</value>
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU&quot;</value>
+            </projectOption>
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU/os_cpu_a.S" target="ucosii/os_cpu_a.S" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU/os_cpu_c.c" target="ucosii/os_cpu_c.c" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU/os_cpu.h"   target="ucosii/os_cpu.h"   type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU/os_dbg.c"   target="ucosii/os_dbg.c"   type="link" sourcePathType="absolute" />
+         </projectActionList>
+            
+         <projectActionList id="KSDK-operating-system-ucosii-cortex-m4" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyIs>CortexM4</deviceFamilyIs>
+                  <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+               </or>
+            </applyWhen>
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU/ARM-Cortex-M4/GNU&quot;</value>
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uC-CPU/ARM-Cortex-M4/GNU&quot;</value>
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU&quot;</value>
+            </projectOption>
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU/os_cpu_a.S" target="ucosii/os_cpu_a.S" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU/os_cpu_c.c" target="ucosii/os_cpu_c.c" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU/os_cpu.h"   target="ucosii/os_cpu.h"   type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU/os_dbg.c"   target="ucosii/os_dbg.c"   type="link" sourcePathType="absolute" />
+         </projectActionList>
+      </projectActionList>
+   </projectActionList>
+</root>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for FRDM-M22F board -->
+   <projectActionList id="bare-metal-KSDK-library" root="">
+      <variable id="projectOptionValue.KSDK-bare-metal-library-enable" 
+            name="Bare metal" 
+            description="Bare metal OS Abstraction Library"
+            radioGroup="group-ksdk-library-import-os-abstraction" 
+            >
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.KSDK-bare-metal-library-enable" />
+         </applyWhen>
+
+         <constant id="osType" value="bm" />
+
+         <!-- OS Abstraction --> 
+         <copy source="usbdm_kds_path/platform/osa/src/fsl_os_abstraction_bm.c"  target="osa/fsl_os_abstraction_bm.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction_bm.h"  target="osa/fsl_os_abstraction_bm.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction.h"     target="osa/fsl_os_abstraction.h"     type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

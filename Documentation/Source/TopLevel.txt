@@ -1,0 +1,384 @@
+/*!
+  \mainpage USBDM Debugger interface for Freescale RS08,HCS08,HCS12,Coldfire and ARM-Kinetis Devices.  
+
+ \section introSection Introduction
+   USBDM is a debugger hardware interface for a range of Freescale microcontrollers.  
+   It is designed to work with Freescale's Codewarrior software under Windows and Linux.  More recently 
+   basic support for Coldfire and Kinetis with the Codesourcery Tool chain or ARM Ltd GNU Tools for ARM
+   has been added. 
+   A set of stand-alone programmers are also provided.
+       
+   The attached files provide a port of a combined TBDML/OSBDM/TBLCF code to various processors.  
+   The primary motivation for doing this was to produce a single BDM that could be used with the following processors:
+   - RS08
+   - HCS08,
+   - HC12,
+   - Coldfire V1-4 microcontrollers
+   - MC56F800xx Digital Signal Controllers (very limited range of devices).
+   - Kinetis ARM-cortex
+   
+   Other features have also been added compared to the original TBDML/OSBDM designs.
+
+   This site contains links to Version 4 of the following:
+   - A set of software drivers for MS windows and Linux that work with various version of the Freescale Codewarrior IDE,
+     including the latest Eclipse version.
+   - Standard-alone programmers.
+   - A description of, and design files for, several versions of suitable BDM hardware
+   - The firmware required for the above BDM hardware.
+   
+   <hr>
+ \subsection QuickLinks Quick Links
+
+   - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
+   - @htmlonly <a href="USBDM_V4.10/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
+   
+<hr>
+\subsection JS16Designs JS16 based versions (Current designs)
+   The following two designs & variations use the <b>MC9S08JS16CWJ</b> (20 pin SOIC).\n
+   This chip is USB2 Full speed and supports initial <b>programming over USB without needing a BDM</b>.
+
+   <b>Minimal design - Supports HCS12, HCS08 and Coldfire V1</b>
+   <b>Minimal design - Supports HCS12, HCS08, Coldfire V1 and Kinetis (via SWD)</b>
+       - These are two alternative designs using a MC9S08JS16CWJ (20 pin SOIC). 
+       - It is easier to construct than the JMxx version
+       - It may be programmed over the USB connection and <b>doesn't require a BDM</b> for initial programming. 
+       - It replaces the Minimal JB16 designs and is recommended (by me) for newbies! 
+       - A PCB design is supplied but is should be possible to roll-your-own on a prototyping board.\n
+       - An alternative, larger design is provided that supports Serial over USB (CDC interface) and Kinetis via SWD.
+
+   <b>Minimal design - Supports Coldfire V2,3,4, Kinetis(via JTAG) and DSC (M56F80xx only) </b>
+       - This is a minimal design using a MC9S08JS16CWJ (20 pin SOIC). 
+       - It is easier to construct than the JMxx version
+       - It may be programmed over the USB connection and <b>doesn't require a BDM</b> for initial programming. 
+       - It is approximately equivalent to the earlier JB16 based TBLCF design in functionality. 
+       - A PCB design is supplied but is should be possible to roll-your-own on a prototyping board.\n
+       - An alternative, larger design is provided that supports Serial over USB (CDC interface).
+
+<hr>
+ \subsection JMxxDesigns JMxx based versions (Current designs)
+   The following designs use the <b>MC9S08JM60CLD</b> (44 pin LQFP).\n
+   This chip is USB2 Full speed and requires a <b>HCS08 BDM for programming the device</b>.
+
+   <b>USBDM-CF - Supports HCS12, HCS08, RS08 & Coldfire V1, V2, V3 & V4, Kinetis(via JTAG) and MC56F80xx</b>
+       - This is a complete fully-featured design using a MC9S08JM60CLD (44 pin LQFP).
+       - It has target power and various other options. 
+       - It <b>REQUIRES a BDM</b> for initial programming.
+       - Later firmware updates may be done over the USB \n
+
+   <b>USBDM-TWR-xxxx - Supports various Freescale Tower systems</b>
+       - This supports the OSBDM-JM60 hardware as used in various Freescale Tower systems.  
+       - Allows use of the stand-alone USBDM programmers with Tower boards.
+       - Significant speed improvement over OSBDM with some targets.
+       - Serial port support uses the standard USB CDC interface and so serial ports appear as the usual COM devices under Windows
+         and Linux.  \n
+         This means they may be used with standard serial programs such as Hyperterminal and within a Terminal window 
+         in Codewarrior Eclipse. 
+       
+<hr>
+ \subsection KLxxDesigns MK20DX128 based versions (Current designs)
+   The following design use the <b>MK20DX128</b> present on various Freescale FREEDOM boards (Arduino form factor).\n
+   This chip is USB2 Full speed and the chips on the Freedom boards include a pre-rogrammer bootloader (OpenSDA) that allows installation of USBDM without a programmer.
+
+   <b>USBDM_OpenSDA - Supports various Freescale Freedom boards </b>
+       - This supports the OpenSDA hardware as used in various  @htmlonly <a href="http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-K20D50M"><b>Freescale Freedom systems</b></a>@endhtmlonly.  
+       - Allows use of the stand-alone USBDM programmers with FRDM boards.
+       - The Freedom board may be used to Open source tool chains such as Codesourcery or ARM Ltd GNU tools.
+       - The Freedom board may be used as a programmer for external devices (with the addition of a cable and header).
+       - Serial port support uses the standard USB CDC interface and so serial ports appear as the usual COM devices under Windows
+         and Linux.  \n
+         This means they may be used with standard serial programs such as Hyperterminal and within a Terminal window 
+         in Codewarrior Eclipse or Eclipse Juno (with suitable plugin). 
+       
+<hr>
+ \subsection JB16Designs JB16 based versions - These design are obsolete
+ <b>
+   Please note that these designs are obsolete.\n\n
+   The JB16 chip used in these designs have a ROM firmware flaw which makes it impossible to reprogram the chip firmware.
+   When the chip is in bootloader mode it fails to enumerate properly under Windows 7 or 8 and later updates of WIN-XP.
+   Because of this it is not possible to update the firmware which make it impractical to support them.\n
+   The USBDM software <i>may</i> still work to some extent but I cannot make any guarantees.\n\n
+</b>
+   These versions were mainly produced to be compatible with the previous hardware versions of TBDML or OSBDM which
+   were based on the MC908JB16.  This is a USB low speed device.
+   The provided firmware versions allow (some) of these devices to be updated to a combined TBDML/OSBDM.  It also allows
+   these to be used with the new Eclipse-based Codewarror which does not support the original osbdm or tbdml.   
+ 
+   <b>There are several hardware designs supplied :</b>
+    - Complete USBDM - Supports <b>HCS12, HCS08, RS08 & Coldfire V1</b> 
+          - This is a complete fully-featured design using MC68HC908JB16DW (28 pin SOIC)
+    - Minimal TBDML 20pin SOIC - Supports <b>HCS12, HCS08, Coldfire V1</b>
+          - This is a very minimal design using MC68HC908JB16DW (28 pin SOIC)
+    - Minimal TBDML 28pin SOIC - Supports <b>HCS12, HCS08, Coldfire V1</b>
+          - This is a very minimal design using MC908JB16JDWE (20 pin SOIC)
+ 
+   <b>BDM firmware versions are also supplied to support several existing hardware designs by other people:</b>
+    - WTBDM08/12
+          - A commercial design available from Witztronics.
+    - OSBDM
+          - A previous design posted on Freescale OSBDM board
+    - HCS08-OSBDM+E
+          - A previous design posted on Freescale OSBDM board
+                        
+<hr>
+ \subsection DeviceCharacteristics Device Characteristics and links to documentation
+
+The table below shows the support provided by each version and provides links to further information.
+
+@htmlonly
+<table border=1 cellspacing=0 cellpadding=0>
+ <tr>
+  <td rowspan=2 > <br> <p  align=center >Description</p> </td>
+  <td width=70 rowspan=2 valign=top > <br> <p  align=center >Current Design</p> </td>
+  <td colspan=5 valign=top > <p  align=center >Device Support</p> </td>
+  <td colspan=2 valign=top > <p  align=center >Features</p> </td>
+ </tr>
+ <tr>
+  <td width=60 valign=top > <p  align=center >RS08</p> </td>
+  <td width=70 valign=top > <p  align=center >HCS08, HCS12, CFV1</p> </td>
+  <td width=60 valign=top > <p  align=center >Kinetis</p> </td>
+  <td width=60 valign=top > <p  align=center >CFV2, CFV3, CFV4*</p> </td>
+  <td width=60 valign=top > <p  align=center >DSC*</p> </td>
+  <td width=60 valign=top > <p  align=center >Target Power</p> </td>
+  <td width=60 valign=top > <p  align=center >Serial Port</p> </td>
+ </tr>
+ <tr>
+  <td valign=top > <p><a href="USBDM_V4.10/USBDM_JB16/html/index.html"><b>USBDM_JB16 (Unsupported)</b></a></p> </td>
+  <td valign=top > <p  align=center >No</p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+  <td valign=top > <p  align=center >X </p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+  <td valign=top > <p  align=center >  </p> </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  >USBDM_CF_JMxxCLD</p>  </td>
+  <td valign=top >  <p  align=center >No  </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >JTAG</p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  >USBDM_SER_JS16CWJ</p>  </td>
+  <td valign=top >  <p  align=center >No</p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p >USBDM_CF_SER_JS16CWJ</p> </td>
+  <td valign=top >  <p  align=center >No  </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >JTAG</p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  >USBDM_JMxxCLC</p>  </td>
+  <td valign=top >  <p  align=center >No</p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  >USBDM_JMxxCLD</p>  </td>
+  <td valign=top >  <p  align=center >No</p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+  <td valign=top >  <p  align=center >X </p>  </td>
+  <td valign=top >  <p  align=center >  </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  align=center >No </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >X  </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_SWD_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  align=center >Yes</p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >X  </p>  </td>
+  <td valign=top >  <p  align=center >SWD</p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_SWD_SER_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  align=center >Yes</p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >X  </p>  </td>
+  <td valign=top >  <p  align=center >SWD</p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >   </p>  </td>
+  <td valign=top >  <p  align=center >X  </p>  </td>
+  <td valign=top >  <p  align=center >X  </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_CF_JS16/html/index.html"><b>USBDM_CF_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  align=center >Yes </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >JTAG</p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_CF_JMxx/html/index.html"><b>USBDM_CF_JMxxCLD_V3</b></a><br>
+                         Also supports Tower systems.
+                    </p>  
+  </td>
+  <td valign=top >  <p  align=center >Yes </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >JTAG</p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+ </tr>
+ <tr>
+  <td valign=top >  <p  ><a href="USBDM_V4.10/Freedom/html/index.html"><b>USBDM_OpenSDA</b></a><br>
+                         Custom OpenSDA (FRDM-KL25Z).
+                    </p>  
+  </td>
+  <td valign=top >  <p  align=center >Yes </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >SWD </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >    </p>  </td>
+  <td valign=top >  <p  align=center >X   </p>  </td>
+ </tr>
+</table>
+<br>* DSC support is very limited in Codewarrior 10 and the stand-alone programmer
+<br>* CFV2,3,4 support is limited in the stand-alone programmer
+@endhtmlonly
+<hr>
+ \subsection OtherLinks Other Links
+
+   - <b> @htmlonly <a href="http://opax.swin.edu.au/~3340694/USBDM/USBDM_V3.2/USBDM/html/index.html">Previous software version 3.2 may be found here.</a> @endhtmlonly </b>\n
+
+<hr>
+ \subsection Notes Notes 
+   -  Please note that these design are different from the <b>Freescale OSBDM-JM60</b> design which was proceeding
+      independently while I was doing the above designs.
+   
+ \section sectionHistory History
+   \ref pageHistory
+
+ \section Credits Credits
+   The bulk of the code is taken from the TBDML, OSBDM and TBLCF projects and I very much appreciate the
+   effort involved in producing the original code. I hope this extension will be useful.
+
+   The hardware interface is based on TBDML, Freescale USBSPYDER08 and my own invention.
+    
+ \section sectionReferences References
+   -  Altium Designer (PCB Design) - http://www.altium.com/products/altium-designer/
+   -  Axiom MC56F8006 Demo board - http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MC56F8006DEMO
+   -  Codesourcery - http://www.codesourcery.com/
+   -  Coldfire Flasher - http://www.freescale.com/files/soft_dev_tools/software/programmers/CFFLASHER.zip
+   -  Doxygen Documentation tool - http://www.stack.nl/~dimitri/doxygen/index.html
+   -  I2C voltage level conversion  - Phillips application note http://www.standardics.nxp.com/support/documents/i2c/pdf/an97055.pdf\n
+      or http://www.nxp.com/acrobat_download/applicationnotes/AN10441_1.pdf (Phillips part of NXP now?)
+   -  LIBUSB-WIN32 - http://libusb-win32.sourceforge.net/
+   -  MAX662 Data sheet - http://www.maxim-ic.com
+   -  OSBDM - http://forums.freescale.com/freescale/board?board.id=OSBDM08
+   -  OSBDM hardware - http://forums.freescale.com/freescale/board/message?board.id=OSBDM08&thread.id=212
+   -  Tasking GDI Spec - http://www.tasking.com/resources/technologies/debuggers/gdikdi.shtml
+   -  Tcl/Tk - http://www.tcl.tk/software/tcltk/8.5.html 
+   -  TBDML - http://forums.freescale.com/freescale/board?board.id=TBDML
+   -  TBDML hardware - http://forums.freescale.com/freescale/board/message?board.id=TBDML&thread.id=2
+   -  USBSPYDER08 - USB mini board for Freescale's Low-End 8-bit Microcontrollers - http://www.freescale.com/
+   -  Ultimate Packer for eXecutables (UPX) has been used to pack DLLs and EXEs - http://upx.sourceforge.net/ 
+   -  WTBDMS08/12 (Witztronics) Hardware - http://www.witztronics.com/
+   -  WxWidgets Cross Platform Library has been used for the GUI - http://www.wxwidgets.org/
+   -  Xerces XML parser - http://xerces.apache.org/xerces-c
+   -  Windows Installer XML (WiX) toolset http://wix.sourceforge.net/
+   
+ \section sectionQueries Queries
+   Any queries please post on the Freescale @htmlonly <a href="http://forums.freescale.com/freescale/board?board.id=OSBDM08">OSBDM Discussion Board</a>. @endhtmlonly \n
+
+ \section whereToGetThem Some Commercial versions of USBDM BDMs
+ I am aware of several companies producing commercial versions of USBDMs of various kinds:
+   - @htmlonly <a href="http://www.flashgenie.net/USBDM.html">Flashgenie.net</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.technologicalarts.ca">Technological Arts</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.witztronics.com">Witztronics</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.evbplus.com/">Wytec's Motorola/Freescale software development tools</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.usbdm.com.br/">Gravador para Microcontroladores Freescale (Gravador USBDM)</a> @endhtmlonly \n
+   
+The software may be used to "upgrade" the following devices to enable the on-board BDM as a USBDM bdm. 
+   - @htmlonly <a href="http://www.freescale.com/webapp/sps/site/homepage.jsp?code=TOWER_HOME">Selected Freescale Tower boards (KInetis, Coldfire, HCS08 and HCS12)</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-KL25Z">Freescale FRDM boards</a> @endhtmlonly \n
+   - @htmlonly <a href="http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MC56F8006DEMO">Axiom MC56F8006 Demo board</a> @endhtmlonly. \n
+
+<hr>
+
+ \section licenseSection License
+   \verbatim
+   Portions of this software is based on TBLCF software
+   Portions of this software is based on OSBDM software
+   Portions of this software is based on TBDML software
+
+   USBDM
+   Copyright (C) 2007-12  Peter O'Donoghue
+
+   Opensource BDM (OSBDM)
+   Copyright (C) ?
+
+   Turbo BDM Light (TBDML)
+   Copyright (C) 2005  Daniel Malik
+
+   Turbo BDM Light ColdFire (TBLCF)
+   Copyright (C) 2005  Daniel Malik
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   \endverbatim
+ 
+*/
+
+/*
+*/

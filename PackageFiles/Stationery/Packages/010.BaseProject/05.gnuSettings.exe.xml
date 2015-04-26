@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Common GNU Build options for EXE project -->
+   <projectActionList id="gnuSettings.exe">
+      <applyWhen>
+         <and>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <!-- C Linker file and path -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile">
+         <value>&quot;Linker-rom.ld&quot;</value>
+      </projectOption>
+      <projectOption id="gnu.c.link.option.paths">
+         <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
+      </projectOption>
+
+      <!-- C++ Linker file and path -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile">
+         <value>&quot;Linker-rom.ld&quot;</value>
+      </projectOption>
+      <projectOption id="gnu.cpp.link.option.paths">
+         <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
+      </projectOption>
+   </projectActionList>
+</root>

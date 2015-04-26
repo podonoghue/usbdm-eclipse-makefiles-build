@@ -1,0 +1,22 @@
+/*!    
+\if Coldfire
+ \page cableAssemblyPage2 DSC Target Connector
+
+ \section sectionDSC_JMxx_Connector DSC JTAG Connector for USBDM_CF_JS16 (matching 14-pin connector)
+   - The JS16 version BDM uses a keyed 14-pin connector for the DSC JTAG connector.  Targets will provide
+    a matching connector with similar keying.  
+    
+     \image html "USBDM_DSC_JS16_Connector.png"
+    
+    Connection can most easily be made by a 14-wire ribbon cable.
+     \image html "DSC_Ribbon_Connection.png"
+     
+<hr>     
+ \section sectionDSC_JS16_Connector DSC JTAG Connector for USBDM_CF_JMxx (non-matching 26-pin connector)
+   - The JMxx version BDM only has a 26-pin Coldfire BDM connector.  It is necessary to make up an adapter cable to 
+     mate with the smaller DSC JTAG connector.  The diagram below shows the required connections.  \n
+     The DE and TRST pins are not used currently.
+    
+     \image html "ColdfireToONCE.png"
+\endif
+  */

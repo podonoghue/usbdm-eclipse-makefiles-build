@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Root element -->
+<!ELEMENT root (description,exampleList)>
+   <!-- XML File version -->
+   <!ATTLIST root version CDATA #REQUIRED>
+
+<!-- XML File Description element. -->
+<!ELEMENT description (#PCDATA)>
+
+<!-- List of examples -->
+<!ELEMENT exampleList (example*) >
+
+<!-- Example information -->
+<!ELEMENT example (#PCDATA|variable)* >
+   <!-- Description of the example file-->
+   <!ATTLIST example description CDATA              #REQUIRED>
+   <!-- Relative path to the Zip file -->
+   <!ATTLIST example path        CDATA              #REQUIRED>
+   <!-- Device family the example if applicatble to -->
+   <!ATTLIST example family     (ARM|COLDFIRE|NONE) #REQUIRED>
+   <!-- Build tool ID -->
+   <!ATTLIST example buildTool   CDATA              #REQUIRED>
+
+<!-- List of variables -->
+<!ELEMENT variable (#PCDATA)>
+   <!-- Name of the variable, body text is the value -->
+   <!ATTLIST variable name       CDATA              #REQUIRED>
+ 
+
+ 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  -->
+<!ELEMENT memory-map (memory | property) >
+   <!ATTLIST memory-map version CDATA #FIXED "1.0.0" >
+
+<!-- memory: Specifies a memory region, and its type, or device. -->
+<!ELEMENT memory (property) >
+   <!ATTLIST memory  type     CDATA    #REQUIRED >
+   <!ATTLIST memory  start    CDATA    #REQUIRED >
+   <!ATTLIST memory  length   CDATA    #REQUIRED >
+   <!ATTLIST memory  device   CDATA    #IMPLIED >
+
+<!-- property: Generic attribute tag -->
+<!ELEMENT property (#PCDATA | property)* >
+   <!ATTLIST property name CDATA #REQUIRED >

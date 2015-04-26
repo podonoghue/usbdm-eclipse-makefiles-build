@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
+[
+<!ENTITY DSC-56F8006-flash-program   SYSTEM "DSC/DSC-56F8006-flash-prog.elf.p.S">
+<!ENTITY DSC-56F8014-flash-program   SYSTEM "DSC/DSC-56F8014-flash-prog.elf.p.S">
+<!ENTITY DSC-56F8023-flash-program   SYSTEM "DSC/DSC-56F8023-flash-prog.elf.p.S">
+<!ENTITY DSC-56F825X-flash-program   SYSTEM "DSC/DSC-56F825X-flash-prog.elf.p.S">
+<!ENTITY DSC-56F8323-flash-program   SYSTEM "DSC/DSC-56F8323-flash-prog.elf.p.S">
+<!ENTITY DSC-FTFL-flash-program      SYSTEM "DSC/DSC-FTFL-flash-prog.elf.p.S">
+<!ENTITY DSC-FTFA-flash-program      SYSTEM "DSC/DSC-FTFA-flash-prog.elf.p.S">
+
+<!ENTITY DSC-56F8006-flash-scripts   SYSTEM "DSC/DSC-56F8006-flash-scripts.tcl">
+<!ENTITY DSC-56F8014-flash-scripts   SYSTEM "DSC/DSC-56F8014-flash-scripts.tcl">
+<!ENTITY DSC-56F8023-flash-scripts   SYSTEM "DSC/DSC-56F8023-flash-scripts.tcl">
+<!ENTITY DSC-56F825X-flash-scripts   SYSTEM "DSC/DSC-56F825X-flash-scripts.tcl">
+<!ENTITY DSC-56F8323-flash-scripts   SYSTEM "DSC/DSC-56F8323-flash-scripts.tcl">
+<!ENTITY DSC-FTFL-flash-scripts      SYSTEM "DSC/DSC-FTFL-flash-scripts.tcl">
+<!ENTITY DSC-FTFA-flash-scripts      SYSTEM "DSC/DSC-FTFA-flash-scripts.tcl">
+
+<!ENTITY Custom-devices              SYSTEM "Custom/custom-dsc.xml">
+]>
+
+<!-- 
+    *****************************************************************************************
+    *****************************************************************************************
+    *************                                                             ***************
+    *************  NOTE: Addresses and sizes prefixed by 'w': refer to words  ***************
+    *************                                                             ***************
+    *****************************************************************************************
+    *****************************************************************************************
+ -->
+
+<!-- 
+      V4.10.6.250 - Started adding MC56F84452
+      V4.10.4     - Changed how security information is expressed
+      V4.9.5      - Revised DSC security options
+                    Changed memory types to pROM etc
+                    Changes for MC56F8323 etc.
+ -->
+<root version="4.10.4">
+   <description>DSC Device characteristics v4.9.5 31/5/2012</description>
+   <sharedInformation>
+      
+      <flashProgram id="DSC-56F8006-flash-program">  &DSC-56F8006-flash-program;  </flashProgram> <!-- MC56F8002/6 -->
+      <flashProgram id="DSC-56F8014-flash-program">  &DSC-56F8014-flash-program;  </flashProgram> <!-- MC56F8011/13, MC56F8014  -->
+      <flashProgram id="DSC-56F8023-flash-program">  &DSC-56F8023-flash-program;  </flashProgram> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
+      <flashProgram id="DSC-56F825X-flash-program">  &DSC-56F825X-flash-program;  </flashProgram> <!-- MC56F8245/46/47/55/56/57  -->
+      <flashProgram id="DSC-56F8323-flash-program">  &DSC-56F8323-flash-program;  </flashProgram> <!-- MC56F8322, MC56F8323 -->
+      <flashProgram id="DSC-FTFL-flash-program">     &DSC-FTFL-flash-program;     </flashProgram> <!-- FTFL FLash -->
+      <flashProgram id="DSC-FTFA-flash-program">     &DSC-FTFA-flash-program;     </flashProgram> <!-- FTFA FLash -->
+
+      <tclScript id="DSC-56F8006-flash-scripts">     &DSC-56F8006-flash-scripts;   </tclScript> <!-- MC56F8002/6 -->
+      <tclScript id="DSC-56F8014-flash-scripts">     &DSC-56F8014-flash-scripts;   </tclScript> <!-- MC56F8011/13, MC56F8014 -->
+      <tclScript id="DSC-56F8023-flash-scripts">     &DSC-56F8023-flash-scripts;   </tclScript> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
+      <tclScript id="DSC-56F825X-flash-scripts">     &DSC-56F825X-flash-scripts;   </tclScript> <!-- MC56F8245/46/47/55/56/57  -->
+      <tclScript id="DSC-56F8323-flash-scripts">     &DSC-56F8323-flash-scripts;   </tclScript> <!-- MC56F8122/322, MC56F8123/323, MC56F8165/365 -->
+      <tclScript id="DSC-FTFL-flash-scripts">        &DSC-FTFL-flash-scripts;      </tclScript> <!-- FTFL FLash -->
+      <tclScript id="DSC-FTFA-flash-scripts">        &DSC-FTFA-flash-scripts;      </tclScript> <!-- FTFA FLash -->
+      
+      <securityEntry id="DSC-default-security">
+         <securityDescription id="DSC-default-security-description">
+            SECL\t\t=[RES=%1X, RES=%6b, SEC=%2b]\nSECH\t\t=[KEYEN=%1b, RES=%1X]\nRES\t\t= %2X\nFPROT\t\t= %2X\nRES\t\t= %2X\nBACKDOOR\t= %8X
+         </securityDescription>
+         <!-- DSC Unsecured value(words) = SECL,SECH,RES,FPROT,RES,backdoor[0-3] -->
+         <securityInfo size="18" type="unsecure" id="DSC-default-security-off">
+            FFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF
+         </securityInfo>
+         <!-- DSC Secured value(words) = SECL,SECH,RES,FPROT,RES,backdoor[0-3] -->
+         <securityInfo size="18" type="secure" id="DSC-default-security-on">
+            0AE7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+         </securityInfo>
+      </securityEntry>
+      <securityEntry id="DSC-FTFL-security">
+         <securityDescription id="DSC-FTFL-security-description">
+            BACKDOOR\t= 0x%8X\nFPROT\t\t= 0x%4X\nFSEC\t\t= [KEYEN=%2b, MEEN=%2b, FSLACC=%2b, SEC=%2b]\nFOPT\t\t= [-=%6b, EZPORT_DIS=%b, LPBOOT=%b]\nFEPROT\t\t= 0x%X\nFDPROT\t\t= 0x%X
+         </securityDescription>
+         <!-- Kinetis Unsecured value -->
+         <securityInfo size="16" type="unsecure" id="DSC-FTFL-security-off">
+            FFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFF
+         </securityInfo>
+         <!-- Kinetis Secured value -->
+         <securityInfo size="16" type="secure" id="DSC-FTFL-security-on">
+            0123456789ABCDEFFFFFFFFFBFFFFFFF
+         </securityInfo>  
+      </securityEntry>
+      <securityEntry id="DSC-FTFA-security">
+         <securityDescription id="DSC-FTFA-security-description">
+            BACKDOOR\t= 0x%8X\nFPROT\t\t= 0x%4X\nFSEC\t\t= [KEYEN=%2b, MEEN=%2b, FSLACC=%2b, SEC=%2b]\nFOPT\t\t= [-=%6b, EZPORT_DIS=%b, LPBOOT=%b]\nFEPROT\t\t= 0x%X\nFDPROT\t\t= 0x%X
+         </securityDescription>
+         <!-- Kinetis Unsecured value -->
+         <securityInfo size="16" type="unsecure" id="DSC-FTFA-security-off">
+            FFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFF
+         </securityInfo>
+         <!-- Kinetis Secured value -->
+         <securityInfo size="16" type="secure" id="DSC-FTFA-security-on">
+            0123456789ABCDEFFFFFFFFFBFFFFFFF
+         </securityInfo>  
+      </securityEntry>
+   </sharedInformation>
+   <deviceList>
+      <device family="DSC" name="_Default" isDefault="true">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange end="w:0x008BFF" start="w:0x008000" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xF400" type="pROM" securityAddress="w:0x7FF7" sectorSize="2048" alignment="1">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" start="w:0x002000" />
+         </memory>
+         <copctlAddress value="w:0x00F110" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) --> 
+         <sdid value="0x00002211" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8014-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8014-flash-program" />
+         <note>Default DSC Device</note>
+      </device>
+      <!-- 
+            MC56F8002/6
+       -->
+      <device family="DSC" name="MC56F8002">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:1K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x1FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange size="w:6K" end="w:0x001FFF" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:1K" />
+         </memory>
+         <copctlAddress value="w:0x00F140" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8006-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8006-flash-program" />
+      </device>
+      <device family="DSC" name="MC56F8006">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:1K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x1FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange size="w:8K" end="w:0x001FFF" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0x00F140" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8006-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8006-flash-program" />
+      </device>
+      <!-- 
+            MC56F8011/13, MC56F8014 
+       -->
+      <device family="DSC" name="MC56F8011">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:1K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x1FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange size="w:6K" end="w:0x001FFF" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:1K" />
+         </memory>
+         <copctlAddress value="w:0x00F0E0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8014-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8014-flash-program" />
+      </device>
+      <device family="DSC" name="MC56F8013">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:2K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x1FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange size="w:8K" end="w:0x001FFF" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0x00F0E0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8014-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8014-flash-program" />
+      </device>
+      <device family="DSC" name="MC56F8014">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:2K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x1FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange size="w:8K" end="w:0x001FFF" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0x00F0E0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8014-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8014-flash-program" />
+      </device>
+  
+      <!-- 
+         MC56F8023/33, MC56F8025/35, MC56F8036, MC56F8027/37 
+       -->
+      <device family="DSC" name="MC56F8023">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:2K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x7FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" size="w:16K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0x00F120" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8023-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8023-flash-program" />
+      </device>
+      <device name="MC56F8025" alias="MC56F8023"></device>
+      <device name="MC56F8027" alias="MC56F8023"></device>
+
+      <device family="DSC" name="MC56F8033">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x7FF7" sectorSize="256">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" size="w:32K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:4K" />
+         </memory>
+         <copctlAddress value="w:0x00F120" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8023-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8023-flash-program" />
+      </device>
+      <device name="MC56F8035" alias="MC56F8033"></device>
+      <device name="MC56F8036" alias="MC56F8033"></device>
+      <device name="MC56F8037" alias="MC56F8033"></device>
+      
+      <!-- 
+            MC56F825X = MC56F8245/46/47/55/56/57
+       -->
+      <device family="DSC" name="MC56F8245">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:3K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x7FF7" sectorSize="1024">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" size="w:24K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:3K" />
+         </memory>
+         <copctlAddress value="w:0xF110" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F825X-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F825X-flash-program" />
+      </device>
+      <device name="MC56F8246" alias="MC56F8245"></device>
+      <device family="DSC" name="MC56F8247">
+         <clock type="External" />
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x7FF7" sectorSize="1024">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" size="w:24K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:4K" />
+         </memory>
+         <copctlAddress value="w:0xF110" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F825X-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F825X-flash-program" />
+      </device>
+      <device family="DSC" name="MC56F8255">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x7FF7" sectorSize="1024">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange end="w:0x007FFF" size="w:32K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x008000" size="w:4K" />
+         </memory>
+         <copctlAddress value="w:0xF110" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F825X-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F825X-flash-program" />
+      </device>
+      <device name="MC56F8256" alias="MC56F8255"></device>
+      <device name="MC56F8257" alias="MC56F8255"></device>
+      
+      <!-- 
+            MC56F8122/322, MC56F8123/323, MC56F8165/365
+            
+       -->
+      <device family="DSC" name="MC56F8322">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <memory registerAddress="w:0x00F400" type="xROM" sectorSize="256">
+            <memoryRange start="w:0x001000" size="w:4K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x3FF7" sectorSize="512">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange start="w:0x000000" size="w:16K" />
+         </memory>
+         <memory registerAddress="w:0x00F400" type="pROM" sectorSize="256">
+            <memoryRange start="w:0x020000" size="w:4K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x02F800" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8323-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8323-flash-program" />
+      </device>
+      <device name="MC56F8323" alias="MC56F8322"></device>
+      <device family="DSC" name="MC56F8365">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:16K"/>
+         </memory>
+         <memory registerAddress="w:0x00F400" type="xROM" sectorSize="256">
+            <memoryRange start="w:0x004000" size="w:16K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0x00F400" type="pROM" securityAddress="w:0x03FFF7" sectorSize="1024">
+            <securityEntryRef ref="DSC-default-security" />
+            <memoryRange start="w:0x000000" size="w:128K"/>
+         </memory>
+         <memory registerAddress="w:0x00F400" type="pROM" sectorSize="1024">
+            <memoryRange start="w:0x020000" size="w:128K"/>
+         </memory>
+         <memory registerAddress="w:0x00F400" type="pROM" sectorSize="1024">
+            <memoryRange start="w:0x040000" size="w:16K"/>
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x04F800" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x02211004" mask="0xFFFFFFFF" />
+         <flashScripts>
+            <tclScriptRef ref="DSC-56F8323-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-56F8323-flash-program" />
+      </device>
+      <!-- 
+         MC56F82313, MC56F82316
+       -->
+      <device family="DSC" name="MC56F82313">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:2K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+            <securityEntryRef ref="DSC-FTFA-security" />
+            <memoryRange start="w:0x000000" size="w:8K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x00F000" size="w:2K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFA-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFA-flash-program" />
+      </device>
+      <device name="MC56F82316" alias="MC56F82313"></device>
+      <!-- 
+         MC56F82323 
+       -->
+      <device family="DSC" name="MC56F82323">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:3K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+            <securityEntryRef ref="DSC-FTFA-security" />
+            <memoryRange start="w:0x000000" size="w:16K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x00F000" size="w:3K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFA-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFA-flash-program" />
+      </device>
+      <!-- 
+         MC56F84XXX subFamily
+       -->
+      <!-- 
+         MC56F82723, MC56F82726, MC56F82728
+       -->
+      <device family="DSC" name="MC56F82723">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:3K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+            <securityEntryRef ref="DSC-FTFA-security" />
+            <memoryRange start="w:0x000000" size="w:16K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFA-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFA-flash-program" />
+      </device>
+      <device name="MC56F82726" alias="MC56F82723"></device>
+      <device name="MC56F82728" alias="MC56F82723"></device>
+      <!-- 
+         MC56F82733, MC56F82736, MC56F82738
+       -->
+      <device family="DSC" name="MC56F82733">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+            <securityEntryRef ref="DSC-FTFA-security" />
+            <memoryRange start="w:0x000000" size="w:24K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFA-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFA-flash-program" />
+      </device>
+      <device name="MC56F82736" alias="MC56F82733"></device>
+      <device name="MC56F82738" alias="MC56F82733"></device>
+      <!-- 
+         MC56F82743, MC56F82746, MC56F82748
+       -->
+      <device family="DSC" name="MC56F82743">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" name="RAMImage1" />
+         </memory>
+         <memory registerAddress="w:0xE3C0" type="xROM" sectorSize="512">
+            <memoryRange start="w:0x004000" size="w:32K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+            <securityEntryRef ref="DSC-FTFA-security" />
+            <memoryRange start="w:0x000000" size="w:32K" />
+         </memory>
+         <memory type="pRAM">
+            <memoryRange start="w:0x00F000" size="w:4K" name="RAMImage2"/>
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFA-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFA-flash-program" />
+      </device>
+      <device name="MC56F82746" alias="MC56F82743"></device>
+      <device name="MC56F82748" alias="MC56F82743"></device>      
+      <!-- 
+         MC56F84441, MC56F84442, MC56F84540, MC56F84543
+       -->
+      <device family="DSC" name="MC56F84441">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:4K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+            <securityEntryRef ref="DSC-FTFL-security" />
+            <memoryRange start="w:0x000000" size="w:32K" />
+         </memory>
+         <memory registerAddress="w:0xE3C0" type="pROM" sectorSize="1024">
+            <memoryRange start="w:0x068000" size="w:16K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFL-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFL-flash-program" />
+      </device>
+      <device name="MC56F84442" alias="MC56F84441"></device>
+      <!-- 
+         MC56F84451, MC56F84452, MC56F84550, MC56F84553
+       -->
+      <device family="DSC" name="MC56F84451">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:8K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+            <securityEntryRef ref="DSC-FTFL-security" />
+            <memoryRange start="w:0x000000" size="w:48K" />
+         </memory>
+         <memory registerAddress="w:0xE3C0" type="pROM" sectorSize="1024" >
+            <memoryRange start="w:0x068000" size="w:16K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFL-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFL-flash-program" />
+      </device>
+      <device name="MC56F84452" alias="MC56F84451"></device>
+      <!-- 
+         MC56F84462, MC56F84565, MC56F84567, MC56F84763, MC56F84766, MC56F84769
+       -->
+      <device family="DSC" name="MC56F84462">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:12K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+            <securityEntryRef ref="DSC-FTFL-security" />
+            <memoryRange start="w:0x000000" size="w:64K" />
+         </memory>
+         <memory registerAddress="w:0xE3C0" type="pROM" sectorSize="1024">
+            <memoryRange start="w:0x068000" size="w:16K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFL-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFL-flash-program" />
+      </device>
+      <device name="MC56F84540" alias="MC56F84441"></device>
+      <device name="MC56F84543" alias="MC56F84441"></device>
+      <device name="MC56F84550" alias="MC56F84451"></device>
+      <device name="MC56F84553" alias="MC56F84451"></device>
+      <device name="MC56F84565" alias="MC56F84462"></device>
+      <device name="MC56F84567" alias="MC56F84462"></device>
+      <!-- 
+         MC56F84585, MC56F84587, MC56F84786, MC56F84789
+       -->
+      <device family="DSC" name="MC56F84585">
+         <clock type="External" />
+         <!-- Data Space -->
+         <memory type="xRAM">
+            <memoryRange start="w:0x000000" size="w:16K" />
+         </memory>
+         <!-- Program Space -->
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+            <securityEntryRef ref="DSC-FTFL-security" />
+            <memoryRange start="w:0x000000" size="w:128K" />
+         </memory>
+         <memory registerAddress="w:0xE3C0" type="pROM" sectorSize="1024">
+            <memoryRange start="w:0x068000" size="w:16K" />
+         </memory>
+         <copctlAddress value="w:0xF2C0" />
+         <sdidAddress value="w:0x11111" /> <!-- Not used (IDCODE) -->
+         <sdid value="0x61C0301D" mask="0xFFFFFFFF"/>
+         <flashScripts>
+            <tclScriptRef ref="DSC-FTFL-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="DSC-FTFL-flash-program" />
+      </device>
+      <device name="MC56F84587" alias="MC56F84585"></device>
+      <device name="MC56F84763" alias="MC56F84462"></device>
+      <device name="MC56F84766" alias="MC56F84462"></device>
+      <device name="MC56F84769" alias="MC56F84462"></device>
+      <device name="MC56F84786" alias="MC56F84585"></device>
+      <device name="MC56F84789" alias="MC56F84585"></device>
+      
+      &Custom-devices;
+   </deviceList>
+</root>

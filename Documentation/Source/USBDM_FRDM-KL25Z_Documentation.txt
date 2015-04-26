@@ -1,0 +1,107 @@
+/*!
+  \mainpage USBDM-FRDM - USBDM Debugger based on Freescale FRDM-xxxx board
+
+ \section introSection Introduction
+   The FRM-xxxx boards from Freescale includes a minimal SWD based debugging interface for ARM Kinetis targets.  The interface
+   hardware is simple but flexible enough to be used with a wide range of Kinetis devices.  The board includes provision for 
+   the connector necessary to allow programming of external devices as well as the target device on the board.  
+   
+   Unfortunately the existing debugger firmware available with the FRDM-xxxx boards is specifically tied to the target chip on the board 
+   (e.g. MKL25Z128M4).  In fact, it is tied to the <b>individual</b> serial number of the <b>chip</b> on the board and cannot even be used to 
+   program other otherwise identical devices.  Changing the chip on the board renders the debugging interface useless. 
+   
+   This manual describes a version of the USBDM firmware that can be loaded into the KL20 based debugging interface on any of the FRDM boards.
+   This allows its use as a general purpose programmer and debugger for Kinetis devices (including the on board target chip e.g. KL25 on the board).
+   This provides a very inexpensive debugging tool.
+    
+   While the USBDM firmware may be used with any of the FRDM-xxxx boards it is recommended to use a FRDM-KL25Z or FRDM-K20D50M board as some of the early
+   versions of the other boards have various hardware errors that make connection to an external device difficult.
+   
+ \subsection featureSection Features
+   This version of the USBDM code combined with the FRDM-xxxx board provides the following features:
+   -	A SWD interface for programming and debugging of <b>Kinetis ARM-Cortex</b> microcontrollers.
+   -  Both the on-board target device (e.g. MKL25Z128M4) and external devices may be programmed.
+   -  Installation of the USBDM software does not require any tools other than the FRDM-KL25Z board.
+   -  Compatible IDEs
+      - Codewarrior V10.x (Eclipse version). The following features are provided:
+         - Kinetis - Integration of <i>USBDM debug interface</i> in wizards and debug functions.
+      - Eclipse (including Freescale Kinetis Design Studio). The following features are provided:
+         - Kinetis <i>New Project Wizard</i>
+         - Kinetis <i>USBDM debug target</i>
+         - Integration of GCC tools (GNU tools for ARM or KDS tools)
+         - Peripheral Register view tailored for Kinetis devices.
+   -  Stand-alone Kinetis programmer utility.
+   -  Linux compatible
+   -  Windows compatible
+   -  The Firmware in the BDM may be updated using the usual FRDM-KL25 Bootloader function.
+   -  The original board software may be restored if USBDM is not found suitable.  
+
+<b>The capabilities and features of the USBDM interface varies between the different versions of hardware. 
+Not all of the functionality described in the following pages may apply to this version.</b>
+       
+ \subsection pictureSection Pictures
+   - <b>Image</b> - FRDM-KL25 with debug cable and Connector (also shown soldered on the board)\n \n
+   \image html "FRDM-Cable.png"
+         
+ \section sectionCredits Credits
+   -  The original base code is taken from the TBDML, OSBDM and TBLCF projects and I very much appreciate
+      the effort involved in producing the original code.  I hope this extension will be useful.
+
+ \section sectionReferences References
+   -  Altium Designer (PCB Design) - http://www.altium.com/products/altium-designer/
+   -  Axiom MC56F8006 Demo board - http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MC56F8006DEMO
+   -  Codesourcery - http://www.codesourcery.com/
+   -  Coldfire Flasher - http://www.freescale.com/files/soft_dev_tools/software/programmers/CFFLASHER.zip
+   -  Doxygen Documentation tool - http://www.stack.nl/~dimitri/doxygen/index.html
+   -  I2C voltage level conversion  - Phillips application note http://www.standardics.nxp.com/support/documents/i2c/pdf/an97055.pdf
+   -  LIBUSB-WIN32 - http://libusb-win32.sourceforge.net/
+   -  MAX662 Data sheet - http://www.maxim-ic.com
+   -  OSBDM - http://forums.freescale.com/freescale/board?board.id=OSBDM08
+   -  OSBDM hardware - http://forums.freescale.com/freescale/board/message?board.id=OSBDM08&thread.id=212
+   -  Tasking GDI Spec - http://www.tasking.com/resources/technologies/debuggers/gdikdi.shtml
+   -  Tcl/Tk - http://www.tcl.tk/software/tcltk/8.5.html 
+   -  TBDML - http://forums.freescale.com/freescale/board?board.id=TBDML
+   -  TBDML hardware - http://forums.freescale.com/freescale/board/message?board.id=TBDML&thread.id=2
+   -  USBSPYDER08 - USB mini board for Freescale's Low-End 8-bit Microcontrollers - http://www.freescale.com/
+   -  Ultimate Packer for eXecutables (UPX) has been used to pack DLLs and EXEs - http://upx.sourceforge.net/ 
+   -  WTBDMS08/12 (Witztronics) Hardware - http://www.witztronics.com/
+   -  WxWidgets Cross Platform Library has been used for the GUI - http://www.wxwidgets.org/
+   -  Xerces XML parser - http://xerces.apache.org/xerces-c
+   
+ \section sectionQueries Queries
+   Any queries please post on the Freescale @htmlonly <a href="https://community.freescale.com/community/bdm">OSBDM and TBDML Discussion Board</a>. @endhtmlonly \n
+   
+ \section licenseSection License
+   \verbatim
+   Portions of this software is based on TBLCF software
+   Portions of this software is based on OSBDM software
+   Portions of this software is based on TBDML software
+
+   USBDM
+   Copyright (C) 2007-13  Peter O'Donoghue
+
+   Opensource BDM (OSBDM)
+   Copyright (C) ?
+
+   Turbo BDM Light (TBDML)
+   Copyright (C) 2005  Daniel Malik
+
+   Turbo BDM Light ColdFire (TBLCF)
+   Copyright (C) 2005  Daniel Malik
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   \endverbatim
+
+*/

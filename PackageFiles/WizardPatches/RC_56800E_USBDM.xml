@@ -1,0 +1,23 @@
+<DEFAULTCONNECTIONFILES>
+</DEFAULTCONNECTIONFILES>
+<REMOTECONNECTIONS>
+   <!-- Added pgo -->
+   <RCONN PANEL_NAME = "GDI Remote Connection" RCONN_NAME = "USBDM_56800E" NUB_NAME = "56800E - GDI" IS_BROWSEABLE = "true">
+      <EXPORTEDPANEL>
+          <NAME>GDI Remote Connection</NAME>
+          <SETTINGLIST>
+              <SETTING><NAME>MWDebugger_GDI_Path</NAME>
+                  <SETTING><NAME>Path</NAME><VALUE>bin\Plugins\Support\USBDM\usbdm-dsc-gdi-legacy.dll</VALUE></SETTING>
+                  <SETTING><NAME>PathFormat</NAME><VALUE>Windows</VALUE></SETTING>
+                  <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+              </SETTING>
+              <SETTING><NAME>MWDebugger_Cfg_Path</NAME>
+                  <SETTING><NAME>Path</NAME><VALUE></VALUE></SETTING>
+                  <SETTING><NAME>PathFormat</NAME><VALUE>Windows</VALUE></SETTING>
+                  <SETTING><NAME>PathRoot</NAME><VALUE>Absolute</VALUE></SETTING>
+              </SETTING>
+              <SETTING><NAME>MWDebugger_logData</NAME><VALUE>0</VALUE></SETTING>
+          </SETTINGLIST>
+      </EXPORTEDPANEL>
+   </RCONN>
+</REMOTECONNECTIONS>

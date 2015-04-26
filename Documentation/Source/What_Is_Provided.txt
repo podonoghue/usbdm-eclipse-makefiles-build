@@ -1,0 +1,60 @@
+/*!
+ \page whatIsProvided What is Provided
+
+ \section A Installation Files (Available from Sourceforge)
+   - Windows:
+      - <b>USBDM_X_X_X_Win.msi</b> - Installer for USBDM software.
+      - <b>USBDM_Drivers_X_X_X_Win_x32.msi</b> - Installer for the USBDM drivers for windows 7 32-bit.
+      - <b>USBDM_Drivers_X_X_X_Win_x64.msi</b> - Installer for the USBDM drivers for windows 7 64-bit.
+      - <b>USBDM_Drivers_X_X_X_WinXP_x32.msi</b> - Installer for the USBDM drivers for Win-XP 32-bit.
+      - <b>USBDM_Drivers_X_X_X_WinXP_x64.msi</b> - Installer for the USBDM drivers for Win-XP 64-bit.
+   - Linux:
+      - <b>usbdm_X.X.X.X-1-i386.deb</b> - Debian installer for 32-bit Linux
+      - <b>usbdm_X.X.X.X-1-amd64.deb</b> - Debian installer for 64-bit Linux
+      
+\section B Other Files
+   - Source code is available on GITHUB https://github.com/podonoghue
+   
+ \section C PCB 
+   This folder contains the files necessary to produce the USBDM hardware
+   -  Gerber files for the SMT-PTH board
+   -  Bill of materials
+   -  Schematic & assembly layouts
+
+ \section D Source
+   
+ \subsection EclipseFiles Eclipse Archive Files
+   - <b>The following files are archives exported from Eclipse CDT for windows.</b> \n
+   To rebuild these projects you will need the following:
+      - <b>Eclipse CDT</b>  \n This is C development environment for the Eclipse IDE. CDT may be obtained from http://www.eclipse.org/cdt/
+      - <b>MinGW - Minimalist GNU for Windows</b> \n  This provides the C development tools (e.g. Compiler, linkers etc.) required for the
+           windows platform.  These are used with the Eclipse IDE on a windows platform. These tools may be obtained from http://www.mingw.org/
+      - <b>Doxygen</b> \n This is a tool for producing documention directly from suitably annotated code.  The source code files have
+           been extensively commented in this fashion. This tool may be obtained from http://www.stack.nl/~dimitri/doxygen/.
+      - <b>eclox</b> \n This is a plugin for Eclipse that allows the convenient use of Doxygen from within Eclipse.  This plugin may
+           be obtained from http://eclox.eu/
+         
+   -  <b>USBDM_Win32_xxxx.zip</b> \n
+      - Source for the all DLL and executables. \n
+      - Documentation source files used to generate help files etc.\n
+      - HextoC \n
+      Source for the conversion program used to convert S1S9 records into a C array for incorporation in the driver DLLs.
+      This is used to embed the BDM Firmware images in the interface DLLs.  This allows
+      automatic update of the JMxx version BDM firmware.
+      
+ \subsection CodeWarrior Codewarrior Projects
+   <b>The following files are simple archives of Freescale Codewarrior for Microcontrollers V6.2 projects.</b> \n
+   
+   -  <b>USBDM_JMxx_xxxx.zip</b> \n
+      Source for the firmware.  This is a simple Zip file of the Codewarrior V10 project.  Documentation for the C files
+      may be generated with doxygen.
+\if RS08
+   -  <b>Flash_Programming_Routines.rar</b> \n
+      This is the source code for the Flash programming routines that are downloaded to the various targets
+      by the BDM when programming the on-chip Flash memory.
+\endif
+      
+ \subsection OtherFiles Other Files
+   -  <b>BDM Timing.xls</b> \n
+      This spreadsheet was used to calculate the timing for the bdm_rx() and bdm_tx() routines. 
+*/

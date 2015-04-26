@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
+[
+<!ENTITY RS08-default-flashScripts      SYSTEM "RS08/RS08-default-flash-scripts.tcl">
+]>
+<!-- 
+      V4.10.4 - Changed how security information is expressed
+ -->
+<root version="4.10.4">
+   <description>RS08 Device characteristics v4.8.0 5/12/2011</description>
+   <sharedInformation>
+      <tclScript id="RS08-default-Scripts">
+         &RS08-default-flashScripts;
+      </tclScript>
+      <!-- Security Values for Flash -->
+      <securityEntry id="HCS12-default-security">
+         <securityDescription id="RS08-default-security-description">
+            NVOPT = [RES=%7b, SECD=%1b]
+         </securityDescription>
+         <!-- RS08 Unsecured value = NVOPT -->
+         <securityInfo size="1" type="unsecure" id="RS08-default-security-off">
+            FF
+         </securityInfo>
+         <!-- RS08 Secured value = NVOPT -->
+         <securityInfo size="1" type="secure" id="RS08-default-security-on">
+            FE
+         </securityInfo>
+      </securityEntry>
+   </sharedInformation>
+   <deviceList>
+      <device family="RS08" name="_Default" isDefault="true" >
+         <clock type="External" />
+         <memory type="ram">
+            <memoryRange end="0x004F" start="0x0020" />
+         </memory>
+         <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3C00" />
+         </memory>
+         <sdidMask value="0xFFF" />
+         <sdid value="0x0" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Default RS08 Device</note>
+      </device>
+      <device family="RS08" name="MC9RS08KA1">
+         <clock registerAddress="0x0014" type="RS08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x004F" start="0x0020" />
+         </memory>
+         <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3C00" />
+         </memory>
+         <soptAddress value="0x201" />
+         <sdidAddress value="0x206" />
+         <sdid value="0x800" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+      </device>
+      <device family="RS08" name="MC9RS08KA2">
+         <clock registerAddress="0x0014" type="RS08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x004F" start="0x0020" />
+         </memory>
+         <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3800" />
+         </memory>
+         <soptAddress value="0x201" />
+         <sdidAddress value="0x206" />
+         <sdid value="0x800" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08KA4">
+         <clock registerAddress="0x023C" type="RS08ICSOSCV1" />
+         <memory type="ram">
+            <memoryRange end="0x009F" start="0x0030" />
+         </memory>
+         <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3000" />
+         </memory>
+         <soptAddress value="0x201" />
+         <sdidAddress value="0x206" />
+         <sdid value="0x803" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08KA8">
+         <clock registerAddress="0x023C" type="RS08ICSOSCV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0030" />
+         </memory>
+         <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x2000" />
+         </memory>
+         <soptAddress value="0x201" />
+         <sdidAddress value="0x206" />
+         <sdid value="0x803" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+      </device>
+      <device family="RS08" name="MC9RS08KB2">
+         <clock registerAddress="0x0238" type="S08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3800" />
+         </memory>
+         <soptAddress value="0x211" />
+         <sdidAddress value="0x216" />
+         <sdid value="0x806" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08KB4">
+         <clock registerAddress="0x0238" type="S08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3000" />
+         </memory>
+         <soptAddress value="0x211" />
+         <sdidAddress value="0x216" />
+         <sdid value="0x806" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08KB8">
+         <clock registerAddress="0x0238" type="S08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x2000" />
+         </memory>
+         <soptAddress value="0x211" />
+         <sdidAddress value="0x216" />
+         <sdid value="0x806" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08KB12">
+         <clock registerAddress="0x0238" type="S08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x1000" />
+         </memory>
+         <soptAddress value="0x211" />
+         <sdidAddress value="0x216" />
+         <sdid value="0x806" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+         <note>Untested</note>
+      </device>
+      <device family="RS08" name="MC9RS08LA8">
+         <clock registerAddress="0x022C" type="RS08ICSV1" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x250" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x2000" />
+         </memory>
+         <soptAddress value="0x019" />
+         <sdidAddress value="0x216" />
+         <sdid value="0x804" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+      </device>
+      <device family="RS08" name="MC9RS08LE4">
+         <clock registerAddress="0x022C" type="S08ICSV2x512" />
+         <memory type="ram">
+            <memoryRange end="0x00BF" start="0x0050" />
+         </memory>
+         <memory registerAddress="0x23C" type="flash" securityAddress="0x3FFC">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange end="0x3FFF" start="0x3000" />
+         </memory>
+         <soptAddress value="0x019" />
+         <sdidAddress value="0x21A" />
+         <sdid value="0x805" />
+         <flashScripts>
+            <tclScriptRef ref="RS08-default-Scripts" />
+         </flashScripts>
+      </device>
+   </deviceList>
+</root>

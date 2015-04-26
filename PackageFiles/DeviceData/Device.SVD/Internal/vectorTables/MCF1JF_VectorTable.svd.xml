@@ -1,0 +1,264 @@
+<!--
+Devices using this vector table: 
+   MCF51JF
+-->
+      <interrupts>
+         <name>MCF1JF_VectorTable</name>
+         <description>MCF51JFxxx VectorTable</description>
+         <interrupt>
+            <name>IRQ</name>
+            <description>IRQ</description>
+            <value>64</value>
+         </interrupt>
+         <interrupt>
+            <name>LVD</name>
+            <description>Low Voltage Detect, Low Voltage Warning interrupt</description>
+            <value>65</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>66</value>
+         </interrupt>
+         <interrupt>
+            <name>LOL</name>
+            <description>MCG Loss of Clock</description>
+            <value>67</value>
+         </interrupt>
+         <interrupt>
+            <name>FLASH</name>
+            <description>Flash</description>
+            <value>68</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_CH0</name>
+            <description>DMA Channel 0</description>
+            <value>69</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_CH1</name>
+            <description>DMA Channel 1</description>
+            <value>70</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_CH2</name>
+            <description>DMA Channel 2</description>
+            <value>71</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_CH3</name>
+            <description>DMA Channel 3</description>
+            <value>72</value>
+         </interrupt>
+         <interrupt>
+            <name>USB0</name>
+            <description>USB0 Status</description>
+            <value>73</value>
+         </interrupt>
+         <interrupt>
+            <name>RNGB</name>
+            <description>RNGB</description>
+            <value>74</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1FAULT_OVF</name>
+            <description>FTM1 Fault &amp; Overflow</description>
+            <value>75</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH0</name>
+            <description>FTM1 Channel 0</description>
+            <value>76</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH1</name>
+            <description>FTM1 Channel 1</description>
+            <value>77</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH2</name>
+            <description>FTM1 Channel 2</description>
+            <value>78</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH3</name>
+            <description>FTM1 Channel 3</description>
+            <value>79</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH4</name>
+            <description>FTM1 Channel 4</description>
+            <value>80</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1_CH5</name>
+            <description>FTM1 Channel 5</description>
+            <value>81</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description>CMP0</description>
+            <value>82</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0_FAULT_OVF</name>
+            <description>FTM0 Fault &amp; Overflow</description>
+            <value>83</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0_CH0</name>
+            <description>FTM0 Channel 0</description>
+            <value>84</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0_CH1</name>
+            <description>FTM0 Channel 1</description>
+            <value>85</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>SPI0</description>
+            <value>86</value>
+         </interrupt>
+         <interrupt>
+            <name>SCI0</name>
+            <description>UART0</description>
+            <value>87</value>
+         </interrupt>
+         <interrupt>
+            <name>SAI_RX</name>
+            <description>I2S Receive</description>
+            <value>88</value>
+         </interrupt>
+         <interrupt>
+            <name>SAI_TX</name>
+            <description>I2S Transmit</description>
+            <value>89</value>
+         </interrupt>
+         <interrupt>
+            <name>IIC0</name>
+            <description>I2C0</description>
+            <value>90</value>
+         </interrupt>
+         <interrupt>
+            <name>IIC2</name>
+            <description>I2C2</description>
+            <value>91</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>SPI1</description>
+            <value>92</value>
+         </interrupt>
+         <interrupt>
+            <name>SCI1</name>
+            <description>UART1</description>
+            <value>93</value>
+         </interrupt>
+         <interrupt>
+            <name>IIC1</name>
+            <description>I2C1</description>
+            <value>94</value>
+         </interrupt>
+         <interrupt>
+            <name>IIC3</name>
+            <description>I2C3</description>
+            <value>95</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>ADC0</description>
+            <value>96</value>
+         </interrupt>
+         <interrupt>
+            <name>TSI0</name>
+            <description>TSI0</description>
+            <value>97</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC0</name>
+            <description>DAC0</description>
+            <value>98</value>
+         </interrupt>
+         <interrupt>
+            <name>CMT</name>
+            <description>CMT</description>
+            <value>99</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>PDB0</description>
+            <value>100</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>LPTMR0</description>
+            <value>101</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR1</name>
+            <description>LPTMR1</description>
+            <value>102</value>
+         </interrupt>
+         <interrupt>
+            <name>L7_SWI</name>
+            <description>Level 7 Software Interrupt</description>
+            <value>103</value>
+         </interrupt>
+         <interrupt>
+            <name>L6_SWI</name>
+            <description>Level 6 Software Interrupt</description>
+            <value>104</value>
+         </interrupt>
+         <interrupt>
+            <name>L5_SWI</name>
+            <description>Level 5 Software Interrupt</description>
+            <value>105</value>
+         </interrupt>
+         <interrupt>
+            <name>L4_SWI</name>
+            <description>Level 4 Software Interrupt</description>
+            <value>106</value>
+         </interrupt>
+         <interrupt>
+            <name>L3_SWI</name>
+            <description>Level 3 Software Interrupt</description>
+            <value>107</value>
+         </interrupt>
+         <interrupt>
+            <name>L2_SWI</name>
+            <description>Level 2 Software Interrupt</description>
+            <value>108</value>
+         </interrupt>
+         <interrupt>
+            <name>L1_SWI</name>
+            <description>Level 1 Software Interrupt</description>
+            <value>109</value>
+         </interrupt>
+         <interrupt>
+            <name>MTIM0</name>
+            <description>MTIM0</description>
+            <value>110</value>
+         </interrupt>
+         <interrupt>
+            <name>USBDCD</name>
+            <description>USBDCD</description>
+            <value>111</value>
+         </interrupt>
+         <interrupt>
+            <name>PORT_AB</name>
+            <description>EGPIO Port A &amp; EGPIO Port B</description>
+            <value>112</value>
+         </interrupt>
+         <interrupt>
+            <name>PORT_CD</name>
+            <description>EGPIO Port C &amp; EGPIO Port D</description>
+            <value>113</value>
+         </interrupt>
+         <interrupt>
+            <name>PORT_EF</name>
+            <description>EGPIO Port E &amp; EGPIO Port F</description>
+            <value>114</value>
+         </interrupt>
+      </interrupts>
+

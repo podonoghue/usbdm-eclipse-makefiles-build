@@ -1,0 +1,125 @@
+/*!    
+ \page buildingSoftwarePage Building USBDM Software.
+
+ \section sectionSoftwareNeeded Software Packages Needed
+   USBDM makes use of the following packages under WIN32:
+   - To build applications:
+      - Minimalist GNU for Windows (MinGW)
+      - wxWidgets
+      - TCL
+      - Xerces-c
+   - To build the Windows installer package (.msi file)
+      - Windows Installer XML (WiX) toolset
+      - MSI Installer SDK V4.5
+   - To build Eclipse plugin-ins for Codewarrior 10.x
+      - Java SDK
+      - Codewarrior 10.x 
+   - To build firmware for BDMs
+      - Codewarrior 10.2
+   - To build documentation
+      - Doxygen 
+      
+ \section sectionBuildingFirmware Building Firmware.
+  
+  The firmware for the HCS08 bdm is available as exported projects from Codewarrior 10.2.  It should be
+  straightforward to import these and rebuild them using Codewarrior.
+   - Unzip the archive.
+   - Select import existing projects in Codewarrior.
+     
+ \section sectionBuildingApplications Building Applications. 
+  To maintain portability between WIN32 and Linux I have chosen to use wxWidgets to provide the GUI.
+  
+  While I do the development using the Eclipse IDE I have found it difficult to provide a portable build
+  environment since Eclipse seems to embed a great deal of machine specific information in the project settings.
+  When moving the projects to another machine they were breaking in a fatal fashion - The project setting would 
+  become unusable.  In any case this is not a practical approach since changing the project settings when moving
+  between machine would be tedious.
+  
+  To solve this I have changed the projects to using make files.  This allows 
+  the projects to be built outside of Eclipse or with Eclipse using Makefile based projects.
+  Machine specific information is localised to one Makefile to allow convenient changes.   
+  
+  The following described setting up the required environment using currently available (May 2013) versions of the 
+  needed packages.
+   - Mingw 4.6.2 (32-bit) \n
+   I installed to "c:\Apps\MinGW" \n
+   Download mingw-get-inst-xxxx.exe from http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst \n
+   I suggest you follow the guidelines at http://www.mingw.org/wiki/Getting_Started to install MinGW using the automatic installer.  You 
+   will also need to install MSYS. \n
+   
+   - wxWidgets 2.9.4 \n
+   I installed to "C:\Apps\wxWidgets-2.9.4" \n
+   Download wxMSW-2.9.4-Setup.exe from http://sourceforge.net/projects/wxwindows/files/2.9.4/ \n
+   It is necessary to build wxWidgets libraries using the MinGW compiler.  Instructions for doing so area available in the README
+   installed (search for MinGW).  I just used the simple make option.\n
+   Command line used:  <b>mingw32-make -f makefile.gcc BUILD=release SHARED=1 </b>\n 
+   This will create the library and include files.
+
+   - TCL (Active TCL 8.6.x.x) \n
+   I installed to "C:\Apps\Tcl" \n
+      - I took the easy route and just installed Active TCL from http://www.activestate.com/activetcl/downloads \n
+      - As an alternative you should be able to use the TCL source files from Sourceforge http://sourceforge.net/projects/tcl/files/Tcl/8.5.12/ 
+      to build the TCL DLL using MinGW.\n
+      - Note - All that is actually needed is the header files and the single DLL tcl86.dll that is provided in the USBDM install so you may not
+      actually need to build TCL (I hope). 
+   
+   - Xerces-C 3.1 XML parser \n
+   I installed the archive to "C:\Apps\xerces" \n
+      - It is necessary to compile the xerces library using MinGW.  Download the sources from http://xerces.apache.org/xerces-c/ \n
+        Build xerces libraries using the MinGW compiler.  Instructions for doing so area available here 
+        http://xerces.apache.org/xerces-c/build-3.html \n
+        Commands used: \n
+        ./configure\n
+		make libxerces_c_la_LDFLAGS="-release 3.1 -no-undefined"\n
+		(Note the -no-undefined option is NOT used in the ./configure!)\n
+		
+   - Windows Installer 4.5 SDK (needed to build the Windows installer) \n
+      This is part of Windows SDK for Windows 7.  I was unable to get this version to work so I used earlier non-official download of msi45sdk.msi.
+        - Search for 'Windows Installer 4.5 SDK' or msi45sdk.msi to install the Windows installer by itself.
+  
+   - WiX Tool-set v3.7 (needed to build the Windows installer) \n
+        - Download from http://wix.codeplex.com/
+  
+   - Building USBDM applications \n
+      The following will build the applications and interface DLLs but not the Java related components.
+        -# Download the source package from GITHUB - https://github.com/podonoghue 
+        -# Edit the Common.mk file.  This file assumes the paths given above. Update paths as necessary
+        -# Run the command <b>CollectExternalFiles</b>.  This collects external files.  If it complains, then locate the missing external files or
+         correct the paths in the command file.
+        -# Run the make command "make -f MakeAll.mk all"
+  
+\section Documentation
+	The documentation is built in Eclipse using
+	  - doxygen
+	  	- http://www.stack.nl/~dimitri/doxygen/
+	  - Eclox plugin for Eclipse
+	  	- http://home.gna.org/eclox/
+	  - HTML Help compiler (to produced windows help files)
+	  	- Download from Mircosoft
+	If using windows XP you will need to change the HHC location to point to the HTML Help installation. (Advanced Tab, By Group, HTML Output) 
+
+\section sectionJava Java & Eclipse plugins
+  The required source files are included as part of the USBDM source package referred to in the above step.
+  
+  - USBDM JNI dll \n
+    This is the Java native Interface for the USBDM interface DLL. It allows java code to access basic functions. 
+      - Download and install a current Java SDK from Oracle: Java SE Development Kit 7 (32-bit) (Java SE 7u21, JDK)\n
+      	Download from http://www.oracle.com/technetwork/java/javase/downloads/index.html \n
+   		I installed the standard location
+      - Complete the steps given above for <b>Building USBDM applications</b>
+      - Edit the MakeAll.mk file and add in the UsbdmJniWrapper_dll target to the list of targets
+      - Run the make command "make -f MakeAll.mk all"
+    
+  - Codewarrior plugins \n
+    No idea how to do these except from within Eclipse with Plugin development tools.
+      - Install Eclipse with plugin development support (PDE). \n 
+        Add Eclipse SDK (See Help->Install New Software, search for SDK). \n
+        We are building plugins for the Codewarrior version of Eclipse so it is necessary to change the plugin target. \n
+        - Select Window->Preferences.
+        - Expand Plug-in Development->Target Platform.
+        - Click Add on the first tab.
+        - Use the wizard to add the plugin directory from a Codewarrior installation.
+      - Follow the instructions at http://www.eclipse.org/swt/eclipse.php to download and install Eclipse SWT as a project in Eclipse.
+        I used swt-3.7.2-win32-win32-x86_64.zip from http://www.eclipse.org/swt/.
+      - You should be able now build the usbdmPligin_CW10_2 project.
+*/

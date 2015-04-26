@@ -1,0 +1,168 @@
+/*!
+ \page unlockingCFVxPage Unlocking Coldfire V2, 3 or 4 devices. (Basic Operation)
+ 
+\section Preamble
+
+   The CF_Unlocker utility allows coldfire V2, 3 and 4 chips to be unsecured 
+   and erased using the JTAG interface.\n
+
+   Most of the Coldfire chips require certain signals to be changed to enable the 
+   JTAG interface.  Check the details of your hardware and ensure that any required links have 
+   been changed before running <b>CF_Unlocker</b>.
+      
+\section RunningCF_Unlocker Running CF_Unlocker
+ 
+   -  Run <b>CF_Unlocker</b>\n
+      The usual USBDM/CF JTAG connection dialogue will appear.  This allows the interface to 
+      the target to be configured.  See \ref configuringCFVxPage for more details of this dialogue.\n
+      
+   -  The following dialogue will then open:\n\n
+      \image html CF_Unlock_basic.png
+      
+   -  Much of the information in this dialogue is completed automatically if the target device is
+      'known' to the software.  There is a configuration file provide <b>CF_Unlocker.cfg</b> that 
+      contains information about a few common devices.  Descriptions of other devices may be added
+      to this file.  
+   -  The following description assumes that a single know device is found so only Steps <b>one</b>,
+      <b>three</b> and <b>six</b> need attention.
+
+  \subsection StepOne Step one - JTAG Chain
+   -  Press <b>Initialise JTAG chain</b> to have the BDM scan the JTAG chain for devices.\n
+      
+   -  After scanning the JTAG chain the <b>JTAG Device #</b> drop-down box will be populated with 
+      an entry for each device found in the JTAG chain.  There would usually only be a single 
+      device - the coldfire target.\n
+      A recognized device will be described by part name e.g. <b>0. MCF5211</b>.  
+
+  \subsection StepTwo Step Two - Select device in chain to erase
+   -  No selection is needed here for the usual case of a single device in the JTAG chain.
+      Details about the device will be displayed.
+  
+  \subsection StepThree Step Three - Select target device type and speed
+   -  Device type would normally be selected automatically for a known device.\n
+   
+   -  <b>Target speed</b> - The target speed is used to determine the correct Flash clock divider
+      value.  This value <b>must</b> be provided for automatic calculation of Flash parameters.
+   
+  \subsection StepFour Step Four - Select Flash clock limits and equation
+   This information would normally be selected automatically for a known device.
+   -  <b>Minimum Frequency</b> - The minimum frequency allowed for the Flash clock (usually 150kHz).
+   -  <b>Maximum Frequency</b> - The maximum frequency allowed for the Flash clock (usually 200kHz).
+   -  Only a single Flash divider equation is available - I believe all the Coldfire devices use
+      this equation.
+  
+  \subsection StepFive Step Five - Select erase parameters
+   Again this information would be determined automatically for a know device.  
+   -  <b>Unlock Instruction</b> - This is the JTAG <b>LOCKOUT_RECOVERY</b> instruction used to initiate the
+      Flash erase (usually 0x0B).
+      
+   -  <b>Clk Divider value</b> - This is the required value for the <b>JTAG_TFM_CLKDIV</b> register.  This
+      is the same as the <b>CFMCLKD</b> - CFM Clock Divider Register value described in the Flash section 
+      of the relevent user manual.  It is calculated from the Target clock frequency, Minimum and Maximum 
+      Flash clock frequencies and the Flash divider equation. \n
+
+   \subsection StepSix Step Six - Unlock and Erase
+   -  Press this button to erase the selected device.
+*/   
+ 
+/*!
+\page unlockingCFVxPageAdvanced Unlocking Coldfire V2, 3 or 4 devices. (Advanced Operation)
+
+\section Preamble
+
+   The CF_Unlocker utility allows coldfire V2, 3 and 4 chips to be unsecured 
+   and erased using the JTAG interface.\n
+
+   Most of the Coldfire chips require certain signals to be changed to enable the 
+   JTAG interface.  Check the details of your hardware and ensure that any required links have 
+   been changed before running <b>CF_Unlocker</b>.
+      
+\section RunningCF_Unlocker Running CF_Unlocker
+ 
+   -  Run <b>CF_Unlocker</b>\n
+      The usual USBDM/CF JTAG connection dialogue will appear.  This allows the interface to 
+      the target to be configured.  See \ref configuringCFVxPage for more details of this dialogue.\n
+      
+   -  A dialogue similar to the following will open:\n\n
+   <table border="0">
+   <tr>
+   <td>
+      \image html CF_Unlock.png
+      <b> \n Dialog after a known device is selected</b>      
+   <td>
+      \image html CF_Unlock_Unrecognized.png
+      <b> \n Dialog after an unknown Freescale device is selected</b>      
+   </table>      
+   \n
+   - Much of the information in this dialogue is completed automatically if the target device is
+     'known' to the software.  There is a configuration file provide <b>CF_Unlocker.cfg</b> that 
+     contains information about a few common devices.  Descriptions of other devices may be added
+     to this file.
+
+  \subsection StepOne Step one - JTAG Chain
+   -  Press <b>Initialise JTAG chain</b> to have the BDM scan the JTAG chain for devices.
+     
+   -  After scanning the JTAG chain the <b>JTAG Device #</b> drop-down box will be populated with 
+      an entry for each device found in the JTAG chain.  There would usually only be a single 
+      device - the coldfire target.\n\n
+      If the device is recognized then it will be described by part name e.g. <b>1. MCF5211</b>.  
+      Otherwise it may be described as:
+      - <b>Unrecognized</b> - A Freescale device was found but the software doesn't have a 
+         description of how to erase it. \n
+         Some manual configuration of the erase parameters must be done in the later steps.
+      - <b>Non-Freeescale</b> - A non-Freescale device was found.  This (obviously) may not
+         be erased.
+      - <b>No JTAG IDCODE</b> - A device was found but it does not support the JTAG IDCODE 
+         instruction so no information is available. This device may not be erased.\n
+
+  \subsection StepTwo Step Two - Select device in chain to erase
+   -  Devices in the JTAG chain may be selected from the <b>JTAG Device #</b> drop-down box.
+      Information about the selected device will be displayed and other parts of the dialogue will be 
+      updated accordingly.
+   -  If the JTAG chain contains <b>more than one</b> unrecognized device and the device being erased 
+      is not the <b>first</b> or <b>last</b> in the chain then it will be necessary to enter the JTAG 
+      instruction register length for each unknown device.  Select each unknown device in turn and 
+      enter the IR length in the box next to the device name.
+   -  Select the device to be erased from the <b>JTAG Device #</b> drop-down box before proceeding to
+      the next step.
+  
+  \subsection StepThree Step Three - Select target device type and speed
+   Device type would normally be selected automatically for a known device.\n
+   
+   -  <b>Device Type</b> - If the device is not recognised, but you are confident of the device
+      type or know that it is similar to another device, then the device type may be selected here.
+      If the device type is not available in the list box then select <b>Custom</b> and complete 
+      the remaining parts of the dialogue.
+   -  <b>Target speed</b> - The target speed is used to determine the correct Flash clock divider
+      value.  This value <b>must</b> be provided if automatic calculation of Flash parameters is used.
+   
+  \subsection StepFour Step Four - Select Flash clock limits and equation
+   This information would normally be selected automatically for a known device.  If the device is 
+   not recognised then it <b>must</b> be provided manually.  Please refer to the Flash section of
+   the user manual for the device being used.
+   -  <b>Minimum Frequency</b> - The minimum frequency allowed for the Flash clock (usually 150kHz).
+   -  <b>Maximum Frequency</b> - The maximum frequency allowed for the Flash clock (usually 200kHz).
+   -  Only a single Flash divider equation is available - I believe all the Coldfire devices use
+      this equation.
+  
+  \subsection StepFive Step Five - Select erase parameters
+   Again this information would be determined automatically for a know device and target clock frequency.  
+   Alternatively, it may be entered manually after referring to the user manual for the device being used.
+   -  <b>Unlock Instruction</b> - This is the JTAG <b>LOCKOUT_RECOVERY</b> instruction used to initiate the
+      Flash erase (usually 0x0B).
+      
+   -  <b>Clk Divider value</b> - This is the required value for the <b>JTAG_TFM_CLKDIV</b> register.  This
+      is the same as the <b>CFMCLKD</b> - CFM Clock Divider Register value described in the Flash section 
+      of the relevent user manual.  It is calculated from the Target clock frequency, Minimum and Maximum 
+      Flash clock frequencies and the Flash divider equation. \n
+      The method used to calculate this value is different to that given in
+      the Coldfire User Manuals. The value calculated here is the one that results in a Flash clock frequency 
+      nearest to the middle of the permitted Flash Clock range.  This value is more conservative than that
+      arrived at by the recommended method.  This is to take account of possible clock speed variation if 
+      an untrimmed internal clock is being used by the target.
+
+   \subsection StepSix Step Six - Unlock and Erase
+   -  Press this button to erase the selected device.
+      
+      
+*/

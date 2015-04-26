@@ -1,0 +1,226 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "OSC1_MCF51" ?>
+         <name>OSC1</name>
+         <description>System Oscillator</description>
+         <prependToName>OSC1</prependToName>
+         <headerStructName>OSC</headerStructName>
+         <baseAddress>0xFFFF8120</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SC16P</name>
+                     <description>Oscillator +16 pF Capacitor Load</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Add 16 pF</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SC8P</name>
+                     <description>Oscillator +8 pF Capacitor Load</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Add 8 pF</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SC4P</name>
+                     <description>Oscillator +4 pF Capacitor Load</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Add 4 pF</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SC2P</name>
+                     <description>Oscillator +2 pF Capacitor Load</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Add 2 pF</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EREFSTEN</name>
+                     <description>External Reference Stop Enable\n
+Controls whether or not the external reference clock (OSCERCLK) remains enabled when MCU enters Stop mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in STOP</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in STOP\tif ERCLKEN is set before entering</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERCLKEN</name>
+                     <description>External Reference Enable\nEnables external reference clock (OSCERCLK)</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OSC1_TSTCTR</name>
+               <description>Test Control Register</description>
+               <addressOffset>0x1</addressOffset>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CMPM</name>
+                     <description>AC-Coupling Comparator Operation Mode\n
+This bit selects the AC-Coupling Comparator Operation modes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Single mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Differential mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALCTST</name>
+                     <description>Auto Loop Control Test Enable\n
+This bit is used to control the Auto Loop Control test</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disables ALC test</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables ALC test</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSTEN</name>
+                     <description>VLP OSC Test Enable\n
+This bit is associated with ALCTST and is used to test OSC</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable OSC voltage test</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable OSC test</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSCEN</name>
+                     <description>OSC Enable in Test Mode\n
+This bit is used to enable OSC module in test modes</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable in test modes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable in test modes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

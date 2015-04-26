@@ -1,0 +1,249 @@
+<!--
+Devices using this peripheral: 
+      MKV10Z7
+-->
+      <peripheral>
+         <?sourceFile "MMDVSQ_0" ?>
+         <name>MMDVSQ</name>
+         <description>Memory-Mapped Divide and Square Root</description>
+         <prependToName>MMDVSQ_</prependToName>
+         <baseAddress>0xF0004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DEND</name>
+               <description>Dividend Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DIVIDEND</name>
+                     <description>Dividend</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSOR</name>
+               <description>Divisor Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DIVISOR</name>
+                     <description>Divisor</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CSR</name>
+               <description>Control/Status Register</description>
+               <addressOffset>0x8</addressOffset>
+               <resetMask>0x9FFFFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SRT</name>
+                     <description>Start</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No operation initiated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>If CSR[DFS] = 1, then initiate a divide calculation, else ignore</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USGN</name>
+                     <description>Unsigned calculation</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Perform a signed divide</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Perform an unsigned divide</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>REM</name>
+                     <description>REMainder calculation</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Return the quotient in the RES for the divide calculation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Return the remainder in the RES for the divide calculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DZE</name>
+                     <description>Divide-by-Zero-Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Reads of the RES register return the register contents</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>If CSR[DZ] = 1, an attempted read of RES register is error terminated to signal a divide-by-zero, else the register contents are returned</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DZ</name>
+                     <description>Divide-by-Zero</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last divide operation had a non-zero divisor, that is, DSOR != 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last divide operation had a zero divisor, that is, DSOR = 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFS</name>
+                     <description>Disable Fast Start</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A divide operation is initiated by a write to the DSOR register</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A divide operation is initiated by a write to the CSR register with CSR[SRT] = 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SQRT</name>
+                     <description>SQUARE ROOT</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Current or last MMDVSQ operation was not a square root</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Current or last MMDVSQ operation was a square root</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIV</name>
+                     <description>DIVIDE</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Current or last MMDVSQ operation was not a divide</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Current or last MMDVSQ operation was a divide</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BUSY</name>
+                     <description>BUSY</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>MMDVSQ is idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>MMDVSQ is busy performing a divide or square root calculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RES</name>
+               <description>Result Register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RESULT</name>
+                     <description>Result</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCND</name>
+               <description>Radicand Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RADICAND</name>
+                     <description>Radicand</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

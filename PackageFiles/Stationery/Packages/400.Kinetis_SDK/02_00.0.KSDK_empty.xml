@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-empty-project" root="">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-empty" 
+            name="Minimal Project" 
+            description="Empty Project"
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+   		<applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-empty" />
+            </and>
+   		</applyWhen>
+         <copy source="Sources/main-empty.c" target="Sources/main.c" replace="true"/>
+         <projectActionList>
+            <applyWhen>
+                <or>
+                  <hardwareMatches>^frdmkl03z</hardwareMatches>
+                  <hardwareMatches>^frdmkl46z</hardwareMatches>
+                  <hardwareMatches>^frdmk22f</hardwareMatches>
+                  <hardwareMatches>^frdmk64f</hardwareMatches>
+               </or>
+            </applyWhen>
+            <copy source="Sources/main-board.c" target="Sources/main.c" replace="true"/>
+         </projectActionList>
+   	</projectActionList>
+   </projectActionList>
+</root>

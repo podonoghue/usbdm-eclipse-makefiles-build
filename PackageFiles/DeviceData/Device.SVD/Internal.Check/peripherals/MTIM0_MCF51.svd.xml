@@ -1,0 +1,282 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "MTIM0_MCF51" ?>
+         <name>MTIM0</name>
+         <description>Modulo Timer Module</description>
+         <prependToName>MTIM0</prependToName>
+         <baseAddress>0xFFFF8410</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x6</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SC</name>
+               <description>Status and Control</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>TSTP</name>
+                     <description>Timer counter stop\n
+When set, this read/write bit stops the MTIM16 counter at its current value. Counting resumes from the
+current value when TSTP is cleared. Reset sets TSTP to prevent the MTIM16 from counting</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Counter active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Counter stopped</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRST</name>
+                     <description>Timer counter reset\n
+When 1 is written to this write-only bit, the counter register resets to 0x0000 and TOF is cleared.\n
+Writing 1 to this bit also causes the modulo value to take effect at once</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to reset</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOIE</name>
+                     <description>Timer Overflow Interrupt Enable\n
+An interrupt is generated when TOF equals one</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOF</name>
+                     <description>Timer Overflow Flag\n
+This bit is set when the counter register overflows to 0x0000 after reaching the value in the modulo register.\n
+Clear TOF by reading the SC register while TOF is set and then by writing 0 to TOF.\n
+Writing 1 has no effect.\n
+TOF is also cleared when 1 is written to TRST</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not overflowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overflowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLK</name>
+               <description>Clock configuration register</description>
+               <addressOffset>0x1</addressOffset>
+               <fields>
+                  <field>
+                     <name>PS</name>
+                     <description>Clock source prescaler\n
+These bits select one of nine outputs from the 8-bit prescaler. \b
+Changing the prescaler value while the counter is active does not clear the counter.\n
+The count continues with the new prescaler value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Divide by 1</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Divide by 2</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Divide by 4</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Divide by 8</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Divide by 16</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Divide by 32</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Divide by 64</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Divide by 128</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1XXX</name>
+                           <description>Divide by 256</description>
+                           <value>0b1XXX</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKS</name>
+                     <description>Clock source select\n
+These bits select one of four different clock sources as the input to the MTIM16 prescaler.\n
+Changing the clock source while the counter is active does not clear the counter.\n
+The count continues with the new clock source</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Bus Clock</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Fixed-freq. clock (</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>TCK Falling</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>TCK Rising</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNT</name>
+               <description>Counter</description>
+               <addressOffset>0x2</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTH</name>
+               <?hide?>
+               <description>Counter High</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTL</name>
+               <?hide?>
+               <description>Counter Low</description>
+               <addressOffset>0x3</addressOffset>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MOD</name>
+               <description>Modulo High</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODH</name>
+               <?hide?>
+               <description>Modulo High</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODL</name>
+               <?hide?>
+               <description>Modulo Low</description>
+               <addressOffset>0x5</addressOffset>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

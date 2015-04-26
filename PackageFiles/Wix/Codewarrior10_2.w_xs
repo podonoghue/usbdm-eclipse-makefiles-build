@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define CW_VER_UC="V10.2" ?> 
+   <?define CW_Ver="v10.2" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <!-- ?define WxWidgetsVer="295u" ?-->
+   
+   <Fragment>
+      <!--======================================================
+               Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <!-- Codewarrior for MCU 10.x directory structure-->
+         <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)" Name="NotFoundCW_10_$(var.CW_VER_UC)">
+            <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_eclipse" Name="eclipse">
+               <Directory Id="D.CW_$(var.CW_VER_UC)_EclipseDropins" Name="dropins"/>
+               <Directory Id="D.CW_$(var.CW_VER_UC)_EclipsePlugins" Name="plugins"/>
+            </Directory>
+            <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU" Name="MCU" >
+               <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib" Name="lib" >
+                  <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib_wizard_data" Name="wizard_data" >
+                     <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib_wizard_data_launch_config" Name="launch_config" />
+                  </Directory>
+               </Directory>
+               <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin" Name="bin" >
+                  <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins" Name="plugins" >
+                     <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support" Name="support" >
+                        <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_ARM" Name="ARM" >
+                           <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_ARM_gdi" Name="gdi" />
+                        </Directory>
+                        <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_Coldfire" Name="ColdFire" >
+                           <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_Coldfire_gdi" Name="gdi" />
+                        </Directory>
+                        <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_HC08" Name="HC08" >
+                           <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_HC08_gdi" Name="gdi" />
+                        </Directory>
+                        <!-- Added V10.2 -->
+                        <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_DSC" Name="DSC" >
+                           <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_DSC_gdi" Name="gdi" />
+                        </Directory>
+                        <Directory Id="CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_S12Z" Name="S12Z" >
+                           <Directory Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_S12Z_gdi" Name="gdi" />
+                        </Directory>
+                     </Directory>
+                  </Directory>
+               </Directory>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+               Registry searches
+      =======================================================-->
+     
+      <!-- Check for presence of CW for MCU V10.x -->
+      <Property Id="P.CW_FOR_MCU_$(var.CW_VER_UC)">
+         <RegistrySearch Id="Rs.CW_FOR_MCU_$(var.CW_VER_UC)"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\Freescale\CodeWarrior\Product Versions\CW for MCU $(var.CW_Ver)"
+                    Name="Path"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for CodeWarrior Development Studio for MCU V10.x -->
+      <Property Id="D.CW_FOR_MCU_$(var.CW_VER_UC)">
+         <RegistrySearchRef Id="Rs.CW_FOR_MCU_$(var.CW_VER_UC)" />
+      </Property>
+      
+      <!--=================================================================================
+           Actions
+      ==================================================================================-->
+      <!-- Patch Eclipse New Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateEclipseMergeNewProjectWizardCommand_$(var.CW_VER_UC)"
+         Property="Ca.MergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.projectwizard_1.*.*.*\\&quot; plugin.xml &quot;[D.WizardPatchData]PatchNewWizardPlugin_$(var.CW_VER_UC).xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Unpatch Eclipse New Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateEclipseUnMergeNewProjectWizardCommand_$(var.CW_VER_UC)"
+         Property="Ca.UnMergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.projectwizard_1.*.*.*\\&quot; plugin.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Patch Eclipse Change Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateEclipseMergeChangeProjectWizardCommand_$(var.CW_VER_UC)"
+         Property="Ca.MergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.changewizard_1.*.*.*\\&quot; plugin.xml &quot;[D.WizardPatchData]PatchChangeWizardPlugin_$(var.CW_VER_UC).xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Unpatch Eclipse Change Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateEclipseUnMergeChangeProjectWizardCommand_$(var.CW_VER_UC)"
+         Property="Ca.UnMergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.changewizard_1.*.*.*\\&quot; plugin.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Refresh Eclipse plugins -->
+      <CustomAction
+         Id="Ca.CreateEclipseRefreshPluginsCommand_$(var.CW_VER_UC)_$(var.CW_VER_UC)"
+         Property="Ca.EclipseRefreshPluginsCommand_$(var.CW_VER_UC)"
+         Value="&quot;[D.CW_FOR_MCU_$(var.CW_VER_UC)_eclipse]cwide&quot; -clean -initialize"
+         Execute="immediate"/>
+         
+      <CustomAction Id="Ca.EclipseRefreshPluginsCommand_$(var.CW_VER_UC)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <InstallExecuteSequence>
+          <!-- These actions set Properties used by later actions -->
+          <Custom Action="Ca.CreateEclipseMergeNewProjectWizardCommand_$(var.CW_VER_UC)"          After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+          <Custom Action="Ca.CreateEclipseUnMergeNewProjectWizardCommand_$(var.CW_VER_UC)"        After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
+          <Custom Action="Ca.CreateEclipseMergeChangeProjectWizardCommand_$(var.CW_VER_UC)"       After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+          <Custom Action="Ca.CreateEclipseUnMergeChangeProjectWizardCommand_$(var.CW_VER_UC)"     After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
+          
+          <Custom Action="Ca.CreateEclipseRefreshPluginsCommand_$(var.CW_VER_UC)_$(var.CW_VER_UC)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+
+          <!-- These actions patch or restore the various Codewarrior XML files -->
+          <Custom Action="Ca.MergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"                After="PublishProduct"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+          <Custom Action="Ca.UnMergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"              Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
+          <Custom Action="Ca.MergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)"             After="PublishProduct"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+          <Custom Action="Ca.UnMergeChangeProjectWizardEclipseCommand_$(var.CW_VER_UC)"           Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
+
+          <Custom Action="Ca.EclipseRefreshPluginsCommand_$(var.CW_VER_UC)" Before="InstallFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
+      </InstallExecuteSequence>
+      
+      <!--======================================================
+               Components
+      =======================================================-->
+     <!-- 
+           CW Eclipse support 
+     -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).Marker' Guid='ffb56279-50cb-4ad0-b329-90a298a12f5c' >
+            <File Id='CW_FOR_MCU_$(var.CW_VER_UC)_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- CW Eclipse RS08/HCS08 support -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_HC08_gdi">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCSFiles' Guid='73b139cb-ba81-46e3-934e-26f4fe5399cd'>
+<!--            <File Id='EclipseHCSFiles1_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='EclipseHCSFiles2_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseHCSFiles3_$(var.CW_VER_UC)'  DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='EclipseHCSFiles4_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+                                      
+            <File Id='EclipseHCSFiles5_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='EclipseHCSFiles6_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdmTCL.4.dll' />
+            <File Id='EclipseHCSFiles7_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='EclipseHCSFiles8_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='EclipseHCSFiles9_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-hcs08-gdi.dll' />
+            <File Id='EclipseHCSFiles10_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-rs08-gdi.dll' KeyPath='yes' />
+
+            <File Id='EclipseHCSFiles11_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-debug.4.dll' />
+            <File Id='EclipseHCSFiles12_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+            <File Id='EclipseHCSFiles13_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='EclipseHCSFiles14_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='EclipseHCSFiles15_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-hcs08-gdi-debug.dll' />
+            <File Id='EclipseHCSFiles16_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-rs08-gdi-debug.dll'/>
+
+            <File Id='EclipseHCSFiles17_$(var.CW_VER_UC)' DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseHCSFiles18_$(var.CW_VER_UC)' DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='EclipseHCSFiles20_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='EclipseHCSFiles21_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- CW Eclipse Coldfire V1/Vx support -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_Coldfire_gdi">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).CFFiles' Guid='86b6e1f0-820b-483c-b895-edb75c9abed9' >
+<!--            <File Id='EclipseCFFiles1_$(var.CW_VER_UC)'   DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='EclipseCFFiles2_$(var.CW_VER_UC)'   DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseCFFiles3_$(var.CW_VER_UC)'   DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='EclipseCFFiles4_$(var.CW_VER_UC)'   DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+    
+            <File Id='EclipseCFFiles5_$(var.CW_VER_UC)'   DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='EclipseCFFiles6_$(var.CW_VER_UC)'   DiskId='1' Source='bin\usbdmTCL.4.dll' />
+            <File Id='EclipseCFFiles7_$(var.CW_VER_UC)'   DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='EclipseCFFiles8_$(var.CW_VER_UC)'   DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='EclipseCFFiles9_$(var.CW_VER_UC)'   DiskId='1' Source='Install\CW_10_x\usbdm-cfv1-gdi.dll' KeyPath='yes' />
+            <File Id='EclipseCFFiles10_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-cfvx-gdi.dll'/>
+
+            <File Id='EclipseCFFiles11_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-debug.4.dll' />
+            <File Id='EclipseCFFiles12_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+            <File Id='EclipseCFFiles13_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='EclipseCFFiles14_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='EclipseCFFiles15_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-cfv1-gdi-debug.dll'/>
+            <File Id='EclipseCFFiles16_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-cfvx-gdi-debug.dll'/>
+
+            <File Id='EclipseCFFiles17_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseCFFiles18_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='EclipseCFFiles20_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='EclipseCFFiles21_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- CW Eclipse ARM support -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_ARM_gdi">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).ArmFiles' Guid='894af0b1-1a41-4104-81bc-da51942164c6' >
+<!--            <File Id='EclipseArmFiles1_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='EclipseArmFiles2_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseArmFiles3_$(var.CW_VER_UC)'  DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='EclipseArmFiles4_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+
+            <File Id='EclipseArmFiles5_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='EclipseArmFiles6_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdmTCL.4.dll' />
+            <File Id='EclipseArmFiles7_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='EclipseArmFiles8_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='EclipseArmFiles9_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-arm-gdi.dll' KeyPath='yes' />
+
+            <File Id='EclipseArmFiles10_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-debug.4.dll'/>
+            <File Id='EclipseArmFiles11_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+            <File Id='EclipseArmFiles12_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='EclipseArmFiles13_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='EclipseArmFiles14_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-arm-gdi-debug.dll'/>
+
+            <File Id='EclipseArmFiles15_$(var.CW_VER_UC)' DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseArmFiles16_$(var.CW_VER_UC)' DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='EclipseArmFiles20_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='EclipseArmFiles21_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- CW Eclipse DSC support V10.2-->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_DSC_gdi">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).DscFiles' Guid='36eaeb2c-7884-42a7-9e6b-affedd3ebfdb' >
+<!--            <File Id='EclipseDscFiles1_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='EclipseDscFiles2_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseDscFiles3_$(var.CW_VER_UC)'  DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='EclipseDscFiles4_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+
+            <File Id='EclipseDscFiles5_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='EclipseDscFiles6_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdmTCL.4.dll' />
+            <File Id='EclipseDscFiles7_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='EclipseDscFiles8_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='EclipseDscFiles9_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-dsc-gdi.dll' KeyPath='yes' />
+
+            <File Id='EclipseDscFiles10_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-debug.4.dll'/>
+            <File Id='EclipseDscFiles11_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+            <File Id='EclipseDscFiles12_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='EclipseDscFiles13_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='EclipseDscFiles14_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-dsc-gdi-debug.dll'/>
+
+            <File Id='EclipseDscFiles15_$(var.CW_VER_UC)' DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseDscFiles16_$(var.CW_VER_UC)' DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='EclipseDscFiles20_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='EclipseDscFiles21_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- CW Eclipse S12Z support V10.2 -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_S12Z_gdi">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCS12Files' Guid='80a10a1b-c6f3-4b14-aa1a-bd3aced05e2f' >
+<!--            <File Id='EclipseS12ZFiles1_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='EclipseS12ZFiles2_$(var.CW_VER_UC)'  DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseS12ZFiles3_$(var.CW_VER_UC)'  DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='EclipseS12ZFiles4_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+
+            <File Id='EclipseS12ZFiles5_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='EclipseS12ZFiles6_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdmTCL.4.dll' />
+            <File Id='EclipseS12ZFiles7_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='EclipseS12ZFiles8_$(var.CW_VER_UC)'  DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='EclipseS12ZFiles9_$(var.CW_VER_UC)'  DiskId='1' Source='Install\CW_10_x\usbdm-hcs12-gdi.dll' KeyPath='yes' />
+
+            <File Id='EclipseS12ZFiles10_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-debug.4.dll'/>
+            <File Id='EclipseS12ZFiles11_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+            <File Id='EclipseS12ZFiles12_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='EclipseS12ZFiles13_$(var.CW_VER_UC)' DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='EclipseS12ZFiles14_$(var.CW_VER_UC)' DiskId='1' Source='Install\CW_10_x\usbdm-hcs12-gdi-debug.dll'/>
+
+            <File Id='EclipseS12ZFiles15_$(var.CW_VER_UC)' DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseS12ZFiles16_$(var.CW_VER_UC)' DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='EclipseS12ZFiles20_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='EclipseS12ZFiles21_$(var.CW_VER_UC)' DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- CW Eclipse launch configartions support -->
+      <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib_wizard_data_launch_config">
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles' Guid='6923f0df-a199-4666-abff-7a334de7ec73' >
+            <File Id='EclipseLaunchFiles1_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_arm.xml'     KeyPath='yes' />
+            <File Id='EclipseLaunchFiles2_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_cfv1.xml' />
+            <File Id='EclipseLaunchFiles3_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_cfvx.xml' />
+            <File Id='EclipseLaunchFiles4_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_hcs08.xml' />
+            <File Id='EclipseLaunchFiles5_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_rs08.xml' />
+             <!-- Ver 10.2 -->
+            <File Id='EclipseLaunchFiles6_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_dsc.xml' />
+            <File Id='EclipseLaunchFiles7_$(var.CW_VER_UC)' DiskId='1' Source='LaunchConfig\usbdm_s12z.xml' />
+             <!--    -->
+         </Component>
+      </DirectoryRef>
+
+      <!-- Patch Codewarrior Menu folder and shortcuts -->
+      <DirectoryRef Id="D.ProgramMenuPatchDir">
+         <Component Id='C.PatchCodewarriorWizardsMenu_$(var.CW_VER_UC)' Guid='*'>
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorWizardsMenu_MCU_10.$(var.CW_VER_UC)' Value="" KeyPath='yes' />
+            <Shortcut Id="Sc.PatchCW_V10_NewWizard_$(var.CW_VER_UC)" 
+               Name="Modify CW for MCU $(var.CW_VER_UC) New Project Wizard"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Adds USBDM targets to CW for MCU 10.$(var.CW_VER_UC) New Project Wizard"
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.projectwizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchNewWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
+            <Shortcut Id="Sc.PatchCW_V10_ChangeWizard_$(var.CW_VER_UC)" 
+               Name="Modify CW for MCU $(var.CW_VER_UC) Change Project Wizard"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Adds USBDM targets to CW for MCU $(var.CW_VER_UC) Change Project Wizard"
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.changewizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchChangeWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
+            <Shortcut Id="Sc.RefreshCodewarrior_$(var.CW_VER_UC)"
+               Name="Refresh Codewarrior $(var.CW_VER_UC) Configuration"
+               Target="[D.CW_FOR_MCU_$(var.CW_VER_UC)_eclipse]cwide.exe"
+               Description="Causes Codewarrior Eclipse to re-initialise its configuration cache." 
+               WorkingDirectory='D.CW_FOR_MCU_$(var.CW_VER_UC)_eclipse' Advertise="no" 
+               Arguments="-clean -initialize" />
+         </Component>
+      </DirectoryRef>
+
+      <Feature Id='F.CW_FOR_MCU_$(var.CW_VER_UC)'
+            Title='MCU $(var.CW_VER_UC)'
+            Description="USBDM support for CW for MCU $(var.CW_VER_UC)."
+            ConfigurableDirectory="D.CW_FOR_MCU_$(var.CW_VER_UC)"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.CW_FOR_MCU_$(var.CW_VER_UC)]]>
+         </Condition>
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).Marker' />
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCSFiles' />
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).CFFiles' />
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).ArmFiles' />
+             <!-- Ver 10.2 -->
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).DscFiles' />
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCS12Files' />
+             <!--    -->
+         <ComponentRef Id='C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles' />
+         <ComponentGroupRef Id='Cg.EclipsePlugin_$(var.CW_VER_UC)' />
+         <ComponentGroupRef Id='Cg.DeviceDataInstall' />
+         <ComponentGroupRef Id='Cg.PatchCodewarriorWizardsCommon'/>
+         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_$(var.CW_VER_UC)' />
+      </Feature>
+
+   </Fragment>
+</Wix>

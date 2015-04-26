@@ -1,0 +1,261 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "RGPIO_MCF51" ?>
+         <name>RGPIO</name>
+         <description>Rapid GPIO</description>
+         <prependToName>RGPIO</prependToName>
+         <baseAddress>0xFFC00000</baseAddress>
+         <size>16</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0xA</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0xE</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DIR</name>
+               <description>Data Direction Register\nControls pin direction</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIR0</name>
+                     <description>Pin Direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DIR0" > <name>DIR1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="DIR0" > <name>DIR15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATA</name>
+               <description>Data Register\nHold data driven to output pins or direct pin data if pin is an input</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA0</name>
+                     <description>Pin Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DATA0" > <name>DATA1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="DATA0" > <name>DATA15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ENB</name>
+               <description>Pin Enable Register\nEnables pin as Rapid GPIO function</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENB0</name>
+                     <description>Pin Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>GPIO Function</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RGPIO Function</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ENB0" > <name>ENB1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="ENB0" > <name>ENB15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLR</name>
+               <description>Clear Data Register\nWriting 0 will clear the corresponding bit.  Writing 1 has no effect</description>
+               <addressOffset>0x6</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR0</name>
+                     <description>Pin Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 0 to clear</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CLR0" > <name>CLR1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SET</name>
+               <description>Set Data Register\nWriting 1 will set the corresponding bit.  Writing 0 has no effect</description>
+               <addressOffset>0xA</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET0</name>
+                     <description>Pin Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to set</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SET0" > <name>SET1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>TOG</name>
+               <description>Toggle Data Register\nWriting 1 will toggle the corresponding bit.  Writing 0 has no effect</description>
+               <addressOffset>0xE</addressOffset>
+               <fields>
+                  <field>
+                     <name>TOG0</name>
+                     <description>Pin Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to toggle</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TOG0" > <name>TOG1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="TOG0" > <name>TOG15</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

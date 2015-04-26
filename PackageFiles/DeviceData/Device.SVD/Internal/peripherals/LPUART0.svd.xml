@@ -1,0 +1,1236 @@
+<!--
+Devices using this peripheral: 
+      MK22F51212
+-->
+      <peripheral>
+         <?sourceFile "LPUART0" ?>
+         <name>LPUART0</name>
+         <description>Low Power Universal Asynchronous Receiver/Transmitter</description>
+         <prependToName>LPUART0</prependToName>
+         <baseAddress>0x4002A000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>BAUD</name>
+               <description>Baud Rate Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SBR</name>
+                     <description>Baud Rate Modulo Divisor.\n
+The 13 bits in SBR[12:0] set the modulo divide rate for the baud rate generator. When SBR is 1 - 8191,
+the baud rate equals &quot;baud clock / ((OSR+1) x SBR)&quot;. The 13-bit baud rate setting [SBR12:SBR0] must
+only be updated when the transmitter and receiver are both disabled (LPUART_CTRL[RE] and
+LPUART_CTRL[TE] are both 0)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>SBNS</name>
+                     <description>Stop Bit Number Select\n
+SBNS determines whether data characters are one or two stop bits. This bit should only be changed when
+the transmitter and receiver are both disabled</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>One stop bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Two stop bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXEDGIE</name>
+                     <description>RX Input Active Edge Interrupt Enable\n
+Enables the receive input active edge, RXEDGIF, to generate interrupt requests. Changing CTRL[LOOP]
+or CTRL[RSRC] when RXEDGIE is set can cause the RXEDGIF to set</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Hardware interrupts from LPUART_STAT[RXEDGIF] disabled (use polling)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Hardware interrupt requested when LPUART_STAT[RXEDGIF] flag is 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBKDIE</name>
+                     <description>LIN Break Detect Interrupt Enable\n
+LBKDIE enables the LIN break detect flag, LBKDIF, to generate interrupt requests</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Hardware interrupts from LPUART_STAT[LBKDIF] disabled (use polling)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Hardware interrupt requested when LPUART_STAT[LBKDIF] flag is 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RESYNCDIS</name>
+                     <description>Resynchronization Disable\n
+When set, disables the resynchronization of the received data word when a data one followed by data
+zero transition is detected. This bit should only be changed when the receiver is disabled</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Resynchronization during received data word is supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Resynchronization during received data word is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOTHEDGE</name>
+                     <description>Both Edge Sampling\n
+Enables sampling of the received data on both edges of the baud rate clock, effectively doubling the
+number of times the receiver samples the input data for a given oversampling ratio. This bit must be set for
+oversampling ratios between x4 and x7 and is optional for higher oversampling ratios. This bit should only
+be changed when the receiver is disabled</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver samples input data using the rising edge of the baud rate clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver samples input data using the rising and falling edge of the baud rate clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MATCFG</name>
+                     <description>Match Configuration\n
+Configures the match addressing mode used</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Address Match Wakeup</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Idle Match Wakeup</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Match On and Match Off</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Enables RWU on Data Match and Match On/Off for transmitter CTS input</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RDMAE</name>
+                     <description>Receiver Full DMA Enable (only on device with DMA)\n
+RDMAE configures the receiver data register full flag, LPUART_STAT[RDRF], to generate a DMA request</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDMAE</name>
+                     <description>Transmitter DMA Enable (only on device with DMA)\n
+TDMAE configures the transmit data register empty flag, LPUART_STAT[TDRE], to generate a DMA request</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSR</name>
+                     <description>Over Sampling Ratio\n
+This field configures the oversampling ratio for the receiver between 4x (00011) and 32x (11111). Writing
+an invalid oversampling ratio will default to an oversampling ratio of 16 (01111). This field should only be
+changed when the transmitter and receiver are both disabled</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>M10</name>
+                     <description>10-bit Mode select
+The M10 bit causes a tenth bit to be part of the serial transmission. This bit should only be changed when
+the transmitter and receiver are both disabled</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver and transmitter use 8-bit or 9-bit data characters</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver and transmitter use 10-bit data characters</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAEN2</name>
+                     <description>Match Address Mode Enable 2</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables automatic address matching or data matching mode for MATCH[MA2]</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAEN1</name>
+                     <description>Match Address Mode Enable 1</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables automatic address matching or data matching mode for MATCH[MA1]</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>Status Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xC00000</resetValue>
+               <resetMask>0x7FFFFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MA2F</name>
+                     <description>Match 2 Flag\n
+MA2F is set whenever the next character to be read from LPUART_DATA matches MA2. \n
+To clear MA2F, write a logic one to the MA2F</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Received data is not equal to MA2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Received data is equal to MA2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MA1F</name>
+                     <description>Match 1 Flag\n
+MA1F is set whenever the next character to be read from LPUART_DATA matches MA1. \n
+To clear MA1F, write a logic one to the MA1F</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Received data is not equal to MA1</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Received data is equal to MA1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PF</name>
+                     <description>Parity Error Flag\n
+PF is set whenever the next character to be read from LPUART_DATA was received when parity is
+enabled (PE = 1) and the parity bit in the received character does not agree with the expected parity value. \n
+To clear PF, write a logic one to the PF</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No parity error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Parity error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FE</name>
+                     <description>Framing Error Flag\n
+FE is set whenever the next character to be read from LPUART_DATA was received with logic 0 detected
+where a stop bit was expected. \n
+To clear NF, write logic one to the NF</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No framing error detected. This does not guarantee the framing is correct</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Framing error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NF</name>
+                     <description>Noise Flag\n
+The advanced sampling technique used in the receiver takes three samples in each of the received bits. If
+any of these samples disagrees with the rest of the samples within any bit time in the frame then noise is
+detected for that character. NF is set whenever the next character to be read from DATA was
+received with noise detected within the character. \n
+To clear NF, write logic one to the NF</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No noise detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Noise detected in the received character in DATA</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OR</name>
+                     <description>Receiver Overrun Flag\n
+OR is set when software fails to prevent the receive data register from overflowing with data. The OR bit is
+set immediately after the stop bit has been completely received for the dataword that overflows the buffer
+and all the other error flags (FE, NF, and PF) are prevented from setting. The data in the shift register is
+lost, but the data already in the LPUART data registers is not affected. If LBKDE is enabled and a LIN
+Break is detected, the OR field asserts if LBKDIF is not cleared before the next data character is received.
+While the OR flag is set, no additional data is stored in the data buffer even if sufficient room exists. \n
+To clear OR, write logic 1 to the OR flag</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No overrun</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receive overrun (new LPUART data lost)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IDLE</name>
+                     <description>Idle Line Flag\n
+IDLE is set when the LPUART receive line becomes idle for a full character time after a period of activity.
+When ILT is cleared, the receiver starts counting idle bit times after the start bit.\n
+To clear IDLE, write logic 1 to the IDLE flag</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No idle line detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle line detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RDRF</name>
+                     <description>Receive Data Register Full Flag\n
+RDRF is set when the receive buffer (LPUART_DATA) is full. \n
+To clear RDRF, read the LPUART_DATA register</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive data buffer empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receive data buffer full</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transmission Complete Flag\n
+TC is cleared when there is a transmission in progress or when a preamble or break character is loaded.
+TC is set when the transmit buffer is empty and no data, preamble, or break character is being transmitted</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmitter active (sending data, a preamble, or a break)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitter idle (transmission activity complete)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Transmit Data Register Empty Flag\n
+TDRE will set when the transmit data register (LPUART_DATA) is empty. To clear TDRE, write to the
+LPUART data register (LPUART_DATA)</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit data buffer full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit data buffer empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAF</name>
+                     <description>Receiver Active Flag\n
+RAF is set when the receiver detects the beginning of a valid start bit, and RAF is cleared automatically
+when the receiver detects an idle line</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver idle waiting for a start bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver active (LPUART_RX input not idle)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBKDE</name>
+                     <description>LIN Break Detection Enable\n
+LBKDE selects a longer break character detection length. While LBKDE is set, receive data is not stored
+in the receive data buffer</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Break character is detected at length 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
+12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Break character is detected at length of 11 bit times (if M=0, SBNS=0) or 12 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
+14 (if M=1, SBNS=1 or M10=1, SNBS=0) or 15 (if M10=1, SNBS=1)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BRK13</name>
+                     <description>Break Character Generation Length\n
+BRK13 selects a longer transmitted break character length. Detection of a framing error is not affected by
+the state of this bit. This bit should only be changed when the transmitter is disabled</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Break character is transmitted with length of 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
+12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Break character is transmitted with length of 13 bit times (if M=0, SBNS=0) or 14 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
+15 (if M=1, SBNS=1 or M10=1, SNBS=0) or 16 (if M10=1, SNBS=1)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWUID</name>
+                     <description>Receive Wake Up Idle Detect
+For RWU on idle character, RWUID controls whether the idle character that wakes up the receiver sets the
+IDLE bit. For address match wakeup, RWUID controls if the IDLE bit is set when the address does not
+match. This bit should only be changed when the receiver is disabled</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>During receive standby state (RWU = 1), the IDLE bit does not get set upon detection of an idle character.\n
+During address match wakeup, the IDLE bit does not get set when an address does not match</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>During receive standby state (RWU = 1), the IDLE bit gets set upon detection of an idle character.\n
+During address match wakeup, the IDLE bit does get set when an address does not match</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXINV</name>
+                     <description>Receive Data Inversion\n
+Setting this bit reverses the polarity of the received data input</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive data not inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receive data inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSBF</name>
+                     <description>MSB First\n
+Setting this bit reverses the order of the bits that are transmitted and received on the wire. This bit does
+not affect the polarity of the bits, the location of the parity bit or the location of the start or stop bits. This bit
+should only be changed when the transmitter and receiver are both disabled</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LSB (bit0) is the first data bit that is transmitted or received</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MSB (bit9, bit8, bit7 or bit6) is the first data bit that is transmitted or received</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXEDGIF</name>
+                     <description>LPUART_RX Pin Active Edge Interrupt Flag
+RXEDGIF is set when an active edge, falling if RXINV = 0, rising if RXINV=1, on the LPUART_RX pin
+occurs. RXEDGIF is cleared by writing a 1 to it</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No active edge on the receive pin has occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An active edge on the receive pin has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBKDIF</name>
+                     <description>LIN Break Detect Interrupt Flag\n
+LBKDIF is set when the LIN break detect circuitry is enabled and a LIN break character is detected.
+LBKDIF is cleared by writing a 1 to it</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No LIN break character has been detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LIN break character has been detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>Control Register</description>
+               <addressOffset>0x8</addressOffset>
+               <resetMask>0x7FFFFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT</name>
+                     <description>Parity Type\n
+Provided parity is enabled (PE = 1), this bit selects even or odd parity. Odd parity means the total number
+of 1s in the data character, including the parity bit, is odd. Even parity means the total number of 1s in the
+data character, including the parity bit, is even</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Even parity</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Odd parity</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PE</name>
+                     <description>Parity Enable\n
+Enables hardware parity generation and checking. When parity is enabled, the bit immediately before the
+stop bit is treated as the parity bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Parity function disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Parity function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ILT</name>
+                     <description>Idle Line Type Select\n
+Determines when the receiver starts counting logic 1s as idle character bits. The count begins either after
+a valid start bit or after the stop bit. If the count begins after the start bit, then a string of logic 1s preceding
+the stop bit can cause false recognition of an idle character. Beginning the count after the stop bit avoids
+false idle character recognition, but requires properly synchronized transmissions</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle character bit count starts after start bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle character bit count starts after stop bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE</name>
+                     <description>Receiver Wakeup Method Select\n
+Determines which condition wakes the LPUART when RWU=1:\n
+- Address mark in the most significant bit position of a received data character, or\n
+- An idle condition on the receive pin input signal</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle-line wakeup</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Address-mark wakeup</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>M</name>
+                     <description>9-Bit or 8-Bit Mode Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal - start + 8 data bits + stop</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver and transmitter use 9-bit data characters start + 8 data bits + 9th data bit + stop</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSRC</name>
+                     <description>Receiver Source Select\n
+This field has no meaning or effect unless the LOOPS field is set. When LOOPS is set, the RSRC field
+determines the source for the receiver shift register input</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Internal loop back mode and the UART does not use the RxD pins</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single-wire UART mode where the TxD pin is connected to the transmitter output and receiver input</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DOZEEN</name>
+                     <description>Stops in Wait Mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enabled in Wait mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disabled in Wait mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOOPS</name>
+                     <description>Loop Mode Select\n
+When set, the Rx pin is disconnected from the LPUART and the transmitter output is internally connected to the receiver input. \n
+The transmitter and the receiver must be enabled to use the loop function</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation - RxD and TxD use separate pins</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Loop mode where transmitter output is internally connected to receiver input. The receiver input is determined by the RSRC bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MA2IE</name>
+                     <description>Match 2 Interrupt Enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MA1IE</name>
+                     <description>Match 1 Interrupt Enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SBK</name>
+                     <description>Send Break\n
+Writing a 1 and then a 0 to SBK queues a break character in the transmit data stream</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal transmitter operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Queue break character(s) to be sent</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWU</name>
+                     <description>Receiver Wakeup Control\n
+This field can be set to place the LPUART receiver in a standby state. RWU automatically clears when an
+RWU event occurs, that is, an IDLE event when CTRL[WAKE] is clear or an address match when
+CTRL[WAKE] is set with STAT[RWUID] is clear</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal receiver operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LPUART receiver in standby waiting for wakeup condition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RE</name>
+                     <description>Receiver Enable\n
+Enables the LPUART receiver. When RE is written to 0, this register bit will read as 1 until the receiver
+finishes receiving the current character (if any)</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TE</name>
+                     <description>Transmitter Enable\n
+Enables the LPUART transmitter. TE can also be used to queue an idle preamble by clearing and then
+setting TE. When TE is cleared, this register bit will read as 1 until the transmitter has completed the
+current character and the LPUART_TX pin is tristated</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmitter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ILIE</name>
+                     <description>Idle Line Interrupt Enable\n
+ILIE enables the idle line flag, STAT[IDLE], to generate interrupt requests</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IDLE interrupt requests disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>IDLE interrupt requests enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RIE</name>
+                     <description>Receiver Interrupt Enable for RDRF</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Hardware interrupts from RDRF disabled; use polling</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Hardware interrupt requested when RDRF flag is 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TCIE</name>
+                     <description>Transmission Complete Interrupt Enable\n
+TCIE enables the transmission complete flag, TC, to generate interrupt requests</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TC interrupt requests disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TC interrupt requests enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIE</name>
+                     <description>Transmit Interrupt Enable for TDRE\n
+Enables STAT[TDRE] to generate interrupt requests</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Hardware interrupts from TDRE disabled; use polling</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Hardware interrupt requested when TDRE flag is 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PEIE</name>
+                     <description>Parity Error Interrupt Enable\n
+This bit enables the parity error flag (PF) to generate hardware interrupt requests</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PF interrupt requests are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PF interrupt requests are enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FEIE</name>
+                     <description>Framing Error Interrupt Enable\n
+This bit enables the framing error flag (FE) to generate hardware interrupt requests</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FE interrupt requests are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FE interrupt requests are enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NEIE</name>
+                     <description>Noise Error Interrupt Enable\n
+This bit enables the noise flag (NF) to generate hardware interrupt requests</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NF interrupt requests are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NF interrupt requests are enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ORIE</name>
+                     <description>Overrun Error Interrupt Enable\n
+This bit enables the overrun flag (OR) to generate hardware interrupt requests</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>OR interrupts are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>OR interrupt requests are enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXINV</name>
+                     <description>Transmit Data Inversion\n
+Setting this bit reverses the polarity of the transmitted data output</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit data is not inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit data is inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXDIR</name>
+                     <description>Transmitter Pin Data Direction in Single-Wire mode\n
+When the LPUART is configured for single-wire half-duplex operation (LOOPS = RSRC = 1), this bit
+determines the direction of data at the LPUART_TX pin. When clearing TXDIR, the transmitter will finish
+receiving the current character (if any) before the receiver starts receiving data from the LPUART_TX pin</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TxD pin is an input in single-wire mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TxD pin is an output in single-wire mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>R9T8</name>
+                     <description>Receive Bit 9 / Transmit Bit 8</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>R8T9</name>
+                     <description>Receive Bit 8 / Transmit Bit 9</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATA</name>
+               <description>Data Register\n
+Reads return the contents of the read-only receive data buffer and writes go to the write-only transmit data buffer. 
+Reads and writes of this register are also involved in the automatic flag clearing mechanisms for the UART status flags</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>RT</name>
+                     <description>Read receive data buffer or write transmit data buffer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDLINE</name>
+                     <description>Idle Line\n
+Indicates the receiver line was idle before receiving the character in DATA[9:0]. Unlike the IDLE flag, this
+bit can set for the first character received when the receiver is first enabled</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXEMPT</name>
+                     <description>Receive Buffer Empty\n
+Asserts when there is no data in the receive buffer. This field does not take into account data that is in the
+receive shift register</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRETSC</name>
+                     <description>Frame Error / Transmit Special Character\n
+For reads, indicates the current received dataword contained in DATA[R9:R0] was received with a frame
+error. For writes, indicates a break or idle character is to be transmitted instead of the contents in
+DATA[T9:T0]. T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
+DATA[T8:T0] should be zero</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PARITYE</name>
+                     <description>Parity Error\n
+The current received dataword contained in DATA[R9:R0] was received with a parity error</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOISY</name>
+                     <description>Noise Error\n
+The current received dataword contained in DATA[R9:R0] was received with noise</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCH</name>
+               <description>Match Address Register\n
+The MA1 and MA2 registers are compared to input data addresses when the most significant bit is set and
+the associated BAUD[MAEN] bit is set. \n
+If a match occurs, the following data is transferred to the data register. \n
+If a match fails, the following data is discarded. \n
+Software should only write a MA register when the associated BAUD[MAEN] bit is clear</description>
+               <addressOffset>0x10</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>MA1</name>
+                     <description>Match Address 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>MA2</name>
+                     <description>Match Address 2</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODIR</name>
+               <description>MODEM register\n
+The MODEM register controls options for setting the modem configuration</description>
+               <addressOffset>0x14</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
+         </registers>
+      </peripheral>

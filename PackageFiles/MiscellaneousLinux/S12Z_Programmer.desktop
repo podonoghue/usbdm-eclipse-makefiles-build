@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=S12Z_FlashProgrammer
+Comment=Flash programmer for S12Z devices
+Keywords=HCS12;S12Z;Programmer;
+Exec=/usr/bin/S12Z_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=S12Z_Programmer
+GenericName[en_AU]=S12Z Programmer
+Comment[en_AU]=USBDM Flash programmer for S12Z

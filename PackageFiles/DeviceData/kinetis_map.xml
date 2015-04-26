@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE memory-map SYSTEM "Memory.dtd">
+
+<root version="4.10.5">
+   <memory-map>
+      <memory type="ram" start="0x1000" length="0x1000" >
+         <property name="blocksize">0x400</property>
+      </memory>
+  	</memory-map>
+</root>

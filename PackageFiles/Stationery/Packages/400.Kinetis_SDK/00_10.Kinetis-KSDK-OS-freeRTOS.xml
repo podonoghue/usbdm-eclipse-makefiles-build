@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK OS Choice -->
+
+   <projectActionList id="KSDK-operating-system-freeRTOS" root="" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-SDK-os-free-rtos" 
+         name="Free RTOS"
+         description="Free RTOS operating system support" 
+         radioGroup="group-ksdk-operating-system">
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+         </applyWhen>
+         <constant id="kdsOperatingSystem" value="FreeRTOS" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/port/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/config/$(kdsTargetName)/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/src&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/port/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/config/$(kdsTargetName)/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/src&quot;</value>
+         </projectOption>
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/croutine.c"           target="free-rtos/croutine.c"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/croutine.h"       target="free-rtos/croutine.h"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/event_groups.c"       target="free-rtos/event_groups.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/FreeRTOS.h"       target="free-rtos/FreeRTOS.h"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/heap_1.c"             target="free-rtos/heap_1.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/heap_2.c"             target="free-rtos/heap_2.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/heap_3.c"             target="free-rtos/heap_3.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/heap_4.c"             target="free-rtos/heap_4.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/list.c"               target="free-rtos/list.c"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/list.h"           target="free-rtos/list.h"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/mpu_wrappers.h"   target="free-rtos/mpu_wrappers.h"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/port/gcc/port.c"          target="free-rtos/port.c"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/portable.h"       target="free-rtos/portable.h"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/port/gcc/portasm.S"       target="free-rtos/portasm.S"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/port/gcc/portmacro.h"     target="free-rtos/portmacro.h"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/port/gcc/portTicks.h"     target="free-rtos/portTicks.h"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/projdefs.h"       target="free-rtos/projdefs.h"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/queue.c"              target="free-rtos/queue.c"          type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/semphr.h"         target="free-rtos/semphr.h"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/StackMacros.h"    target="free-rtos/StackMacros.h"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/task.h"           target="free-rtos/task.h"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/tasks.c"              target="free-rtos/tasks.c"          type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/src/timers.c"             target="free-rtos/timers.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/FreeRTOS/include/timers.h"         target="free-rtos/timers.h"         type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

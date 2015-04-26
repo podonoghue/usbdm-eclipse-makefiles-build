@@ -1,0 +1,430 @@
+<!--
+Devices using this peripheral: 
+      MKM33Z5
+-->
+      <peripheral>
+         <?sourceFile "MCM_MKM" ?>
+         <name>MCM</name>
+         <description>Core Platform Miscellaneous Control Module</description>
+         <prependToName>MCM</prependToName>
+         <baseAddress>0xF0003000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PLASC</name>
+               <description>Crossbar Switch (AXBS) Slave Configuration\n
+PLASC is a 16-bit read-only register identifying the presence/absence of bus slave connections to the device&apos;s crossbar switch</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x7</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ASC</name>
+                     <description>Each bit in the ASC field indicates whether there is a corresponding connection to the crossbar switch&apos;s slave input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus slave connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus slave connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLAMC</name>
+               <description>Crossbar Switch (AXBS) Master Configuration\n
+PLAMC is a 16-bit read-only register identifying the presence/absence of bus master connections to the device&apos;s crossbar switch</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x5</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>AMC</name>
+                     <description>Each bit in the AMC field indicates whether there is a corresponding connection to the AXBS master input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus master connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus master connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLACR</name>
+               <description>Platform Control Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>ARB</name>
+                     <description>Arbitration select</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fixed-priority arbitration for the crossbar masters</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Round-robin arbitration for the crossbar masters</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CFCC</name>
+                     <description>Clear Flash Controller Cache\n
+Writing a 1 to this field clears the cache. Writing a 0 to this field is ignored. This field always reads as 0</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DFCDA</name>
+                     <description>Disable Flash Controller Data Caching</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable flash controller data caching</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable flash controller data caching</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFCIC</name>
+                     <description>Disable Flash Controller Instruction Caching</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable flash controller instruction caching</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable flash controller instruction caching</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFCC</name>
+                     <description>Disable Flash Controller Cache</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable flash controller cache</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable flash controller cache</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EFDS</name>
+                     <description>Enable Flash Data Speculation</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable flash data speculation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable flash data speculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFCS</name>
+                     <description>Disable Flash Controller Speculation</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable flash controller speculation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable flash controller speculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID</name>
+               <description>Process ID register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>M0_PID</name>
+                     <description>Drives the M0_PID value in the MPU.\n
+   00h-    Reserved for privileged secure tasks\n
+   01h-7Fh Allocated for user secure tasks\n
+   80h-FFh Allocated for user nonsecure tasks</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CPO</name>
+               <description>Compute Operation Control Register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>CPOREQ</name>
+                     <description>Compute Operation request</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Request is cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Request Compute Operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOACK</name>
+                     <description>Compute Operation acknowledge</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Compute operation entry has not completed or compute operation exit has completed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Compute operation entry has completed or compute operation exit has not completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOWOI</name>
+                     <description>Compute Operation wakeup on interrupt</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When set, the CPOREQ is cleared on any interrupt or exception vector fetch</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCRn</name>
+               <description>Master Attribute Configuration Register</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>ATC0</name>
+                     <description>Attribute Configuration Master n\n
+This 3-bit field defines the privileged/user and secure/nonsecure attribute configurations</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00x</name>
+                           <description>Master attributes are statically forced to {privileged, secure}</description>
+                           <value>0b00x</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Master attributes are statically forced to {user, secure}</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Master attributes are statically forced to {user, nonsecure}</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Enable master attribute {privileged or user} and statically force {secure}</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Enable master attribute {privileged or user} and statically force {nonsecure}</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11x</name>
+                           <description>Enable master attribute {privileged or user, secure or nonsecure}</description>
+                           <value>0b11x</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RO0</name>
+                     <description>Read-Only Master n\n
+This register bit provides a mechanism to lock the configuration state defined by ATCn. Once asserted,
+this bit remains set and attempted writes to the ATCn register are ignored until the next system reset
+clears the flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the ATCn are allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the ATCn are ignored</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ATC2</name>
+                     <description>Attribute Configuration Master n\n
+This 3-bit field defines the privileged/user and secure/nonsecure attribute configurations</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00x</name>
+                           <description>Master attributes are statically forced to {privileged, secure}</description>
+                           <value>0b00x</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Master attributes are statically forced to {user, secure}</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Master attributes are statically forced to {user, nonsecure}</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Enable master attribute {privileged or user} and statically force {secure}</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Enable master attribute {privileged or user} and statically force {nonsecure}</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11x</name>
+                           <description>Enable master attribute {privileged or user, secure or nonsecure}</description>
+                           <value>0b11x</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RO2</name>
+                     <description>Read-Only Master n\n
+This register bit provides a mechanism to lock the configuration state defined by ATCn. Once asserted,
+this bit remains set and attempted writes to the ATCn register are ignored until the next system reset
+clears the flag</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the ATCn are allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the ATCn are ignored</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

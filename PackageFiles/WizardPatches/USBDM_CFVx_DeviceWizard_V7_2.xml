@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--
+   Changes to Coldfire V7.2 individual device files
+-->
+<WIZARD>
+   <WIZARDELEMENTLIST>
+      <WIZARDELEMENT name="" term="" id="ID_CHIP_LIST">
+         <WIZARDELEMENTLIST>
+            <WIZARDELEMENT name="" term="" >
+               <WIZARDELEMENTLIST>
+                  <WIZARDELEMENT name="" term="" >
+                     <WIZARDELEMENTLIST>
+                        <WIZARDELEMENT name="Chip" >
+                           <RESTRICTIONLIST>
+                              <!-- Added - pgo -->
+                              <RESTRICTION merge-actions="insert">
+                                 <WIZARDELEMENTREF idref="ID_CONNECTION_LIST">
+                                    <RECURSION nameref="" idrefs="ID_CONNECTION_LIST ID_CONN_USBDM" />
+                                 </WIZARDELEMENTREF>
+                              </RESTRICTION>
+                           </RESTRICTIONLIST>
+                        </WIZARDELEMENT>
+                     </WIZARDELEMENTLIST>
+                  </WIZARDELEMENT>
+               </WIZARDELEMENTLIST>
+            </WIZARDELEMENT>
+         </WIZARDELEMENTLIST>
+      </WIZARDELEMENT>
+      <WIZARDELEMENT name="" term="" id="ID_CONNECTION_LIST">
+         <WIZARDELEMENTLIST>
+            <!-- Added - pgo -->
+            <WIZARDELEMENT  merge-actions="insert" name="" term="" id="ID_CONN_USBDM" />
+         </WIZARDELEMENTLIST>
+      </WIZARDELEMENT>
+   </WIZARDELEMENTLIST>
+</WIZARD>

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#====================================================
+# Refresh Codewarrior
+#
+#====================================================
+
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.3
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_3.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_3.xml
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.2
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_2.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_2.xml
+fi
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.1
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_1.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_1.xml
+fi
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+echo "Can't locate Codewarrior directory"
+fi
+
+ECLIPSE_CWIDE=${CODEWARRIOR_DIRECTORY}/eclipse/cwide
+PLUGIN_DIRECTORY=${CODEWARRIOR_DIRECTORY}/eclipse/plugins
+
+echo "Copying Eclipse plugin"
+echo cp $CP_OPTIONS "../plugins/net.sourceforge.usbdm.connections.usbdm_4.*.jar" ${PLUGIN_DIRECTORY}
+cp $CP_OPTIONS "../plugins/net.sourceforge.usbdm.connections.usbdm_4."*".jar"    ${PLUGIN_DIRECTORY}
+
+echo "Refreshing Eclipse"
+echo ${ECLIPSE_CWIDE} -clean -initialize
+${ECLIPSE_CWIDE} -clean -initialize
+echo "Done"
+echo
+
+echo "Launching Eclipse"
+sudo -u pgo ${ECLIPSE_CWIDE} -console
+

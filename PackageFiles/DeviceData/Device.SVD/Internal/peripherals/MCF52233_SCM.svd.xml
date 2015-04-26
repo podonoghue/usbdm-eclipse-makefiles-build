@@ -1,0 +1,1008 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF52233_SCM" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>SCM</name>
+         <description>System Control Module</description>
+         <prependToName>SCM</prependToName>
+         <baseAddress>0x40000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IPSBAR</name>
+               <description>Peripheral System Base Address Register\n
+The IPSBAR specifies the base address for the 1-Gbyte memory space associated with the on-chip peripherals.\n
+At reset, the base address is loaded with 0x4000_0000 and marked as valid (IPSBAR[V]=1)</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>V</name>
+                     <description>Valid\nEnables the IPS Base address region. V is set at reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IPS not valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>IPS valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BA</name>
+                     <description>Base address\n
+Defines the base address of the 1-Gbyte internal peripheral space\n
+This is the starting address for the IPS registers when the valid bit is set</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>0x0000_0000</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>0x4000_0000</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>0x8000_0000</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>0xC000_0000</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAMBAR</name>
+               <description>Memory Base Address Register\n
+Controls peripheral (e.g., DMA and FEC) access to the SRAM</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>BDE</name>
+                     <description>Back door enable\n
+Qualifies non-core master module accesses to the memory</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BA</name>
+                     <description>Base address\n
+Defines the memory module&apos;s base address on a 64-Kbyte boundary corresponding
+to the physical array location within the 4 Gbyte address space supported by ColdFire</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PPMRH</name>
+               <description>Peripheral Power Management\n
+The PPMRH and PPMRL registers control the generation of the module clocks for peripherals</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>CDGPIO</name>
+                     <description>General purpose I/O</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CDGPIO" > <name>CDEPORT</name> <description>Edge port</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDPIT0</name> <description>Programmable Interrupt Timer 0</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDPIT1</name> <description>Programmable Interrupt Timer 1</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDADC</name> <description>Analogue to Digital Converter</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDGPT</name> <description>General Purpose Timer</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDPWM</name> <description>Pulse Width Modulator</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDCAN</name> <description>Controller Area Network</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDCFM</name> <description>ColdFire Flash Module</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDEPHY</name> <description>ColdFire Flash Module</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CDGPIO" > <name>CDRNGA</name> <description>ColdFire Flash Module</description> <bitOffset>13</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRSR</name>
+               <description>Core Reset Status Register\n
+The CRSR contains a bit that indicates the reset source to the CPU</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EXT</name>
+                     <description>External reset\n
+An external device driving RSTI caused the last reset.\n
+Assertion of reset by an external device causes the processor core to initiate reset exception processing.\n
+All registers are forced to their initial state</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Caused last reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CWCR</name>
+               <description>Core Watchdog Control Register\n
+The core watchdog timer prevents system lockup if the software becomes trapped in a loop with no controlled exit.\n
+If enabled, the watchdog timer requires the periodic execution of a core watchdog servicing sequence</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CWTIF</name>
+                     <description>Timer interrupt flag\n
+Write a 1 to clear the interrupt request</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CWTAVAL</name>
+                     <description>Transfer acknowledge valid\n
+Write a 1 to clear this flag bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CWTA</name>
+                     <description>Transfer acknowledge enable\n
+After one CWT time-out period of the unacknowledged assertion of the CWT interrupt, the transfer acknowledge asserts.\n
+This allows the CWT to terminate a bus cycle and interrupt acknowledge to occur</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CWT</name>
+                     <description>Watchdog timing delay\n
+These bits select the timeout period for the CWT</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>2^9 Bus frequency</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2^11 Bus frequency</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>2^13 Bus frequency</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>2^15 Bus frequency</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>2^19 Bus frequency</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>2^23 Bus frequency</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>2^27 Bus frequency</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>2^31 Bus frequency</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CWRI</name>
+                     <description>Watchdog interrupt select\n
+If a time-out occurs, the CWT generates an interrupt to the processor core\n
+If a core reset is required, the watchdog interrupt should set the soft reset bit in the Reset Control register</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Required to be 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CWE</name>
+                     <description>Core watchdog enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CWSR</name>
+               <description>Watchdog Service Register\n
+Used to provide the software watchdog service sequence to prevent a CWT time-out.\n
+The service sequence requires two writes to this register: 0x55 followed by 0xAA</description>
+               <addressOffset>0x13</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>DMAREQC</name>
+               <description>DMA Request Control\n
+The DMAREQC register provides a software-controlled connection matrix for DMA requests.\n
+It logically routes DMA requests from the DMA timers and UARTs to the four channels of the DMA controller</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>DMAC0</name>
+                     <description>DMA 0 source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>DMA Timer 0</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>DMA Timer 1</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>DMA Timer 2</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>DMA Timer 3</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>UART0 Receive</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>UART1 Receive</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>UART2 Receive</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>UART0 Transmit</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>UART1 Transmit</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>UART2 Transmit</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Reserved</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DMAC0" > <name>DMAC1</name> <description>DMA 1 source</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DMAC0" > <name>DMAC2</name> <description>DMA 2 source</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="DMAC0" > <name>DMAC3</name> <description>DMA 3 source</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PPMRL</name>
+               <description>Peripheral Power Management\n
+The PPMRH and PPMRL registers control the generation of the module clocks for peripherals</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>CDG</name>
+                     <description>Global Space</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CDG" > <name>CDDMA</name> <description>Direct Memory Access Controller</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDUART0</name> <description>UART 0</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDUART1</name> <description>UART 1</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDUART2</name> <description>UART 2</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDI2C0</name> <description>Inter-IC Communication 0</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDQSPI</name> <description>Serial Peripheral Interface</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDRTC</name> <description>Real Time Clock</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDDTIM0</name> <description>DMA Timer 0</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDDTIM1</name> <description>DMA Timer 1</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDDTIM2</name> <description>DMA Timer 2</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDDTIM3</name> <description>DMA Timer 3</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDINTC0</name> <description>Interrupt Controller 0</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDINTC1</name> <description>Interrupt Controller 1</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CDG" > <name>CDFEC</name> <description>Fast Ethernet Controller</description> <bitOffset>21</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>MPARK</name>
+               <description>Bus Master Park Register\n
+The MPARK controls the operation of the system bus arbitration module.\n
+The initial state of the master priorities is M3 &gt; M2 &gt; M1 &gt; M0\n
+The M1_PRTY field should not be set for a priority higher than third</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>LCKOUT_TIME</name>
+                     <description>Lock-out Time\n
+Lock-out time for a master being denied the bus. The lock out time is defined as 2^ LCKOUT_TIME</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRKLAST</name>
+                     <description>Parking Master\nPark on the last active master or highest priority master if no masters are active</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Last active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Highest priority</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIMEOUT</name>
+                     <description>Timeout Enable\nMonitors masters being locked out of the bus</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- No lockout count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled\t- Allow a master access when it has been locked out for LCKOUT_TIME</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FIXED</name>
+                     <description>Fixed or round robin arbitration</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Round robin</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fixed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>M1_PRTY</name>
+                     <description>Master 1 priority (USB Controller)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Fourth (lowest)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Third</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Second</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>First (highest)</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="M1_PRTY" > <name>M0_PRTY</name> <description>Master 0 priority (ColdFire Core)</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="M1_PRTY" > <name>M2_PRTY</name> <description>Master 2 priority (DMA Controller)</description> <bitOffset>20</bitOffset> </field>
+                  <field>
+                     <name>BCR24BIT</name>
+                     <description>Size of DMA BCRs\nEnables the use of 24 bit byte count registers in the DMA module</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>16-bit BCRs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>24-bit BCRs</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>M2_P_EN</name>
+                     <description>DMA bandwidth control enable\n
+Allows the use of the DMA&apos;s bandwidth control to elevate the priority of its bus requests</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MPR</name>
+               <description>Controls the bus master privilege level\nDefines the access privilege level of each bus master</description>
+               <addressOffset>0x20</addressOffset>
+               <size>8</size>
+               <resetMask>0x3</resetMask>
+               <fields>
+                  <field>
+                     <name>MPR0</name>
+                     <description>Privilege level master 0 (ColdFire Core)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>User mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use source attribute</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="MPR0" > <name>MPR1</name> <description>Privilege level master 1 (Internal bus master)</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MPR0" > <name>MPR2</name> <description>Privilege level master 2 (DMA Controller)</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MPR0" > <name>MPR3</name> <description>Privilege level master 3 (Fast Ethernet Controller)</description> <bitOffset>3</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PPMRS</name>
+               <description>Peripheral Power Management Set Register\n
+Provides a memory-mapped mechanism to set a given bit in the PPMRx registers to disable the clock for a IPS module.\n
+The data value on a register write causes the corresponding bit in the PPMRx register to be set.
+The SMCD bit provides a global set function, forcing the entire contents of the PPMRx to be set, disabling all IPS module clocks.
+Reads of this register return all zeroes</description>
+               <addressOffset>0x21</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SMCD</name>
+                     <description>Set module clock disable\n
+Selects the corresponding bit in PPMRx, disabling the peripheral clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAMCD</name>
+                     <description>Set all module clock disables\n
+Allows a single bit or all bits in the PMMRx to be set</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Selected bit\t- Set only those bits specified in the SMCD field</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All bits\t- Set all bits in PPMRH and PPMRL, disabling all peripheral clocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PPMRC</name>
+               <description>Peripheral Power Management Clear Register\n
+Provides a memory-mapped mechanism to clear a given bit in the PPMRx registers to enable the clock for a IPS module.\n
+The data value on a register write causes the corresponding bit in the PPMRx register to be clear.
+The SMCD bit provides a global clear function, forcing the entire contents of the PPMRx to be cleared, enabling all IPS module clocks.
+Reads of this register return all zeroes</description>
+               <addressOffset>0x22</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SMCD</name>
+                     <description>Clear module clock disable\n
+Selects the corresponding bit in PPMRx, enabling the peripheral clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAMCD</name>
+                     <description>Clear all module clock disables\n
+Allows a single bit or all bits in the PMMRx to be cleared</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Selected bit\t- Clear only those bits specified in the SMCD field</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All bits\t- Clear all bits in PPMRH and PPMRL, enabling all peripheral clocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPSBMT</name>
+               <description>IPS Bus Timeout Monitor\n
+The IPS controller implements a bus timeout monitor to ensure that every IPS bus cycle is properly
+terminated within a programmed period of time</description>
+               <addressOffset>0x23</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BMT</name>
+                     <description>Bus monitor timeout\n
+This field selects the timeout period (measured in system bus clock cycles) for the bus monitor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1024 cycles</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>512 cycles</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>256 cycles</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>128 cycles</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>64 cycles</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>32 cycles</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>16 cycles</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>8 cycles</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BME</name>
+                     <description>Bus timeout monitor enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>9</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8</dimIndex>
+               <name>PACR%s</name>
+               <description>Peripheral Access Control Register\n
+Access to several on-chip peripherals is controlled by shared peripheral access control register.\n
+A single PACR defines the access level for each of the two modules:\n
+PACR0  \tSCM     \t\t--------\n
+PACR1  \t--------  \tDMA\n
+PACR2  \tUART0 \tUART1\n
+PACR3  \tUART2 \t--------\n
+PACR4  \tI2C0    \t\tQSPI\n
+PACR5  \tI2C1    \t\t--------\n
+PACR6  \tDTIM0 \tDTIM1\n
+PACR7  \tDTIM2 \tDTIM3\n
+PACR8  \tINTC0 \t--------\n
+PACR10 \tFEC   \t\t\t--------</description>
+               <addressOffset>0x24</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ACCESS_CTRL0</name>
+                     <description>Supervisor,User access control\n
+This 3-bit field defines the access control for the given platform peripheral</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>S-RW, U-</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>S-R, U-</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>S-R, U-R</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>S-R, U-</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>S-RW, U-RW</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>S-RW, U-R</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>S-RW, U-RW</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>S-, U-</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK0</name>
+                     <description>ACCESSCTRLx Lock\n
+This bit, when set, prevents subsequent writes to ACCESSCTRLx. Any attempted write to the PACR
+generates an error termination and the contents of the register are not affected. Only a system reset clears
+this flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Unlocked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ACCESS_CTRL0" > <name>ACCESS_CTRL1</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="LOCK0" > <name>LOCK1</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>GPACR%s</name>
+               <description>Grouped Peripheral Access Control\n
+The on-chip peripheral space starting at IPSBAR is subdivided into 16 64-Mbyte regions.\n
+The first two regions have unique access control registers associated with it</description>
+               <addressOffset>0x30</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ACCESS_CTRL</name>
+                     <description>Supervisor,User access control\n
+This 4-bit field defines the access control for the given memory region</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>S-RW, U-</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>S-R, U-</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>S-R, U-R</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>S-R, U-</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>S-RW, U-RW</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>S-RW, U-R</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>S-RW, U-RW</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>S-, U-</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>S-RWE, U-</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>S-RE, U-</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>S-RE, U-RE</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>S-E, U-</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>S-RWE, U-RWE</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>S-RWE, U-RE</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>S-RW, U-R</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>S-RWE, U-E</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK</name>
+                     <description>Lock bit\n
+When set, this bit prevents writes to the GPACR.\n
+Any attempted write to the GPACR generates an error termination and the contents of the register are not affected.\n
+Only a system reset clears this flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>GPACR unlocked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>GPACR locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

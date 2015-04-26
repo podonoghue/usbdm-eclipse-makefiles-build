@@ -1,0 +1,392 @@
+<!--
+Devices using this peripheral: 
+      MK22F51212
+-->
+      <peripheral>
+         <?sourceFile "SMC_HSRUN" ?>
+         <name>SMC</name>
+         <description>System Mode Controller</description>
+         <prependToName>SMC</prependToName>
+         <baseAddress>0x4007E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PMPROT</name>
+               <description>Power Mode Protection Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>AVLLS</name>
+                     <description>Allow Very-Low-Leakage Stop Mode\n
+Provided the appropriate control bits are set up in PMCTRL, this write once bit allows the MCU to enter
+any very-low-leakage stop mode (VLLSx)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VLLSx modes not allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>VLLSx modes allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALLS</name>
+                     <description>Allow Low-Leakage Stop Mode\n
+Provided the appropriate control bits are set up in PMCTRL, this write-once bit allows the MCU to enter
+any low-leakage stop mode (LLS)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LLSx modes not allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LLSx modes allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AVLP</name>
+                     <description>Allow Very-Low-Power Modes\n
+Provided the appropriate control bits are set up in PMCTRL, this write-once field allows the MCU to enter
+any very-low-power mode (VLPR, VLPW, and VLPS)</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VLPR/VLPW/VLPS not allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>VLPR/VLPW/VLPS allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AHSRUN</name>
+                     <description>Allow High Speed Run mode\n
+This write-once field allows the MCU to enter High Speed Run mode (HSRUN)</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>HSRUN not allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>HSRUN allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMCTRL</name>
+               <description>Power Mode Control Register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>STOPM</name>
+                     <description>Stop Mode Control\n
+When written, controls entry into the selected stop mode when Sleep-Now or Sleep-On-Exit mode is entered with SLEEPDEEP=1.\n
+Writes to this field are blocked if the protection level has not been enabled using the PMPROT register.\n
+After any system reset, this field is cleared by hardware on any successful write to the PMPROT register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Normal Stop (STOP)</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Reserved</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Very-Low-Power Stop (VLPS)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Low-Leakage Stop (LLSx)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Very-Low-Leakage Stop (VLLSx)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPA</name>
+                     <description>Stop Aborted\n
+This status field indicates an interrupt or reset occurred during the previous stop mode entry sequence, 
+preventing the system from entering that mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Stop mode entry successful</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stop mode entry aborted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUNM</name>
+                     <description>Run Mode Control\n
+When written, causes entry into the selected run mode.\n
+Writes to this field are blocked if the protection level has not been enabled using the PMPROT register.\n
+This field is cleared by hardware on any exit to normal RUN mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Normal Run mode (RUN)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Reserved</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Very-Low-Power Run mode (VLPR)</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>High Speed Run mode (HSRUN)</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STOPCTRL</name>
+               <description>Stop Control Register\n
+The STOPCTRL register provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetValue>0x3</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LLSM</name>
+                     <description>LLS or VLLS Mode Control
+This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>VLLS0</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>VLLS1</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>VLLS2</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>VLLS3</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Reserved</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PORPO</name>
+                     <description>POR Power Option\n
+Controls whether the POR detect circuit (for brown-out detection) is enabled in VLLS0 mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>POR detect enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>POR detect disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PSTOPO</name>
+                     <description>Partial Stop Option\n
+These bits control whether a Partial Stop mode is entered when STOPM=STOP</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>STOP - Normal Stop mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PSTOP1 - System and bus clocks disabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>PSTOP2 - System clock disabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMSTAT</name>
+               <description>Power Mode Status Register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0x1</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PMSTAT</name>
+                     <description>Power Mode Status\nIndicates current power mode\n
+When debug is enabled, the PMSTAT will not update to STOP or VLPS\n
+When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000001</name>
+                           <description>RUN</description>
+                           <value>0b00000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00000010</name>
+                           <description>STOP</description>
+                           <value>0b00000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00000100</name>
+                           <description>VLPR</description>
+                           <value>0b00000100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00001000</name>
+                           <description>VLPW</description>
+                           <value>0b00001000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00010000</name>
+                           <description>VLPS</description>
+                           <value>0b00010000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00100000</name>
+                           <description>LLS</description>
+                           <value>0b00100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01000000</name>
+                           <description>VLLS</description>
+                           <value>0b01000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000000</name>
+                           <description>HSRUN</description>
+                           <value>0b10000000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

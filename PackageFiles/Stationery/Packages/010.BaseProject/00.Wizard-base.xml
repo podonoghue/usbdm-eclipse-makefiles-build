@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+
+   <projectActionList id="Wizard-base" >
+      <group id="group-additional-options"
+         name="Additional Project Options ($(targetDevice))"
+         row="0"
+         width="1"
+       />
+      <group id="group-ksdk-operating-system"
+         name="Kinetis SDK Operating System Support"
+         row="1"
+         width="1"
+       />
+      <group id="group-ksdk-demo"
+         name="Kinetis SDK Demo"
+         row="2"
+         width="2"
+         span="2"
+       />
+      
+      <!-- Variables defined externally by New project Wizard -->
+      <!-- Default power option -->
+      <constant id="bdmTargetVdd" value="BDM_TARGET_VDD_OFF" />
+   </projectActionList>
+</root>

@@ -1,0 +1,435 @@
+<!--
+Devices using this vector table: 
+   MK63F12
+   MK64F12
+-->
+      <interrupts>
+         <name>MK63F12_VectorTable</name>
+         <description>MK63F/64F VectorTable</description>
+         <interrupt>
+            <name>DMA0</name>
+            <description>DMA channel 0 transfer complete interrupt</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>DMA channel 1 transfer complete interrupt</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>DMA channel 2 transfer complete interrupt</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>DMA channel 3 transfer complete interrupt</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA4</name>
+            <description>DMA channel 4 transfer complete interrupt</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA5</name>
+            <description>DMA channel 5 transfer complete interrupt</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA6</name>
+            <description>DMA channel 6 transfer complete interrupt</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA7</name>
+            <description>DMA channel 7 transfer complete interrupt</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA8</name>
+            <description>DMA channel 8 transfer complete interrupt</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA9</name>
+            <description>DMA channel 9 transfer complete interrupt</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA10</name>
+            <description>DMA channel 10 transfer complete interrupt</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA11</name>
+            <description>DMA channel 11 transfer complete interrupt</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA12</name>
+            <description>DMA channel 12 transfer complete interrupt</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA13</name>
+            <description>DMA channel 13 transfer complete interrupt</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA14</name>
+            <description>DMA channel 14 transfer complete interrupt</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA15</name>
+            <description>DMA channel 15 transfer complete interrupt</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>DMA error interrupt all channels</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>MCM</name>
+            <description>Normal Interrupt</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTFE_Command</name>
+            <description>FTFE interrupt</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTFE_Collision</name>
+            <description>FTFE Read collision interrupt</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>PMC Low Voltage Detect, Low Voltage Warning</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>LLWU Low Leakage Wakeup</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>WDOG interrupt</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>RNG</name>
+            <description>Random Number Generator</description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>I2C0 interrupt</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C1</name>
+            <description>I2C1 interrupt</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>SPI0 interrupt</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>SPI1 interrupt</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>I2S0_Tx</name>
+            <description>I2S0 Tx Interrupt</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>I2S0_Rx</name>
+            <description>I2S0 Rx Interrupt</description>
+            <value>29</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_LON</name>
+            <description>UART LON interrupt</description>
+            <value>30</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_RxTx</name>
+            <description>UART status sources</description>
+            <value>31</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_Error</name>
+            <description>UART error sources</description>
+            <value>32</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_RxTx</name>
+            <description>UART status sources</description>
+            <value>33</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_Error</name>
+            <description>UART error sources</description>
+            <value>34</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_RxTx</name>
+            <description>UART status sources</description>
+            <value>35</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_Error</name>
+            <description>UART error sources</description>
+            <value>36</value>
+         </interrupt>
+         <interrupt>
+            <name>UART3_RxTx</name>
+            <description>UART status sources</description>
+            <value>37</value>
+         </interrupt>
+         <interrupt>
+            <name>UART3_Error</name>
+            <description>UART error sources</description>
+            <value>38</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>ADC0 interrupt</description>
+            <value>39</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description>CMP0 interrupt</description>
+            <value>40</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP1</name>
+            <description>CMP1 interrupt</description>
+            <value>41</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>FTM0 fault, overflow and channels interrupt</description>
+            <value>42</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FTM1 fault, overflow and channels interrupt</description>
+            <value>43</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>FTM2 fault, overflow and channels interrupt</description>
+            <value>44</value>
+         </interrupt>
+         <interrupt>
+            <name>CMT</name>
+            <description>CMT interrupt</description>
+            <value>45</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC_Alarm</name>
+            <description>RTC interrupt</description>
+            <value>46</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC_Seconds</name>
+            <description>RTC interrupt</description>
+            <value>47</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch0</name>
+            <description>PIT timer channel 0 interrupt</description>
+            <value>48</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch1</name>
+            <description>PIT timer channel 1 interrupt</description>
+            <value>49</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch2</name>
+            <description>PIT timer channel 2 interrupt</description>
+            <value>50</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch3</name>
+            <description>PIT timer channel 3 interrupt</description>
+            <value>51</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB</name>
+            <description>PDB Programmable Delay Block interrupt</description>
+            <value>52</value>
+         </interrupt>
+         <interrupt>
+            <name>USBOTG</name>
+            <description>USB0 OTG interrupt</description>
+            <value>53</value>
+         </interrupt>
+         <interrupt>
+            <name>USBDCD</name>
+            <description>USBDCD interrupt</description>
+            <value>54</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC0</name>
+            <description>Digital to Analogue Converter</description>
+            <value>56</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Multipurpose Clock Generator</description>
+            <value>57</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>LPTMR Low Power Timer interrupt</description>
+            <value>58</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>Port A interrupt</description>
+            <value>59</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>Port B interrupt</description>
+            <value>60</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTC</name>
+            <description>Port C interrupt</description>
+            <value>61</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTD</name>
+            <description>Port D interrupt</description>
+            <value>62</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTE</name>
+            <description>Port E interrupt</description>
+            <value>63</value>
+         </interrupt>
+         <interrupt>
+            <name>SWI</name>
+            <description>Software interrupt</description>
+            <value>64</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI2</name>
+            <description>SPI2 interrupt</description>
+            <value>65</value>
+         </interrupt>
+         <interrupt>
+            <name>UART4_RxTx</name>
+            <description>UART status sources</description>
+            <value>66</value>
+         </interrupt>
+         <interrupt>
+            <name>UART4_Error</name>
+            <description>UART error sources</description>
+            <value>67</value>
+         </interrupt>
+         <interrupt>
+            <name>UART5_RxTx</name>
+            <description>UART status sources</description>
+            <value>68</value>
+         </interrupt>
+         <interrupt>
+            <name>UART5_Error</name>
+            <description>UART error sources</description>
+            <value>69</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP2</name>
+            <description>CMP2 interrupt</description>
+            <value>70</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM3</name>
+            <description>FTM3 interrupt</description>
+            <value>71</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC1</name>
+            <description>Digital to Analogue Converter</description>
+            <value>72</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC1</name>
+            <description>ADC0 interrupt</description>
+            <value>73</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C2</name>
+            <description>I2C2 interrupt</description>
+            <value>74</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Message</name>
+            <description>CAN0 ORed Message Buffer (0-15)</description>
+            <value>75</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_BusOff</name>
+            <description>CAN0 Bus Off</description>
+            <value>76</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Error</name>
+            <description>CAN0 Error</description>
+            <value>77</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Tx</name>
+            <description>CAN0 Transmit Warning</description>
+            <value>78</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Rx</name>
+            <description>CAN0 Receive Warning</description>
+            <value>79</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_WakeUp</name>
+            <description>CAN0 Wake Up</description>
+            <value>80</value>
+         </interrupt>
+         <interrupt>
+            <name>SDHC</name>
+            <description>SDHC</description>
+            <value>81</value>
+         </interrupt>
+         <interrupt>
+            <name>ENET_1588Timeout</name>
+            <description>Ethernet MAC IEEE 1588 Timer interrupt</description>
+            <value>82</value>
+         </interrupt>
+         <interrupt>
+            <name>ENET_Tx</name>
+            <description>Ethernet MAC Transmit interrupt</description>
+            <value>83</value>
+         </interrupt>
+         <interrupt>
+            <name>ENET_Rx</name>
+            <description>Ethernet MAC Receive interrupt</description>
+            <value>84</value>
+         </interrupt>
+         <interrupt>
+            <name>ENET_Error</name>
+            <description>Ethernet MAC Error and miscellaneous interrupt</description>
+            <value>85</value>
+         </interrupt>
+      </interrupts>
+

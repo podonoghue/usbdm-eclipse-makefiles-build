@@ -1,0 +1,87 @@
+<device family="HCS08" name="MC9S08JR12_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000060"  end="0x00015F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x00D000" end="0x00FFFF" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="MC9S08LC20_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000050"  end="0x00009F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x000001" end="0x000FA0" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="MC9S08RT4_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000080"  end="0x00015F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x000001" end="0x0003E8" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="MC9S08RT8_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000080"  end="0x0001DF"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x000001" end="0x0007D0" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="MC9S08RT16_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000060"  end="0x00025F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x00C000" end="0x00FFFF" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="MC9S08MZ16_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000050"  end="0x00009F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x000001" end="0x000FA0" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="SC9S08MZ32_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000050"  end="0x00009F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+      <memoryRange start="0x001F40" end="0x003E7F" />
+   </memory>
+   <sdid value="0x000" />
+</device>
+<device family="HCS08" name="SC9S08MZ60_FLASH">
+   <memory type="ram">
+      <memoryRange start="0x000050"  end="0x00009F"/>
+   </memory>
+   <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+      <securityInfoRef ref="HCS08-default-security-off" />
+      <securityInfoRef ref="HCS08-default-security-on" />
+   </memory>
+   <sdid value="0x000" />
+</device>

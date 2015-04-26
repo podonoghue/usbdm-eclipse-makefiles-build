@@ -1,0 +1,2569 @@
+<!--
+Devices using this peripheral: 
+      MK61F12
+      MK61F15
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "DDR_0" ?>
+         <name>DDR</name>
+         <description>DRAM Controller</description>
+         <prependToName>DDR</prependToName>
+         <baseAddress>0x400AE000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1AC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR00</name>
+               <description>DDR Control Register 0</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x20400000</resetValue>
+               <fields>
+                  <field>
+                     <name>START</name>
+                     <description>Start</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DDRCLS</name>
+                     <description>DRAM Class</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>DDR</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>LPDDR</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Reserved</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Reserved</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>DDR2</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Reserved</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Reserved</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VERSION</name>
+                     <description>Version</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR01</name>
+               <description>DDR Control Register 1</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x20B10</resetValue>
+               <fields>
+                  <field>
+                     <name>MAXROW</name>
+                     <description>Maxmum Row</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAXCOL</name>
+                     <description>Maximum Column</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>0</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>1</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>11</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Reserved</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Reserved</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CSMAX</name>
+                     <description>Chip Select Maximum</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>One</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Two</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR02</name>
+               <description>DDR Control Register 2</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TINIT</name>
+                     <description>Time Initialization</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>INITAREF</name>
+                     <description>Initialization Auto-Refresh</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR03</name>
+               <description>DDR Control Register 3</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>LATLIN</name>
+                     <description>Latency Linear</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Reserved</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Reserved</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>1 cycle</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>1.5 cycles</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>7.5 cycles</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LATGATE</name>
+                     <description>Latency Gate</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRLAT</name>
+                     <description>Write Latency</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCCD</name>
+                     <description>Time CAS-to-CAS Delay</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR04</name>
+               <description>DDR Control Register 4</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>TBINT</name>
+                     <description>Time Burst Interrupt Interval</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRRD</name>
+                     <description>Defines the DRAM activate-to-activate delay for different banks (TRRD) in cycles</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRC</name>
+                     <description>Defines the DRAM period between active commands for the same bank (TRC) in cycles</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRASMIN</name>
+                     <description>Time RAS Minimum</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR05</name>
+               <description>DDR Control Register 5</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>TWTR</name>
+                     <description>Time Write-To-Read</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRP</name>
+                     <description>Defines the DRAM precharge command time (TRP) in cycles</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRTP</name>
+                     <description>Time Read-To-Precharge</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMRD</name>
+                     <description>DRAM TMRD parameter in cycles</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR06</name>
+               <description>DDR Control Register 6</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>TMOD</name>
+                     <description>Time Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRASMAX</name>
+                     <description>Time Row Access Maximum</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>INTWBR</name>
+                     <description>Interrupt Write Burst</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Read commands cannot interrupt write commands</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Read commands can interrupt write commands</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR07</name>
+               <description>DDR Control Register 7</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKPW</name>
+                     <description>Clock Pulse Width</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCKESR</name>
+                     <description>Time Clock low Self Refresh</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>AP</name>
+                     <description>Auto Precharge</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCAPEN</name>
+                     <description>Concurrent Auto-Precharge Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR08</name>
+               <description>DDR Control Register 8</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRAS</name>
+                     <description>Time RAS lockout</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRASDI</name>
+                     <description>Time RAS-to-CAS Delay Interval</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TWR</name>
+                     <description>Time Write Recovery</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TDAL</name>
+                     <description>Defines the auto-precharge write recovery time when auto-precharge is enabled (CR01[AP] is set), in cycles. This is defined internally as t RP (pre-charge time) + auto-precharge write recovery time. Not all memories use this parameter. If t DAL is defined in the memory specification, then program this parameter to the specified value. If the memory does not specify a t DAL time, then program this parameter to t WR + t RP . Do not program this parameter with a value of 0x0. Else, the memory controller does not function properly when auto-precharge is enabled</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR09</name>
+               <description>DDR Control Register 9</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDLL</name>
+                     <description>Time DLL</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOCMD</name>
+                     <description>No Command</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Issue only REF and PRE commands during DLL initialization of the DRAM devices. If PRE commands are issued before DLL initialization is complete, the command is executed immediately and the DLL initialization continues</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Do not issue any type of command during DLL initialization of the DRAM devices. If any other commands are issued, they are held until DLL initialization completes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BSTLEN</name>
+                     <description>Burst Length</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Reserved</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Two memory words - only applicable if the reduc parameter is set to &apos;b0 for operation in full datapath mode. Applicable for these memory systems: DDR1 (dram_class = &apos;b0000) LPDDR1 (dram_class = &apos;b0001)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Four memory words. Applicable for these memory systems: DDR1 (dram_class = &apos;b0000) LPDDR1 (dram_class = &apos;b0001) DDR2 (dram_class = &apos;b0100)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Eight memory words. Applicable for these memory systems: DDR1 (dram_class = &apos;b0000) LPDDR1 (dram_class = &apos;b0001)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Reserved</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR10</name>
+               <description>DDR Control Register 10</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>TFAW</name>
+                     <description>Time FAW</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCPD</name>
+                     <description>Time Clock Enable to Precharge Delay</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRPAB</name>
+                     <description>TRP All Bank</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR11</name>
+               <description>DDR Control Register 11</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>REGDIMM</name>
+                     <description>Registered DIMM</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AREF</name>
+                     <description>Auto Refresh</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>AREFMODE</name>
+                     <description>Auto Refresh Mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TREFEN</name>
+                     <description>Enables refresh commands. If command refresh mode is configured, then refresh commands are automatically issued based on the internal CR31[TREF] counter and any refresh commands sent through the command interface or the register interface. 0 Refresh commands disabled 1 Refresh commands enabled</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR12</name>
+               <description>DDR Control Register 12</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRFC</name>
+                     <description>Time Refresh Command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>TREF</name>
+                     <description>Time Refresh</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR13</name>
+               <description>DDR Control Register 13</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>TREFINT</name>
+                     <description>Reserved</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>PD</name>
+                     <description>Power Down</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable full power state</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The memory controller completes processing of the current burst for the current transaction (if any), issues a precharge all command, and disables the clock enable signal to the DRAM devices. Any subsequent commands in the command queue are suspended until this bit is cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR14</name>
+               <description>DDR Control Register 14</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>TPDEX</name>
+                     <description>Time Power Down Exit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXSR</name>
+                     <description>Time Exit Self Refresh</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR15</name>
+               <description>DDR Control Register 15</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXSNR</name>
+                     <description>TXSNR parameter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>SREF</name>
+                     <description>Self Refresh</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PUREF</name>
+                     <description>Power Up Refresh</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR16</name>
+               <description>DDR Control Register 16</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>QKREF</name>
+                     <description>Quick Refresh</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Continue memory initialization</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt memory initialization and enter self-refresh mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKDLY</name>
+                     <description>Clock Delay</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPCTRL</name>
+                     <description>Low Power Control</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR17</name>
+               <description>DDR Control Register 17</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>LPPDCNT</name>
+                     <description>Low Power Power Down Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPRFCNT</name>
+                     <description>Low Power Refresh Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR18</name>
+               <description>DDR Control Register 18</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>LPEXTCNT</name>
+                     <description>Low Power External Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPAUTO</name>
+                     <description>Low Power Auto</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR19</name>
+               <description>DDR Control Register 19</description>
+               <addressOffset>0x4C</addressOffset>
+               <fields>
+                  <field>
+                     <name>LPINTCNT</name>
+                     <description>Low Power Interval Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPRFHOLD</name>
+                     <description>Low Power Refresh Hold</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR20</name>
+               <description>DDR Control Register 20</description>
+               <addressOffset>0x50</addressOffset>
+               <resetValue>0xC000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPRE</name>
+                     <description>Low Power Refresh enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Refreshes occur</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Refreshes do not occur</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Reserved</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CKSRE</name>
+                     <description>Clock hold delay on self refresh entry. Sets the number of cycles to hold the clock stable after entering self-refresh mode. The clock will run for a minimum of cksre cycles after CLK falls</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CKSRX</name>
+                     <description>Clock Self Refresh Exit</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRMD</name>
+                     <description>Write Mode Register</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR21</name>
+               <description>DDR Control Register 21</description>
+               <addressOffset>0x54</addressOffset>
+               <resetValue>0x400</resetValue>
+               <fields>
+                  <field>
+                     <name>MR0DAT0</name>
+                     <description>Data to program into memory mode register 0 for chip select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MR1DAT0</name>
+                     <description>Data to program into memory mode register 1 for chip select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR22</name>
+               <description>DDR Control Register 22</description>
+               <addressOffset>0x58</addressOffset>
+               <resetValue>0x400</resetValue>
+               <fields>
+                  <field>
+                     <name>MR2DATA0</name>
+                     <description>Data to program into memory mode register 2 for chip select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MR3DAT0</name>
+                     <description>Data to program into memory mode register 3 for chip select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR23</name>
+               <description>DDR Control Register 23</description>
+               <addressOffset>0x5C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>Not_Used</name>
+                     <description>Reserved</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOT_USED</name>
+                     <description>Reserved</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR24</name>
+               <description>DDR Control Register 24</description>
+               <addressOffset>0x60</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <name>CR25</name>
+               <description>DDR Control Register 25</description>
+               <addressOffset>0x64</addressOffset>
+               <fields>
+                  <field>
+                     <name>BNK8</name>
+                     <description>Eight Bank Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>4 banks</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>8 banks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADDPINS</name>
+                     <description>Address Pins</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>COLSIZ</name>
+                     <description>Column Size</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>APREBIT</name>
+                     <description>Auto Precharge Bit</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR26</name>
+               <description>DDR Control Register 26</description>
+               <addressOffset>0x68</addressOffset>
+               <fields>
+                  <field>
+                     <name>AGECNT</name>
+                     <description>Age Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CMDAGE</name>
+                     <description>Command Age count</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADDCOL</name>
+                     <description>Address Collision enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BNKSPT</name>
+                     <description>Bank Split enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR27</name>
+               <description>DDR Control Register 27</description>
+               <addressOffset>0x6C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PLEN</name>
+                     <description>Placement Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled. The command queue is a straight FIFO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled. The command queue is filled according to the placement logic factors</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRIEN</name>
+                     <description>Priority Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWEN</name>
+                     <description>Read Write same Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SWPEN</name>
+                     <description>Swap Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR28</name>
+               <description>DDR Control Register 28</description>
+               <addressOffset>0x70</addressOffset>
+               <fields>
+                  <field>
+                     <name>CSMAP</name>
+                     <description>Chip Select Map</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>REDUC</name>
+                     <description>Controls the width of the memory datapath. The entire user datapath is used regardless of this setting. When operating in half datapath mode, only burst length value of 4 and 8 are supported</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>16-bit - standard operation using full memory bus</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>8-bit - Memory datapath width is half of the maximum size. The upper half of the memory busses (DQ, DQS, and DM) are unused and relevant data only exists in the lower half of the busses</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BIGEND</name>
+                     <description>Big Endian Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Little endian</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Big endian</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CMDLATR</name>
+                     <description>Command Latency Reduction Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR29</name>
+               <description>DDR Control Register 29</description>
+               <addressOffset>0x74</addressOffset>
+               <fields>
+                  <field>
+                     <name>WRLATR</name>
+                     <description>Write Latency Reduction enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSTWR</name>
+                     <description>Fast Write</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The memory controller issues a write command to the DRAM devices when it has received enough data for one DRAM burst. Write data can be sent in any cycle relative to the write command. This mode also allows for multi-word write command data to arrive in non-sequential cycles</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The memory controller issues a write command to the DRAM devices after the first word of the write data is received by the memory controller. The first word can be sent at any time relative to the write command. In this mode, multi-word write command data must be available to the memory controller in sequential cycles</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>QFULL</name>
+                     <description>Queue Fullness</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RESYNC</name>
+                     <description>Resyncronize</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Initiate</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR30</name>
+               <description>DDR Control Register 30</description>
+               <addressOffset>0x78</addressOffset>
+               <fields>
+                  <field>
+                     <name>RSYNCRF</name>
+                     <description>Resynchroize after Refresh</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTSTAT</name>
+                     <description>Interrupt Status</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>9</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>INTACK</name>
+                     <description>Interupt Acknowlege</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clear the corresponding bit in INTSTATUS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR31</name>
+               <description>DDR Control Register 31</description>
+               <addressOffset>0x7C</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTMASK</name>
+                     <description>Interrupt Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No mask</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Mask corresponding interrupt signal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR32</name>
+               <description>DDR Control Register 32</description>
+               <addressOffset>0x80</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>OORAD</name>
+                     <description>Out Of Range Address</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR33</name>
+               <description>DDR Control Register 33</description>
+               <addressOffset>0x84</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>OORLEN</name>
+                     <description>Out Of Range Length</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>OORTYP</name>
+                     <description>Out Of Range Type</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>OORID</name>
+                     <description>Out Of Range source ID</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR34</name>
+               <description>DDR Control Register 34</description>
+               <addressOffset>0x88</addressOffset>
+               <fields>
+                  <field>
+                     <name>ODTRDC</name>
+                     <description>ODT Read map CS</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ODTWRCS</name>
+                     <description>ODT Write map CS</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR35</name>
+               <description>DDR Control Register 35</description>
+               <addressOffset>0x8C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R2WSMCS</name>
+                     <description>Read To Write Same Chip Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>W2RSMCS</name>
+                     <description>Write To Read Same Chip Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR36</name>
+               <description>DDR Control Register 36</description>
+               <addressOffset>0x90</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>Not_Used</name>
+                     <description>Reserved</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOT_USED</name>
+                     <description>Reserved</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR37</name>
+               <description>DDR Control Register 37</description>
+               <addressOffset>0x94</addressOffset>
+               <fields>
+                  <field>
+                     <name>R2RSAME</name>
+                     <description>R2R Same chip select delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>R2WSAME</name>
+                     <description>R2W Same chip select delay</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>W2RSAME</name>
+                     <description>W2R Same chip select delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>W2WSAME</name>
+                     <description>W2W Same chip select delay</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR38</name>
+               <description>DDR Control Register 38</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDNCS</name>
+                     <description>OCD Pull Down adjustment Chip Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>PUPCS</name>
+                     <description>OCD Pull Up adjustment Chip Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRCNT</name>
+                     <description>Port 0 Write Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR39</name>
+               <description>DDR Control Register 39</description>
+               <addressOffset>0x9C</addressOffset>
+               <fields>
+                  <field>
+                     <name>P0RDCNT</name>
+                     <description>Port 0 Read command Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>RP0</name>
+                     <description>Port 0 Read command Priority</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WP0</name>
+                     <description>Port 0 Write command Priority</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR40</name>
+               <description>DDR Control Register 40</description>
+               <addressOffset>0xA0</addressOffset>
+               <fields>
+                  <field>
+                     <name>P0TYP</name>
+                     <description>Port 0 Type</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>P1WRCNT</name>
+                     <description>Port 1 Write command Count</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR41</name>
+               <description>DDR Control Register 41</description>
+               <addressOffset>0xA4</addressOffset>
+               <fields>
+                  <field>
+                     <name>P1RDCNT</name>
+                     <description>Port 1 Read command Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>RP1</name>
+                     <description>Read command priority Port 1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WP1</name>
+                     <description>Write command priority Port 1</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR42</name>
+               <description>DDR Control Register 42</description>
+               <addressOffset>0xA8</addressOffset>
+               <fields>
+                  <field>
+                     <name>P1TYP</name>
+                     <description>Port 1 Type</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>P2WRCNT</name>
+                     <description>Port 2 Write command Count</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR43</name>
+               <description>DDR Control Register 43</description>
+               <addressOffset>0xAC</addressOffset>
+               <fields>
+                  <field>
+                     <name>P2RDCNT</name>
+                     <description>Port 2 Read command Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>RP2</name>
+                     <description>Read command priority Port 2</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WP2</name>
+                     <description>Write command priority Port 2</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR44</name>
+               <description>DDR Control Register 44</description>
+               <addressOffset>0xB0</addressOffset>
+               <fields>
+                  <field>
+                     <name>P2TYP</name>
+                     <description>Port 2 Type</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRRLAT</name>
+                     <description>WRR Latency</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Free-running</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Limited</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WRRSHARE</name>
+                     <description>WRR Shared arbitration</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Port 0 and port 1 are treated independently for arbitration</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Port 0 and port 1 are grouped together for arbitration</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WRRERR</name>
+                     <description>WRR parameters Error</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR45</name>
+               <description>DDR Control Register 45</description>
+               <addressOffset>0xB4</addressOffset>
+               <fields>
+                  <field>
+                     <name>P0PRI0</name>
+                     <description>Port 0 Priority 0 commands</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P0PRI1</name>
+                     <description>Port 0 Priority 1 commands</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P0PRI2</name>
+                     <description>Port 0 Priority 2 commands</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P0PRI3</name>
+                     <description>Port 0 Priority 3 commands</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR46</name>
+               <description>DDR Control Register 46</description>
+               <addressOffset>0xB8</addressOffset>
+               <fields>
+                  <field>
+                     <name>P0ORD</name>
+                     <description>Port 0 Order</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest listing in the scan order</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>------</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>------</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest listing in the scan order</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P0PRIRLX</name>
+                     <description>Port 0 Priority Relax</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>P1PRI0</name>
+                     <description>Port 1 Priority 0 commands</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR47</name>
+               <description>DDR Control Register 47</description>
+               <addressOffset>0xBC</addressOffset>
+               <fields>
+                  <field>
+                     <name>P1PRI1</name>
+                     <description>Port 1 Priority 1 commands</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P1PRI2</name>
+                     <description>Port 1 Priority 2 commands</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P1PRI3</name>
+                     <description>Port 1 Priority 3 commands</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P1ORD</name>
+                     <description>Port 1 Order</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest listing in the scan order</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest listing in the scan order</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR48</name>
+               <description>DDR Control Register 48</description>
+               <addressOffset>0xC0</addressOffset>
+               <fields>
+                  <field>
+                     <name>P1PRIRLX</name>
+                     <description>Port 1 Priority Relax</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>P2PRI0</name>
+                     <description>Port 2 Priority 0 commands</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P2PRI1</name>
+                     <description>Port 2 Priority 1 commands</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR49</name>
+               <description>DDR Control Register 49</description>
+               <addressOffset>0xC4</addressOffset>
+               <fields>
+                  <field>
+                     <name>P2PRI2</name>
+                     <description>Port 2 Priority 2 commands</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P2PRI3</name>
+                     <description>Port 2 Priority 3 commands</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Lowest</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>-----</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>-----</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Highest</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>P2ORD</name>
+                     <description>Port 2 Order</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Highest listing in the scan order</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>-----</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>-----</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Lowest listing in the scan order</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR50</name>
+               <description>DDR Control Register 50</description>
+               <addressOffset>0xC8</addressOffset>
+               <fields>
+                  <field>
+                     <name>P2PRIRLX</name>
+                     <description>Port 2 Priority Relax</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKSTATUS</name>
+                     <description>Clock Status</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR51</name>
+               <description>DDR Control Register 51</description>
+               <addressOffset>0xCC</addressOffset>
+               <resetValue>0x400</resetValue>
+               <fields>
+                  <field>
+                     <name>DLLRSTDLY</name>
+                     <description>DLL Reset Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>DLLRADLY</name>
+                     <description>DLL Reset Adjust Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>PHYWRLAT</name>
+                     <description>PHY Write Latency</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR52</name>
+               <description>DDR Control Register 52</description>
+               <addressOffset>0xD0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PYWRLTBS</name>
+                     <description>PHY Write Latency Base</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PHYRDLAT</name>
+                     <description>PHY Read Latency</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RDDATAEN</name>
+                     <description>Read Data Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RDDTENBAS</name>
+                     <description>Read Data Enable Base</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR53</name>
+               <description>DDR Control Register 53</description>
+               <addressOffset>0xD4</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKDISCS</name>
+                     <description>DRAM Clock Disable for chip select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Memory clock active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Memory clock disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRTLUPDMN</name>
+                     <description>DFI CRTLUPD Minimum</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CTRLUPDMX</name>
+                     <description>DFI CRTLUPD Minimum</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR54</name>
+               <description>DDR Control Register 54</description>
+               <addressOffset>0xD8</addressOffset>
+               <fields>
+                  <field>
+                     <name>PHYUPDTY0</name>
+                     <description>DFI PHYUPD Type 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>PHYUPDTY1</name>
+                     <description>DFI PHYUPD Type 1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR55</name>
+               <description>DDR Control Register 55</description>
+               <addressOffset>0xDC</addressOffset>
+               <fields>
+                  <field>
+                     <name>PHYUPDTY2</name>
+                     <description>DFI PHYUPD TYPE2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>PHYUPDTY3</name>
+                     <description>DFI PHYUPD TYPE3</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR56</name>
+               <description>DDR Control Register 56</description>
+               <addressOffset>0xE0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PHYUPDRESP</name>
+                     <description>TDFI PHYUPDRESP parameter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>RDLATADJ</name>
+                     <description>Read Latency Adjust</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRLATADJ</name>
+                     <description>Write Latency Adjust</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR57</name>
+               <description>DDR Control Register 57</description>
+               <addressOffset>0xE4</addressOffset>
+               <fields>
+                  <field>
+                     <name>CMDDLY</name>
+                     <description>Command Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKDISDLY</name>
+                     <description>DFI Clock Disable Delay</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKENDLY</name>
+                     <description>DFI Clock Enable Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ODTALTEN</name>
+                     <description>ODT Alternate Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>8,9</dimIndex>
+               <name>CR5%s</name>
+               <description>DDR Control Register 58</description>
+               <addressOffset>0xE8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>Not_Used</name>
+                     <description>Reserved</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOT_USED</name>
+                     <description>Reserved</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CR6%s</name>
+               <description>DDR Control Register 60</description>
+               <addressOffset>0xF0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>Not_Used</name>
+                     <description>Reserved</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOT_USED</name>
+                     <description>Reserved</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR</name>
+               <description>RCR Control Register</description>
+               <addressOffset>0x180</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>RST</name>
+                     <description>Reset</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No software reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Force software reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PAD_CTRL</name>
+               <description>I/O Pad Control Register</description>
+               <addressOffset>0x1AC</addressOffset>
+               <resetValue>0x200</resetValue>
+               <fields>
+                  <field>
+                     <name>SPARE_DLY_CTRL</name>
+                     <description>These SPARE_DLY_CTRL[3:0]bits set the delay chains in the spare logic</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PAD_ODT_CS0</name>
+                     <description>Required to enable ODT and configure ODT resistor value in the pad</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>ODT Disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>75 Ohms</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>150 Ohms</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>50 Ohms</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

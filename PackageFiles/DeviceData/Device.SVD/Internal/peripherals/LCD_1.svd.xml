@@ -1,0 +1,1146 @@
+<!--
+Devices using this peripheral: 
+      MK30D7
+      MK30DZ10
+      MK40D7
+      MK40DZ10
+      MK51D7
+      MK51DZ10
+      MK53DZ10
+-->
+      <peripheral>
+         <?sourceFile "LCD_1" ?>
+         <name>LCD</name>
+         <description>Segment Liquid Crystal Display</description>
+         <prependToName>LCD</prependToName>
+         <baseAddress>0x400BE000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x60</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>GCR</name>
+               <description>LCD General Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x8350003</resetValue>
+               <fields>
+                  <field>
+                     <name>DUTY</name>
+                     <description>LCD duty select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Use 1 BP (1/1 duty cycle)</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Use 2 BP (1/2 duty cycle)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Use 3 BP (1/3 duty cycle)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Use 4 BP (1/4 duty cycle). (Default)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Use 5 BP (1/5 duty cycle)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Use 6 BP (1/6 duty cycle)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Use 7 BP (1/7 duty cycle)</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Use 8 BP (1/8 duty cycle)</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCLK</name>
+                     <description>LCD Clock Prescaler</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>SOURCE</name>
+                     <description>LCD Clock Source Select</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Selects the default clock as the LCD clock source</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Selects the alternate clock as the LCD clock source</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCDEN</name>
+                     <description>LCD Driver Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All frontplane and backplane pins are disabled. The LCD controller system is also disabled, and all LCD waveform generation clocks are stopped. VLL3 is connected to VDD internally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD controller driver system is enabled, and frontplane and backplane waveforms are generated. All LCD pins, LCD_Pn, enabled using the LCD pin enable register, output an LCD driver waveform.The backplane pins output an LCD driver backplane waveform based on the settings of DUTY[2:0]. Charge pump or resistor bias is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCDSTP</name>
+                     <description>LCD driver, charge pump, resistor bias network, and voltage regulator while in Stop mode</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Allows the LCD driver, charge pump, resistor bias network, and voltage regulator to continue running during Stop mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disables the LCD driver, charge pump, resistor bias network, and voltage regulator when MCU enters Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCDWAIT</name>
+                     <description>LCD driver, charge pump, resistor bias network, and voltage regulator stop while in Wait mode</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Allows the LCD driver, charge pump, resistor bias network, and voltage regulator to continue running during Wait mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disables the LCD driver, charge pump, resistor bias network, and voltage regulator when MCU enters Wait mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALTDIV</name>
+                     <description>LCD AlternateClock Divider</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Divide factor = 1 (No divide)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Divide factor = 8</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDCIEN</name>
+                     <description>LCD Fault Detection Complete Interrupt Enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt request is generated by this event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When a fault is detected and FDCF bit is set, this event causes an interrupt request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCDIEN</name>
+                     <description>LCD Frame Frequency Interrupt Enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt request is generated by this event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When LCDIF bit is set, this event causes an interrupt request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VSUPPLY</name>
+                     <description>Voltage Supply Control</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Drive V LL2 internally from V DD</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Drive V LL3 internally from V DD</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Reserved</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Drive V LL3 externally from V DD or drive V LL1 internally from V IREG</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LADJ</name>
+                     <description>Load Adjust</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>HREFSEL</name>
+                     <description>High Reference Select</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Divide input, V IREG = 1.0 V for 3 V glass</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Do not divide the input, V IREG = 1.67 V for 5 V glass</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPSEL</name>
+                     <description>Charge Pump or Resistor Bias Select</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LCD charge pump is disabled. Resistor network selected. (The internal 1/3-bias is forced.)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD charge pump is selected. Resistor network disabled. (The internal 1/3-bias is forced.)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RVTRIM</name>
+                     <description>Regulated Voltage Trim</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RVEN</name>
+                     <description>Regulated Voltage Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Regulated voltage disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Regulated voltage enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AR</name>
+               <description>LCD Auxiliary Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>BRATE</name>
+                     <description>Blink-rate configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>BMODE</name>
+                     <description>Blink mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Display blank during the blink period</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Display alternate display during blink period (Ignored if duty is 5 or greater)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BLANK</name>
+                     <description>Blank display mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal or alternate display mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Blank display mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALT</name>
+                     <description>Alternate display mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal display mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Alternate display mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BLINK</name>
+                     <description>Blink command</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disables blinking</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Starts blinking at blinking frequency specified by LCD blink rate calculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LCDIF</name>
+                     <description>LCD Frame Frequency Interrupt flag</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Frame frequency interrupt condition has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The start of LCD controller frame has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FDCR</name>
+               <description>LCD Fault Detect Control Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>FDPINID</name>
+                     <description>Fault Detect Pin ID</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fault detection for LCD_P0 pin</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fault detection for LCD_P1 pin</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDBPEN</name>
+                     <description>Fault Detect Back Plane Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Type of the selected pin under fault detect test is front plane</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Type of the selected pin under fault detect test is back plane</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDEN</name>
+                     <description>Fault Detect Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable fault detection</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable fault detection</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDSWW</name>
+                     <description>Fault Detect Sample Window Width</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sample window width is 4 sample clock cycles</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sample window width is 8 sample clock cycles</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDPRS</name>
+                     <description>Fault Detect Clock Prescaler</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1/1 bus clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1/2 bus clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FDSR</name>
+               <description>LCD Fault Detect Status Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>FDCNT</name>
+                     <description>Fault Detect Counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No &quot;one&quot; samples</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1 &quot;one&quot; samples</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDCF</name>
+                     <description>Fault Detection Complete Flag</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fault detection is not completed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fault detection is completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PENL</name>
+               <description>LCD Pin Enable register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>PEN</name>
+                     <description>LCD Pin Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LCD operation disabled on LCD_Pn</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD operation enabled on LCD_Pn</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PENH</name>
+               <description>LCD Pin Enable register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>PEN</name>
+                     <description>LCD Pin Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LCD operation disabled on LCD_Pn</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD operation enabled on LCD_Pn</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BPENL</name>
+               <description>LCD Back Plane Enable register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>BPEN</name>
+                     <description>Back Plane Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Front plane operation enabled on LCD_Pn</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Back plane operation enabled on LCD_Pn</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BPENH</name>
+               <description>LCD Back Plane Enable register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BPEN</name>
+                     <description>Back Plane Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Front plane operation enabled on LCD_Pn</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Back plane operation enabled on LCD_Pn</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF3TO0</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF0</name>
+                     <description>Controls segments or phases connected to LCD_P0 as described above for WF3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF1</name>
+                     <description>Controls segments or phases connected to LCD_P1 as described above for WF3</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF2</name>
+                     <description>Controls segments or phases connected to LCD_P2 as described above for WF3</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF3</name>
+                     <description>Segment-on front plane operation - Each bit turns on or off the segments associated with LCD_P3 in the following pattern: HGFEDCBA (most significant bit controls segment H and least significant bit controls segment A). Segment-on back plane operation - Each bit activates or deactivates the phases associated with LCD_P3 in the following pattern: HGFEDCBA (most significant bit controls phase H and least significant bit controls phase A). For each bit: 0 Segment off or phase deactivated 1 Segment on or phase activated</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF7TO4</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF4</name>
+                     <description>Controls segments or phases connected to LCD_P4 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF5</name>
+                     <description>Controls segments or phases connected to LCD_P5 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF6</name>
+                     <description>Controls segments or phases connected to LCD_P6 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF7</name>
+                     <description>Controls segments or phases connected to LCD_P7 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF11TO8</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF8</name>
+                     <description>Controls segments or phases connected to LCD_P8 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF9</name>
+                     <description>Controls segments or phases connected to LCD_P9 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF10</name>
+                     <description>Controls segments or phases connected to LCD_P10 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF11</name>
+                     <description>Controls segments or phases connected to LCD_P11 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF15TO12</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF12</name>
+                     <description>Controls segments or phases connected to LCD_P12 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF13</name>
+                     <description>Controls segments or phases connected to LCD_P13 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF14</name>
+                     <description>Controls segments or phases connected to LCD_P14 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF15</name>
+                     <description>Controls segments or phases connected to LCD_P15 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF19TO16</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF16</name>
+                     <description>Controls segments or phases connected to LCD_P16 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF17</name>
+                     <description>Controls segments or phases connected to LCD_P17 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF18</name>
+                     <description>Controls segments or phases connected to LCD_P18 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF19</name>
+                     <description>Controls segments or phases connected to LCD_P19 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF23TO20</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF20</name>
+                     <description>Controls segments or phases connected to LCD_P20 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF21</name>
+                     <description>Controls segments or phases connected to LCD_P21 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF22</name>
+                     <description>Controls segments or phases connected to LCD_P22 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF23</name>
+                     <description>Controls segments or phases connected to LCD_P23 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF27TO24</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF24</name>
+                     <description>Controls segments or phases connected to LCD_P24 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF25</name>
+                     <description>Controls segments or phases connected to LCD_P25 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF26</name>
+                     <description>Controls segments or phases connected to LCD_P26 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF27</name>
+                     <description>Controls segments or phases connected to LCD_P27 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF31TO28</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF28</name>
+                     <description>Controls segments or phases connected to LCD_P28 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF29</name>
+                     <description>Controls segments or phases connected to LCD_P29 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF30</name>
+                     <description>Controls segments or phases connected to LCD_P30 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF31</name>
+                     <description>Controls segments or phases connected to LCD_P31 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF35TO32</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF32</name>
+                     <description>Controls segments or phases connected to LCD_P32 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF33</name>
+                     <description>Controls segments or phases connected to LCD_P33 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF34</name>
+                     <description>Controls segments or phases connected to LCD_P34 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF35</name>
+                     <description>Controls segments or phases connected to LCD_P35 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF39TO36</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF36</name>
+                     <description>Controls segments or phases connected to LCD_P36 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF37</name>
+                     <description>Controls segments or phases connected to LCD_P37 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF38</name>
+                     <description>Controls segments or phases connected to LCD_P38 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF39</name>
+                     <description>Controls segments or phases connected to LCD_P39 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF43TO40</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF40</name>
+                     <description>Controls segments or phases connected to LCD_P40 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF41</name>
+                     <description>Controls segments or phases connected to LCD_P41 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF42</name>
+                     <description>Controls segments or phases connected to LCD_P42 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF43</name>
+                     <description>Controls segments or phases connected to LCD_P43 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF47TO44</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x4C</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF44</name>
+                     <description>Controls segments or phases connected to LCD_P44 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF45</name>
+                     <description>Controls segments or phases connected to LCD_P45 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF46</name>
+                     <description>Controls segments or phases connected to LCD_P46 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF47</name>
+                     <description>Controls segments or phases connected to LCD_P47 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF51TO48</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x50</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF48</name>
+                     <description>Controls segments or phases connected to LCD_P48 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF49</name>
+                     <description>Controls segments or phases connected to LCD_P49 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF50</name>
+                     <description>Controls segments or phases connected to LCD_P50 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF51</name>
+                     <description>Controls segments or phases connected to LCD_P51 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF55TO52</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x54</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF52</name>
+                     <description>Controls segments or phases connected to LCD_P52 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF53</name>
+                     <description>Controls segments or phases connected to LCD_P53 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF54</name>
+                     <description>Controls segments or phases connected to LCD_P54 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF55</name>
+                     <description>Controls segments or phases connected to LCD_P55 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF59TO56</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF56</name>
+                     <description>Controls segments or phases connected to LCD_P56 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF57</name>
+                     <description>Controls segments or phases connected to LCD_P57 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF58</name>
+                     <description>Controls segments or phases connected to LCD_P58 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF59</name>
+                     <description>Controls segments or phases connected to LCD_P59 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WF63TO60</name>
+               <description>LCD Waveform register</description>
+               <addressOffset>0x5C</addressOffset>
+               <fields>
+                  <field>
+                     <name>WF60</name>
+                     <description>Controls segments or phases connected to LCD_P60 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF61</name>
+                     <description>Controls segments or phases connected to LCD_P61 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF62</name>
+                     <description>Controls segments or phases connected to LCD_P62 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WF63</name>
+                     <description>Controls segments or phases connected to LCD_P63 as described above for WF3TO0[WF3]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

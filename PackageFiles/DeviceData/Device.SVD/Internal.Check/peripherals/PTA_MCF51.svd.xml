@@ -1,0 +1,128 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "PTA_MCF51" ?>
+         <name>PTA</name>
+         <description>GPIO Port</description>
+         <prependToName>PTA</prependToName>
+         <headerStructName>PT</headerStructName>
+         <baseAddress>0xFFFF8000</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>D</name>
+               <description>Port Data Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTD0</name>
+                     <description>Port data bits\n
+Writes are latched into all bits of this register. \n
+Reads return either the latched data for pins configured as outputs or\n
+the pin data for pins configured as inputs</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTD0" > <name>PTD1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTD0" > <name>PTD7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>DD</name>
+               <description>Port Data Direction Register</description>
+               <addressOffset>0x1</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTDD0</name>
+                     <description>Port data direction bits\n
+Each bit of the port data direction register controls whether an associated port pin is an input or output
+when pin interrupt is disabled and no other module controls the pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTDD0" > <name>PTDD7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PV</name>
+               <description>Port Pin Value Register</description>
+               <addressOffset>0x2</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PTPV0</name>
+                     <description>Port pin value bits\n
+For pins that are configured as digital pins, this register always reflects the digital level on the actual PAD</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTPV0" > <name>PTPV7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

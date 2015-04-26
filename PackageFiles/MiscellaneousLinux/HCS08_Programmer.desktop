@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=HCS08_FlashProgrammer
+Comment=Flash programmer for HCS08 devices
+Keywords=HCS08;Programmer;
+Exec=/usr/bin/HCS08_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=HCS08 Programmer
+GenericName[en_AU]=HCS08 Programmer
+Comment[en_AU]=USBDM Flash programmer for HCS08

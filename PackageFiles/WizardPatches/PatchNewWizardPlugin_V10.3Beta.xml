@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension name="MCU New Project Wizard"
+		point="com.freescale.core.ide.newprojectwizard.newProjectWizard">
+		<wizard uiExtensionID="com.freescale.mcu.projectwizard.ui"
+			wizardExtensionID="com.freescale.mcu.projectwizard.wizard1">
+			<projectGeneration baseProjectType="com.freescale.mcu.projectwizard.projecttype1">
+				<configurations>
+					<configuration configurationId="toolchain.config.hcs08.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo # HCS08 Release -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.08.usbdm" id="usbdm_hcs08"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration configurationId="toolchain.config.hcs08.absoluteAssembly.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo # HCS08 Absolute Assem. Release -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.08.usbdm" id="usbdm_hcs08"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration configurationId="toolchain.config.rs08.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo # RS08 Release -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.08.usbdm" id="usbdm_rs08"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration configurationId="toolchain.config.rs08.absoluteAssembly.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo # RS08 Absolute Assem. Release -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.08.usbdm" id="usbdm_rs08"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration conditionId="mcu.projectwizard.condition.isColdFire.v1"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV1 Release -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfv1"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_INTRAM.default"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 Internal RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_EXTRAM.default"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 Console, external RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTRAM"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 Internal RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTRAM"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 External RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTFLASH"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 Internal Flash -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTFLASH"
+						configurationId="com.freescale.coldfire.toolchain.configuration">
+						<configurationLaunchSettings>
+							<!-- Added pgo # CFV2,3,4 External Flash -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.cf.usbdm" id="usbdm_cfvx"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration 
+                  conditionId="mcu.projectwizard.condition.arm.fsl.ID_TARGET_RAM"
+						configurationId="com.freescale.arm.cdt.toolchain.config.arm.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo #ARM.FSL RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.arm.fsl.ID_TARGET_FLASH"
+						configurationId="com.freescale.arm.cdt.toolchain.config.arm.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo #ARM.FSL Flash -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration 
+                  conditionId="mcu.projectwizard.condition.arm.gcc.ID_TARGET_RAM"
+						configurationId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #ARM.GCC RAM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.arm.gcc.ID_TARGET_FLASH"
+						configurationId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #ARM.GCC Flash -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.dsc.hw.ID_TARGET_INTERNAL_FLASH_SDM"
+						configurationId="com.freescale.dsc.cdt.toolchain.config.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #DSC Internal Flash SDM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.dsc.usbdm" id="usbdm_dsc"
+								name="USBDM" />
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.dsc.hw.ID_TARGET_INTERNAL_FLASH_LDM"
+						configurationId="com.freescale.dsc.cdt.toolchain.config.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #DSC Internal Flash LDM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.dsc.usbdm" id="usbdm_dsc"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.dsc.hw.ID_TARGET_EXTERNAL_RAM_SDM"
+						configurationId="com.freescale.dsc.cdt.toolchain.config.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #DSC External RAM SDM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.dsc.usbdm" id="usbdm_dsc"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						conditionId="mcu.projectwizard.condition.dsc.hw.ID_TARGET_EXTERNAL_RAM_LDM"
+						configurationId="com.freescale.dsc.cdt.toolchain.config.debug">
+						<configurationLaunchSettings>
+							<!-- Added pgo #DSC External RAM LDM -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.dsc.usbdm" id="usbdm_dsc"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration conditionId="mcu.projectwizard.condition.isS12ZFamily"
+						configurationId="com.freescale.s12z.toolchain.release">
+						<configurationLaunchSettings>
+							<!-- Added pgo #S12Z Internal Flash -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.s12z.usbdm" id="usbdm_s12z"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+				</configurations>
+			</projectGeneration>
+		</wizard>
+	</extension>
+	<extension id="com.freescale.mcu.projectwizard.ui" point="com.freescale.core.ide.wizard.ui.wizardUI">
+		<pages>
+			<page id="mcu.projectwizard.page.connections.s08">
+				<uiElement
+					id="mcu.projectwizard.connections.list.s08.rseHostComboComposite">
+					<uiElement id="mcu.projectwizard.connections.list.s08">
+						<!-- Added pgo #SO8 -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.connections.list.s08.createNewSystemID"
+							id="mcu.projectwizard.conn.08.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+			<page id="mcu.projectwizard.page.connections.cf">
+				<uiElement
+					id="mcu.projectwizard.page.connections.cf.rseHostComboComposite">
+					<uiElement id="mcu.projectwizard.connections.list.cf"
+						itemType="checkboxGroup">
+						<!-- Added pgo #Coldfire -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.page.connections.cf.createNewSystemID"
+							id="mcu.projectwizard.conn.cf.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+			<page id="mcu.projectwizard.page.connections.arm">
+				<uiElement
+					id="mcu.projectwizard.connections.list.arm.rseHostComboComposite">
+					<uiElement id="mcu.projectwizard.connections.list.arm"
+						itemType="checkboxGroup">
+						<!-- Added pgo #ARM -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.connections.list.arm.createNewSystemID"
+							id="mcu.projectwizard.conn.arm.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+			<page id="mcu.projectwizard.page.connections.dsc">
+				<uiElement
+					id="mcu.projectwizard.connections.list.dsc.rseHostComboComposite">
+					<uiElement id="mcu.projectwizard.connections.list.dsc"
+						itemType="checkboxGroup">
+						<!-- Added pgo #DSC -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.connections.list.dsc.createNewSystemID"
+							id="mcu.projectwizard.conn.dsc.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+			<page id="mcu.projectwizard.page.connections.s12z">
+				<uiElement
+					id="mcu.projectwizard.connections.list.s12z.rseHostComboComposite">
+					<uiElement id="mcu.projectwizard.connections.list.s12z"
+						itemType="checkboxGroup">
+						<!-- Added pgo #S12Z -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.connections.list.s12z.createNewSystemID"
+							id="mcu.projectwizard.conn.s12z.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+		</pages>
+		<conditions>
+			<condition id="mcu.projectwizard.condition.dsc.conn.isHardware">
+				<or>
+					<!-- Added pgo #DSC Condition -->
+					<isSelected merge-actions="insert"
+						uiChoiceId="mcu.projectwizard.conn.dsc.usbdm" />
+				</or>
+			</condition>
+		</conditions>
+	</extension>
+</plugin>

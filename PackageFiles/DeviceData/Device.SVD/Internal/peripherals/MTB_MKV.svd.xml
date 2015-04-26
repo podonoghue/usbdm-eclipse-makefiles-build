@@ -1,0 +1,307 @@
+<!--
+Devices using this peripheral: 
+      MKV10Z7
+-->
+      <peripheral>
+         <?sourceFile "MTB_MKV" ?>
+         <name>MTB</name>
+         <description>Micro Trace Buffer</description>
+         <prependToName>MTB</prependToName>
+         <baseAddress>0xF0000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFA0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFB0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFC8</offset>
+            <size>0x38</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>POSITION</name>
+               <description>MTB Position Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>WRAP</name>
+                     <description>This bit is set to 1 automatically when the POINTER value wraps as determined by the MTB_MASTER[MASK] field in the MASTER Trace Control Register. A debug agent might use the WRAP bit to determine whether the trace information above and below the pointer address is valid</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>POINTER</name>
+                     <description>Trace Packet Address Pointer</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASTER</name>
+               <description>MTB Master Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x80</resetValue>
+               <fields>
+                  <field>
+                     <name>MASK</name>
+                     <description>Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTARTEN</name>
+                     <description>Trace Start Input Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTOPEN</name>
+                     <description>Trace Stop Input Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFRWPRIV</name>
+                     <description>Special Function Register Write Privilege</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAMPRIV</name>
+                     <description>RAM Privilege</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HALTREQ</name>
+                     <description>Halt Request</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EN</name>
+                     <description>Main Trace Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FLOW</name>
+               <description>MTB Flow Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>AUTOSTOP</name>
+                     <description>If this bit is 1 and WATERMARK is equal to MTB_POSITION[POINTER], then the MTB_MASTER[EN] bit is automatically set to 0. This stops tracing</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTOHALT</name>
+                     <description>If this bit is 1 and WATERMARK is equal to MTB_POSITION[POINTER], then the MTB_MASTER[HALTREQ] bit is automatically set to 1. If the DBGEN signal is HIGH, the MTB asserts this halt request to the Cortex-M0+ processor by asserting the EDBGRQ signal</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WATERMARK</name>
+                     <description>WATERMARK[28:0]</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BASE</name>
+               <description>MTB Base Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>BASEADDR</name>
+                     <description>This value is defined with a hardwired signal and the expression: 0x2000_0000 - (RAM_Size/4). For example, if the total RAM capacity is 16 KB, this field is 0x1FFF_F000</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODECTRL</name>
+               <description>Integration Mode Control Register</description>
+               <addressOffset>0xF00</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MODECTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAGSET</name>
+               <description>Claim TAG Set Register</description>
+               <addressOffset>0xFA0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TAGSET</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAGCLEAR</name>
+               <description>Claim TAG Clear Register</description>
+               <addressOffset>0xFA4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TAGCLEAR</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LOCKACCESS</name>
+               <description>Lock Access Register</description>
+               <addressOffset>0xFB0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LOCKACCESS</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LOCKSTAT</name>
+               <description>Lock Status Register</description>
+               <addressOffset>0xFB4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LOCKSTAT</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUTHSTAT</name>
+               <description>Authentication Status Register</description>
+               <addressOffset>0xFB8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>BIT0</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BIT2</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVICEARCH</name>
+               <description>Device Architecture Register</description>
+               <addressOffset>0xFBC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x47700A31</resetValue>
+               <fields>
+                  <field>
+                     <name>DEVICEARCH</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVICECFG</name>
+               <description>Device Configuration Register</description>
+               <addressOffset>0xFC8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DEVICECFG</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVICETYPID</name>
+               <description>Device Type Identifier Register</description>
+               <addressOffset>0xFCC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x31</resetValue>
+               <fields>
+                  <field>
+                     <name>DEVICETYPID</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>4,5,6,7,0,1,2,3</dimIndex>
+               <name>PERIPHID%s</name>
+               <description>Peripheral ID Register</description>
+               <addressOffset>0xFD0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PERIPHID</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>COMPID%s</name>
+               <description>Component ID Register</description>
+               <addressOffset>0xFF0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COMPID</name>
+                     <description>Component ID</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

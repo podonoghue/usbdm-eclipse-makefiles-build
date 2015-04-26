@@ -1,0 +1,976 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "SPI0_MCF51_FIFO" ?>
+         <name>SPI0</name>
+         <description>Serial Peripheral Interface</description>
+         <prependToName>SPI0</prependToName>
+         <baseAddress>0xFFFF81A0</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0xA</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>C1</name>
+               <description>Control register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetValue>0x4</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LSBFE</name>
+                     <description>LSB first (shifter direction)\n
+Controls whether serial data transfers start with most-significant or least-significant bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Most significant</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Least significant</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSOE</name>
+                     <description>Slave select output enable\n
+This bit only has effect when MODFEN=1 and in master node.\n
+In slave mode, SS pin function is slave select input irrespective of this bit.\n
+In master mode when MODFEN=0 SS pin function is general-purpose I/O\n
+In master mode when MODFEN=1 see below for SS pin usage:</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fault mode input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Automatic SS output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPHA</name>
+                     <description>Clock phase\n
+Determine when output data changes and input data is captured relative to the clock</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data captured on leading edge\t- Data changes on following edge</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Data changes on the leading edge\t - Data captured on following edge</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOL</name>
+                     <description>Clock polarity\n
+Defines inactive state of the CLK</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive is low\t- Leading edge is rising (idles low)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Inactive is high\t- Leading edge is falling (idles high)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSTR</name>
+                     <description>Master/slave mode select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Slave device</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Master device</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPTIE</name>
+                     <description>Transmit interrupt enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPE</name>
+                     <description>System enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPIE</name>
+                     <description>Interrupt enable: for SPRF and MODF</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C2</name>
+               <description>Control register 2</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SPC0</name>
+                     <description>Pin control 0\nThis bit enables bidirectional data pin configurations</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Separate input and output\t- In master mode of operation: MISO is master in and MOSI is master out. In slave mode of operation: MISO is slave out and MOSI is slave in</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single-wire bidirectional\t- In master mode of operation: MISO is not used by SPI; MOSI is master in when BIDIROE is 0 or master I/O when BIDIROE is 1. In slave mode of operation: MISO is slave in when BIDIROE is 0 or slave I/O when BIDIROE is 1; MOSI is not used by SPI</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPISWAI</name>
+                     <description>Stop in wait mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Operate normally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clocks stopped</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXDMAE</name>
+                     <description>Receive DMA request enable\n Selects between DMA request and default interrupt requests (if enabled)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BIDIROE</name>
+                     <description>Bidirectional mode output enable\nControls output driver enable in bidirectional mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- Data I/O pin acts as an input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled\t- Data I/O pin enabled as an output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODFEN</name>
+                     <description>Master mode-fault function enable\nControls operation of SS pin as fault input</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- Master SS pin reverts to general-purpose I/O not controlled by SPI</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled\t- Master SS pin acts as the mode fault input or the slave select output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXDMAE</name>
+                     <description>Transmit DMA enable\n Selects between DMA or interrupts requests (if enabled) from SPTEF</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPIMODE</name>
+                     <description>8-bit or 16-bit mode\n
+This bit allows the user to select either an 8-bit or 16-bit data transmission length</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>8-bit SPI</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>16-bit SPI</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPMIE</name>
+                     <description>Match interrupt enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BR</name>
+               <description>SPI baud rate register\n
+BAUD = (Bus Clock)/Prescaler/Baud Rate Divisor\n
+Used to set the prescaler and bit rate divisor for an SPI master</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SPR</name>
+                     <description>SPI baud rate divisor select\n
+Selects one of nine divisors for the SPI baud rate divider.\n
+The input to this divider comes from the SPI baud rate prescaler</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Divide by 2</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Divide by 4</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Divide by 8</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Divide by 16</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Divide by 32</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Divide by 64</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Divide by 128</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Divide by 256</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Divide by 512</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPPR</name>
+                     <description>Baud rate prescale divisor\n
+The input to this prescaler is the bus rate clock (BUSCLK). The output of this prescaler drives the input of the SPI baud rate divider</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Divide by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Divide by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Divide by 3</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Divide by 4</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Divide by 5</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Divide by 6</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Divide by 7</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Divide by 8</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>S</name>
+               <description>Status register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0x20</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RFIFOEF</name>
+                     <description>Read FIFO empty flag\n
+This bit indicates the status of the read FIFO when FIFOMODE is enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FIFO has data</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFULLF</name>
+                     <description>Transmit FIFO full flag\n
+This bit indicates the status of the transmit FIFO when FIFOMODE is enabled.\n
+This flag is set when there are 8 bytes in the transmit FIFO</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FIFO &lt; 8 bytes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO = 8 bytes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TNEAREF</name>
+                     <description>Transmit FIFO nearly empty flag\n
+This flag is set when only two 16-bit words or four 8-bit bytes of data remain to be transmitted</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not nearly empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Nearly empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RNFULLF</name>
+                     <description>Receive FIFO nearly full flag\n
+This flag is set when more than three 16-bit words or six 8-bit bytes of data are available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not nearly full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Nearly full</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODF</name>
+                     <description>Master mode fault flag\n
+MODF is set if the SPI is configured as a master and the slave select input goes low, \n
+indicating some other SPI device is also configured as a master</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No mode fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Mode fault error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPTEF</name>
+                     <description>Transmit buffer/FIFO empty flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Buffer/FIFO not empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Buffer/FIFO empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPMF</name>
+                     <description>Match flag\n
+SPMF is set after SPRF is 1 when the value in the receive data buffer matches the value in the MH:ML registers.\n
+To clear the flag, read SPMF when it is set and then write a 1 to it</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No match</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Match</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPRF</name>
+                     <description>Read buffer/FIFO full flag\nIndicates Buffer/FIFO is full</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Buffer/FIFO not full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Buffer/FIFO full</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>D</name>
+               <description>Data register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Data (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DH</name>
+               <description>Data register low</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Data (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DL</name>
+               <description>Data register high</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Data (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>M</name>
+               <description>Match register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Hardware compare value (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MH</name>
+               <description>Match register high</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Hardware compare value (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ML</name>
+               <description>Match register low</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>Bits</name>
+                     <description>Hardware compare value (low byte)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C3</name>
+               <description>Control register 3</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FIFOMODE</name>
+                     <description>FIFO mode enable\n
+This bit enables the SPI to use a 64-bit FIFO (8 bytes or four 16-bit words) for both transmit and receive buffers</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FIFO disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RNFULLIEN</name>
+                     <description>Receive FIFO nearly full interrupt enable\n
+Writing 1 to this bit enables the SPI to interrupt the CPU when the RNFULLF flag is set.\n
+This bit is ignored and has no function if the FIFOMODE bit is 0</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TNEARIEN</name>
+                     <description>Transmit FIFO nearly empty interrupt enable\n
+Writing 1 to this bit enables the SPI to interrupt the CPU when the TNEAREF flag is set.\n
+This bit is ignored and has no function if the FIFOMODE bit is 0</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTCLR</name>
+                     <description>Interrupt clearing mechanism select\n
+This bit selects the mechanism by which the SPRF, SPTEF, TNEAREF, and RNFULLF interrupts are cleared</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clear source flag</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write CI register</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RNFULLF_MARK</name>
+                     <description>Receive FIFO nearly full watermark\n
+This bit selects the threshold after which the RNFULLF flag is asserted</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Rx FIFO &gt;= 48 bits</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rx FIFO &gt;= 32 bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TNEAREF_MARK</name>
+                     <description>Transmit FIFO nearly empty watermark\n
+This bit selects the threshold after which the TNEAREF flag is asserted</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tx FIFO &lt;= 16 bits</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO &lt;= 32 bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CI</name>
+               <description>Clear interrupt register</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SPRFCI</name>
+                     <description>Receive FIFO full flag clear interrupt\n
+Writing 1 to this bit clears the SPRF interrupt provided that C3[3] is set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear SPRF</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPTEFCI</name>
+                     <description>Transmit FIFO empty flag clear interrupt\n
+Writing 1 to this bit clears the SPTEF interrupt provided that C3[3] is set</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear SPRF</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RNFULLFCI</name>
+                     <description>Receive FIFO nearly full flag clear interrupt\n
+Writing 1 to this bit clears the RNFULLF interrupt provided that C3[3] is set</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear RNFULLF</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TNEAREFCI</name>
+                     <description>Transmit FIFO nearly empty flag clear interrupt\n
+Writing 1 to this bit clears the TNEAREF interrupt provided that C3[3] is set</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear TNEAREF</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXFOF</name>
+                     <description>Receive FIFO overflow flag\n
+This flag indicates that a receive FIFO overflow condition has occurred</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Rx FIFO Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rx FIFO Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFOF</name>
+                     <description>Transmit FIFO overflow flag\n
+This flag indicates that a transmit FIFO overflow condition has occurred</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Tx FIFO Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXFERR</name>
+                     <description>Receive FIFO error flag\n
+This flag indicates that a receive FIFO error occurred because entries in the FIFO exceed 8</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Rx FIFO Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rx FIFO Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFERR</name>
+                     <description>Transmit FIFO error flag\n
+This flag indicates that a transmit FIFO error occurred because entries in the FIFO exceed 8</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Tx FIFO Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

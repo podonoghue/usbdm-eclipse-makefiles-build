@@ -1,0 +1,2 @@
+Check Firmware changer when no driver for ICP mode or other error
+Check WCID details again - Why does it not work if proper validation of USB requests is done by BDM?

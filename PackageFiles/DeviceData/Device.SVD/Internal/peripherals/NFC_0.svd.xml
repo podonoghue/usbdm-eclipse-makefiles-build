@@ -1,0 +1,740 @@
+<!--
+Devices using this peripheral: 
+      MK10F12
+      MK20F12
+      MK60F12
+      MK60F15
+      MK61F12
+      MK61F15
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "NFC_0" ?>
+         <name>NFC</name>
+         <description>NAND flash controller</description>
+         <prependToName>NFC</prependToName>
+         <baseAddress>0x400A8000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x3F00</offset>
+            <size>0x3C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CMD1</name>
+               <description>Flash command 1</description>
+               <addressOffset>0x3F00</addressOffset>
+               <resetValue>0x30FF0000</resetValue>
+               <fields>
+                  <field>
+                     <name>BYTE3</name>
+                     <description>Third command byte that may be sent to the flash device</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE2</name>
+                     <description>Second command byte that may be sent to the flash device</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMD2</name>
+               <description>Flash command 2</description>
+               <addressOffset>0x3F04</addressOffset>
+               <resetValue>0x7EE000</resetValue>
+               <fields>
+                  <field>
+                     <name>BUSY_START</name>
+                     <description>Busy indicator and start command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>During reads, flash controller is idle and it is okay to send next command. During writes, no action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>During reads, command execution is busy. During writes, start command execution</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BUFNO</name>
+                     <description>Internal buffer number used for this command</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>CODE</name>
+                     <description>User-defined flash operation sequencer</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE1</name>
+                     <description>First command byte that may be sent to the flash device</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAR</name>
+               <description>Column address</description>
+               <addressOffset>0x3F08</addressOffset>
+               <fields>
+                  <field>
+                     <name>BYTE1</name>
+                     <description>First byte of column address</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE2</name>
+                     <description>Second byte of column address</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAR</name>
+               <description>Row address</description>
+               <addressOffset>0x3F0C</addressOffset>
+               <resetValue>0x11000000</resetValue>
+               <fields>
+                  <field>
+                     <name>BYTE1</name>
+                     <description>First byte of row address</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE2</name>
+                     <description>Second byte of row address</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE3</name>
+                     <description>Third byte of row address</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RB0</name>
+                     <description>Ready/busy 0 enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NFC_R/ B 0 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NFC_R/ B 0 is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RB1</name>
+                     <description>Ready/busy 1 enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NFC_R/ B 1 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NFC_R/ B 1 is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CS0</name>
+                     <description>Chip select 0 enable</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NFC_CE0 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NFC_CE0 is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CS1</name>
+                     <description>Chip select 1 enable</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NFC_CE1 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NFC_CE1 is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RPT</name>
+               <description>Flash command repeat</description>
+               <addressOffset>0x3F10</addressOffset>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>16-bit repeat count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAI</name>
+               <description>Row address increment</description>
+               <addressOffset>0x3F14</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>INC1</name>
+                     <description>Increment for the first byte of row address</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>INC2</name>
+                     <description>Increment for the second byte of row address</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>INC3</name>
+                     <description>Increment for the third byte of row address</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR1</name>
+               <description>Flash status 1</description>
+               <addressOffset>0x3F18</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>ID4</name>
+                     <description>Fourth byte returned by read ID command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ID3</name>
+                     <description>Third byte returned by read ID command</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ID2</name>
+                     <description>Second byte returned by read ID command</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ID1</name>
+                     <description>First byte returned by read ID command</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR2</name>
+               <description>Flash status 2</description>
+               <addressOffset>0x3F1C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>STATUS1</name>
+                     <description>Byte returned by read status command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ID5</name>
+                     <description>Fifth byte returned by read ID command</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMA1</name>
+               <description>DMA channel 1 address</description>
+               <addressOffset>0x3F20</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADDRESS</name>
+                     <description>DMA channel 1 address. DMA channel 1 address, it is 8-byte aligned</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMACFG</name>
+               <description>DMA configuration</description>
+               <addressOffset>0x3F24</addressOffset>
+               <fields>
+                  <field>
+                     <name>ACT2</name>
+                     <description>DMA channel 2 status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active, and transfers to memory when triggered</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACT1</name>
+                     <description>DMA channel 1 status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active, and transfers to memory when triggered</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFFSET2</name>
+                     <description>256-byte offset for DMA channel 2. DMA channel 2 transfer starts at this offset count x 256 bytes. For example, if OFFSET2 = 0x2, DMA channel 2 transfer starts at 0x200</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>COUNT2</name>
+                     <description>Number of bytes to be transferred by DMA channel 2. It should be multiple of 8 bytes</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>COUNT1</name>
+                     <description>Number of bytes to be transferred by DMA channel 1. It should be multiple of 8 bytes</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SWAP</name>
+               <description>Cach swap</description>
+               <addressOffset>0x3F28</addressOffset>
+               <resetValue>0xFFE0FFE</resetValue>
+               <fields>
+                  <field>
+                     <name>ADDR2</name>
+                     <description>Upper swap address</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADDR1</name>
+                     <description>Lower swap address</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SECSZ</name>
+               <description>Sector size</description>
+               <addressOffset>0x3F2C</addressOffset>
+               <resetValue>0x420</resetValue>
+               <fields>
+                  <field>
+                     <name>SIZE</name>
+                     <description>Size in bytes of one elementary transfer unit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFG</name>
+               <description>Flash configuration</description>
+               <addressOffset>0x3F30</addressOffset>
+               <resetValue>0xEA631</resetValue>
+               <fields>
+                  <field>
+                     <name>PAGECNT</name>
+                     <description>Number of virtual pages (in one physical flash page) to be programmed or read, etc</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AIBN</name>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not auto-increment buffer number</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Auto-increment buffer number</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AIAD</name>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not auto-increment flash row address</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Auto-increment flash row address</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BITWIDTH</name>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>8-bit wide flash mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>16-bit wide flash mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIMEOUT</name>
+                     <description>The number of flash_clk cycles from NFC_WE high to either: NAND flash busy (t WB ), or NFC_RE low (t WHR ) After the last command is issued to flash, before sampling NFC_R/ B , the NFC must wait t WB clocks. After t WB clocks: if NFC_R/ B is sampled as high, the NFC considers the command to be a timeout, and the flash memory is idle. The NFC can issue new commands to the flash memory. if NFC_R/ B is sampled as low, the NAND flash memory is busy. When reading the status or ID from the NAND flash memory, after the last command is issued to flash, the NFC must wait for t WHR cycles. The NFC then negates NFC_RE to low to read the valid status or ID. t WB exists in page program/read, block erase, etc. Refer to the NAND flash datasheet for details of t WB and t WHR</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDCNT</name>
+                     <description>Number of bytes that are read for the read id command</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>FAST</name>
+                     <description>See the &quot;Fast Flash Configuration for EDO&quot; section for more details</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Slow flash timing. Clock in read data on rising edge of read strobe</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fast flash timing. Clock in read data a half clock later than rising edge of read strobe</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ECCMODE</name>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>No correction, ECC bypass</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4-error correction (8 ECC bytes)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>6-error correction (12 ECC bytes)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8-error correction (15 ECC bytes)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>12-error correction (23 ECC bytes)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>16-error correction (30 ECC bytes)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>24-error correction (45 ECC bytes)</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>32-error correction (60 ECC bytes)</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAREQ</name>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not transfer sector after ECC done</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>After ECC done, transfer sector using DMA</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ECCSRAM</name>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not write ECC status to SRAM</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write ECC status to SRAM</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ECCAD</name>
+                     <description>Byte address in SRAM where ECC status is written</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOPWERR</name>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No stop on write error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Auto-sequencer stops on a write error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMA2</name>
+               <description>DMA channel 2 address</description>
+               <addressOffset>0x3F34</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADDRESS</name>
+                     <description>DMA channel 2 address. DMA channel 2 address, it is 8-byte aligned</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ISR</name>
+               <description>Interrupt status</description>
+               <addressOffset>0x3F38</addressOffset>
+               <resetValue>0x60000000</resetValue>
+               <fields>
+                  <field>
+                     <name>DMABN</name>
+                     <description>DMA buffer number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ECCBN</name>
+                     <description>ECC buffer number</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RESBN</name>
+                     <description>Residue buffer number</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>IDLECLR</name>
+                     <description>Clear bit for NFC_ISR[IDLE]. Writing 1 to this bit clears NFC_ISR[IDLE]</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONECLR</name>
+                     <description>Clear bit for NFC_ISR[DONE]. Writing 1 to this bit clears NFC_ISR[DONE]</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WERRCLR</name>
+                     <description>Clear bit for NFC_ISR[WERR]. Writing 1 to this bit clears NFC_ISR[WERR]</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDLEEN</name>
+                     <description>Enable bit for NFC_ISR[IDLE]</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONEEN</name>
+                     <description>Enable bit for NFC_ISR[DONE]</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WERREN</name>
+                     <description>Enable bit for NFC_ISR[WERR]</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DMABUSY</name>
+                     <description>DMA engine busy</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ECCBUSY</name>
+                     <description>ECC engine busy</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RESBUSY</name>
+                     <description>Residue engine busy</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CMDBUSY</name>
+                     <description>Command busy</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>WERRNS</name>
+                     <description>Write error status</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>IDLE</name>
+                     <description>Command idle interrupt</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>Done interrupt</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>WERR</name>
+                     <description>Write error interrupt</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

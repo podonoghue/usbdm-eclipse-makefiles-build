@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<macros>
+					<stringMacro name="WXWIN" type="VALUE_PATH_DIR" value="C:\Apps\wxWidgets-3.0.2"/>
+					<stringMacro name="XERCES" type="VALUE_PATH_DIR" value="C:\Apps\xerces-c-3.1.1"/>
+				</macros>
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171.574033308" name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.1292734501" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.2020029941" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
+							<builder id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171.677137832" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.2121330370" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
+								<option id="gnu.both.asm.option.include.paths.1136630793" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.769505028" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1881488886" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1624802614" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+								<option id="gnu.cpp.compiler.option.include.paths.639773202" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1878407177" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="TARGET=ARM"/>
+									<listOptionValue builtIn="false" value="useWxWidgets"/>
+									<listOptionValue builtIn="false" value="__WXMSW__"/>
+									<listOptionValue builtIn="false" value="UNICODE"/>
+									<listOptionValue builtIn="false" value="__GNUWIN32__"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.179506931" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1771296721" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
+								<option id="gnu.c.compiler.option.include.paths.882461399" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+								</option>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1702185299" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="TARGET=ARM"/>
+									<listOptionValue builtIn="false" value="useWxWidgets"/>
+									<listOptionValue builtIn="false" value="__WXMSW__"/>
+									<listOptionValue builtIn="false" value="UNICODE"/>
+									<listOptionValue builtIn="false" value="__GNUWIN32__"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1711297244" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1215389842" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.668707683" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.243642510" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="Programmer.null.1121319673" name="Programmer"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/Programmer"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171;cdt.managedbuild.toolchain.gnu.mingw.base.1792983171.574033308;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1624802614;cdt.managedbuild.tool.gnu.cpp.compiler.input.179506931">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171;cdt.managedbuild.toolchain.gnu.mingw.base.1792983171.574033308;cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1771296721;cdt.managedbuild.tool.gnu.c.compiler.input.1711297244">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+</cproject>

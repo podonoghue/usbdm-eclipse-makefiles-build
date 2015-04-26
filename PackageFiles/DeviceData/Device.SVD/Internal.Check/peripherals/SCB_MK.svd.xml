@@ -1,0 +1,1393 @@
+<!--
+Devices using this peripheral: 
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK11D5
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21D5
+      MK21F12
+      MK22D5
+      MK22F12
+      MK22F51212
+      MK24F12
+      MK30D7
+      MK30D10
+      MK30DZ10
+      MK40D7
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D7
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F12
+      MK61F15
+      MK63F12
+      MK64F12
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "SCB_MK" ?>
+         <name>SCB</name>
+         <description>System Control</description>
+         <prependToName>SCB</prependToName>
+         <baseAddress>0xE000E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD00</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>ACTLR</name>
+               <description>Auxiliary Control Register,</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DISMCYCINT</name>
+                     <description>Disables interruption of multi-cycle instructions</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISDEFWBUF</name>
+                     <description>Disables write buffer use during default memory map accesses</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISFOLD</name>
+                     <description>Disables folding of IT instructions</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CPUID</name>
+               <description>CPUID Base Register</description>
+               <addressOffset>0xD00</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x410FC240</resetValue>
+               <fields>
+                  <field>
+                     <name>REVISION</name>
+                     <description>Indicates patch release: 0x0 = Patch 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PARTNO</name>
+                     <description>Indicates part number</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>VARIANT</name>
+                     <description>Indicates processor revision: 0x2 = Revision 2</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IMPLEMENTER</name>
+                     <description>Implementer code</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICSR</name>
+               <description>Interrupt Control and State Register</description>
+               <addressOffset>0xD04</addressOffset>
+               <fields>
+                  <field>
+                     <name>VECTACTIVE</name>
+                     <description>Active exception number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RETTOBASE</name>
+                     <description>Indicates whether there are preempted active exceptions</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>there are preempted active exceptions to execute</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>there are no active exceptions, or the currently-executing exception is the only active exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VECTPENDING</name>
+                     <description>Exception number of the highest priority pending enabled exception</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ISRPENDING</name>
+                     <description>Interrupt pending flag, excluding NMI and Faults</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ISRPREEMPT</name>
+                     <description>Indicates whether a pending exception will be serviced on exit from debug halt state</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Will not service</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Will service a pending exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSTCLR</name>
+                     <description>SysTick exception clear-pending bit</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>removes the pending state from the SysTick exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSTSET</name>
+                     <description>SysTick exception set-pending bit</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: SysTick exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes SysTick exception state to pending; read: SysTick exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSVCLR</name>
+                     <description>PendSV clear-pending bit</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>removes the pending state from the PendSV exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSVSET</name>
+                     <description>PendSV set-pending bit</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: PendSV exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes PendSV exception state to pending; read: PendSV exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NMIPENDSET</name>
+                     <description>NMI set-pending bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: NMI exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes NMI exception state to pending; read: NMI exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VTOR</name>
+               <description>Vector Table Offset Register</description>
+               <addressOffset>0xD08</addressOffset>
+               <fields>
+                  <field>
+                     <name>TBLOFF</name>
+                     <description>Vector table base offset</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>25</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AIRCR</name>
+               <description>Application Interrupt and Reset Control Register</description>
+               <addressOffset>0xD0C</addressOffset>
+               <fields>
+                  <field>
+                     <name>VECTRESET</name>
+                     <description>Reserved for Debug use</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>VECTCLRACTIVE</name>
+                     <description>Reserved for Debug use</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SYSRESETREQ</name>
+                     <description>System reset request</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no system reset request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>asserts a signal to the outer system that requests a reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRIGROUP</name>
+                     <description>Interrupt priority grouping field. This field determines the split of group priority from subpriority</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENDIANNESS</name>
+                     <description>Data endianness bit</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Little-endian</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Big-endian</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VECTKEY</name>
+                     <description>Register key</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR</name>
+               <description>System Control Register</description>
+               <addressOffset>0xD10</addressOffset>
+               <fields>
+                  <field>
+                     <name>SLEEPONEXIT</name>
+                     <description>Indicates sleep-on-exit when returning from Handler mode to Thread mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>o not sleep when returning to Thread mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enter sleep, or deep sleep, on return from an ISR</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLEEPDEEP</name>
+                     <description>Controls whether the processor uses sleep or deep sleep as its low power mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>sleep</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>deep sleep</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEVONPEND</name>
+                     <description>Send Event on Pending bit</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCR</name>
+               <description>Configuration and Control Register</description>
+               <addressOffset>0xD14</addressOffset>
+               <fields>
+                  <field>
+                     <name>NONBASETHRDENA</name>
+                     <description>Indicates how the processor enters Thread mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>processor can enter Thread mode only when no exception is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>processor can enter Thread mode from any level under the control of an EXC_RETURN value</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USERSETMPEND</name>
+                     <description>Enables unprivileged software access to the STIR</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UNALIGN_TRP</name>
+                     <description>Enables unaligned access traps</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>do not trap unaligned halfword and word accesses</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>trap unaligned halfword and word accesses</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIV_0_TRP</name>
+                     <description>Enables faulting or halting when the processor executes an SDIV or UDIV instruction with a divisor of 0</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>do not trap divide by 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>trap divide by 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BFHFNMIGN</name>
+                     <description>Enables handlers with priority -1 or -2 to ignore data BusFaults caused by load and store instructions</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>data bus faults caused by load and store instructions cause a lock-up</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>handlers running at priority -1 and -2 ignore data bus faults caused by load and store instructions</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STKALIGN</name>
+                     <description>Indicates stack alignment on exception entry</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>4-byte aligned</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>8-byte aligned</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHPR1</name>
+               <description>System Handler Priority Register 1</description>
+               <addressOffset>0xD18</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_4</name>
+                     <description>Priority of system handler 4, MemManage</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_5</name>
+                     <description>Priority of system handler 5, BusFault</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_6</name>
+                     <description>Priority of system handler 6, UsageFault</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHPR2</name>
+               <description>System Handler Priority Register 2</description>
+               <addressOffset>0xD1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_11</name>
+                     <description>Priority of system handler 11, SVCall</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHPR3</name>
+               <description>System Handler Priority Register 3</description>
+               <addressOffset>0xD20</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_14</name>
+                     <description>Priority of system handler 14, PendSV</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_15</name>
+                     <description>Priority of system handler 15, SysTick exception</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHCSR</name>
+               <description>System Handler Control and State Register</description>
+               <addressOffset>0xD24</addressOffset>
+               <fields>
+                  <field>
+                     <name>MEMFAULTACT</name>
+                     <description>MemManage exception active bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BUSFAULTACT</name>
+                     <description>BusFault exception active bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USGFAULTACT</name>
+                     <description>UsageFault exception active bit</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SVCALLACT</name>
+                     <description>SVCall active bit</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MONITORACT</name>
+                     <description>Debug monitor active bit</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSVACT</name>
+                     <description>PendSV exception active bit</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYSTICKACT</name>
+                     <description>SysTick exception active bit</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USGFAULTPENDED</name>
+                     <description>UsageFault exception pending bit</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MEMFAULTPENDED</name>
+                     <description>MemManage exception pending bit</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BUSFAULTPENDED</name>
+                     <description>BusFault exception pending bit</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SVCALLPENDED</name>
+                     <description>SVCall pending bit</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MEMFAULTENA</name>
+                     <description>MemManage enable bit</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>disable the exception</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enable the exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BUSFAULTENA</name>
+                     <description>BusFault enable bit</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>disable the exception</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enable the exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USGFAULTENA</name>
+                     <description>UsageFault enable bit</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>disable the exception</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enable the exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFSR</name>
+               <description>Configurable Fault Status</description>
+               <addressOffset>0xD28</addressOffset>
+               <fields>
+                  <field>
+                     <name>IACCVIOL</name>
+                     <description>Instruction access violation flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no instruction access violation fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor attempted an instruction fetch from a location that does not permit execution</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACCVIOL</name>
+                     <description>Data access violation flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no data access violation fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor attempted a load or store at a location that does not permit the operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MUNSTKERR</name>
+                     <description>MemManage fault on unstacking for a return from exception</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no unstacking fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>unstack for an exception return has caused one or more access violations</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSTKERR</name>
+                     <description>MemManage fault on stacking for exception entry</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no stacking fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>stacking for an exception entry has caused one or more access violations</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MLSPERR</name>
+                     <description>MemManage fault occurred during floating-point lazy state preservation</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No MemManage fault occurred during floating-point lazy state preservation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A MemManage fault occurred during floating-point lazy state preservation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MMARVALID</name>
+                     <description>MemManage Fault Address Register (MMFAR) valid flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>value in MMAR is not a valid fault address</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MMAR holds a valid fault address</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IBUSERR</name>
+                     <description>Instruction bus error</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no instruction bus error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>instruction bus error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRECISERR</name>
+                     <description>Precise data bus error</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no precise data bus error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>a data bus error has occurred, and the PC value stacked for the exception return points to the instruction that caused the fault</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IMPRECISERR</name>
+                     <description>Imprecise data bus error</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no imprecise data bus error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>a data bus error has occurred, but the return address in the stack frame is not related to the instruction that caused the error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UNSTKERR</name>
+                     <description>BusFault on unstacking for a return from exception</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no unstacking fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>unstack for an exception return has caused one or more BusFaults</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STKERR</name>
+                     <description>BusFault on stacking for exception entry</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no stacking fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>stacking for an exception entry has caused one or more BusFaults</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LSPERR</name>
+                     <description>Bus fault occurred during floating-point lazy state preservation</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No bus fault occurred during floating-point lazy state preservation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus fault occurred during floating-point lazy state preservation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BFARVALID</name>
+                     <description>BusFault Address Register (BFAR) valid flag</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>value in BFAR is not a valid fault address</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>BFAR holds a valid fault address</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UNDEFINSTR</name>
+                     <description>Undefined instruction UsageFault</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no undefined instruction UsageFault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has attempted to execute an undefined instruction</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INVSTATE</name>
+                     <description>Invalid state UsageFault</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no invalid state UsageFault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has attempted to execute an instruction that makes illegal use of the EPSR</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INVPC</name>
+                     <description>Invalid PC load UsageFault, caused by an invalid PC load by EXC_RETURN</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no invalid PC load UsageFault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has attempted an illegal load of EXC_RETURN to the PC</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NOCP</name>
+                     <description>No coprocessor UsageFault</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no UsageFault caused by attempting to access a coprocessor</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has attempted to access a coprocessor</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UNALIGNED</name>
+                     <description>Unaligned access UsageFault</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no unaligned access fault, or unaligned access trapping not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has made an unaligned memory access</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIVBYZERO</name>
+                     <description>Divide by zero UsageFault</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no divide by zero fault, or divide by zero trapping not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>the processor has executed an SDIV or UDIV instruction with a divisor of 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HFSR</name>
+               <description>HardFault Status register</description>
+               <addressOffset>0xD2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>VECTTBL</name>
+                     <description>Indicates a BusFault on a vector table read during exception processing</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no BusFault on vector table read</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>BusFault on vector table read</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FORCED</name>
+                     <description>Indicates a forced hard fault, generated by escalation of a fault with configurable priority that cannot be handles, either because of priority or because it is disabled</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no forced HardFault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>forced HardFault</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DEBUGEVT</name>
+                     <description>Reserved for Debug use. When writing to the register you must write 0 to this bit, otherwise behavior is Unpredictable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFSR</name>
+               <description>Debug Fault Status Register</description>
+               <addressOffset>0xD30</addressOffset>
+               <fields>
+                  <field>
+                     <name>HALTED</name>
+                     <description>Indicates a debug event generated by either a C_HALT or C_STEP request, triggered by a write to the DHCSR or a step request triggered by setting DEMCR.MON_STEP to 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No active halt request debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Halt request debug event active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BKPT</name>
+                     <description>Debug event generated by BKPT instruction execution or a breakpoint match in FPB</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No current breakpoint debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one current breakpoint debug event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DWTTRAP</name>
+                     <description>Debug event generated by the DWT</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No current debug events generated by the DWT</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one current debug event generated by the DWT</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VCATCH</name>
+                     <description>Indicates triggering of a Vector catch</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Vector catch triggered</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Vector catch triggered</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTERNAL</name>
+                     <description>Debug event generated because of the assertion of EDBGRQ</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No EDBGRQ debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>EDBGRQ debug event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MMFAR</name>
+               <description>MemManage Fault Address Register</description>
+               <addressOffset>0xD34</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADDRESS</name>
+                     <description>Address of MemManage fault location</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFAR</name>
+               <description>BusFault Address Register</description>
+               <addressOffset>0xD38</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADDRESS</name>
+                     <description>Address of the BusFault location</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AFSR</name>
+               <description>Auxiliary Fault Status Register</description>
+               <addressOffset>0xD3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>AUXFAULT</name>
+                     <description>Latched version of the AUXFAULT inputs</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

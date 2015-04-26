@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Cortex-M3 CMSIS RTOS -->
+   <projectActionList id="Cortex-M3-CMSIS" >
+      <applyWhen>
+         <and>
+            <deviceFamilyIs>CortexM3</deviceFamilyIs>
+            <variableRef idRef="linkerRamSize"   condition="greaterThan" value="2048" />
+            <variableRef idRef="linkerFlashSize" condition="greaterThan" value="4096" />
+            <variableRef idRef="outputType"      condition="matches"     value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.CMSIS-RTOS" 
+         name="CMSIS RTOS" 
+         description="Adds CMSIS-RTOS framework for Cortex M3" 
+         checkGroup="group-additional-options" />
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
+         </applyWhen>
+         <createFolder target="cmsis" type="include" />
+         <copy source="../cmsis/Doc/index.html" target="CMSIS.html" type="link" />
+         <copy source="../cmsis/INC" target="cmsis/INC" />
+         <copy source="../cmsis/SRC" target="cmsis/SRC" />
+         <copy source="../cmsis/GCC/SVC_Table.S" target="cmsis/GCC/SVC_Table.S" />
+         <copy source="../cmsis/GCC/HAL_CM3.S" target="cmsis/GCC/HAL_CM3.S" />
+         <copy source="Sources/RTX_Conf_CM.c" target="Sources/RTX_Conf_CM.c" />
+         <copy source="Sources/main-RTX.c" target="Sources/main.c" replace="true" />
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
+            <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
+            <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>__CORTEX_M3</value>
+            <value>__CMSIS_RTOS</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>__CORTEX_M3</value>
+            <value>__CMSIS_RTOS</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+
+</root>

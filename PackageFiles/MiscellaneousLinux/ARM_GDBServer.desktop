@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=ARM_GDBServer
+Comment=GDB Server for ARM devices
+Keywords=ARM;GDB;
+Exec=/usr/bin/ARM_GDBServer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=ARM GDB Server
+GenericName[en_AU]=ARM GDB Server
+Comment[en_AU]=USBDM GDB Server for ARM

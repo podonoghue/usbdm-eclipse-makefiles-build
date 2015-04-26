@@ -1,0 +1,1496 @@
+<!--
+Devices using this peripheral: 
+      MK22F12
+      MK22F51212
+-->
+      <peripheral>
+         <?sourceFile "I2S0_MK_F12" ?>
+         <name>I2S0</name>
+         <description>Inter-IC Sound / Synchronous Audio Interface</description>
+         <prependToName>I2S0</prependToName>
+         <headerStructName>I2S</headerStructName>
+         <baseAddress>0x4002F000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>TCSR</name>
+               <description>SAI Transmit Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>FRDE</name>
+                     <description>FIFO Request DMA Enable\n
+Enables/disables DMA requests</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FRDE" > <name>FWDE</name> <description>FIFO Warning DMA Enable\n
+Enables/disables DMA requests</description> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>FRIE</name>
+                     <description>FIFO Request Interrupt Enable\n
+Enables/disables FIFO request interrupts</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FRIE" > <name>FWIE</name> <description>FIFO Warning Interrupt Enable\n
+Enables/disables FIFO warning interrupts</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>FEIE</name> <description>FIFO Error Interrupt Enable\n
+Enables/disables FIFO error interrupts</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>SEIE</name> <description>Sync Error Interrupt Enable\n
+Enables/disables sync error interrupts</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>WSIE</name> <description>Word Start Interrupt Enable\n
+Enables/disables word start interrupts</description> <bitOffset>12</bitOffset> </field>
+                  <field>
+                     <name>FRF</name>
+                     <description>FIFO Request Flag\n
+Indicates that the number of words in an enabled transmit channel FIFO is less than or equal to the transmit FIFO watermark</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FIFO watermark not reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO watermark reached</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FWF</name>
+                     <description>FIFO Warning Flag\n
+Indicates that an enabled transmit FIFO is empty</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No transmit FIFO empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit FIFO is empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FEF</name>
+                     <description>FIFO Error Flag\n
+Indicates that an enabled transmit FIFO has underrun.\n
+Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Underrun not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Underrun detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEF</name>
+                     <description>Sync Error Flag\n
+Indicates that an error in the externally-generated frame sync has been detected.\n
+Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sync error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WSF</name>
+                     <description>Word Start Flag\n
+Indicates that the start of the configured word has been detected.\n
+ Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Start not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SR</name>
+                     <description>Software Reset\n
+When set, resets the internal transmitter logic including the FIFO pointers.\n
+Software-visible registers are not affected, except for the status</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FR</name>
+                     <description>FIFO Reset\n
+Resets the FIFO pointers. Reading this field will always return zero</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to reset</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCE</name>
+                     <description>Bit Clock Enable\n
+Enables the transmit bit clock, separately from the TE.\n
+This field is automatically set whenever TE is set. \n
+When software clears this field, the transmit bit clock remains enabled, and this bit remains set, until the end of the current frame</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DBGE</name>
+                     <description>Debug Enable\n
+Enables/disables transmitter operation in Debug mode.\n
+The transmit bit clock is not affected by debug mode</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in Debug mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in Debug mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPE</name>
+                     <description>Stop Enable\n
+Configures transmitter operation in Stop mode.\n
+This field is ignored and the transmitter is disabled in all low-leakage stop modes</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in Stop mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TE</name>
+                     <description>Transmitter Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmitter disabled\tand last transmission completed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitter enabled\tor transmitter has been disabled and has not yet reached end of frame</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR1</name>
+               <description>SAI Transmit Configuration 1 Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>TFW</name>
+                     <description>Transmit FIFO Watermark\n
+Configures the watermark level for all enabled transmit channels</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR2</name>
+               <description>SAI Transmit Configuration 2 Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>Bit Clock Divide\n
+Divides down the audio master clock to generate the bit clock when configured for an internal bit clock.\n
+The division value is (DIV + 1) * 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BCD</name>
+                     <description>Bit Clock Direction\n
+Configures the direction of the bit clock</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External bit clock\t(slave mode)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal bit clock\t(master mode)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCP</name>
+                     <description>Bit Clock Polarity\n
+Configures the polarity of the bit clock</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high\t- Bit clock drives outputs on rising edge and samples inputs on falling edge</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active Low\t- Bit clock drives outputs on falling edge and samples inputs on rising edge</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSEL</name>
+                     <description>Clocking mode\n
+When configured for external bit clock configures for asynchronous or synchronous operation. When
+configured for internal bit clock, selects the Audio Master Clock used to generate the internal bit clock</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Bus Clock (or Asynchronous)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Master Clock 1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Master Clock 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Master Clock 3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCI</name>
+                     <description>Bit Clock Input</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal logic is clocked as if bit clock was externally generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCS</name>
+                     <description>Bit Clock Swap</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal bit clock source</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Swap bit clock source</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNC</name>
+                     <description>Synchronous Mode</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Asynchronous mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Synchronous with receiver</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>External SAI transmitter</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>External SAI receiver</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR3</name>
+               <description>SAI Transmit Configuration 3 Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>WDFL</name>
+                     <description>Word Flag Configuration
+Configures which word sets the start of word flag.\n
+The value written must be one less than the word number.\n
+For example, writing 0 configures the first word in the frame</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCE</name>
+                     <description>Transmit Channel Enable\n
+Enables the corresponding data channel for transmit operation.\n
+A channel must be enabled before its FIFO is accessed</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Channel disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Channel enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR4</name>
+               <description>SAI Transmit Configuration 4 Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>FSD</name>
+                     <description>Frame Sync Direction\n
+Configures the direction of the frame sync</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External Frame Sync\t(slave mode)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal Frame Sync\t(master mode)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSP</name>
+                     <description>Frame Sync Polarity\n
+Configures the polarity of the frame sync</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSE</name>
+                     <description>Frame Sync Early\n
+Control where frame sync asserts relative to 1st bit of the frame</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Asserts with first bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Asserts one bit before first bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MF</name>
+                     <description>MSB First\n
+Configures whether the LSB or the MSB is transmitted/received first</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LSB first</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MSB first</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYWD</name>
+                     <description>Sync Width\n
+Configures the length of the frame sync in number of bit clocks.\n
+The value written must be one less than the number of bit clocks.\n
+ or example, write 0 for the frame sync to assert for one bit clock only</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRSZ</name>
+                     <description>Frame size\n
+Configures the number of words in each frame.\n
+The value written must be one less than the number of words in the frame.\n
+For example, write 0 for one word per frame</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR5</name>
+               <description>SAI Transmit Configuration 5 Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>FBT</name>
+                     <description>First Bit Shifted\n
+Configures the bit index for the first bit transmitted for each word in the frame.\n
+If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
+If configured for LSB First, the index of the next bit transmitted is one more than the current bit transmitted</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>W0W</name>
+                     <description>Word 0 Width\n
+Configures the number of bits in the first word in each frame.\n
+The value written must be one less than the number of bits in the first word.\n
+Word width of less than 8 bits is not supported if there is only one word per frame</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>WNW</name>
+                     <description>Word N Width\n
+Configures the number of bits in each word, for each word except the first in the frame.\n
+The value written must be one less than the number of bits per word.\n
+The value of WNW must be greater than or equal to the value of W0W even when there is only one word in each frame.\n
+Word width of less than 8 bits is not supported</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>TDR%s</name>
+               <description>Transmit Data Register\n
+The corresponding TCR3[TCE] bit must be set before accessing the channel&apos;s transmit data register.\n
+Writes to this register when the transmit FIFO is not full will push the data written into the transmit data FIFO.\n
+Writes to this register when the transmit FIFO is full are ignored</description>
+               <addressOffset>0x20</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>TDR</name>
+                     <description>Transmit Data Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>TFR%s</name>
+               <description>SAI Transmit FIFO Register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RFP</name>
+                     <description>Read FIFO Pointer\n
+FIFO read pointer for transmit data channel</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WFP</name>
+                     <description>Write FIFO Pointer\n
+FIFO write pointer for transmit data channel</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TMR</name>
+               <description>SAI Transmit Mask Register</description>
+               <addressOffset>0x60</addressOffset>
+               <fields>
+                  <field>
+                     <name>TWM</name>
+                     <description>Transmit Word Mask\n
+Configures whether the transmit word is masked (transmit data pin tri-stated and \n
+transmit data not read from FIFO) for the corresponding word in the frame</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Word N enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Word N is masked\t- The transmit data pins are tri-stated when masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCSR</name>
+               <description>SAI Receive Control Register</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>FRDE</name>
+                     <description>FIFO Request DMA Enable\nEnables/disables DMA requests</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FRDE" > <name>FWDE</name> <description>FIFO Warning DMA Enable\nEnables/disables DMA requests</description> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>FRIE</name>
+                     <description>FIFO Request Interrupt Enable\nEnables/disables FIFO request interrupts</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FRIE" > <name>FWIE</name> <description>FIFO Warning Interrupt Enable\nEnables/disables FIFO warning interrupts</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>FEIE</name> <description>FIFO Error Interrupt Enable\nEnables/disables FIFO error interrupts</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>SEIE</name> <description>Sync Error Interrupt Enable\nEnables/disables sync error interrupts</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="FRIE" > <name>WSIE</name> <description>Word Start Interrupt Enable\nEnables/disables word start interrupts</description> <bitOffset>12</bitOffset> </field>
+                  <field>
+                     <name>FRF</name>
+                     <description>FIFO Request Flag\n
+Indicates that the number of words in an enabled receive channel FIFO is greater than the receive FIFO watermark</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Watermark not reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Watermark reached</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FWF</name>
+                     <description>FIFO Warning Flag\nIndicates that an enabled receive FIFO is full</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No FIFO full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A FIFO is full</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FEF</name>
+                     <description>FIFO Error Flag\nIndicates that an enabled receive FIFO has overflowed.\n
+Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Overflow not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overflow detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEF</name>
+                     <description>Sync Error Flag\n
+Indicates that an error in the externally-generated frame sync has been detected.\n
+Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sync error not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sync error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WSF</name>
+                     <description>Word Start Flag\n
+Indicates that the start of the configured word has been detected.\n
+Write a logic 1 to this field to clear this flag</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Start not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SR</name>
+                     <description>Software Reset\n
+Resets the internal receiver logic including the FIFO pointers.\n
+Software-visible registers are not affected, except for the status</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FR</name>
+                     <description>FIFO Reset\n
+Resets the FIFO pointers. Reading this field will always return zero</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCE</name>
+                     <description>Bit Clock Enable\n
+Enables the receive bit clock, separately from RE.\n
+This field is automatically set whenever RE is set.
+When software clears this field, the receive bit clock remains enabled, and this field remains set, until the end of the current frame</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DBGE</name>
+                     <description>Debug Enable\n
+Enables/disables receiver operation in Debug mode. The receive bit clock is not affected by Debug mode</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in Debug mode\t, after completing the current frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in Debug mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPE</name>
+                     <description>Stop Enable\n
+Configures receiver operation in Stop mode.\n
+This bit is ignored and the receiver is disabled in all low-leakage stop modes</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in Stop mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RE</name>
+                     <description>Receiver Enable\nEnables/disables the receiver.\n
+When software clears this field, the receiver remains enabled, and this bit remains set, until the end of the current frame</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver enabled\tor receiver has been disabled and has not yet reached end of frame</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR1</name>
+               <description>SAI Receive Configuration 1 Register</description>
+               <addressOffset>0x84</addressOffset>
+               <fields>
+                  <field>
+                     <name>RFW</name>
+                     <description>Receive FIFO Watermark\n
+Configures the watermark level for all enabled receiver channels</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR2</name>
+               <description>SAI Receive Configuration 2 Register</description>
+               <addressOffset>0x88</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>Bit Clock Divide
+Divides down the audio master clock to generate the bit clock when configured for an internal bit clock.
+The division value is (DIV + 1) * 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BCD</name>
+                     <description>Bit Clock Direction
+Configures the direction of the bit clock</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External bit clock\t(slave mode)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal bit clock\t(master mode)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCP</name>
+                     <description>Bit Clock Polarity</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active High\t- Bit Clock drives outputs on rising edge and samples inputs on falling edge</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active Low\t- Bit Clock drives outputs on falling edge and samples inputs on rising edge</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSEL</name>
+                     <description>Clocking Mode\n
+When configured for external bit clock, this field configures for asynchronous or synchronous operation.\n
+When configured for internal bit clock, this field selects the audio master clock used to generate the internal bit clock</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Bus clock (or Asynchronous)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Master clock 1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Master clock 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Master clock 3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCI</name>
+                     <description>Bit Clock Input</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal logic is clocked as if bit clock was externally generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BCS</name>
+                     <description>Bit Clock Swap</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Use the normal bit clock source</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Swap the bit clock source</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNC</name>
+                     <description>Synchronous Mode</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Asynchronous mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Synchronous with transmitter</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Synchronous with another SAI receiver</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Synchronous with another SAI transmitter</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR3</name>
+               <description>SAI Receive Configuration 3 Register</description>
+               <addressOffset>0x8C</addressOffset>
+               <fields>
+                  <field>
+                     <name>WDFL</name>
+                     <description>Word Flag Configuration\n
+Configures which word the start of word flag is set.\n
+The value written should be one less than the word number (for example, write zero to configure for the first word in the frame)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>RCE</name>
+                     <description>Receive Channel Enable\nEnables the corresponding data channel for receive operation</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Channel N is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Channel N is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR4</name>
+               <description>SAI Receive Configuration 4 Register</description>
+               <addressOffset>0x90</addressOffset>
+               <fields>
+                  <field>
+                     <name>FSD</name>
+                     <description>Frame Sync Direction\n
+Configures the direction of the frame sync</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Generated externally\t(slave mode)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generated internally\t(master mode)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSP</name>
+                     <description>Frame Sync Polarity\n
+Configures the polarity of the frame sync</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSE</name>
+                     <description>Frame Sync Early\n
+Control where frame sync asserts relative to 1st bit of the frame</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Asserts with first bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Asserts one bit before first bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MF</name>
+                     <description>MSB First\n
+Configures whether the LSB or the MSB is transmitted/received first</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LSB first</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MSB first</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYWD</name>
+                     <description>Sync Width\n
+Configures the length of the frame sync in number of bit clocks.\n
+The value written must be one less than the number of bit clocks.\n
+ or example, write 0 for the frame sync to assert for one bit clock only</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRSZ</name>
+                     <description>Frame size\n
+Configures the number of words in each frame.\n
+The value written must be one less than the number of words in the frame.\n
+For example, write 0 for one word per frame</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR5</name>
+               <description>SAI Receive Configuration 5 Register</description>
+               <addressOffset>0x94</addressOffset>
+               <fields>
+                  <field>
+                     <name>FBT</name>
+                     <description>First Bit Shifted\n
+Configures the bit index for the first bit transmitted for each word in the frame.\n
+If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
+If configured for LSB First, the index of the next bit transmitted is one more than the current bit transmitted</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>W0W</name>
+                     <description>Word 0 Width\n
+Configures the number of bits in the first word in each frame.\n
+The value written must be one less than the number of bits in the first word.\n
+Word width of less than 8 bits is not supported if there is only one word per frame</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>WNW</name>
+                     <description>Word N Width\n
+Configures the number of bits in each word, for each word except the first in the frame.\n
+The value written must be one less than the number of bits per word.\n
+The value of WNW must be greater than or equal to the value of W0W even when there is only one word in each frame.\n
+Word width of less than 8 bits is not supported</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>RDR%s</name>
+               <description>SAI Receive Data Register</description>
+               <addressOffset>0xA0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RDR</name>
+                     <description>Receive Data Register\n
+Reads from this register when the receive FIFO is not empty will return the data from the top of the receive FIFO.\n
+Reads from this register when the receive FIFO is empty are ignored</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>RFR%s</name>
+               <description>SAI Receive FIFO Register</description>
+               <addressOffset>0xC0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RFP</name>
+                     <description>Read FIFO Pointer\n
+FIFO read pointer for receive data channel</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WFP</name>
+                     <description>Write FIFO Pointer\n
+FIFO write pointer for receive data channel</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RMR</name>
+               <description>SAI Receive Mask Register</description>
+               <addressOffset>0xE0</addressOffset>
+               <fields>
+                  <field>
+                     <name>RWM</name>
+                     <description>Receive Word Mask\n
+Configures whether the receive word is masked (received data ignored and\n
+ not written to receive FIFO) for the corresponding word in the frame</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Word N is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Word N is masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MCR</name>
+               <description>SAI MCLK Control Register</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>MICS</name>
+                     <description>MCLK Input Clock Select\nSelects the clock input to the MCLK divider</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Input clock 0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Input clock 1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Input clock 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Input clock 3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MOE</name>
+                     <description>MCLK Output Enable\n
+Enables the MCLK divider and configures the MCLK signal pin as an output.\n
+ When software clears this field, it remains set until the MCLK divider is fully disabled</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is input bypassing the MCLK Divider</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is output from the MCLK Divider</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DUF</name>
+                     <description>Divider Update Flag\n
+Provides the status of on-the-fly updates to the MCLK divider ratio\n
+Updates to the MCLK divider ratio are blocked while this flag remains set</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Ratio not updating</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Ratio is updating on-the-fly</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MDR</name>
+               <description>SAI MCLK Divide Register\n
+Sets the MCLK divide ratio such that: MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
+FRACT must be set equal or less than the value in the DIVIDE field</description>
+               <addressOffset>0x104</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIVIDE</name>
+                     <description>MCLK Divide\nSets the MCLK divide value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRACT</name>
+                     <description>MCLK Fraction\nSets the MCLK fraction value</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

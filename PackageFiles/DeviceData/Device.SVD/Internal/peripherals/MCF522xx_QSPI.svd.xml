@@ -1,0 +1,605 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF522xx_QSPI" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>QSPI</name>
+         <description>Queued Serial Peripheral Interface</description>
+         <prependToName>QSPI</prependToName>
+         <baseAddress>0x40000340</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>QMR</name>
+               <description>Mode Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BAUD</name>
+                     <description>Baud rate divider\n
+The baud rate is selected by writing a value in the range 2-255. A value of zero disables the QSPI.\n
+A value of 1 is an invalid setting. 
+The desired QSPI_CLK baud rate is related to the internal bus clock and QMR[BAUD] by the following expression:\n
+   \t QMR[BAUD] = fsys / (2 * [desired QSPI_CLK baud rate])</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPHA</name>
+                     <description>Clock phase\n
+Determine when output data changes and input data is captured relative to the clock</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data captured on leading edge\t- Data changes on following edge</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Data changes on the leading edge\t - Data captured on following edge</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOL</name>
+                     <description>Clock polarity\n
+Defines inactive state of the CLK</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive is low\t- Leading edge is rising (idles low)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Inactive is high\t- Leading edge is falling (idles high)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BITS</name>
+                     <description>Transfer size\n
+Determines the number of bits to be transferred for each entry in the queue</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>16 bits</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>8 bits</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>9 bits</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>10 bits</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>11 bits</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>12 bits</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>13 bits</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>14 bits</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>15 bits</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DOHIE</name>
+                     <description>None</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>None</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>None</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSTR</name>
+                     <description>Master mode enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reserved, do not use</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The QSPI is master\t- Must be set for the QSPI module to operate correctly</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>QDLYR</name>
+               <description>Delay Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DTL</name>
+                     <description>Delay after transfer\n
+When the DT bit in the command RAM is set this field determines the delay length after the serial transfer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>QCD</name>
+                     <description>QSPI_CLK delay\n
+When the DSCK bit in the command RAM is set this field determines the delay length from assertion of 
+chip selects to valid QSPI_CLK transition</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPE</name>
+                     <description>QSPI enable\n
+When set, the QSPI initiates transfers in master mode by executing commands in the command RAM.\n
+The QSPI clears this bit automatically when a transfer completes. \n
+The user can also clear this bit to abort transfer unless QIR[ABRTL] is set.\n
+The recommended method for aborting transfers is to set QWR[HALT]</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write 1 to initiate transfers</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>QWR</name>
+               <description>Wrap Register\n
+The QSPI wrap register provides halt transfer control, wrap-around settings, and queue pointer locations</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>NEWQP</name>
+                     <description>Start of queue pointer\n
+This 4-bit field points to the first entry in the RAM to be executed on initiating a transfer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPTQP</name>
+                     <description>Completed queue entry pointer\n
+Points to the RAM entry that contains the last command to have been completed</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ENDQP</name>
+                     <description>End of queue pointer\n
+Points to the RAM entry that contains the last transfer description in the queue</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CSIV</name>
+                     <description>Chip select inactive level</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WRTO</name>
+                     <description>Wrap-around location\n
+Determines where the QSPI wraps to in wrap-around mode</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Zero</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wrap to QWR.NEWQP</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WREN</name>
+                     <description>Wrap-around enable\n
+Controls whether operation stops after QWR.ENDQP is reached or wraps around to continue at entry zero or the entry pointed to by QWR.NEWQP</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Execution stops</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Execution wraps-around</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HALT</name>
+                     <description>Halt transfers\n
+Assertion of this bit causes the QSPI to stop execution of commands after it has completed execution of the current command</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>QIR</name>
+               <description>Interrupt Register</description>
+               <addressOffset>0xC</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SPIF</name>
+                     <description>QSPI finished flag\n
+Asserted when the QSPI has completed all the commands in the queue\n
+Set on completion of the command pointed to by QWR[ENDQP], \n
+and on completion of the current command after assertion of QWR[HALT].\n
+In wrap-around mode, this bit is set every time the command pointed to by QWR[ENDQP] is completed.\n
+Writing a 1 to this bit (w1c) clears it and writing 0 has no effect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ABRT</name>
+                     <description>Abort flag\n
+Indicates that QDLYR[SPE] has been cleared by the user writing to the QDLYR rather than by completion
+of the command queue by the QSPI.\n
+Writing a 1 to this bit (w1c) clears it and writing 0 has no effect</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Aborted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WCEF</name>
+                     <description>Write collision error flag\n
+Indicates that an attempt has been made to write to the RAM entry that is currently being
+executed. Writing a 1 to this bit (w1c) clears it and writing 0 has no effect</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Collision</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPIFE</name>
+                     <description>QSPI finished (SPIF) interrupt enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SPIFE" > <name>ABRTE</name> <description>Abort (ABRT) interrupt enable</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="SPIFE" > <name>WCEFE</name> <description>Write collision interrupt enable</description> <bitOffset>11</bitOffset> </field>
+                  <field>
+                     <name>ABRTL</name>
+                     <description>Abort lock-out\n
+When set, QDLYR[SPE] cannot be cleared by writing to the QDLYR. QDLYR[SPE] is only cleared by
+the QSPI when a transfer completes</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Unlocked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ABRTB</name>
+                     <description>Abort access error enable\n
+                     An abort occurs when QDLYR[SPE] is cleared during a transfer. 
+When set, an attempt to clear QDLYR[SPE] during a transfer results in an access error</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Unprotected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ABRTB" > <name>WCEFB</name> <description>Write collision access error enable\n
+A write collision occurs during a data transfer when the RAM entry containing
+the current command is written to by the CPU with the QDR.\n
+ When this bit is asserted, the write access to QDR results in an access error</description> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>QAR</name>
+               <description>Address Register\n
+The QAR is used to specify the location in the QSPI RAM that read and write operations affect\n
+0x00-0x0F Transmit RAM\n
+0x10-0x1F Receive RAM\n
+0x20-0x2F Command RAM\n
+0x30-0x3F Reserved</description>
+               <addressOffset>0x10</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ADDR</name>
+                     <description>Address used to read/write the QSPI RAM</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>QDR</name>
+               <description>Data Register\n
+A write to this register causes data to be written to the QSPI RAM entry specified by QAR[ADDR].\n
+Similarly, a read of this field returns the data in the QSPI RAM at the address specified by QAR[ADDR].\n
+During command RAM accesses (QAR[ADDR] = 0x20-0x2F), only the most significant byte of this field is used</description>
+               <addressOffset>0x14</addressOffset>
+               <size>16</size>
+               <access>read-write</access>
+               <resetMask>0xFFFF</resetMask>
+            </register>
+            <register>
+               <name>QDR_COMMAND</name>
+               <description>Command Register\n
+A write to this field causes data to be written to the QSPI RAM entry specified by QAR[ADDR].\n
+Similarly, a read of this field returns the data in the QSPI RAM at the address specified by QAR[ADDR].\n
+During command RAM accesses (QAR[ADDR] = 0x20-0x2F), only the most significant byte of this field is used</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>QSPI_CS0</name>
+                     <description>Peripheral chip select\n
+Used to select an external device for serial data transfer. More than one chip select may be active at once</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Unselected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="QSPI_CS0" > <name>QSPI_CS1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="QSPI_CS0" > <name>QSPI_CS2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="QSPI_CS0" > <name>QSPI_CS3</name> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>DSCK</name>
+                     <description>Chip select to QSPI_CLK delay\n
+Allows for a fixed half-clock delay or the use of QDLYR.QCD to specify the delay from QSPI_CS valid to QSPI_CLK</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Half clock period</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>QDLYR.QCD value</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DT</name>
+                     <description>Delay after transfer\n
+Allows for a fixed delay or the use of QDLYR.DTL to specify the delay after transfer</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reset value?</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>QDLYR.DTL value</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BITSE</name>
+                     <description>Bits per transfer enable\n
+Allows for fixed 8-bit transfers of control of length by QMR.BITS</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>8 bits</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>QMR.BITS bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CONT</name>
+                     <description>Continuous chip-select\n
+Controls whether chip-select is kept asserted between word transfers.  \n
+In any case it becomes inactive at queue completion</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive between words</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active until queue empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

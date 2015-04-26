@@ -1,0 +1,93 @@
+<!--
+Devices using this vector table: 
+   MK10D10
+   MK10D5
+   MK10D7
+   MK10DZ10
+   MK10F12
+   MK11D5
+   MK12D5
+   MK20D10
+   MK20D7
+   MK20DZ10
+   MK20F12
+   MK21D5
+   MK21F12
+   MK22D5
+   MK30D10
+   MK30D7
+   MK30DZ10
+   MK40D10
+   MK40D7
+   MK40DZ10
+   MK50D10
+   MK50D7
+   MK50DZ10
+   MK51D10
+   MK51D7
+   MK51DZ10
+   MK52D10
+   MK52DZ10
+   MK53D10
+   MK53DZ10
+   MK60D10
+   MK60DZ10
+   MK60F12
+   MK61F12
+   MK70F12
+-->
+      <interrupts>
+         <name>CortexM4_VectorTable</name>
+         <description>CortexM3 Generic VectorTable</description>
+         <interrupt>
+            <name>Reset</name>
+            <description>Reset Vector, invoked on Power up and warm reset</description>
+            <value>-15</value>
+         </interrupt>
+         <interrupt>
+            <name>NonMaskableInt</name>
+            <description>Non maskable Interrupt, cannot be stopped or preempted</description>
+            <value>-14</value>
+         </interrupt>
+         <interrupt>
+            <name>HardFault</name>
+            <description>Hard Fault, all classes of Fault</description>
+            <value>-13</value>
+         </interrupt>
+         <interrupt>
+            <name>MemoryManagement</name>
+            <description>Memory Management, MPU mismatch, including Access Violation and No Match</description>
+            <value>-12</value>
+         </interrupt>
+         <interrupt>
+            <name>BusFault</name>
+            <description>Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault</description>
+            <value>-11</value>
+         </interrupt>
+         <interrupt>
+            <name>UsageFault</name>
+            <description>Usage Fault, i.e. Undef Instruction, Illegal State Transition</description>
+            <value>-10</value>
+         </interrupt>
+         <interrupt>
+            <name>SVCall</name>
+            <description>System Service Call via SVC instruction</description>
+            <value>-5</value>
+         </interrupt>
+         <interrupt>
+            <name>DebugMonitor</name>
+            <description>Debug Monitor</description>
+            <value>-4</value>
+         </interrupt>
+         <interrupt>
+            <name>PendSV</name>
+            <description>Pendable request for system service</description>
+            <value>-2</value>
+         </interrupt>
+         <interrupt>
+            <name>SysTick</name>
+            <description>System Tick Timer</description>
+            <value>-1</value>
+         </interrupt>
+      </interrupts>
+

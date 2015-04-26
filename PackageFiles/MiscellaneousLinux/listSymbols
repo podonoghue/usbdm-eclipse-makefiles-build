@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ nm -g libusbdm.so.4.3 >libusbdm.lst
+ nm -g libusbdm-debug.so.4.3 >libusbdm-debug.lst
+

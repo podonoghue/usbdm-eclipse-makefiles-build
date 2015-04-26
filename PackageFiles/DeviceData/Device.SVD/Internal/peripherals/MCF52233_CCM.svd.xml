@@ -1,0 +1,260 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF52233_CCM" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>CCM</name>
+         <description>Chip Configuration Module</description>
+         <prependToName>CCM</prependToName>
+         <baseAddress>0x40110004</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CCR</name>
+               <description>Chip Configuration Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BMT</name>
+                     <description>Bus monitor timing.\nThis field selects the timeout period (in system clocks) for the bus monitor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>65536</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>32768</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>16384</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8192</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4096</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>2048</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>1024</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>512</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BME</name>
+                     <description>Bus monitor enable.\nThis read/write bit enables the bus monitor to operate during external bus cycles</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Bus monitor disabled for external bus cycles</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Bus monitor enabled for external bus cycles</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PSTEN</name>
+                     <description>PST[3:0]/DDATA[3:0] enable.\nThis read/write bit enables the Processor Status (PST) and Debug Data (DDATA)
+functions of the external pins</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PST/DDATA function disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PST/DDATA function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SZEN</name>
+                     <description>TSIZ[1:0] enable.\nThis read/write bit enables the TSIZ[1:0] function of the external pins</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TSIZ[1:0] function disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TSIZ[1:0] function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPCR</name>
+               <description>Low-Power Control Register\n The LPCR controls chip operation and module operation during
+low-power modes</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LVDSE</name>
+                     <description>LDV standby enable.\n
+Controls whether the PMM enters VREG Standby Mode (LVD disabled) or VREG Pseudo-Standby (LVD enabled) mode when the PMM receives a power down request. This bit has no effect if the RCR[LVDE] bit is a logic 0</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STPMD</name>
+                     <description>PLL/CLKOUT stop mode.\n
+Controls PLL and CLKOUT operation in stop mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPMD</name>
+                     <description>Low-power mode select.\n
+Used to select the low-power mode the chip enters after the ColdFire
+CPU executes the STOP instruction. These bits must be written prior to instruction execution for them
+to take effect. The LPMD[1:0] bits are readable and writable in all modes</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Run</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Doze</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Wait</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Stop</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCON</name>
+               <description>Reset Configuration Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MODE</name>
+                     <description>Chip configuration mode.\nReflects the default chip configuration mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>None</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>None</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RLOAD</name>
+                     <description>Pad driver load.\nReflects the default pad driver strength configuration</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Partial drive strength (This is the default value.)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Full drive strength</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CIR</name>
+               <description>Chip Identification Register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PRN</name>
+                     <description>Part identification number.\nContains a unique identification number for the device</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>PIN</name>
+                     <description>Part revision number. This number is increased by one for each new full-layer mask set of this part. The revision numbers are assigned in chronological order, beginning with zero</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

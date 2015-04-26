@@ -1,0 +1,266 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF522xx_EPORT1" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>EPORT1</name>
+         <description>Edge Port Module</description>
+         <prependToName>EPORT1</prependToName>
+         <baseAddress>0x40140000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>EPPAR</name>
+               <description>Pin Assignment Register\n
+Configures pins for level detection, rising and/or falling edge detection.\n
+Pins configured as level-sensitive are active-low and must be held until acknowledged by software. \n
+Pins configured as edge-triggered are latched and need not remain asserted for interrupt generation.\n 
+Functionality is independent of the selected pin direction.\n
+Level sensitivity must be selected to bring the device out of stop mode with an IRQn interrupt.\n
+Reset clears the EPPAn fields</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPPA8</name>
+                     <description>Pin event causing IRQ</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Level-sensitive</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Rising edge</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Falling edge</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Either edge</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA9</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA10</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA11</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA12</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA13</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA14</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="EPPA8" > <name>EPPA15</name> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPDDR</name>
+               <description>Data Direction Register\n
+Clearing a bit configures the corresponding pin as an input.\n
+Setting a bit configures the corresponding pin as an output.\n
+Reset clears EPDD15-EPDD8.\n
+A pin must be set as input to use as an external interrupt request source\n
+Software can use an pin configured as an output to generate an interrupt</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPDD8</name>
+                     <description>Pin direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD9</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD10</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD11</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD12</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD13</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD14</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPDD8" > <name>EPDD15</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPIER</name>
+               <description>Interrupt Enable Register\n
+Enable EPORT interrupt requests on pin\n
+If bit is set, EPORT generates an interrupt request when:\n
+  - The corresponding bit in the EPORT flag register (EPFR) is set or later becomes set.\n
+  - The corresponding pin level is low and the pin is configured for level-sensitive operation.\n
+Clearing a bit in EPIER negates any interrupt request from the corresponding EPORT pin</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPIE8</name>
+                     <description>Pin interrupt enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE9</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE10</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE11</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE12</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE13</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE14</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPIE8" > <name>EPIE15</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPDR</name>
+               <description>Data Register\n
+This register stores data written to EPDR.\n
+If any pin of the port is configured as an output, the bit stored for that pin is driven onto the pin.\n
+Reading EDPR returns the data stored in the register\n
+Reset sets EPD15 - EPD8</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPD8</name>
+                     <description>Value driven on pin if output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin driven low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin driven high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPD8" > <name>EPD9</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD10</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD11</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD12</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD13</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD14</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPD8" > <name>EPD15</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPPDR</name>
+               <description>Pin Data Register\n
+EPPDR reflects the current state of the EPORT pins IRQ15 - IRQ8.\n
+Writing to EPPDR has no effect, and the write cycle terminates normally.\n
+Reset does not affect EPPDR</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPPD8</name>
+                     <description>Direct pin input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin currently low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin currently high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD9</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD10</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD11</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD12</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD13</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD14</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPPD8" > <name>EPPD15</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPFR</name>
+               <description>Edge Flag Register\nIndicates edge detected\n
+When configured for edge triggering, indicates that the selected edge has been detected\n
+Bits in this register are set when the selected edge is detected on the corresponding pin.\n
+A bit remains set until cleared by writing a 1 to it. Writing 0 has no effect.\n
+If a pin is configured as level-sensitive (EPPARn = 00), pin transitions do not affect this register.\n
+Reset clears EPF15 - EPF8</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EPF8</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Edge not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Edge detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EPF8" > <name>EPF9</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF10</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF11</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF12</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF13</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF14</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EPF8" > <name>EPF15</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

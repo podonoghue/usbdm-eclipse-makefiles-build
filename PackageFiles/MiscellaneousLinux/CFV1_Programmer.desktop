@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=CFV1_FlashProgrammer
+Comment=Flash programmer for CFV1 devices
+Keywords=CFV1;Programmer;
+Exec=/usr/bin/CFV1_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Coldfire V1 Programmer
+GenericName[en_AU]=Coldfire V1 Programmer
+Comment[en_AU]=USBDM Flash programmer for CFV1

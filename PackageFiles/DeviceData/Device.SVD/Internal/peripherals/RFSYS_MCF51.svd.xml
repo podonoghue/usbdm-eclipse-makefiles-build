@@ -1,0 +1,56 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "RFSYS_MCF51" ?>
+         <name>RFSYS</name>
+         <description>Register File</description>
+         <prependToName>RFSYS</prependToName>
+         <baseAddress>0xFFFF8060</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>32</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31</dimIndex>
+               <name>REGB[%s]</name>
+               <?hide?>
+               <description>Battery Backed Register File</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>REGW[%s]</name>
+               <?hide?>
+               <description>Battery Backed Register File</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <access>read-write</access>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>REGL[%s]</name>
+               <description>Battery Backed Register File</description>
+               <addressOffset>0x0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
+         </registers>
+      </peripheral>

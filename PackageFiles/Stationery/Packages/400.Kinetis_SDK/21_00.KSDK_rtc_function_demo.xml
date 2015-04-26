@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-rtc-function-demo" root="">
+      <applyWhen>
+         <and>
+            <or>
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-rtc-function-demo" 
+            name="Real Time Clock Demo" 
+            description=
+"This RTC demo application demonstrates the important features of the RTC Module by using the RTC\n
+Periperhal Driver. It supports these features:\n
+- Calendar\n
+- Alarm\n
+- Seconds interrupt\n
+- Compensation"
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+   		<applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-rtc-function-demo" />
+            </and>
+   		</applyWhen>
+         <deleteResource target="Sources/main.c" />
+   		<copy source="usbdm_kds_path/demos/rtc_func/src/rtc_func.c" target="Sources/rtc_func.c" sourcePathType="absolute" />
+   	</projectActionList>
+   </projectActionList>
+</root>

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=ARM_FlashProgrammer
+Comment=Flash programmer for ARM devices
+Keywords=ARM;Programmer;
+Exec=/usr/bin/ARM_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=ARM Programmer
+GenericName[en_AU]=ARM Programmer
+Comment[en_AU]=USBDM Flash programmer for ARM

@@ -1,0 +1,546 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF522xx_CFM" ?>
+         <name>CFM</name>
+         <description>ColdFire Flash Module</description>
+         <prependToName>CFM</prependToName>
+         <baseAddress>0x401D0000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x0</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x2</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x20</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x24</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x4A</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CFMMCR</name>
+               <description>Module Configuration Register\n
+The CFMMCR register is used to configure and control the operation of the internal bus interface</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KEYACC</name>
+                     <description>Enable Security Key Writing\n
+Determines if CFM flash 0x0400-0x0407 are interpreted as unlock security sequence or command write sequence.\n
+Only writable if the KEYEN bits in the CFMSEC register are set to enable backdoor key access</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Command sequence</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Unlock sequence</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIE</name>
+                     <description>Command Complete (CCIF) Interrupt\n
+The CCIE bit enables an interrupt in case the command completion flag, CCIF in the CFMUSTAT register, is set</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CBEIE</name>
+                     <description>Command Buffer Empty (CBEIF) Interrupt\n
+The CBEIE bit enables an interrupt in case the command buffer empty flag, CBEIF in the CFMUSTAT register, is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AEIE</name>
+                     <description>Access Error (ACCERR) Interrupt\n
+The AEIE bit enables an interrupt in case the access error flag, ACCERR in the CFMUSTAT register, is set</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PVIE</name>
+                     <description>Protection Violation (PVIOL) Interrupt\n
+The PVIE bit enables an interrupt in case the protection violation flag, PVIOL in the CFMUSTAT register, is set</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK</name>
+                     <description>CFMPROT, CMFSACC, and CFMDACC protection</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Registers writable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Registers write locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMCLKD</name>
+               <description>Clock Divider Register\n
+The CFMCLKD register is used to control the period of the clock used for timed events in program and
+erase algorithms</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>Clock Divider Bits\n
+The combination of PRDIV8 and DIV divides the internal flash bus clock down to a frequency of 150 KHz - 200 KHz.\n
+The flash bus clock frequency range is 150 KHz less than the internal flash bus clock which is less than 102.4 MHz</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRDIV8</name>
+                     <description>Enable /8 Prescaler</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled (/1)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled (/8)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIVLD</name>
+                     <description>Clock Divider Loaded\n
+Indicates if the CFMCLKD register has been written to since the last reset</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMSEC</name>
+               <description>Security Register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SEC</name>
+                     <description>Flash memory security\n
+The SEC bits define the security state of the MCU. The value 0x4AC81 is the single code 
+that enables the security feature in the CFM (0x4AC81 = HALT instruction)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>SECSTAT</name>
+                     <description>Flash memory security status</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KEYEN</name>
+                     <description>Backdoor access key\nEnable backdoor key access to unlock security</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMPROT</name>
+               <description>Protection Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>PROTECT</name>
+                     <description>Protect Sectors\nDefines which flash logical sectors are protected against program and erase</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not protected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMSACC</name>
+               <description>Supervisor Access Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>SUPV</name>
+                     <description>Flash Supervisor/user space\nAssigns flash address space for supervisor/user access</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Unrestricted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Supervisore</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMDACC</name>
+               <description>Data Access Register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>DACC</name>
+                     <description>Flash data/instruction space\nFlash memory address space assignment for data/instruction access</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data+Execution</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Data only</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMUSTAT</name>
+               <description>User Status Register</description>
+               <addressOffset>0x20</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BLANK</name>
+                     <description>Flash Blank\nAll flash memory locations or the selected page have been verified as erased.
+The BLANK flag, set by the flash command controller, indicates that a blank check or page erase verify
+operation has checked all flash memory locations or the selected flash logical page and found them to be
+erased. The BLANK flag is cleared by writing a 1 to BLANK. Writing a 0 to the BLANK flag has no effect
+on BLANK</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not Erased</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Erased</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACCERR</name>
+                     <description>Access Error\n
+The ACCERR flag, set by the flash command controller, indicates an illegal access was made to the flash
+memory or registers caused by an illegal command write sequence. The ACCERR flag is cleared by
+writing a 1 to the ACCERR flag. Writing a 0 to the ACCERR flag has no effect on ACCERR. While the
+ACCERR flag is set, it is not possible to launch a command or start a command write sequence</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Access error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PVIOL</name>
+                     <description>Protection Violation\n
+The PVIOL flag, set by the flash command controller, indicates an attempt was made to program or erase
+an address in a protected flash logical sector. The PVIOL flag is cleared by writing a 1 to PVIOL. Writing
+a 0 to the PVIOL flag has no effect on PVIOL. While the PVIOL flag is set, it is not possible to launch a
+command or start a command write sequence</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No violation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protection violation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIF</name>
+                     <description>Command Complete\n
+The CCIF flag, set by the flash command controller, indicates that there are no more commands pending.
+The CCIF flag is cleared by the flash command controller when CBEIF is cleared and sets upon
+completion of all active and pending commands. Writing to the CCIF flag has no effect on CCIF. The CCIF
+flag can generate an interrupt if the CCIE bit in the CFMMCR register is set</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Command in progress</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CBEIF</name>
+                     <description>Command Buffer Empty\n
+The CBEIF flag is set by the flash controller yo indicates that the address, data, and command
+buffers are empty so that a new command write sequence can be started.\n
+The CBEIF flag is cleared by writing a 1 to CBEIF as part of a command write sequence.\n
+Writing a 0 to the CBEIF flag has no effect on CBEIF, but can be used to abort a 
+command write sequence. The CBEIF flag can generate an interrupt if the CBEIE bit in the 
+CFMMCR register is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Buffers full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Buffers ready</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMCMD</name>
+               <description>Command Register</description>
+               <addressOffset>0x24</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CMD</name>
+                     <description>CFM Command Buffer and Register\n
+Valid commands are:\n 
+0x05 =&gt; Blank check, \n
+0x06 =&gt; Page Erase Verify,\n 
+0x20 =&gt; Word Program, \n
+0x40 =&gt; Page Erase, \n
+0x41 =&gt; Mass Erase</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFMCLKSEL</name>
+               <description>Clock Select Register\n
+The CFMCLKSEL register reflects the factory setting for read access latency from the system bus to the
+flash block</description>
+               <addressOffset>0x4A</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLKSEL</name>
+                     <description>Flash Read Access Latency Select\n
+The CLKSEL bits set the read access latency to the flash block</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Two-cycle 2-1-1-1</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Two-cycle 2-1-1-1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Single-Cycle 1-1-1-1</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Two-cycle 2-1-1-1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

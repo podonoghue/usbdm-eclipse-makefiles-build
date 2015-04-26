@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=CFVx_GDBServer
+Comment=Coldfire GDB Server for Coldfire V1, V2 & V3 devices
+Keywords=Coldfire;GDB;
+Exec=/usr/bin/CFVx_GDBServer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Coldfire V2, V3 & V4 GDB Server
+GenericName[en_AU]=Coldfire V2, V3 & V4 GDB Server
+Comment[en_AU]=USBDM GDB Server for Coldfire V1, V2 and V3

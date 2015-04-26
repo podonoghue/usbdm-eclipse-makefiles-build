@@ -1,0 +1,480 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "MXC_MCF51" ?>
+         <name>MXC</name>
+         <description>External Interrupt</description>
+         <prependToName>MXC</prependToName>
+         <baseAddress>0xFFFF8080</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PTAPF1</name>
+               <description>Port A Pin Function 1 Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>A6</name>
+                     <description>A6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>A7</name>
+                     <description>A7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTAPF2</name>
+               <description>Port A Pin Function 2 Register</description>
+               <addressOffset>0x1</addressOffset>
+               <fields>
+                  <field>
+                     <name>A4</name>
+                     <description>A4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>A5</name>
+                     <description>A5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTAPF3</name>
+               <description>Port A Pin Function 3 Register</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>A2</name>
+                     <description>A2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>A3</name>
+                     <description>A3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTAPF4</name>
+               <description>Port A Pin Function 1 Register</description>
+               <addressOffset>0x3</addressOffset>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>A0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>A1</name>
+                     <description>A1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTBPF1</name>
+               <description>Port B Pin Function 1 Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>B6</name>
+                     <description>B6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>B7</name>
+                     <description>B7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTBPF2</name>
+               <description>Port B Pin Function 2 Register</description>
+               <addressOffset>0x5</addressOffset>
+               <fields>
+                  <field>
+                     <name>B4</name>
+                     <description>B4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>B5</name>
+                     <description>B5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTBPF3</name>
+               <description>Port B Pin Function 3 Register</description>
+               <addressOffset>0x6</addressOffset>
+               <fields>
+                  <field>
+                     <name>B2</name>
+                     <description>B2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>B3</name>
+                     <description>B3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTBPF4</name>
+               <description>Port B Pin Function 1 Register</description>
+               <addressOffset>0x7</addressOffset>
+               <fields>
+                  <field>
+                     <name>B0</name>
+                     <description>B0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>B1</name>
+                     <description>B1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTCPF1</name>
+               <description>Port C Pin Function 1 Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>C6</name>
+                     <description>C6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>C7</name>
+                     <description>C7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTCPF2</name>
+               <description>Port C Pin Function 2 Register</description>
+               <addressOffset>0x9</addressOffset>
+               <fields>
+                  <field>
+                     <name>C4</name>
+                     <description>C4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>C5</name>
+                     <description>C5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTCPF3</name>
+               <description>Port C Pin Function 3 Register</description>
+               <addressOffset>0xA</addressOffset>
+               <fields>
+                  <field>
+                     <name>C2</name>
+                     <description>C2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>C3</name>
+                     <description>C3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTCPF4</name>
+               <description>Port C Pin Function 1 Register</description>
+               <addressOffset>0xB</addressOffset>
+               <fields>
+                  <field>
+                     <name>C0</name>
+                     <description>C0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>C1</name>
+                     <description>C1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTDPF1</name>
+               <description>Port D Pin Function 1 Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>D6</name>
+                     <description>D6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>D7</name>
+                     <description>D7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTDPF2</name>
+               <description>Port D Pin Function 2 Register</description>
+               <addressOffset>0xD</addressOffset>
+               <fields>
+                  <field>
+                     <name>D4</name>
+                     <description>D4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>D5</name>
+                     <description>D5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTDPF3</name>
+               <description>Port D Pin Function 3 Register</description>
+               <addressOffset>0xE</addressOffset>
+               <fields>
+                  <field>
+                     <name>D2</name>
+                     <description>D2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>D3</name>
+                     <description>D3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTDPF4</name>
+               <description>Port D Pin Function 1 Register</description>
+               <addressOffset>0xF</addressOffset>
+               <fields>
+                  <field>
+                     <name>D0</name>
+                     <description>D0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>D1</name>
+                     <description>D1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTEPF1</name>
+               <description>Port E Pin Function 1 Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>E6</name>
+                     <description>E6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>E7</name>
+                     <description>E7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTEPF2</name>
+               <description>Port E Pin Function 2 Register</description>
+               <addressOffset>0x11</addressOffset>
+               <fields>
+                  <field>
+                     <name>E4</name>
+                     <description>E4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>E5</name>
+                     <description>E5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTEPF3</name>
+               <description>Port E Pin Function 3 Register</description>
+               <addressOffset>0x12</addressOffset>
+               <fields>
+                  <field>
+                     <name>E2</name>
+                     <description>E2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>E3</name>
+                     <description>E3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTEPF4</name>
+               <description>Port E Pin Function 1 Register</description>
+               <addressOffset>0x13</addressOffset>
+               <fields>
+                  <field>
+                     <name>E0</name>
+                     <description>E0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>E1</name>
+                     <description>E1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTFPF1</name>
+               <description>Port F Pin Function 1 Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>F6</name>
+                     <description>F6 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>F7</name>
+                     <description>F7 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTFPF2</name>
+               <description>Port F Pin Function 2 Register</description>
+               <addressOffset>0x15</addressOffset>
+               <fields>
+                  <field>
+                     <name>F4</name>
+                     <description>F4 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>F5</name>
+                     <description>F5 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTFPF3</name>
+               <description>Port F Pin Function 3 Register</description>
+               <addressOffset>0x16</addressOffset>
+               <fields>
+                  <field>
+                     <name>F2</name>
+                     <description>F2 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>F3</name>
+                     <description>F3 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTFPF4</name>
+               <description>Port F Pin Function 1 Register</description>
+               <addressOffset>0x17</addressOffset>
+               <fields>
+                  <field>
+                     <name>F0</name>
+                     <description>F0 Pin Mux Controls</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>F1</name>
+                     <description>F1 Pin Mux Controls</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

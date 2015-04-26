@@ -1,0 +1,320 @@
+/*!
+\page USBDM Flash Programmers Details
+
+\section TargetSecurity Target Security
+
+The various targets provide security by programming a <b>Security Region</b> of the internal Flash with certain 
+values that enable or disable security features on the device.  The Flash contents of a secured device are 
+inaccessible and only limited access to the chip is possible using the debug interface. 
+      
+The target devices provide some mechanism for being unsecured.  For security reasons, this involves totally erasing the device 
+ to maintain the privacy of the originally programmed information.  The USBDM programmers refer to this as 
+<b>mass erasing</b> and it is one of the options provided for erasing the device before programming.
+
+The mass erase details vary from chip to chip and are summarised below:
+
+   - <b>RS08, Coldfire V1</b> \n
+     The device provides a mass erase operation.  This leaves the flash erased to 0xFF.  The security region is part of 
+     this flash and is erased as well.  A security value of 0xFF corresponds to a unsecured state so the device is left blank
+     and in an unsecured state.\n
+     NOTE: Programming a memory image that does not contain values for the security region to a blank device will leave the device 
+     <b>unsecured</b>.    
+
+   - <b>HCS08</b> \n
+     The device provides a mass erase operation.  This leaves the flash erased to 0xFF.  The security region is part of 
+     this flash and is erased as well.  A security value of 0xFF corresponds to a <b>secured state</b> so the device is left 
+     blank but in an <b>secured</b> state.  To entirely unsecure the device it is necessary to re-program the security area 
+     to a particular, non-0xFF value and reset the device.  The programmer does <b>not</b> do this\n
+     The programmer takes advantage of an additional feature of the HCS08 devices.  A <b>blank</b> device may be temporarily 
+     unsecured by executing a blank check operation of the flash.  This allows the programmer to re-program a blank device.\n  
+     NOTE: Programming a memory image that does not contain values for the security region to a blank device will leave the 
+     device <b>secured</b>.    
+
+   - <b>HCS12</b> \n
+     The device provides a mass erase operation.  This leaves the flash erased to 0xFF.  The security region is part of 
+     this flash and is erased as well.  A security value of 0xFF corresponds to a <b>secured state</b> so the device is left 
+     blank but in an <b>partially secured</b> state.  To entirely unsecure the device to allow unfettered reprogramming it is
+     necessary to re-program the security area to a non-0xFF value and reset the device.
+     The programmer carries out the above operations when needed (for a secured device) and then uses a sector erase to restore
+     the security area to a blank (secured) state but without a further reset.  This leaves the device blank but temporarily 
+     unsecured.  \n
+     NOTE: Programming a memory image that does not contain values for the security region to a blank device will leave the 
+     device <b>secured</b>.    
+
+   - <b>Coldfire V1+, Kinetis, MC56F8xxx(newer devices only)</b> \n
+     The device provides an unsecure operation.  This erases the flash to 0xFF and then re-programs the security region to an
+     unsecured state.  The device is unsecured but <b>not blank</b>.\n
+     The non-blank security area may conflict with programming a new security value to the device.  To prevent this problem
+     the programmer does a selective erase of the security area after the mass erase.  This leaves the device
+     <b>blank</b> and it will be become secured if reset in this state.  The programmer does not reset the device until it has 
+     finished programming so this is not an issue. \n
+     It is also possible to permanently secure these devices by choosing particular security options to be programmed in the 
+     security region.  Such a device cannot be erased or re-programmed ever.\n
+     The programmer does not allow programming of a device to permanently secure it in the above fashion.\n
+     NOTE: Programming a memory image that does not contain values for the security region to a mass erased device will leave
+     the device <b>secured</b> due to the selective erase done following the mass erase.\n
+     NOTE: This outcome differs to that of earlier versions of the programmer.    
+     
+   - <b>Coldfire V2,3,4</b> \n
+     These devices have a separate utility to unlock them so Mass erase is not available in the programmer.
+
+\section sectionClockTrimming Notes on Clock Trimming (RS08,HCS08 & CFV1 only)
+   - The program uses measurements of the BDM interface speed to determine the speed of the target
+     internal clock.  As such it is limited in accuracy by the speed of the processor used in the BDM.
+     USBDM BDMs are available using two different microprocessors.  The earlier MC68HC908JB16 based BDMs 
+     operate at 6 MHz bus speed while the MC9S08JS16 or MC9S08JMxx BDMs operate at 24 MHz.  It would be
+     expected that trimming would be more accurate for the higher speed BDMs.
+   - The following algorithm is used:\n
+      -# A binary search is done to locate a provisional trim value
+      -# Measurements of the clock frequency is done for a range of values either side of the above value.
+         These measurements are repeated several times for each value.
+      -# A linear regression is done on the values obtained.  This is a quite arbitrary approach that assumes
+         frequency versus trim value is linear.
+      -# The required trim value is estimated from the linear curve obtained.  This seems to result in a 
+         very consistent value for the trim that doesn't vary much due to individual measurement tolerances. 
+   - The software programs the target clock divider for a low bus speed before measurement.  Since the
+     BDM interface speed is directly related to the bus speed this improves the accuracy.
+   - In practice, when using the JMxx BDMs, the trimming seems consistent  to +/- 1 LSB of the trim value.
+     I need to investigate this a bit further on the slower BDMs.
+   - The trim frequency specified is that of the internal clock (either ~32.7kHz or ~243kHz depending on 
+     the clock type used in a particular target).  It's up to you to relate this to an actual bus frequency
+     for the target in your application as this will depend upon how your code programs the clock 
+     divider/multiplier registers or equivalent. The clocks may be trimmed over quite a range, +/-25% I
+     believe.  Please check the manual for the chip you are using to determine a suitable clock speed and
+     detailed programming of the clock module. 
+   
+\section sectionTargetPrograming Notes on Target Programming & Time taken
+   - The utility downloads a program to the target RAM to do the majority of the actual programming.  The 
+     program is relocated (patched) to operate at whatever location it is loaded since the RAM boundaries
+     vary with target type.
+   - The above approach is only practical because the devices share a very common structure in respect 
+     of the clock types and Flash programming requirements.  A single program with minor patches is re-usable
+     on different targets.  This approach would be impractical on other processor families which vary more.
+   - The remainder of the target RAM is used as a buffer for the actual data to be programmed.
+     The larger the buffer (up to a limit) the faster the programming will proceed since it reduces the number
+     of USB transfers required and the overhead of polling the program executing on the target etc.
+   - Some direct manipulation of the target Flash registers is necessary for the mass-erase and blank-check 
+     operations since these must be available even if the target is secured and the RAM inaccessible.
+   - Some of the other target registers are also directly manipulated e.g. the clock trim registers, 
+     Flash protection and Flash timing.  This may be slower than loading a program to the RAM to do this
+     indirectly but these are infrequent operations that don't affect the overall time taken significantly.
+   - The program has very little 'knowledge' of the target being programmed.  Attempting to program the wrong
+     device or an illegal Flash memory range tends to result in cryptic error messages e.g. loss of BDM
+     communication due to the target doing a Illegal Address reset :)
+   - The speed of programming is affected by the following:
+      - Speed of USB interface.  The JS16 & JMxx BDM are full-speed while JB16 is low-speed.  This has an
+        obvious affect.
+      - Speed of transfer from the BDM to the target device.  While programming, the software programs the
+        target bus clock to a higher speed to improve the BDM interface speed.
+      - Time taken by the flash state machine to do the actual programming.  This is fixed for a particular 
+        target. (Changing the bus speed does NOT affect this.) The software makes use of Burst-programming
+        when available which is the fastest alternative.
+
+\section sectionExampleCode Example Code for Setting Clock trim
+   - An example of trimming a S08ICGVx clock.\n
+     This code will result in a bus clock of 16MHz if the internal clock is trimmed to 250 kHz.
+   
+\verbatim
+
+typedef unsigned char U8;
+
+// Clock Trim values in Flash - dummy value overwritten by flash programmer
+static const volatile U8 NV_ICGTRM_INIT @0x0000FFBE = 0xFF;  // MSB
+
+void initClock( void ) {
+
+   SOPT          = SOPT_STOPE_MASK|SOPT_BKGDPE_MASK; // Watchdog off, STOP enabled
+   
+   if (NV_ICGTRM_INIT != 0xFF) {
+
+     // Only trim & update clock if Trim values have been programmed to Flash.
+     // Changing clock divider on untrimmed device may be out of bus clock spec.
+
+     ICGTRM = NV_ICGTRM_INIT;
+
+     // Set 16 MHz bus clock assuming internal clock trimmed to 250 kHz
+     ICGC1 = (1<<ICGC1_CLKS_BITNUM);                       // CLKS=1
+     ICGC2 = (5<<ICGC2_MFD_BITNUM)|(0<<ICGC2_RFD_BITNUM);  // MFD=5, RFD=0   
+                                                           // N=4+2*MFD=14, R=2**RFD=1
+                                                           // Fbus=(250kHz/7)*32*N/R=16MHz
+   }
+}
+
+\endverbatim
+
+   - An example of trimming a S08ICSVx clock.\n
+      - Depending on the clock version (V1, V2 or V3) & DRS options, 
+        this code will result in a bus clock of 8, 16MHz or 24MHz if the internal clock 
+        is trimmed to 31.25 MHz.
+      - Alternatively, trimming the clock to 39.06 kHz will result in 10, 20 or 30 MHz bus 
+        speed if supported by the particular chip.
+     
+   <table border="1">
+   <tr><td>Clock Version<td>DRS<td>Clock Trim Freq<td>FLL Factor<td>DCO Freq<td>Bus Freq (BDIV=00)
+   <tr><td>S08ICSV1<td>-<td>31.25-39.0625 kHz<td>512<td>16 - 20 MHz<td>8 - 10 MHz
+   <tr><td>S08ICSV2<td>-<td>31.25-39.0625 kHz<td>1024<td>32 - 40 MHz<td>16 - 20 MHz
+   <tr><td>S08ICSV3<td>00<td>31.25-39.0625 kHz<td>512<td>16 - 20 MHz<td>8 - 10 MHz
+   <tr><td>S08ICSV3<td>01<td>31.25-39.0625 kHz<td>1024<td>32 - 40 MHz<td>16 - 20 MHz
+   <tr><td>S08ICSV3<td>10<td>31.25-39.0625 kHz<td>1536<td>48 - 60 MHz<td>24 - 30 MHz
+   </table>
+
+\verbatim
+
+typedef unsigned char U8;
+
+// Clock FTRIM values in Flash - value _combined_ with FTRIM bit by programmer
+static const volatile U8 NV_FTRIM_INIT  @0x0000FFAE = 0xFF; // may be ICSSC_DRST_DRS0 etc
+
+// Clock TRIM values in Flash - dummy value overwritten by flash programmer
+static const volatile U8 NV_ICSTRM_INIT @0x0000FFAF = 0xFF;
+
+void initClock( void ) {
+
+   SOPT1          = SOPT1_STOPE_MASK|SOPT1_BKGDPE_MASK;  // Watchdog off, STOP enabled, BKGD pin enabled,  
+   
+   if (NV_ICSTRM_INIT != 0xFF) {
+
+     //  Only trim & update clock if Trim values have been programmed to Flash.
+     //  Enabling x1 clock divider on untrimmed device may be out of bus clock spec.
+
+     ICSSC       = NV_FTRIM_INIT;    // Trim the internal clock
+     ICSTRM      = NV_ICSTRM_INIT;
+
+     // Set 8/16 MHz bus clock assuming 31.25 MHz trim
+     ICSC2 = (0<<ICSC2_BDIV_BITNUM);                   // BDIV=0,RANGE=0,HGO=0,LP=0,EREFS=0,ERCLKEN=0,EREFSTEN=0
+     ICSC1 = (0<<ICSC1_CLKS_BITNUM)|ICSC1_IREFS_MASK;  // CLKS=0,RDIV=0,IREFS=1,IRCLKEN=0,IREFSTEN=0
+   }
+}
+
+\endverbatim
+
+   - An example of trimming a S08MCGVx clock.  
+     - This code will result in a bus clock of 16MHz if the internal clock is 
+       trimmed to 31.25 MHz.
+     - Depending on the clock version (V1 or V2) & DRS options, 
+       this code will result in a bus clock of 8 or 16MHz if the internal clock 
+       is trimmed to 31.25 MHz.
+     - Alternatively, trimming the clock to 39.06 kHz will result in 10 or 20 MHz bus 
+       speed if supported by the particular chip.
+   
+   <table border="1">
+   <tr><td>Clock Version<td>DRS<td>Clock Trim Freq<td>FLL Factor<td>DCO Freq<td>Bus Freq (BDIV=00)
+   <tr><td>S08MCGV1<td>-<td>31.25-39.0625 kHz<td>1024<td>32 - 40 MHz<td>16 - 20 MHz
+   <tr><td>S08MCGV2<td>0<td>31.25-39.0625 kHz<td>512<td>16 - 20 MHz<td>8 - 10 MHz
+   <tr><td>S08MCGV2<td>1<td>31.25-39.0625 kHz<td>1024<td>32 - 40 MHz<td>16 - 20 MHz
+   <tr><td>S08MCGV4<td>2<td>31.25-39.0625 kHz<td>1536<td>48 - 60 MHz<td>24 - 30 MHz
+   </table>
+
+\verbatim
+
+typedef unsigned char U8;
+
+// Clock Trim values in Flash - dummy values overwritten by flash programmer
+static const volatile U8 NV_MCGTRM_INIT @0x0000FFAF = 0xFF;  // MSB
+static const volatile U8 NV_FTRIM_INIT  @0x0000FFAE = 0xFF;  // LSB
+
+void initClock( void ) {
+
+   SOPT1          = SOPT1_STOPE_MASK;  // Watchdog off, STOP enabled, BKGD pin enabled,  
+   
+   if (NV_MCGTRM_INIT != 0xFF) {
+
+     //  Only trim & update clock if Trim values have been programmed to Flash.
+     //  Enabling x1 clock divider on untrimmed device may be out of bus clock spec.
+
+     MCGSC       = NV_FTRIM_INIT;    // Trim the internal clock
+     MCGTRM      = NV_MCGTRM_INIT;
+
+     // Set 16 MHz bus clock assuming 31.25 MHz trim
+     MCGC2 = (0<<MCGC2_BDIV_BITNUM);                   // BDIV=0,RANGE=0,HGO=0,LP=0,EREFS=0,ERCLKEN=0,EREFSTEN=0
+     MCGC1 = (0<<MCGC1_CLKS_BITNUM)|MCGC1_IREFS_MASK;  // CLKS=00,RDIV=0,IREFS=1,IRCLKEN=0,IREFSTEN=0
+     // Following only applies for S08MCGV2 (and is default anyway!)
+     //MCGT  = MCGT_DRST_DRS_MASK; // MCGT_DRST_DRS=1, MCGT_DMX32=0  
+   }
+}
+
+\endverbatim
+
+\section sectionAddingDevices Adding Devices
+The programmers use several techniques to obtain their results.  Where possible these have been made configurable to allow
+adding or changing devices without the need to re-compile the code.
+The programmers make use of the following:\n\n
+<b>XML files</b>\n
+<hr>
+  These describe the various devices and indicate which programming algorithms are used.  The details vary a bit between
+  programmers but may include the following:\n
+  <b>&lt;sdid&gt;</b> Used to physically identify and confirm the device being programmed.  An SDID of zero will match any device.
+    - value
+  
+  <b>&lt;clock&gt;</b> Used to describe one of the standard clocks.  This is used to identify the correct clock trim algorithms <i>Hard coded</i>
+  in the programmers.\n
+    - type
+    - registerAddress
+  
+  <b>&lt;securityInfoRef ...&gt;</b> is used to refer to a shared description of the modifications to the Flash image required to secure or
+   unsecure the device.  This uses the &lt;securityAddress> from the memory tag.\n
+     - ref - A reference to security information declared in the &lt;sharedInfo> area.
+     
+  <b>&lt;note&gt;</b> A brief note about the device.
+  
+  <b>&lt;memory&gt;</b> Description of memory for the device.  A separate &lt;memory&gt; entry is used for each memory in the device.  A memory is a region
+   having a different memory type or memory controller.  For example RAM and Flash would be described by separate entries as would two 
+   Flash memories that have different controllers or erase individually.\n
+     - pageAddress - the location of the page register e.g. PPAGE or EPAGE
+     - registerAddress - the location of the flash controller registers
+     - type - the type of the memory
+     - securityAddress - the location of the security region used to secure the device\n
+  
+  <b>&lt;memoryRange&gt;</b> Each memory is made up of a collection of one or more &lt;memoryRange> elements describing the non-contiguous ranges of memory.\n
+     - pageNo - the page number to write to the EPAGE/PPAGE register for this region.  If omitted a value is calculated from the
+              memory region address (only HCS12, HCS08 use paged memory addresses).\n 
+     - start - start of the memory range.  This will be a paged address if appropriate.
+     - end or size - you may specify either the inclusive end address or size.  Size may be given in K or MB e.g. 128K 1M\n
+\verbatim   
+      <device family="HCS08" name="MC9S08DE60">
+         <clock registerAddress="0x0048" type="S08MCGV1" />
+         <memory type="ram">
+            <memoryRange end="0x107F" start="0x0080" />
+         </memory>
+         <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange end="0x13FF" start="0x1080" />
+            <memoryRange end="0xFFFF" start="0x1900" />
+         </memory>
+         <memory pageAddress="0x1823" registerAddress="0x1820" type="eeprom">
+            <memoryRange end="0x0017FF" start="0x001400"  pageNo="0x10" />
+            <memoryRange end="0x0117FF" start="0x011400"  pageNo="0x50" />
+         </memory>
+         <sdid value="0x00E" />
+         <note>EEPROM programming uses Page 0x00 and 0x01</note>
+         <note>Flash ECC not supported</note>
+      </device>
+ \endverbatim
+ 
+ <b>TCL scripts</b>\n
+ <hr>
+    Each device has a TCL script that provides basic functions necessary for the programmer.  These are usually shared by multiple devices
+    but if needed an individual script may be used.\n\n
+    The scripts provide the following operations:
+    - Initialisation of the target.  Done after each reset.
+    - Initialisation of the flash.  Done before flash programming.
+    - Mass erase & unsecure. Used when the mass erase option is selected.
+    - Security check.  Determines if the device is secured.
+
+ <b>Binary Files (Freescale S-records)</b>\n
+ <hr>
+    A program is down-loaded to the target to do the actually programming of a device.  In the case of RS08 and HCS08 devices 
+    this program is incorporated into the programmers.  For HCS12, Coldfire and Kinetis devices the program is kept in a separate file that
+    is referenced by the XML files.  This allows for individual algorithms to be used for each device if necessary.  In practice, there
+    is a shared program used for each Coldfire V1 family (Coldfile, Coldfire+), Coldfire V234 and Kinetis devices. There are several used to 
+    cover the range of flash or memory management used by the HCS12 devices. \n
+    The external programs provide the following capabilities:
+    - Sector or page erase.  Used for Erase-selective option.
+    - Flash region mass erase i.e. erasing an entire flash memory as a single operation.  Used for Erase-All option.
+    - Blank checking.  Used to check if a memory region is blank before programming.
+    - Programming. Does the actual programming.
+    - Verify. Verifies memory contents.
+    
+    To improve performance multiple operations may be combined e.g. ERASE+BLANK_CHECK+PROGRAM+VERIFY 
+*/

@@ -1,0 +1,79 @@
+/*!
+ \page driverPage USB Driver Installation
+
+\section InstallingDriversSectionWindows Installation of USBDM USB drivers for Windows
+  
+The driver installation has been considerably simplified from version 4.10.3 by the provision of a separate driver 
+installation.  There are four installers provided: \n
+- <b>USBDM_Drivers_x_x_x_WinXP_x32.msi</b> - Windows XP 32-bit
+- <b>USBDM_Drivers_x_x_x_WinXP_x64.msi</b> - Windows XP 64-bit
+- <b>USBDM_Drivers_x_x_x_Win_x32.msi</b> - Windows 7 32-bit
+- <b>USBDM_Drivers_x_x_x_Win_x64.msi</b> - Windows 7 64-bit
+
+<b>Note:</b> On Windows, libusb1.0 is a thin wrapper around the Microsoft winUSB low-level USB drivers.  Because
+of this you may see references to winusb in the following.\n
+
+Please install the drivers before plugging in a BDM. \n
+
+Steps to follow undex Windows-8
+	- Before installation it is necessary to enable the use of unsigned drivers.  This is necessary because I have not paid 
+	for them to be signed.\n
+	- Please follow the steps outlined here:\n 
+	https://learn.sparkfun.com/tutorials/disabling-driver-signature-on-windows-8/disabling-signed-driver-enforcement-on-windows-8
+	- After this you should be able to follow the steps given below for WIN-7 to install the drivers.
+	
+Steps to follow under WIN-7 (it's similar for WIN-XP but there will be other confirmation dialogues)
+   - Download the appropriate driver installation file (as above) from Sourceforge:
+   <A HREF="http://sourceforge.net/projects/usbdm/files/Version 4.10.6/Software/">USBDM Sourceforge</A>\n
+   - Remove the BDM if it is already plugged in.
+   - If you have installed a previous driver version (.msi file) and you wish to install a later version then
+     use add/remove programs to uninstall the existing drivers first (look for the <b>USBDM drivers</b> entry).
+   - Install the driver .msi file.  This should clean out any incompatible driver files.
+   \image html MSI_DriverInstaller.png
+     During the installation you may receive several prompts warning you that the drivers are not signed.  
+     This is to be expected since I have not paid for them to be signed.\n
+   \image html DriverWarning.png
+   - After installing the drivers, plugging in a BDM should trigger the actual driver installation. \n
+   \image html InstallingDeviceDriverPopUp.png
+   - If you click on the pop-up you can confirm the driver installation steps.\n
+     In the case shown below drivers for the BDM interface and the serial port (CDC) interface are installed.  
+   \image html DriverInstallationPrompt.png
+   - Successful installation
+   \image html ConfirmedDeviceDriverPopUp.png
+
+<hr> 
+\section InstallingDriversSectionLinux Installation of USBDM USB drivers for Linux
+There isn't any.  The DEB file provided will modify the /etc/udev/rules.d file to allow
+access to the USBDM device. The required driver for USBDM BDM interface (LibusbV1) is included in the standard
+Linux (at least Ubuntu current version).  The CDC (serial port) is a standard device and should also be installed
+without any extra steps.
+
+If more installation is required on your version you will have to investigate this yourself.  I'm not a Linux 
+expert and I don't have access to other versions for testing.  If you find other steps are necessary then please
+ advise and I will try to update the installation accordingly.
+
+<hr>
+ \section LinuxDrivers Linux Drivers
+ The shell scripts supplied with the linux version should install the required information for the libusb drivers 
+ to work on a linux machine.
+ 
+ You will also need to make sure you have installed some libraries:
+   (Some information posted by joncas on Freescale Forums - thanks)
+  \verbatim
+  Hello PGO,
+  
+  I just tried your version 4.6 with Codewarrior 10.1 on a clean install of Ubuntu 11.04 (32 bit).
+  In case it helps anyone else trying this, it required adding the following libraries with the 
+  Synaptic Package Manager:
+    - tcl8.5 
+    - libwxgtk2.8-0 
+    - lbwxgtk2.8-dbg 
+    - libstdc++5 
+    - libxerces-c3.1
+  Then it seems to run fine.
+  Many thanks and best regards!
+   
+  Robert
+  \endverbatim
+
+*/

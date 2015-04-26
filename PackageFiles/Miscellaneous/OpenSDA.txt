@@ -1,0 +1,33 @@
+The USBDM_OpenSDAxxx.sx flash images are USBDM firmware for FRDM-xxxx boards.  This can
+be used as cheap Kinetis programmers.
+
+Versions:
+===========
+Open-SDA Version 1 - Used with most FRDM boards
+USBDM_OpenSDA.sx              Firmware with serial number 0001
+USBDM_OpenSDA_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+
+Open-SDA Version 2 - Used with FRM-K64F (MBED versions of Freedom boards)
+USBDM_OpenSDA2.sx             Firmware with serial number 0001
+USBDM_OpenSDA2_Unique_ID.sx   Firmware with device specific serial number, i.e. each BDM has an unique ID
+
+The first version of each firmware is useful if you are using BDMs as a 'class set' as it means that each BDM 
+should end up appearing as the same serial port e.g. COM8.
+The second version is useful if you wish to use two BDMs on the same machine at the same time as the COM port
+used will be tied to the BDM i.e. each BDM will end up with a board specific COM port even if plugged into 
+another USB port.  This means the COM numbers doesn't change each time you plug in the BDM.
+
+These are OpenSDA application and is loaded by the following actions:
+
+(Before doing the following install the USBDM drivers).
+
+*  Unplug FRDM-XXXX board
+*  Whilst holding the reset switch depressed plug in the FRDM-XXXX board.  The
+   green LED should start blinking at about 1Hz (OpenSDA V1 only).  
+*  Open a file explorer and locate the USB drive that has now appeared.  It will have
+   the drive name "BOOTLOADER"
+*  Drag the USBDM_OpenSDAX.sx to the USB drive and wait a short while.  The OpenSDA firmware
+   on the FRDM-XXXX board will program the USBDM firmware into the MK20 debugger chip on the
+   board.
+*  In the case of the Open-SDAV2 device the BOOTLOADER Disk will disappear.
+*  Remove and re-plug the FRDM-XXXX board.  The board will now appear as a USBDM device.

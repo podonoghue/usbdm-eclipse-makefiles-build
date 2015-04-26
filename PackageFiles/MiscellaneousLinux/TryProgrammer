@@ -1,0 +1,50 @@
+#!/bin/bash
+
+echo ================================================================
+echo
+echo "Batch file showing examples of command-line flash programming"
+echo
+echo ================================================================
+
+FLASHCOMMAND=./CFV1_FlashProgrammer
+
+echo "Programming an image without trimming the clock"
+$FLASHCOMMAND -device=MCF51CN128 -vdd=3v3 -program -unsecure TestMCF51CN128.elf.S19
+if [[ $? != 0 ]]; then
+   echo "Programming image failed"
+else
+   echo "Success!"
+fi
+
+echo "Verifying programmed image"
+$FLASHCOMMAND -device=MCF51CN128 -vdd=3v3 -verify -unsecure TestMCF51CN128.elf.S19
+if [ $? != 0 ]; then
+   echo "Verifying image failed"
+else
+   echo "Success!"
+fi
+
+echo "Programming clock trim on an already programmed device"
+$FLASHCOMMAND -device=MCF51CN128 -vdd=3v3 -program -trim=35 -noerase
+if [ $? != 0 ]; then
+   echo "Programming trim failed"
+else
+   echo "Success!"
+fi
+
+echo "Programming an image with clock trim and securing"
+$FLASHCOMMAND -device=MCF51CN128 -vdd=3v3 -program -secure -trim=31.25 TestMCF51CN128.elf.S19
+if [ $? != 0 ]; then
+   echo "Programming image failed"
+else
+   echo "Success!"
+fi
+
+echo "Verifying programmed image - this should fail as device is secured"
+$FLASHCOMMAND -device=MCF51CN128 -vdd=3v3 -verify TestMCF51CN128.elf.S19
+if [ $? != 0 ]; then
+   echo "Verifying image failed (as it should)"
+else
+   echo "Verify succeeded but it should have failed!!!!"
+fi
+

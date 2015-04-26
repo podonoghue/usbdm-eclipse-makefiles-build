@@ -1,0 +1,358 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF522xx_DTIM" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>DTIM</name>
+         <description>DMA Timers</description>
+         <prependToName>DTIM</prependToName>
+         <baseAddress>0x40000400</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>4</dim>
+               <dimIncrement>64</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CH,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>DTMR</name>
+                  <description>Timer Mode Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <size>16</size>
+                  <resetMask>0xFFFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>RST</name>
+                        <description>Reset timer\n
+Performs a software timer reset similar to an external reset, although other register values can be written while RST is cleared.\n
+ A transition of RST from 1 to 0 resets register values. The timer counter is not clocked unless the timer is enabled</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Reset timer</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enable timer</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CLK</name>
+                        <description>Input clock source for the timer.\n
+Avoid setting CLK when RST is already set. Doing so causes CLK to zero (stop counting)</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Stop count</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Internal bus clock divided by 1</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Internal bus clock divided by 16</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>DTINn pin (falling edge)</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>FRR</name>
+                        <description>Free run/restart on reference match\n
+Controls if the counter rolls over at the reference (restart) or maximum (free-run) value</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Free run</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Restart</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ORRI</name>
+                        <description>Output reference request enable\n
+If ORRI is set when DTERn[REF] is set, a DMA request or an interrupt occurs</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>OM</name>
+                        <description>Output mode\n
+The output either pulses low (12.5-ns resolution at 80 MHz) or toggles on event</description>
+                        <bitOffset>5</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Pulse</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Toggle</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CE</name>
+                        <description>Capture edge\n
+Controls when capturing occurs</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Disabled</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Rising edge</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Falling edge</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Any edge</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>PS</name>
+                        <description>Prescaler value.\n
+Divides the clock input (internal bus clock/(16 or 1) or clock on DTINn)</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DTXMR</name>
+                  <description>Timer Extended Mode</description>
+                  <addressOffset>0x2</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>MODE16</name>
+                        <description>Increment mode for the timer\n
+Setting MODE16 is intended to exercise the upper bits of the 32-bit timer in diagnostic software. \n
+All 32 bits of the counter remain compared to the reference value</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Increment by 1</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Increment by 65537</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>HALTED</name>
+                        <description>Counter operation when halted\n
+This allows debug mode to be entered without timer interrupts affecting the debug flow.\n
+Note: This bit is only applicable in reference compare mode</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Enabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Disabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>DMAEN</name>
+                        <description>DMA request enable\n
+Enables DMA request output on counter reference match or capture edge event</description>
+                        <bitOffset>7</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DTER</name>
+                  <description>Timer Event</description>
+                  <addressOffset>0x3</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>CAP</name>
+                        <description>Capture event\n
+Event depends on DTMRn[CE] &amp; DTXMRn[DMAEN].\n
+The counter value has been latched into DTCRn. Writing a 1 to CAP clears the event condition. \n
+Writing a 0 has no effect</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No event</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Event occurred</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>REF</name>
+                        <description>Output reference event.\n
+The counter value DTCNn equals DTRRn.\n
+Event action depends on DTMRn[ORRI] &amp; DTXMRn[DMAEN].\n
+Writing a 1 to REF clears the event condition. Writing a 0 has no effect</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No action</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Action occurred</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DTRR</name>
+                  <description>Timer Reference Register\n
+This value is compared with the respective free-running timer counter (DTCNn) as part of the output-compare function</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>REF</name>
+                        <description>Reference value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DTCR</name>
+                  <description>Timer Capture Registers\n
+Captures the corresponding DTCNn value during a capture operation when an edge occurs on DTINn, as programmed in DTMRn</description>
+                  <addressOffset>0x8</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>CAP</name>
+                        <description>Capture value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DTCN</name>
+                  <description>Timer Counter\n
+The current value of the 32-bit timer counter</description>
+                  <addressOffset>0xC</addressOffset>
+                  <fields>
+                     <field>
+                        <name>CNT</name>
+                        <description>Timer counter.\n
+Can be read at anytime without affecting counting and any write to this field clears it</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+         </registers>
+      </peripheral>

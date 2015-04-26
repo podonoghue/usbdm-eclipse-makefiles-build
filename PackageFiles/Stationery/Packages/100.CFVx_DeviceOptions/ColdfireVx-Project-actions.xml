@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+      
+   <!--Base CFVx files -->
+   <projectActionList id="Coldfire-Vx-files"  >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CFV2</deviceFamilyMatches>
+            </or>
+         </and>
+      </applyWhen>
+      <createFolder target="Sources"                         type="" />
+      <createFolder target="Startup_Code"                    type="" />
+      <createFolder target="Project_Headers"                 type="include" />
+      <createFolder target="Project_Settings/Linker_Files"   type="" />
+
+      <copy source="Startup_Code/system.c"                                     target="Startup_Code/system.c" />
+      <copy source="Startup_Code/vectors-cfv2.c"                               target="Startup_Code/vectors.c" />
+      <copy source="Startup_Code/newlib_stubs.c"                               target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/startup_gcc_m68k_elf.S"                       target="Startup_Code/startup_gcc_m68k_elf.S" />
+      <copy source="Project_Settings/Debug.launch"                             target="Project_Settings/$(projectName)-Debug.launch" />
+      <copy source="Project_Settings/Linker_Files/m68k-rom.ld"                 target="Project_Settings/Linker_Files/Linker-rom.ld" />
+      <copy source="Project_Settings/Linker_Files/MemoryMap.ld"                target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
+      <copy source="Project_Headers/derivative.h"                              target="Project_Headers/derivative.h" />
+      <copy source="Project_Headers/TargetDevice.h"                            target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/system.h"                                  target="Project_Headers/system.h" />
+      <copy source="Project_Headers/utilities.h"                               target="Project_Headers/utilities.h" />
+      <copy source="Project_Headers/core_cfv2.h"                               target="Project_Headers/core_cfv2.h" />
+      <copy source="Sources/main.c"                                            target="Sources/main.c" />
+
+      <copy source="$(externalVectorTable)"                                    target="Startup_Code/vectors.c" replace="true" />
+      <copy source="$(externalHeaderFile)"                                     target="Project_Headers/$(targetDevice).h" replace="true" />
+   </projectActionList>
+</root>

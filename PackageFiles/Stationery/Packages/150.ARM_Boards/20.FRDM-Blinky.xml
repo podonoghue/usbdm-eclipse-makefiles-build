@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="FRDM-Blinky-MK-" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <or>
+               <deviceNameMatches>^FRDM[-_].*</deviceNameMatches>
+               <deviceNameMatches>^TWR[-_].*</deviceNameMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.FRDM-Blinky" 
+         name="Blinky example" 
+         description="Add Blinky Example code for Demo board"
+         checkGroup="group-additional-options" />
+
+      <!-- Blinky example for Freedom board -->
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+               </or>
+            </and>
+         </applyWhen>
+         <projectActionList>
+            <applyWhen >
+               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds.c"                target="Sources/leds.c" />
+            <copy source="Sources/main.c"                target="Sources/main.c" replace="true" />
+         </projectActionList>
+      </projectActionList>
+   
+      <!-- Blinky example for Freedom board -->
+      <projectActionList id="FRDM-Blinky-MKL" >
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               </or>
+               <deviceSubfamilyMatches>^MKL\d+.*</deviceSubfamilyMatches>
+            </and>
+         </applyWhen>
+         <projectActionList>
+            <applyWhen >
+               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds.c"                target="Sources/leds.c" />
+            <copy source="Sources/main.c"                target="Sources/main.c" replace="true" />
+         </projectActionList>
+      </projectActionList>
+   
+      <!-- Blinky example for Freedom board -->
+      <projectActionList id="FRDM-Blinky-MKE" >
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               </or>
+               <deviceSubfamilyMatches>^MKE\d+.*</deviceSubfamilyMatches>
+            </and>
+         </applyWhen>
+         <projectActionList>
+            <applyWhen >
+               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds-mke.c"            target="Sources/leds.c" />
+            <copy source="Sources/main.c"                target="Sources/main.c" replace="true" />
+         </projectActionList>
+      </projectActionList>
+   
+      <!-- Blinky example for Freedom board -->
+      <projectActionList id="FRDM-Blinky-MKM" >
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               </or>
+               <deviceSubfamilyMatches>^MKM\d+.*</deviceSubfamilyMatches>
+            </and>
+         </applyWhen>
+         <projectActionList>
+            <applyWhen >
+               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds-mkm.c"            target="Sources/leds.c" />
+            <copy source="Sources/main.c"                target="Sources/main.c" replace="true" />
+         </projectActionList>
+      </projectActionList>
+   </projectActionList>
+
+</root>

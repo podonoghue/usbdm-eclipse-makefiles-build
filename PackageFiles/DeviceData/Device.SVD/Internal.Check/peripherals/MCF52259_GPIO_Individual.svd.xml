@@ -1,0 +1,238 @@
+<!--
+Devices using this peripheral: 
+      MCF52259
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_GPIO" ?>
+         <name>GPIO_PTE</name>
+         <description>GPIO PTE</description>
+         <prependToName>GPIO_PTE</prependToName>
+         <baseAddress>0x40100000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x18</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x30</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x48</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x60</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PORT</name>
+               <description>Data register\n
+The PORT registers store the data to be driven on the corresponding port n pins when the pins are configured for digital output</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PORT</name>
+                     <description>None</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DDR</name>
+               <description>Direction register\n
+The DDR registers control the direction of the port n pin drivers when the pins are configured for digital I/O</description>
+               <addressOffset>0x18</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DDR</name>
+                     <description>None</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SET</name>
+               <description>Pin Data/Set Registers\n
+The PORTnP/SETn registers reflect the current pin states and control the setting of output pins when the
+pin is configured for digital I/O</description>
+               <addressOffset>0x30</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>None</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLR</name>
+               <description>Port Clear Output Data Register\n
+Writing 0s to a CLRn register clears the corresponding bits in the PORTn register.\n
+Writing 1s has no effect.\n
+Reading the CLRn register returns 0s</description>
+               <addressOffset>0x48</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>None</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>None</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>None</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PAR</name>
+               <description>Configure pin use</description>
+               <addressOffset>0x60</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PAR</name>
+                     <description>None</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>
+
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTF</name>
+         <description>GPIO TF</description>
+         <prependToName>GPIO_PTF</prependToName>
+         <baseAddress>0x40100001</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTG</name>
+         <description>GPIO TG</description>
+         <prependToName>GPIO_PTG</prependToName>
+         <baseAddress>0x40100002</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTH</name>
+         <description>GPIO TH</description>
+         <prependToName>GPIO_PTH</prependToName>
+         <baseAddress>0x40100003</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTI</name>
+         <description>GPIO TI</description>
+         <prependToName>GPIO_PTI</prependToName>
+         <baseAddress>0x40100004</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTJ</name>
+         <description>GPIO TJ</description>
+         <prependToName>GPIO_PTJ</prependToName>
+         <baseAddress>0x40100006</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PNQ</name>
+         <description>GPIO NQ</description>
+         <prependToName>GPIO_PNQ</prependToName>
+         <baseAddress>0x40100008</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PAN</name>
+         <description>GPIO AN</description>
+         <prependToName>GPIO_PAN</prependToName>
+         <baseAddress>0x4010000A</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PAS</name>
+         <description>GPIO AS</description>
+         <prependToName>GPIO_PAS</prependToName>
+         <baseAddress>0x4010000B</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PQS</name>
+         <description>GPIO QS</description>
+         <prependToName>GPIO_PQS</prependToName>
+         <baseAddress>0x4010000C</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTA</name>
+         <description>GPIO TA</description>
+         <prependToName>GPIO_PTA</prependToName>
+         <baseAddress>0x4010000E</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PTC</name>
+         <description>GPIO PTC</description>
+         <prependToName>GPIO_PTC</prependToName>
+         <baseAddress>0x4010000F</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PUA</name>
+         <description>GPIO UA</description>
+         <prependToName>GPIO_PUA</prependToName>
+         <baseAddress>0x40100011</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PUB</name>
+         <description>GPIO UB</description>
+         <prependToName>GPIO_PUB</prependToName>
+         <baseAddress>0x40100012</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PUC</name>
+         <description>GPIO UC</description>
+         <prependToName>GPIO_PUC</prependToName>
+         <baseAddress>0x40100013</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PDDa</name>
+         <description>GPIO DDa</description>
+         <prependToName>GPIO_PDDa</prependToName>
+         <baseAddress>0x40100014</baseAddress>
+      </peripheral>
+      <peripheral derivedFrom="GPIO_PTE">
+         <name>GPIO_PDD</name>
+         <description>GPIO DD</description>
+         <prependToName>GPIO_PDD</prependToName>
+         <baseAddress>0x40100015</baseAddress>
+      </peripheral>
+      
+            

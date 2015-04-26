@@ -1,0 +1,2836 @@
+<!--
+Devices using this peripheral: 
+      MK52D10
+      MK53D10
+      MK60D10
+      MK60F12
+      MK60F15
+      MK61F12
+      MK61F15
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "ENET_0" ?>
+         <name>ENET</name>
+         <description>Ethernet MAC-NET Core</description>
+         <prependToName>ENET</prependToName>
+         <baseAddress>0x400C0000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x4</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x24</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x64</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x84</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC4</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE4</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x118</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x144</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x190</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x78</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x284</offset>
+            <size>0x60</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x400</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x604</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>EIR</name>
+               <description>Interrupt Event Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>TS_TIMER</name>
+                     <description>Timestamp Timer</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TS_AVAIL</name>
+                     <description>Transmit Timestamp Available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WAKEUP</name>
+                     <description>Node Wakeup Request Indication</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLR</name>
+                     <description>Payload Receive Error</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UN</name>
+                     <description>Transmit FIFO Underrun</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RL</name>
+                     <description>Collision Retry Limit</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LC</name>
+                     <description>Late Collision</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EBERR</name>
+                     <description>Ethernet Bus Error</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MII</name>
+                     <description>MII Interrupt</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXB</name>
+                     <description>Receive Buffer Interrupt</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXF</name>
+                     <description>Receive Frame Interrupt</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXB</name>
+                     <description>Transmit Buffer Interrupt</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXF</name>
+                     <description>Transmit Frame Interrupt</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GRA</name>
+                     <description>Graceful Stop Complete</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BABT</name>
+                     <description>Babbling Transmit Error</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BABR</name>
+                     <description>Babbling Receive Error</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EIMR</name>
+               <description>Interrupt Mask Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TS_TIMER</name>
+                     <description>TS_TIMER Interrupt Mask</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TS_AVAIL</name>
+                     <description>TS_AVAIL Interrupt Mask</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WAKEUP</name>
+                     <description>WAKEUP Interrupt Mask</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLR</name>
+                     <description>PLR Interrupt Mask</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UN</name>
+                     <description>UN Interrupt Mask</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RL</name>
+                     <description>RL Interrupt Mask</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LC</name>
+                     <description>LC Interrupt Mask</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EBERR</name>
+                     <description>EBERR Interrupt Mask</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MII</name>
+                     <description>MII Interrupt Mask</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXB</name>
+                     <description>RXB Interrupt Mask</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXF</name>
+                     <description>RXF Interrupt Mask</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXB</name>
+                     <description>TXB Interrupt Mask</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding interrupt source is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding interrupt source is not masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXF</name>
+                     <description>TXF Interrupt Mask</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding interrupt source is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding interrupt source is not masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GRA</name>
+                     <description>GRA Interrupt Mask</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding interrupt source is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding interrupt source is not masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BABT</name>
+                     <description>BABT Interrupt Mask</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding interrupt source is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding interrupt source is not masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BABR</name>
+                     <description>BABR Interrupt Mask</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding interrupt source is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding interrupt source is not masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RDAR</name>
+               <description>Receive Descriptor Active Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>RDAR</name>
+                     <description>Receive Descriptor Active</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TDAR</name>
+               <description>Transmit Descriptor Active Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDAR</name>
+                     <description>Transmit Descriptor Active</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ECR</name>
+               <description>Ethernet Control Register</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0xF0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>RESET</name>
+                     <description>Ethernet MAC Reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ETHEREN</name>
+                     <description>Ethernet Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reception immediately stops and transmission stops after a bad CRC is appended to any currently transmitted frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MAC is enabled, and reception and transmission are possible</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAGICEN</name>
+                     <description>Magic Packet Detection Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Magic detection logic disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The MAC core detects magic packets and asserts EIR[WAKEUP] when a frame is detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLEEP</name>
+                     <description>Sleep Mode Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operating mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sleep mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EN1588</name>
+                     <description>EN1588 Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Legacy FEC buffer descriptors and functions enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enhanced frame time-stamping functions enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DBGEN</name>
+                     <description>Debug Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MAC continues operation in debug mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MAC enters hardware freeze mode when the processor is in debug mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPEN</name>
+                     <description>STOPEN Signal Control</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DBSWP</name>
+                     <description>Descriptor Byte Swapping Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The buffer descriptor bytes are not swapped to support big-endian devices</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The buffer descriptor bytes are swapped to support little-endian devices</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MMFR</name>
+               <description>MII Management Frame Register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <description>Management Frame Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TA</name>
+                     <description>Turn Around</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RA</name>
+                     <description>Register Address</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>PA</name>
+                     <description>PHY Address</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>OP</name>
+                     <description>Operation Code</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Write frame operation, but not MII compliant</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Write frame operation for a valid MII management frame</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Read frame operation for a valid MII management frame</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Read frame operation, but not MII compliant</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ST</name>
+                     <description>Start Of Frame Delimiter</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MSCR</name>
+               <description>MII Speed Control Register</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>MII_SPEED</name>
+                     <description>MII Speed</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIS_PRE</name>
+                     <description>Disable Preamble</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Preamble enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Preamble (32 ones) is not prepended to the MII management frame</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HOLDTIME</name>
+                     <description>Hold time On MDIO Output</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1 internal module clock cycle</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2 internal module clock cycles</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>3 internal module clock cycles</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>8 internal module clock cycles</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MIBC</name>
+               <description>MIB Control Register</description>
+               <addressOffset>0x64</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>MIB_CLEAR</name>
+                     <description>MIB Clear</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MIB_IDLE</name>
+                     <description>MIB Idle</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>MIB_DIS</name>
+                     <description>Disable MIB Logic</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCR</name>
+               <description>Receive Control Register</description>
+               <addressOffset>0x84</addressOffset>
+               <resetValue>0x5EE0001</resetValue>
+               <fields>
+                  <field>
+                     <name>LOOP</name>
+                     <description>Internal Loopback</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Loopback disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitted frames are looped back internal to the device and transmit MII output signals are not asserted. DRT must be cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DRT</name>
+                     <description>Disable Receive On Transmit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive path operates independently of transmit. Used for full-duplex or to monitor transmit activity in half-duplex mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable reception of frames while transmitting. Normally used for half-duplex mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MII_MODE</name>
+                     <description>Media Independent Interface Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reserved</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MII or RMII mode, as indicated by the RMII_MODE bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PROM</name>
+                     <description>Promiscuous mode. All frames are accepted regardless of address matching</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BC_REJ</name>
+                     <description>Broadcast Frame Reject</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCE</name>
+                     <description>Flow Control Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RMII_MODE</name>
+                     <description>RMII Mode Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MAC configured for MII mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MAC configured for RMII operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RMII_10T</name>
+                     <description>Enables 10-Mbps mode of the RMII</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>100 Mbps operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>10 Mbps operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PADEN</name>
+                     <description>Enable Frame Padding Remove On Receive</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No padding is removed on receive by the MAC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Padding is removed from received frames</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PAUFWD</name>
+                     <description>Terminate/Forward Pause Frames</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pause frames are terminated and discarded in the MAC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pause frames are forwarded to the user application</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRCFWD</name>
+                     <description>Terminate/Forward Received CRC</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The CRC field of received frames is transmitted to the user application</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The CRC field is stripped from the frame</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CFEN</name>
+                     <description>MAC Control Frame Enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MAC control frames with any opcode other than 0x0001 (pause frame) are accepted and forwarded to the client interface</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MAC control frames with any opcode other than 0x0001 (pause frame) are silently discarded</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAX_FL</name>
+                     <description>Maximum Frame Length</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>NLC</name>
+                     <description>Payload Length Check Disable</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The payload length check is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The core checks the frame&apos;s payload length with the frame length/type field. Errors are indicated in the EIR[PLC] field</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GRS</name>
+                     <description>Graceful Receive Stopped</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR</name>
+               <description>Transmit Control Register</description>
+               <addressOffset>0xC4</addressOffset>
+               <fields>
+                  <field>
+                     <name>GTS</name>
+                     <description>Graceful transmit stop</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FDEN</name>
+                     <description>Full-Duplex Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TFC_PAUSE</name>
+                     <description>Transmit Frame Control Pause</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No PAUSE frame transmitted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The MAC stops transmission of data frames after the current transmission is complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RFC_PAUSE</name>
+                     <description>Receive Frame Control Pause</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ADDSEL</name>
+                     <description>Source MAC Address Select On Transmit</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Node MAC address programmed on PADDR1/2</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Reserved</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADDINS</name>
+                     <description>Set MAC Address On Transmit</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The source MAC address is not modified by the MAC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The MAC overwrites the source MAC address with the programmed MAC address according to ADDSEL</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRCFWD</name>
+                     <description>Forward Frame From Application With CRC</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TxBD[TC] controls whether the frame has a CRC from the application</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The transmitter does not append any CRC to transmitted frames as it is expecting a frame with CRC from the application</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PALR</name>
+               <description>Physical Address Lower Register</description>
+               <addressOffset>0xE4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PADDR1</name>
+                     <description>Pause Address</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PAUR</name>
+               <description>Physical Address Upper Register</description>
+               <addressOffset>0xE8</addressOffset>
+               <resetValue>0x8808</resetValue>
+               <fields>
+                  <field>
+                     <name>TYPE</name>
+                     <description>Type Field In PAUSE Frames</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PADDR2</name>
+                     <description>Bytes 4 (bits 31:24) and 5 (bits 23:16) of the 6-byte individual address used for exact match, and the source address field in PAUSE frames</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OPD</name>
+               <description>Opcode/Pause Duration Register</description>
+               <addressOffset>0xEC</addressOffset>
+               <resetValue>0x10000</resetValue>
+               <fields>
+                  <field>
+                     <name>PAUSE_DUR</name>
+                     <description>Pause Duration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>OPCODE</name>
+                     <description>Opcode Field In PAUSE Frames</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IAUR</name>
+               <description>Descriptor Individual Upper Address Register</description>
+               <addressOffset>0x118</addressOffset>
+               <fields>
+                  <field>
+                     <name>IADDR1</name>
+                     <description>The upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address. Bit 31 of IADDR1 contains hash index bit 63. Bit 0 of IADDR1 contains hash index bit 32</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IALR</name>
+               <description>Descriptor Individual Lower Address Register</description>
+               <addressOffset>0x11C</addressOffset>
+               <fields>
+                  <field>
+                     <name>IADDR2</name>
+                     <description>The lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address. Bit 31 of IADDR2 contains hash index bit 31. Bit 0 of IADDR2 contains hash index bit 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GAUR</name>
+               <description>Descriptor Group Upper Address Register</description>
+               <addressOffset>0x120</addressOffset>
+               <fields>
+                  <field>
+                     <name>GADDR1</name>
+                     <description>Contains the upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address. Bit 31 of GADDR1 contains hash index bit 63. Bit 0 of GADDR1 contains hash index bit 32</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GALR</name>
+               <description>Descriptor Group Lower Address Register</description>
+               <addressOffset>0x124</addressOffset>
+               <fields>
+                  <field>
+                     <name>GADDR2</name>
+                     <description>Contains the lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address. Bit 31 of GADDR2 contains hash index bit 31. Bit 0 of GADDR2 contains hash index bit 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TFWR</name>
+               <description>Transmit FIFO Watermark Register</description>
+               <addressOffset>0x144</addressOffset>
+               <fields>
+                  <field>
+                     <name>TFWR</name>
+                     <description>Transmit FIFO Write</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>64 bytes written</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000001</name>
+                           <description>64 bytes written</description>
+                           <value>0b000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000010</name>
+                           <description>128 bytes written</description>
+                           <value>0b000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000011</name>
+                           <description>192 bytes written</description>
+                           <value>0b000011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>4032 bytes written</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STRFWD</name>
+                     <description>Store And Forward Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled, the transmission start threshold is programmed in TFWR</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RDSR</name>
+               <description>Receive Descriptor Ring Start Register</description>
+               <addressOffset>0x180</addressOffset>
+               <fields>
+                  <field>
+                     <name>R_DES_START</name>
+                     <description>Pointer to the start of the receive buffer descriptor queue</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TDSR</name>
+               <description>Transmit Buffer Descriptor Ring Start Register</description>
+               <addressOffset>0x184</addressOffset>
+               <fields>
+                  <field>
+                     <name>X_DES_START</name>
+                     <description>Pointer to the start of the transmit buffer descriptor queue</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MRBR</name>
+               <description>Maximum Receive Buffer Size Register</description>
+               <addressOffset>0x188</addressOffset>
+               <fields>
+                  <field>
+                     <name>R_BUF_SIZE</name>
+                     <description>Receive buffer size in bytes</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSFL</name>
+               <description>Receive FIFO Section Full Threshold</description>
+               <addressOffset>0x190</addressOffset>
+               <fields>
+                  <field>
+                     <name>RX_SECTION_FULL</name>
+                     <description>Value Of Receive FIFO Section Full Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSEM</name>
+               <description>Receive FIFO Section Empty Threshold</description>
+               <addressOffset>0x194</addressOffset>
+               <fields>
+                  <field>
+                     <name>RX_SECTION_EMPTY</name>
+                     <description>Value Of The Receive FIFO Section Empty Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAEM</name>
+               <description>Receive FIFO Almost Empty Threshold</description>
+               <addressOffset>0x198</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>RX_ALMOST_EMPTY</name>
+                     <description>Value Of The Receive FIFO Almost Empty Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAFL</name>
+               <description>Receive FIFO Almost Full Threshold</description>
+               <addressOffset>0x19C</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>RX_ALMOST_FULL</name>
+                     <description>Value Of The Receive FIFO Almost Full Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TSEM</name>
+               <description>Transmit FIFO Section Empty Threshold</description>
+               <addressOffset>0x1A0</addressOffset>
+               <fields>
+                  <field>
+                     <name>TX_SECTION_EMPTY</name>
+                     <description>Value Of The Transmit FIFO Section Empty Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAEM</name>
+               <description>Transmit FIFO Almost Empty Threshold</description>
+               <addressOffset>0x1A4</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>TX_ALMOST_EMPTY</name>
+                     <description>Value of Transmit FIFO Almost Empty Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAFL</name>
+               <description>Transmit FIFO Almost Full Threshold</description>
+               <addressOffset>0x1A8</addressOffset>
+               <resetValue>0x8</resetValue>
+               <fields>
+                  <field>
+                     <name>TX_ALMOST_FULL</name>
+                     <description>Value Of The Transmit FIFO Almost Full Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIPG</name>
+               <description>Transmit Inter-Packet Gap</description>
+               <addressOffset>0x1AC</addressOffset>
+               <resetValue>0xC</resetValue>
+               <fields>
+                  <field>
+                     <name>IPG</name>
+                     <description>Transmit Inter-Packet Gap</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FTRL</name>
+               <description>Frame Truncation Length</description>
+               <addressOffset>0x1B0</addressOffset>
+               <resetValue>0x7FF</resetValue>
+               <fields>
+                  <field>
+                     <name>TRUNC_FL</name>
+                     <description>Frame Truncation Length</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TACC</name>
+               <description>Transmit Accelerator Function Configuration</description>
+               <addressOffset>0x1C0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SHIFT16</name>
+                     <description>TX FIFO Shift-16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Indicates to the transmit data FIFO that the written frames contain two additional octets before the frame data. This means the actual frame begins at bit 16 of the first word written into the FIFO. This function allows putting the frame payload on a 32-bit boundary in memory, as the 14-byte Ethernet header is extended to a 16-byte header</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPCHK</name>
+                     <description>Enables insertion of IP header checksum</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Checksum is not inserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If an IP frame is transmitted, the checksum is inserted automatically. The IP header checksum field must be cleared. If a non-IP frame is transmitted the frame is not modified</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PROCHK</name>
+                     <description>Enables insertion of protocol checksum</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Checksum not inserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If an IP frame with a known protocol is transmitted, the checksum is inserted automatically into the frame. The checksum field must be cleared. The other frames are not modified</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RACC</name>
+               <description>Receive Accelerator Function Configuration</description>
+               <addressOffset>0x1C4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PADREM</name>
+                     <description>Enable Padding Removal For Short IP Frames</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Padding not removed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Any bytes following the IP payload section of the frame are removed from the frame</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPDIS</name>
+                     <description>Enable Discard Of Frames With Wrong IPv4 Header Checksum</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Frames with wrong IPv4 header checksum are not discarded</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If an IPv4 frame is received with a mismatching header checksum, the frame is discarded. IPv6 has no header checksum and is not affected by this setting. Discarding is only available when the RX FIFO operates in store and forward mode (RSFL cleared)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRODIS</name>
+                     <description>Enable Discard Of Frames With Wrong Protocol Checksum</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Frames with wrong checksum are not discarded</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If a TCP/IP, UDP/IP, or ICMP/IP frame is received that has a wrong TCP, UDP, or ICMP checksum, the frame is discarded. Discarding is only available when the RX FIFO operates in store and forward mode (RSFL cleared)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LINEDIS</name>
+                     <description>Enable Discard Of Frames With MAC Layer Errors</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Frames with errors are not discarded</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Any frame received with a CRC, length, or PHY error is automatically discarded and not forwarded to the user application interface</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SHIFT16</name>
+                     <description>RX FIFO Shift-16</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Instructs the MAC to write two additional bytes in front of each frame received into the RX FIFO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RMON_T_DROP</name>
+               <description>Count of frames not counted correctly (RMON_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable</description>
+               <addressOffset>0x200</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_PACKETS</name>
+               <description>RMON Tx packet count (RMON_T_PACKETS)</description>
+               <addressOffset>0x204</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_BC_PKT</name>
+               <description>RMON Tx Broadcast Packets (RMON_T_BC_PKT)</description>
+               <addressOffset>0x208</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_MC_PKT</name>
+               <description>RMON Tx Multicast Packets (RMON_T_MC_PKT)</description>
+               <addressOffset>0x20C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_CRC_ALIGN</name>
+               <description>RMON Tx Packets w CRC/Align error (RMON_T_CRC_ALIGN)</description>
+               <addressOffset>0x210</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_UNDERSIZE</name>
+               <description>RMON Tx Packets &lt; 64 bytes, good CRC (RMON_T_UNDERSIZE)</description>
+               <addressOffset>0x214</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_OVERSIZE</name>
+               <description>RMON Tx Packets &gt; MAX_FL bytes, good CRC (RMON_T_OVERSIZE)</description>
+               <addressOffset>0x218</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_FRAG</name>
+               <description>RMON Tx Packets &lt; 64 bytes, bad CRC (RMON_T_FRAG)</description>
+               <addressOffset>0x21C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_JAB</name>
+               <description>RMON Tx Packets &gt; MAX_FL bytes, bad CRC (RMON_T_JAB)</description>
+               <addressOffset>0x220</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_COL</name>
+               <description>RMON Tx collision count (RMON_T_COL)</description>
+               <addressOffset>0x224</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P64</name>
+               <description>RMON Tx 64 byte packets (RMON_T_P64)</description>
+               <addressOffset>0x228</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P65TO127</name>
+               <description>RMON Tx 65 to 127 byte packets (RMON_T_P65TO127)</description>
+               <addressOffset>0x22C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P128TO255</name>
+               <description>RMON Tx 128 to 255 byte packets (RMON_T_P128TO255)</description>
+               <addressOffset>0x230</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P256TO511</name>
+               <description>RMON Tx 256 to 511 byte packets (RMON_T_P256TO511)</description>
+               <addressOffset>0x234</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P512TO1023</name>
+               <description>RMON Tx 512 to 1023 byte packets (RMON_T_P512TO1023)</description>
+               <addressOffset>0x238</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P1024TO2047</name>
+               <description>RMON Tx 1024 to 2047 byte packets (RMON_T_P1024TO2047)</description>
+               <addressOffset>0x23C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_P_GTE2048</name>
+               <description>RMON Tx packets w &gt; 2048 bytes (RMON_T_P_GTE2048)</description>
+               <addressOffset>0x240</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_T_OCTETS</name>
+               <description>RMON Tx Octets (RMON_T_OCTETS)</description>
+               <addressOffset>0x244</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_DROP</name>
+               <description>Count of frames not counted correctly (IEEE_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable</description>
+               <addressOffset>0x248</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_FRAME_OK</name>
+               <description>Frames Transmitted OK (IEEE_T_FRAME_OK)</description>
+               <addressOffset>0x24C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_1COL</name>
+               <description>Frames Transmitted with Single Collision (IEEE_T_1COL)</description>
+               <addressOffset>0x250</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_MCOL</name>
+               <description>Frames Transmitted with Multiple Collisions (IEEE_T_MCOL)</description>
+               <addressOffset>0x254</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_DEF</name>
+               <description>Frames Transmitted after Deferral Delay (IEEE_T_DEF)</description>
+               <addressOffset>0x258</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_LCOL</name>
+               <description>Frames Transmitted with Late Collision (IEEE_T_LCOL)</description>
+               <addressOffset>0x25C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_EXCOL</name>
+               <description>Frames Transmitted with Excessive Collisions (IEEE_T_EXCOL)</description>
+               <addressOffset>0x260</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_MACERR</name>
+               <description>Frames Transmitted with Tx FIFO Underrun (IEEE_T_MACERR)</description>
+               <addressOffset>0x264</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_CSERR</name>
+               <description>Frames Transmitted with Carrier Sense Error (IEEE_T_CSERR)</description>
+               <addressOffset>0x268</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_SQE</name>
+               <description>Frames Transmitted with SQE Error (IEEE_T_SQE). NOTE: Counter not implemented (read 0 always) as no SQE information is available</description>
+               <addressOffset>0x26C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_FDXFC</name>
+               <description>Flow Control Pause frames transmitted (IEEE_T_FDXFC)</description>
+               <addressOffset>0x270</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_T_OCTETS_OK</name>
+               <description>Octet count for Frames Transmitted w/o Error (IEEE_T_OCTETS_OK). NOTE: Counts total octets (includes header and FCS fields)</description>
+               <addressOffset>0x274</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_PACKETS</name>
+               <description>RMON Rx packet count (RMON_R_PACKETS)</description>
+               <addressOffset>0x284</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_BC_PKT</name>
+               <description>RMON Rx Broadcast Packets (RMON_R_BC_PKT)</description>
+               <addressOffset>0x288</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_MC_PKT</name>
+               <description>RMON Rx Multicast Packets (RMON_R_MC_PKT)</description>
+               <addressOffset>0x28C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_CRC_ALIGN</name>
+               <description>RMON Rx Packets w CRC/Align error (RMON_R_CRC_ALIGN)</description>
+               <addressOffset>0x290</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_UNDERSIZE</name>
+               <description>RMON Rx Packets &lt; 64 bytes, good CRC (RMON_R_UNDERSIZE)</description>
+               <addressOffset>0x294</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_OVERSIZE</name>
+               <description>RMON Rx Packets &gt; MAX_FL bytes, good CRC (RMON_R_OVERSIZE)</description>
+               <addressOffset>0x298</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_FRAG</name>
+               <description>RMON Rx Packets &lt; 64 bytes, bad CRC (RMON_R_FRAG)</description>
+               <addressOffset>0x29C</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_JAB</name>
+               <description>RMON Rx Packets &gt; MAX_FL bytes, bad CRC (RMON_R_JAB)</description>
+               <addressOffset>0x2A0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_RESVD_0</name>
+               <description>Reserved (RMON_R_RESVD_0)</description>
+               <addressOffset>0x2A4</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P64</name>
+               <description>RMON Rx 64 byte packets (RMON_R_P64)</description>
+               <addressOffset>0x2A8</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P65TO127</name>
+               <description>RMON Rx 65 to 127 byte packets (RMON_R_P65TO127)</description>
+               <addressOffset>0x2AC</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P128TO255</name>
+               <description>RMON Rx 128 to 255 byte packets (RMON_R_P128TO255)</description>
+               <addressOffset>0x2B0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P256TO511</name>
+               <description>RMON Rx 256 to 511 byte packets (RMON_R_P256TO511)</description>
+               <addressOffset>0x2B4</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P512TO1023</name>
+               <description>RMON Rx 512 to 1023 byte packets (RMON_R_P512TO1023)</description>
+               <addressOffset>0x2B8</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P1024TO2047</name>
+               <description>RMON Rx 1024 to 2047 byte packets (RMON_R_P1024TO2047)</description>
+               <addressOffset>0x2BC</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_P_GTE2048</name>
+               <description>RMON Rx packets w &gt; 2048 bytes (RMON_R_P_GTE2048)</description>
+               <addressOffset>0x2C0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RMON_R_OCTETS</name>
+               <description>RMON Rx Octets (RMON_R_OCTETS)</description>
+               <addressOffset>0x2C4</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_DROP</name>
+               <description>Count of frames not counted correctly (IEEE_R_DROP). NOTE: Counter increments if a frame with valid/missing SFD character is detected and has been dropped. None of the other counters increments if this counter increments</description>
+               <addressOffset>0x2C8</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_FRAME_OK</name>
+               <description>Frames Received OK (IEEE_R_FRAME_OK)</description>
+               <addressOffset>0x2CC</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_CRC</name>
+               <description>Frames Received with CRC Error (IEEE_R_CRC)</description>
+               <addressOffset>0x2D0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_ALIGN</name>
+               <description>Frames Received with Alignment Error (IEEE_R_ALIGN)</description>
+               <addressOffset>0x2D4</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_MACERR</name>
+               <description>Receive Fifo Overflow count (IEEE_R_MACERR)</description>
+               <addressOffset>0x2D8</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_FDXFC</name>
+               <description>Flow Control Pause frames received (IEEE_R_FDXFC)</description>
+               <addressOffset>0x2DC</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>IEEE_R_OCTETS_OK</name>
+               <description>Octet count for Frames Rcvd w/o Error (IEEE_R_OCTETS_OK). Counts total octets (includes header and FCS fields)</description>
+               <addressOffset>0x2E0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>ATCR</name>
+               <description>Timer Control Register</description>
+               <addressOffset>0x400</addressOffset>
+               <fields>
+                  <field>
+                     <name>EN</name>
+                     <description>Enable Timer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The timer stops at the current value</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The timer starts incrementing</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFFEN</name>
+                     <description>Enable One-Shot Offset Event</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The timer can be reset to zero when the given offset time is reached (offset event). The field is cleared when the offset event is reached, so no further event occurs until the field is set again. The timer offset value must be set before setting this field</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFFRST</name>
+                     <description>Reset Timer On Offset Event</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The timer is not affected and no action occurs, besides clearing OFFEN, when the offset is reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If OFFEN is set, the timer resets to zero when the offset setting is reached. The offset event does not cause a timer interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PEREN</name>
+                     <description>Enable Periodical Event</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A period event interrupt can be generated (EIR[TS_TIMER]) and the event signal output is asserted when the timer wraps around according to the periodic setting ATPER. The timer period value must be set before setting this bit. Not all devices contain the event signal output. See the chip configuration details</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PINPER</name>
+                     <description>Enables event signal output assertion on period event. Not all devices contain the event signal output. See the Chip Configuration details</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RESTART</name>
+                     <description>Reset Timer</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPTURE</name>
+                     <description>Capture Timer Value</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The current time is captured and can be read from the ATVR register</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLAVE</name>
+                     <description>Enable Timer Slave Mode</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The timer is active and all configuration fields in this register are relevant</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The internal timer is disabled and the externally provided timer value is used. All other fields, except CAPTURE, in this register have no effect. CAPTURE can still be used to capture the current timer value</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATVR</name>
+               <description>Timer Value Register</description>
+               <addressOffset>0x404</addressOffset>
+               <fields>
+                  <field>
+                     <name>ATIME</name>
+                     <description>A write sets the timer. A read returns the last captured value. To read the current value, issue a capture command (set ATCR[CAPTURE]) prior to reading this register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATOFF</name>
+               <description>Timer Offset Register</description>
+               <addressOffset>0x408</addressOffset>
+               <fields>
+                  <field>
+                     <name>OFFSET</name>
+                     <description>Offset value for one-shot event generation. When the timer reaches the value an event can be generated to reset the counter. If the increment value in ATINC is given in true nanoseconds, this value is also given in true nanoseconds</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATPER</name>
+               <description>Timer Period Register</description>
+               <addressOffset>0x40C</addressOffset>
+               <resetValue>0x3B9ACA00</resetValue>
+               <fields>
+                  <field>
+                     <name>PERIOD</name>
+                     <description>Value for generating periodic events. Each instance the timer reaches this value, the period event occurs and the timer restarts. If the increment value in ATINC is given in true nanoseconds, this value is also given in true nanoseconds. The value should be initialized to 1,000,000,000 (1 x 10 9 ) to represent a timer wrap around of one second. The increment value set in ATINC should be set to the true nanoseconds of the period of clock ts_clk, hence implementing a true 1 second counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATCOR</name>
+               <description>Timer Correction Register</description>
+               <addressOffset>0x410</addressOffset>
+               <fields>
+                  <field>
+                     <name>COR</name>
+                     <description>Correction Counter Wrap-Around Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>31</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATINC</name>
+               <description>Time-Stamping Clock Period Register</description>
+               <addressOffset>0x414</addressOffset>
+               <fields>
+                  <field>
+                     <name>INC</name>
+                     <description>Clock Period Of The Timestamping Clock (ts_clk) In Nanoseconds</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>INC_CORR</name>
+                     <description>Correction Increment Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ATSTMP</name>
+               <description>Timestamp of Last Transmitted Frame</description>
+               <addressOffset>0x418</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TIMESTAMP</name>
+                     <description>Timestamp of the last frame transmitted by the core that had TxBD[TS] set . This register is only valid when EIR[TS_AVAIL] is set</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TGSR</name>
+               <description>Timer Global Status Register</description>
+               <addressOffset>0x604</addressOffset>
+               <fields>
+                  <field>
+                     <name>TF0</name>
+                     <description>Copy of Timer Flag for channel 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer Flag for Channel 0 is clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer Flag for Channel 0 is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF1</name>
+                     <description>Copy of Timer Flag for channel 1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer Flag for Channel 1 is clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer Flag for Channel 1 is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF2</name>
+                     <description>Copy of Timer Flag for channel 2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer Flag for Channel 2 is clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer Flag for Channel 2 is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF3</name>
+                     <description>Copy of Timer Flag for channel 3</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer Flag for Channel 3 is clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer Flag for Channel 3 is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCSR0</name>
+               <description>Timer Control Status Register</description>
+               <addressOffset>0x608</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Timer DMA Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMODE</name>
+                     <description>Timer Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Timer Channel is disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Timer Channel is configured for Input Capture on rising edge</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Timer Channel is configured for Input Capture on falling edge</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Timer Channel is configured for Input Capture on both edges</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Timer Channel is configured for Output Compare - software only</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10x1</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
+                           <value>0b10x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIE</name>
+                     <description>Timer Interrupt Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF</name>
+                     <description>Timer Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input Capture or Output Compare has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input Capture or Output Compare has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCCR0</name>
+               <description>Timer Compare Capture Register</description>
+               <addressOffset>0x60C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TCC</name>
+                     <description>Timer Capture Compare</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCSR1</name>
+               <description>Timer Control Status Register</description>
+               <addressOffset>0x610</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Timer DMA Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMODE</name>
+                     <description>Timer Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Timer Channel is disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Timer Channel is configured for Input Capture on rising edge</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Timer Channel is configured for Input Capture on falling edge</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Timer Channel is configured for Input Capture on both edges</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Timer Channel is configured for Output Compare - software only</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10x1</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
+                           <value>0b10x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIE</name>
+                     <description>Timer interrupt enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF</name>
+                     <description>Timer Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input Capture or Output Compare has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input Capture or Output Compare has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCCR1</name>
+               <description>Timer Compare Capture Register</description>
+               <addressOffset>0x614</addressOffset>
+               <fields>
+                  <field>
+                     <name>TCC</name>
+                     <description>Timer Capture Compare</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCSR2</name>
+               <description>Timer Control Status Register</description>
+               <addressOffset>0x618</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Timer DMA Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMODE</name>
+                     <description>Timer Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Timer Channel is disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Timer Channel is configured for Input Capture on rising edge</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Timer Channel is configured for Input Capture on falling edge</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Timer Channel is configured for Input Capture on both edges</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Timer Channel is configured for Output Compare - software only</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10x1</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
+                           <value>0b10x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIE</name>
+                     <description>Timer interrupt enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF</name>
+                     <description>Timer Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input Capture or Output Compare has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input Capture or Output Compare has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCCR2</name>
+               <description>Timer Compare Capture Register</description>
+               <addressOffset>0x61C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TCC</name>
+                     <description>Timer Capture Compare</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCSR3</name>
+               <description>Timer Control Status Register</description>
+               <addressOffset>0x620</addressOffset>
+               <fields>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Timer DMA Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMODE</name>
+                     <description>Timer Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Timer Channel is disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Timer Channel is configured for Input Capture on rising edge</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Timer Channel is configured for Input Capture on falling edge</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Timer Channel is configured for Input Capture on both edges</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Timer Channel is configured for Output Compare - software only</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10x1</name>
+                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
+                           <value>0b10x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIE</name>
+                     <description>Timer interrupt enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TF</name>
+                     <description>Timer Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input Capture or Output Compare has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input Capture or Output Compare has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCCR3</name>
+               <description>Timer Compare Capture Register</description>
+               <addressOffset>0x624</addressOffset>
+               <fields>
+                  <field>
+                     <name>TCC</name>
+                     <description>Timer Capture Compare</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -1,0 +1,222 @@
+<!-- Root element -->
+<!ELEMENT root (description,sharedInformation?,deviceList)>
+     <!ATTLIST root version CDATA #REQUIRED>
+  <!-- General Description element. -->
+<!ELEMENT description (#PCDATA)>
+  <!-- List of devices -->
+<!ELEMENT deviceList (device*)>
+  <!-- Device characteristics -->
+<!ELEMENT device ((sdid*|
+                   (clock?,
+                    (memory|memoryRef)+,
+                    (soptAddress|copctlAddress)?,
+                    sdidAddress?,
+                    sdidMask?,
+                    sdid+,
+                    flashScripts?,
+                    (tclScript|tclScriptRef)?,
+                    (flashProgram|flashProgramRef)?,
+                    flashProgramData?,
+                    (flexNVMInfo|flexNVMInfoRef)?,
+                    (projectActionList|projectActionListRef)*,
+                    (registerDescription|registerDescriptionRef)?
+                    )
+                   ),
+                  note*)>
+     <!ATTLIST device name ID #REQUIRED>
+     <!ATTLIST device alias IDREF #IMPLIED>
+     <!ATTLIST device family (RS08|HCS08|HCS08Plus|HCS12|S12Z|CFV1|CFV1Plus|CFV2|CFV3|CFV4|ARM|DSC|CortexM0|CortexM0plus|CortexM3|CortexM3F|CortexM4|CortexM4F) #IMPLIED>
+     <!ATTLIST device isDefault (true) #IMPLIED>
+     <!ATTLIST device speed CDATA #IMPLIED>
+     <!ATTLIST device subfamily CDATA #IMPLIED>
+     <!ATTLIST device hidden (true) #IMPLIED>
+     <!ATTLIST device hardware CDATA #IMPLIED>
+
+  <!-- List of actions to be applied to a project -->
+<!ELEMENT projectActionList (projectActionListRef|projectActionList|variable|condition|excludeSourceFile|excludeSourceFolder|createFolder|copy|projectOption|customAction)*>
+     <!ATTLIST projectActionList id    ID     #IMPLIED>
+     <!ATTLIST projectActionList root  CDATA  #IMPLIED>
+     
+<!ELEMENT projectActionListRef EMPTY>
+     <!ATTLIST projectActionListRef ref IDREF #REQUIRED>
+     
+<!-- File to be copied to a project -->
+<!ELEMENT copy EMPTY >
+   <!ATTLIST copy source  				CDATA #REQUIRED>
+   <!ATTLIST copy target  				CDATA #REQUIRED>
+   <!ATTLIST copy type    				CDATA #IMPLIED>
+   <!ATTLIST copy macroReplacement  (true|false) #IMPLIED>
+   <!ATTLIST copy replace           (true|false) #IMPLIED>
+   
+ <!-- Variable controlling a condition -->
+<!ELEMENT variable EMPTY >
+     <!ATTLIST variable id           ID    #REQUIRED>
+     <!ATTLIST variable name         CDATA #REQUIRED>
+     <!ATTLIST variable description  CDATA #IMPLIED>
+     <!ATTLIST variable defaultValue CDATA #IMPLIED>
+     <!ATTLIST variable type         CDATA #IMPLIED>
+     <!ATTLIST variable values       CDATA #IMPLIED>
+     <!ATTLIST variable group        CDATA #IMPLIED>
+     
+ <!-- Custom build action -->
+<!ELEMENT customAction (value)* >
+     <!ATTLIST customAction class         CDATA #REQUIRED>
+     
+ <!-- Condition controlling actions -->
+<!ELEMENT condition (excludeSourceFile|excludeSourceFolder|createFolder|copy|projectOption|customAction)*>
+     <!ATTLIST condition variable    IDREF #REQUIRED>
+     <!ATTLIST condition negated    (true) #IMPLIED>
+     
+<!ELEMENT createFolder EMPTY >
+     <!ATTLIST createFolder target  CDATA #REQUIRED>
+     <!ATTLIST createFolder type    CDATA #REQUIRED>
+     
+  <!-- Register description for GDB -->
+<!ELEMENT registerDescription (#PCDATA)>
+     <!ATTLIST registerDescription id    ID    #IMPLIED>
+     <!ATTLIST registerDescription count CDATA #REQUIRED>
+<!ELEMENT registerDescriptionRef EMPTY>
+     <!ATTLIST registerDescriptionRef ref IDREF #REQUIRED>
+
+  <!-- Eclipse project options (for gcc, gdb etc) -->
+<!ELEMENT projectOption (value*)>
+     <!ATTLIST projectOption id        CDATA #REQUIRED>
+     <!ATTLIST projectOption replace   (true|false) #IMPLIED>
+
+  <!-- Exclude/include source folder in Eclipse project -->
+<!ELEMENT excludeSourceFolder EMPTY >
+     <!ATTLIST excludeSourceFolder target  CDATA #REQUIRED>
+     <!ATTLIST excludeSourceFolder excluded (true|false) #IMPLIED>
+
+  <!-- Exclude/include source file in Eclipse project -->
+<!ELEMENT excludeSourceFile EMPTY >
+     <!ATTLIST excludeSourceFile target  CDATA #REQUIRED>
+     <!ATTLIST excludeSourceFile excluded (true|false) #IMPLIED>
+
+  <!-- Attribute value for projectOption --> 
+<!ELEMENT value (#PCDATA)>  
+
+  <!-- Type of clock & characteristics -->
+<!ELEMENT clock EMPTY>
+     <!ATTLIST clock type (External|S08ICGV1|S08ICGV2|S08ICGV3|S08ICGV4|S08ICSV1|S08ICSV2|S08ICSV2x512|S08ICSV3|S08ICSV4|RS08ICSOSCV1|RS08ICSV1|S08MCGV1|S08MCGV2|S08MCGV3|MCG_MK) "External">
+     <!ATTLIST clock registerAddress CDATA "0">
+  <!-- List of memory regions in device -->
+<!ELEMENT memory (flashProgramRef?,
+     (securityEntry|securityEntryRef)?,
+     (flexNVMInfo|flexNVMInfoRef)?,
+     description?,
+     (memoryRange+))>
+     <!ATTLIST memory id               ID #IMPLIED>
+     <!ATTLIST memory type             (ram|flash|pFlash|dFlash|eeprom|flexNVM|flexRAM|io|pRAM|pROM|xRAM|xROM|bitband) #REQUIRED>
+     <!ATTLIST memory subType          CDATA "1">
+     <!ATTLIST memory pageAddress      CDATA "0">
+     <!ATTLIST memory registerAddress  CDATA "0">
+     <!ATTLIST memory securityAddress  CDATA "0">
+     <!ATTLIST memory alignment        CDATA #IMPLIED >
+     <!ATTLIST memory sectorSize       CDATA #IMPLIED >
+	  <!ATTLIST memory addressMode      (linear|paged) #IMPLIED>
+  <!-- SOPT(1) register address -->
+<!ELEMENT memoryRef EMPTY>
+     <!ATTLIST memoryRef ref IDREF #REQUIRED>
+<!ELEMENT securityEntry (securityDescription,securityInfo,securityInfo)>
+     <!ATTLIST securityEntry flavour    CDATA "common">
+     <!ATTLIST securityEntry id         ID #IMPLIED>
+<!ELEMENT securityEntryRef EMPTY>
+     <!ATTLIST securityEntryRef ref IDREF #REQUIRED>
+<!ELEMENT securityInfo (#PCDATA)>
+     <!ATTLIST securityInfo id         ID #IMPLIED>
+     <!ATTLIST securityInfo size    CDATA #REQUIRED>
+     <!ATTLIST securityInfo type (secure|unsecure|custom) #REQUIRED>
+<!ELEMENT securityDescription (#PCDATA)>
+     <!ATTLIST securityDescription id   ID #IMPLIED>
+<!ELEMENT securityDescriptionRef EMPTY>
+     <!ATTLIST securityDescriptionRef ref IDREF #REQUIRED>
+<!ELEMENT securityInfoRef EMPTY>
+     <!ATTLIST securityInfoRef ref IDREF #REQUIRED>
+<!ELEMENT soptAddress EMPTY>
+     <!ATTLIST soptAddress value CDATA #REQUIRED>
+  <!-- SDID address -->
+<!ELEMENT sdidAddress EMPTY>
+     <!ATTLIST sdidAddress value CDATA #REQUIRED>
+  <!--SDID mask for device significant bits -->
+<!ELEMENT sdidMask EMPTY>
+     <!ATTLIST sdidMask value CDATA #REQUIRED>
+  <!-- Device SDID used to identify device -->
+<!ELEMENT sdid EMPTY>
+     <!ATTLIST sdid value CDATA #REQUIRED>
+     <!ATTLIST sdid mask  CDATA #IMPLIED>
+  <!--NVOPT memory address-->
+<!ELEMENT nvoptAddress EMPTY>
+     <!ATTLIST nvoptAddress value CDATA #REQUIRED>
+  <!-- NVSEC memory address -->
+<!ELEMENT nvsecAddress EMPTY>
+     <!ATTLIST nvsecAddress value CDATA #REQUIRED>
+  <!--COPTCTL register address-->
+<!ELEMENT copctlAddress EMPTY>
+     <!ATTLIST copctlAddress value CDATA #REQUIRED>
+  <!--FSEC address-->
+<!--!ELEMENT fsecAddress EMPTY-->
+     <!--!ATTLIST fsecAddress value CDATA #REQUIRED-->
+  <!-- FOPT address -->
+<!--!ELEMENT foptAddress EMPTY-->
+     <!--!ATTLIST foptAddress value CDATA #REQUIRED-->
+  <!--Flash utility functions-->
+<!ELEMENT flashScripts (tclScriptRef|tclScript)*>
+
+<!--Specifies a memory range-->
+<!ELEMENT memoryRange (#PCDATA)>
+     <!ATTLIST memoryRange name      CDATA #IMPLIED>
+     <!-- Various combinations may be used. Addresses are inclusive
+     start  + end
+     start  + size
+     middle + size
+     end    + size
+     -->
+     <!ATTLIST memoryRange start     CDATA #IMPLIED>
+     <!ATTLIST memoryRange middle    CDATA #IMPLIED>
+     <!ATTLIST memoryRange end       CDATA #IMPLIED>
+     <!ATTLIST memoryRange size      CDATA #IMPLIED>
+     <!-- Various combinations may be used. pageStart,pageEnd are inclusive
+     pageStart  + pageEnd
+     pageStart  + pages
+     pageEnd    + pages
+     pageReset specifies the reset page number
+     pageNo    specifies the page number for a single page
+     -->
+     <!ATTLIST memoryRange pageNo    CDATA #IMPLIED>
+     <!ATTLIST memoryRange pageStart CDATA #IMPLIED>
+     <!ATTLIST memoryRange pageEnd   CDATA #IMPLIED>
+     <!ATTLIST memoryRange pages     CDATA #IMPLIED>
+     <!ATTLIST memoryRange pageReset CDATA #IMPLIED>
+  <!-- Note on device entry -->
+<!ELEMENT note (#PCDATA)>
+  <!-- Information shared between devices -->
+<!ELEMENT sharedInformation 
+	(memory|tclScript|flashProgram|securityEntry|securityDescription|securityInfo|flexNVMInfo|projectActionList|registerDescription)*>
+  <!--TCL Script-->
+<!ELEMENT tclScript (#PCDATA)>
+     <!ATTLIST tclScript id ID #IMPLIED>
+  <!--Reference to TCL Script-->
+<!ELEMENT tclScriptRef EMPTY>
+     <!ATTLIST tclScriptRef ref IDREF #REQUIRED>
+  <!--Flash program-->
+<!ELEMENT flashProgram (#PCDATA)>
+     <!ATTLIST flashProgram id ID #REQUIRED>
+  <!--Reference to Flash program-->
+<!ELEMENT flashProgramRef EMPTY>
+     <!ATTLIST flashProgramRef ref IDREF #REQUIRED>
+<!ELEMENT flashProgramData (#PCDATA)>
+  <!--Partitioning of FlexNVM-->
+<!ELEMENT flexNVMInfo (eeepromEntry+, partitionEntry+)>
+     <!ATTLIST flexNVMInfo id ID #IMPLIED>
+     <!ATTLIST flexNVMInfo backingRatio CDATA "16">
+<!ELEMENT eeepromEntry EMPTY>
+     <!ATTLIST eeepromEntry description CDATA "">
+     <!ATTLIST eeepromEntry eeeSize     CDATA "0x00">
+     <!ATTLIST eeepromEntry value       CDATA "0x00">
+<!ELEMENT partitionEntry EMPTY>
+     <!ATTLIST partitionEntry description   CDATA "">
+     <!ATTLIST partitionEntry eeSize        CDATA "0x00">
+     <!ATTLIST partitionEntry value         CDATA "0x00">
+<!ELEMENT flexNVMInfoRef EMPTY>
+     <!ATTLIST flexNVMInfoRef ref IDREF #REQUIRED>

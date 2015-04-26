@@ -1,0 +1,179 @@
+<!--
+Devices using this peripheral: 
+      MKE04Z4
+      MKE06Z4
+-->
+      <peripheral>
+         <?sourceFile "KBI0_MKE_2" ?>
+         <name>KBI0</name>
+         <description>Keyboard interrupts</description>
+         <prependToName>KBI0</prependToName>
+         <baseAddress>0x40079000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PE</name>
+               <description>KBI Pin Enables\n
+Each of the KBIPEn bits enable the corresponding KBI interrupt pin</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>KBIPE</name>
+                     <description>KBI Pin Enables</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Detection disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Detection enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ES</name>
+               <description>KBI Edge Selects\n
+Each of the KBEDGn bits selects the falling edge/low-level or rising edge/high-level function of the corresponding pin</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KBEDG</name>
+                     <description>KBI Edge Selects</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Falling edge/low level</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rising edge/high level</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SC</name>
+               <description>KBI Status and Control Register\n
+KBI_SC contains the status flag and control bits, which are used to configure the KBI</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>KBMOD</name>
+                     <description>KBI Detection Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Keyboard detects edges only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Keyboard detects both edges and levels</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBIE</name>
+                     <description>KBI Interrupt Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>KBI interrupt not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>KBI interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBACK</name>
+                     <description>KBI Acknowledge - Writing a 1 to KBACK is part of the flag clearing mechanism</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>KBF</name>
+                     <description>KBI Interrupt Flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>KBI interrupt request not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>KBI interrupt request detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KBSPEN</name>
+                     <description>Real KBI_SP register enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The real time value of Keyboard source pin to be read</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The latched value in KBxSP register while interrupt flag occur to be read</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSTKBSP</name>
+                     <description>Reset KBI_SP register\n
+Writing a 1 to RSTKBSP is to clear the KBIxSP Register. This bit always reads as 0</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SP</name>
+               <description>KBI Source Pin\n
+This field is read only, it indicates the active pin defined as keyboard interrupt which is pushed, the
+individual bit is set to 1 when corresponding keyboard pin is effective pushed, only system reset or writting
+1 to RSTKBSP bit can clear this register</description>
+               <addressOffset>0xC</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
+         </registers>
+      </peripheral>

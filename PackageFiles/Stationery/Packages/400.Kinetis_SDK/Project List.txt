@@ -1,0 +1,281 @@
+2. ADC Hardware Trigger Demo - adc_lptmr_trigger 
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z32</hardwareMatches>
+    <hardwareMatches>^twrkv31f</hardwareMatches>
+
+2. ADC Hardware Trigger Demo - adc_pdb_trigger
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z32</hardwareMatches>
+    <hardwareMatches>^twrkv31f</hardwareMatches>
+
+2. ADC Hardware Trigger Demo - adc_pit_trigger
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f</hardwareMatches>
+
+2. ADC Hardware Trigger Demo - adc_tpm_trigger
+------------------------------------
+	<hardwareMatches>^frdmkl03z48m</hardwareMatches>
+
+3. ADC Low Power
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+
+5. DAC ADC Demo
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+6. Flash Demo
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+(7.)FlexCAN and UART Communication Demo
+------------------------------------
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+
+(8.)FTM PDB ADC Demo
+------------------------------------
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+
+9. FlexTimer PWM Demo
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+	
+10. Hello World Demo
+---------------------------------------
+
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+11. Hardware Timer Demo
+----------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+
+12. I2C Communication Demo
+------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+13. I2C Demo with RTOS
+------------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+14. LPTMR demo
+------------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+15. HTTP Server Demo on lwIP TCP/IP Stack
+------------------------------------------
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+16. Ping Demo on lwIP TCP/IP Stack
+------------------------------------------
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+17. TCP Echo Demo on lwIP TCP/IP Stack
+------------------------------------------
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+18. UDP Echo Demo on lwIP TCP/IP Stack
+------------------------------------------
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+20. Power Manager Demo
+------------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03z</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+21. RTC Function Demo
+------------------------------------------
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmkl03</hardwareMatches>
+    <hardwareMatches>^frdmkl46z</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+22. SAI Demo
+------------------------------------------
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+23. SD Card Demo
+------------------------------------------
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+
+(24.) Thermistor Lab Demo
+------------------------------------------
+	<hardwareMatches>^twrkv10z75m</hardwareMatches>
+
+25. Watchdog Timer Reset Demo
+------------------------------------------
+	<hardwareMatches>^frdmk22fk02</hardwareMatches>
+	<hardwareMatches>^frdmk22fk0264</hardwareMatches>
+	<hardwareMatches>^frdmk64fv
+	<hardwareMatches>^twrk22f120m</hardwareMatches>
+	<hardwareMatches>^twrk22f120mk02</hardwareMatches>
+	<hardwareMatches>^twrk24f120m</hardwareMatches>
+	<hardwareMatches>^twrk60d100m</hardwareMatches>
+	<hardwareMatches>^twrk64f120m</hardwareMatches>
+	<hardwareMatches>^twrkv10z75m</hardwareMatches>
+	<hardwareMatches>^twrkv31f120m</hardwareMatches>
+	<hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+
+	

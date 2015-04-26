@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=CFVx_FlashProgrammer
+Comment=Flash programmer for CFVx devices
+Keywords=CFVx;Programmer;
+Exec=/usr/bin/CFVx_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Coldfire V2, V3 & V4 Programmer
+GenericName[en_AU]=Coldfire V2, V3 & V4 Programmer
+Comment[en_AU]=USBDM Flash programmer for CFVx

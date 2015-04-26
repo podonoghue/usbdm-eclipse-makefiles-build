@@ -1,0 +1,168 @@
+#!/bin/bash
+
+echo "Starting"
+
+#====================================================
+# Added properties directory
+# Updated for Eclipse plugin
+# Moved shared files to /usr/local/share/usbdm
+# Removed Eclipse installation
+#====================================================
+
+#================================
+# USBDM Version
+#
+MAJOR=4
+MINOR=10
+
+LIB_SUFFIX=.so.${MAJOR}.${MINOR}
+
+#CP_OPTIONS="-v"
+CP_OPTIONS=
+
+#================================================================
+
+USBDM_CONFIG_DIRECTORY=/usr/local/share/usbdm
+USBDM_PROP_DIRECTORY=$HOME/.usbdm
+
+PROMPT_L1="This script will install the USBDM V${MAJOR}.${MINOR} files."
+PROMPT_L2="Please check the contents of this file before execution.  "
+PROMPT_L3="This script needs to be run as root."
+PROMPT_L4="use \'sudo ./Install_USBDM\'"
+PROMPT_L7="Continue (Y/N)?"
+
+PROMPT="${PROMPT_L1}\n\n ${PROMPT_L2}\n\n ${PROMPT_L3}\n ${PROMPT_L4}\n\n ${PROMPT_L5}\n ${PROMPT_L6}\n\n ${PROMPT_L7}\n"  
+
+if [[ -e /usr/bin/zenity ]]; then
+   zenity --title "Confirm System Changes" --question --text "${PROMPT}"
+   
+   if [ $? != 0 ]; then
+      exit 1
+   fi
+else
+   echo
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L1}"
+   echo
+   echo "${PROMPT_L2}"
+   echo
+   echo "${PROMPT_L3}"
+   echo "${PROMPT_L4}"
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L7}"
+
+   read guess
+   if [ "$guess" != "Y" ]; then
+     echo "Ok I won't do anything - bye"
+     exit
+   fi
+fi
+
+if [ -z "$SUDO_UID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+if [ -z "$SUDO_GID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+#echo SUDO_UID="$SUDO_UID" SUDO_GID="$SUDO_GID"
+
+echo
+echo "Copying rules file to /etc/udev/rules.d"
+echo "(Allows USBDM device to be accessed)"
+echo ==================================================================
+rm -f /etc/udev/rules.d/*usbdm.rules
+echo "cp $CP_OPTIONS bin/usbdm.rules /etc/udev/rules.d/46-usbdm.rules"
+cp $CP_OPTIONS bin/usbdm.rules /etc/udev/rules.d/46-usbdm.rules
+echo "chmod a+r      /etc/udev/rules.d/46-usbdm.rules"
+chmod a+r      /etc/udev/rules.d/46-usbdm.rules
+
+echo
+echo "Installing USBDM shared libraries to /usr/local/lib"
+echo ==================================================================
+# Earlier install?
+rm -f /usr/local/lib/libusbdm*
+
+# Where to copy shared libs
+DEST_LIBDIR=/usr/lib
+
+rm -f ${DEST_LIBDIR}/libusbdm*
+
+# Shared libs to copy
+SHARED_LIBS="libusbdm-wxPlugin libusbdm libusbdm-debug libusbdm-dsc libusbdm-dsc-debug libusbdm-tcl libusbdm-tcl-debug"
+
+# Copy & create symbolic links
+for FILE in ${SHARED_LIBS}; do
+   echo cp $CP_OPTIONS bin/${FILE}.so.${MAJOR}.${MINOR}    ${DEST_LIBDIR}
+        cp $CP_OPTIONS bin/${FILE}.so.${MAJOR}.${MINOR}    ${DEST_LIBDIR}
+   if [[ ! -e ${DEST_LIBDIR}/${FILE}.so.${MAJOR} ]]; then
+      ln -s ${FILE}.so.${MAJOR}.${MINOR}    ${DEST_LIBDIR}/${FILE}.so.${MAJOR}
+   fi
+   if [[ ! -e ${DEST_LIBDIR}/${FILE}.so ]]; then
+      ln -s ${FILE}.so.${MAJOR}.${MINOR}    ${DEST_LIBDIR}/${FILE}.so
+   fi
+   chmod a+rx ${DEST_LIBDIR}/${FILE}.so.${MAJOR}.${MINOR}
+done
+
+echo ==================================================================
+echo "ldconfig -X -v | grep usbdm"
+ldconfig -X -v | grep usbdm
+echo ==================================================================
+
+echo
+echo "Installing USBDM Config files to ${USBDM_CONFIG_DIRECTORY}"
+echo ==================================================================
+
+if [[ -e "${USBDM_CONFIG_DIRECTORY}" ]]; then
+   echo Cleaning USBDM Config Directory - ${USBDM_CONFIG_DIRECTORY}
+   rm -r -f "${USBDM_CONFIG_DIRECTORY}"/*
+fi
+if [[ ! -e "${USBDM_CONFIG_DIRECTORY}" ]]; then
+   echo Creating USBDM Config Directory - ${USBDM_CONFIG_DIRECTORY}
+   mkdir "${USBDM_CONFIG_DIRECTORY}"     
+fi
+
+echo "Copying Device Flash Images"
+echo "cp    -r  bin/DeviceData              "${USBDM_CONFIG_DIRECTORY}""
+cp    -r  bin/DeviceData              "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+echo "Copying Project Examples"
+echo "cp    -r  bin/Examples                "${USBDM_CONFIG_DIRECTORY}""
+cp    -r  bin/Examples                "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+echo "Copying Project Stationery"
+echo "cp    -r  bin/Stationery              "${USBDM_CONFIG_DIRECTORY}""
+cp    -r  bin/Stationery              "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+echo "Copying Device Flash Images"
+echo "cp    -r  bin/FlashImages             "${USBDM_CONFIG_DIRECTORY}""
+cp    -r  bin/FlashImages             "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+echo "Copying Executables"
+echo "cp    -r  bin/*             "${USBDM_CONFIG_DIRECTORY}""
+cp    bin/*             "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+echo "Setting ownership and permissions"
+echo "chown -R "$SUDO_UID":"$SUDO_GID"                    "${USBDM_CONFIG_DIRECTORY}""
+chown -R "$SUDO_UID":"$SUDO_GID"      "${USBDM_CONFIG_DIRECTORY}"
+echo "chmod -R a+r                          "${USBDM_CONFIG_DIRECTORY}""
+chmod -R a+r                          "${USBDM_CONFIG_DIRECTORY}"
+echo
+
+
+echo ==================================================================
+echo
+echo "Done"
+echo

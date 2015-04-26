@@ -1,0 +1,190 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF52233_RCM" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>RCM</name>
+         <description>Reset Controller Module</description>
+         <prependToName>RCM</prependToName>
+         <baseAddress>0x40110000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>RCR</name>
+               <description>Reset Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LVDE</name>
+                     <description>LVD enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LVDRE</name>
+                     <description>LVD reset enable\n
+Controls the LVD reset if LVDE is set.\n
+This bit has no effect if the LVDE bit is a logic 0.\n
+LVD reset has priority over LVD interrupt, if both are enabled</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reset disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LVDIE</name>
+                     <description>LVD interrupt enable\n
+Controls the LVD interrupt if LVDE is set. \n
+This bit has no effect if the LVDE bit is a logic 0</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LVDF</name>
+                     <description>LVD flag\n
+Indicates the low-voltage detect status if LVDE is set.\n
+Write a 1 to clear the LVDF bit</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRCRSTOUT</name>
+                     <description>Assert RSTO\n
+Allows software to assert or negate the external RSTO pin</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Negate RTSO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Assert RSTO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SOFTRST</name>
+                     <description>Software Reset\n
+Allows software to request a reset.\n
+The reset caused by setting this bit clears this bit</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSR</name>
+               <description>Reset Status Register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LOL</name>
+                     <description>Loss-of-lock reset flag\n
+Indicates that the last reset state was caused by a PLL loss of lock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Caused last reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="LOL" > <name>LOC</name> <description>Loss-of-clock reset flag\n
+Indicates that the last reset state was caused by a PLL loss of clock</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="LOL" > <name>EXT</name> <description>External reset flag.\n
+Indicates that the last reset was caused by an external device asserting the external RSTI pin</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="LOL" > <name>POR</name> <description>Power-on reset flag\n
+Indicates that the last reset was caused by a power-on reset</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="LOL" > <name>SOFT</name> <description>Software reset flag\n
+Indicates that the last reset was caused by software</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="LOL" > <name>LVD</name> <description>Low voltage detect\n
+Indicates that the last reset state was caused by an LVD reset</description> <bitOffset>6</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

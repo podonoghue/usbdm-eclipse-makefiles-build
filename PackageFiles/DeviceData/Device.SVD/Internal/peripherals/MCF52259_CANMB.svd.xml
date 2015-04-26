@@ -1,0 +1,175 @@
+<!--
+Devices using this peripheral: 
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_CANMB" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>CANMB</name>
+         <description>FlexCAN Module</description>
+         <prependToName>CANMB</prependToName>
+         <baseAddress>0x40170080</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>16</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>MB,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>CODE</name>
+                  <description>Message buffer code</description>
+                  <addressOffset>0x0</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>CODE</name>
+                        <description>Message buffer code\n Can be accessed (read or write) by the CPU and by the FlexCAN module itself, as part of
+the message buffer matching and arbitration process</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CTRL</name>
+                  <description>Control values</description>
+                  <addressOffset>0x1</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>LENGTH</name>
+                        <description>Length of data in bytes\n
+Indicates the length (in bytes) of the Rx or Tx data; data is located in offset 0x8 through 0xF of the MB space.\n 
+In reception, this field is written by the FlexCAN module, copied from the DLC (data length code) field of the 
+received frame. DLC is defined by the CAN Specification and refers to the data length of the actual frame before it 
+is copied into the message buffer.\n 
+In transmission, this field is written by the CPU and is used as the DLC field value of the frame to be transmitted</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote transmission request\n
+Used for requesting transmissions of a data frame.\n
+If FlexCAN transmits this bit as 1 (recessive) and receives it as 0 (dominant), it is interpreted as arbitration loss.\n 
+If this bit is transmitted as 0 (dominant), then if it is received as 1 (recessive), the FlexCAN module treats it as bit error. \n
+If the value received matches the value transmitted, it is considered as a successful bit transmission</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote frame</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID extended bit\nIdentifies whether the frame format is standard or extended</description>
+                        <bitOffset>5</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard format</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended format</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute remote request\n
+Fixed recessive bit, used only in extended format. It must be set by the user for
+transmission (Tx Buffers) and is stored with the value received on the CAN bus for Rx receiving buffers. It can be
+received as recessive or dominant. If FlexCAN receives this bit as dominant, then it is interpreted as arbitration loss</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value for transmission in Extended Format frames</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory for transmission in Extended Format frames</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>TIME</name>
+                  <description>Free-running counter time stamp</description>
+                  <addressOffset>0x2</addressOffset>
+                  <size>16</size>
+                  <resetMask>0xFFFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>TIME_STAMP</name>
+                        <description>Free-running counter time stamp\nStores the value of the free-running timer which is captured when the beginning
+of the identifier (ID) field appears on the CAN bus</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>ID</name>
+                  <description>Standard and Extended IDs</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EXT</name>
+                        <description>Extended frame identifier\nIn extended frame format, all bits (the 11 bits of the standard frame identifier and the 18
+bits of the extended frame identifier) are used for frame identification in receive and transmit cases</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>18</bitWidth>
+                     </field>
+                     <field>
+                        <name>STD</name>
+                        <description>Standard frame identifier\nIn standard frame format, only the 11 most significant bits (28 to 18) are used for frame
+identification in receive and transmit cases. The 18 least significant bits are ignored</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>8</dim>
+                  <dimIncrement>1</dimIncrement>
+                  <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+                  <name>DATA%s</name>
+                  <description>Transmit/Receive data buffer</description>
+                  <addressOffset>0x8</addressOffset>
+                  <size>8</size>
+                  <access>read-write</access>
+                  <resetMask>0xFF</resetMask>
+               </register>
+            </cluster>
+         </registers>
+      </peripheral>

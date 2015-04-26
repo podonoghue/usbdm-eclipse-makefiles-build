@@ -1,0 +1,83 @@
+/*!
+ \page Building the various projects
+
+ \section introSection Introduction
+   The source directory contains various archives of parts of the project:
+   
+ \section C Source folder
+   This contains the sources for the software (above DLLs and JM60 code).
+   
+ \subsection EclipseFiles Eclipse Archive Files
+   - <b>The following files are archives exported from Eclipse CDT for windows.  To rebuild these projects you will need the following:
+         - <b>Eclipse CDT</b>  This is C development environment for the Eclipse IDE. CDT may be obtained from http://www.eclipse.org/cdt/
+         - <b>MinGW</b>Minimalist GNU for Windows.  This provides the C development tools (e.g. Compiler, linkers etc.) required for the
+              windows platform.  These are used with the Eclipse IDE on a windows platform. These tools may be obtained from http://www.mingw.org/
+         - <b>Doxygen</b> This is a tool for producing documention directly from suitably annotated code.  The source code files have
+              been extensively commented in this fashion. This tool may be obtained from http://www.stack.nl/~dimitri/doxygen/.
+         - <b>eclox</b> This is a plugin for Eclipse that allows the convenient use of Doxygen from within Eclipse.  This plugin may
+              be obtained from http://eclox.eu/
+         </b>    
+   -  <b>USBDM_DLL_xxxxxx.zip</b> \n
+      Source for the tbdml.dll, opensourcebdm.dll and tblcf.dll files. 
+      To rebuild these DLLs you will also need the USB interface DLL (LIBUSB). Documentation is included in the
+      Documentation sub-folder.  You will need Doxygen to build the documentation from the source.
+      
+   -  <b>USBDM_JMxx_Snapshot_xxxxxx.zip</b> \n
+      Source for the JM60 code.  This is a simple Zip file of the Codewarrior project.  Documentation is included in
+      the Documentation sub-folder.
+      
+   -  <b>HexToC_Snapshot_xxxxxx.zip</b> \n
+      Source for the conversion program used to convert S1S9 records into a C array for incorporation in the driver DLLs.
+      This is used to embed the BDM Firware images in the interface DLLs.  This allows
+      automatic update of the JMxx version BDM firmware.
+      
+   -  <b>BDM Timing.xls</b> \n
+      This spreadsheet was used to calculate the timing for the bdm_rx() and bdm_tx() routines. 
+      
+   -  <b>RS08_FlashProgramming.rar</b> \n
+      This is the source code for the RS08 programming routines that are downloaded to the various RS08 variants
+      by the BDM when programming the flash memory.
+      
+   -  <b>SetBoot_xxxxx.zip</b> \n
+      This is the source code for the Setboot utility described above.
+      
+   -  <b>libusb-win32-device-bin-0.1.12.1.tar.gz</b> \n
+      The USB interface library used.  See http://libusb-win32.sourceforge.net/
+*/
+
+
+/*!    
+ \page installationPage Installation & Initial Programming of BDM Firmware
+
+ \section sectionInitialProgramming Initial construction and programming.
+   -  Build the hardware using the information provided in the <b>PCB</b> folder.  
+   
+   -  Program your JMxx with the binary file provided in the <b>Installation->USBDM_Flash_Images</b> directory.  
+      This requires a HCS08 BDM.  \n
+      To save space a 4-pin programming header has been used on the BDM.  An adapter is needed to connect to a
+      standard BDM header.  This would consist of a 6-pin socket wired to a 4-pin header as shown below:  I have 
+      found that if you slightly splay the 4-pin header it will make a quite reliable connection when directly 
+      inserted into a PTH board without soldering. It may then be easily removed.\n
+      Alternatively, wires may be temporarily soldered to the BDM.   \n
+      Note that this programming is only needed once.  Updating of the firmware is done via USB.\n
+   \image html BDMAdapter.png
+
+   -  Install the modified driver files.\n
+      Copy the files to the appropriate <b>Codewarrior</b> directories. A command file <b>Install Codewarrior Files.cmd</b> is provided to do this.  
+      <b>Carefully check</b> this command file before executing it.  It may be necessary to modify paths depending upon which version of Codewarrior
+      you have installed or if non-standard installation paths were used. \n
+      This command file must be executed with administrator priviledges on Vista. (Right-click and choose Run as Administrator)      
+      - The command file copies the following files\n
+         <b>tblcf.dll, tblcf.cfg, tblcf_gdi.dll</b> -> \n
+         "C:\Program Files\Freescale\CodeWarrior for ColdFire V7.1\bin\Plugins\Support\ColdFire\usbdm_cf" \n
+         <b>opensourcebdm.dll</b> -> \n
+         "C:\Program Files\Freescale\CodeWarrior for Microcontrollers V6.2\Prog\gdi" \n
+         <b>tbdml.dll</b> -> \n
+         "C:\Program Files\Freescale\CodeWarrior for S12(X) V5.0\Prog\gdi" \n
+      - <b>Do not delete any existing DLL files</b> for example the .gdi files.  See the discussion in the "What is Provided" section for more details.
+
+ \section sectionUpdate Update of BDM Firmware.
+   -  The Bootloader.exe program may be used to arbitrarily change the BDM firmware.  For example, 
+      if you wish to restore an earlier version.  Its use is pretty obvious.
+*/
+

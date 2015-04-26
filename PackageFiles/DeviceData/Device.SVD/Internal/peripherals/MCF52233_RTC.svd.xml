@@ -1,0 +1,245 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF52233_RTC" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>RTC</name>
+         <description>Real-Time Clock</description>
+         <prependToName>RTC</prependToName>
+         <baseAddress>0x400003C0</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x28</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>HOURMIN</name>
+               <description>Hours and Minutes Counter</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>MINUTES</name>
+                     <description>Minutes setting\nCan be set to any value between 0 and 59</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOURS</name>
+                     <description>Hours setting\nCan be set to any value between 0 and 23</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SECONDS</name>
+               <description>Seconds Counter</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SECONDS</name>
+                     <description>Seconds setting\nCan be set to any value between 0 and 59</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ALRM_HM</name>
+               <description>Hours and Minutes Alarm</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>MINUTES</name>
+                     <description>Alarm minutes setting\nCan be set to any value between 0 and 59</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOURS</name>
+                     <description>Alarm hours setting\nCan be set to any value between 0 and 23</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ALRM_SEC</name>
+               <description>Seconds Alarm</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>SECONDS</name>
+                     <description>Alarm seconds setting\nCan be set to any value between 0 and 59</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RTCCTL</name>
+               <description>Control</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>SWR</name>
+                     <description>Software Reset\n
+This bit resets the RTC to its default state. However, a software reset has no effect on the EN bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset module\t to its default state</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EN</name>
+                     <description>RTC Control\n
+This bit enables the RTC. The software reset bit (SWR) has no effect on this bit</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RTCISR</name>
+               <description>Interrupt Status</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>SW</name>
+                     <description>Stop-watch flag\nThis bit indicates that the stop-watch count-down has timed out</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No time-out</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Time-out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SW" > <name>MIN</name> <description>Minute flag\nThis bit indicates that the minute counter has incremented.\n
+If enabled, this bit is set on every increment of the RTC minute counter</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>ALM</name> <description>Alarm flag\nThis bit indicates that the RTC time matches the value in the alarm registers.\n
+The alarm re-occurs every 65536 days. For a single alarm, clear the interrupt enable for this bit in the interrupt service routine</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>DAY</name> <description>Day flag\nThis bit indicates whether the day counter has incremented. If enabled, this bit is set on every
+increment of the RTC day counter</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>HZ1</name> <description>1 Hz flag\nThis bit indicates whether the second counter has incremented. If enabled, this bit is set on every
+increment of the RTC second counter</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>HR</name> <description>Hour flag\nThis bit indicates whether the hour counter has incremented. If enabled, this bit is set on every
+increment of the RTC hour counter</description> <bitOffset>5</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>RTCIENR</name>
+               <description>Interrupt Enable</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>SW</name>
+                     <description>Stop-watch interrupt\n
+Enables/disables the stop-watch interrupt. The stop-watch counts down and remains at decimal -1 until it is reprogrammed.
+If this bit is enabled with -1 (decimal) in the STPWCH register, an interrupt is posted on the next minute tick</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SW" > <name>MIN</name> <description>Minute interrupt\n
+This bit enables/disables an interrupt when the RTC minute counter increments</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>ALM</name> <description>Alarm interrupt\n
+This bit enables/disables the alarm interrupt</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>DAY</name> <description>Day interrupt\n
+This bit enables/disables an interrupt when the hours counter rolls over from 23 to 0 (midnight roll-over)</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>HZ1</name> <description>1 Hz interrupt\n
+This bit enables/disables an interrupt when the second counter of the real-time clock increments</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SW" > <name>HR</name> <description>Hour interrupt\n
+This bit enables/disables an interrupt when the hour counter of the real-time clock
+increments</description> <bitOffset>5</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>STPWCH</name>
+               <description>Stop-watch Minutes</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CNT</name>
+                     <description>Stop-watch count\nThis field contains the stop-watch count-down value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DAYS</name>
+               <description>Days Counter</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>DAYS</name>
+                     <description>Day Setting\nThis field indicates the current day count, and can be set to any value between 0 and 65535</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ALRM_DAY</name>
+               <description>Day Alarm</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DAYSAL</name>
+                     <description>Day Setting of the Alarm\nThis field can be set to any value between 0 and 65535</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

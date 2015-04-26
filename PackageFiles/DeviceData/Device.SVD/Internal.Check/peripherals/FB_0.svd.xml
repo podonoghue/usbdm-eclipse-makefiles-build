@@ -1,0 +1,541 @@
+<!--
+Devices using this peripheral: 
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21F12
+      MK22F12
+      MK22F51212
+      MK24F12
+      MK30D10
+      MK30DZ10
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F12
+      MK61F15
+      MK63F12
+      MK64F12
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "FB_0" ?>
+         <name>FB</name>
+         <description>FlexBus external bus interface</description>
+         <prependToName>FB</prependToName>
+         <baseAddress>0x4000C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x48</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>6</dim>
+               <dimIncrement>12</dimIncrement>
+               <dimIndex>0,1,2,3,4,5</dimIndex>
+               <name>CS,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>CSAR</name>
+                  <description>Chip Select Address Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>BA</name>
+                        <description>Base Address\n
+Defines the base address for memory dedicated to the associated chip-select.\n
+BA is compared to bits 31-16 on the internal address to determine if external memory is being accessed</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CSMR</name>
+                  <description>Chip Select Mask Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>V</name>
+                        <description>Valid\n
+Specifies whether the corresponding CSAR, CSMR, and CSCR contents are valid.\n
+Programmed chip selects do not assert until the V bit is 1b\n
+(except for FB_CS0, which acts as the global chip-select)</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Chip-select invalid</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Chip-select valid</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>WP</name>
+                        <description>Write Protect\n
+Controls write accesses to the address range in the corresponding CSAR\n
+Attempting writes to a protected range results in a bus error termination of the internal cycle and no external cycle</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Writes allowed</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Writes not allowed\n</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BAM</name>
+                        <description>Base Address Mask\n
+Defines the associated chip-select&apos;s block size by masking address bits\n
+If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>16</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Bit is used</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Bit is masked</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CSCR</name>
+                  <description>Chip Select Control Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <resetValue>0x3FFC00</resetValue>
+                  <fields>
+                     <field>
+                        <name>BSTW</name>
+                        <description>Burst-Write Enable\n
+Enables burst write of data larger than the specified port size</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Mutiple writes are used</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Burst enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BSTR</name>
+                        <description>Burst-Read Enable\n
+Enables burst write of data larger than the specified port size</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Mutiple reads are used</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Burst enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BEM</name>
+                        <description>Byte-Enable Mode\n
+Controls is FB_BE signals are used for writes</description>
+                        <bitOffset>5</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Writes used FB_BE</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Reads and writes use FB_BE</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>PS</name>
+                        <description>Port Size</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>32-bit port size</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>8-bit port size</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1X</name>
+                              <description>16-bit port size</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>AA</name>
+                        <description>Auto-Acknowledge Enable\n
+Allows an internal transfer acknowledge to be asserted as specified by WS otherwise and external acknowledge is expected</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>External ACK</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Internal ACK</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BLS</name>
+                        <description>Byte-Lane Shift</description>
+                        <bitOffset>9</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data is left-aligned on FB_AD</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Data is right-aligned on FB_AD</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>WS</name>
+                        <description>Wait states\n
+Specifies the number of wait states after FlexBus asserts the associated chip select and before an internal
+transfer acknowledge is generated (WS = 00h inserts 0 wait states, ..., WS = 3Fh inserts 63 wait states)</description>
+                        <bitOffset>10</bitOffset>
+                        <bitWidth>6</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0bXXXXXX</name>
+                              <description>N wait states</description>
+                              <isDefault>true</isDefault>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>WRAH</name>
+                        <description>Write Address Hold or Deselect after FB_CSn negates</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>1 cycle</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>2 cycles</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>3 cycles</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>4 cycles</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RDAH</name>
+                        <description>Read Address Hold or Deselect
+If CSCRn[AA] is then an additional cycle is added</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>0 cycles</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>1 cycle</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>2 cycles</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>3 cycles</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ASET</name>
+                        <description>Address Setup\n
+Determines on which clock cycle FB_CSn is asserted after the address is asserted</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>1st rising clock edge</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>2nd rising clock edge</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>3rd rising clock edge</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>4th rising clock edge</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>EXTS</name>
+                        <description>Extended Transfer Start/Extended Address Latch Enable Controls how long FB_TS /FB_ALE is asserted</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled. FB_TS /FB_ALE asserts for one bus clock cycle</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled. FB_TS /FB_ALE remains asserted until the first positive clock edge after FB_CSn asserts</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SWSEN</name>
+                        <description>Secondary Wait State Enable</description>
+                        <bitOffset>23</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled. A number of wait states (specified by WS) are inserted before an internal transfer acknowledge is generated for all transfers</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled. A number of wait states (specified by SWS) are inserted before an internal transfer acknowledge is generated for burst transfer secondary terminations</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SWS</name>
+                        <description>Secondary Wait States</description>
+                        <bitOffset>26</bitOffset>
+                        <bitWidth>6</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <register>
+               <name>CSPMCR</name>
+               <description>Chip Select port Multiplexing Control Register</description>
+               <addressOffset>0x60</addressOffset>
+               <fields>
+                  <field>
+                     <name>GROUP5</name>
+                     <description>FlexBus Signal Group 5 Multiplex control</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>FB_TA</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>FB_CS3. You must also set CSCRn[AA]</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>FB_BE_7_0. You must also set CSCRn[AA]</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GROUP4</name>
+                     <description>FlexBus Signal Group 4 Multiplex control</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>FB_TBST</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>FB_CS2</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>FB_BE_15_8</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GROUP3</name>
+                     <description>FlexBus Signal Group 3 Multiplex control</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>FB_CS5</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>FB_TSIZ1</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>FB_BE_23_16</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GROUP2</name>
+                     <description>FlexBus Signal Group 2 Multiplex control</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>FB_CS4</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>FB_TSIZ0</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>FB_BE_31_24</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GROUP1</name>
+                     <description>FlexBus Signal Group 1 Multiplex control</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>FB_ALE</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>FB_CS1</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>FB_TS</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

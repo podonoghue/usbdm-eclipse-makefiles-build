@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-watchdog-timer-reset-demo" root="">
+      <applyWhen>
+         <and>
+            <or>
+	<hardwareMatches>^frdmk22fk02</hardwareMatches>
+	<hardwareMatches>^frdmk22fk0264</hardwareMatches>
+	<hardwareMatches>^frdmk64fv</hardwareMatches>
+	<hardwareMatches>^twrk22f120m</hardwareMatches>
+	<hardwareMatches>^twrk22f120mk02</hardwareMatches>
+	<hardwareMatches>^twrk24f120m</hardwareMatches>
+	<hardwareMatches>^twrk60d100m</hardwareMatches>
+	<hardwareMatches>^twrk64f120m</hardwareMatches>
+	<hardwareMatches>^twrkv10z75m</hardwareMatches>
+	<hardwareMatches>^twrkv31f120m</hardwareMatches>
+	<hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-watchdog-timer-reset-demo" 
+            name="Watchdog Timer Reset Demo" 
+            description=
+"The Watchdog Timer Reset demo application demonstrates how the Watchdog module can be used to reset\n
+a device. The overflow time for a Watchdog timer is approximately 2 seconds."
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+   		<applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-watchdog-timer-reset-demo" />
+            </and>
+   		</applyWhen>
+         <deleteResource target="Sources/main.c" />
+   		<copy source="usbdm_kds_path/demos/wdog_reset/src/wdog_reset.c" target="Sources/wdog_reset.c" sourcePathType="absolute" />
+   	</projectActionList>
+   </projectActionList>
+</root>

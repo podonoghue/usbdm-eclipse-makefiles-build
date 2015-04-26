@@ -1,0 +1,37 @@
+/*!    
+\if Coldfire
+ \page cableAssemblyPage Coldfire Target Connector
+
+ \section sectionColdfireBDMConnectorUSBDM_JMxx Coldfire BDM Connector for USBDM_CF_JMxx (full 26-pin connector)
+   -  There are several options for how the connection to the Coldfire processor may be made
+   - A <b>right-angle</b> socket may be soldered to the <b>rear</b> of the BDM module.  This allows the BDM to connect 
+     directly to the target with the BDM vertical i.e. at right-angle to the target board.\n
+     \image html CF_Right_Angle_Connection.png
+     
+   - A <b>staight</b> socket may be soldered to the <b>rear</b> of the BDM module.  This allows the BDM to connect 
+     directly to the target with the BDM horizontal and extending from the edge of the target board.
+     This requires that the connector on the target board has been correctly orientated and positioned near an edge.\n
+     \image html CF_Inline_Connection.png
+     
+   - A <b>plug or simple male header</b> may be soldered to the <b>top</b> of the BDM module.  A 26-way ribbon cable is then 
+     used to make the connection to the target BDM connector.  The ribbon cable should be kept short.  A reduced cable
+     may be used as described in the next section.\n
+     \image html CF_Ribbon_Connection.png
+
+ \section sectionReducedCable Reduced pin-count cable
+   -  The original TBLCF suggested the use of a reduced pin-count connector and cable.  This version supports a 
+      similar arrangement but I advise that the cable be constructed as shown in the figure below:\n
+      \image html "Reduced_cable_diagram.png"
+   - This cable maintains the correct impedance for all the retained signal connections and avoids 
+     the need to remove pins from the BDM connector.
+     
+<hr>
+ \section sectionColdfireBDMConnectorUSBDM_JS16 Coldfire BDM Connector for USBDM_CF_JS16 (reduced 10-pin connector)
+   - The JS16 version BDM uses a 10-pin reduced size connector for the Coldfire connector.  Most targets provide a 
+     26-way connector so a transition is required.  (It is also possible to use a 26-way cable plugged in offset.)
+     \image html "reduced_cable_diagram(JS16).png"
+   - Make sure the connector is plugged in correctly as shown below - The jumper pins are NOT part of the connector.
+     \image html "USBDM_CF_JS16_Connector.png"
+
+\endif
+  */

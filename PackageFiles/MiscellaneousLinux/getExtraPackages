@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "Adding extra packages for Codewarrior on Mint-64"
+echo "Codewarrior runs but debugging seems badly broken"
+echo "================================================="
+
+sudu dpkg --add-architecture i386
+sudu apt-get -y update
+sudu apt-get -y install libgtk2.0-0:i386
+sudu apt-get -y install gcc-multilib g++-multilib
+sudu apt-get -y install libexpat1:i386
+sudu apt-get -y install libxt6:i386
+sudu apt-get -y install libswt-gtk-3-jni:i386
+sudu apt-get -y install libswt-gtk-3-java:i386
+sudu apt-get -y install gnome-themes-standard:i386
+sudo ln -sfv /lib/i386-linux-gnu/libexpat.so.1.6.0 /lib/i386-linux-gnu/libexpat.so.0

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=HCS12_FlashProgrammer
+Comment=Flash programmer for HCS12 devices
+Keywords=HCS12;Programmer;
+Exec=/usr/bin/HCS12_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=HCS12 Programmer
+GenericName[en_AU]=HCS12 Programmer
+Comment[en_AU]=USBDM Flash programmer for HCS12

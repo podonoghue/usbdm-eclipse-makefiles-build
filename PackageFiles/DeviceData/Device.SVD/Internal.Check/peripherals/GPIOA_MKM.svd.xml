@@ -1,0 +1,219 @@
+<!--
+Devices using this peripheral: 
+      MKM33Z5
+-->
+      <peripheral>
+         <?sourceFile "GPIOA_MKM" ?>
+         <?refreshWholePeripheral?>
+         <name>GPIOA</name>
+         <description>General Purpose Input/Output</description>
+         <prependToName>GPIOA</prependToName>
+         <headerStructName>GPIO</headerStructName>
+         <baseAddress>0x400FF000</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x10</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x14</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x1C</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PDOR</name>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDO0</name>
+                     <description>Port Data Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDO0" > <name>PDO1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDIR</name>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PDI0</name>
+                     <description>Port Data Input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDI0" > <name>PDI1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDDR</name>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDD0</name>
+                     <description>Port Data Direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDD0" > <name>PDD1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>GACR</name>
+               <description>GPIO Attribute Checker Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>ACB</name>
+                     <description>Attribute Check Byte\n
+This 3 bit field defines the attributes required to access the corresponding GPIO port&apos;s programming model</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>User nonsecure: Read + Write; User Secure: Read + Write; Privileged Secure: Read + Write</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>User nonsecure: Read; User Secure: Read + Write; Privileged Secure: Read + Write</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>User nonsecure: None; User Secure: Read + Write; Privileged Secure: Read + Write</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>User nonsecure: Read; User Secure: Read; Privileged Secure: Read + Write</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>User nonsecure: None; User Secure: Read; Privileged Secure: Read + Write</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>User nonsecure: None; User Secure: None; Privileged Secure: Read + Write</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>User nonsecure: None; User Secure: None; Privileged Secure: Read</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>User nonsecure: None; User Secure: None; Privileged Secure: None</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ROB</name>
+                     <description>Read-Only Byte\n
+This register bit provides a mechanism to &quot;lock&quot; the configuration state defined by ACB. Once asserted,
+this bit remains set and attempted writes to the ACB are ignored until the next system reset clears the flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the ACB are allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the ACB are ignored</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

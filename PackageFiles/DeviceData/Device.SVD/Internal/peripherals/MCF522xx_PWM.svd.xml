@@ -1,0 +1,524 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF522xx_PWM" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>PWM</name>
+         <description>Pulse-Width Modulation Module</description>
+         <prependToName>PWM</prependToName>
+         <baseAddress>0x401B0000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x28</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PWME</name>
+               <description>Enable Register\nPWM Channel Enable</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PWME0</name>
+                     <description>Channel Output Enable\n
+If enabled, the PWM signal is available at PWMOUTx in next clock cycle</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PWME0" > <name>PWME1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PWME0" > <name>PWME7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMPOL</name>
+               <description>Polarity Register\nPWM Channel Polarity</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PPOL0</name>
+                     <description>PWM Channel Polarity\n
+Controls the initial channel output which then changes when duty count is reached</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low then high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High then low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PPOL0" > <name>PPOL7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMCLK</name>
+               <description>Clock Select Register\n
+Determine which of two clock choices are used for a channel.\n
+For channels 0, 1, 4, and 5, the clock choices are clock A or SA. \n
+For channels 2, 3, 6, and 7, the choices are clock B or SB</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PCLK0</name>
+                     <description>Clock source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Source A</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Scaled source A</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PCLK0" > <name>PCLK1</name> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>PCLK2</name>
+                     <description>Clock source</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Source B</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Scaled source B</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PCLK2" > <name>PCLK3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PCLK0" > <name>PCLK4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PCLK0" > <name>PCLK5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PCLK2" > <name>PCLK6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PCLK2" > <name>PCLK7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMPRCLK</name>
+               <description>Prescale Clock Select Register\n
+The PWMPRCLK register selects the prescale clock source for clocks A and B independently</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PCKA</name>
+                     <description>Clock A prescaler select.\n
+These three bits control the rate of Clock A, which can be used for PWM channels 0, 1, 4 and 5</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>123</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PCKA" > <name>PCKB</name> <description>Clock B prescaler select\n
+These three bits control the rate of Clock B, which can be used for PWM channels 2, 3, 6 and 7</description> <bitOffset>4</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMCAE</name>
+               <description>Centre Align Enable Register\n
+The PWMCAE register contains eight control bits for the selection of centre-aligned outputs or
+left-aligned outputs for each PWM channel.\n
+Write these bits only when the corresponding channel is disabled</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CAE0</name>
+                     <description>Channel alignment</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Left-aligned</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Centre-aligned</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CAE0" > <name>CAE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CAE0" > <name>CAE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMCTL</name>
+               <description>Control Register\n
+The PWMCTL register provides various control of the PWM module</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PFRZ</name>
+                     <description>Freeze Mode operation</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stopped</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PSWAI</name>
+                     <description>Wait Mode operation</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stopped</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CON01</name>
+                     <description>Concatenate even/odd PWM channels\n
+Allows two consecutive channels N and N+1 to form one 16-bit PWM channel\n
+The channel operation is controlled by the higher numbered channel</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Independent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Concatenated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CON01" > <name>CON23</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CON01" > <name>CON45</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CON01" > <name>CON67</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMSCLA</name>
+               <description>Scale Register A\n
+Programmable scale value used in scaling clock A to generate clock SA.\n
+Clock SA is generated with the following equation:\n
+    Clock SA = (Clock A)/(2 * PWMSCLA)</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PWMSCLB</name>
+               <description>Scale Register B\n
+Programmable scale value used in scaling clock B to generate clock SB.\n
+Clock SB is generated with the following equation:\n
+    Clock SB = (Clock B)/(2 * PWMSCLA)</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>PWMCNT%s</name>
+               <description>Channel %s Counter Register\n
+Dedicated 8-bit up/down counter that runs at the rate of the selected clock source, PWMCLK[PCLKn]. \n
+The counter can be read at any time without affecting the count or the operation of the PWM channel.\n
+In left-aligned output mode, the counter counts from 0 to the value in the period register minus 1.\n
+In centre-aligned output mode, the counter counts from 0 up to the value in the period register and then back down to 0</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>PWMPER%s</name>
+               <description>Channel %s Period Register\n
+The PWM period registers determine the period of the associated PWM channel</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>PWMDTY%s</name>
+               <description>Channel %s Duty Register\n
+The PWM duty registers determine the duty cycle of the associated PWM channel</description>
+               <addressOffset>0x1C</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PWMSDN</name>
+               <description>Shutdown Register</description>
+               <addressOffset>0x24</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SDNEN</name>
+                     <description>PWM emergency shutdown\n
+If set, the pin associated with PWM channel 7 is forced to input and the emergency shutdown feature is enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Emergency shutdown is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Emergency shutdown is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWM7IL</name>
+                     <description>PWM channel 7 input polarity\n
+If PWMSDN[SDNEN] is set, this bit sets the active level of the PWM 7 channel</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PWM 7 input is active low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>EPWM 7 input is active high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWM7IN</name>
+                     <description>PWM channel 7 input status\n
+Reflects the current status of the PWMOUT7 pin</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>None</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>None</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LVL</name>
+                     <description>Shutdown output level\n
+Describes the behaviour of the PWM outputs when PWM7IN input is asserted and PWMSDN[SDNEN] is set</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PWM outputs are forced to logic 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PWM outputs are forced to logic 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RESTART</name>
+                     <description>PWM restart\n
+After setting the RESTART bit, the PWM channels start running after the corresponding counter resets to zero.\n
+Also, if emergency shutdown is cleared (after being set), the PWM outputs restart after the corresponding
+counter resets to zero.\n
+This bit is self-clearing, so is always read as zero</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write &apos;1&apos; to restart</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IE</name>
+                     <description>PWM interrupt enable\n
+An interrupt is triggered to the device&apos;s interrupt controller when PWMSDN[IF] is set</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IF</name>
+                     <description>PWM interrupt flag\n
+Any change in state of PWM7IN is flagged by setting this bit.\n
+The flag is cleared by writing a 1 to it</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No change in PWM7IN input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Change in PWM7IN input</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

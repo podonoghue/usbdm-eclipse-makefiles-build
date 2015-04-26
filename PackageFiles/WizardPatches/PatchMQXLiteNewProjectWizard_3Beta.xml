@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point="com.freescale.core.ide.newprojectwizard.newProjectWizard">
+		<wizard uiExtensionID="com.freescale.mcu.mqxlite.projectwizard.ui"
+			wizardExtensionID="com.freescale.mcu.mqxlite.projectwizard.wizard1">
+			<projectGeneration
+				baseProjectType="com.freescale.mcu.mqxlite.projectwizard.projecttype1"
+				ccNatureConditionId="mcu.projectwizard.condition.projectGeneration.ccNature">
+				<configurations>
+					<configuration configurationId="com.freescale.arm.cdt.toolchain.config.arm.release"
+						projectType="com.freescale.arm.cdt.toolchain.project.arm">
+						<configurationLaunchSettings>
+							<!-- Added pgo -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration configurationId="com.freescale.arm.cdt.toolchain.config.arm.release"
+						projectType="com.freescale.arm.cdt.toolchain.project.arm">
+						<configurationLaunchSettings>
+							<!-- Added pgo -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						configurationId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug"
+						projectType="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf">
+						<configurationLaunchSettings>
+							<!-- Added pgo -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+					<configuration
+						configurationId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug"
+						projectType="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf">
+						<configurationLaunchSettings>
+							<!-- Added pgo -->
+							<launchSettingsRef merge-actions="insert"
+								conditionId="mcu.projectwizard.conn.arm.usbdm" id="usbdm_arm"
+								name="USBDM">
+							</launchSettingsRef>
+						</configurationLaunchSettings>
+					</configuration>
+				</configurations>
+			</projectGeneration>
+		</wizard>
+	</extension>
+
+	<extension id="com.freescale.mcu.mqxlite.projectwizard.ui"
+		point="com.freescale.core.ide.wizard.ui.wizardUI">
+		<pages>
+			<page enablementCondition="mcu.projectwizard.condition.isArmFamily"
+				id="mcu.projectwizard.page.connections.arm" pageOkCondition="mcu.projectwizard.condition.connection.arm.pageok">
+				<uiElement
+					id="mcu.projectwizard.connections.list.arm.rseHostComboComposite"
+					itemType="rseHostComboComposite" title="ARM RSE Systems Composite">
+					<uiElement id="mcu.projectwizard.connections.list.arm"
+						itemType="checkboxGroup" defaultValue="mcu.projectwizard.conn.pneusbmlink"
+						title="%uiElement.title.connection">
+						<!-- Added pgo -->
+						<elementChoice merge-actions="insert"
+							contentHelp="Connect to USBDM Open Source BDM."
+							enablementCondition="mcu.projectwizard.condition.arm.enable.connection.Segger"
+							id="mcu.projectwizard.conn.arm.usbdm" name="USBDM" />
+					</uiElement>
+				</uiElement>
+			</page>
+		</pages>
+	</extension>
+</plugin>

@@ -1,0 +1,1373 @@
+<!--
+Devices using this peripheral: 
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "LCDC_0" ?>
+         <name>LCDC</name>
+         <description>Liquid Crystal Display Controller</description>
+         <prependToName>LCDC</prependToName>
+         <baseAddress>0x400B6000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x28</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x50</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>LSSAR</name>
+               <description>LCDC screen start address register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SSA</name>
+                     <description>Screen start address of LCD panel</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>30</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LSR</name>
+               <description>LCDC size register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>YMAX</name>
+                     <description>Screen height</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>XMAX</name>
+                     <description>Screen width divided by 16</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LVPWR</name>
+               <description>LCDC virtual page width register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>VPW</name>
+                     <description>Virtual page width</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LCPR</name>
+               <description>LCDC cursor position register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>CYP</name>
+                     <description>Cursor Y position</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>CXP</name>
+                     <description>Cursor X position</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>OP</name>
+                     <description>Arithmetic operation control</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable arithmetic operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable arithmetic operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CC</name>
+                     <description>Cursor control</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LCWHB</name>
+               <description>LCDC cursor width, height, and blink register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x10100FF</resetValue>
+               <fields>
+                  <field>
+                     <name>BD</name>
+                     <description>Blink divisor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CH</name>
+                     <description>Cursor height</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>CW</name>
+                     <description>Cursor width</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BK_EN</name>
+                     <description>Blink enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Blink is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Blink is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LCCMR</name>
+               <description>LCDC color cursor mapping register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>CUR_COL_B</name>
+                     <description>Cursor blue field</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No blue</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full blue</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CUR_COL_G</name>
+                     <description>Cursor green field</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No green</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full green</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CUR_COL_R</name>
+                     <description>Cursor red field</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No red</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full red</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPCR</name>
+               <description>LCDC panel configuration register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>PCD</name>
+                     <description>Pixel clock divider</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SCLKSEL</name>
+                     <description>LSCLK select</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable OE and LSCLK in TFT mode when no data output</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Always enable LSCLK in TFT mode even if there is no data output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACD</name>
+                     <description>Alternate crystal direction</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>ACDSEL</name>
+                     <description>ACD clock source select</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Use FLM as a clock source for ACD count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use LP/HSYNC as a clock source for ACD count</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>REV_VS</name>
+                     <description>Reverse vertical scan</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Vertical scan in normal direction</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Vertical scan in reverse direction</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SWAP_SEL</name>
+                     <description>Swap select</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>24 bpp, 18 bpp, 16 bpp, 12 bpp mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>8 bpp, 4 bpp, 2 bpp, and 1 bpp mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>END_SEL</name>
+                     <description>Endian select</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Little Endian</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Big Endian</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SCLKIDLE</name>
+                     <description>LSCLK idle enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable LSCLK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable LSCLK</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OEPOL</name>
+                     <description>Output enable polarity</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKPOL</name>
+                     <description>LCD shift clock polarity</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active on negative edge of LSCLK. In TFT mode, active on positive edge of LSCLK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active on positive edge of LSCLK. In TFT mode, active on negative edge of LSCLK</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPPOL</name>
+                     <description>Line pulse polarity</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLMPOL</name>
+                     <description>First line marker polarity</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PIXPOL</name>
+                     <description>Pixel polarity</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BPIX</name>
+                     <description>Bits per pixel</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1 bpp, FRC bypassed</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2 bpp</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4 bpp</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8 bpp</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>12 bpp (16-bits of memory used)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>16 bpp</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>18 bpp (32-bits of memory used)</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>24 bpp (32-bits of memory used)</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PBSIZ</name>
+                     <description>Panel bus width</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1-bit</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2-bit</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4-bit</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8-bit</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COLOR</name>
+                     <description>Interfaces to color display</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LCD panel is a Monochrome display</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD panel is a Color display</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TFT</name>
+                     <description>Interfaces to TFT display</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LCD panel is a passive display</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LCD panel is an active display: &quot;digital CRT&quot; signal format, FRC is bypassed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LHCR</name>
+               <description>LCDC horizontal configuration register</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x4000000</resetValue>
+               <fields>
+                  <field>
+                     <name>H_WAIT_2</name>
+                     <description>Wait between HSYNC and start of next line</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>H_WAIT_1</name>
+                     <description>Wait between OE and HSYNC</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>H_WIDTH</name>
+                     <description>Horizontal sync pulse width</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LVCR</name>
+               <description>LCDC vertical configuration register</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x4000000</resetValue>
+               <fields>
+                  <field>
+                     <name>V_WAIT_2</name>
+                     <description>Wait between frames 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>V_WAIT_1</name>
+                     <description>Wait between frames 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>V_WIDTH</name>
+                     <description>Vertical sync pulse width</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPOR</name>
+               <description>LCDC panning offset register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>POS</name>
+                     <description>Panning offset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPCCR</name>
+               <description>LCDC PWM contrast control register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PW</name>
+                     <description>Pulse-width</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CC_EN</name>
+                     <description>Contrast control enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Contrast control is off</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Contrast control is on</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SCR</name>
+                     <description>Source select</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Line pulse</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pixel clock</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>LCD clock</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LDMSK</name>
+                     <description>LD mask</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LD [23:0] is normal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LD [23:0] always equals 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LDCR</name>
+               <description>LCDC DMA control register</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0x80040060</resetValue>
+               <fields>
+                  <field>
+                     <name>TM</name>
+                     <description>DMA trigger mark</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>HM</name>
+                     <description>DMA high mark</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>BURST</name>
+                     <description>Burst length</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Burst length is dynamic</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Burst length is fixed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LRMCR</name>
+               <description>LCDC refresh mode control register</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>SELF_REF</name>
+                     <description>Self-refresh</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable self-refresh</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable self-refresh</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LICR</name>
+               <description>LCDC interrupt configuration register</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTCON</name>
+                     <description>Interrupt condition</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt flag is set when the end of frame (EOF) is reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt flag is set when the beginning of frame (BOF) is reached</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTSYN</name>
+                     <description>Interrupt source</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt flag is set on loading the last/first data of frame from memory</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt flag is set on output of the last/first data of frame to LCD panel</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_INT_CON</name>
+                     <description>Graphic window interrupt condition</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt flag is set when end of graphic window is reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt flag is set when beginning of graphic window is reached</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LIER</name>
+               <description>LCDC interrupt enable register</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BOF_EN</name>
+                     <description>Beginning of frame interrupt enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOF_EN</name>
+                     <description>End of frame interrupt enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UDR_ERR_EN</name>
+                     <description>Under run error interrupt enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_BOF_EN</name>
+                     <description>Graphic window beginning of frame interrupt enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_EOF_EN</name>
+                     <description>Graphic window end of frame interrupt enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_UDR_ERR_EN</name>
+                     <description>Graphic window under run error interrupt enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mask interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LISR</name>
+               <description>LCDC interrupt status register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>BOF</name>
+                     <description>Beginning of frame</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOF</name>
+                     <description>End of frame</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UDR_ERR</name>
+                     <description>Under run error</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_BOF</name>
+                     <description>Graphic window beginning of frame</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_EOF</name>
+                     <description>Graphic window end of frame</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_UDR_ERR</name>
+                     <description>Graphic window under run error</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Graphic window under run has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Graphic window under run has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWSAR</name>
+               <description>LCDC graphic window start address register</description>
+               <addressOffset>0x50</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWSA</name>
+                     <description>Graphic window start address on LCD screen</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>30</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWSR</name>
+               <description>LCDC graphic window size register</description>
+               <addressOffset>0x54</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWH</name>
+                     <description>Graphic window height</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>GWW</name>
+                     <description>Graphic window width divided by 16</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWVPWR</name>
+               <description>LCDC graphic window virtual page width register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWVPW</name>
+                     <description>Graphic window virtual page width</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWPOR</name>
+               <description>LCDC graphic window panning offset register</description>
+               <addressOffset>0x5C</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWPO</name>
+                     <description>Graphic window panning offset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWPR</name>
+               <description>LCDC graphic window position register</description>
+               <addressOffset>0x60</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWYP</name>
+                     <description>Graphic window Y position</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>GWXP</name>
+                     <description>Graphic window X position</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWCR</name>
+               <description>LCDC graphic window control register</description>
+               <addressOffset>0x64</addressOffset>
+               <fields>
+                  <field>
+                     <name>GWCKB</name>
+                     <description>Graphic window color keying blue component</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No blue</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full blue</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GWCKG</name>
+                     <description>Graphic window color keying green component</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No green</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full green</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GWCKR</name>
+                     <description>Graphic window color keying red component</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>No red</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Full red</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GW_RVS</name>
+                     <description>Graphic window reverse vertical scan</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Vertical scan in normal direction</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Vertical scan in reverse direction</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GWE</name>
+                     <description>Graphic window enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable graphic window on screen</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable graphic window on screen</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GWCKE</name>
+                     <description>Graphic window color keying enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable color keying of graphic window</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable color keying of graphic window</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GWAV</name>
+                     <description>Graphic window alpha value</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Graphic window totally transparent (not displayed on LCD screen)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Graphic window totally opaque (completely visible on LCD screen)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LGWDCR</name>
+               <description>LCDC graphic window DMA control register</description>
+               <addressOffset>0x68</addressOffset>
+               <resetValue>0x80040060</resetValue>
+               <fields>
+                  <field>
+                     <name>GWTM</name>
+                     <description>Graphic window DMA low mark</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>GWHM</name>
+                     <description>Graphic window DMA high mark</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>GWBT</name>
+                     <description>Graphic window DMA burst type</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Burst length is dynamic</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Burst length is fixed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LAUSCR</name>
+               <description>LCDC AUS mode control register</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>AGWCKB</name>
+                     <description>AUS graphic window color keying blue component</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGWCKG</name>
+                     <description>AUS graphic window color keying green component</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGWCKR</name>
+                     <description>AUS graphic window color keying red component</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUS_Mode</name>
+                     <description>AUS mode control</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>AUS mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LAUSCCR</name>
+               <description>LCDC AUS mode cursor control register</description>
+               <addressOffset>0x84</addressOffset>
+               <fields>
+                  <field>
+                     <name>ACUR_COL_B</name>
+                     <description>AUS cursor red field</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ACUR_COL_G</name>
+                     <description>AUS cursor green field</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ACUR_COL_R</name>
+                     <description>AUS cursor red field</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

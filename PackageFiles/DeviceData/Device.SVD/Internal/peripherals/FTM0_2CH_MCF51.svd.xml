@@ -1,0 +1,1469 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "FTM0_2CH_MCF51" ?>
+         <name>FTM0</name>
+         <description>FlexTimer Module (2 channels)</description>
+         <prependToName>FTM0</prependToName>
+         <baseAddress>0xFFFF8440</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0xB</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x20</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x2B</offset>
+            <size>0x9</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SC</name>
+               <description>Status and Control</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PS</name>
+                     <description>Prescale Factor Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Divide by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Divide by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Divide by 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Divide by 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Divide by 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Divide by 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Divide by 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Divide by 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKS</name>
+                     <description>Clock Source Selection</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>System clock</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Fixed freq. clock</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>External clock</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPWMS</name>
+                     <description>Centre-Aligned PWM Select\n
+Selects between left and centre-aligned PWM pulse output</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Left-aligned</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Centre-aligned</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOIE</name>
+                     <description>Timer Overflow Interrupt Enable\n
+An interrupt is generated when TOF equals one</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOF</name>
+                     <description>Timer Overflow Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not overflowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overflowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNT</name>
+               <description>Counter</description>
+               <addressOffset>0x1</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTH</name>
+               <?hide?>
+               <description>Counter High</description>
+               <addressOffset>0x1</addressOffset>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTL</name>
+               <?hide?>
+               <description>Counter Low</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MOD</name>
+               <description>Modulo High</description>
+               <addressOffset>0x3</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODH</name>
+               <?hide?>
+               <description>Modulo High</description>
+               <addressOffset>0x3</addressOffset>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODL</name>
+               <?hide?>
+               <description>Modulo Low</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>Modulo Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <cluster>
+               <dim>2</dim>
+               <dimIncrement>3</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>CONTROLS,@pC@i@f</name>
+               <addressOffset>0x5</addressOffset>
+               <register>
+                  <name>CnSC</name>
+                  <description>Channel %s Status and Control</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DMA</name>
+                        <description>DMA Transfer Enable</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>DMA disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>DMA enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ELS</name>
+                        <?ignoreOverlap?>
+                        <description>Edge or Level Select\n
+Determine edge sensitivity of IC or output action of OC and pulse polarity of PWM\n
+Edge sensitivity/Output polarity/Pulse polarity</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Inactive</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Rising/Toggle/Low</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Falling/Clear/High</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Either/Set/Low</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ELSA</name>
+                        <?hide?>
+                        <description>Edge or Level Select A</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>ELSB</name>
+                        <?hide?>
+                        <description>Edge or Level Select B</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>MS</name>
+                        <?ignoreOverlap?>
+                        <description>Channel Mode Select\n
+Determines Input Capture, Output Compare &amp; Pulse Width Modulation</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Input capture</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Output compare</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1X</name>
+                              <description>Pulse Width Modulation</description>
+                              <value>0b1X</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>MSA</name>
+                        <?hide?>
+                        <description>Channel Mode Select A</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>MSB</name>
+                        <?hide?>
+                        <description>Channel Mode Select B</description>
+                        <bitOffset>5</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>CHIE</name>
+                        <description>Channel Interrupt Enable</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Interrupts disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Interrupts enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CHF</name>
+                        <description>Channel Flag\nSet when a channel event occurs</description>
+                        <bitOffset>7</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No channel event</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Channel event</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CnV</name>
+                  <description>Channel %s Value</description>
+                  <addressOffset>0x1</addressOffset>
+                  <size>16</size>
+                  <resetMask>0xFFFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>VAL</name>
+                        <description>Channel Value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CnVH</name>
+                  <?hide?>
+                  <description>Channel %s Value High</description>
+                  <addressOffset>0x1</addressOffset>
+                  <fields>
+                     <field>
+                        <name>VAL</name>
+                        <description>Channel Value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CnVL</name>
+                  <?hide?>
+                  <description>Channel %s Value Low</description>
+                  <addressOffset>0x2</addressOffset>
+                  <fields>
+                     <field>
+                        <name>VAL</name>
+                        <description>Channel Value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <register>
+               <name>CNTIN</name>
+               <description>Counter Initial Value</description>
+               <addressOffset>0x20</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initial Value of the FTM Counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTINH</name>
+               <?hide?>
+               <description>Counter Initial Value High</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initial Value of the FTM Counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNTINL</name>
+               <?hide?>
+               <description>Counter Initial Value Low</description>
+               <addressOffset>0x21</addressOffset>
+               <fields>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initial Value of the FTM Counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATUS</name>
+               <description>Capture and Compare Status</description>
+               <addressOffset>0x22</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH0F</name>
+                     <description>Channel 0 Flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No channel event has occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A channel event has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Flag</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Flag</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Flag</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Flag</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Flag</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH6F</name> <description>Channel 6 Flag</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH7F</name> <description>Channel 7 Flag</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODE</name>
+               <description>Features Mode Selection</description>
+               <addressOffset>0x23</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>FTMEN</name>
+                     <description>FTM Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Only the TPM-compatible registers (first set of registers) can be used without any restriction. Do not use the FTM-specific</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All registers including the FTM-specific registers (second set of registers) are available for use with no restrictions</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initialize the Channels Output</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WPDIS</name>
+                     <description>Write Protection Disable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Write protection is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write protection is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWMSYNC</name>
+                     <description>PWM Synchronization Mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No restrictions. Software and hardware triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software trigger can only be used by MOD and CnV synchronization, and hardware triggers can only be used by OUTMASK and FTM counter synchronization</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CAPTEST</name>
+                     <description>Capture Test Mode Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Capture test mode is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Capture test mode is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FAULTM</name>
+                     <description>Fault Control Mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Fault control is disabled for all channels</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Fault control is enabled for even channels only (channels 0, 2, 4, and 6), and the selected mode is the manual fault clearing</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Fault control is enabled for all channels, and the selected mode is the manual fault clearing</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Fault control is enabled for all channels, and the selected mode is the automatic fault clearing</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FAULTIE</name>
+                     <description>Fault Interrupt Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fault control interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fault control interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYNC</name>
+               <description>Synchronization</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>CNTMIN</name>
+                     <description>Minimum Loading Point Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The minimum loading point is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The minimum loading point is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CNTMAX</name>
+                     <description>Maximum Loading Point Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The maximum loading point is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The maximum loading point is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>REINIT</name>
+                     <description>FTM Counter Reinitialization by Synchronization (FTM Counter Synchronization)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FTM counter continues to count normally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FTM counter is updated with its initial value when the selected trigger is detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNCHOM</name>
+                     <description>Output Mask Synchronization</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>OUTMASK register is updated with the value of its buffer in all rising edges of the system clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>OUTMASK register is updated with the value of its buffer only by the PWM synchronization</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRIG0</name>
+                     <description>PWM Synchronization Hardware Trigger 0</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Trigger is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Trigger is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TRIG0" > <name>TRIG1</name> <description>PWM Synchronization Hardware Trigger 1</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TRIG0" > <name>TRIG2</name> <description>PWM Synchronization Hardware Trigger 2</description> <bitOffset>6</bitOffset> </field>
+                  <field>
+                     <name>SWSYNC</name>
+                     <description>PWM Synchronization Software Trigger</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Software trigger is not selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software trigger is selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUTINIT</name>
+               <description>Initial State for Channels Output</description>
+               <addressOffset>0x25</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH0OI</name>
+                     <description>Channel 0 Output Initialization Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH0OI" > <name>CH1OI</name> <description>Channel 1 Output Initialization Value</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH2OI</name> <description>Channel 2 Output Initialization Value</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH3OI</name> <description>Channel 3 Output Initialization Value</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH4OI</name> <description>Channel 4 Output Initialization Value</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH5OI</name> <description>Channel 5 Output Initialization Value</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH6OI</name> <description>Channel 6 Output Initialization Value</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CH0OI" > <name>CH7OI</name> <description>Channel 7 Output Initialization Value</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUTMASK</name>
+               <description>Output Mask</description>
+               <addressOffset>0x26</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH0OM</name>
+                     <description>Channel 0 Output Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not masked\tChannel output operates normally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Masked\tChannel output is forced to its inactive state</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH0OM" > <name>CH1OM</name> <description>Channel 1 Output Mask</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH2OM</name> <description>Channel 2 Output Mask</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH3OM</name> <description>Channel 3 Output Mask</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH4OM</name> <description>Channel 4 Output Mask</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH5OM</name> <description>Channel 5 Output Mask</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH6OM</name> <description>Channel 6 Output Mask</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CH0OM" > <name>CH7OM</name> <description>Channel 7 Output Mask</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>COMBINE%s</name>
+               <description>Function for Linked Channels</description>
+               <addressOffset>0x27</addressOffset>
+               <fields>
+                  <field>
+                     <name>COMBINE</name>
+                     <description>Combine Channels %s</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Independent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Combined</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMP</name>
+                     <description>Complement for Channels %s</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Same</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Complement</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DECAPEN</name>
+                     <description>Dual Edge Capture Mode Enable for Channels %s</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DECAP</name>
+                     <description>Dual Edge Capture Mode Captures for Channel %s</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DTEN</name>
+                     <description>Deadtime Enable for Channels %s</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNCEN</name>
+                     <description>PWM Synchronization Enable for Channels %s</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FAULTEN</name>
+                     <description>Fault Control Enable for Channels %s</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEADTIME</name>
+               <description>Deadtime Insertion Control</description>
+               <addressOffset>0x2B</addressOffset>
+               <fields>
+                  <field>
+                     <name>DTVAL</name>
+                     <description>Deadtime Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DTPS</name>
+                     <description>Deadtime Prescaler Value</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0x</name>
+                           <description>Divide by 1</description>
+                           <value>0b0x</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Divide by 4</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Divide by 16</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EXTTRIG</name>
+               <description>FTM External Trigger</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH2TRIG</name>
+                     <description>Channel 2 Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Trigger disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Trigger is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH0TRIG</name> <description>Channel 0 Trigger Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field>
+                     <name>INITTRIGEN</name>
+                     <description>Initialization Trigger Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The generation of initialization trigger is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The generation of initialization trigger is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRIGF</name>
+                     <description>Channel Trigger Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No channel trigger was generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A channel trigger was generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>POL</name>
+               <description>Channels Polarity</description>
+               <addressOffset>0x2D</addressOffset>
+               <fields>
+                  <field>
+                     <name>POL0</name>
+                     <description>Channel 0 Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active high</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active low</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="POL0" > <name>POL1</name> <description>Channel 1 Polarity</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL2</name> <description>Channel 2 Polarity</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL3</name> <description>Channel 3 Polarity</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL4</name> <description>Channel 4 Polarity</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL5</name> <description>Channel 5 Polarity</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL6</name> <description>Channel 6 Polarity</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="POL0" > <name>POL7</name> <description>Channel 7 Polarity</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMS</name>
+               <description>Fault Mode Status</description>
+               <addressOffset>0x2E</addressOffset>
+               <fields>
+                  <field>
+                     <name>FAULTF0</name>
+                     <description>Fault Detection Flag 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fault condition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FAULTF0" > <name>FAULTF1</name> <description>Fault Detection Flag 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FAULTF0" > <name>FAULTF2</name> <description>Fault Detection Flag 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="FAULTF0" > <name>FAULTF3</name> <description>Fault Detection Flag 3</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FAULTIN</name>
+                     <description>Fault Inputs</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The logic OR of the enabled fault inputs is 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The logic OR of the enabled fault inputs is 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WPEN</name>
+                     <description>Write Protection Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Write protection is disabled. Write protected bits can be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write protection is enabled. Write protected bits cannot be written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FAULTF</name>
+                     <description>Fault Detection Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No fault condition was detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A fault condition was detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FILTER0</name>
+               <description>Input Capture Filter Control</description>
+               <addressOffset>0x2F</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH0FVAL</name>
+                     <description>Channel 0 Input Filter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Filter enabled</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH0FVAL" > <name>CH1FVAL</name> <description>Channel 1 Input Filter</description> <bitOffset>4</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>FILTER1</name>
+               <description>Input Capture Filter Control</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>CH2FVAL</name>
+                     <description>Channel 2 Input Filter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Filter enabled</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CH2FVAL" > <name>CH3FVAL</name> <description>Channel 3 Input Filter</description> <bitOffset>4</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>FLTFILTER</name>
+               <description>Fault Input Filter Control</description>
+               <addressOffset>0x31</addressOffset>
+               <fields>
+                  <field>
+                     <name>FFVAL</name>
+                     <description>Fault Input Filter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Disabled</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Filter enabled</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FLTCTRL</name>
+               <description>Fault Control</description>
+               <addressOffset>0x32</addressOffset>
+               <fields>
+                  <field>
+                     <name>FAULT0EN</name>
+                     <description>Fault Input 0 Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTR0EN</name>
+                     <description>Fault Input 0 Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Filter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Filter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FFLTR0EN" > <name>FFLTR1EN</name> <description>Fault Input 1 Filter Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="FFLTR0EN" > <name>FFLTR2EN</name> <description>Fault Input 2 Filter Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="FFLTR0EN" > <name>FFLTR3EN</name> <description>Fault Input 3 Filter Enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>QDCTRL</name>
+               <description>Quadrature Decoder Control and Status</description>
+               <addressOffset>0x33</addressOffset>
+               <fields>
+                  <field>
+                     <name>QUADEN</name>
+                     <description>Quadrature Decoder Mode Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOFDIR</name>
+                     <description>Timer Overflow Direction in Quadrature Decoder Mode\n
+Indicates if the TOF bit was set on the top or the bottom of counting</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Bottom of counting\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Top of counting\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>QUADIR</name>
+                     <description>FTM Counter Direction in Quadrature Decoder Mode\n
+Indicates the counting direction and it is updated according to selected encoding mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Decreasing</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Increasing</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>QUADMODE</name>
+                     <description>Quadrature Decoder Mode\n
+Selects the encoding mode used in the quadrature decoder mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Phase A/B mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Count/direction mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PHBPOL</name>
+                     <description>Phase B Input Polarity</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal polarity\tPhase B input signal is not inverted before identifying the rising and falling edges of this signal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Inverted polarity\tPhase B input signal is inverted before identifying the rising and falling edges of this signal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PHAPOL</name>
+                     <description>Phase A Input Polarity</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal polarity\tPhase A input signal is not inverted before identifying the rising and falling edges of this signal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Inverted polarity\tPhase A input signal is inverted before identifying the rising and falling edges of this signal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PHBFLTREN</name>
+                     <description>Phase B Input Filter Enable\n
+Enables the filter for the quadrature decoder phase B input</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PHAFLTREN</name>
+                     <description>Phase A Input Filter Enable\n
+Enables the filter for the quadrature decoder phase A input</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

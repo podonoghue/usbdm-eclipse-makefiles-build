@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension name="MCU Change Wizard"
+      point="com.freescale.core.ide.newprojectwizard.newProjectWizard">
+      <wizard
+         uiExtensionID="com.freescale.mcu.changewizard.ui"
+         wizardExtensionID="com.freescale.mcu.changewizard.wizard1">
+         <projectGeneration
+            baseProjectType="com.freescale.mcu.changewizard.projectGeneration1">
+            <configurations>
+               <configuration
+                     configurationId="toolchain.config.hcs08.release"
+                     projectType="toolchain.hcs08.executable">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.08.usbdm"
+                           id="usbdm_hcs08"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     configurationId="toolchain.config.hcs08.absoluteAssembly.release"
+                     projectType="toolchain.hcs08.absoluteAssembly">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.08.usbdm"
+                           id="usbdm_hcs08"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     configurationId="toolchain.config.rs08.release"
+                     projectType="toolchain.rs08.executable">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.08.usbdm"
+                           id="usbdm_rs08"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     configurationId="toolchain.config.rs08.absoluteAssembly.release"
+                     projectType="toolchain.rs08.absoluteAssembly">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.08.usbdm"
+                           id="usbdm_rs08"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.isColdFire.v1">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfv1"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_INTRAM.default">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_EXTRAM.default">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTRAM">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTRAM">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTFLASH">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTFLASH">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.cf.usbdm"
+                           id="usbdm_cfvx"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.arm.ID_TARGET_INTERNAL_RAM">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.arm.usbdm"
+                           id="usbdm_arm"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                     conditionId="mcu.projectwizard.condition.arm.ID_TARGET_INTERNAL_FLASH">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo -->                     
+                     <launchSettingsRef merge-actions="insert"
+                           conditionId="mcu.projectwizard.conn.arm.usbdm"
+                           id="usbdm_arm"
+                           name="USBDM Open Source BDM">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+            </configurations>
+         </projectGeneration>
+      </wizard>
+   </extension>
+   <extension
+         id="com.freescale.mcu.changewizard.ui"
+         point="com.freescale.core.ide.wizard.ui.wizardUI">
+      <pages>
+         <page id="mcu.projectwizard.page.connections.s08">
+            <uiElement
+                  id="mcu.projectwizard.connections.list.s08.rseHostComboComposite">
+			      <uiElement
+	                  id="mcu.projectwizard.connections.list.s08">
+                        <!-- Added pgo -->
+                        <elementChoice merge-actions="insert"
+                            contentHelp="Connect to USBDM."
+                            enablementCondition="mcu.projectwizard.connections.list.s08.createNewSystemID"
+                            id="mcu.projectwizard.conn.08.usbdm"
+                            name="USBDM open source BDM">
+                        </elementChoice>
+		         </uiElement>
+            </uiElement>
+         </page>
+         <page id="mcu.projectwizard.page.connections.cf">
+               <uiElement
+                  id="mcu.projectwizard.page.connections.cf.rseHostComboComposite">
+		            <uiElement
+		                  id="mcu.projectwizard.connections.list.cf">
+                        <!-- Added pgo -->
+                        <elementChoice merge-actions="insert"
+                            contentHelp="Connect to USBDM."
+                            enablementCondition="mcu.projectwizard.page.connections.cf.createNewSystemID"
+                            id="mcu.projectwizard.conn.cf.usbdm"
+                            name="USBDM open source BDM">
+                        </elementChoice>
+		            </uiElement>
+            </uiElement>
+         </page>
+         <page id="mcu.projectwizard.page.connections.arm">
+	            <uiElement
+                   id="mcu.projectwizard.connections.list.arm.rseHostComboComposite">
+	                 <uiElement
+	                    id="mcu.projectwizard.connections.list.arm">
+                        <!-- Added pgo -->
+                        <elementChoice merge-actions="insert"
+                            contentHelp="Connect to USBDM."
+                            enablementCondition="mcu.projectwizard.connections.list.arm.createNewSystemID"
+                            id="mcu.projectwizard.conn.arm.usbdm"
+                            name="USBDM open source BDM">
+                        </elementChoice>
+	                 </uiElement>
+	            </uiElement>
+         </page>
+      </pages>
+      <conditions>
+         <condition merge-actions="insert"
+               id="mcu.projectwizard.condition.support.usbdm">
+            <or>
+               <conditionRef
+                     conditionId="mcu.projectwizard.condition.isHCS08">
+               </conditionRef>
+               <conditionRef
+                     conditionId="mcu.projectwizard.condition.isRS08">
+               </conditionRef>
+            </or>
+         </condition>
+      </conditions>
+   </extension>
+</plugin>

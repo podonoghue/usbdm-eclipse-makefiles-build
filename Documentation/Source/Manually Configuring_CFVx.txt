@@ -1,0 +1,137 @@
+/*!
+ \page configuringCFVxPage CodeWarrior - ColdFire V7.x
+ 
+   The following procedure assumes that the USBDM/CF DLLs have been installed in the recommended directory: \n
+   <b>"C:\Program Files\Freescale\CodeWarrior for ColdFire V7.1\bin\Plugins\Support\ColdFire\USBDM_CF"</b> \n
+   See the Installation instructions for more details.
+
+\section InitialCFVxTargetConfig Creation of a USBDM/CF target connection.
+ 
+ USBDM/CF uses the GDI target connection interface in the debugger.  It is necessary to create a new
+ GDI target connection to support this.  This needs to be done once only.\n
+ 
+ - Start Codewarrior and close any open projects.  Select <b>Edit->preferences...</b> to open the dialogue shown below:\n 
+   Select <b>Debugger->Remote Connections</b> to show all the target connections.\n\n
+   \image html CFVxConfiguration1.png
+   
+ - Select <b>Add...</b> to add a new connection.  This will open the dialogue below:\n\n
+   \image html CFVxConfiguration2.png
+
+ - Type in a suitable name. Note that the name must be a single word e.g. <b>USBDM_Coldfire</b>
+
+ - Select Coldfire GDI as the Debugger.
+
+ - Click the <b>Browse</b> button to select the GDI DLL to be used.  Browse to the DLL directory: \n
+   <b>"C:\Program Files\Freescale\CodeWarrior for ColdFire V7.1\bin\Plugins\Support\ColdFire\usbdm"</b> \n
+   and select the <b>usbdm-cfvx-gdi-legacy.dll</b> file. \n
+   Close each dialogue by selecting <b>OK</b>.
+
+\section CFVxTargetSelection Selecting the USBDM/CF target connection.
+ 
+ Each target in a project must be set to use the USBDM/CF target connection created above.\n
+ 
+ - Create a new project or open an existing one.
+ 
+ - Select the target you wish to use with USBDM and then press <b>Alt-F7</b>
+   to open the settings dialogue shown:\n\n
+   \image html CFVxConfiguration3.png
+
+ - Select <b>Debugger->Remote Debugging</b> and change the connection to <b>USBDM_Coldfire</b>.
+ 
+ - Note that you will need to do the above for each Target in the project.
+ 
+ - You should now be able to debug in the usual fashion.
+
+\section usingColdfire Launch Dialogues 
+   <table border="0">
+   <tr>
+   <td>
+   When starting the debugger you will be presented with the dialogue at right.  After closing this 
+   dialogue debugging will proceed as usual.  Some options may be disabled depending upon the
+   hardware capabilities of the BDM interface.\n\n
+   <b>Target Vdd Control</b> - Enables supply of Target Vdd from the USBDM module
+      -  Enable - Enables voltage supply to target Vdd through BDM connection.\n\n
+      -  3.3V or 5V - Select target supply voltage\n\n
+      -  Cycle target Vdd on reset - This option will cause the BDM to cycle the target power as part of the reset sequence.\n\n
+      -  Cycle target Vdd on connection problems - This option will cause the BDM to cycle the target power when
+         it is having trouble connecting to the target.  \n\n
+      -  Leave target powered on exit - The target Vdd supply will be left on when exiting the debugger.\n\n
+      -  Prompt to manually cycle target Vdd - Some targets may only be made to enter BDM mode through holding
+         BKGD low while applying power.  This option will cause a dialogue to appear prompting the user to remove
+         and re-apply power to the target.  The BDM will be holding BKGD low while this prompt appears.  This option
+         is not required if the BDM is supplying power to the target.\n\n
+   </td>
+   <td> \image html USBDMConfigureCFVx-1.png</td>
+   </tr>
+   </table>
+   <b>Connection Control</b>
+      -  Automatically re-connect - Not currently used.\n\n
+      -  Connection Speed - This sets the speed of communication with the target.  There is no method available for the
+         BDM to determine the speed of the target and hence this must be specified here. 
+         - <b>CFV1,2,3</b> \n
+            For most Coldfire targets the
+            speed should be less than 1/5 of the target clock frequency.\n
+            <b>Note</b> that the speed chosen should match the slowest clock frequency in use by the target.  For example, many
+            processors start up using the internal clock before switching to a faster external crystal and a clock multiplier.
+            The speed should be chosen to be 1/5 of the slower <b>internal clock frequency.</b>
+         - <b>JTAG</b> \n
+            The JTAG chain on the target is (usually?) independent of the target clock.  It should be possibly to communicate 
+            at the highest speed but this may be affected by cable length and quality of PCB routing.  Reduce speed if it is 
+            found unreliable.
+         - <b>MC56F80xx</b> \n
+            This target uses the JTAG connection but currently the speed option is ignored.
+
+ \section PopupDialogues Popups
+   <table border="0">
+   <tr>
+   <td>
+   -  When first connecting with the target you may be prompted with a connection error dialogue if the connection can't
+      be established.  This provides you with an opportunity  to return to the Connection Dialogue to change settings.  This option 
+      will not be available if the connection is later lost.
+   </td>
+   </tr>
+      <table border="0">
+      <tr>
+      <td> \image html USBDM_ConnectionError2.png </td>
+      <td> \image html USBDM_ConnectionError1.png </td>
+      <td> \image html USBDM_ConnectionError_Power.png </td>
+      </tr>
+      </table>
+   </table>
+   <table border="0">
+      <tr>
+      <td>
+      -  When connecting with the target you may be prompted to cycle the target power.  \n
+         Simply turn off and turn on the target power and then press \b Retry to continue.  The Target BKGD pin will be held
+         low while doing this.  \n This is useful for \e difficult HCS08 targets that may not respond to software reset
+         when in certain modes. For example, this may occur when a blank chip has a COP timeout or some times when the
+         processor clock is supended.  Another case would be if the BKGD pin can be programmed as an general purpose I/O pin.
+      </td>
+      <td> \image html USBDM_ConnectionError_CyclePower.png</td>
+      </tr>
+   </table>
+   <table border="0">
+   <tr>
+   <td>
+   -  After the initial connection with the target, you may be prompted to supply power to the target.  
+      This means that the BDM has detected that the target has no supply.  
+   </td>
+   <td> \image html USBDM_ConnectionError_RestorePower.png</td>
+   </tr>
+   </table>
+
+\if Power
+   <table border="0">
+   <tr>
+   <td>
+   -  The following dialogue is used to alert you to a supply overload when using the internal BDM power supply.
+      It is likely that the target is taking more current than the BDM can supply (~100 mA but depends on the regulator used). 
+      This prompt may also appear if the target supply is momentarily shorted.  The BDM 
+      detects this situation and <b>removes the target supply until a new debugging session is started</b>.
+   </td>
+   <td> \image html USBDM_ConnectionError_RestorePower.png</td>
+   </tr>
+   </table>
+\endif   
+
+*/

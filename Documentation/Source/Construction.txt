@@ -1,0 +1,85 @@
+/*!    
+ \page constructionPage BDM Construction and Firmware
+
+ \section sectionConstruction Construction.
+   -  Build the hardware using the information provided in the <b>PCB</b> download.
+   -  The following are provided:
+      - PDFs including the circuit diagrams with parts lists and example PCB layouts.
+      - PCB layouts in Altium designer format (a trial version of the software may be down loaded from http://altium.com/evaluate/). 
+      - PCB layouts exported from Altium designer as Gerber files and NC drill files.
+      
+\section sectionInitialProgramming Initial programming of USBDM bootloader into BDM Flash.
+
+   -  If you purchased a commercial version of the BDM with Version 4.0 or later software then the correct USBDM bootloader should have 
+      already been installed and you may go to \ref sectionUpdate to update the BDM firmware.  If the software is Ver 3 then
+      you are advised to update all the flash including the bootloader.
+
+\if JS16
+   -  Please complete the following before the next step:
+      -  Install the USBDM software \ref softwareInstallationPage  
+      -  Install the USBDM drivers \ref driverPage  \n
+
+   -  <b>Note - Two bootloaders are used in programming the JS16 BDM</b>
+      - The JS16 has an inbuilt USB bootloader.  This is used with the provided JS16 First Stage Bootloader to initially program the JS16.
+      - The USBDM has its own bootloader.  This is necessary for the JMxx versions and for consistency is also used with
+        the JS16 versions.  This bootloader has to be programmed into the BDM once (using the built-in bootloader from above!)\n
+      
+   -  If the BDM is completely unprogrammed you can simply plug it in, otherwise tie the BLMS pin low before doing so.\n
+   
+   -  The same driver is used by the JS16 Bootloader as used by the USBDM software so should install automatically.
+   
+   -  If you are having problems detecting the device or are not prompted for the driver you can confirm that the BDM is
+      in Freescale bootloader mode by checking the device PID/VID in the device manager.  It should be VID=15A2 & PID=0038 and
+      the device should appears as <b>JS16 Bootloader</b> in the device manager when the driver is correctly installed.\n
+      
+   -  <b>If you have previously used the Freescale JS16 GUI Bootloader then it may be necessary to uninstall the device first
+      using the Device Manager.</b>
+
+   -  Start the JS16 Bootloader.\n
+      - Select the appropriate firmware to load to the device.
+      - Press Program to program the device.  There is no progress dialogue but after a short wait a confirmation should appear.
+      -  You should then use the USBDM Firmware updater to install the current firmware version as described below. \n \n
+      \image html JS_Bootloader.png
+      
+   - <b> Note </b> - The above loader replaces the Freescale GUI Loader used previously.  This was needed as it appears the
+     Freescale software & driver does not install under Windows 64-bit.
+      
+\endif
+\if JMxx 
+   -  Program your JMxx with the binary files provided. The required flash images are installed with the USBDM software
+      and are available from the USBDM start menu. PDFs of the circuit corresponding to each hardware is provided to 
+      identify the correct firmware version to load.\n  
+      <b>This requires a HCS08 BDM.</b>  \n
+      To save space a 4-pin programming header has been used on the BDM.  An adapter is needed to connect to a
+      standard BDM header.  This would consist of a 6-pin socket wired to a 4-pin header as shown below:  I have 
+      found that if you slightly splay the 4-pin header it will make a quite reliable connection when directly 
+      inserted into a PTH board without soldering. It may then be easily removed.\n
+      Alternatively, wires may be temporarily soldered to the BDM.   \n
+   \image html BDMAdapter.png
+\endif
+
+   - <b>Note that the above programming is only needed once.</b>  Updating of the firmware is done via the <i>USBDM Firmware Bootloader</i>  - see below.\n
+   This also allows changing the USB serial number. \n\n
+
+ \section sectionUpdate Update of BDM firmware and changing serial number
+   This is the usual process for updating the BDM between different levels of the Version 4 firmware.\n
+   -  Please complete the following before the next step (if not already done):
+      -  Install the USBDM software \ref softwareInstallationPage  
+      -  Install the USBDM drivers \ref driverPage  \n \n
+   -  The provided USBDM Firmware Updater (FirmwareChanger.exe - not the JS16 First stage one!) may be used to change the BDM firmware.  
+      Its use is pretty obvious.\n
+      These required flash images are installed with the USBDM software and the correct one will be automatically loaded if the
+      <b>Auto update BDM firmware</b> checkbox is selected.\n
+      It also allows the serial number of the BDM to be changed as part of the programming process.  This is desirable as the serial
+      number is used to identify a particular BDM if several are plugged in at the same time. \n\n
+   <b>Notes:</b>\n
+   -  The bootloader re-boots the BDM into USBDM in-circuit-programming (USBDM-ICP) mode to change the main firmware.  The device will be 
+      re-enumerate and appears as a <b>new device</b>.  You may be prompted to allow driver installation.
+   -  The Bootloader will not allow the programming of a Flash image that doesn't match the existing BDM type i.e. whatever was originally
+      programmed into the BDM.  This is to prevent accidental upgrade with an incompatible Flash image.
+   -  The Bootloader requires the BDM to have already been programmed at least once so that the Bootloader firmware is present in the BDM.
+   -  If the BDM contains an old version of the Bootloader firmware (USBDM < V4.0) then it is necessary to take special steps to install the 
+      USB drivers to support both old and new VID/PIDs.  Please see the driver installation instructions. \ref NoteOnFirmwareChange \n\n
+       \image html Bootloader.png
+
+*/

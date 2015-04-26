@@ -1,0 +1,551 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+-->
+      <peripheral>
+         <?sourceFile "RNG_MCF51" ?>
+         <name>RNG</name>
+         <description>Random Number Generator</description>
+         <prependToName>RNG</prependToName>
+         <baseAddress>0xFFFF98C0</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>VER</name>
+               <description>RNGB Version ID Register</description>
+               <addressOffset>0x0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x10000280</resetValue>
+               <fields>
+                  <field>
+                     <name>MINOR</name>
+                     <description>Minor version number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAJOR</name>
+                     <description>Major version number</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TYPE</name>
+                     <description>Random number generator type</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>RNGA</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>RNGB</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>RNGC</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMD</name>
+               <description>RNGB Command Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ST</name>
+                     <description>Self test\nInitiates a self test of the RNGB&apos;s internal logic</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Self test mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GS</name>
+                     <description>Generate seed\nInitiates the seed generation process</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not in seed generation mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate seed mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CI</name>
+                     <description>Clear interrupt\nClears the RNGB interrupt if an error is not present</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear interrupt</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CE</name>
+                     <description>Clear error\nClears the errors in the RNG_ESR register and the RNGB interrupt</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear errors &amp; interrupt</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SR</name>
+                     <description>Software reset\nPerforms a software reset of the RNGB. This bit is self-clearing</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to reset</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>RNGB Control Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>FUFMOD</name>
+                     <description>FIFO underflow response mode\nControls the RNGB&apos;s response to a FIFO underflow condition</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0X</name>
+                           <description>Return zero, set FUFE</description>
+                           <value>0b0X</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Generate bus transfer error</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Return zero &amp; generate interrupt</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AR</name>
+                     <description>Auto-reseed\n
+Setting this bit allows the RNGB to automatically generate a new seed whenever one is needed.\n
+This allows software to never use the RNG_CMD[GS], although it is still possible.\n
+A new seed is needed whenever the RNG_SR[RS] is set</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not enable automatic reseeding</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable automatic reseeding</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASKDONE</name>
+                     <description>Mask done interrupt\nMasks interrupts generated upon completion of seed and self test modes</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="MASKDONE" > <name>MASKERR</name> <description>Mask error interrupt\nMasks interrupts generated by errors in the RNGB</description> <bitOffset>6</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>RNGB Status Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x500D</resetValue>
+               <fields>
+                  <field>
+                     <name>BUSY</name>
+                     <description>Busy\n
+Reflects the current state of RNGB.\n
+The RNGB is busy when seeding, generating the next seed, creating a new random number, or performing a self test</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not busy</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLP</name>
+                     <description>Sleep mode\n
+When set, the RNGB is in sleep mode and all internal clocks are disabled.\n
+While in this mode, access to the FIFO is allowed.\n
+Once the FIFO is empty, the RNGB fills the FIFO and then enters sleep mode again</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>In sleep mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RS</name>
+                     <description>Reseed needed\n
+Indicates the RNGB needs to be reseeded.\n
+This is done by setting RNG_CMD[GS], or automatically if RNG_CR[AR] is set</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not needed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Needs to be reseeded</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STDN</name>
+                     <description>Self test done\n
+Indicates the self test is complete.\n
+This bit is cleared by hardware reset or a new self test is initiated by setting RNG_CMD[ST]</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Self test not complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Self test complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SDN</name>
+                     <description>Seed done\nIndicates the RNG has generated the first seed</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Generation incomplete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generation complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NSDN</name>
+                     <description>New seed done\n
+Indicates that a new seed is ready for use during the next seed generation process</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Generation incomplete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generation complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FIFO_LVL</name>
+                     <description>FIFO level\nIndicates the number of random words currently in the output FIFO</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Number available</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FIFO_SIZE</name>
+                     <description>FIFO size\nSize of the FIFO, and maximum possible FIFO level</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Size</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERR</name>
+                     <description>Error\n
+Indicates an error was detected in the RNGB. Identified in RNG_ESR register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ST_PF</name>
+                     <description>Self test result\nTRNG, PRNG and RESEED Self test results</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Test Passed</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXX</name>
+                           <description>Tests Failed</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATPF</name>
+                     <description>Statistics test result</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000000</name>
+                           <description>Tests Passed</description>
+                           <value>0b00000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXXXXXX</name>
+                           <description>Tests Failed</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ESR</name>
+               <description>RNGB Error Status Register</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LFE</name>
+                     <description>Linear feedback shift register (LFSR) error\n
+Indicates a failure of one of the LFSRs used in the RNGB&apos;s three entropy sources.\n
+This bit is sticky and can only be cleared by a software or hardware reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LFSRs OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LFSR failure</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSCE</name>
+                     <description>Oscillator error\n
+Indicates the oscillator may be broken. \n
+This bit is sticky and can only be cleared by a software or hardware reset</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Oscillator OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Oscillator problem</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STE</name>
+                     <description>Self test error\n
+Indicates the RNGB has failed the most recent self test.\n
+This bit is sticky and can only be reset by a hardware reset or by writing one to RNG_CMD[CE]</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Self test OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Self test failed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SATE</name>
+                     <description>Statistical test error\n
+Indicates if RNGB has failed the statistical tests for the last generated seed.\n
+This bit is sticky and is cleared by a hardware or software reset or by writing one to RNG_CMD[CE]</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Statistical tests OK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Statistical tests failed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FUFE</name>
+                     <description>FIFO underflow error\n
+Indicates the a FIFO underflow condition resulting in the last random data read being unreliable.\n
+This bit can be masked by RNG_CR[FUFMOD] and is cleared by hardware or software reset or by writing one to RNG_CMD[CE]</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FIFO underflowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT</name>
+               <description>RNGB Output FIFO\n
+A read of this address when the FIFO is not empty, returns 32 bits of random data</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RANDOUT</name>
+                     <description>Random Output</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

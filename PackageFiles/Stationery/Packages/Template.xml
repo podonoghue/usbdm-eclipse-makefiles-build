@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <applyWhen>
+      <deviceFamilyIs>CortexM0</deviceFamilyIs>
+   </applyWhen>
+
+</root>

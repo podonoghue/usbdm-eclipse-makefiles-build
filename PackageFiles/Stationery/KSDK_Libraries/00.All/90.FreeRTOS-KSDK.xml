@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK FreeRTOS OS Support -->
+   <projectActionList id="freertos-KSDK-library" root="">
+      <variable id="projectOptionValue.KSDK-freertos-library-enable" 
+            name="FreeRTOS" 
+            description="FreeRTOS OS Abstraction Library"
+            radioGroup="group-ksdk-library-import-os-abstraction" 
+            >
+         <enableWhen>
+            <preclusion idRef="projectOptionValue.KSDK-KL03Z4-library-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.KSDK-freertos-library-enable" />
+         </applyWhen>
+
+         <constant id="osType" value="FreeRTOS" />
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/config/$(kdsTargetName)/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/port/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/src&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/config/$(kdsTargetName)/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/port/gcc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/FreeRTOS/src&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+
+         <!-- OS Abstraction --> 
+         <copy source="usbdm_kds_path/platform/osa/src/fsl_os_abstraction_free_rtos.c"  target="osa/fsl_os_abstraction_free_rtos.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction_free_rtos.h"  target="osa/fsl_os_abstraction_free_rtos.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction.h"            target="osa/fsl_os_abstraction.h"            type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

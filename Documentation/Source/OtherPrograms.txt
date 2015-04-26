@@ -1,0 +1,58 @@
+/*!
+ \page OtherPrograms Other Programs
+ 
+   The USBDM Installer will also add USBDM support to the following programs:\n
+   - Freemaster V1.3
+   - CF Flasher V3.1
+   - 56800E Flash Programmer (part of CodeWarrior for DSC56800E v8.3)
+   
+   The above programs should be installed \b before USBDM is installed.
+
+<hr>
+\section Freemaster Freemaster V1.3
+   The authors of the above program have kindly added support for USBDM.  This
+   support may need to be updated if a later version of USBDM is installed.  The 
+   installer will do this by default if Freemaster is detected.\n
+   Use of USBDM with Freemaster is described in the Freemaster documentation.\n
+      
+<hr>
+\section CFFlasher CF Flasher V3.1
+
+   To use the CF Flasher Programmer with USBDM do the following:
+   - Launch the program.
+   - Click \b Target \b Config to open the Target Configuration dialogue.
+      - Select \b usbdm-cff in the drop-down box in the \b BDM \b Communication group.
+      - Click the Configure button even though nothing visible happens (if you look 
+        carefully you may see the BDM activity light blink)!
+      - Select \b target device or board in the drop-down box in the \b Target \b Configuration group.
+      - Click \b OK to close the dialogue.\n
+          
+       
+   You should now be able to program in the usual fashion.\n\n
+    
+   Example Command line use with batch file:
+   
+   \verbatim
+   @echo off
+   
+   Echo Erasing target
+   CFFlasher.exe -t M52233DEMO -bdm usbdm-cff -e
+   
+   Echo programming target
+   CFFlasher.exe -t M52233DEMO -bdm usbdm-cff -p MCF52233_INTERNAL_FLASH.elf.S19
+   \endverbatim
+   
+<hr>
+\section DSC56800EFlashProgrammer  56800E Flash Programmer 
+   To use the 56800E Flash Programmer with USBDM do the following:
+   - Launch the program.
+   - Click \b Settings... to open the Settings... dialogue.
+      - Click the \b GDI radio button within the \b Connection \b Type group. 
+      - Click on the \b GDI \b DLL browse button and locate the USBDM GDI file that has been installed.  This should be
+        located within the Codewarrior software program area e.g. \n
+        "C:\Program Files\Freescale\CodeWarrior for DSC56800E v8.3\bin\Plugins\Support\USBDM\usbdm-dsc-gdi-legacy-debug.dll"
+      - Click \b OK to close the dialogue.\n
+       
+    You should now be able to program in the usual fashion.\n\n
+    
+*/

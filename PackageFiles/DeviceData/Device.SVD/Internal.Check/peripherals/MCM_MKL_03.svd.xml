@@ -1,0 +1,213 @@
+<!--
+Devices using this peripheral: 
+      MKL03Z4
+-->
+      <peripheral>
+         <?sourceFile "MCM_MKL_03" ?>
+         <name>MCM</name>
+         <description>Core Platform Miscellaneous Control Module</description>
+         <prependToName>MCM</prependToName>
+         <baseAddress>0xF0003000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PLASC</name>
+               <description>Crossbar Switch (AXBS) Slave Configuration</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x7</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ASC</name>
+                     <description>Each bit in the ASC field indicates whether there is a corresponding connection to the crossbar switch&apos;s slave input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus slave connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus slave connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLAMC</name>
+               <description>Crossbar Switch (AXBS) Master Configuration</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>AMC</name>
+                     <description>Each bit in the AMC field indicates whether there is a corresponding connection to the AXBS master input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus master connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus master connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLACR</name>
+               <description>Platform Control Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>EFDS</name>
+                     <description>Enable Flash Data Speculation</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable flash data speculation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable flash data speculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFCS</name>
+                     <description>Disable Flash Controller Speculation</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable flash controller speculation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable flash controller speculation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ESFC</name>
+                     <description>Enable Stalling Flash Controller</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable stalling flash controller when flash is busy</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable stalling flash controller when flash is busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CPO</name>
+               <description>Compute Operation Control Register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>CPOREQ</name>
+                     <description>Compute Operation request</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Request is cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Request Compute Operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOACK</name>
+                     <description>Compute Operation acknowledge</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Compute operation entry has not completed or compute operation exit has completed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Compute operation entry has completed or compute operation exit has not completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOWOI</name>
+                     <description>Compute Operation wakeup on interrupt</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When set, the CPOREQ is cleared on any interrupt or exception vector fetch</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

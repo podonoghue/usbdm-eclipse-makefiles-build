@@ -1,0 +1,410 @@
+<!--
+Devices using this peripheral: 
+      MK22F51212
+-->
+      <peripheral>
+         <?sourceFile "DAC0_MK_0x40028000" ?>
+         <name>DAC0</name>
+         <description>12-Bit Digital-to-Analog Converter</description>
+         <prependToName>DAC0</prependToName>
+         <headerStructName>DAC</headerStructName>
+         <baseAddress>0x40028000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x0</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>DATA</name>
+               <description>Data Register\n
+When the DAC Buffer is not enabled DATA controls the output voltage based on the following formula:
+V out = V in * (1 + DATA[0])/4096\n
+When the DAC buffer is enabled, DATA is mapped to the 16-word buffer</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <cluster>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>DAT,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>DATL</name>
+                  <?hide?>
+                  <description>Data Low Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>DATA</name>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DATH</name>
+                  <?hide?>
+                  <description>Data High Register</description>
+                  <addressOffset>0x1</addressOffset>
+                  <size>8</size>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>DATA</name>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <register>
+               <name>SR</name>
+               <description>Status Register</description>
+               <addressOffset>0x20</addressOffset>
+               <size>8</size>
+               <resetValue>0x2</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DACBFRPBF</name>
+                     <description>Buffer Read Pointer Bottom Position Flag\n
+Indicates if the DAC buffer read pointer is equal to C2[DACBFUP]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pointer not equal to DACBFUP</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pointer equal to DACBFUP</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACBFRPTF</name>
+                     <description>Buffer Read Pointer Top Position Flag\n
+Indicates that the DAC buffer read pointer not zero</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pointer not zero</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pointer is zero</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACBFWMF</name>
+                     <description>Buffer Watermark Flag\n
+Indicates if the DAC buffer read pointer has reached the watermark level</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Watermark not reached</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Watermark reached</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C0</name>
+               <description>Control Register 0</description>
+               <addressOffset>0x21</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DACBBIEN</name>
+                     <description>Buffer Read Pointer Bottom Flag Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DACBBIEN" > <name>DACBTIEN</name> <description>Buffer Read Pointer Top Flag Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DACBBIEN" > <name>DACBWIEN</name> <description>Buffer Watermark Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>LPEN</name>
+                     <description>Low Power Control</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>High-Power mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Low-Power mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACSWTRG</name>
+                     <description>DAC Software Trigger</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Trigger is not valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Trigger is valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACTRGSEL</name>
+                     <description>DAC Trigger Select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Hardware trigger</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software trigger</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACRFS</name>
+                     <description>DAC Reference Select</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DACREF_1 is reference</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DACREF_2 is reference</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACEN</name>
+                     <description>Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DAC is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DAC is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C1</name>
+               <description>Control Register 1</description>
+               <addressOffset>0x22</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DACBFEN</name>
+                     <description>Buffer Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pointer is disabled\t- The converted data is always the first word of the buffer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pointer is enabled\t- The converted data is the word that the read pointer points to. It means converted data can be from any word of the buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACBFMD</name>
+                     <description>Buffer Work Mode Select</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Normal mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Swing mode</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>One-Time Scan mode</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACBFWM</name>
+                     <description>Buffer Watermark Select</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>1 word</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>2 words</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>3 words</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>4 words</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>DMA Enable Select</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA is enabled. When DMA is enabled, the DMA request will be generated by original interrupts. The interrupts will not be presented on this module at the same time</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C2</name>
+               <description>Control Register 2</description>
+               <addressOffset>0x23</addressOffset>
+               <size>8</size>
+               <resetValue>0xF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DACBFUP</name>
+                     <description>Buffer Upper Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Buffer Limit</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DACBFRP</name>
+                     <description>Buffer Read Pointer</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Buffer Pointer</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

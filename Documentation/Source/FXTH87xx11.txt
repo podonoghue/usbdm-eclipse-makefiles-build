@@ -1,0 +1,76 @@
+/*!
+ \page FXTH87xx11 Programming devices while preserving data
+
+\section FXTH87xx11-1 Example issues with FXTH87xx11
+ 
+Some devices require programming ranges of the Flash memory while preserving other areas.  A good example of this is the FXTH87xx11. \n
+The FXTH87xx11 comes pre-programmed with utility code that user programs are meant to access so it is necessary to program part of the Flash.
+ 
+Before playing around with this chip I created an image of the chip contents.  
+This allows the chip to be returned to a "factory fresh" state if the firmware is accidentally erased.
+
+I have attached the image:
+	- @htmlonly Image from a FXTH870511, <a href="FXTH870511_Image.sx.zip">FXTH870511_Image.sx</a> @endhtmlonly 
+
+The USBDM HCS08 Programmmer provides two entries for use with this device:
+	- <b>FXTH87xx11-Full-Erase</b> \n
+		This is a device entry that allows completely unprotected programming of the device.  This can be used to re-program the device with the above image using mass-erase.
+	- <b>FXTH87xx11</b> \n
+		This is an entry that only allows programming the intended user area of the Flash.  
+		Due to limitations in the USBDM programmer it is not possible to prevent you from mass-erasing the device  - You have to <b>manually select selective erase</b>.
+
+ 
+<hr>
+\section FXTH87xx11-2 To restore an accidentally erased device
+<table border="0">
+<tr>
+<td>
+    - Load the above image FXTH870511_Image.sx\n
+	- Select <b>FXTH87xx11-Full-Erase</b> as the device\n
+    - Select <b>Image</b> for security\n
+    - Select <b>EraseMass</b>\n
+    - Program and verify to check it's OK
+</td>
+<td>
+   \image html MassEraseExample.png
+</td>
+</tr>
+</table>
+
+ <hr>
+\section FXTH87xx11-3 To program a user program (restricted to user flash area)
+<table border="0">
+<tr>
+<td>
+    - Load the user image file.\n
+      This image should only correspond to the user programmable area of the device.\n
+    - Select <b>FXTH87xx11</b> as the device\n
+    - Select <b>Image</b> for security\n
+    - Select <b>EraseSelective</b>\n
+    - Program and verify to check it's OK
+</td>
+<td>
+   \image html UserProgramExample.png
+</td>
+</tr>
+</table>
+ 
+ <hr>
+\section FXTH87xx11-4 To use with Codewarrior 10.x
+<table border="0">
+<tr>
+<td>
+    - Create a project in usual way with a USBDM target interface.\n
+    - Modify the USBDM options as shown below\n
+       - <b>Security field from flash image</b> (there won't be one)\n
+       - <b>Selective erase (by sector)</b>\n
+    - You should be able to debug in the usual fashion\n
+</td>
+</tr>
+<tr>
+<td>
+   \image html CodewarriorSelectiveExample.png
+</td>
+</tr>
+</table>
+*/

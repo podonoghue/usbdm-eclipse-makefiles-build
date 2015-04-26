@@ -1,0 +1,520 @@
+<!--
+Devices using this peripheral: 
+      MKE02Z2
+      MKE02Z4
+      MKE04Z4
+      MKE04Z8M4
+      MKE06Z4
+-->
+      <peripheral>
+         <?sourceFile "FGPIOA_MKE" ?>
+         <?refreshWholePeripheral?>
+         <name>FGPIOA</name>
+         <description>General Purpose Input/Output</description>
+         <prependToName>FGPIOA</prependToName>
+         <headerStructName>GPIOA</headerStructName>
+         <baseAddress>0xF8000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PDOR</name>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Data Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDORA</name>
+               <?hide?>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PDORA"> <name>PDORB</name> <addressOffset>0x1</addressOffset> </register>
+            <register derivedFrom="PDORA"> <name>PDORC</name> <addressOffset>0x2</addressOffset> </register>
+            <register derivedFrom="PDORA"> <name>PDORD</name> <addressOffset>0x3</addressOffset> </register>
+            <register>
+               <name>PSOR</name>
+               <description>Port Set Output Register\n
+Writing 1 to a bit sets the corresponding bit in the PDOR</description>
+               <addressOffset>0x4</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Set Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to set</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PSORA</name>
+               <?hide?>
+               <description>Port Set Output Register\n
+Writing 1 to a bit sets the corresponding bit in the PDOR</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PSORA"> <name>PSORB</name> <addressOffset>0x5</addressOffset> </register>
+            <register derivedFrom="PSORA"> <name>PSORC</name> <addressOffset>0x6</addressOffset> </register>
+            <register derivedFrom="PSORA"> <name>PSORD</name> <addressOffset>0x7</addressOffset> </register>
+            <register>
+               <name>PCOR</name>
+               <description>Port Clear Output Register\n
+Writing 1 to a bit clears the corresponding bit in the PDOR</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Clear Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PCORA</name>
+               <?hide?>
+               <description>Port Clear Output Register\n
+Writing 1 to a bit clears the corresponding bit in the PDOR</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PCORA"> <name>PCORB</name> <addressOffset>0x9</addressOffset> </register>
+            <register derivedFrom="PCORA"> <name>PCORC</name> <addressOffset>0xA</addressOffset> </register>
+            <register derivedFrom="PCORA"> <name>PCORD</name> <addressOffset>0xB</addressOffset> </register>
+            <register>
+               <name>PTOR</name>
+               <description>Port Toggle Output Register\n
+Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
+               <addressOffset>0xC</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Toggle Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to toggle</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTORA</name>
+               <?hide?>
+               <description>Port Toggle Output Register\n
+Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PTORA"> <name>PTORB</name> <addressOffset>0xD</addressOffset> </register>
+            <register derivedFrom="PTORA"> <name>PTORC</name> <addressOffset>0xE</addressOffset> </register>
+            <register derivedFrom="PTORA"> <name>PTORD</name> <addressOffset>0xF</addressOffset> </register>
+            <register>
+               <name>PDIR</name>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Data Input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDIRA</name>
+               <?hide?>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PDIRA"> <name>PDIRB</name> <addressOffset>0x11</addressOffset> </register>
+            <register derivedFrom="PDIRA"> <name>PDIRC</name> <addressOffset>0x12</addressOffset> </register>
+            <register derivedFrom="PDIRA"> <name>PDIRD</name> <addressOffset>0x13</addressOffset> </register>
+            <register>
+               <name>PDDR</name>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Data Direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDDRA</name>
+               <?hide?>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PDDRA"> <name>PDDRB</name> <addressOffset>0x15</addressOffset> </register>
+            <register derivedFrom="PDDRA"> <name>PDDRC</name> <addressOffset>0x16</addressOffset> </register>
+            <register derivedFrom="PDDRA"> <name>PDDRD</name> <addressOffset>0x17</addressOffset> </register>
+            <register>
+               <name>PIDR</name>
+               <description>Port Input Disable Register\n
+Used to disable the pin input function</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>A0</name>
+                     <description>Port Input Disable\n
+Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input available</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Input reads as 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="A0" > <name>A1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>A7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B0</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B1</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B2</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B3</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B5</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B6</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>B7</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C0</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C1</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C2</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C4</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C5</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C6</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>C7</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D0</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D1</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D2</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D3</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D4</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D5</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D6</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="A0" > <name>D7</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIDRA</name>
+               <?hide?>
+               <description>Port Input Disable Register\n
+Used to disable the pin input function</description>
+               <addressOffset>0x18</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register derivedFrom="PIDRA"> <name>PIDRB</name> <addressOffset>0x19</addressOffset> </register>
+            <register derivedFrom="PIDRA"> <name>PIDRC</name> <addressOffset>0x1A</addressOffset> </register>
+            <register derivedFrom="PIDRA"> <name>PIDRD</name> <addressOffset>0x1B</addressOffset> </register>
+         </registers>
+      </peripheral>

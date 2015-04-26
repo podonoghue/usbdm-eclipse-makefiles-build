@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- GNU Build options Cortex M4 & M4F (e.g. MK) devices -->
+   <projectActionList id="gnuSettings.cortex.m4">
+      <applyWhen>
+         <or>
+            <deviceFamilyIs>CortexM4</deviceFamilyIs>
+            <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+         </or>
+      </applyWhen>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mcpu">
+         <value>net.sourceforge.usbdm.cdt.arm.toolchain.mcpu.cortexM4</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mthumb">
+         <value>true</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.buildtools">
+         <value>net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM</value>
+      </projectOption>
+
+      <!-- Extra GNU Build options Cortex M4F (e.g. MKxxF) devices -->
+      <projectActionList id="gnuSettings.cortex.m4f" >
+         <applyWhen>
+            <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mfloat-abi">
+            <value>net.sourceforge.usbdm.cdt.toolchain.processor.option.misc.mfloat.hard</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mfpu">
+            <value>net.sourceforge.usbdm.cdt.toolchain.processor.option.misc.mfpu.fpv4-sp-d16</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+   
+</root>

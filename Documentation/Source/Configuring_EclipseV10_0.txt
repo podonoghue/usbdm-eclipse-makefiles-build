@@ -1,0 +1,419 @@
+/*!
+ \page eclipse_V10_1_UsagePage Codewarrior - Eclipse V10.0
+ 
+\section EclipseWizard Using the New project Wizard to create a Project with USBDM support
+
+ USBDM is now fully supported by the Codewarrior New project Wizard.  The following shows the required initial 
+ steps of creating a USBDM project using the wizard.
+
+-  Start the wizard from the Menu, for examle <b>New->Bareboard Project</b>. 
+\image html "eclipseNewProjectWizard1.png"
+
+-  Choose a suitable name for the project. 
+\image html "eclipseNewProjectWizard2.png"
+
+-  Select the target device or board for development. 
+\image html "eclipseNewProjectWizard3.png"
+
+-  Select the USDBM interface option and other interfaces as required. 
+\image html "eclipseNewProjectWizard4.png"
+ 
+ 
+This will create a new project with a debug configuration for USBDM.  It may be desirable to change some
+of the default debug configuration settings to suit your BDM.  The following section describes the USBDM
+settings available.
+
+To change debug settings select from the main menu or the drop-down menu available on the debug icon:
+<table border="0">
+   <tr>
+      <td> \image html "OpenLaunchConfigurationsFromMenu.png" </td> 
+      <td> \image html "OpenLaunchConfigurations.png"  </td>
+   </tr>
+</table>
+
+To view the USBDM Debug Options select the Debug Configuration at the left and then select the <b>Debugger</b> tab and the <b>Connection</b> sub-tab. 
+  \image html "SelectingUSBDMLaunchOptions.png"
+ 
+   The various options are discussed in the following sections  
+
+\if HCS08
+<hr>
+\section USBDMOptionsCFVx Options for RS08, HCS08 and Coldfire V1 targets only.
+
+   Some of the following options may be absent from the dialogue for a particular target.\n
+   Some options may have no effect depending upon the hardware capabilities of the BDM interface connected 
+   during the actual debugging session.\n\n
+
+   \image html "3. NewDebugConfiguration_Debugger_Connection_HCS08.png" 
+   
+<table border="0">
+   <tr>
+     <td>
+      <b>Preferred BDM - Allows selection of preferred BDM when multiple are connected when launching a debug session</b>\n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Preferred_BDM.png" 
+      - <b> Refresh - </b> This may be used to scan for connected BDMs.\n\n
+      - <b> BDM Selection drop-down box - </b> This displays the serial numbers of the connected USBDM-BDMs.  It is 
+         useful if each BDM has a unique serial number as that will allow the automatic re-selection of the same BDM
+         on the next session.\n
+         If the BDM does not support the required target then a suitable message replaces the serial number.  Communication
+         problems will also cause an informative message. \n
+         You may select a preferred BDM from those currently connected.  This BDM will be given preference when launching a
+         new debugging session.  If not found then the first suitable BDM will be used instead <em>without any prompting</em>.
+         If you have no preference or are only using a single BDM then select the <b>Any Connected USBDM</b> option. \n\n
+      - <b> BDM Description - </b> Also displayed is the BDM Description obtained from the BDM firmware.\n\n
+     </td>
+   </tr>
+
+   <tr>
+     <td>
+      <b>Target Vdd Supply - Enables supply of Target Vdd from the USBDM module</b> \n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Target_Vdd.png" 
+      - <b> Off, 3.3V or 5V -</b> Controls voltage supply to target through BDM Vdd connection.\n\n
+      - <b> Cycle target Vdd on reset -</b> This option will cause the BDM to cycle the target power as part of the reset sequence.\n\n
+      - <b> Cycle target Vdd on connection problems -</b> This option will cause the BDM to cycle the target power when
+         it is having trouble connecting to the target.  \n\n
+      - <b> Leave target powered on exit -</b> The target Vdd supply will be left on when exiting the debugger.\n\n
+     </td>
+   </tr>
+
+   <tr>
+      <td>
+      <b>Connection Control</b> \n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Connection_Control.png" 
+      - <b> Automatically re-connect -</b> The existing TBDML code appears to have problems debugging a target
+         when the target clock speed is changed.  The option causes the BDM to continuously update the 
+         interface speed to prevent loss of communication in this case.  \n\n
+      - <b> Drive RESET signal -</b> Many of the target microcontrollers do not have a dedicated 
+         reset signal.  This is not a problem as it is possible to reset the target using the BKGD mode
+         commands through the BDM interface.  However, the RESET signal on the BDM interface will
+         often still be connected to the Reset signal of the processor.  This option allows the
+         BDM to monitor and control the RESET signal when appropriate. \n\n
+      </td>
+   </tr>
+   
+   <tr>
+      <td>
+      <b>BDM Clock Select</b>
+      \image html "3. NewDebugConfiguration_Debugger_Connection_BDM_Clock_Select.png" 
+      -  Some targets provide an alternative BDM clock selection which may be at 
+         a lower speed that the default.  This can have advantages when connecting to high speed targets (mostly
+         of use in the JB16 version).  There may be other requirements before the alternative clock will be used.
+         - <b>Default</b> - Use whatever is the default BDM clock source
+         - <b>Bus Clk/2</b> - The BDM clock is derived from the target Bus Clock.  Note that this means that the
+           connection speed may vary when the target clock configuration changes. 
+         - <b>Alt</b> - Use whatever is the Alternative BDM clock source.  This varies with the target device.  \n\n  
+      </td>
+   </tr>
+
+   <tr>
+      <td>
+      <b>Internal Clock Trim</b>
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Internal_Clock_Trim.png" 
+      - <b> Trim Frequency -</b> If the check box is selected then the target chip's internal clock source will be
+           trimmed to the given frequency and the trim parameters programmed to nonvolatile memory. \n
+           Note that the value given is for the target clock - NOT the target bus clock.  See the documentation
+           for the stand-alone Programmers for a more complete discussion of the use of the clock modules.\n
+           The FTRIM value will be combined with the flash image value if not 0xFF.\n\n
+      - <b> Nonvolatile TRIM Address -</b> The address of the non-volatile flash locations to program the clock trim 
+        parameters to. Freescale has nominated particular locations to be used. It is (usually) the responsibility
+        of the reset code programmed in the chip to copy these values to the clock registers upon reset.\n\n
+      </td>
+   </tr>
+      
+   <tr>
+      <td>
+      <b>Miscellaneous</b>
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Miscellaneous.png" 
+      - <b> Mask interrupts when stepping (HCS08 only) -</b> This option allows the single stepping of the target 
+         without entry to pending interrupt routines.  If this option is not selected then stepping may result in 
+         movement to the 1st instruction of the pending interrupt routine - usually not desired. This function is
+         achieved by setting the I-bit in the CCR before each step and restoring the original value afterwards.  I
+         have tried to check for all <i>special</i> case instructions (e.g. SEI or CLI) and I believe this option
+         is safe to use.  Note that execution of a WAIT instruction will always cause entry to pending interrupt routines.
+      </td>
+   </tr>
+   
+   <tr>
+      <td>
+      <b>Common Options</b>
+         - <b>Restore Default -</b> Returns the dialogue to the target specific default values.\n\n
+      </td>
+   </tr>
+   </table>
+</table>
+\endif
+
+\if Coldfire
+<hr>
+\section USBDMOptionsCFVx USBDM Options for Coldfire V2, 3 and 4 targets only.
+
+   Some options may have no effect depending upon the hardware capabilities of the BDM interface connected 
+   during the actual debugging session.\n\n
+
+   \image html "3. NewDebugConfiguration_Debugger_Connection_CFVx.png" 
+   
+<table border="0">
+   <tr>
+     <td>
+      <b>Preferred BDM - Allows selection of preferred BDM when multiple are connected when launching a debug session</b>\n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Preferred_BDM.png" 
+      - <b> Refresh - </b> This may be used to scan for connected BDMs.\n\n
+      - <b> BDM Selection drop-down box - </b> This displays the serial numbers of the connected USBDM-BDMs.  It is 
+         useful if each BDM has a unique serial number as that will allow the automatic re-selection of the same BDM
+         on the next session.\n
+         If the BDM does not support the required target then a suitable message replaces the serial number.  Communication
+         problems will also cause an informative message. \n
+         You may select a preferred BDM from those currently connected.  This BDM will be given preference when launching a
+         new debugging session.  If not found then the first suitable BDM will be used instead <em>without any prompting</em>.
+         If you have no preference or are only using a single BDM then select the <b>Any Connected USBDM</b> option. \n\n
+      - <b> BDM Description - </b> Also displayed is the BDM Description obtained from the BDM firmware.\n\n
+     </td>
+   </tr>
+
+   <tr>
+     <td>
+      <b>Target Vdd Supply - Enables supply of Target Vdd from the USBDM module</b> \n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Target_Vdd.png" 
+      - <b> Off, 3.3V or 5V -</b> Controls voltage supply to target through BDM Vdd connection.\n\n
+      - <b> Cycle target Vdd on reset -</b> This option will cause the BDM to cycle the target power as part of the reset sequence.\n\n
+      - <b> Cycle target Vdd on connection problems -</b> This option will cause the BDM to cycle the target power when
+         it is having trouble connecting to the target.  \n\n
+      - <b> Leave target powered on exit -</b> The target Vdd supply will be left on when exiting the debugger.\n\n
+     </td>
+   </tr>
+
+   <tr>
+      <td>
+      <b>Connection Control</b> \n\n
+      \image html "3. NewDebugConfiguration_Debugger_Connection_Connection_Control_CFVx.png" 
+      - <b> Automatically re-connect -</b> The existing TBDML code appears to have problems debugging a target
+         when the target clock speed is changed.  The option causes the BDM to continuously update the 
+         interface speed to prevent loss of communication in this case.  \n\n
+      - <b>  Use PST Signals -</b> Coldfire targets have 4 PST signals or a single ALLPST signal that can be used to determine 
+             if the target is running or halted.  If using the reduced width connector this signal is not connected to the BDM. This
+             checkbox should be unselected in this case and an alternative software method will be used.\n\n
+      - <b>  Connection Speed -</b> This sets the speed of communication with the target.  There is no method available for the
+         BDM to determine the speed of the target and hence this must be specified here.\n 
+         For most Coldfire targets the speed should be less than 1/5 of the target clock frequency.\n
+         <b>Note</b> that the speed chosen should match the slowest clock frequency in use by the target.  For example, many
+         processors start up using the internal clock before switching to a faster external crystal and a clock multiplier.
+         The speed should be chosen to be 1/5 of the slower <b>internal clock frequency.</b>
+      </td>
+   </tr>
+   
+   <tr>
+      <td>
+      <b>Common Options</b>
+         - <b>Restore Default -</b> Returns the dialogue to the target specific default values.\n\n
+      </td>
+   </tr>
+
+<hr>
+<table border="0">
+   <tr>
+      <td>This completes the setting up of a launch configuration . You may proceed directly to debugging with
+          the <b>Debug button</b> or just <b>Close</b> the dialogue. \n\n
+          Later debugging sessions may be started by selecting the Launch configuration directly from the debug
+          drop-down menu.</td>
+      <td> \image html "7. Launch Debugger.png"</td>
+   </tr>
+</table>
+\endif
+
+\section PopupDialogues Popups
+
+<table border="0">
+   <tr>
+      <td>
+      - When connecting with the target you may be prompted to cycle the target power.  \n
+      Simply turn off and turn on the target power and then press \b Retry to continue.  The Target BKGD pin will be held
+      low while doing this.  \n
+      This is useful for \e difficult HCS08 targets that may not respond to software reset when in certain modes. For 
+      example, this may occur when a blank chip has a COP timeout or some times when the processor clock is suspended.
+      Another case would be if the BKGD pin can be programmed as an general purpose I/O pin.
+   </td>
+      <td> 
+         \image html USBDM_ConnectionError_CyclePower.png
+      </td>
+   </tr>
+</table>
+
+<table border="0">
+<tr>
+<td>
+-  After the initial connection with the target, you may be prompted to supply power to the target.  
+   This means that the BDM has detected that the target has no supply.  
+</td>
+<td> \image html USBDM_ConnectionError_RestorePower.png</td>
+</tr>
+</table>
+
+\if Power
+   <table border="0">
+   <tr>
+   <td>
+   -  The following dialogue is used to alert you to a supply overload when using the internal BDM power supply.
+      It is likely that the target is taking more current than the BDM can supply (~100 mA but depends on the regulator used). 
+      This prompt may also appear if the target supply is momentarily shorted.  The BDM 
+      detects this situation and <b>removes the target supply until a new debugging session is started</b>.
+   </td>
+   <td> \image html USBDM_ConnectionError_RestorePower.png</td>
+   </tr>
+   </table>
+\endif   
+
+<hr>
+ \section EclipseLaunchConfiguration Manually Creating a Launch Configuration for USBDM
+ <b>
+ Since USBDM is now supported by the Codewarrior New project Wizard the following process is no longer necessary.  
+ It is included as a reference to what the various setting do rather than as a necessary process.\n\n
+ </b>
+ 
+The following describes manually creating a custom <b>Debug Launch Configuration</b>. The configuration can
+ then be used to launch a debug session.\n\n
+The following outlines the steps required to create the Debug Launch Configuration. This should be read in
+conjunction with the Codewarrior V10 quickstart manual. It is assumed that a suitable application has been
+created beforehand.\n\n
+The following example is for a Coldfire V1 device. The settings for a RS08 or HCS08 device would be almost
+identical. The required changes are indicated where appropriate.\n\n
+<em>Programming the flash of Coldfire V2,3,4 devices is not supported so some sections are not appropriate to
+those devices. It is necessary to program the device using the Flash programmer before debugging or as a 
+autorun task setup as part of the Debug Launch Configuration</em>.\n\n
+
+ 
+<table border="0">
+   <tr>
+      <td> Select an existing application to configure for debugging. </td> 
+      <td> \image html "1a. Select Project.png"  </td>
+   </tr>
+</table>
+<table border="0">
+   <tr>
+      <td> Open the Debug Configuration Dialogue by selecting <em><b>Run->Debug Configurations...</b></em> from 
+           the menu or clicking on the small arrow to the right of the debug icon. The dialogue shown at right 
+           will open: </td>
+      <td> \image html "1a. NewDebugConfigurationMenu.png" </td>
+   </tr>
+</table>
+<table border="0">
+   <tr>
+      <td> \image html "2a. NewDebugConfiguration(New).png" </td>
+      <tr>
+      <td> Make sure <b>Codewarrior Download</b> is selected in the panel at left and then click the <b>New</b> 
+           button/icon to create a new empty configuration. This configuration will be partially completed 
+           <b>providing you have selected an existing application at the first step above</b>. </td>
+   </tr>
+</table>
+<table border="0">
+   <tr>
+      <td> \image html "2b. NewDebugConfiguration(New).png" </td>
+   </tr>
+   <tr>
+      <td> Check the dialogue contents and rename the launch configuration if desired e.g. add the USBDM suffix
+           as a reminder that this configuration is intended for the USBDM debugger.. </td>
+   </tr>
+</table>
+<table border="0">
+   <tr>
+      <td><b>Select the Debugger tab and set up the following option:</b>
+           - <em>Debugger : Codewarrior debugger for Coldfire/HCS08/RS08 as appropriate</em>\n
+               Choose the appropriate debugger for the Coldfire, HCS08 or RS08 targets. </td>
+   </tr>               
+   <tr>
+      <td><b>Select the <em>Coldfire</em>, <em>RS08</em> or <em>HCS08</em> tab at the lower part of the screen.</b>\n
+          - It is necessary to select the <b>Target Processor</b> on this page. This information is used by USBDM to select the
+            flash programming and clock trimming algorithms.</td>
+   </tr>               
+   <tr>               
+      <td> \image html "6. NewDebugConfiguration_Debugger_Coldfire.png"</td>
+   </tr>
+   <tr>
+      <td>Select <b><em>Apply</em></b> to save the changes.</td>
+   </tr>               
+</table>
+
+<table border="0">
+   <tr>               
+      <td colspan="2">
+         <b>Select the Connection tab in the lower area of the dialogue and set the following options:</b>\n
+      </td>
+   </tr>               
+   <tr>
+      <td>               
+           - <em>Connection Protocol : GDI</em>\n
+               The <b>GDI</b> (Generic Debugger Interface) protocol is a publicly know standard for debugger interfaces.
+               Codewarrrior supports a subset of this standard to which the USBDM GDI interface has been
+               designed. This allow Codewarrior to talk to the debugger hardware and interrogate and control the
+               target device. \n\n
+           - <em>Select the appropriate USBDM connection from the <b>Connection:</b> drop-down box.</em>  This will be one of \n 
+             - <b>"USBDM RS08 Interface"</b>\n 
+             - <b>"USBDM HCS08 Interface"</b>\n 
+             - <b>"USBDM Coldfire V1 Interface"</b>\n 
+             - <b>"USBDM Coldfire V2,3,4 Interface"</b>.\n
+      </td>
+      <td>             
+          \image html "3. NewDebugConfiguration_Debugger_Connection.png"
+      </td>
+   </tr>
+</table>
+   The dialogue will update to show options specific to the USBDM interface. \n
+
+<hr>   
+\section EclipseProgrammingHCS Programming Options for RS08, HCS08 or Coldfire V1
+
+<table border="0">
+   <tr>
+      <td>
+          Select the <b><em>Download</em></b> tab and modify it as shown below :\n
+          (Make sure you unselect <i>Execute Tasks</i>)
+      </td>
+   </tr>               
+   <tr>               
+      <td> \image html "5. NewDebugConfiguration_Debugger_Download_HCS08.png" </td>
+   </tr>
+   <tr>               
+      <td>The USBDM GDI dll has a built in flash programmer that handles the programming of the target non-volatile
+          memory (in RS08, HCS08 & CFV1 targets).\n
+          The options selected cause USBDM to program the target on initial download with a new debug session but
+          not to re-program if the debugger session is re-started. This prevents the Flash from being needlessly 
+          re-programmed. \n
+          The verify options may be selected but USBDM already verifies programming so this is unnecessary. Also, it
+          is possible for the Codewarrior verify to fail as USBDM may modify the data programmed to the target
+          memory to support trimming of the target clock or disabling target security to allow debugging. \n\n
+       </td>
+   </tr>
+</table>
+
+\if Coldfire
+<hr>   
+\section EclipseProgrammingCFV1 Programming Options for using CFVx
+
+<table border="0">
+   <tr> <td>The Programming of Coldfire V2, 3 & 4 targets is not supported by the USBDM GDI interface. It is necessary to
+          program the target using the Codewarrior flash programmer before each debugging session. You may add a task on this 
+          dialogue so that this is done every time the debugger is launched.\n\n
+          Before proceeding make sure that you have already have a Flash programming Target Task 
+          suitable for the target device you are using. By default Codewarrior will have created 
+          such a task when the project was created (for a Coldfire V3-4 target).  If necessary see 
+          \ref eclipseFlashProgrammingPage "Coldfire V2-V4 Flash programming" for instructions on creating one.\n\n
+          
+          - Select the <b><em>Download</em></b> tab.\n
+          - Unselect <i>Perform Standard Download</i> checkbox.
+          - Select <i>Execute Tasks</i> checkbox.
+          - Click on the <b>add</b> button to open a dialogue to add a new task.
+             - Select the Flash programming task created earlier within the drop-down box
+             - Select then <b>Execute on initial launch</b> checkbox 
+             - Unselect then <b>Execute on successive runs</b> checkbox\n to prevent repeated 
+               programming of the flash if you restart the debugging session.
+        </td>
+        <td> 
+       \image html "5. NewDebugConfiguration_Debugger_Download_CFVx.png" </td>
+   </tr>               
+   <tr>               
+      <td> \image html "Flash_Programming_Task_8.png" </td>
+   </tr>
+</table>
+\endif
+
+
+*/  

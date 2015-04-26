@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define CW_Ver="2" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <!-- ?define WxWidgetsVer="295u" ?-->
+   
+   <Fragment>
+      <!--======================================================
+            Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <!-- Directory for CodeWarrior for ColdFire V7.2 -->
+         <Directory Id="D.CODEWARRIOR_COLDFIRE_V7_2" Name="NotFoundCODEWARRIOR_COLDFIRE_V7_2">
+            <Directory Id="CODEWARRIOR_COLDFIRE_V7_2_bin" Name="bin">
+               <Directory Id="CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins" Name="Plugins">
+                  <Directory Id="CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support" Name="Support">
+                     <Directory Id="CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFire" Name="ColdFire">
+                        <Directory Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFire_USBDM" Name="USBDM"/>
+                     </Directory>
+                     <Directory Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard" Name="ColdFireWizard">
+                        <Directory Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard_XML" Name="XML" />
+                     </Directory>
+                     <Directory Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_DefaultConnections" Name="DefaultConnections"/>
+                  </Directory>
+               </Directory>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+            Registry searches
+      =======================================================-->
+     
+      <!-- Check for CodeWarrior Development Studio for ColdFire V7.2 -->
+      <Property Id="P.CODEWARRIOR_COLDFIRE_V7_2">
+         <RegistrySearch Id="Rs.CODEWARRIOR_COLDFIRE_V7_2"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\Freescale\CodeWarrior\Product Versions\CW ColdFire V7.2"
+                    Name="PATH"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for CodeWarrior Development Studio for ColdFire V7.2 -->
+      <Property Id="D.CODEWARRIOR_COLDFIRE_V7_2">
+         <RegistrySearchRef Id="Rs.CODEWARRIOR_COLDFIRE_V7_2" />
+      </Property>
+            
+      <!--======================================================
+            Actions
+      =======================================================-->
+      <!-- Patch CFVx Wizard.xml-->
+      <CustomAction
+         Id="Ca.CreateCFVxMergeCommand1_V7_2"
+         Property="Ca.MergeCFVxCommand1_V7_2"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard]\&quot; wizard.xml &quot;[D.WizardPatchData]USBDM_CFVx_Wizard_V7_2.xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeCFVxCommand1_V7_2"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Unpatch CFVx Wizard.xml-->
+      <CustomAction
+         Id="Ca.CreateCFVxUnMergeCommand1_V7_2"
+         Property="Ca.UnMergeCFVxCommand1_V7_2"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard]\&quot; wizard.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeCFVxCommand1_V7_2" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Patch CFVx Wizard device.xml-->
+      <CustomAction
+         Id="Ca.CreateCFVxMergeCommand2_V7_2"
+         Property="Ca.MergeCFVxCommand2_V7_2"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard_XML]\&quot; *m*5*.xml &quot;[D.WizardPatchData]USBDM_CFVx_DeviceWizard_V7_2.xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeCFVxCommand2_V7_2"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Unpatch CFVx Wizard device.xml -->
+      <CustomAction
+         Id="Ca.CreateCFVxUnMergeCommand2_V7_2"
+         Property="Ca.UnMergeCFVxCommand2_V7_2"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard_XML]\&quot; *m*5*.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeCFVxCommand2_V7_2" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <InstallExecuteSequence>
+          <!-- These actions set Properties used by later actions -->
+          <Custom Action="Ca.CreateCFVxMergeCommand1_V7_2"     After="CostFinalize"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files>2]]></Custom>
+          <Custom Action="Ca.CreateCFVxUnMergeCommand1_V7_2"   After="CostFinalize"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files=2]]></Custom>
+          <Custom Action="Ca.CreateCFVxMergeCommand2_V7_2"     After="CostFinalize"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files>2]]></Custom>
+          <Custom Action="Ca.CreateCFVxUnMergeCommand2_V7_2"   After="CostFinalize"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files=2]]></Custom>
+
+          <!-- These actions patch or restore the various Codewarrior XML files -->
+          <Custom Action="Ca.MergeCFVxCommand1_V7_2"           After="PublishProduct"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files>2]]></Custom>
+          <Custom Action="Ca.UnMergeCFVxCommand1_V7_2"         Before="RemoveFiles">  <![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files=2]]></Custom>
+          <Custom Action="Ca.MergeCFVxCommand2_V7_2"           After="PublishProduct"><![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files>2]]></Custom>
+          <Custom Action="Ca.UnMergeCFVxCommand2_V7_2"         Before="RemoveFiles">  <![CDATA[$C.CODEWARRIOR_COLDFIRE_V7_2.Files=2]]></Custom>
+      </InstallExecuteSequence>
+
+      <!--======================================================
+            Components
+      =======================================================-->
+     <!-- 
+           USBDM Installed Marker
+     -->
+      <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2">
+         <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.Marker' Guid='ca747494-47cc-4d78-aa9d-5a101d2aa08d' >
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- CW for Coldfire support -->
+      <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFire_USBDM">
+         <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.Files' Guid='6072e6a2-7c0a-4c4a-8769-88d40b7945c2' >
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_1'         DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_2'         DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_1'     DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_2'     DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1'   DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1d'  DiskId='1' Source='bin\usbdm-debug.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2'   DiskId='1' Source='bin\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2d'  DiskId='1' Source='bin\usbdm-system-debug.4.dll' />
+	    
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1'   DiskId='1' Source='bin\usbdm-gdi-cfvx-legacy.4.dll' KeyPath='yes' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1d'  DiskId='1' Source='bin\usbdm-gdi-cfvx-legacy-debug.4.dll'/>
+         </Component>
+      </DirectoryRef>
+
+      <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_DefaultConnections">
+         <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.DefaultConnections' Guid='097f2440-1f51-4b0c-81a8-aa5363b263be' >
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_DefaultConnections' DiskId='1' Source='WizardPatches\RC_CF_USBDM.xml' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Patch Codewarrior CFVx shortcut -->
+      <DirectoryRef Id="D.ProgramMenuPatchDir">
+         <Component Id='C.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2' Guid='*'>
+            <Shortcut Id="Sc.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2" 
+               Name = "Modify CodeWarrior for Coldfire V7.2 New Project Wizard"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Adds USBDM targets to CodeWarrior for Coldfire V7.2 New Project Wizard"
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard]\&quot; &quot;wizard.xml&quot; &quot;[D.WizardPatchData]USBDM_CFVx_Wizard_V7_2.xml&quot; "/>
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Patch Codewarrior CFVx Device shortcut -->
+      <DirectoryRef Id="D.ProgramMenuPatchDir">
+         <Component Id='C.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2_Devices' Guid='*'>
+            <Shortcut Id="Sc.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2_Devices" 
+               Name = "Modify CodeWarrior for Coldfire V7.2 New Project Wizard - device files"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Adds USBDM targets to CodeWarrior for Coldfire V7.2 New Project Wizard"
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFireWizard_XML]\&quot; &quot;*m*5*.xml&quot; &quot;[D.WizardPatchData]USBDM_CFVx_DeviceWizard_V7_2.xml&quot; "/>
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2_Devices' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!--======================================================
+            Features
+      =======================================================-->
+      <Feature Id='F.CODEWARRIOR_COLDFIRE_V7_2'
+            Title='Coldfire V7.2'
+            Description="USBDM support for CodeWarrior for Coldfire V7.2."
+            ConfigurableDirectory="D.CODEWARRIOR_COLDFIRE_V7_2"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.CODEWARRIOR_COLDFIRE_V7_2]]>
+         </Condition>
+         <ComponentRef Id='C.CODEWARRIOR_COLDFIRE_V7_2.Marker' />
+         <ComponentRef Id='C.CODEWARRIOR_COLDFIRE_V7_2.Files' />
+         <ComponentRef Id='C.CODEWARRIOR_COLDFIRE_V7_2.DefaultConnections' />
+         <ComponentGroupRef Id='Cg.PatchCodewarriorWizardsCommon' />
+         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2' />
+         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_CODEWARRIOR_CFVx_V7_2_Devices' />
+      </Feature>
+
+   </Fragment>
+</Wix>

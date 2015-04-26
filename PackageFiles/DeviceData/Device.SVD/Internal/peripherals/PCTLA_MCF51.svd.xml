@@ -1,0 +1,437 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "PCTLA_MCF51" ?>
+         <name>PCTLA</name>
+         <description>Port Pin Control</description>
+         <prependToName>PCTLA</prependToName>
+         <headerStructName>PCTL</headerStructName>
+         <baseAddress>0xFFFF9200</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0xB</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PUE</name>
+               <description>Pulling Enable Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTPUE0</name>
+                     <description>Port internal pulling enable bits\n
+Each pin has a pullup and pulldown resistor associated with it. \n
+For port pins that are not configured as inputs, these bits have no effect and the internal pull resistors are disabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTPUE0" > <name>PTPUE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUS</name>
+               <description>Pullup/Pulldown Select Register</description>
+               <addressOffset>0x1</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTPUS0</name>
+                     <description>Port pullup/pulldown select bits\n
+Each bit selects the pullup or pulldown resistor enabled by the corresponding PUE bit.\n
+For port pins that are not configured as inputs, these bits have no effect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Down</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Up</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTPUS0" > <name>PTPUS7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>DS</name>
+               <description>Drive Strength Enable Register</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTDSS0</name>
+                     <description>Port output drive strength control bits\n
+Each of these control bits selects between low and high drive strength for the associated port pin.\n
+For port pins that are configured as inputs, these bits have no effect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low drive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High drive</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTDSS0" > <name>PTDSS7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SRE</name>
+               <description>Slew Rate Enable Register</description>
+               <addressOffset>0x3</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTSRE0</name>
+                     <description>Port output slew rate enable bits\n
+Each of these control bits determines whether the output slew rate control is enabled for the associated port pin.\n
+For port pins that are not configured as outputs, these bits have no effect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No slew limit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Slew limit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTSRE0" > <name>PTSRE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PFE</name>
+               <description>Passive Filter Enable Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTPFE0</name>
+                     <description>Port passive input filter enable bits\n
+These bits enable control of input low-pass filters for port pins.\n
+For port pins not configured as inputs, these bits have no effect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Filter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Filter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTPFE0" > <name>PTPFE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IC</name>
+               <description>Interrupt Control Register</description>
+               <addressOffset>0x5</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTMOD</name>
+                     <description>Direction mode for pin interrupt\n
+This bit (along with the EDG bits) controls the detection mode of the pin interrupt for pins</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Edge</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Edge or level</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PTIE</name>
+                     <description>Interrupt enable\n
+Determines whether a pin interrupt is requested to the CPU</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PTDMAEN</name>
+                     <description>DMA enable\n
+Determines whether the pin DMA request is enabled.\n
+If it is enabled, the pin DMA request is asserted when an interrupt flag of any pin is set (at least one bit of the IF register is set).\n
+Meanwhile, a synchronous interrupt from the IF register is disabled if this bit is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPE</name>
+               <description>Interrupt Pin Enable Register</description>
+               <addressOffset>0x6</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTIPE0</name>
+                     <description>Interrupt pin enables\n
+Each PTIPE bit enables the corresponding pin for a pin interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTIPE0" > <name>PTIPE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IF</name>
+               <description>Interrupt Flag Register</description>
+               <addressOffset>0x7</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTIF0</name>
+                     <description>Interrupt flags\n
+Indicate whether a pin interrupt condition is detected on each input pin if the interrupt is enabled by the associated PTIPE bit.\n
+Writing 1 to one bit clears the associated PTIF bit if it is set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTIF0" > <name>PTIF7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IES</name>
+               <description>Interrupt Edge Select Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTEDG0</name>
+                     <description>Edge selects of pin interrupt\n
+Each EDG bit selects the falling edge/low level or rising edge/high level function of the corresponding pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Falling edge/low level</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rising edge/high level</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTEDG0" > <name>PTEDG7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFE</name>
+               <description>Digital Filter Enable Register</description>
+               <addressOffset>0x9</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTDFE0</name>
+                     <description>Digital filter enables\n
+Each PTDFE bit enables the digital filter on the pin when the pin is configured as an input.\n
+If the pin is not configured as an input, the digital filter circuit is not used.\n
+The digital filter is included in the signal path to EGPIO and any module that gets control of the pin and configures it as an input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Filter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Filter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTDFE0" > <name>PTDFE7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFC</name>
+               <description>Digital Filter Control Register</description>
+               <addressOffset>0xA</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTFF</name>
+                     <description>Filter factor bits\n
+Controls the width of the glitch (in terms of clock cycles) the filter should absorb.\n
+Glitches less than or equal to this width setting are not allowed by the filter to pass</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXXX</name>
+                           <description>Clock cycles</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PTCLKS</name>
+                     <description>Clock select bit\n
+Selects the counting clock for digital filters</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Bus clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LPO clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

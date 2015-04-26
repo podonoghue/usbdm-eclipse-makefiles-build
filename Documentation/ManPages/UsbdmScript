@@ -1,0 +1,121 @@
+.\" Manpage for UsbdmScript.
+.\" Contact podonoghue@swin.edu.au to correct errors or typos.
+.TH man 1 "13 October 2013" "1.0" "UsbdmScript man page"
+.SH NAME
+UsbdmScript - TCL based interpreter for USBDM programmers
+.SH SYNOPSIS
+UsbdmScript
+.SH DESCRIPTION
+UsbdmScript is a TCL based interpreter for use with USBDM programmers.
+
+The following commands are available:
+
+connect                      - Connect to target
+
+closeBDM                     - Close BDM connection
+
+debug <value>                - Debug commands
+
+dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err
+       returns 0=>cancel, 1=yes, 2=no, 3=ok
+                             - display dialogue
+
+exit                         - Exit program
+
+getErrorMessage <rc>         - Get given USBDM rc as String
+
+getLastError                 - Get last USBDM rc as number
+
+getLastErrorMessage          - Get last USBDM rc as string
+
+go                           - Start from current PC
+
+gs                           - Read status register
+
+halt                         - Halt the target
+
+help                         - Display help
+
+jtag-reset                   - Take JTAG TAP to TEST-LOGIC-RESET state
+
+jtag-shift <S|R|D|I><#bits><values>  - Shift given values into current chain
+                               S=stay, R=exit Run-test/Idle, D=shift-DR, I=shiftIR
+
+jtag-shift-dr                - Set up for DR chain shift
+
+jtag-shift-ir                - Set up for IR chain shift
+
+jtag-idcode                  - Read IDCODE from JTAG
+
+log 0|1                      - setting ARM loggin OFF/ON
+
+memorySpace [<N|X|P>]        - set memory space (DSC)
+
+openbdm [<bdmNumber>]        - Open given BDM
+
+pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,
+                                level=H|L|3|-
+
+regs                         - Print out registers
+
+reset <N|S><H|S|P|A>         - Reset to bdm mode
+
+rblock <addr> <size>         - Read block
+
+rb <addr> <count>            - Read byte
+
+rw <addr> <count>            - Read word
+
+rl <addr> <count>            - Read longword (CFV1 only)
+
+rreg <regNo>                 - Read core register
+
+rdreg <regNo>                - Read debug register
+
+rcreg <regNo>                - Read control register
+
+setboot                      - Set USBDM module to ICP mode
+
+setbytesex <big|little>      - Set big/little endian target
+
+settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM
+
+settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)
+
+settargetvpp <standby|on|off>- Set target Vpp
+
+speed ?Hz?                   - Set/Get speed 
+
+step                         - Execute a single instruction
+
+sync                         - Execute a low level sync
+
+tblock <start> <end> <count> - Random RAM write/read block test
+
+testcreg                     - Test control register
+
+testStatus                   - Read target status in an infinite loop
+
+wc <value>                   - Write control register
+
+wpc <value>                  - Write to PC
+
+wblock <addr> <size> <data>  - Write block
+
+wb <addr> <data>             - Write byte
+
+ww <addr><value>             - Write word
+
+wl <addr><value>             - Write longword (CFV1 only)
+
+wreg <regNo><value>          - Write core register
+
+wdreg <regNo><value>         - Write debug register
+
+wcreg <regNo><value>         - Write control register
+
+.SH SEE ALSO
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Peter O'Donoghue (podonoghue@swin.edu.au)

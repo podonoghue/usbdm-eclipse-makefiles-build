@@ -1,0 +1,79 @@
+#!/bin/bash
+set -e
+#================================
+# USBDM Version
+#
+MAJOR=4
+MINOR=10
+
+CP_OPTIONS=-p
+
+# Where to find files (relative to /)
+DUMMY_ROOT=""
+USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
+USBDM_LIB_DIR="${DUMMY_ROOT}/usr/lib/usbdm"
+USBDM_CDT_PLUGINS_DIR="${DUMMY_ROOT}/usr/share/usbdm/CDT"
+
+# System directories
+LIB_DIR="/usr/lib"
+BIN_DIR="/usr/bin"
+RULES_DIR=/etc/udev/rules.d
+
+echo 
+echo "Checking for Eclipse dropin directory"
+echo ==================================================================
+for ECLIPSE_DROPIN_DIR in "/usr/local/eclipse/dropins" "/opt/eclipse/dropins" ; do
+   echo -n "Looking for Eclipse in ${ECLIPSE_DROPIN_DIR}"
+   if [[ -d ${ECLIPSE_DROPIN_DIR} ]]; then
+      echo " - Found"
+      break;
+   else
+      echo " - Not Found"
+   fi
+done
+
+if [[ -d ${ECLIPSE_DROPIN_DIR} ]]; then
+   echo 
+   echo "Installing Eclipse CDT plugins to ${ECLIPSE_DROPIN_DIR}"
+   echo ======================================================================================
+   if [[ -d "${ECLIPSE_DROPIN_DIR}/usbdm" ]]; then
+      rm -rfv "${ECLIPSE_DROPIN_DIR}/usbdm"
+   fi
+   mkdir -pv "${ECLIPSE_DROPIN_DIR}/usbdm"
+   ln -sv  ${USBDM_CDT_PLUGINS_DIR}/* "${ECLIPSE_DROPIN_DIR}/usbdm"
+else
+   echo 
+   echo "Eclipse installation not found - Not installing Eclipse CDT plugins"
+   echo =======================================================================
+fi
+
+echo 
+echo "Checking for Codewarrior dropin directory"
+echo ==================================================================
+for CODEWARRIOR_DROPIN_DIR in "/usr/local/Freescale/CodeWarrior_MCU_10.2/eclipse/dropins" "/opt/Freescale/CodeWarrior_MCU_10.2/eclipse/dropins" ; do
+   echo -n "Looking for Codewarrior in ${CODEWARRIOR_DROPIN_DIR}"
+   if [[ -d ${CODEWARRIOR_DROPIN_DIR} ]]; then
+      echo " - Found"
+      break;
+   else
+      echo " - Not Found"
+   fi
+done
+
+if [[ -d ${CODEWARRIOR_DROPIN_DIR} ]]; then
+   echo 
+   echo "Installing Codewarrior plugins to ${CODEWARRIOR_DROPIN_DIR}"
+   echo ======================================================================================
+   if [[ -d "${CODEWARRIOR_DROPIN_DIR}/usbdm" ]]; then
+      rm -rfv "${CODEWARRIOR_DROPIN_DIR}/usbdm"
+   fi
+   mkdir -pv "${CODEWARRIOR_DROPIN_DIR}/usbdm"
+#   ln -sv  ${USBDM_CW_PLUGINS_DIR}/* "${CODEWARRIOR_DROPIN_DIR}/usbdm"
+else
+   echo 
+   echo "Codewarrior installation not found - Not installing Codewarrior plugins"
+   echo ===========================================================================
+fi
+
+#ldconfig -X -v | grep usbdm
+

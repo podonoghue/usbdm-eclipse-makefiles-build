@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- GNU Build options Cortex M0 (e.g. MKL, MKE) devices -->
+   <projectActionList id="gnuSettings.cortex.m0">
+      <applyWhen>
+         <deviceFamilyIs>CortexM0</deviceFamilyIs>
+      </applyWhen>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mcpu">
+         <value>net.sourceforge.usbdm.cdt.arm.toolchain.mcpu.cortexM0</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.mthumb">
+         <value>true</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.buildtools">
+         <value>net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM</value>
+      </projectOption>
+   </projectActionList>
+</root>

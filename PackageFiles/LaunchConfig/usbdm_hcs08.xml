@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--<!DOCTYPE WizardExtension SYSTEM "codewarriorDeviceBuildSettingsSchema.dtd">-->
+<wizardExtension>
+   <newProjectExtension>
+      <launchSettings>
+         <settingsGroup id="usbdm_hcs08">
+            <settingsGroupRef id="hc08_common_download"/>
+            <settingsGroupRef id="hc08_absolute_assembly"/>
+            <applySetting id="org.eclipse.cdt.launch.DEBUGGER_ID"
+               value="com.freescale.cdt.debug.cw.hc08.HC08Debugger" type="string" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Protocol Plugin Name"
+               value="HC08 GDI" type="string" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Type"
+               value="net.sourceforge.usbdm.connections.usbdm.hcs08" type="string" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.PhysicalConnectionAttributeBase"
+               value="net.sourceforge.usbdm.connections.usbdm." type="string" />
+            <applySetting id="net.sourceforge.usbdm.connections.usbdm.Library"
+               value="usbdm-hcs08-gdi" type="string" />
+
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.automaticReconnect"
+               value="1" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.cycleTargetVddOnReset"
+               value="0" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.cycleTargetVddonConnect"
+               value="0" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.defaultBdmSerialNumber"
+               value="Any connected USBDM" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.leaveTargetPowered"
+               value="0" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.setTargetVdd"
+               value="0" type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.trimTargetClock" value="0"
+               type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.useAltBDMClock" value="255"
+               type="string" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.useDebugBuild"
+	       value="false" type="boolean" />
+            <applySetting
+               id="net.sourceforge.usbdm.connections.usbdm.useResetSignal" value="0"
+               type="string" />
+
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDconstant"
+               value="true" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDexecutable"
+               value="true" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDinitialized"
+               value="true" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDuninitialized"
+               value="true" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVconstant"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVexecutable"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVinitialized"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVuninitialized"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDconstant"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDexecutable"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDinitialized"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDuninitialized"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVconstant"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVexecutable"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVinitialized"
+               value="false" type="boolean" />
+            <applySetting
+               id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVuninitialized"
+               value="false" type="boolean" />
+
+            <!--
+               not used - kept for reference - Sets up a flash programming task
+               <applySetting id="com.freescale.cdt.debug.cw.Embedded
+               Download.StandardDownload" value="false" type="boolean"/>
+
+               <applySetting id="com.freescale.cdt.debug.cw.Embedded
+               Download.ExecuteTasks" value="false" type="boolean"/> <applySetting
+               id="com.freescale.cdt.debug.cw.Embedded
+               Download.TaskInitialLaunches" type="list" mode="append"><listValue
+               value="true"/></applySetting> <applySetting
+               id="com.freescale.cdt.debug.cw.Embedded Download.TaskNames"
+               type="list" mode="append"><listValue
+               value="ProjectName_${ChipSTID}"/></applySetting> <applySetting
+               id="com.freescale.cdt.debug.cw.Embedded
+               Download.TaskSuccessiveRuns" type="list" mode="append"><listValue
+               value="false"/></applySetting> <applySetting
+               id="com.freescale.cdt.debug.cw.Embedded Download.TaskTypes"
+               type="list" mode="append"><listValue value="Flash Programmer for
+               HCS08/ColdFire V1"/></applySetting>
+            -->
+
+         </settingsGroup>
+      </launchSettings>
+   </newProjectExtension>
+</wizardExtension>

@@ -1,0 +1,55 @@
+#include <windows.h>
+
+#ifndef IDC_STATIC
+#define IDC_STATIC (-1)
+#endif
+
+//
+// This resource file is kept separate so that the Version #defines don't get mutilated by the resource editor.
+//
+// Version Information resources
+//
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+1 VERSIONINFO
+    FILEVERSION     4,6,0,0
+    PRODUCTVERSION  4,6,0,0
+    FILEOS          VOS_NT
+    FILETYPE        VFT_APP
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "pgo"
+            VALUE "FileDescription",  "A simple program for modifying an XML file"
+            VALUE "FileVersion",      "4.6" 
+            VALUE "InternalName",     ""
+            VALUE "ProductName",      "USBDM"
+            VALUE "ProductVersion",   "4.6"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        /* The following line should only be modified for localized versions.     */
+        /* It consists of any number of WORD,WORD pairs, with each pair           */
+        /* describing a language,codepage combination supported by the file.      */
+        /*                                                                        */
+        /* For example, a file might have values "0x409,1252" indicating that it  */
+        /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+
+#define RT_MANIFEST  24
+#define APP_MANIFEST  1
+
+APP_MANIFEST RT_MANIFEST uacManifest.xml
+
+#ifdef USE_ICON    
+   IDI_APPICON ICON "Hardware-Chip.ico"
+#endif

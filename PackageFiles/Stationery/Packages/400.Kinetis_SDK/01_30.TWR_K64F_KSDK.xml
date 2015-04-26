@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY HARDWARE_NAME     "twrk64f120m">
+<!ENTITY BOARD_NAME        "TWR_K64F120M">
+]
+>
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for TWR board -->
+   <projectActionList id="&HARDWARE_NAME;-KSDK" root="">
+      <applyWhen>
+         <and>
+            <or>
+               <hardwareMatches>&HARDWARE_NAME;</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </applyWhen>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/boards/&HARDWARE_NAME;&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/boards/&HARDWARE_NAME;&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FREEDOM</value>
+            <value>&BOARD_NAME;</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FREEDOM</value>
+            <value>&BOARD_NAME;</value>
+         </projectOption>
+         <createFolder type="" target="board" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/board.h"         target="board/board.h"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/gpio_pins.c"     target="board/gpio_pins.c"     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/gpio_pins.h"     target="board/gpio_pins.h"     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/hardware_init.c" target="board/hardware_init.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/pin_mux.c"       target="board/pin_mux.c"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/boards/&HARDWARE_NAME;/pin_mux.h"       target="board/pin_mux.h"       type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

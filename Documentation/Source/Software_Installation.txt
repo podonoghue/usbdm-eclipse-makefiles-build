@@ -1,0 +1,73 @@
+/*!    
+ \page softwareInstallationPage Software Installation
+
+ \section windowsInstallationSection Installation of USBDM for Windows
+
+Under Windows, installation is done with a standard Windows MSI file <b>USBDM_X_X_X_X_Win.msi. </b>\n
+Download from: <A HREF="http://sourceforge.net/projects/usbdm/files/Version 4.10.6/Software/">USBDM Sourceforge</A>\n
+Note that there is a separate installation for the device drivers and you must select the version appropriate to your operating system see \ref driverPage.\n \n
+\image html MSI_Installer.png
+
+The USBDM installation will do the following:
+  - Install stand-alone programmers for various targets
+     - Kinetis
+     - Coldfire V1
+     - Coldfire V2,3,4
+     - MC56F80xx
+     - HCS08
+     - HCS12
+     - RS08
+  - Install various utilities to support USBDM
+     - BDM firmware updater
+     - JS16 Bootloader
+     - TCL interpreter
+     - Coldfire V2,3,4 Unlocker
+     - MC56F80xx Unlocker
+     - JB16 Setboot utility
+     - GDB Servers
+  - Install documentation and Examples
+  - Modify various other applications that USBDM is designed to work with.  These applications need to be installed <b>before</b> USBDM.\n
+  <b>Note : </b> It may be necessary to re-install the USBDM software if Codewarrior is updated or re-installed as USBDM modified files may be replaced.
+     - CodeWarrior for Coldfire V7.2
+     - CodeWarrior for DSC56800E V8.3
+     - CodeWarrior Development Studio for S12(X) V5.1
+     - CodeWarrior Development Studio for Microcontrollers V6.3\n
+     - CW for MCU v10.1/v10.2/v10.3
+     - Eclipse Juno, Kepler or Luna (need to manually select the installation directory)
+     - Kinetis Design Studio
+     - FreeMASTER V1.3
+     - CF Flasher V3.1
+
+<hr>
+ \section linuxInstallationSection Installation of USBDM for Linux
+Under Linux, installation is done by standard Debian archive.
+  This will do the following:
+  - Install shared files to /usr/share/usbdm
+  - Install executables to /usr/bin
+  - Install shared libraries to /usr/lib/i386-linux-gnu/usbdm or /usr/lib/x86-linux-gnu/usbdm
+  - Modify the /etc/udev/rules.d file to allow use of the USBDM hardware as a USB device.
+  - Various GUI desktop icons are created for the programmers and GDB servers.
+  - Modify various other applications that USBDM is designed to work with.  These applications need to be installed <b>before</b> USBDM.\n
+     - CW for MCU v10.1/v10.2
+     - Eclipse
+     - Kinetis Design Studio
+  - A <b>.usbdm</b> directory will be created in the user's root directory when any programs are run.
+
+ Various programs are then available in the installation directory.
+  - Stand-alone programmers for various targets
+     - Kinetis
+     - Coldfire V1
+     - Coldfire V2,3,4
+     - MC56F80xx
+     - HCS08
+     - HCS12
+     - RS08
+  - Various utilities to support USBDM
+     - BDM firmware updater
+     - JS16 Bootloader
+     - TCL interpreter
+     - Coldfire V2,3,4 Unlocker
+     - MC56F80xx Unlocker
+     - JB16 Setboot utility
+  - Documention and Examples
+*/

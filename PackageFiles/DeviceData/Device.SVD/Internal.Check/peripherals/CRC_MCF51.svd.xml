@@ -1,0 +1,469 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "CRC_MCF51" ?>
+         <name>CRC</name>
+         <description>Cyclic Redundancy Check</description>
+         <prependToName>CRC</prependToName>
+         <baseAddress>0xFFFF8570</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x0</offset>
+            <size>0xA</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DATA</name>
+               <description>Data register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>LL</name>
+                     <description>Low Lower Byte</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LU</name>
+                     <description>Low Upper Byte</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HL</name>
+                     <description>High Lower Byte</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HU</name>
+                     <description>High Upper Byte</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATAH</name>
+               <?hide?>
+               <description>DATAH register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetValue>0xFFFF</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATAH</name>
+                     <description>DATAH stores the high 16 bits of the 16/32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATAHU</name>
+               <?hide?>
+               <description>DATAHU register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATAHU</name>
+                     <description>DATAHU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATAHL</name>
+               <?hide?>
+               <description>DATAHL register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATAHL</name>
+                     <description>DATAHL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATAL</name>
+               <?hide?>
+               <description>DATAL register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>16</size>
+               <resetValue>0xFFFF</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATAL</name>
+                     <description>DATAL stores the lower 16 bits of the 16/32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATALU</name>
+               <?hide?>
+               <description>DATALU register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATALU</name>
+                     <description>DATALL stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATALL</name>
+               <?hide?>
+               <description>DATALL register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATALL</name>
+                     <description>CRCLL stores the first 8 bits of the 32 bit DATA</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLY</name>
+               <description>Polynomial register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x1021</resetValue>
+               <fields>
+                  <field>
+                     <name>LOW</name>
+                     <description>Low Polynomial Half-word</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>HIGH</name>
+                     <description>High Polynomial Half-word</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYH</name>
+               <?hide?>
+               <description>GPOLYH register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetValue>0xFFFF</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYH</name>
+                     <description>POLYH stores the high 16 bits of the 16/32 bit CRC polynomial value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYHU</name>
+               <?hide?>
+               <description>GPOLYHU register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYHU</name>
+                     <description>POLYHU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYHL</name>
+               <?hide?>
+               <description>GPOLYHL register</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYHL</name>
+                     <description>POLYHL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYL</name>
+               <?hide?>
+               <description>GPOLYL register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetValue>0xFFFF</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYL</name>
+                     <description>POLYL stores the lower 16 bits of the 16/32 bit CRC polynomial value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYLU</name>
+               <?hide?>
+               <description>GPOLYLU register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYLU</name>
+                     <description>POLYLL stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPOLYLL</name>
+               <?hide?>
+               <description>GPOLYLL register</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GPOLYLL</name>
+                     <description>POLYLL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>Control register</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TCRC</name>
+                     <description>Width of CRC protocol</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>16-bit CRC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>32-bit CRC</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAS</name>
+                     <description>Write CRC Data Register As Seed\n
+When asserted, a value written to the CRC data register is considered a seed value.\n
+When negated, a value written to the CRC data register is taken as data for CRC computation</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes are data values</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes are seed values</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FXOR</name>
+                     <description>Complement Read Of CRC Data Register\n
+Some CRC protocols require the final checksum to be XORed with 0xFFFFFFFF or 0xFFFF.\n
+Asserting this bit enables on the fly complementing of read data</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No inversion</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Invert read of data register</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOTR</name>
+                     <description>Type of Transpose For Read\n
+Identify the transpose configuration of values read from the CRC Data register.\n
+Controls transposition of bits within the bytes and bytes within the whole value</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No transposition</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Bits transposed</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Bits and bytes transposed</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Bytes transposed</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TOTR" > <name>TOT</name> <description>Type of Transpose For Writes\n
+Define the transpose configuration for values written to the CRC data register\n
+Controls transposition of bits within the bytes and bytes within the whole value</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRLH</name>
+               <?hide?>
+               <description>Control register (byte access)</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TCRC</name>
+                     <description>Width of CRC protocol</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>16-bit CRC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>32-bit CRC</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAS</name>
+                     <description>Write CRC Data Register As Seed\n
+When asserted, a value written to the CRC data register is considered a seed value.\n
+When negated, a value written to the CRC data register is taken as data for CRC computation</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes are data values</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes are seed values</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FXOR</name>
+                     <description>Complement Read of CRC Data Register\n
+Some CRC protocols require the final checksum to be XORed with 0xFFFFFFFF or 0xFFFF.\n
+Asserting this bit enables on the fly complementing of read data</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No inversion</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Invert read of data register</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOTR</name>
+                     <description>Type of Transpose For Read\n
+Identify the transpose configuration of values read from the CRC Data register.\n
+Controls transposition of bits within the bytes and bytes within the whole value</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No transposition</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Bits transposed</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Bits and bytes transposed</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Bytes transposed</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TOTR" > <name>TOT</name> <description>Type of Transpose For Writes\n
+Define the transpose configuration for values written to the CRC data register\n
+Controls transposition of bits within the bytes and bytes within the whole value</description> <bitOffset>6</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

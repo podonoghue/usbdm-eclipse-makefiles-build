@@ -1,0 +1,189 @@
+/*!
+ \page tipsPage Troubleshooting USBDM
+
+\section TroubleshootingSection1 Troubleshooting USBDM installation #1
+   - <b>The USBDM option does not appear in the Codewarrior new project wizard</b> \n
+      - The USBDM installation modifies the <i>new project wizard</i> files in the Codewarrior installation.  This may fail or 
+         be undone by other changes such as the installation of Codewarrior updates.
+   - <b>The USBDM launch configurations are missing.</b> \n
+        This may cause the New Project Wizard to fail or make it impossible to launch debugging sessions with existing projects. 
+        This problem may be confirmed by trying to open the launch settings for a project and checking for the USBDM options.  
+      -  USBDM uses an eclipse plug-in to implement the USBDM launch setting dialogues.  If this plug-in is missing or failing to load the
+         above issue will occur.\n\n 
+   - Possible causes
+      - The installation failed to complete successfully.  Files are missing or failed to be modified.
+      - The changed files are overwritten by the installation of a Codewarrior service pack or upgrade.
+      - Sometimes Codewarrior does not pick up plug-in changes initially.
+      - On Windows 7, and depending on User Access Control (UAC) settings, the Codewarrior software may not be able to modify
+        its own settings to recognise the USDBDM changes.  In particular, the plug-in may fail to load because of this.\n\n  
+   - Resolution - Try the following in order
+      -# The modification of the Codewarrior Wizard XML files is done as part of the installation process but is also available as a
+        separate program in the USBDM menu.  This may be run manually if needed. (See <b><i>Start Menu->USBDM 4.x.x->/Codewarrior Wizard Patches</i></b>)
+      -# <b>If using Windows 7,</b> try running Codewarrior in administrator mode.  This may allow eclipse to update its settings to 
+        recognise the USBDM changes.  It should only be necessary to do this once.  To do this right-click on the Codewarrior icon and select
+        <b>Run as administrator</b>.  You may be prompted for confirmation.
+      -# Re-run the installation and choose <b>Repair</b> from the options.  This should check all files are present and re-run any USBDM
+        patches to Codewarrior.
+      -# Open a command prompt and run the following command: \n
+        <b>"c:\Program Files\Freescale\CW MCU v10.0\eclipse\cwide.exe" -clean</b>\n
+        This should be done as administrator under Windows 7.
+   
+ <hr>
+   
+\section TroubleshootingSection2 Troubleshooting USBDM installation #2
+   - <b>BDM appears unreliable</b> \n
+   - <b>Random messages about USB problems</b> \n
+      - This may indicate a problem with the software versions.  It is very important that exactly the same version of software and BDM firmware is used.\n
+      
+   - Resolution
+      -# Install the latest version of the USBDM software using the installer.
+      -# Check for any late updates on the sourceforge website
+      -# Update the BDM to the firmware version supplied with the software.  \n
+        This is done with the provided <b>USBDM Bootloader</b>.  
+        The required files are present in the USBDM installation directory created at step a). \n
+        Please see \ref sectionUpdate for details.
+
+ <hr>
+   
+\section TroubleshootingSection3 Troubleshooting USBDM installation #3
+   - <b>USBDM problems</b> \n
+      - There have been a few isolated problems reported that seem to relate to USB issues.\n
+      
+   - Try the following:
+      -# Install the latest version of the USBDM software using the installer.
+      -# Use a different USB cable
+      -# Use a different USB port on the computer
+      -# Add a USB port expander inline with the BDM.
+
+ <hr>
+   
+\section TroubleshootingSection4 Troubleshooting USBDM installation #4
+	- <b>Missing TBDML or OSBDM options in Codewarrior legacy <i>New Project Wizard</i></b> \n
+		- The USBDM installer attempts to patch the XML files associated with the above applications
+      to add in the TBDML or OSBDM options if they are missing.  This may be the case for later devices.\n
+      Sometimes this can be messed up by a feature of Windows 7 know as 'VirtualStore'.  This is a
+      fix to allow older programs to appear to write to protected areas of storage which is now not
+      supported - in particular "c:\program Files....".  It does this by doing the writes to another 
+      area or storage and forwarding future accesses to that new location.  \n
+      This can interfere with the USBDM patching process (or be triggered by it). The patching process
+      has been improved to avoid this.
+		- Applying service packs to Codewarrior may add new devices to Codewarrior.\n
+		  These devices may not support TBDML or OSBDM and obviously haven't been patched as above.
+   	  
+	- Check the following:
+		-# See if there is a directory "%localappdata%\VirtualStore\Program Files (x86)\Freescale\CWS12v5.1\bin\plugins\support"
+		-# Delete the contents of the <b>XML</b> subfolder
+		-# Run the <b><i>appropriate</i></b> scripts from the USBDM menu <b>Codewarrior Wizard Patches</b>
+
+ <hr>
+   
+\section TestingTheBDMHardwareSection Testing the BDM hardware
+      
+   There is TCL command interpreter supplied with the later version of usbdm.  In V4.7 onwards this is available in the start menu as <b>USBDM TCL Interpreter</b>. \n
+   Type ? to get a list of commands.\n\n
+   
+   You can do a basic output pin static test with the following commands:
+\verbatim
+;# Simple BDM test 
+openbdm
+settarget hcs12
+
+pinSet rst=L    ;# Reset pin should be low
+pinSet rst=3    ;# Reset pin should be 3-state and have a weak pull-up to target VDD on the BDM.
+pinSet bkgd=L   ;# BKGD pin should be low
+pinSet bkgd=3   ;# BKGD pin should be 3-state and have a weak pull-up to target VDD on the BDM.
+pinSet bkgd=H   ;# BKGD pin should be high
+\endverbatim
+   
+   If you are using an unpowered BDM you would need to supply power to the BDM connector for this to visibly affect the pins.\n
+   These tests should be done without a target connected.\n\n
+
+   The following provides a repeating loop for testing with a CRO:
+
+\verbatim
+;# Simple BDM test loop for HCS12/08 interface pins
+openbdm
+settarget hcs12
+
+proc test {} {
+   for { set i 1 } { $i <= 100 } { incr i } {
+     pinSet rst=L  ; after 10;
+     pinSet rst=3  ; after 10;
+     pinSet bkgd=L ; after 10;
+     pinSet bkgd=3 ; after 10;
+     pinSet bkgd=H ; after 10;
+     pinSet bkgd=3 ; after 10;
+   }
+}
+\endverbatim
+
+You can type this in directly or more conveniently save the above script it to a plain text file (say testbdm.tcl) in the same directory as the USBDM files.\n
+You can then load the script and execute the test procedure using the following commands:
+
+\verbatim
+source testbdm.tcl
+test
+\endverbatim
+
+ <hr>
+
+ \section addingTargets Adding Missing Targets to Codewarrior for HCS08/CFV1 or HCS12
+
+   <b>Note: The above Installation process now modifies the Legacy Codewarrior installations to incorporate
+      the changes described in the second alternative below. </b>
+
+   USBDM 'pretends' to be a OSBDM or a TBDML for Legacy Codewarrior versions.  Unfortunately OSBDM and TBDML 
+   (and hence USBDM) are no longer supported by Freescale for newer targets including some HCS12, HCS08 and 
+   Coldfire V1 devices.  It is still possible to use USBDM (or OSBDM) but it requires some 'messing about' 
+   to either set up a target or to modify the Codewarrior configuration to make TBDML/OSBDM/USBDM available as a connection.
+   
+   If you find that the required connection is not available for the target you are using you can do <b>either</b>
+   of the following:
+  
+  <hr> 
+   For each project that you create do the following steps:
+   <ul>
+    <li> Set up a project for one of the other debug connections (e.g. CFV1 FSL ...)</li>
+    <li> Start the debugger - the debugger will be unable to find the missing interface. Just cancel the dialogues but stay in the debugger.</li>
+    <li> Within the debugger select <B>Component->Set Connection...</b> and select <b>HCS08/CFV1 Open Source BDM</b>.</li> 
+    <li> Exit the debugger</li>
+    <li> Restart the debugger from the IDE.  You should find that it is now using the OSBDM/USBDM connection.
+      This should persist unless you change the connection within the IDE in which case you will need to re-do the above steps.</li>
+      </ul>
+   I have only tried this (recently) with a CN128 but it should work for other targets.
+   This has not been tested very much so there may be other problems.
+
+  <hr> 
+   Modify the Codewarrior configuration so that the OSBDM/USBDM connection is available in the Project Wizards.
+   <ul>
+    <li> Edit the target specific file for the device you are using e.g.\n
+    "C:\Program Files\Freescale\CodeWarrior for Microcontrollers V6.3\bin\plugins\Support\HC(S)08Wizard\XML\MCF51AC256A.xml"</li>\n
+    "C:\Program Files\Freescale\CWS12v5.1\bin\Plugins\Support\HC12Wizard\XML\mc9s12xf128.xml"
+    <li>Add the following clause amongst the other similar looking ones :)</li>
+    </ul>
+    For \b HCS08
+   \verbatim
+   <RESTRICTION>
+      <WIZARDELEMENTREF idref="ID_CONNECTION_LIST">
+         <RECURSION nameref="" idrefs="ID_CONNECTION_LIST ID_CONN_HCS08OSBDM"></RECURSION>
+      </WIZARDELEMENTREF>
+   </RESTRICTION>
+   \endverbatim
+    For \b CFV1
+   \verbatim
+   <RESTRICTION>
+      <WIZARDELEMENTREF idref="ID_CONNECTION_LIST">
+         <RECURSION nameref="" idrefs="ID_CONNECTION_LIST ID_CONN_CFV1OSBDM"></RECURSION>
+      </WIZARDELEMENTREF>
+   </RESTRICTION>
+   \endverbatim
+    For \b HCS12
+   \verbatim
+   <RESTRICTION>
+      <WIZARDELEMENTREF idref="ID_CONNECTION_LIST">
+         <RECURSION nameref="" idrefs="ID_CONNECTION_LIST ID_CONN_TBDML"></RECURSION>
+      </WIZARDELEMENTREF>
+   </RESTRICTION>
+   \endverbatim
+   <b> The above has had only trivial testing so YMMV </b>
+*/

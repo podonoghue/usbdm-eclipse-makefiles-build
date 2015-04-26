@@ -1,0 +1,365 @@
+<!--
+Devices using this peripheral: 
+      MCF5223x
+-->
+      <peripheral>
+         <?sourceFile "MCF52233_GPIO" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>GPIO</name>
+         <description>General Purpose I/O Port</description>
+         <prependToName>GPIO</prependToName>
+         <baseAddress>0x40100008</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x18</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x48</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PORTNQ</name>
+               <description>Data register\n
+The PORT registers store the data to be driven on the corresponding port n pins when the pins are configured for digital output</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PORT0</name>
+                     <description>Pin value if output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Driven low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Driven high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PORT0" > <name>PORT1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PORT0" > <name>PORT7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="PORTNQ"> <name>PORTAN</name> <addressOffset>0x2</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTAS</name> <addressOffset>0x3</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTQS</name> <addressOffset>0x4</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTTA</name> <addressOffset>0x6</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTTC</name> <addressOffset>0x7</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTTD</name> <addressOffset>0x8</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTUA</name> <addressOffset>0x9</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTUB</name> <addressOffset>0xA</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTUC</name> <addressOffset>0xB</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTDD</name> <addressOffset>0xC</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTLD</name> <addressOffset>0xD</addressOffset> </register>
+            <register derivedFrom="PORTNQ"> <name>PORTGP</name> <addressOffset>0xE</addressOffset> </register>
+            <register>
+               <name>DDRNQ</name>
+               <description>Direction register\n
+The DDR registers control the direction of the port n pin drivers when the pins are configured for digital I/O</description>
+               <addressOffset>0x18</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DDR0</name>
+                     <description>Pin direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DDR0" > <name>DDR1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DDR0" > <name>DDR7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="DDRNQ"> <name>DDRAN</name> <addressOffset>0x1A</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRAS</name> <addressOffset>0x1B</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRQS</name> <addressOffset>0x1C</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRTA</name> <addressOffset>0x1E</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRTC</name> <addressOffset>0x1F</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRTD</name> <addressOffset>0x20</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRUA</name> <addressOffset>0x21</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRUB</name> <addressOffset>0x22</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRUC</name> <addressOffset>0x23</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRDD</name> <addressOffset>0x24</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRLD</name> <addressOffset>0x25</addressOffset> </register>
+            <register derivedFrom="DDRNQ"> <name>DDRGP</name> <addressOffset>0x26</addressOffset> </register>
+            <register>
+               <name>SETNQ</name>
+               <description>Pin Data/Set Registers\n
+Writing 1s to a SETn register sets the corresponding bits in the PORTn register.\n
+Writing 0s has no effect.\n
+Reads from SETn registers reflect the current pin states</description>
+               <addressOffset>0x30</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SET0</name>
+                     <description>Pin value (write-1 to set)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SET0" > <name>SET1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SET0" > <name>SET7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="SETNQ"> <name>SETAN</name> <addressOffset>0x32</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETAS</name> <addressOffset>0x33</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETQS</name> <addressOffset>0x34</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETTA</name> <addressOffset>0x36</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETTC</name> <addressOffset>0x37</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETTD</name> <addressOffset>0x38</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETUA</name> <addressOffset>0x39</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETUB</name> <addressOffset>0x3A</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETUC</name> <addressOffset>0x3B</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETDD</name> <addressOffset>0x3C</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETLD</name> <addressOffset>0x3D</addressOffset> </register>
+            <register derivedFrom="SETNQ"> <name>SETGP</name> <addressOffset>0x3E</addressOffset> </register>
+            <register>
+               <name>CLRNQ</name>
+               <description>Port Clear Output Data Register\n
+Writing 0s to a CLRn register clears the corresponding bits in the PORTn register.\n
+Writing 1s has no effect.\n
+Reading the CLRn register returns 0s</description>
+               <addressOffset>0x48</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLR0</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin set to 0 on write</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>No effect on write</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CLR0" > <name>CLR1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLR0" > <name>CLR7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="CLRNQ"> <name>CLRAN</name> <addressOffset>0x4A</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRAS</name> <addressOffset>0x4B</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRQS</name> <addressOffset>0x4C</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRTA</name> <addressOffset>0x4E</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRTC</name> <addressOffset>0x4F</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRTD</name> <addressOffset>0x50</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRUA</name> <addressOffset>0x51</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRUB</name> <addressOffset>0x52</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRUC</name> <addressOffset>0x53</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRDD</name> <addressOffset>0x54</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRLD</name> <addressOffset>0x55</addressOffset> </register>
+            <register derivedFrom="CLRNQ"> <name>CLRGP</name> <addressOffset>0x56</addressOffset> </register>
+            <register>
+               <name>QPARNQ</name>
+               <description>Pin Configuration\n
+Configure pin for the for the primary, alternate 1 (secondary), alternate 2 (tertiary), and GPIO (quaternary) functions</description>
+               <addressOffset>0x60</addressOffset>
+               <size>16</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>QPAR0</name>
+                     <description>Pin function</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>GPIO</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Primary</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Alternate 1</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Alternate 2</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR1</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR2</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR3</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR4</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR5</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR6</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR7</name> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PARAN</name>
+               <description>Pin Configuration\nConfigure pin for the primary function or the GPIO function</description>
+               <addressOffset>0x62</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PAR0</name>
+                     <description>Pin function</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>GPIO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Primary</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PAR0" > <name>PAR1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PAR0" > <name>PAR7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>QPARAS</name>
+               <description>Pin Configuration\n
+Configure pin for the for the primary, alternate 1 (secondary), alternate 2 (tertiary), and GPIO (quaternary) functions</description>
+               <addressOffset>0x63</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>QPAR0</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>GPIO</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Primary</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Alternate 1</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Alternate 2</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR1</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR2</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="QPAR0" > <name>QPAR3</name> <bitOffset>6</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="QPARNQ"> <name>QPARQS</name> <addressOffset>0x64</addressOffset> </register>
+            <register derivedFrom="QPARAS"> <name>QPARTA</name> <addressOffset>0x66</addressOffset> </register>
+            <register derivedFrom="QPARAS"> <name>QPARTC</name> <addressOffset>0x67</addressOffset> </register>
+            <register derivedFrom="PARAN"> <name>PARTD</name> <addressOffset>0x68</addressOffset> </register>
+            <register derivedFrom="QPARAS"> <name>QPARUA</name> <addressOffset>0x69</addressOffset> </register>
+            <register derivedFrom="QPARAS"> <name>QPARUB</name> <addressOffset>0x6A</addressOffset> </register>
+            <register derivedFrom="PARAN"> <name>PARUC</name> <addressOffset>0x6B</addressOffset> </register>
+            <register derivedFrom="PARAN"> <name>PARDD</name> <addressOffset>0x6C</addressOffset> </register>
+            <register derivedFrom="PARAN"> <name>PARLD</name> <addressOffset>0x6D</addressOffset> </register>
+            <register derivedFrom="PARAN"> <name>PARGP</name> <addressOffset>0x6E</addressOffset> </register>
+         </registers>
+      </peripheral>

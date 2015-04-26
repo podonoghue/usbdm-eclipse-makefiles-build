@@ -1,0 +1,442 @@
+<!--
+Devices using this peripheral: 
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK11D5
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21D5
+      MK21F12
+      MK22D5
+      MK22F12
+      MK22F51212
+      MK24F12
+      MK30D7
+      MK30D10
+      MK30DZ10
+      MK40D7
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D7
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F12
+      MK61F15
+      MK63F12
+      MK64F12
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "FPB" ?>
+         <name>FPB</name>
+         <description>Flash Patch and Breakpoint Unit</description>
+         <prependToName>FP</prependToName>
+         <baseAddress>0xE0002000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x28</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFD0</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>FlashPatch Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x130</resetValue>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>Enable bit for the FPB.\n
+A Power-on reset clears this bit to 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FPB disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FPB enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KEY</name>
+                     <description>KEY bit\n
+On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NUM_CODE_least</name>
+                     <description>NUM_CODE[3:0]\n
+The least significant bits of NUM_CODE, the number of instruction address comparators.\n
+If NUM_CODE[6:0] is zero, the implementation does not support any instruction address comparators</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>NUM_LIT</name>
+                     <description>NUM_LIT bits\n
+The number of literal address comparators supported.\n
+If this field is zero, the implementation does not support literal comparators</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>NUM_CODE_most</name>
+                     <description>NUM_CODE[6:4]\n
+The most significant bits of NUM_CODE, the number of instruction address comparators, see bits [7:4]</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REMAP</name>
+               <description>FlashPatch Remap Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>REMAP</name>
+                     <description>REMAP bits\n
+If the FPB supports flash patch remap, this field:\n
+\t- holds bits [28:5] of the base address in SRAM to which the FPB remaps the address\n
+\t- has an UNKNOWN value on reset.\n
+If the FPB only supports breakpoint functionality this field is UNK/SBZP</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>RMPSPT</name>
+                     <description>RMPSPT bit\n
+Indicates whether the FPB unit supports flash patch remap</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Remapping not supported\tThe FPB only supports breakpoint functionality</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Hard-wired remap to SRAM region</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>COMP%s</name>
+               <description>FlashPatch Comparator Register %s</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>Enable bit for this comparator.\n
+A Power-on reset clears this bit to 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Comparator disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Comparator enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMP</name>
+                     <description>COMP bits\n
+Bits [28:2] of the address to compare with addresses from the Code memory region. Bits [31:29] and [1:0] of the address for comparison are zero.\n
+If a match occurs:\n
+- for an instruction address comparator, the REPLACE field defines the required action\n
+- for a literal address comparator, the FPB remaps the access.\n
+The reset value of this field is UNKNOWN</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>27</bitWidth>
+                  </field>
+                  <field>
+                     <name>REPLACE</name>
+                     <description>REPLACE[1:0]. \n
+For an instruction address comparator:\n
+- Defines the behavior when the COMP address is matched.\n
+- The reset value of this field is UNKNOWN.\n
+For a literal address comparator:\n
+- Field is UNK/SBZP</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Remap to remap address</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Breakpoint on lower\thalfword, upper is unaffected</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Breakpoint on upper\thalfword, lower is unaffected</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Breakpoint on both\tlower and upper halfwords</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID4</name>
+               <description>Peripheral Identification Register 4</description>
+               <addressOffset>0xFD0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>JEP106</name>
+                     <description>JEP106 continuation code</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>c4KB</name>
+                     <description>4KB Count</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID5</name>
+               <description>Peripheral Identification Register 5</description>
+               <addressOffset>0xFD4</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <name>PID6</name>
+               <description>Peripheral Identification Register 6</description>
+               <addressOffset>0xFD8</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <name>PID7</name>
+               <description>Peripheral Identification Register 7</description>
+               <addressOffset>0xFDC</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <name>PID0</name>
+               <description>Peripheral Identification Register 0</description>
+               <addressOffset>0xFE0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x3</resetValue>
+               <fields>
+                  <field>
+                     <name>PartNumber</name>
+                     <description>Part Number [7:0]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID1</name>
+               <description>Peripheral Identification Register 1</description>
+               <addressOffset>0xFE4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xB0</resetValue>
+               <fields>
+                  <field>
+                     <name>PartNumber</name>
+                     <description>Part Number [11:8]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>JEP106_identity_code</name>
+                     <description>JEP106 identity code [3:0]</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID2</name>
+               <description>Peripheral Identification Register 2</description>
+               <addressOffset>0xFE8</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x2B</resetValue>
+               <fields>
+                  <field>
+                     <name>JEP106_identity_code</name>
+                     <description>JEP106 identity code [6:4]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>Revision</name>
+                     <description>Revision</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID3</name>
+               <description>Peripheral Identification Register 3</description>
+               <addressOffset>0xFEC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CustomerModified</name>
+                     <description>Customer Modified</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RevAnd</name>
+                     <description>RevAnd</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CID0</name>
+               <description>Component Identification Register 0</description>
+               <addressOffset>0xFF0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xD</resetValue>
+               <fields>
+                  <field>
+                     <name>Preamble</name>
+                     <description>Preamble</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CID1</name>
+               <description>Component Identification Register 1</description>
+               <addressOffset>0xFF4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xE0</resetValue>
+               <fields>
+                  <field>
+                     <name>Preamble</name>
+                     <description>Preamble</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ComponentClass</name>
+                     <description>Component class</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>ROM table</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>CoreSight component</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>PrimeCell of system component with no standardized register layout, for backward compatibility</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CID2</name>
+               <description>Component Identification Register 2</description>
+               <addressOffset>0xFF8</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x5</resetValue>
+               <fields>
+                  <field>
+                     <name>Preamble</name>
+                     <description>Preamble</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CID3</name>
+               <description>Component Identification Register 3</description>
+               <addressOffset>0xFFC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xB1</resetValue>
+               <fields>
+                  <field>
+                     <name>Preamble</name>
+                     <description>Preamble</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

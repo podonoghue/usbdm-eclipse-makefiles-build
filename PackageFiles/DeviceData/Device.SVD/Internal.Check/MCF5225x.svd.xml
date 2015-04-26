@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device
+[
+<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MCF5225x_VectorTable.svd.xml">
+<!ENTITY ADC          SYSTEM "peripherals/MCF522xx_ADC.svd.xml">
+<!ENTITY BWT          SYSTEM "peripherals/MCF52259_BWT.svd.xml">
+<!ENTITY CANMB        SYSTEM "peripherals/MCF52259_CANMB.svd.xml">
+<!ENTITY CCM          SYSTEM "peripherals/MCF52259_CCM.svd.xml">
+<!ENTITY CFM          SYSTEM "peripherals/MCF522xx_CFM.svd.xml">
+<!ENTITY CLOCK        SYSTEM "peripherals/MCF52259_CLOCK.svd.xml">
+<!ENTITY DMA          SYSTEM "peripherals/MCF522xx_DMA.svd.xml">
+<!ENTITY DTIM         SYSTEM "peripherals/MCF522xx_DTIM.svd.xml">
+<!ENTITY EPORT0       SYSTEM "peripherals/MCF522xx_EPORT0.svd.xml">
+<!ENTITY FBCS         SYSTEM "peripherals/MCF52259_FBCS.svd.xml">
+<!ENTITY FEC          SYSTEM "peripherals/MCF522xx_FEC.svd.xml">
+<!ENTITY FlexCAN      SYSTEM "peripherals/MCF52259_FlexCAN.svd.xml">
+<!ENTITY GPIO         SYSTEM "peripherals/MCF52259_GPIO.svd.xml">
+<!ENTITY GPT          SYSTEM "peripherals/MCF52259_GPT.svd.xml">
+<!ENTITY I2C0         SYSTEM "peripherals/MCF522xx_I2C0.svd.xml">
+<!ENTITY INTC0        SYSTEM "peripherals/MCF522xx_INTC0.svd.xml">
+<!ENTITY PAD          SYSTEM "peripherals/MCF52259_PAD.svd.xml">
+<!ENTITY PIT0         SYSTEM "peripherals/MCF522xx_PIT0.svd.xml">
+<!ENTITY PMM          SYSTEM "peripherals/MCF522xx_PMM.svd.xml">
+<!ENTITY PWM          SYSTEM "peripherals/MCF522xx_PWM.svd.xml">
+<!ENTITY QSPI         SYSTEM "peripherals/MCF522xx_QSPI.svd.xml">
+<!ENTITY RCM          SYSTEM "peripherals/MCF52259_RCM.svd.xml">
+<!ENTITY RNGA         SYSTEM "peripherals/MCF52259_RNGA.svd.xml">
+<!ENTITY RTC          SYSTEM "peripherals/MCF52259_RTC.svd.xml">
+<!ENTITY SCM          SYSTEM "peripherals/MCF52259_SCM.svd.xml">
+<!ENTITY UART0        SYSTEM "peripherals/MCF522xx_UART0.svd.xml">
+<!ENTITY USB0         SYSTEM "peripherals/MCF52259_USB_OTG.svd.xml">
+]>
+<device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
+   <name>MCF5225x</name>
+   <version>0.0</version>
+   <description>Freescale Coldfire MCF52259</description>
+   <cpu>
+      <name>CFV2</name>
+      <revision>r1p0</revision>
+      <endian>big</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <nvicPrioBits>0</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+&ADC;
+&BWT;
+&CANMB;
+&CCM;
+&CFM;
+&CLOCK;
+&DMA;
+&DTIM;
+&EPORT0;
+&FBCS;
+&FEC;
+&FlexCAN;
+&GPIO;
+&GPT;
+&I2C0;
+<peripheral derivedFrom="I2C0"><name>I2C1</name><prependToName>I2C1</prependToName><baseAddress>0x40000380</baseAddress></peripheral>
+&INTC0;
+<peripheral derivedFrom="INTC0"><name>INTC1</name><prependToName>INTC1</prependToName><baseAddress>0x40000D00</baseAddress></peripheral>
+&PAD;
+&PIT0;
+<peripheral derivedFrom="PIT0"><name>PIT1</name><prependToName>PIT1</prependToName><baseAddress>0x40160000</baseAddress></peripheral>
+&PMM;
+&PWM;
+&QSPI;
+&RCM;
+&RNGA;
+&RTC;
+&SCM;
+&UART0;
+<peripheral derivedFrom="UART0"><name>UART1</name><prependToName>UART1</prependToName><baseAddress>0x40000240</baseAddress></peripheral>
+<peripheral derivedFrom="UART1"><name>UART2</name><prependToName>UART2</prependToName><baseAddress>0x40000280</baseAddress></peripheral>
+&USB0;
+   </peripherals>
+   <vendorExtensions>
+&VECTOR_TABLE;
+   </vendorExtensions>
+</device>

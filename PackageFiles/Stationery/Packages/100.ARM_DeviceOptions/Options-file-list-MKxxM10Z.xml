@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKxx10Z -->
+   <projectActionList id="Options-file-list-MKxxM10Z">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyIs>MK10DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK20DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK30DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK40DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK50DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK51DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK52DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK53DZ10</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK60DZ10</deviceSubfamilyIs>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Clock-setup" 
+         name="Clock setup code" 
+         description="Adds code for basic clock initialization - check assumptions made"
+         checkGroup="group-additional-options"/>
+      <variable id="projectOptionValue.UART-setup" 
+         name="UART setup code" 
+         description="Adds C stdio (UART) support for newlib"          
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Clock-setup"/>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Clock-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/clock-MKxxZ.c" target="Startup_Code/clock.c" />
+         <copy source="Project_Headers/clock_configure-MKxxM10Z.h" target="Project_Headers/clock_configure.h" />
+      </projectActionList>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.UART-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/uart-mk.c" target="Startup_Code/uart.c" />
+         <copy source="Project_Headers/uart.h" target="Project_Headers/uart.h" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

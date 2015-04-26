@@ -1,0 +1,57 @@
+#include "Version.h"
+
+#include <windows.h>
+
+#ifndef IDC_STATIC
+#define IDC_STATIC (-1)
+#endif
+
+//
+// This resource file is kept separate so that the Version #defines don't get mutilated by the resource editor.
+//
+// Version Information resources
+//
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+1 VERSIONINFO
+    FILEVERSION     USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
+    PRODUCTVERSION  USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
+    FILEOS          VOS_NT
+#ifdef INTERACTIVE    
+    FILETYPE        VFT_APP
+#else
+    FILETYPE        VFT_DLL
+#endif
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "pgo"
+            VALUE "FileDescription",  "Creates test images for flash programmer"
+            VALUE "FileVersion",      USBDM_VERSION_STRING
+            VALUE "InternalName",     ""
+            VALUE "ProductName",      "USBDM"
+            VALUE "ProductVersion",   USBDM_VERSION_STRING
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        /* The following line should only be modified for localized versions.     */
+        /* It consists of any number of WORD,WORD pairs, with each pair           */
+        /* describing a language,codepage combination supported by the file.      */
+        /*                                                                        */
+        /* For example, a file might have values "0x409,1252" indicating that it  */
+        /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+
+        VALUE "Translation", 0x409, 1252
+
+    END
+END
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+
+#ifdef USE_ICON    
+   IDI_APPICON ICON "Hardware-Chip.ico"
+#endif

@@ -1,0 +1,129 @@
+<!--
+Devices using this peripheral: 
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_BWT" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>BWT</name>
+         <description>Backup Watchdog Timer Module</description>
+         <prependToName>BWT</prependToName>
+         <baseAddress>0x40140000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>WCR</name>
+               <description>Backup Watchdog Timer Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EN</name>
+                     <description>BWT Enable bit\nThis read-always/write-once bit enables the BWT</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DBG</name>
+                     <description>Reserved\nShould read 1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Reserved</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DOZE</name>
+                     <description>Doze Mode operation\nThis read-always/write-once bit controls the function of the BWT in Doze mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DOZE" > <name>WAIT</name> <description>Wait Mode operation\nThis read-always/write-once bit controls the function of the BWT in Wait mode</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="DOZE" > <name>STOP</name> <description>Stop Mode operation\nThis read-always/write-once bit controls the function of the BWT in Stop mode</description> <bitOffset>4</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>WMR</name>
+               <description>Backup Watchdog Timer Modulus Register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>WM</name>
+                     <description>BWT modulus\nThis value is loaded into the BWT count register (WCNTR) when the BWT is 
+serviced. It thus corresponds to the BWT&apos;s timeout period</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WCNTR</name>
+               <description>Backup Watchdog Timer Count Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>WC</name>
+                     <description>BWT counter\nThis field reflects the current value in the BWT counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WSR</name>
+               <description>Backup Watchdog Timer Service Register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>WS</name>
+                     <description>BWT service field\nTo service the BWT, the software must write the values 0x5555 and 0xAAAA,
+in that order, to this field before the BWT timeout period is reached</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

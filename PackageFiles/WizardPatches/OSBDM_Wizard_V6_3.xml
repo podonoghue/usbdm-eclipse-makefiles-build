@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<WIZARD>
+	<WIZARDELEMENTLIST>
+		<WIZARDELEMENT name="" term="" id="ID_CHIP_LIST">
+			<WIZARDELEMENTLIST>
+				<WIZARDELEMENT name="" term="" id="ID_CHIP_FAMILY_.*">
+					<WIZARDELEMENTLIST>
+						<WIZARDELEMENT name="" term="">
+							<WIZARDELEMENTLIST>
+								<WIZARDELEMENT name="Chip">
+									<RESTRICTIONLIST>
+                              <!-- Added pgo -->
+										<RESTRICTION merge-actions="insert">
+											<WIZARDELEMENTREF idref="ID_CONNECTION_LIST">
+												<RECURSION nameref=""
+													idrefs="ID_CONNECTION_LIST ID_CONN_HCS08OSBDM" />
+											</WIZARDELEMENTREF>
+										</RESTRICTION>
+									</RESTRICTIONLIST>
+								</WIZARDELEMENT>
+							</WIZARDELEMENTLIST>
+						</WIZARDELEMENT>
+					</WIZARDELEMENTLIST>
+				</WIZARDELEMENT>
+			</WIZARDELEMENTLIST>
+		</WIZARDELEMENT>
+	</WIZARDELEMENTLIST>
+</WIZARD>

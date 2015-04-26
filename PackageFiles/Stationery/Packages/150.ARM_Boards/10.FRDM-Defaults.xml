@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+
+   <!-- Modifications for Freedom or Tower board -->
+   <projectActionList id="FRDM-Defaults" >
+      <applyWhen>
+         <or>
+            <deviceNameMatches>^FRDM[-_].*</deviceNameMatches>
+            <deviceNameMatches>^TWR[-_].*</deviceNameMatches>
+         </or>
+      </applyWhen>
+
+      <!-- Enable BDM power option -->
+      <constant id="bdmTargetVdd" value="BDM_TARGET_VDD_3V3" replace="true" />
+
+   </projectActionList>
+
+</root>

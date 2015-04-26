@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define CW_Ver="3" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <!-- ?define WxWidgetsVer="295u" ?-->
+   
+   <Fragment>
+      <!--======================================================
+            Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <!-- Directory for CodeWarrior for DSC V8.3 -->
+         <Directory Id="D.CODEWARRIOR_DSC_V8_3" Name="NotFoundCODEWARRIOR_DSC_V8_3">
+            <Directory Id="CODEWARRIOR_DSC_V8_3_bin" Name="bin">
+               <Directory Id="CODEWARRIOR_DSC_V8_3_bin_Plugins" Name="Plugins">
+                  <Directory Id="CODEWARRIOR_DSC_V8_3_bin_Plugins_Support" Name="Support">
+                     <Directory Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_USBDM" Name="USBDM"/>
+                     <Directory Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_DefaultConnections" Name="DefaultConnections"/>
+                  </Directory>
+               </Directory>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+            Registry searches
+      =======================================================-->
+     
+      <!-- Check for CodeWarrior for DSC56800E v8.3 -->
+      <Property Id="P.CODEWARRIOR_DSC_V8_3">
+         <RegistrySearch Id="Rs.CODEWARRIOR_DSC_V8_3"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\Freescale\CodeWarrior\Product Versions\CW for DSC56800 8.3"
+                    Name="PATH"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for CodeWarrior Development Studio for DSC56800E v8.3 -->
+      <Property Id="D.CODEWARRIOR_DSC_V8_3">
+         <RegistrySearchRef Id="Rs.CODEWARRIOR_DSC_V8_3" />
+      </Property>
+            
+      <!--======================================================
+            Actions
+      =======================================================-->
+
+      <!-- None -->
+
+      <!--======================================================
+            Components
+      =======================================================-->
+      <!-- USBDM Installed Marker -->
+      <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3">
+         <Component Id='C.CODEWARRIOR_DSC_V8_3.Marker' Guid='77a808df-6ae2-4c6f-9e58-22bc02171248' >
+            <File Id='CODEWARRIOR_DSC_V8_3_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- CW for DSC support -->
+      <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_USBDM">
+         <Component Id='C.CODEWARRIOR_DSC_V8_3.Files' Guid='38a3f397-4ffd-4edb-8642-d086279430e8' >
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'        DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'        DiskId='1' Source='bin\libstdc++-6.dll' />
+
+            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_1'    DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_2'    DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1'  DiskId='1' Source='bin\usbdm.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1d' DiskId='1' Source='bin\usbdm-debug.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2'   DiskId='1' Source='bin\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2d'  DiskId='1' Source='bin\usbdm-system-debug.4.dll' />
+	    
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_3'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_3d' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1'  DiskId='1' Source='bin\usbdm-gdi-dsc-legacy.4.dll'   KeyPath='yes' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1d' DiskId='1' Source='bin\usbdm-gdi-dsc-legacy-debug.4.dll'/>
+         </Component>
+      </DirectoryRef>
+
+      <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_DefaultConnections">
+         <Component Id='C.CODEWARRIOR_DSC_V8_3.DefaultConnections' Guid='380703a8-a803-4f46-9c57-3e2e0d34dd13' >
+            <File Id='CODEWARRIOR_DSC_V8_3_DefaultConnections' DiskId='1' Source='WizardPatches\RC_56800E_USBDM.xml' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!--======================================================
+            Features
+      =======================================================-->
+      <Feature Id='F.CODEWARRIOR_DSC_V8_3'
+            Title='DSC56800E V8.3'
+            Description="USBDM support for CodeWarrior for DSC56800E V8.3."
+            ConfigurableDirectory="D.CODEWARRIOR_DSC_V8_3"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.CODEWARRIOR_DSC_V8_3]]>
+         </Condition>
+         <ComponentRef Id='C.CODEWARRIOR_DSC_V8_3.Marker' />
+         <ComponentRef Id='C.CODEWARRIOR_DSC_V8_3.Files' />
+         <ComponentRef Id='C.CODEWARRIOR_DSC_V8_3.DefaultConnections' />
+      </Feature>
+
+   </Fragment>
+</Wix>

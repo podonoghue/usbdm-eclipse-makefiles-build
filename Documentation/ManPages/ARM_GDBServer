@@ -1,0 +1,43 @@
+.\" Manpage for ARM_GDBServer.
+.\" Contact podonoghue@swin.edu.au to correct errors or typos.
+.TH man 1 "13 October 2013" "1.0" "ARM_GDBServer man page"
+.SH NAME
+ARM_GDBServer - USBDM ARM socket based server for GDB
+.SH SYNOPSIS
+ARM_GDBServer [-bdm <str>] [-requiredBdm <str>] [-device <str>] [-erase <str>] [-exitOnClose] [-nvloc <str>] [-power <str>] [-port <str>] [-reset <str>] [-speed <str>] [-trim <str>] [-vdd <str>]
+.SH DESCRIPTION
+ARM_GDBServer is a GUI based server for GDB.
+.SH OPTIONS
+
+  -bdm:<str>        	- Serial number of preferred BDM to use
+
+  -requiredBdm:<str>	- Serial number of required BDM to use
+
+  -device:<str>     	- Target device e.g. MCF51CN128
+
+  -erase:<str>      	- Erase method (Mass, All, Selective, None)
+
+  -exitOnClose      	- Exit Server when connection closed
+
+  -nvloc:<str>      	- Trim non-volatile memory location (hex)
+
+  -power:<str>      	- Power timing (off,recovery) 100-10000 ms
+
+  -port:<str>       	- Server port # to use e.g. 1234
+
+  -reset:<str>      	- Reset timing (active,release,recovery) 10-10000 ms
+
+  -speed:<str>      	- Interface speed (CFVx/Kinetis/DSC) kHz
+
+  -security:<str>      	- Target security after programming (Image, Unsecured, Smart)
+
+  -trim:<str>       	- Trim internal clock to frequency (in kHz) e.g. 32.7
+
+  -vdd:<str>        	- Supply Vdd to target (3V3 or 5V)
+
+.SH SEE ALSO
+ARM_GDBServer(1), CFV1_GDBServer(1), CFVx_GDBServer(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Peter O'Donoghue (podonoghue@swin.edu.au)

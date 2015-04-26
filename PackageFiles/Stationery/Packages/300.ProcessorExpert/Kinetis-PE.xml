@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Processor Expert -->
+   <projectActionList id="Kinetis-PE" root="usbdm_resource_path/Stationery/ARM/">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyIs>CortexM0</deviceFamilyIs>
+               <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
+               <deviceFamilyIs>CortexM4</deviceFamilyIs>
+               <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-PE" 
+         name="Kinetis PE" 
+         description="Run Processor Expert Wizard to add PE features" 
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <not>
+               <or>
+                  <requirement idRef="projectOptionValue.Clock-setup" />
+                  <requirement idRef="projectOptionValue.CMSIS-RTOS" />
+                  <requirement idRef="projectOptionValue.UART-setup" />
+                  <requirement idRef="projectOptionValue.FRDM-Blinky" />
+               </or>
+            </not>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <and>
+            <variableRef idRef="projectOptionValue.Kinetis-PE"/>
+            </and>
+         </applyWhen>
+         <!--
+         <copy source="com.freescale.processorexpert.core.prefs" target=".settings/com.freescale.processorexpert.core.prefs" />
+         <copy source="com.processorexpert.core.ide.newprojectwizard.prefs" target=".settings/com.processorexpert.core.ide.newprojectwizard.prefs" />
+         <copy source="ProcessorExpert.pe" target="ProcessorExpert.pe" />
+         -->
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile" replace="true">
+            <value>ProcessorExpert.ld</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" replace="true">
+            <value>ProcessorExpert.ld</value>
+         </projectOption>
+         <excludeSourceFolder target="Startup_Code" excluded="true" />
+         <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/main.cpp" />
+         <customAction class="net.sourceforge.usbdm.cdt.ui.actions.AddProcessorExpert" />
+      </projectActionList>
+   </projectActionList>
+</root>

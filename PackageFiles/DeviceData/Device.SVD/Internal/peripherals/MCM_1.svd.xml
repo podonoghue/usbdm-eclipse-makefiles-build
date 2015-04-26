@@ -1,0 +1,166 @@
+<!--
+Devices using this peripheral: 
+      MK10D7
+      MK20D7
+      MK30D7
+      MK40D7
+      MK50D7
+      MK51D7
+-->
+      <peripheral>
+         <?sourceFile "MCM_1" ?>
+         <name>MCM</name>
+         <description>Core Platform Miscellaneous Control Module</description>
+         <prependToName>MCM</prependToName>
+         <baseAddress>0xE0080000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PLASC</name>
+               <description>Crossbar Switch (AXBS) Slave Configuration</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x1F</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ASC</name>
+                     <description>Each bit in the ASC field indicates whether there is a corresponding connection to the crossbar switch&apos;s slave input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus slave connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus slave connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLAMC</name>
+               <description>Crossbar Switch (AXBS) Master Configuration</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x3F</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>AMC</name>
+                     <description>Each bit in the AMC field indicates whether there is a corresponding connection to the AXBS master input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus master connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus master connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>Control Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>SRAMUAP</name>
+                     <description>SRAM_U arbitration priority</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Round robin</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Special round robin (favors SRAM backoor accesses over the processor)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Fixed priority. Processor has highest, backdoor has lowest</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Fixed priority. Backdoor has highest, processor has lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRAMUWP</name>
+                     <description>SRAM_U write protect</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRAMLAP</name>
+                     <description>SRAM_L arbitration priority</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Round robin</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Special round robin (favors SRAM backoor accesses over the processor)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Fixed priority. Processor has highest, backdoor has lowest</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Fixed priority. Backdoor has highest, processor has lowest</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRAMLWP</name>
+                     <description>SRAM_L Write Protect</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

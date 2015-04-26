@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKxxM7 -->
+   <projectActionList id="Options-file-list-MKxxM7">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyIs>MK10D7</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK20D7</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK30D7</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK40D7</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK50D7</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK51D7</deviceSubfamilyIs>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Clock-setup" 
+         name="Clock setup code" 
+         description="Adds code for basic clock initialization - check assumptions made"
+         checkGroup="group-additional-options"/>
+      <variable id="projectOptionValue.UART-setup" 
+         name="UART setup code" 
+         description="Adds C stdio (UART) support for newlib"          
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Clock-setup"/>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Clock-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/clock-MKxx.c" target="Startup_Code/clock.c" />
+         <copy source="Project_Headers/clock_configure-MKxxM7.h" target="Project_Headers/clock_configure.h" />
+      </projectActionList>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.UART-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/uart-mk.c" target="Startup_Code/uart.c" />
+         <copy source="Project_Headers/uart.h" target="Project_Headers/uart.h" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#nm lib* --defined-only -g
+nm $1  --defined-only --demangle --dynamic --defined-only|more

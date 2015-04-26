@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- GNU Build options CFVx -->
+   <projectActionList id="gnuSettings.mcf52" >
+      <applyWhen>
+         <or>
+            <deviceFamilyIs>CFV2</deviceFamilyIs>
+         </or>
+      </applyWhen>
+      <projectOption id="net.sourceforge.usbdm.cdt.arm.toolchain.buildtools">
+         <value>net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire</value>
+      </projectOption>
+      
+      <projectActionList id="gnuSettings.mcf52213" >
+         <applyWhen>
+            <deviceNameIs>MCF52213</deviceNameIs>
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu" > 
+            <value>net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu.52213</value> 
+         </projectOption>
+      </projectActionList>
+   
+      <projectActionList id="gnuSettings.mcf52223" >
+         <applyWhen>
+            <or>
+               <deviceNameIs>MCF52221</deviceNameIs>
+               <deviceNameIs>MCF52223</deviceNameIs>
+            </or>
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu" > 
+         <value>net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu.52223</value> 
+         </projectOption> 
+      </projectActionList>
+   
+      <projectActionList id="gnuSettings.mcf5223x" >
+         <applyWhen>
+            <or>
+               <deviceNameIs>MCF52230</deviceNameIs>
+               <deviceNameIs>MCF52231</deviceNameIs>
+               <deviceNameIs>MCF52232</deviceNameIs>
+               <deviceNameIs>MCF52233</deviceNameIs>
+               <deviceNameIs>MCF52234</deviceNameIs>
+               <deviceNameIs>MCF52235</deviceNameIs>
+               <deviceNameIs>MCF52236</deviceNameIs>
+            </or>
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu" > 
+            <value>net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu.52235</value> 
+         </projectOption> 
+      </projectActionList>
+   
+      <projectActionList id="gnuSettings.mcf52259" >
+         <applyWhen>
+            <or>
+               <deviceNameIs>MCF52259</deviceNameIs>
+               <deviceNameMatches>.*52259.*</deviceNameMatches>
+            </or>
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu" > 
+            <value>net.sourceforge.usbdm.cdt.coldfire.toolchain.mcpu.52259</value> 
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+</root>

@@ -1,0 +1,105 @@
+      
+      <!--
+      =============================================================================================
+      -->
+      <device family="HCS08Plus" name="MC9S08AC_16K_sml_xFF">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x00FF" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+         <flashProgramRef ref="HCS08-small-flash-program" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_16K_def_xFF">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x00FF" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_16K_sml_x15F">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x015F" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+         <flashProgramRef ref="HCS08-small-flash-program" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_16K_def_x15F">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x015F" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_16K_sml_x25F">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x025F" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+         <flashProgramRef ref="HCS08-small-flash-program" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_16K_def_x25F">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x0080" end="0x025F" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" alignment="1">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_large">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x000080" end="0x0017FF" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" >
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x0020F0" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08AC_paged">
+         <clock registerAddress="0x0048" type="S08ICGV4" />
+         <memory type="ram">
+            <memoryRange start="0x000080" end="0x0017FF" />
+         </memory>
+         <memory type="flash" registerAddress="0x1820" securityAddress="0xFFB0" pageAddress="0x0078">
+            <securityInfoRef ref="HCS08-default-security-off" />
+            <securityInfoRef ref="HCS08-default-security-on" />
+            <memoryRange start="0x0020F0" end="0x007FFF" />
+            <memoryRange start="0x008000" end="0x00BFFF" pageStart="0" pages="8" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x01B" />
+      </device>

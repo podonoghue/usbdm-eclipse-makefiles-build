@@ -1,0 +1,328 @@
+<!--
+Devices using this peripheral: 
+      MKE04Z4
+      MKE06Z4
+-->
+      <peripheral>
+         <?sourceFile "FGPIOC_MKE" ?>
+         <?refreshWholePeripheral?>
+         <name>FGPIOC</name>
+         <description>General Purpose Input/Output</description>
+         <prependToName>FGPIOC</prependToName>
+         <headerStructName>GPIOC</headerStructName>
+         <baseAddress>0xF8000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PDOR</name>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Data Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDORI</name>
+               <?hide?>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PSOR</name>
+               <description>Port Set Output Register\n
+Writing 1 to a bit sets the corresponding bit in the PDOR</description>
+               <addressOffset>0x4</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Set Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to set</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PSORI</name>
+               <?hide?>
+               <description>Port Set Output Register\n
+Writing 1 to a bit sets the corresponding bit in the PDOR</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PCOR</name>
+               <description>Port Clear Output Register\n
+Writing 1 to a bit clears the corresponding bit in the PDOR</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Clear Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PCORI</name>
+               <?hide?>
+               <description>Port Clear Output Register\n
+Writing 1 to a bit clears the corresponding bit in the PDOR</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PTOR</name>
+               <description>Port Toggle Output Register\n
+Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
+               <addressOffset>0xC</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Toggle Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to toggle</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTORI</name>
+               <?hide?>
+               <description>Port Toggle Output Register\n
+Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PDIR</name>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Data Input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDIRI</name>
+               <?hide?>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PDDR</name>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Data Direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDDRI</name>
+               <?hide?>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>PIDR</name>
+               <description>Port Input Disable Register\n
+Used to disable the pin input function</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>I0</name>
+                     <description>Port Input Disable\n
+Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input available</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Input reads as 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I0" > <name>I1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="I0" > <name>I7</name> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIDRI</name>
+               <?hide?>
+               <description>Port Input Disable Register\n
+Used to disable the pin input function</description>
+               <addressOffset>0x18</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0xFF</resetMask>
+            </register>
+         </registers>
+      </peripheral>

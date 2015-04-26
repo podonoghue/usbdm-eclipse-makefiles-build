@@ -1,0 +1,31 @@
+/*
+ * BdmInterfaceARM.cpp
+ *
+ *  Created on: 13 Apr 2015
+ *      Author: podonoghue
+ */
+
+#include "BdmInterface_CFVx.h"
+
+
+BdmInterface_CFVx::BdmInterface_CFVx() : BdmInterfaceCommon(T_CFVx) {
+}
+
+BdmInterface_CFVx::~BdmInterface_CFVx() {
+}
+
+USBDM_ErrorCode BdmInterface_CFVx::writePC(unsigned long regValue) {
+   return USBDM_WriteCReg(CFVx_CRegPC, regValue);
+};
+
+USBDM_ErrorCode BdmInterface_CFVx::readPC(unsigned long *regValue) {
+   return USBDM_ReadCReg(CFVx_CRegPC, regValue);
+};
+
+/*
+ * Create the plugin instance
+ */
+extern "C"
+BdmInterface* __declspec(dllexport) createPluginInstance() {
+   return new BdmInterface_CFVx();
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-sdhc-sdcard-demo" root="">
+      <applyWhen>
+         <and>
+            <or>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-sdhc-sdcard-demo" 
+            name="SD Card Demo" 
+            description=
+"The SD Card demo application demonstrates the use of the SD card driver.\n
+It displays the card information followed by a write-read compare test\n
+and the erase operation."
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+   		<applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-sdhc-sdcard-demo" />
+            </and>
+   		</applyWhen>
+         <deleteResource target="Sources/main.c" />
+         <copy source="usbdm_kds_path/platform/composite/src/sdcard"             target="sdcard"   type="link"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/fsl_gpio_irq.c"      target="Sources/fsl_gpio_irq.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/sdhc_sdcard.h"       target="Sources/sdhc_sdcard.h"  sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/main.c"              target="Sources/main.c"         sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/sdhc/fsl_sdhc_irq.c"  target="Sources/fsl_sdhc_irq.c" sourcePathType="absolute" />
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/composite/inc&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/composite/inc&quot;</value>
+         </projectOption>
+   	</projectActionList>
+   </projectActionList>
+</root>

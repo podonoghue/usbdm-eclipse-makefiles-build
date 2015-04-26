@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<wizardExtension>
+	<newProjectExtension>
+		<launchSettings>
+			<settingsGroup id="MQX_usbdm_cfvx" conditionId="mcu.mqxprojectwizard1.condition.isColdFire.v2_v4">
+				
+				<settingsGroupRef id="MQX_ColdFirev2_v4_common"/>
+				<settingsGroupRef id="MQX_common_settings"/>
+				
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Type CW Panel" value="" type="string"/>
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.logData" value="false" type="boolean"/>
+
+				<applySetting id="org.eclipse.cdt.launch.DEBUGGER_ID" value="com.freescale.cdt.debug.cw.coldfire.ColdFireDebugger" type="string" />
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Protocol Plugin Name"	value="CF - GDI" type="string" />
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Type" value="net.sourceforge.usbdm.connections.usbdm.cfv234" type="string" />
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.PhysicalConnectionAttributeBase" value="net.sourceforge.usbdm.connections.usbdm." type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.Library" value="usbdm-cfvx-gdi.dll" type="string" />
+
+				<applySetting id="com.freescale.cdt.debug.cw.executeReset" value="true" type="boolean" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.automaticReconnect" value="1" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.connectionSpeed" value="1.5MHz" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.cycleTargetVddOnReset" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.cycleTargetVddonConnect" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.defaultBdmSerialNumber" value="Any connected USBDM" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.leaveTargetPowered" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.setTargetVdd" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.useDebugBuild" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cfvx.usePSTSignals" value="0" type="string" />
+				
+			</settingsGroup>
+		</launchSettings>
+	</newProjectExtension>
+</wizardExtension>

@@ -1,0 +1,21 @@
+   <!-- NXP LPC Devices -->
+   <device name="LPC1343" family="CortexM3" subfamily="LPC1343">
+      <memory type="flash" registerAddress="0x40022000">
+         <memoryRange size="32K" start="0x00000000" />
+      </memory>
+      <memory type="ram">
+         <memoryRange size="8K" start="0x10000000" />
+      </memory>
+      <memory type="io">
+         <memoryRange size="1024M" start="0x40000000" />
+      </memory>
+      <memory type="io">
+         <memoryRange size="1024M" start="0x50000000" />
+      </memory>
+      <sdidAddress value="0xE0042000" />
+      <sdidMask value="0x00000FFF" />
+      <sdid value="0x00000420" />
+      <tclScriptRef ref="STM32F100xx-default-Scripts" />
+      <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
+      <registerDescriptionRef ref="CortexM3F-register-description" />
+   </device>

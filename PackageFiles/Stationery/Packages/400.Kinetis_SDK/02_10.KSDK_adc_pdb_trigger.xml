@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-adc-pdb-trigger" root="">
+      <applyWhen>
+         <and>
+            <or>
+    <hardwareMatches>^frdmk22f</hardwareMatches>
+    <hardwareMatches>^frdmk64f</hardwareMatches>
+    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
+    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z32</hardwareMatches>
+    <hardwareMatches>^twrkv31f</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-adc-pdb-trigger" 
+            name="ADC Hardware Trigger Demo (PDB trigger)" 
+            description=
+"ADC demo application which shows how to use the programmable delay block\n
+as the hardware trigger source for the ADC function"
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </enableWhen>
+      </variable>
+   	<projectActionList>
+         <!--  Common files -->
+   		<applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-adc-pdb-trigger" />
+            </and>
+   		</applyWhen>
+         <deleteResource target="Sources/main.c" />
+   		<copy source="usbdm_kds_path/demos/adc_hw_trigger/src/adc_hw_trigger.c" target="Sources/adc_hw_trigger.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/adc_hw_trigger.h" target="Sources/adc_hw_trigger.h" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/fsl_adc_irq.c"    target="Sources/fsl_adc_irq.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/pdb_trigger.c"    target="Sources/pdb_trigger.c"  sourcePathType="absolute" />
+   	</projectActionList>
+      <projectActionList>
+         <!-- Only for devices with DAC -->
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-adc-pdb-trigger" />
+               <or>
+                  <hardwareMatches>^frdmk22f</hardwareMatches>
+                  <hardwareMatches>^frdmk64f</hardwareMatches>
+               </or>
+            </and>
+         </applyWhen>
+         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/dac_gen_wave.c"   target="Sources/dac_gen_wave.c" sourcePathType="absolute" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>USE_DAC_OUT_AS_SOURCE</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>USE_DAC_OUT_AS_SOURCE</value>
+         </projectOption>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+</root>

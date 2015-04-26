@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK OS Choice -->
+
+  <projectActionList id="KSDK-operating-system-mqx" root="">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-SDK-os-mqx" 
+         name="MQX"
+         description="MQX minimal operating system support" 
+         radioGroup="group-ksdk-operating-system">
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+         </applyWhen>
+         <constant id="kdsOperatingSystem" value="mqx" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_MQX</value>
+            <value>_AEABI_LC_CTYPE=C</value>
+            <value>__STRICT_ANSI__=1</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_MQX</value>
+            <value>_AEABI_LC_CTYPE=C</value>
+            <value>__STRICT_ANSI__=1</value>
+         </projectOption>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/mqx&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/mqx_stdlib&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/mcu/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/board/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/bsp&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_dummy&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_mem&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_null&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_pipe&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_serial&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_tfs&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_tty&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/mqx&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/lib/$(mqxTargetName).kds/debug/mqx_stdlib&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/mcu/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/board/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/bsp&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_dummy&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_mem&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_null&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_pipe&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_serial&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_tfs&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/nio/drivers/nio_tty&quot;</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+
+</root>

@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define KDS_VER="V2_2_0" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <Fragment>
+      <!--======================================================
+               Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <Directory Id='D.$(var.KDS_VER)_APPS' Name="Apps">
+            <!-- Kinetis Design Studio directory structure-->
+            <Directory Id="D.KINETIS_DESIGN_STUDIO">
+               <!-- Eclipse directory structure -->
+               <Directory Id="D.KDSEclipse" Name="Eclipse">
+                  <Directory Id="D.KDSDropins" Name="dropins"/>
+                  <!-- PE directory structure -->
+                  <Directory Id="D.ProcessorExpert" Name="ProcessorExpert">
+                     <Directory Id="D.PE_Config" Name="Config">
+                        <Directory Id="D.PE_Config_Compiler" Name="Compiler"/>
+                     </Directory>
+                  </Directory>
+               </Directory>
+               <!-- Toolchain directory structure -->
+               <Directory Id="D.KDSToolChain" Name="toolchain">
+                  <Directory Id="D.KDSarm_none_eabi" Name="arm-none-eabi">
+                     <Directory Id="D.KDSLib" Name="lib"/>
+                  </Directory>
+               </Directory>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+               Registry searches
+      =======================================================-->
+     
+      <!-- Check for presence of Kinetis Design Studio -->
+      <Property Id="P.KINETIS_DESIGN_STUDIO">
+         <RegistrySearch Id="Rs.KINETIS_DESIGN_STUDIO"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\SOMNIUM Technologies\Kinetis Design Studio"
+                    Name="Path"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for Kinetis Design Studio -->
+      <Property Id="D.KINETIS_DESIGN_STUDIO">
+         <RegistrySearchRef Id="Rs.KINETIS_DESIGN_STUDIO" />
+      </Property>
+      
+      <!--=================================================================================
+           Actions
+      ==================================================================================-->
+      <!-- Refresh Eclipse plugins -->
+      <CustomAction
+         Id="Ca.CreateKDSRefreshPluginsCommand_$(var.KDS_VER)_$(var.KDS_VER)"
+         Property="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)"
+         Value="&quot;[D.KDSEclipse]kinetis-design-studio&quot; -initialize -nosplash"
+         Execute="immediate"/>
+         
+      <CustomAction Id="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <InstallExecuteSequence>
+          <Custom Action="Ca.CreateKDSRefreshPluginsCommand_$(var.KDS_VER)_$(var.KDS_VER)" After="CostFinalize"><![CDATA[$C.KINETIS_DESIGN_STUDIO.Marker>2]]></Custom>
+          <Custom Action="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)"                      Before="InstallFinalize"><![CDATA[$C.KINETIS_DESIGN_STUDIO.Marker>2]]></Custom>
+      </InstallExecuteSequence>
+      
+      <!--======================================================
+               Components
+      =======================================================-->
+      <!-- 
+           USBDM Marker
+      -->
+      <DirectoryRef Id="D.KINETIS_DESIGN_STUDIO">
+         <Component Id='C.KINETIS_DESIGN_STUDIO.Marker' Guid='dff40fe6-cdc9-4771-bcb5-b7f4a830d0df' >
+            <File Id='KINETIS_DESIGN_STUDIO_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <DirectoryRef Id="D.KDSLib">
+         <Component Id='C.KDSLib.Nano' Guid='6737ac6e-29ec-42bd-907f-91b94f545f8f' >
+            <File Id='NanoSpecs' DiskId='1' Source='bin/nano.specs' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- 
+           Processor Expert plugin support 
+      -->
+      <DirectoryRef Id="D.PE_Config_Compiler">
+         <Component Id='C.PE_Config' Guid='db84fae4-f3a9-45a8-b503-c18ac8bd1724' >
+            <File Id='Compiler_xlkr' DiskId='1' Source='bin/net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!--======================================================
+            KDS feature
+      =======================================================-->
+      <Feature Id='F.KINETIS_DESIGN_STUDIO'
+            Title='Kinetis Design Studio Plugins'
+            Description='Add USBDM support to KDS:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
+            ConfigurableDirectory="D.KINETIS_DESIGN_STUDIO"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.KINETIS_DESIGN_STUDIO]]>
+         </Condition>
+         <ComponentRef Id='C.ProgramMenuFolder' />
+         <ComponentRef Id='C.KINETIS_DESIGN_STUDIO.Marker' />
+         <ComponentRef Id='C.KDSLib.Nano' />
+         <ComponentRef Id='C.PE_Config' />
+         <ComponentRef Id='C.CommonFiles' />
+         <ComponentRef Id='C.GdbServer' />
+         <ComponentGroupRef Id='Cg.EclipsePlugins' />
+         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+         <ComponentGroupRef Id='Cg.StationeryInstall'/>
+      </Feature>
+
+   </Fragment>
+</Wix>

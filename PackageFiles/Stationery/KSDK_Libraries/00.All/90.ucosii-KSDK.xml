@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK uC/OS-II OS Support -->
+   <projectActionList id="ucosii-KSDK-library" root="">
+      <variable id="projectOptionValue.KSDK-ucosii-library-enable" 
+            name="uC/OS-II" 
+            description="uC/OS-II OS Abstraction Library"
+            radioGroup="group-ksdk-library-import-os-abstraction" 
+            >
+         <enableWhen>
+            <preclusion idRef="projectOptionValue.KSDK-KL03Z4-library-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.KSDK-ucosii-library-enable" />
+         </applyWhen>
+
+         <constant id="osType" value="ucosii" />
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Source&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Source&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_UCOSII</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_UCOSII</value>
+         </projectOption>
+
+         <!-- OS Abstraction --> 
+         <copy source="usbdm_kds_path/platform/osa/src/fsl_os_abstraction_ucosii.c"  target="osa/fsl_os_abstraction_ucosii.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction_ucosii.h"  target="osa/fsl_os_abstraction_ucosii.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction.h"         target="osa/fsl_os_abstraction.h"          type="link" sourcePathType="absolute" />
+
+         <projectActionList id="KSDK-operating-system-ucosii-cortex-m0" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyIs>CortexM0</deviceFamilyIs>
+                  <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
+               </or>
+            </applyWhen>
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M0/Generic/GNU&quot;</value>
+            </projectOption>
+         </projectActionList>
+            
+         <projectActionList id="KSDK-operating-system-ucosii-cortex-m4" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyIs>CortexM4</deviceFamilyIs>
+                  <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+               </or>
+            </applyWhen>
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/uCOSII/src/uCOS-II/Ports/ARM-Cortex-M4/Generic/GNU&quot;</value>
+            </projectOption>
+         </projectActionList>
+      </projectActionList>
+   </projectActionList>
+</root>

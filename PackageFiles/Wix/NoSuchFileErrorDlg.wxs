@@ -1,0 +1,20 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+   <Fragment>
+      <UI>
+         <Dialog Id="NoSuchFileErrorDlg" Width="260" Height="105" Title="[ProductName] Setup" NoMinimize="yes">
+<!--
+           <Control Id="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24"
+             ToolTip="Information icon" FixedSize="yes" IconSize="32" Text="Exclam.ico" />
+-->             
+           <Control Id="Return" Type="PushButton" X="100" Y="77" Width="56" Height="17" Default="yes" Cancel="yes" Text="&amp;Return">
+             <Publish Event="EndDialog" Value="Return">1</Publish>
+           </Control>
+           <Control Id="Text" Type="Text" X="20" Y="15" Width="220" Height="50" TabSkip="no">
+             <Text>The path for:&#xA;"[CODEWARRIOR_MISSING_APP]" is invalid. &#xA;&#xA;Please check that the path points at the main directory of an existing installation or disable the feature before proceeding. </Text>
+           </Control>
+         </Dialog>
+         
+         <!--Binary Id="info.ico" SourceFile="Utilities\Info.ico" /-->
+      </UI>
+   </Fragment>
+</Wix>

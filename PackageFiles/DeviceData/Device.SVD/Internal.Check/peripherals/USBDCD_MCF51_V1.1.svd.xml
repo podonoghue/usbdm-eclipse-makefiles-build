@@ -1,0 +1,340 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "USBDCD_MCF51_V1.1" ?>
+         <name>USBDCD</name>
+         <description>USB Device Charger Detection module (USB DCD V1.1)</description>
+         <prependToName>USBDCD</prependToName>
+         <baseAddress>0xFFFF8680</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CONTROL</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x10000</resetValue>
+               <fields>
+                  <field>
+                     <name>IACK</name>
+                     <description>Interrupt Acknowledge</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear IF</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IF</name>
+                     <description>Interrupt Flag</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt Pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IE</name>
+                     <description>Interrupt Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>START</name>
+                     <description>Start Change Detection Sequence</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start sequence\t- Initiate the charger detection sequence. If the sequence is already running, writes of this value have no effect</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SR</name>
+                     <description>Software Reset</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Software reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLOCK</name>
+               <description>Clock Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xC1</resetValue>
+               <fields>
+                  <field>
+                     <name>CLOCK_UNIT</name>
+                     <description>Unit of measurement encoding for Clock Speed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>kHz Speed\t- Between 1 kHz and 1023 kHz</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MHz Speed\t- Between 1 MHz and 1023 MHz</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLOCK_SPEED</name>
+                     <description>Numerical Value of Clock Speed in Binary</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATUS</name>
+               <description>Status Register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SEQ_RES</name>
+                     <description>Charger Detection Sequence Results\nReports how the charger detection is attached</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No results</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Standard host\t- Must comply with USB Spec 2.0 by drawing only 2.5mA (max) until connected</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Charging port\t- The exact meaning depends on bit 18:\n
+\t0: Attached to either a charging host or a dedicated charger. The charger type detection has not completed.\n
+\t1: Attached to a charging host. The charger type detection has completed</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Dedicated charger</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEQ_STAT</name>
+                     <description>Charger Detection Sequence Status</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Not enabled/detected\n
+The module is either not enabled, or the module is enabled but the data pins have not yet been detected</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Data pin complete</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Charging port complete</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Charger type complete</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERR</name>
+                     <description>Error Flag\nIndicates whether there is an error in the detection sequence</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No sequence errors</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sequence errors\t- Error in the detection sequence.\n
+See the SEQ_STAT field to determine the phase in which the error occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TO</name>
+                     <description>Timeout Flag\nIndicates whether the detection sequence has passed the timeout threshhold</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>&lt;= 1 second</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>&gt;= 1 second since contact</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACTIVE</name>
+                     <description>Active Status Indicator\nIndicates whether the sequence is running</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sequence not running</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sequence running</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER0</name>
+               <description>TIMER0 Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x100000</resetValue>
+               <fields>
+                  <field>
+                     <name>TUNITCON</name>
+                     <description>Unit Connection Timer Elapse (in ms)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSEQ_INIT</name>
+                     <description>Sequence Initiation Time</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER1</name>
+               <description>TIMER1 register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0xA0028</resetValue>
+               <fields>
+                  <field>
+                     <name>TVDPSRC_ON</name>
+                     <description>Time Period Comparator Enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>TDCD_DBNC</name>
+                     <description>Time Period to Debounce D+ Signal</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER2</name>
+               <description>TIMER2 register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x280001</resetValue>
+               <fields>
+                  <field>
+                     <name>CHECK_DM</name>
+                     <description>Time Before Check of D- Line</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TVDPSRC_CON</name>
+                     <description>Time Period Before Enabling D+ Pullup</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

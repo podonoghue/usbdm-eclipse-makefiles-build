@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK MQX OS Support -->
+   <projectActionList id="mqx-KSDK-library" root="">
+      <variable id="projectOptionValue.KSDK-mqx-library-enable" 
+            name="MQX" 
+            description="MQX OS Abstraction Library"
+            radioGroup="group-ksdk-library-import-os-abstraction" 
+            >
+         <enableWhen>
+            <preclusion idRef="projectOptionValue.KSDK-KL03Z4-library-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.KSDK-mqx-library-enable" />
+         </applyWhen>
+
+         <constant id="osType" value="mqx" />
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/mcu/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/psp/cortex_m&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/mcu/$(mqxTargetName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/config/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/rtos/mqx/mqx/source/psp/cortex_m&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_MQX</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_MQX</value>
+         </projectOption>
+
+         <!-- OS Abstraction --> 
+         <copy source="usbdm_kds_path/platform/osa/src/fsl_os_abstraction_mqx.c"  target="osa/fsl_os_abstraction_mqx.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction_mqx.h"  target="osa/fsl_os_abstraction_mqx.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/osa/inc/fsl_os_abstraction.h"      target="osa/fsl_os_abstraction.h"      type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

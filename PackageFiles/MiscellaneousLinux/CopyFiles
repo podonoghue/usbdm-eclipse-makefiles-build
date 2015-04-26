@@ -1,0 +1,99 @@
+#!/bin/bash
+
+# Version Information
+MAJOR=4
+MINOR=10
+MICRO=5c
+VERSION=${MAJOR}.${MINOR}.${MICRO}
+
+SOURCE_DIRECTORY=${HOME}"/Documents/USBDM/EclipseUSBDM"
+GDI_TARGETS="ARM CFV1 CFVx DSC HCS12 HCS08 RS08"
+GDB_TARGETS="ARM CFV1 CFVx"
+PROG_TARGETS="ARM CFV1 CFVx DSC HCS12 HCS08 RS08"
+DESTINATION_DIRECTORY="./USBDM_Linux_V${VERSION}"
+
+
+if [[ ! -e ${SOURCE_DIRECTORY} ]]; then
+   echo Unable to locate Source directory    ${SOURCE_DIRECTORY}
+fi
+
+if [[ ! -e ${DESTINATION_DIRECTORY} ]]; then
+   mkdir ${DESTINATION_DIRECTORY}
+fi
+
+if [[ ! -e ${DESTINATION_DIRECTORY}/bin ]]; then
+   mkdir ${DESTINATION_DIRECTORY}/bin
+fi
+
+for NAME in ${PROG_TARGETS}; do
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/${NAME}_FlashProgrammer"/${NAME}_F*       ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/${NAME}_FlashProgrammer-debug"/${NAME}_F* ${DESTINATION_DIRECTORY}/bin
+done
+
+for NAME in ${GDI_TARGETS}; do
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/"usbdm-*-gdi/*.so*              ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/"usbdm-*-gdi-debug/*.so*        ${DESTINATION_DIRECTORY}/bin
+done
+
+for NAME in ${GDB_TARGETS}; do
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/"usbdm-*-gdbServer/usbdm-*-gdbServer              ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/${NAME}_Interface/"usbdm-*-gdbServer-debug/usbdm-*-gdbServer-debug  ${DESTINATION_DIRECTORY}/bin
+done
+
+cp "${SOURCE_DIRECTORY}/JS16_Bootloader/JS16_Bootloader"/JS16_Bootloader  ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/JS16_Bootloader/JS16_Bootloader-debug"/*-debug    ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/FirmwareChanger/FirmwareChanger"/FirmwareChanger  ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/FirmwareChanger/FirmwareChanger-debug"/*-debug    ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/Usbdm_TCL/UsbdmScript"/UsbdmScript*               ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Usbdm_TCL/UsbdmScript-debug"/UsbdmScript*         ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Usbdm_TCL/usbdm-tcl"/*.so*                        ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Usbdm_TCL/usbdm-tcl-debug"/*.so*                  ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/CreateFlashTestImage/CreateFlashTestImage"/CreateFlashTestImage  ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/Unlocker/CFVx_Unlocker"/CFVx_Unlocker            ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Unlocker/CFVx_Unlocker-debug"/*-debug            ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Unlocker/DSC_Unlocker"/DSC_Unlocker              ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/Unlocker/DSC_Unlocker-debug"/*-debug             ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/MergeXML/MergeXML"/MergeXML                      ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/MergeXML/MergeXML-debug"/*-debug                 ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/wxPlugin_DLL/usbdm-wxPlugin"/*.so*               ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/UsbdmJniWrapper_DLL/UsbdmJniWrapper"/*.so*       ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/UsbdmJniWrapper_DLL/UsbdmJniWrapper-debug"/*.so* ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/USBDM_DLL/usbdm"/*.so*                           ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/USBDM_DLL/usbdm-debug"/*.so*                     ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/USBDM_DSC_DLL/usbdm-dsc"/*.so*                   ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/USBDM_DSC_DLL/usbdm-dsc-debug"/*.so*             ${DESTINATION_DIRECTORY}/bin
+
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/WizardPatches"                   ${DESTINATION_DIRECTORY}/bin
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/DeviceData"                      ${DESTINATION_DIRECTORY}/bin
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/Stationery"                      ${DESTINATION_DIRECTORY}/bin
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/Examples"                        ${DESTINATION_DIRECTORY}/bin
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/FlashImages"                     ${DESTINATION_DIRECTORY}/bin
+cp -r "${SOURCE_DIRECTORY}/PackageFiles/LaunchConfig"                    ${DESTINATION_DIRECTORY}
+
+cp "${SOURCE_DIRECTORY}/PackageFiles"/Scripts/*.tcl                      ${DESTINATION_DIRECTORY}/bin
+
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/Install_Codewarrior_Patches  ${DESTINATION_DIRECTORY}
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/Install_Eclipse_Plugins      ${DESTINATION_DIRECTORY}
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/Install_USBDM                ${DESTINATION_DIRECTORY}
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/LinuxInstallReadMe.txt       ${DESTINATION_DIRECTORY}
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/RefreshCodewarrior           ${DESTINATION_DIRECTORY}
+
+cp "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/error.wav                         ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/TryProgrammer                ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/PackageFiles"/LinuxMiscellaneous/usbdm.rules                  ${DESTINATION_DIRECTORY}/bin
+cp "${SOURCE_DIRECTORY}/PackageFiles"/Scripts/*.tcl                                   ${DESTINATION_DIRECTORY}/bin
+
+exit
+
+
+
+

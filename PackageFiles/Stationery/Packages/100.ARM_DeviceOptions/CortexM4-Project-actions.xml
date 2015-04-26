@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+
+   <!-- Base MK files -->
+   <projectActionList id="Kinetis-MK-files" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <deviceSubfamilyMatches>^MK\d+.*</deviceSubfamilyMatches>
+            <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <createFolder target="Sources"                              type="" />
+      <createFolder target="Startup_Code"                         type="" />
+      <createFolder target="Project_Headers"                      type="include" />
+      <createFolder target="Project_Settings/Linker_Files"        type="" />
+   
+      <copy source="Startup_Code/system-mk.c"                                 target="Startup_Code/system.c" />
+      <copy source="Startup_Code/vectors-mk.c"                                target="Startup_Code/vectors.c" />
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+
+      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM4.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
+
+      <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
+
+      <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" replace="true" />
+      <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"         target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
+
+      <copy source="Project_Headers/bitband-mk.h"                             target="Project_Headers/bitband.h" />
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
+      <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h" />
+      <copy source="Project_Headers/core_cm4_simd.h"                          target="Project_Headers/core_cm4_simd.h" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
+      <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
+
+      <copy source="Sources/main.c"                                           target="Sources/main.c" />
+   
+      <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"            replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+   </projectActionList>
+
+</root>

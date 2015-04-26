@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define CW_Ver="1" ?> 
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <Fragment>
+      <!--======================================================
+            Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <!-- Directory structure for CF Flasher V3.1 -->
+         <Directory Id="D.CFFLASHER_V3_1"  Name="CF Flasher">
+            <Directory Id="D.CFFLASHER_V3_1_protocol" Name="BDM Protocol" />
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+            Registry searches
+      =======================================================-->
+      <!-- Check for CF Flasher V3.1 -->
+      <Property Id="P.CFFLASHER_V3_1">
+         <DirectorySearch Id="ProgramFilesFolder" Path="[ProgramFilesFolder]\Freescale">
+            <DirectorySearch  Id="Ds.CFFLASHER_V3_1"
+                       Path="CF Flasher" 
+                       Depth = "1" 
+                       AssignToProperty="yes" />
+         </DirectorySearch>
+      </Property>
+
+      <!-- Modify default install path for CF Flasher V3.1 -->
+      <Property Id="D.CFFLASHER_V3_1">
+         <DirectorySearchRef Id="Ds.CFFLASHER_V3_1" 
+                     Parent="ProgramFilesFolder" 
+                     Path="CF Flasher" />
+      </Property>
+      
+      <!--======================================================
+            Actions
+      =======================================================-->
+
+      <!-- None -->
+      
+      <!--======================================================
+            Components
+      =======================================================-->
+     <!-- USBDM Installed Marker -->
+      <DirectoryRef Id="D.CFFLASHER_V3_1">
+         <Component Id='C.CFFLASHER_V3_1.Marker' Guid='f3f075b4-845a-4bd7-946a-003c0fa85708' >
+            <File Id='CFFLASHER_V3_1_Marker'  DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+<!--            <File Id='CFFLASHER_V3_1_Files10' DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='CFFLASHER_V3_1_Files11'  DiskId='1' Source='bin\USBDM-CFFlasher-Readme.txt'/>
+            <File Id='CFFLASHER_V3_1_Files12'  DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='CFFLASHER_V3_1_Files13'  DiskId='1' Source='bin\libstdc++-6.dll' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- CF Flasher V3.1 support -->
+      <DirectoryRef Id="D.CFFLASHER_V3_1_protocol">
+         <Component Id='C.CFFLASHER_V3_1.Files' Guid='38ff37f1-c783-4c2e-952e-3eb158ef8345' >
+            <File Id='CFFLASHER_V3_1_Files1'  DiskId='1' Source='bin\usbdm-cff.dll'/>
+            <File Id='CFFLASHER_V3_1_Files2'  DiskId='1' Source='bin\usbdm-cff-debug.dll'/>
+         </Component>
+      </DirectoryRef>
+
+      <!--======================================================
+            Features
+      =======================================================-->
+      <Feature Id='F.CFFLASHER_V3_1'
+            Title='CF Flasher V3.1'
+            Description="USBDM plugin for Coldfire Flash Programmer V3.1."
+            ConfigurableDirectory="D.CFFLASHER_V3_1"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.CFFLASHER_V3_1]]>
+         </Condition>
+         <ComponentRef Id='C.CFFLASHER_V3_1.Marker' />
+         <ComponentRef Id='C.CFFLASHER_V3_1.Files' />
+      </Feature>
+
+   </Fragment>
+</Wix>

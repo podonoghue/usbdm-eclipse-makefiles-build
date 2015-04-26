@@ -1,0 +1,222 @@
+<!--
+Devices using this peripheral: 
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_PAD" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>PAD</name>
+         <description>Pin Configuration</description>
+         <prependToName>PAD</prependToName>
+         <baseAddress>0x40100078</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PSRR0</name>
+               <description>Pin Slew Rate Register 0</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PSRR0</name>
+                     <description>PSRR0 slew rate</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fast</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Slow\t- slew rate is approximately 10 times slower</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR1</name> <description>PSRR1 slew rate</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR2</name> <description>PSRR2 slew rate</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR3</name> <description>PSRR3 slew rate</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR4</name> <description>PSRR4 slew rate</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR5</name> <description>PSRR5 slew rate</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR6</name> <description>PSRR6 slew rate</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR7</name> <description>PSRR7 slew rate</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR8</name> <description>PSRR8 slew rate</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR9</name> <description>PSRR9 slew rate</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR10</name> <description>PSRR10 slew rate</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR11</name> <description>PSRR11 slew rate</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR12</name> <description>PSRR12 slew rate</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR13</name> <description>PSRR13 slew rate</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR14</name> <description>PSRR14 slew rate</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR15</name> <description>PSRR15 slew rate</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR16</name> <description>PSRR16 slew rate</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR17</name> <description>PSRR17 slew rate</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR18</name> <description>PSRR18 slew rate</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR19</name> <description>PSRR19 slew rate</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR20</name> <description>PSRR20 slew rate</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR21</name> <description>PSRR21 slew rate</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR22</name> <description>PSRR22 slew rate</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR23</name> <description>PSRR23 slew rate</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR24</name> <description>PSRR24 slew rate</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR25</name> <description>PSRR25 slew rate</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR26</name> <description>PSRR26 slew rate</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR27</name> <description>PSRR27 slew rate</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR28</name> <description>PSRR28 slew rate</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR29</name> <description>PSRR29 slew rate</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR30</name> <description>PSRR30 slew rate</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR31</name> <description>PSRR31 slew rate</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDSR0</name>
+               <description>Pin Drive Strength Register 0</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDSR0</name>
+                     <description>PDSRx pin drive strength</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low drive (2mA)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High drive (10mA)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR1</name> <description>PDSR1 slew rate</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR2</name> <description>PDSR2 slew rate</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR3</name> <description>PDSR3 slew rate</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR4</name> <description>PDSR4 slew rate</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR5</name> <description>PDSR5 slew rate</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR6</name> <description>PDSR6 slew rate</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR7</name> <description>PDSR7 slew rate</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR8</name> <description>PDSR8 slew rate</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR9</name> <description>PDSR9 slew rate</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR10</name> <description>PDSR10 slew rate</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR11</name> <description>PDSR11 slew rate</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR12</name> <description>PDSR12 slew rate</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR13</name> <description>PDSR13 slew rate</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR14</name> <description>PDSR14 slew rate</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR15</name> <description>PDSR15 slew rate</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR16</name> <description>PDSR16 slew rate</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR17</name> <description>PDSR17 slew rate</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR18</name> <description>PDSR18 slew rate</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR19</name> <description>PDSR19 slew rate</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR20</name> <description>PDSR20 slew rate</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR21</name> <description>PDSR21 slew rate</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR22</name> <description>PDSR22 slew rate</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR23</name> <description>PDSR23 slew rate</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR24</name> <description>PDSR24 slew rate</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR25</name> <description>PDSR25 slew rate</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR26</name> <description>PDSR26 slew rate</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR27</name> <description>PDSR27 slew rate</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR28</name> <description>PDSR28 slew rate</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR29</name> <description>PDSR29 slew rate</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR30</name> <description>PDSR30 slew rate</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR31</name> <description>PDSR31 slew rate</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="PSRR0"> <name>PSRR1</name> <description>Pin Slew Rate Register 1</description> <addressOffset>0x8</addressOffset> </register>
+            <register>
+               <name>PSRR2</name>
+               <description>Pin Slew Rate Register 2</description>
+               <addressOffset>0xE</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PSRR0</name>
+                     <description>PSRR0 slew rate</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fast</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Slow\t- slew rate is approximately 10 times slower</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR1</name> <description>PSRR1 slew rate</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR2</name> <description>PSRR2 slew rate</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR3</name> <description>PSRR3 slew rate</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR4</name> <description>PSRR4 slew rate</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR5</name> <description>PSRR5 slew rate</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR6</name> <description>PSRR6 slew rate</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR7</name> <description>PSRR7 slew rate</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR8</name> <description>PSRR8 slew rate</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR9</name> <description>PSRR9 slew rate</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR10</name> <description>PSRR10 slew rate</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR11</name> <description>PSRR11 slew rate</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR12</name> <description>PSRR12 slew rate</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR13</name> <description>PSRR13 slew rate</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR14</name> <description>PSRR14 slew rate</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PSRR0" > <name>PSRR15</name> <description>PSRR15 slew rate</description> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register derivedFrom="PDSR0"> <name>PDSR1</name> <description>Pin Drive Strength Register 1</description> <addressOffset>0x10</addressOffset> </register>
+            <register>
+               <name>PDSR2</name>
+               <description>Pin Drive Strength Register 2</description>
+               <addressOffset>0x16</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PDSR0</name>
+                     <description>PDSRx pin drive strength</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low drive (2mA)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High drive (10mA)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR1</name> <description>PDSR1 slew rate</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR2</name> <description>PDSR2 slew rate</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR3</name> <description>PDSR3 slew rate</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR4</name> <description>PDSR4 slew rate</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR5</name> <description>PDSR5 slew rate</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR6</name> <description>PDSR6 slew rate</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR7</name> <description>PDSR7 slew rate</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR8</name> <description>PDSR8 slew rate</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR9</name> <description>PDSR9 slew rate</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR10</name> <description>PDSR10 slew rate</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR11</name> <description>PDSR11 slew rate</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR12</name> <description>PDSR12 slew rate</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR13</name> <description>PDSR13 slew rate</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR14</name> <description>PDSR14 slew rate</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PDSR0" > <name>PDSR15</name> <description>PDSR15 slew rate</description> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

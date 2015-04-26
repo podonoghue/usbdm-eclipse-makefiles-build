@@ -1,0 +1,1256 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+-->
+      <peripheral>
+         <?sourceFile "SIM_MCF51JM" ?>
+         <name>SIM</name>
+         <description>System Integration Module</description>
+         <prependToName>SIM</prependToName>
+         <baseAddress>0xFFFF80C0</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x7</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0xA</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0xD</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x10</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x1A</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x20</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x24</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SOPT1</name>
+               <description>System Options Register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>VSTB</name>
+                     <description>USB Regulator standby in run/wait modes\n
+This bit controls whether the USB VREG enters standby in VLPW and VLPR modes</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Operates\tin VLPW/VLPR</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Standby\tin VLPW/VLPR</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSTB</name>
+                     <description>USB Regulator standby in stop modes\n
+This bit controls whether the USB VREG enters standby in STOP, VLPS, LLS and VLLS modes</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Operates\tin STOP/VLPS/LLS/VLLS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Standby\tin STOP/VLPS/LLS/VLLS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>REGE</name>
+                     <description>USB Voltage Regulator enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT2</name>
+               <description>System Options Register 2</description>
+               <addressOffset>0x1</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RAMSIZE</name>
+                     <description>RAM size</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>8 KBytes</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>16 KBytes</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>32 KBytes</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>64 KBytes</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Reserved</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT3</name>
+               <description>System Options Register 3</description>
+               <addressOffset>0x2</addressOffset>
+               <fields>
+                  <field>
+                     <name>RWE</name>
+                     <description>USB Voltage Regulator write enable\n
+Writing 1 to this bit allows the REGE bit in the SOPT1 register to be written.\n
+This bit clears after a write to the REGE bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>REGE protected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>REGE can be written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UVSWE</name>
+                     <description>USB Standby write enable\n
+Writing 1 to this bit allows the SSTB and VSTB bits in the SOPT1 register to be written.\n
+This bit clears after a write to SSTB, VSTB or both</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SSTB, VSTB protected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SSTB, VSTB can be written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT4</name>
+               <description>System Options Register 4</description>
+               <addressOffset>0x3</addressOffset>
+               <fields>
+                  <field>
+                     <name>VLLDBGREQ</name>
+                     <description>Very Low Leakage Debug Request upon Wakeup\n
+This bit can be written through the BDM interface</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reset mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Debug mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAITE</name>
+                     <description>Wait mode enable\n
+Enables entry to WAIT mode</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPE</name>
+                     <description>Stop mode enable\n
+Enables entry to stop mode.\n
+This bit can be written only once after each reset</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT5</name>
+               <description>System Options Register 5</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>F0ECS</name>
+                     <description>FTM0 external clock select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TMR_CLKIN0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TMR_CLKIN1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="F0ECS" > <name>F1ECS</name> <description>FTM1 external clock select</description> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>MECS</name>
+                     <description>MTIM16 external clock source select</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>TMR_CLKIN0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>TMR_CLKIN1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>FTM0.Ch1 Out</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FTM1.Ch1 Out</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT6</name>
+               <description>System Options Register 6</description>
+               <addressOffset>0x5</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTC5PAD</name>
+                     <description>PTC5 pad double pad strength</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Single-pad drive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Dual-pad drive</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTC5PAD" > <name>PTC6PAD</name> <description>PTC6 pad double pad strength</description> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>MODTX1</name>
+                     <description>Modulate TX1</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>UART1 not modulated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>UART1 by MTBASE1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX1IN</name>
+                     <description>UART1 RX input pin selection</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX1 from digital pin</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX1 from CMP</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MTBASE1</name>
+                     <description>UART1 TX modulation time base select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>FTM0.Ch0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>FTM0.Ch1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>FTM1.Ch0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>MTIM</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MBSL</name>
+                     <description>Mini-FlexBus security level\n
+When flash security is enabled this field affects what CPU operations can access off-chip via the Mini-FlexBus</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0X</name>
+                           <description>Access disallowed</description>
+                           <value>0b0X</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Opcode access allowed</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Access allowed</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT7</name>
+               <description>System Options Register 7</description>
+               <addressOffset>0x6</addressOffset>
+               <fields>
+                  <field>
+                     <name>FTM0SYNC</name>
+                     <description>FTM0 synchronisation trigger</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No trigger generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PWM trigger to FTM0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FTM1SYNC</name>
+                     <description>FTM1 synchronisation trigger</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No trigger generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PWM trigger to FTM1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>I2CDR0</name>
+                     <description>I2C Link for I2C0 and I2C1\n
+Allows I2C0 &amp; I2C1 signals to be internally inter-connected</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pins operate normally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Inter-connected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="I2CDR0" > <name>I2CDR2</name> <description>I2C Link for I2C2 and I2C3\n
+Allows I2C2 &amp; I2C3 to be internally inter-connected</description> <bitOffset>4</bitOffset> </field>
+                  <field>
+                     <name>ACFTM</name>
+                     <description>CMP output connection to FTM0 Ch0\n
+Allows the CMP output to be internally connected to FTM0.CH0</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No connection</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CMP-&gt;FTM.CH0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADTRGS</name>
+                     <description>ADC hardware trigger source</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PDB</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LPTMR0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USBBE</name>
+                     <description>USB Byte-swap Enable\n
+Enables byte swapping for all USB master accesses\n
+Byte swapping affects all USB read data, USB write data, and USB BD accesses.\n
+This enable bit should only be written when the USB is disabled</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Swapped</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COPC</name>
+               <description>COP Control Register\n
+All of the bits in this register can be written only once after a reset</description>
+               <addressOffset>0xA</addressOffset>
+               <fields>
+                  <field>
+                     <name>COPW</name>
+                     <description>COP windowed mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Windowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COPCLKS</name>
+                     <description>COP watchdog clock select\n
+This write-once bit selects the clock source of the COP watchdog</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Internal 1 kHz clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Bus clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COPT</name>
+                     <description>COP watchdog timeout\n
+These write-once bits select the timeout period of the COP.\n
+The COPT field along with the COPCLKS bit define the COP timeout period</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>32ms/2^13 bus cycles</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>256ms/2^7 bus cycles</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>1024ms/2^10 bus cycles</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SRVCOP</name>
+               <description>Service COP Register\n
+Write 0x55 followed by 0xAA to service COP</description>
+               <addressOffset>0xB</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>OSC1_CNTRL</name>
+               <description>Oscillator 1 Control Register</description>
+               <addressOffset>0xD</addressOffset>
+               <fields>
+                  <field>
+                     <name>OSC1EREFS</name>
+                     <description>External reference select\n
+Selects the source for the external reference clock</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Oscillator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSC1HGO</name>
+                     <description>High gain oscillator select\n
+Controls the crystal oscillator mode of operation</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low power</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High gain</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSC1RANGE</name>
+                     <description>Frequency range select\n
+Selects the frequency range for the crystal oscillator or external clock source</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Low range: 32-40kHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>High range: 1-8 MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Very High range: 8-32 MHz</description>
+                           <value>0b1X</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSC1EN</name>
+                     <description>Oscillator 1 enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SDIDH</name>
+               <description>Device Identification High Register</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>SDIDL</name>
+               <description>Device Identification Low Register</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>SCGC1</name>
+               <description>Clock Gate Control Register 1</description>
+               <addressOffset>0x12</addressOffset>
+               <fields>
+                  <field>
+                     <name>UART0</name>
+                     <description>UART0 clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="UART0" > <name>UART1</name> <description>UART1 clock enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>SPI0</name> <description>SPI0 clock enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>SPI1</name> <description>SPI1 clock enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>I2C0</name> <description>I2C0 clock enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>I2C1</name> <description>I2C1 clock enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>I2C2</name> <description>I2C2 clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="UART0" > <name>I2C3</name> <description>I2C3 clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCGC2</name>
+               <description>Clock Gate Control Register 2</description>
+               <addressOffset>0x13</addressOffset>
+               <fields>
+                  <field>
+                     <name>DAC12B</name>
+                     <description>DAC12B clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DAC12B" > <name>ADC</name> <description>ADC clock enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>VREF</name> <description>VREF clock enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>TSI</name> <description>TSI clock enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>CMP</name> <description>CMP clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>I2S</name> <description>I2S clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCGC3</name>
+               <description>Clock Gate Control Register 3</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>FTM0</name>
+                     <description>FTM0 clock enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FTM0" > <name>FTM1</name> <description>FTM1 clock enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="FTM0" > <name>MTIM</name> <description>MTIM clock enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTM0" > <name>CMT</name> <description>CMT clock enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="FTM0" > <name>PDB</name> <description>PDB clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="FTM0" > <name>CRC</name> <description>CRC clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCGC4</name>
+               <description>Clock Gate Control Register 4</description>
+               <addressOffset>0x15</addressOffset>
+               <fields>
+                  <field>
+                     <name>WDOG</name>
+                     <description>WDOG clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="WDOG" > <name>IRQ</name> <description>IRQ clock enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WDOG" > <name>DMA</name> <description>DMA clock enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WDOG" > <name>FTFL</name> <description>FTFL clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCGC5</name>
+               <description>Clock Gate Control Register 5</description>
+               <addressOffset>0x16</addressOffset>
+               <fields>
+                  <field>
+                     <name>MCG</name>
+                     <description>MCG clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="MCG" > <name>OSC1</name> <description>OSC1 clock enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MCG" > <name>OSC2</name> <description>OSC2 clock enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MCG" > <name>MFBUS</name> <description>MFBUS clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MCG" > <name>RNGB</name> <description>RNGB clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCGC6</name>
+               <description>Clock Gate Control Register 6</description>
+               <addressOffset>0x17</addressOffset>
+               <fields>
+                  <field>
+                     <name>PORTA</name>
+                     <description>PORTA clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PORTA" > <name>PORTB</name> <description>PORTB clock enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTC</name> <description>PORTC clock enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTD</name> <description>PORTD clock enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTE</name> <description>PORTE clock enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTF</name> <description>PORTF clock enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>USBDCD</name> <description>USBDCD clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>USBOTG</name> <description>USBOTG clock enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKOUT</name>
+               <description>Clock-out Register</description>
+               <addressOffset>0x1A</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKOUTDIV</name>
+                     <description>Division of the CLKOUT pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Divide by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Divide by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Divide by 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Divide by 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Divide by 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Divide by 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Divide by 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Divide by 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CS</name>
+                     <description>CLKOUT pin clock select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Disabled</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>OSC1ERCLK</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>OSC2ERCLK</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>MCGOUTCLK</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>CPUCLK/SYSCLK</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>BUSCLK</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>LPO</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>LPTMR0</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKDIV0</name>
+               <description>Clock Divider 0 Register</description>
+               <addressOffset>0x1B</addressOffset>
+               <fields>
+                  <field>
+                     <name>OUTDIV</name>
+                     <description>Clock output divider value to generate CPU clock\n
+Sets the divide value for the core/system clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Divide-by-1</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Divide-by-2</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Divide-by-3</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Divide-by-4</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Divide-by-5</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Divide-by-6</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Divide-by-7</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Divide-by-8</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Divide-by-9</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Divide-by-10</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Divide-by-11</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Divide-by-12</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Divide-by-13</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Divide-by-14</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Divide-by-15</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Divide-by-16</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKDIV1</name>
+               <description>Clock Divider 1 Register\n
+This register sets the clock divider when the USB clock source is MCGFLLCLK/MCGPLLCLK (SOPT2[USBSRC]).\n
+Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>USBSRC</name>
+                     <description>USB clock source select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Divided MCGPLLCLK</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Divided MCGFLLCLK</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>USB_CLKIN pin</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USBFRAC</name>
+                     <description>USB clock divider fraction\n
+Sets the fraction multiply value for the fractional clock divider used as a source for USB clock</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USBDIV</name>
+                     <description>USB clock divider divisor\n
+Sets the divide value for the fractional clock divider used as a source for the USB clock</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SPCR</name>
+               <description>Flash Configuration Register</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PFSIZE</name>
+                     <description>Program flash size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>32 KB PFLASH, 1 KB protection</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>64 KB PFLASH, 2 KB protection</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>128 KB PFLASH, 4 KB protection</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>256 KB PFLASH, 8 KB protection</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Reserved</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NVMSIZE</name>
+                     <description>FlexNVM size</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>16 KB of FlexNVM, 2 KB protection</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>32 KB of FlexNVM, 4 KB protection</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Reserved</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>UID%s</name>
+               <description>Unique Identification Register %s</description>
+               <addressOffset>0x24</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+         </registers>
+      </peripheral>

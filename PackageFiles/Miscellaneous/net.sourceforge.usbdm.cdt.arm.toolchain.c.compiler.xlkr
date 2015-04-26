@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File name MUST correspond with the superClassId of the build tool in the .cproject file 
+  the file name must have .xlkr extension -->
+<xlkr_definition>
+  <!-- tooltype is the type of the tool: [compiler,linker] -->
+  <tooltype>compiler</tooltype>
+  <!-- here start section for defining global symbols -->
+  <define_symbols>
+    <!-- define symbol -->
+
+    <define_symbol>
+      <symbol>PECW_RecentTargetName</symbol>
+      <default>${ConfigurationName}</default>
+    </define_symbol>
+
+    <define_symbol>
+      <symbol>CW_PRJWIZ_MCU_NAME</symbol>
+      <default>${CW_MCU_Name}</default>
+    </define_symbol>    
+    
+    <define_symbol>
+      <symbol>PE_G_XLKR_SysToolPath</symbol>
+      <default>${system:MISRA_TOOLDIR}</default>
+    </define_symbol>
+
+    <!--define_symbol>
+      <symbol>CW_BUILD_TOOL</symbol>
+      <default>cdt_managedbuild_tool_gnu_cross_c_compiler</default>
+    </define_symbol-->
+
+    <define_symbol>
+      <symbol>PE_G_XLKR_ToolChainDir</symbol>
+      <default>${system:GNUARM}</default>   
+    </define_symbol>
+
+  </define_symbols>
+  
+  <define_symbol>
+    <symbol>PE_G_XLKR_C_COMPILER_OTHER_PARAMS</symbol>
+    <option_id>net.sourceforge.usbdm.gnu.c.compiler.option.misc.other</option_id>
+  </define_symbol>
+
+  <define_symbol>
+    <symbol>PE_G_XLKR_ASM_COMPILER_OTHER_PARAMS</symbol>
+    <option_id>net.sourceforge.usbdm.cdt.toolchain.cppAssembler.miscellaneous.otherFlags</option_id>
+  </define_symbol>
+
+  <!-- mapping between option_id and PEx symbol -->
+  <symbol_mapping>
+    <!-- C compiler -->
+    <map id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" 
+         symbol="PE_G_4PEx_ToolChain_Compiler_SearchUserPaths" />
+    <map id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" 
+         symbol="PE_G_4PEx_ToolChain_Compiler_SearchUserRecursivePaths" />
+    <map id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" 
+         symbol="PE_G_4PEx_ToolChain_Compiler_SearchSystemPaths" />
+    <map id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" 
+         symbol="PE_G_4PEx_ToolChain_Compiler_SearchSystemRecursivePaths" />
+    <map id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols"
+         symbol="PE_G_4PEx_ToolChain_Compiler_Defines" />
+    <!-- Linker -->
+    <map id="gnu.cpp.link.option.paths" 
+         symbol="PE_G_4PEx_ToolChain_Linker_SearchLibraryPaths" />
+    <map id="gnu.cpp.link.option.libs" 
+         symbol="PE_G_4PEx_ToolChain_Linker_Libraries" />
+    <map id="gnu.cpp.link.option.userobjs"
+         symbol="PE_G_4PEx_ToolChain_Linker_OtherObjects" />
+    <!-- Linker Entry Point -->
+    <!--map id="com.freescale.arm.cdt.toolchain.linker.entryPoint"
+         symbol="PE_G_4PEx_ToolChain_Linker_EntryPoint" /-->
+    <!-- ASM compiler -->
+    <map id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" 
+         symbol="PE_G_4PEx_ToolChain_Asm_SearchUserPaths" />
+    <map id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" 
+         symbol="PE_G_4PEx_ToolChain_Asm_SearchUserRecursivePaths" />
+    <map id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" 
+         symbol="PE_G_4PEx_ToolChain_Asm_SearchSystemPaths" />
+    <map id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" 
+         symbol="PE_G_4PEx_ToolChain_Asm_SearchSystemRecursivePaths" />
+    <map id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols"
+         symbol="PE_G_4PEx_ToolChain_Asm_Defines" />
+  </symbol_mapping>
+</xlkr_definition>

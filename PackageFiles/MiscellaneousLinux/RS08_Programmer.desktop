@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=RS08_FlashProgrammer
+Comment=Flash programmer for RS08 devices
+Keywords=RS08;Programmer;
+Exec=/usr/bin/RS08_FlashProgrammer
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=RS08 Programmer
+GenericName[en_AU]=RS08 Programmer
+Comment[en_AU]=USBDM Flash programmer for RS08

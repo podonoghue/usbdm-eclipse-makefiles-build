@@ -1,0 +1,120 @@
+<!--
+Devices using this vector table: 
+   MKE02Z2
+   MKE02Z4
+-->
+      <interrupts>
+         <name>MKE02Z2_VectorTable</name>
+         <description>MKE02Z2 VectorTable</description>
+         <interrupt>
+            <name>FTMRH</name>
+            <description>FTMRH Command complete or error</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>IRQ</name>
+            <description>External Interrupt</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>I2C Interface 0</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface 0</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface 1</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0</name>
+            <description>UART0 Status and error</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1</name>
+            <description>UART1 Status and error</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2</name>
+            <description>UART2 Status and error</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analogue to Digital Converter 0</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>ACMP0</name>
+            <description>Analogue comparator 0</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>Flexible Timer Module 0</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>Flexible Timer Module 1</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>Flexible Timer Module 2</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC</name>
+            <description>Real Time Clock overflow</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>ACMP1</name>
+            <description>Analogue comparator 0</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch0</name>
+            <description>Programmable Interrupt Timer Channel 0</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT_Ch1</name>
+            <description>Programmable Interrupt Timer Channel 1</description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>KBI0</name>
+            <description>Keyboard Interrupt 0</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>KBI1</name>
+            <description>Keyboard Interrupt 1</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>ICS</name>
+            <description>ICS</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>Watch dog</description>
+            <value>28</value>
+         </interrupt>
+      </interrupts>
+

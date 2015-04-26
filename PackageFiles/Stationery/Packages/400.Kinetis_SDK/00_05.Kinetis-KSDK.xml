@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK - Common paths, files and project modifications -->
+   <projectActionList id="Kinetis-KSDK" root="usbdm_resource_path/Stationery/ARM/">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
+               
+               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
+               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
+
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-SDK-enable" 
+         name="Kinetis Software Development Kit (KSDK)"
+         description="Adds the Kinetis SDK base files to the project" 
+         checkGroup="group-additional-options">
+         <enableWhen>
+            <not>
+               <or>
+                  <requirement idRef="projectOptionValue.Clock-setup" />
+                  <requirement idRef="projectOptionValue.FRDM-Blinky" />
+                  <requirement idRef="projectOptionValue.CMSIS-RTOS" />
+                  <requirement idRef="projectOptionValue.Kinetis-PE" />
+               </or>
+            </not>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </applyWhen>
+         <!-- ASM Include paths -->
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" replace="true">
+         </projectOption>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" replace="true">
+            <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths" replace="true">
+            <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
+            <value>KDS</value>
+            <value>NDEBUG</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
+            <value>KDS</value>
+            <value>NDEBUG</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="debug">
+            <value>KDS</value>
+            <value>DEBUG</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
+            <value>KDS</value>
+            <value>DEBUG</value>
+         </projectOption>
+         <!-- Turn off Extra warnings -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.warnings.extrawarn">
+            <value>&quot;false&quot;</value>
+         </projectOption>
+         <!-- Remove unused Header files -->
+         <deleteResource target="Project_Headers" />
+         <!-- Remove unused Startup files -->
+         <deleteResource target="Startup_Code" />
+         <!-- Remove unused Linker -->
+         <!-- deleteResource target="Project_Settings/Linker_Files" / -->
+         <createFolder type="" target="doc" />
+         <copy source="usbdm_kds_path/doc/Kinetis SDK API Reference Manual.html"            target="doc/Kinetis SDK API Reference Manual.html"            type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/Kinetis SDK Demo Applications User's Guide.html"  target="doc/Kinetis SDK Demo Applications User's Guide.html"  type="link" sourcePathType="absolute" />
+         <createFolder type="" target="utilities" />
+         <copy source="usbdm_kds_path/platform/utilities/src/fsl_debug_console.c"  target="utilities/fsl_debug_console.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/utilities/inc/fsl_debug_console.h"  target="utilities/fsl_debug_console.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/utilities/src/fsl_misc_utilities.c" target="utilities/fsl_misc_utilities.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/utilities/src/print_scan.c"         target="utilities/print_scan.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/utilities/src/print_scan.h"         target="utilities/print_scan.h"         type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

@@ -1,0 +1,753 @@
+<!--
+Devices using this peripheral: 
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK30D10
+      MK30DZ10
+      MK61F12
+      MK61F15
+      MK70F12
+      MK70F15
+-->
+      <peripheral>
+         <?sourceFile "AXBS_8M_8S" ?>
+         <name>AXBS</name>
+         <description>Crossbar switch (8 master, 8 slave)</description>
+         <prependToName>AXBS</prependToName>
+         <baseAddress>0x40004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x110</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x210</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x300</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x310</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x400</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x410</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x500</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x510</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x600</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x610</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x700</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x710</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x800</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x900</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xB00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF00</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>8</dim>
+               <dimIncrement>256</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>SLAVE,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>PRS</name>
+                  <description>Priority Registers Slave</description>
+                  <addressOffset>0x0</addressOffset>
+                  <resetValue>0x76543210</resetValue>
+                  <fields>
+                     <field>
+                        <name>M0</name>
+                        <description>Master 0 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M1</name>
+                        <description>Master 1 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M2</name>
+                        <description>Master 2 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M3</name>
+                        <description>Master 3 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>12</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M4</name>
+                        <description>Master 4 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M5</name>
+                        <description>Master 5 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M6</name>
+                        <description>Master 6 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>M7</name>
+                        <description>Master 7 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>28</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>This master has level 1 (highest) priority when accessing the slave port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>This master has level 2 priority when accessing the slave port</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>This master has level 3 priority when accessing the slave port</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>This master has level 4 priority when accessing the slave port</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>This master has level 5 priority when accessing the slave port</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>This master has level 6 priority when accessing the slave port</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>This master has level 7 priority when accessing the slave port</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>This master has level 8 (lowest) priority when accessing the slave port</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CRS</name>
+                  <description>Control Register</description>
+                  <addressOffset>0x10</addressOffset>
+                  <fields>
+                     <field>
+                        <name>PARK</name>
+                        <description>Park</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>Park on master port M0</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>Park on master port M1</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>Park on master port M2</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>Park on master port M3</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>Park on master port M4</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>Park on master port M5</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>Park on master port M6</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>Park on master port M7</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>PCTL</name>
+                        <description>Parking Control</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>When no master makes a request, the arbiter parks the slave port on the master port defined by the PARK field</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>When no master makes a request, the arbiter parks the slave port on the last master to be in control of the slave port</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>When no master makes a request, the slave port is not parked on a master and the arbiter drives all outputs to a constant safe state</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Reserved</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ARB</name>
+                        <description>Arbitration Mode</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Fixed priority</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Round-robin (rotating) priority</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Reserved</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Reserved</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>HLP</name>
+                        <description>Halt Low Priority</description>
+                        <bitOffset>30</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>The low power mode request has the highest priority for arbitration on this slave port</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>The low power mode request has the lowest initial priority for arbitration on this slave port</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RO</name>
+                        <description>Read Only</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>The slave port&apos;s registers are writeable</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>The slave port&apos;s registers are read-only and cannot be written. Attempted writes have no effect on the registers and result in a bus error response</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <cluster>
+               <dim>8</dim>
+               <dimIncrement>256</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>MASTER,@p@f@i</name>
+               <addressOffset>0x800</addressOffset>
+               <register>
+                  <name>MGPCR</name>
+                  <description>Master General Purpose Control Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>AULB</name>
+                        <description>Arbitrate On Undefined Length Bursts</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>No arbitration is allowed during an undefined length burst</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>Arbitration is allowed at any time during an undefined length burst</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>Arbitration is allowed after four beats of an undefined length burst</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>Arbitration is allowed after eight beats of an undefined length burst</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>Arbitration is allowed after 16 beats of an undefined length burst</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>Reserved</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>Reserved</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>Reserved</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+         </registers>
+      </peripheral>

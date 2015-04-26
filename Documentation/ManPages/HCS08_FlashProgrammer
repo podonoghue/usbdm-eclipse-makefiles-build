@@ -1,0 +1,33 @@
+.\" Manpage for HCS08_FlashProgrammer.
+.\" Contact podonoghue@swin.edu.au to correct errors or typos.
+.TH man 1 "13 October 2013" "1.0" "HCS08_FlashProgrammer man page"
+.SH NAME
+HCS08_FlashProgrammer - USBDM HCS08 Flash programmer
+.SH SYNOPSIS
+HCS08_FlashProgrammer [-device <str>] [-erase <str>] [-execute] [-flexNVM <str>] [-masserase] [-noerase] [-nvloc <str>] [-power <str>] [-program] [-reset <str>] [-security <str>] [-secure] [-speed <str>] [-trim <str>] [-unsecure] [-vdd <str>] [-verify] [Name of the S19 Hex or ELF file to load]
+.SH DESCRIPTION
+HCS08_FlashProgrammer is a GUI or command line based programmer designed to be used with simple USBDM hardware to program HCS08 devices from Freescale.  If no options are provided then a GUI interface is opened.
+.SH OPTIONS
+  -device:<str>  	Target device e.g. MC9S08AW16A
+  -erase:<str>   	Erase method (Mass, All, Selective, None)
+  -execute       	Leave target power on & reset to normal mode at completion
+  -flexNVM:<str> 	FlexNVM parameters (eeprom,partition hex values)
+  -masserase     	Equivalent to erase=Mass
+  -noerase       	Equivalent to erase=None
+  -nvloc:<str>   	Trim non-volatile memory location (hex)
+  -power:<str>   	Power timing (off,recovery) 100-10000 ms
+  -program       	Program and verify flash contents
+  -reset:<str>   	Reset timing (active,release,recovery) 100-10000 ms
+  -security:<str>	Explicit security value to use (as hex string)
+  -secure        	Leave device secure after programming
+  -speed:<str>   	Interface speed (CFVx/Kinetis/DSC) kHz
+  -trim:<str>    	Trim internal clock to frequency (in kHz) e.g. 32.7
+  -unsecure      	Leave device unsecure after programming
+  -vdd:<str>     	Supply Vdd to target (3V3 or 5V)
+  -verify        	Verify flash contents
+.SH SEE ALSO
+ARM_FlashProgrammer(1), CFV1_FlashProgrammer(1), CFVx_FlashProgrammer(1), DSC_FlashProgrammer(1), HCS08_FlashProgrammer(1), HCS12_FlashProgrammer(1), RS08_FlashProgrammer(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Peter O'Donoghue (podonoghue@swin.edu.au)

@@ -1,0 +1,123 @@
+#!/bin/bash
+
+echo "Starting"
+
+#====================================================
+# Added properties directory
+# Updated for Eclipse plugin
+# Moved shared files to /usr/local/share/usbdm
+# Separated Eclipse installation
+#====================================================
+
+#================================
+# USBDM Version
+#
+MAJOR=4
+MINOR=10
+VERSION=${MAJOR}.${MINOR}
+LIB_SUFFIX=.so.${VERSION}
+
+#CP_OPTIONS="-v"
+CP_OPTIONS=
+
+# Try to locate Codewarrior
+#================================================================
+ECLIPSE_DIRECTORY=/opt/eclipse
+if [[ ! -d ${ECLIPSE_DIRECTORY} ]]; then
+ECLIPSE_DIRECTORY=/usr/local/eclipse
+fi
+if [[ ! -d ${ECLIPSE_DIRECTORY} ]]; then
+ECLIPSE_DIRECTORY=/usr/local/share/eclipse
+fi
+if [[ ! -d ${ECLIPSE_DIRECTORY} ]]; then
+echo "Can't locate Eclipse directory"
+ECLIPSE_DIRECTORY="*** Directory not found ***"
+fi
+ECLIPSE_DROPIN_DIRECTORY=${ECLIPSE_DIRECTORY}/dropins
+
+#================================================================
+PROMPT_L1="This script will install the USBDM V${MAJOR}.${MINOR} files."
+PROMPT_L2="Please check the contents of this file before execution.  "
+PROMPT_L3="This script needs to be run as root."
+PROMPT_L4="use \'sudo ./Install_Eclipse_Plugins\'"
+PROMPT_L5="This script expects to find Eclipse here:"
+PROMPT_L6="${ECLIPSE_DIRECTORY}"
+PROMPT_L7="Continue (Y/N)?"
+
+PROMPT="${PROMPT_L1}\n\n ${PROMPT_L2}\n\n ${PROMPT_L3}\n ${PROMPT_L4}\n\n ${PROMPT_L5}\n ${PROMPT_L6}\n\n ${PROMPT_L7}\n"  
+
+if [[ -e /usr/bin/zenity ]]; then
+   zenity --title "Confirm System Changes" --question --text "${PROMPT}"
+   
+   if [ $? != 0 ]; then
+      exit 1
+   fi
+else
+   echo
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L1}"
+   echo
+   echo "${PROMPT_L2}"
+   echo
+   echo "${PROMPT_L3}"
+   echo "${PROMPT_L4}"
+   echo
+   echo "${PROMPT_L5}"
+   echo "${PROMPT_L6}"
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L7}"
+
+   read guess
+   if [ "$guess" != "Y" ]; then
+     echo "Ok I won't do anything - bye"
+     exit
+   fi
+fi
+
+if [[ ! -e $ECLIPSE_DIRECTORY ]]; then
+   echo "Can't locate Eclipse Directory"
+   exit 1
+fi
+
+if [ -z "$SUDO_UID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+if [ -z "$SUDO_GID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+#echo SUDO_UID="$SUDO_UID" SUDO_GID="$SUDO_GID"
+
+echo
+echo "Installing USBDM Eclipse Plugin"
+echo ==================================================================
+# Remove existing plugin (dropin dir)
+if [[ -e ${ECLIPSE_DROPIN_DIRECTORY}/"usbdm" ]]; then
+   echo "Removing existing plugin"
+   echo rm -R ${ECLIPSE_DROPIN_DIRECTORY}/"usbdm"
+   rm -R ${ECLIPSE_DROPIN_DIRECTORY}/"usbdm"
+fi
+
+echo "Creating plugin directory"
+echo mkdir "${ECLIPSE_DROPIN_DIRECTORY}/usbdm"
+mkdir "${ECLIPSE_DROPIN_DIRECTORY}/usbdm"
+
+echo "Copying plugin files"
+echo cp -r $CP_OPTIONS "plugins/EclipseCDT/plugins"* "${ECLIPSE_DROPIN_DIRECTORY}/usbdm"
+cp      -r $CP_OPTIONS "plugins/EclipseCDT/plugins"* "${ECLIPSE_DROPIN_DIRECTORY}/usbdm"
+
+echo "Setting plugin permissions"
+echo "chmod a+rwx "${ECLIPSE_DROPIN_DIRECTORY}/usbdm""
+chmod a+rwx "${ECLIPSE_DROPIN_DIRECTORY}/usbdm"
+ 
+echo
+echo "Done"
+echo
+

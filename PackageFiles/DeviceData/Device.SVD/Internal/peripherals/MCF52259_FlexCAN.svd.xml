@@ -1,0 +1,775 @@
+<!--
+Devices using this peripheral: 
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_FlexCAN" ?>
+         <?preferredAccessWidth "32" ?>
+         <?forcedBlockWidth "32" ?>
+         <name>FlexCAN</name>
+         <description>FlexCAN Module</description>
+         <prependToName>FlexCAN</prependToName>
+         <baseAddress>0x40170000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x28</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CANMCR</name>
+               <description>FlexCAN Configuration\n
+CANMCR defines global system configurations, such as the module operation mode and maximum
+message buffer configuration. Most of the fields in this register can be accessed at any time, except the
+MAXMB field, which should only be changed while the module is in freeze mode</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>MAXMB</name>
+                     <description>Maximum number of message buffers\n
+Defines the maximum number of message buffers that take part in the matching and arbitration process</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPMACK</name>
+                     <description>Low power mode acknowledge\n
+Indicates that FlexCAN is disabled. \n
+Disabled mode cannot be entered until all current transmission or reception processes have finished, 
+so the CPU can poll the LPMACK bit to know when the FlexCAN has actually entered low power mode</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not in LPM</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Low power mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SUPV</name>
+                     <description>Supervisor/user data space\nPlaces the FlexCAN registers in supervisor or user data space</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>User mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Supervisor mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRZACK</name>
+                     <description>Freeze acknowledge\n
+Indicates that the FlexCAN module has entered freeze mode. The user should poll this bit
+after freeze mode has been requested, to know when the module has actually entered freeze mode</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Freeze mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SOFTRST</name>
+                     <description>Soft reset\n
+When set, the FlexCAN resets its internal state machines (sequencer, error counters, error flags, and
+timer) and the host interface registers (CANMCR [except the MDIS bit], TIMER, ERRCNT, ERRSTAT, IMASK, and
+IFLAG)</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Ready</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Soft reset initiated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NOTRDY</name>
+                     <description>FlexCAN not ready\n
+This bit indicates that the FlexCAN is in disable or freeze mode.\n
+This bit is cleared after the FlexCAN exits these modes</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disable or freeze mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HALT</name>
+                     <description>Halt FlexCAN\n
+Setting this bit puts the FlexCAN module into freeze mode.\n
+It has the same effect as assertion of the BKPT signal.\n
+This bit is set after reset and should be cleared after initialising the message buffers and control regs</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Halt request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRZ</name>
+                     <description>Freeze mode enable\n
+When set, the FlexCAN can enter freeze mode when the BKPT line is asserted or the HALT bit is set</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- Ignore BKPT signal &amp; HALT bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled\t-FlexCAN module able to enter debug mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MDIS</name>
+                     <description>Module disable\n
+This bit controls whether FlexCAN is enabled or not.\n
+ When disabled, FlexCAN shuts down the FlexCAN clocks that drive the CAN interface and Message Buffer sub-module</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enabled\t- FlexCAN module and clocks enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disabled\t- FlexCAN module, clocks disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANCTRL</name>
+               <description>FlexCAN Control\n
+CANCTRL is defined for specific FlexCAN control features related to the CAN bus, such as bit-rate,
+programmable sampling point within an Rx bit, loop back mode, listen-only mode, bus off recovery
+behavior, and interrupt enabling</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PROPSEG</name>
+                     <description>Propagation segment\n
+Defines the length of the propagation segment in the bit time\n
+Propagation segment time = (PROPSEG + 1)*time-quanta\n
+Note: A time-quantum equals 1 S clock period</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>LOM</name>
+                     <description>Listen-only mode\n
+Configures FlexCAN to operate in listen-only mode. \n
+In this mode transmission is disabled, all error counters are frozen, and the module operates in a CAN error passive mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Listen-only mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBUF</name>
+                     <description>Lowest buffer transmitted first\n
+Defines the ordering mechanism for message buffer transmission</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Lowest ID first</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Lowest buffer # first</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSYNC</name>
+                     <description>Timer synchronize mode\n
+Enables the mechanism that resets the free-running timer each time a message is received in Message Buffer 0</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOFFREC</name>
+                     <description>Bus off recovery mode\n
+Defines how FlexCAN recovers from bus off state.\n
+If this bit is cleared, automatic recovering from bus off state occurs according to the CAN Specification 2.0B. \n
+If the bit is set, automatic recovering from bus off is disabled and the module remains in bus off state 
+until the bit is cleared by the user</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Automatic</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SMP</name>
+                     <description>Sampling mode\n
+Determines whether the FlexCAN module samples each received bit one time or three times to determine its value</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>One sample</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Three samples</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPB</name>
+                     <description>Loop back\n
+Configures FlexCAN to operate in loop-back mode. In this mode, FlexCAN performs an internal loop
+back that can be used for self test operation. The bit stream output of the transmitter is fed back internally to the
+receiver input</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLK_SRC</name>
+                     <description>Clock source\n
+Selects the clock source for the CAN interface to be fed to the prescalar.\n
+This bit should only be changed while the module is disabled</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>EXTAL</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Internal bus clock/2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERRMSK</name>
+                     <description>Error interrupt mask</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOFFMSK</name>
+                     <description>Bus off interrupt mask</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PSEG2</name>
+                     <description>Phase buffer segment 2\n
+Defines the length of phase buffer segment 2 in the bit time\n
+Phase buffer segment = (PSEG2 + 1)*time-quanta</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSEG1</name>
+                     <description>Phase buffer segment 1\n
+Defines the length of phase buffer segment 1 in the bit time\n
+Phase buffer segment = (PSEG1 + 1)*time-quanta</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>RJW</name>
+                     <description>Resynchronization jump width\n
+Defines the maximum number of time-quanta that a bit time can be changed by one resynchronization\n
+Resync jump width = (RJW + 1)*time-quanta\n
+One time quantum is equal to the S clock period</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRESDIV</name>
+                     <description>Prescaler division factor\n
+Defines the ratio between the clock source frequency (set by CLK_SRC bit) and the serial clock (S clock) frequency.\n
+The S clock period defines the time-quantum of the CAN protocol</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER</name>
+               <description>Free Running Timer\n
+This register represents a 16-bit free running counter that can be read and written to by the CPU.\n
+The timer starts from 0x0000 after reset, counts linearly to 0xFFFF, and wraps around</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TIMER</name>
+                     <description>Free running timer\n
+Captured at the beginning of the identifier (ID) field of any frame on the CAN bus.\n 
+This captured value is written into the TIMESTAMP entry in a message buffer after a\n 
+successful reception or transmission of a message</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXGMASK</name>
+               <description>Rx Global Mask\n
+These registers are used as acceptance masks for received frame IDs. Three masks are defined:\n
+ - Global mask (RXGMASK) used for Rx buffers 0-13\n 
+ - Mask for buffer 14 (RX14MASK)\n
+ - Mask and buffer 15 (RX15MASK)</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>MI</name>
+                     <description>ID mask bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register derivedFrom="RXGMASK"> <name>RX14MASK</name> <description>Rx Buffer 14 Mask</description> <addressOffset>0x14</addressOffset> </register>
+            <register derivedFrom="RXGMASK"> <name>RX15MASK</name> <description>Rx Buffer 15 Mask</description> <addressOffset>0x18</addressOffset> </register>
+            <register>
+               <name>ERRCNT</name>
+               <description>Error Counter\n
+This register has two 8-bit fields reflecting the value of two FlexCAN error counters:\n
+transmit error counter (TXECTR) and receive error counter (RXECTR)</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXECTR</name>
+                     <description>Transmit error counter\nIndicates current number of transmit errors</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXECTR</name>
+                     <description>Receive error counter\nIndicates current number of receive errors</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ERRSTAT</name>
+               <description>Error and Status\n
+ERRSTAT reflects various error conditions, some general status of the device, and is the source of three
+interrupts to the CPU</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>ERRINT</name>
+                     <description>Error interrupt\n
+Indicates that at least one of the ERRSTAT[15:10] bits is set.\n
+The user must write a 1 to clear this bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOFFINT</name>
+                     <description>Buss off interrupt\n
+Used to request an interrupt when the FlexCAN enters the bus off state.\n
+The user must write a 1 to clear this bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLTCONF</name>
+                     <description>Fault confinement state\n
+Indicates the confinement state of the FlexCAN module</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Error active</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Error passive</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Bus off</description>
+                           <value>0b1X</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRX</name>
+                     <description>Transmit/receive status\n
+Indicates when the FlexCAN module is transmitting or receiving a message.\n 
+TXRX has no meaning when IDLE equals 1</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiving</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitting</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IDLE</name>
+                     <description>Bus idle status\n
+Indicates when there is activity on the CAN bus</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CAN not idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CAN is idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXWRN</name>
+                     <description>Receiver error status flag\n
+Reflects the status of the FlexCAN receive error counter</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive errors &lt; 96</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>NoReceive errors &gt;= 96</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXWRN</name>
+                     <description>Transmit error status flag\n
+Reflects the status of the FlexCAN transmit error counter</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit errors &lt; 96</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit errors &gt;= 96</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STFERR</name>
+                     <description>Bit stuffing</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="STFERR" > <name>FRMERR</name> <description>Message form error\n
+Indicates that a form error has been detected by the receiver node, i.e. a fixed-form bit field contains at least one illegal bit</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="STFERR" > <name>CRCERR</name> <description>Cyclic redundancy check error\n
+Indicates whether or not a CRC error has been detected by the receiver</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="STFERR" > <name>ACKERR</name> <description>Acknowledge error\n
+Indicates whether an acknowledgement has been correctly received for a transmitted message</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="STFERR" > <name>BIT0ERR</name> <description>Bit-0 error\n
+Indicates inconsistency between the transmitted and received bit in a message</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="STFERR" > <name>BIT1ERR</name> <description>Bit-1 error\n
+Indicates inconsistency between the transmitted and received bit in a message\n
+The transmit bit error field is not modified during the arbitration field or the ACK slot bit time of a message,
+or by a transmitter that detects dominant bits while sending a passive error frame</description> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IMASK</name>
+               <description>Interrupt Masks\n
+IMASK contains one interrupt mask bit per buffer.\n
+It enables the CPU to control which buffers generates an interrupt after a successful transmission/reception</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>BUF0M</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="BUF0M" > <name>BUF1M</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF2M</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF3M</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF4M</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF5M</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF6M</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF7M</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF8M</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF9M</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF10M</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF11M</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF12M</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF13M</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF14M</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="BUF0M" > <name>BUF15M</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IFLAG</name>
+               <description>Interrupt Flags\n
+IFLAG contains one interrupt flag bit per buffer.\n
+Each successful transmission/reception sets the corresponding IFLAG bit and, 
+if the corresponding IMASK bit is set, generates an interrupt</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>BUF0I</name>
+                     <description>Complete flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Complete\t- Transmission or reception completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="BUF0I" > <name>BUF1I</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF2I</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF3I</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF4I</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF5I</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF6I</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF7I</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF8I</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF9I</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF10I</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF11I</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF12I</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF13I</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF14I</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="BUF0I" > <name>BUF15I</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

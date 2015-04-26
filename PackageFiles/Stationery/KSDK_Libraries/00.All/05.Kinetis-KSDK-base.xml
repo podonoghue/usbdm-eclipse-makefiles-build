@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK - Common paths, files and project modifications -->
+   <projectActionList id="Kinetis-KSDK" root="usbdm_resource_path/Stationery/ARM/">
+
+      <group id="group-ksdk-library-import-device"         name="Device" />
+      <group id="group-ksdk-library-import-os-abstraction" name="Operating System Support" />
+
+      <!-- Project name with macros osType=(bm|FreeRTOS|mqx), targetDevice=(K22F51212|K64F12|KL03Z4|KL46Z4)  -->
+      <constant id="projectName"     value="ksdk_lib_$(kdsTargetName)_$(osType)_usbdm" />
+      <constant id="projectHomePath" value="" />       <!--  Where project is created (empty for default=workspace) -->
+      <constant id="buildToolId"     value="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM" />
+      <constant id="outputType"      value="net.sourceforge.usbdm.cdt.newProjectType.staticLib" />
+      <constant id="interfaceType"   value="T_ARM" />
+      <constant id="hasCCNature"     value="false" />
+      
+      <!-- ASM Include paths - delete -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" replace="true">
+      </projectOption>
+      <!-- C Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" replace="true">
+         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
+      </projectOption>
+      <!-- C++ Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths" replace="true">
+         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
+      </projectOption>
+      <!-- C Defines -->
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
+         <value>KDS</value>
+         <value>NDEBUG</value>
+      </projectOption>
+      <!-- C++ Defines -->
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
+         <value>KDS</value>
+         <value>NDEBUG</value>
+      </projectOption>
+      <!-- C Defines -->
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="debug">
+         <value>KDS</value>
+         <value>DEBUG</value>
+      </projectOption>
+      <!-- C++ Defines -->
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
+         <value>KDS</value>
+         <value>DEBUG</value>
+      </projectOption>
+      <!-- C Linker User objects - delete -->
+      <projectOption id="gnu.c.link.option.userobjs" replace="true">
+      </projectOption>
+      <!-- CPP Linker User objects - delete -->
+      <projectOption id="gnu.cpp.link.option.userobjs" replace="true">
+      </projectOption>
+      <!-- C Link options - delete -->
+      <projectOption id="gnu.c.link.option.other" replace="true">
+      </projectOption>
+      <!-- C++ Link options - delete -->
+      <projectOption id="gnu.cpp.link.option.other" replace="true">
+      </projectOption>
+      <!-- Remove unused Header files -->
+      <deleteResource target="Project_Headers" />
+      <!-- Remove unused Startup files -->
+      <deleteResource target="Startup_Code" />
+      <!-- C Linker file - delete -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile" replace="true">
+      </projectOption>
+      <!-- C++ Linker file - delete -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" replace="true">
+      </projectOption>
+      
+      <projectOption id="cdt.managedbuild.tool.gnu.c.linker.output.so" replace="true">
+         <value>lib</value>
+      </projectOption>
+
+      <projectOption id="gnu.cpp.link.option.shared" replace="true">
+         <value>true</value>
+      </projectOption>
+      
+      <projectOption id="gnu.c.link.option.shared" replace="true">
+         <value>true</value>
+      </projectOption>
+      
+      <!-- C Debug level -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel" replace="true" config="release">
+         <value>net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.none</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel" replace="true" config="debug">
+         <value>net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.default</value>
+      </projectOption>
+      <!-- C Optimisation levels -->
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" replace="true" config="release">
+         <value>net.sourceforge.usbdm.gnu.c.optimization.level.size</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" replace="true" config="debug">
+         <value>net.sourceforge.usbdm.gnu.c.optimization.level.none</value>
+      </projectOption>
+ 
+   </projectActionList>
+
+</root>

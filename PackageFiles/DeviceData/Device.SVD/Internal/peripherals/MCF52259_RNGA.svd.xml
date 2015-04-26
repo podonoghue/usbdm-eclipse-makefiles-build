@@ -1,0 +1,293 @@
+<!--
+Devices using this peripheral: 
+      MCF5225x
+-->
+      <peripheral>
+         <?sourceFile "MCF52259_RNGA" ?>
+         <name>RNGA</name>
+         <description>Random Number Generator</description>
+         <prependToName>RNGA</prependToName>
+         <baseAddress>0x401F0000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>RNGCR</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>GO</name>
+                     <description>Go - Enables RNG\n
+Enables random data to be generated. Bit is sticky and only cleared by hardware reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- RNGOUT not loaded with random data</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled\t- RNGOUT loaded with random data</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HA</name>
+                     <description>High assurance\n
+Notifies core when RNGOUT underflow has occurred (RNGOUT is read while empty).\n
+Enables the security violation bit in the RNGSR. \n
+Bit is sticky and only cleared by hardware reset</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled\t- security violation will not be notified</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables\t- security violation will be notified</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IM</name>
+                     <description>Error interrupt mask</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CI</name>
+                     <description>Write 1 to clear interrupt\n
+Writing a 1 to this bit clears the error interrupt and RNGSR[EI]. This bit is self-clearing,</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clear error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLM</name>
+                     <description>Sleep operation\n
+The RNGA can be placed in low power mode by setting this bit.\n
+When this bit is set, the oscillators are disabled.\n
+Clearing this bit causes the RNGA to exit sleep mode. \n
+RNGOUT is not pushed while the RNGA is in sleep
+mode</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sleep mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RNGSR</name>
+               <description>Status Register</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SV</name>
+                     <description>Security violation\n
+When enabled by RNGCR[HA], signals that a RNGOUT underflow has occurred.\n
+Bit is sticky and is only cleared by hardware reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No overflow</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overflow occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LRS</name>
+                     <description>Status of RNGOUT on last read\n
+Reflects status of most recent read of RNGOUT</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Invalid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FUF</name>
+                     <description>FIFO underflow\n
+Signals FIFO underflow. Reset by reading RNGSR</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No underflow\t- RNGOUT not read while empty since last read of RNGSR</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Underflow\t- RNGOUT read while empty since last read of RNGSR</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EI</name>
+                     <description>Error interrupt\n
+Signals a FIFO underflow. Reset by a write to RNGCR[CI] and not masked by RNGCR[IM]</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt\t- RNGOUT not read while empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt\t- RNGOUT read while empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLP</name>
+                     <description>Sleep\nThis bit reflects whether the RNG is in sleep mode. When this bit is set, the RNGA is in sleep mode and the
+oscillator clocks are inactive. While in this mode, RNGOUT is not loaded</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sleep mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFL</name>
+                     <description>Output FIFO level\n
+Indicates current number of random words in the output FIFO. Determines if valid random data
+is available for reading from the FIFO without causing an underflow condition. On this device, the maximum value for
+this field is 0x01</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>OFS</name>
+                     <description>Output FIFO size\n
+Indicates size of the output FIFO (1 word) and maximum possible value of RNGR[OFL]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-write</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RNGER</name>
+               <description>RNG Entropy Register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>ENT</name>
+                     <description>Entropy Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RNGOUT</name>
+               <description>Output FIFO</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RANDOM_OUTPUT</name>
+                     <description>Random output value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

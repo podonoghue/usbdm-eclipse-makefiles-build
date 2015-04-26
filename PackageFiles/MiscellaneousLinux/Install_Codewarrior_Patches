@@ -1,0 +1,218 @@
+#!/bin/bash
+
+echo "Starting"
+
+#====================================================
+# Added properties directory
+# Updated for Eclipse plugin
+# Moved shared files to /usr/local/share/usbdm
+# Separated Eclipse installation
+#====================================================
+
+#================================
+# USBDM Version
+#
+MAJOR=4
+MINOR=10
+
+LIB_SUFFIX=.so.${MAJOR}.${MINOR}
+
+#CP_OPTIONS="-v"
+CP_OPTIONS=
+
+# Try to locate Codewarrior
+#================================================================
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.3
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_V10.3.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_V10.3.xml
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.2
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_V10.2.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_V10.2.xml
+fi
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+CODEWARRIOR_DIRECTORY=/usr/local/Freescale/CodeWarrior_MCU_10.1
+CODEWARRIOR_PATCH_NEW_WIZARD=PatchNewWizardPlugin_V10.1.xml
+CODEWARRIOR_PATCH_CHANGE_WIZARD=PatchChangeWizardPlugin_V10.1.xml
+fi
+if [[ ! -d ${CODEWARRIOR_DIRECTORY} ]]; then
+echo "Can't locate Codewarrior directory"
+CODEWARRIOR_DIRECTORY="*** Directory not found ***"
+fi
+#================================================================
+PROMPT_L1="This script will install the USBDM V${MAJOR}.${MINOR} files."
+PROMPT_L2="Please check the contents of this file before execution.  "
+PROMPT_L3="This script needs to be run as root."
+PROMPT_L4="use \'sudo ./Install_Codewarrior\'"
+PROMPT_L5="This script expects to find CodeWarrior here:"
+PROMPT_L6="${CODEWARRIOR_DIRECTORY}"
+PROMPT_L7="Continue (Y/N)?"
+
+PROMPT="${PROMPT_L1}\n\n ${PROMPT_L2}\n\n ${PROMPT_L3}\n ${PROMPT_L4}\n\n ${PROMPT_L5}\n ${PROMPT_L6}\n\n ${PROMPT_L7}\n"  
+
+if [[ -e /usr/bin/zenity ]]; then
+   zenity --title "Confirm System Changes" --question --text "${PROMPT}"
+   
+   if [ $? != 0 ]; then
+      exit 1
+   fi
+else
+   echo
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L1}"
+   echo
+   echo "${PROMPT_L2}"
+   echo
+   echo "${PROMPT_L3}"
+   echo "${PROMPT_L4}"
+   echo
+   echo "${PROMPT_L5}"
+   echo "${PROMPT_L6}"
+   echo
+   echo "########################################################"
+   echo
+   echo "${PROMPT_L7}"
+
+   read guess
+   if [ "$guess" != "Y" ]; then
+     echo "Ok I won't do anything - bye"
+     exit
+   fi
+fi
+
+if [[ ! -e $CODEWARRIOR_DIRECTORY ]]; then
+   echo "Can't locate CodeWarrior Directory"
+   exit 1
+fi
+
+if [ -z "$SUDO_UID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+if [ -z "$SUDO_GID" ]; then
+   echo "This script should be run sudo"
+   exit 1
+fi
+
+#echo SUDO_UID="$SUDO_UID" SUDO_GID="$SUDO_GID"
+
+
+
+CF_GDI_DIRECTORY=${CODEWARRIOR_DIRECTORY}/MCU/CodeWarrior/CodeWarrior_Plugins/Support/ColdFire/gdi
+HCS_GDI_DIRECTORY=${CODEWARRIOR_DIRECTORY}/MCU/CodeWarrior/CodeWarrior_Plugins/Support/HC08/gdi
+ARM_GDI_DIRECTORY=${CODEWARRIOR_DIRECTORY}/MCU/CodeWarrior/CodeWarrior_Plugins/Support/ARM/gdi
+DSC_GDI_DIRECTORY=${CODEWARRIOR_DIRECTORY}/MCU/CodeWarrior/CodeWarrior_Plugins/Support/DSC/gdi
+CW_PLUGIN_DIRECTORY=${CODEWARRIOR_DIRECTORY}/eclipse/plugins
+CW_DROPIN_DIRECTORY=${CODEWARRIOR_DIRECTORY}/eclipse/dropins
+WIZARD_DIRECTORY=${CODEWARRIOR_DIRECTORY}/MCU/lib/wizard_data
+ECLIPSE_CWIDE=${CODEWARRIOR_DIRECTORY}/eclipse/cwide
+
+#chmod a+r $USBDM_DIRECTORY/lib*-gdi.so.4
+
+CF_GDI_TARGETS="usbdm-cfv1-gdi.so usbdm-cfvx-gdi.so usbdm-cfv1-gdi-debug.so usbdm-cfvx-gdi-debug.so"
+HCS_GDI_TARGETS="usbdm-hcs08-gdi.so usbdm-rs08-gdi.so usbdm-hcs08-gdi-debug.so usbdm-rs08-gdi-debug.so"
+ARM_GDI_TARGETS="usbdm-arm-gdi.so usbdm-arm-gdi-debug.so"
+DSC_GDI_TARGETS="usbdm-dsc-gdi.so usbdm-dsc-gdi-debug.so"
+
+MAJOR=4
+MINOR=10
+VERSION=${MAJOR}.${MINOR}
+
+echo
+echo "Installing CFV1 & CFVx GDI files"
+echo ==================================================================
+for FILENAME in ${CF_GDI_TARGETS}; do
+echo cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${CF_GDI_DIRECTORY}/${FILENAME}
+     cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${CF_GDI_DIRECTORY}/${FILENAME}
+echo chmod a+rwx ${CF_GDI_DIRECTORY}/${FILENAME}
+     chmod a+rwx ${CF_GDI_DIRECTORY}/${FILENAME}
+done
+
+echo
+echo "Installing RS08 & HCS08 GDI files"
+echo ==================================================================
+for FILENAME in ${HCS_GDI_TARGETS}; do
+echo cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${HCS_GDI_DIRECTORY}/${FILENAME}
+     cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${HCS_GDI_DIRECTORY}/${FILENAME}
+echo chmod a+rwx ${HCS_GDI_DIRECTORY}/${FILENAME}
+     chmod a+rwx ${HCS_GDI_DIRECTORY}/${FILENAME}
+done
+
+echo
+echo "Installing Kinetis GDI files"
+echo ==================================================================
+for FILENAME in ${ARM_GDI_TARGETS}; do
+echo cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${ARM_GDI_DIRECTORY}/${FILENAME}
+     cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${ARM_GDI_DIRECTORY}/${FILENAME}
+echo chmod a+rwx ${ARM_GDI_DIRECTORY}/${FILENAME}
+     chmod a+rwx ${ARM_GDI_DIRECTORY}/${FILENAME}
+done
+
+echo
+echo "Installing DSC GDI files"
+echo ==================================================================
+for FILENAME in ${DSC_GDI_TARGETS}; do
+echo cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${DSC_GDI_DIRECTORY}/${FILENAME}
+     cp $CP_OPTIONS "bin/"lib${FILENAME}.${VERSION} ${DSC_GDI_DIRECTORY}/${FILENAME}
+echo chmod a+rwx ${DSC_GDI_DIRECTORY}/${FILENAME}
+     chmod a+rwx ${DSC_GDI_DIRECTORY}/${FILENAME}
+done
+
+echo
+echo "Installing USBDM Eclipse Plugin"
+echo ==================================================================
+# Remove existing plugin (plugin dir)
+for PLUGIN in  ${CW_PLUGIN_DIRECTORY}/"net.sourceforge.usbdm."* ; do
+   if [[ -e $PLUGIN ]]; then
+      echo rm "${PLUGIN}"
+      rm "${PLUGIN}"
+   fi
+   if [[ -d $PLUGIN ]]; then
+      echo rm -R "${PLUGIN}"
+      rm -R "${PLUGIN}"
+   fi
+done
+# Remove existing plugin (dropin dir)
+if [[ -e ${CW_DROPIN_DIRECTORY}/"usbdm" ]]; then
+   rm -R ${CW_DROPIN_DIRECTORY}/"usbdm"
+fi
+
+mkdir ${CW_DROPIN_DIRECTORY}/"usbdm"
+echo cp -r $CP_OPTIONS "plugins/Codewarrior/plugins"* ${CW_DROPIN_DIRECTORY}/usbdm
+cp      -r $CP_OPTIONS "plugins/Codewarrior/plugins"* ${CW_DROPIN_DIRECTORY}/usbdm
+echo chmod a+rwx ${CW_DROPIN_DIRECTORY}/usbdm
+chmod a+rwx ${CW_DROPIN_DIRECTORY}/usbdm
+ 
+echo
+echo "Installing Codewarrior Project Wizard Files for USBDM"
+echo ==================================================================
+echo "Copying launch settings"
+echo cp $CP_OPTIONS "LaunchConfig/"*".xml" ${WIZARD_DIRECTORY}/launch_config
+cp $CP_OPTIONS "LaunchConfig/"*".xml" ${WIZARD_DIRECTORY}/launch_config
+echo chmod a+rwx ${WIZARD_DIRECTORY}"/launch_config/usbdm"*".xml"
+chmod a+rwx ${WIZARD_DIRECTORY}"/launch_config/usbdm"*".xml"
+
+echo "Patching New Project Wizard"
+WIZARD_PATCH_FILE=bin/WizardPatches/${CODEWARRIOR_PATCH_NEW_WIZARD}
+WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.projectwizard_"  
+./bin/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+echo touch ${WIZARD_BASE_DIR}\*
+touch ${WIZARD_BASE_DIR}*
+
+echo "Patching Change Project Wizard"
+WIZARD_PATCH_FILE=bin/WizardPatches/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
+WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.changewizard_"  
+./bin/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+
+echo "Refreshing Eclipse"
+echo touch ${WIZARD_BASE_DIR}\*
+touch ${WIZARD_BASE_DIR}*
+echo ${ECLIPSE_CWIDE} -clean -initialize
+${ECLIPSE_CWIDE} -clean -initialize
+
+echo
+echo "Done"
+echo

@@ -1,0 +1,489 @@
+<!--
+Devices using this peripheral: 
+      MKE04Z8M4
+-->
+      <peripheral>
+         <?sourceFile "FTMRE_MKE_2" ?>
+         <?preferredAccessWidth "8" ?>
+         <name>FTMRE</name>
+         <description>Flash Memory Interface</description>
+         <prependToName>FTMRE</prependToName>
+         <baseAddress>0x40020000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x1</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x5</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x7</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0xB</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0xF</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>FCCOBIX</name>
+               <description>Flash CCOB Index Register \n
+The FCCOBIX register is used to index the FCCOB register for NVM memory operations</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CCOBIX</name>
+                     <description>Common Command Register Index \n
+Selects which word of the FCCOB register array is being read or written to</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FSEC</name>
+               <description>Flash Security Register \n
+The FSEC register holds all bits associated with the security of the MCU and NVM module. All fields in the FSEC register are readable but not writable. During the reset sequence, the FSEC register is loaded with the contents of the flash security byte in the flash configuration field located in flash memory</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SEC</name>
+                     <description>Flash Security Bits \n
+Defines the security state of the MCU. If the flash module is unsecured using backdoor key access, the SEC field is forced to 10. \n
+NOTE: 01 is the preferred SEC state to set MCU to secured state</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Secured</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Secured</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Unsecured</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Secured</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KEYEN</name>
+                     <description>Backdoor Key Security Enable Bits \n
+The KEYEN[1:0] bits define the enabling of backdoor key access to the flash module.  \n
+NOTE: 01 is the preferred KEYEN state to disable backdoor key access</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Disabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Disabled</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCLKDIV</name>
+               <description>Flash Clock Divider Register \n
+Used to control timed events in program and erase algorithms. \n
+NOTE: The FCLKDIV register must not be written while a flash command is executing (FSTAT[CCIF] = 0)</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FDIV</name>
+                     <description>Clock Divider Bits \n
+FDIV[5:0] must be set to effectively divide BUSCLK down to 1MHz to control timed events during flash program and erase algorithms</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>FDIVLCK</name>
+                     <description>Clock Divider Locked</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FDIV field is open for writing</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FDIV value is locked and cannot be changed. After the lock bit is set high, only reset can clear this bit and restore writability to the FDIV field in user mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDIVLD</name>
+                     <description>Clock Divider Loaded</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FCLKDIV register has not been written since the last reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FCLKDIV register has been written since the last reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FSTAT</name>
+               <description>Flash Status Register \n
+The FSTAT register reports the operational status of the flash and EEPROM module</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MGSTAT</name>
+                     <description>Memory Controller Command Completion Status Flag \n
+One or more MGSTAT flag bits are set if an error is detected during execution of a flash command or during the flash reset sequence</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No Error</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Error - command dependent</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Error - command dependent</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Error - command dependent</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MGBUSY</name>
+                     <description>Memory Controller Busy Flag \n
+Reflects the active state of the memory controller</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Memory controller is idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Memory controller is busy executing a flash command (CCIF = 0)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPVIOL</name>
+                     <description>Flash Protection Violation Flag \n
+Indicates an attempt was made to program or erase an address in a protected area of flash or EEPROM memory. Write 1 to FPVIOL to clear it. While FPIOL is set, it is not possible to launch a command or start a command write sequence</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No protection violation is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protection violation is detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACCERR</name>
+                     <description>Flash Access Error Flag \n
+Indicates an illegal access has occurred to the flash memory caused by either a violation of the command write sequence or issuing an illegal flash command. While ACCERR is set, the CCIF flag cannot be cleared to launch a command. Write a 1 to this field to clear it</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No access error is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash Protection Violation Flag</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIF</name>
+                     <description>Command Complete Interrupt Flag \n
+Indicates that a flash command has completed. The CCIF flag is cleared by writing a 1 to CCIF to launch a command and CCIF will stay low until command completion or command violation</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash command is in progress</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash command has completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCNFG</name>
+               <description>Flash Configuration Register \n
+The FCNFG register enables the flash command complete interrupt and forces ECC faults on flash array read access from the CPU</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FSFD</name>
+                     <description>Force Single Bit Fault Detect \n
+The FSFD bit allows the user to simulate a single bit fault during flash array read operations and check the associated interrupt routine. This field is cleared by writing a 0 to FSFD</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash array read operations will set the SFDIF flag in the FERSTAT register only if a single bit fault is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash array read operation will force the SFDIF flag in the FERSTAT register to be set and an interrupt will be generated as long as FERCNFG[SFDIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDFD</name>
+                     <description>Force Double Bit Fault Detect \n
+Allows the user to simulate a double-bit fault during flash array read operations and check the associated interrupt routine. This field is cleared by writing a 0 to FDFD</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash array read operations will set the FERSTAT[DFDIF] flag only if a double bit fault is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Any flash array read operation will force the FERSTAT[DFDIF] flag to be set and an interrupt will be generated as long as FERCNFG[DFDIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IGNSF</name>
+                     <description>Ignore Single Bit Fault \n
+Controls single-bit fault reporting in the FERSTAT register</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All single-bit faults detected during array reads are reported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single-bit faults detected during array reads are not reported and the single bit fault interrupt will not \n
+be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIE</name>
+                     <description>Command Complete Interrupt Enable \n
+Controls interrupt generation when a flash command has completed</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Command complete interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt will be requested whenever the CCIF flag in the FSTAT register is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCCOB</name>
+               <description>Flash Common Command Object Register (FCCOBLO:FCCOBHI) \n
+The FCCOB is an array of six words addressed via the CCOBIX index found in the FCCOBIX register.  \n
+Byte-wide reads and writes are allowed to the FCCOB register</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <access>read-write</access>
+               <resetMask>0xFFFF</resetMask>
+            </register>
+            <register>
+               <name>FCCOBLO</name>
+               <description>Flash Common Command Object Register:Low \n
+Low 8 bits of Common Command Object register</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>FCCOBHI</name>
+               <description>Flash Common Command Object Register:High \n
+High 8 bits of Common Command Object register</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>FPROT</name>
+               <description>Flash Protection Register \n
+The FPROT register defines which flash sectors are protected against program and erase operations. \n
+The bits of the FPROT register are writable with the restriction that the size of the protected region can only be increased. \n
+During the reset sequence, the FPROT register is loaded with the contents of the flash protection byte in the flash configuration field at global address 0x40D located in flash memory</description>
+               <addressOffset>0xB</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FPLS</name>
+                     <description>Flash Protection Lower Address Size \n
+The FPLS bits determine the size of the protected/unprotected area in flash memory.  \n
+The FPLS bits can only be written to while the FPLDIS bit is set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>FPLDIS</name>
+                     <description>Flash Protection Lower Address Range Disable \n
+The FPLDIS bit determines whether there is a protected/unprotected area in a specific region of the flash memory beginning with global address 0x0_0000</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Protection/Unprotection enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protection/Unprotection disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPOPEN</name>
+                     <description>Flash Protection Operation Enable \n
+The FPOPEN bit determines the protection function for program or erase operations</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The FPHDIS and FPLDIS fields define unprotected address ranges as specified by the corresponding FPHS and FPLS fields</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The FPHDIS and FPLDIS fields enable protection for the address range specified by the corresponding FPHS and FPLS fields</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FOPT</name>
+               <description>Flash Option Register \n
+During the reset sequence, the FOPT register is loaded from the flash nonvolatile byte in the flash configuration field at global address 0x040F located in flash memory. \n
+Usage varies with particular device</description>
+               <addressOffset>0xF</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+         </registers>
+      </peripheral>

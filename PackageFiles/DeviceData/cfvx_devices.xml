@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
+[
+<!ENTITY CFV2-default-flashProgram           SYSTEM "CFVx/ColdfireV2-default-flash-program.elf.S19">
+<!ENTITY CFV2-default-flashScripts           SYSTEM "CFVx/ColdfireV2-default-flash-scripts.tcl">
+<!ENTITY Coldfire-base-register-description  SYSTEM "CFV1/Coldfire-base-register-description.xml">
+<!ENTITY Custom-Devices                      SYSTEM "Custom/custom-cfvx.xml">
+]>
+<!--  Notes
+      V4.10.6.240 - Added members to MCF5225x
+      V4.10.6.240 - Added GDB register description
+      V4.10.6.170 - Added features to support more flexible project creation
+      V4.10.6.170 - Split out C project creation
+      V4.10.6.110 - Changed to using <projectActionList> tag & related changes
+      V4.10.6     - Added GDB register descriptions 
+      V4.10.5d    - Changed GNU C information
+      V4.10.5     - Added GNU C information
+      V4.10.4     - Changed how security information is expressed
+      V4.10.4     - Added I/O space 
+ -->
+<root version="4.10.6.170">
+   <description>Coldfire V2, 3 and 4 Device characteristics</description>
+   <sharedInformation>
+      <!-- 
+            Flash Programs & TCL Scripts 
+      -->
+      <flashProgram id="default-CFV2-FlashProgram">    &CFV2-default-flashProgram;    </flashProgram>
+      <tclScript    id="default-CFV2-Scripts">         &CFV2-default-flashScripts;    </tclScript>
+
+      <!-- 
+            Security Entries 
+      -->
+      <securityEntry id="CFV2-default-security">
+         <securityDescription id="CFV1-default-security-description">
+            BACKDOOR\t= %8X\nCMPROT\t= %4X\nCMSACC\t= %4X\nCMDACC\t= %4X\nCFMSEC\t= [KEYEN=%b, RES=%1X, SEC=%2X]
+         </securityDescription>
+         <!-- CFV2 Unsecured value = backdoor[8],CFMPROT[4],CFMSACC[4],CFMDACC[4],CFMSEC[4] -->
+         <securityInfo size="24" type="unsecure" id="CFV2-default-security-off">
+            0000000000000000 00000000 00000000 00000000 00000000
+         </securityInfo>
+         <!-- CFV2 Secured value = backdoor[8],CFMPROT[4],CFMSACC[4],CFMDACC[4],CFMSEC[4] -->
+         <securityInfo size="24" type="secure" id="CFV2-default-security-on">
+            FFFFFFFFFFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF C0004AC8
+         </securityInfo>
+      </securityEntry>
+
+      <memory id="coldfire4K_Ram" type="ram">
+         <memoryRange start="0x20000000" size="4K" />
+      </memory>
+      <memory id="coldfire8K_Ram" type="ram">
+         <memoryRange start="0x20000000" size="4K" />
+      </memory>
+      <memory id="coldfire16K_Ram" type="ram">
+         <memoryRange start="0x20000000" size="16K" />
+      </memory>
+      <memory id="coldfire32K_Ram" type="ram">
+         <memoryRange start="0x20000000" size="32K" />
+      </memory>
+      <memory id="coldfire64K_Ram" type="ram">
+         <memoryRange start="0x20000000" size="64K" />
+      </memory>
+      <memory id="coldfire64K_Flash" type="flash" registerAddress="0x401D0000" securityAddress="0x0400" alignment="4"
+         sectorSize="2048">
+         <flashProgramRef ref="default-CFV2-FlashProgram" />
+         <securityEntryRef ref="CFV2-default-security" />
+         <memoryRange start="0x000000" size="64K" />
+      </memory>
+      <memory id="coldfire128K_Flash" type="flash" registerAddress="0x401D0000" securityAddress="0x0400" alignment="4"
+         sectorSize="2048">
+         <flashProgramRef ref="default-CFV2-FlashProgram" />
+         <securityEntryRef ref="CFV2-default-security" />
+         <memoryRange start="0x000000" size="128K" />
+      </memory>
+      <memory id="coldfire256K_Flash" type="flash" registerAddress="0x401D0000" securityAddress="0x0400" alignment="4"
+         sectorSize="2048">
+         <flashProgramRef ref="default-CFV2-FlashProgram" />
+         <securityEntryRef ref="CFV2-default-security" />
+         <memoryRange start="0x000000" size="256K" />
+      </memory>
+      <memory id="coldfire512K_Flash" type="flash" registerAddress="0x401D0000" securityAddress="0x0400" alignment="4"
+         sectorSize="2048">
+         <flashProgramRef ref="default-CFV2-FlashProgram" />
+         <securityEntryRef ref="CFV2-default-security" />
+         <memoryRange start="0x000000" size="512K" />
+      </memory>
+      <memory id="coldfire_default_io"  type="io">
+         <memoryRange size="1024M" start="0x40000000" />
+      </memory>
+      <!--  
+            Register sets 
+      -->
+      <registerDescription id="Coldfire-register-description"  count="18" >
+         &Coldfire-base-register-description;
+      </registerDescription>
+
+   </sharedInformation>
+		
+   <deviceList>
+      <!--
+         =======================================================================
+      -->
+      <device family="CFV2" name="_Default" isDefault="true" >
+         <clock type="External" />
+         <memory type="ram">
+            <memoryRange start="0x20000000" size="4K" />
+         </memory>
+         <memory type="flash" registerAddress="0x401D0000" securityAddress="0x0400" sectorSize="2048" alignment="4">
+            <securityEntryRef ref="CFV2-default-security" />            
+            <memoryRange start="0x000000" size="512K" />
+         </memory>
+         <memoryRef ref="coldfire_default_io" />
+         <sdidAddress value="0x4011000A" />
+         <sdidMask value="0xFFC0" />
+         <sdid value="0x0000" mask="0x0000"/>
+         <tclScriptRef ref="default-CFV2-Scripts" />
+         <flashProgramRef ref="default-CFV2-FlashProgram" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+         <note>Default CFV1 Device</note>
+      </device>
+&Custom-Devices;
+      <!--
+         =======================================================================
+      -->
+      <device family="CFV2" name="MCF52210" subfamily="MCF5221x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire16K_Ram" />
+         <memoryRef ref="coldfire64K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52211" subfamily="MCF5221x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire16K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52212" subfamily="MCF5221x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire8K_Ram" />
+         <memoryRef ref="coldfire64K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52213" subfamily="MCF5221x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire8K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1580" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <!--
+         =======================================================================
+      -->
+      <device family="CFV2" name="MCF52221" subfamily="MCF5222x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire16K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1400" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52223" subfamily="MCF5222x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire16K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x14C0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <!--
+         =======================================================================
+      -->
+      <device family="CFV2" name="MCF52230" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1200" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52231" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1240" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52232" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x0000" mask="0x0000"/>
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52233" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1280" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52234" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x12C0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52235" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1300" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52236" subfamily="MCF5223x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x1280" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+
+      <!--
+         =======================================================================
+      -->
+      <device family="CFV2" name="MCF52252" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x21C0" mask="0xFFC0" />
+         <sdid value="0x2200" mask="0xFFC0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52254" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire64K_Ram" />
+         <memoryRef ref="coldfire512K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x21C1" mask="0xFFC0" /> <!--  Reported value -->
+         <sdid value="0x2240" mask="0xFFC0" />
+         <sdid value="0x2280" mask="0xFFC0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52255" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire64K_Ram" />
+         <memoryRef ref="coldfire512K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x2440" mask="0xFFC0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52256" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x22C0" mask="0xFFC0" />
+         <sdid value="0x2300" mask="0xFFC0" />
+         <sdid value="0x23C0" mask="0xFFC0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52258" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire64K_Ram" />
+         <memoryRef ref="coldfire512K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x2340" mask="0xFFC0" />
+         <sdid value="0x2380" mask="0xFFC0" />
+         <sdid value="0x2400" mask="0xFFC0" />
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+      <device family="CFV2" name="MCF52259" subfamily="MCF5225x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire64K_Ram" />
+         <memoryRef ref="coldfire512K_Flash" />
+         <memoryRef ref="coldfire_default_io" />
+         <sdid value="0x2480" mask="0xFFC0"/>
+         <registerDescriptionRef ref="Coldfire-register-description" />
+      </device>
+	 
+      <!--
+         =======================================================================
+      -->
+       <device name="TWR_MCF52259"    alias="MCF52259" />
+   </deviceList>
+</root>

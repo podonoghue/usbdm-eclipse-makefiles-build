@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<wizardExtension>
+	<newProjectExtension>
+		<launchSettings>
+			<settingsGroup id="MQX_usbdm_cfv1" conditionId="mcu.mqxprojectwizard1.condition.isColdFire.v1">
+				
+				<settingsGroupRef id="MQX_cfv1_common_download"/>
+				<settingsGroupRef id="MQX_common_settings"/>
+
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Protocol Plugin Name"	value="CF - GDI" type="string" />
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Type" value="net.sourceforge.usbdm.connections.usbdm.cfv1" type="string" />
+				<applySetting id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.PhysicalConnectionAttributeBase" value="net.sourceforge.usbdm.connections.usbdm." type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.Library" value="usbdm-cfv1-gdi" type="string" />
+
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.automaticReconnect"	value="1" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cycleTargetVddOnReset"	value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.cycleTargetVddonConnect" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.defaultBdmSerialNumber" value="Any connected USBDM" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.leaveTargetPowered" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.maskInterrupts" value="0"	type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.setTargetVdd"	value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.trimTargetClock" value="0" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.useAltBDMClock" value="255" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.useDebugBuild" value="false" type="boolean" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.useResetSignal" value="0" type="string" />
+
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDconstant" value="true" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDexecutable" value="true" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDinitialized" value="true" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDuninitialized" value="true" type="boolean"/>
+				
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVconstant" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVexecutable" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVinitialized" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IVuninitialized" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDconstant" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDexecutable" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDinitialized" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SDuninitialized" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVconstant" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVexecutable" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVinitialized" value="false" type="boolean"/>
+				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.SVuninitialized" value="false" type="boolean"/>
+				
+			</settingsGroup>
+		</launchSettings>
+	</newProjectExtension>
+</wizardExtension>

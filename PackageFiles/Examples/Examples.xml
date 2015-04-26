@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE DeviceList SYSTEM "Examples.dtd">
+<!-- 
+      V4.10.7 - Removed examples obsoleted by Project Creation options
+      V4.10.6 - Added LCD & serial examples
+      V4.10.5 - Created
+ -->
+<root version="4.10.6">
+   <description>List of USBDM Examples</description>
+   <exampleList>
+      <example description="Freedom KL25Z Arduino Demo"    family="ARM" path="ArduinoKL25.zip"     buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom KL25Z board
+Uses C++ classes to create a basic 'Arduino' style hardware interface.
+      </example>
+      <example description="Freedom K20D50M Arduino Demo"    family="ARM" path="ArduinoMK20.zip"     buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K20D50M board
+Uses C++ classes to create a basic 'Arduino' style hardware interface.
+      </example>
+      <example description="Freedom K22F Arduino Demo"    family="ARM" path="ArduinoMK22.zip"     buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K22F board
+Uses C++ classes to create a basic 'Arduino' style hardware interface.
+      </example>
+      <example description="Freedom K64F Arduino Demo"    family="ARM" path="ArduinoMK64.zip"     buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K64F board
+Uses C++ classes to create a basic 'Arduino' style hardware interface.
+      </example>
+      <example description="Freedom KL25Z Basic"             family="ARM" path="MKL25Z128M4_FRDM.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom KL25Z board
+Includes example clock initialisation and port operations.
+      </example>
+      <example description="Freedom KL25Z Demonstration"     family="ARM" path="MKL25Z128M4_FRDM_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom KL25Z board
+Includes example clock initialisation, port, PIT, LPTMR, 
+RTC, PTM(PWM and OC), ADC operations and I2C (accelerometer).
+Includes example code demonstrating use of printf() with on-chip UART.
+      </example>
+      <example description="Freedom KL25Z CPP Demonstration" family="ARM" path="MKL25Z128M4_FRDM_DemoCPP.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom KL25Z board
+As for Freedom KL25Z Demonstration but with some experiments 
+with CPP for comparison
+      </example>
+      <example description="Freedom K20D50M Demonstration"   family="ARM" path="MK20DX128M5_FRDM_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K20D50M board
+Includes example clock initialisation, port, PIT, LPTMR, 
+RTC, FTM(PWM and OC), ADC operations and I2C (accelerometer).
+Includes example code demonstrating use of printf() with on-chip UART.
+      </example>
+      <example description="Freedom K20D50M with Colour LCD (Die)"  family="ARM" path="MK20DX128M5_LCD_DieRoll_CPP.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K20D50M board
+Includes driver for colour LCD (Spark Fun LCD-09363 or ElecFreaks SHD-CLS).
+Uses Real Time Clock (RTC) for rand() function.
+Written using CPP classes (surprisingly  efficient).
+      </example>
+      <example description="Freedom K20D50M CMSIS RTOS"      family="ARM" path="MK20DX128M5_cmsis_rtos.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K20D50M board
+Includes CMSIS-RTOS examples
+      </example>
+      <example description="Freedom K22FN12M Demonstration"  family="ARM" path="MK22FN1M0M12_FRDM_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K20D50M board modified with K22FN12M
+Includes example clock initialisation, port, PIT, LPTMR, 
+RTC, FTM(PWM and OC), ADC operations and I2C (accelerometer).
+Includes example code demonstrating use of printf() with on-chip UART.
+      </example>
+      <example description="Freedom K64F Demonstration"      family="ARM" path="MK64FN1M0M12_FRDM_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for Freedom K64F board
+Includes example clock initialisation, port, PIT, LPTMR, 
+RTC, FTM(PWM and OC), ADC operations and I2C (accelerometer).
+Includes example code demonstrating use of printf() with on-chip UART.
+      </example>
+      <example description="Tower MCF51JF128 Basic"          family="COLDFIRE"   path="MCF51JF128_Tower.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire">
+Example project for Tower MCF51JF128 board
+Includes example port operations.
+      </example>
+      <example description="Tower MCF51JF128 Demonstration"  family="COLDFIRE"   path="MCF51JF128_Tower_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire">
+Example project for Tower MCF51JF128 board
+Includes example clock initialisation, port, PIT, LPTMR, 
+MTIM, PTM(PWM and OC) and ADC operations.
+Includes example code demonstrating use of printf() with on-chip UART.
+      </example>
+      <example description="Generic MCF52233 Basic"          family="COLDFIRE"   path="MCF52233_cpp.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire">
+Example project for Generic MCF52233 device
+Includes example port operations.
+      </example>
+      <example description="STM32F103 SPL Example"           family="ARM" path="STM32_cmsis_rtos.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Example project for STM32F103 (OLIMEXINO-STM32 Board)
+Includes STM32 Standard Peripheral Library (SPL) and CMSIS-RTOS 
+      </example>
+      <example description="USBDM API"                       family="NONE" path="USBDM_API_Example.zip">
+Example project using USBDM API to read data from the Flash memory of a 
+target device using a USBDM interface.
+      </example>
+      <example description="USBDM Kinetis Firmware"    family="ARM" path="USBDM_Kinetis_Firmware.zip"     buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
+Project to create the USBDM programming interface firmware targeted for 
+MK20DX128M5 devices.
+This is suitable for FRDM-xxxx boards or stand-alone K20 hardware. 
+      </example>
+   </exampleList>
+</root>

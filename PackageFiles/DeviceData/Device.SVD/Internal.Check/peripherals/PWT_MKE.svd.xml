@@ -1,0 +1,317 @@
+<!--
+Devices using this peripheral: 
+      MKE04Z4
+      MKE04Z8M4
+      MKE06Z4
+-->
+      <peripheral>
+         <?sourceFile "PWT_MKE" ?>
+         <name>PWT</name>
+         <description>Pulse Width Timer</description>
+         <prependToName>PWT</prependToName>
+         <baseAddress>0x40033000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>R1</name>
+               <description>Pulse Width Timer Register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PWTOV</name>
+                     <description>PWT Counter Overflow\n
+Indicates that the PWT counter has run from 0x0000_0xFFFF to 0x0000_0x0000.\n
+This field is cleared by writing 0 to PWTOV when PWTOV is set.\n
+Writing 1 to this field has no effect.\n
+If another overflow occurs when this field is being cleared, the clearing fails</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PWT counter no overflow</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PWT counter runs from 0xFFFF to 0x0000</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWTRDY</name>
+                     <description>PWT Pulse Width Valid\n
+Indicates that the PWT Pulse Width register(s) has been updated and is ready to be read.\n
+This field is cleared by reading PWTRDY and then writing 0 to PWTRDY bit when PWTRDY is set.\n
+Writing 1 to this field has no effect. PWTRDY setting is associated with the EDGE[1:0] bits</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PWT pulse width register(s) is not up-to-date</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PWT pulse width register(s) has been updated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWTSR</name>
+                     <description>PWT Soft Reset\n
+Performs a soft reset to the PWT. This field always reads as 0</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No action taken</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writing 1 to this field will perform soft reset to PWT</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>POVIE</name>
+                     <description>PWT Counter Overflow Interrupt Enable\n
+Enables/disables the PWT to generate an interrupt when PWTOV is set due to PWT counter overflow</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable PWT to generate interrupt when PWTOV is set</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable PWT to generate interrupt when PWTOV is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRDYIE</name>
+                     <description>PWT Pulse Width Data Ready Interrupt Enable\n
+Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as PWTIE is set</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable PWT to generate interrupt when PWTRDY is set</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable PWT to generate interrupt when PWTRDY is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWTIE</name>
+                     <description>PWT Module Interrupt Enable\n
+Enables the PWT module to generate an interrupt</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disables the PWT to generate interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables the PWT to generate interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWTEN</name>
+                     <description>PWT Module Enable\n
+Enables/disables the PWT module.\n
+To avoid unexpected behavior, do not change any PWT configurations as long as PWTEN is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The PWT is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The PWT is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRE</name>
+                     <description>PWT Clock Prescaler (CLKPRE) Setting\n
+Selects the value by which the clock is divided to clock the PWT counter</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Clock divided by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Clock divided by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Clock divided by 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Clock divided by 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Clock divided by 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Clock divided by 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Clock divided by 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Clock divided by 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EDGE</name>
+                     <description>PWT Input Edge Sensitivity\n
+Selects which edge triggers the pulse width measurement and which edges trigger the capture.\n
+If user needs to change the trigger and capture mode by changing the value of EDGE[1:0], a PWT software reset
+is required after changing the EDGE[1:0] value.\n
+Clearing PWTEN and then setting it has the same effect</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>The first falling-edge starts the pulse width measurement, and on all the subsequent falling edges,
+the pulse width is captured</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>The first rising edge starts the pulse width measurement, and on all the subsequent rising and falling
+edges, the pulse width is captured</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>The first falling edge starts the pulse width measurement, and on all the subsequent rising and falling
+edges, the pulse width is captured</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>The first-rising edge starts the pulse width measurement, and on all the subsequent rising edges, the
+pulse width is captured</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PINSEL</name>
+                     <description>PWT Pulse Inputs Selection\n
+Enables the corresponding PWT input port, if this PWT input comes from an external source</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>PWTIN[0] is enabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PWTIN[1] is enabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>PWTIN[2] is enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>PWTIN[3] is enabled</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PCLKS</name>
+                     <description>PWT Clock Source Selection\n
+Controls the selection of clock source for the PWT counter</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TIMER_CLK is selected as the clock source of PWT counter</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Alternative clock is selected as the clock source of PWT counter</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PPW</name>
+                     <description>Positive Pulse Width\n
+Captured positive pulse width value. It is suggested to use half-word (16-bit) or word (32-bit) to read out this value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>R2</name>
+               <description>Pulse Width Timer Register 2</description>
+               <addressOffset>0x4</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
+         </registers>
+      </peripheral>

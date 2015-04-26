@@ -1,0 +1,15 @@
+/*!    
+\if Kinetis
+ \page cableAssemblyPageKinetis Kinetis Target Connector Adapter
+
+ \section sectionKinetisBDMConnector Kinetis BDM Connector for USBDM_CF_JMxx
+   - The Kinetis target usualy uses a 1.26 mm (0.05 inch) pitched connector.  To use it with the existing USBDMs designed 
+     for Coldfire targets it is necessary to construct an adapter.  Probably the easiest method is to make up a board with
+     two suitable headers as shown below:
+     
+     \image html ColdfireToKinetisAdapter.png
+     
+        - @htmlonly <a href="KinetisAdapter.pdf">Adapter design - Schematics, Assembly Overlays & Bill of Materials</a> @endhtmlonly 
+     
+\endif
+  */

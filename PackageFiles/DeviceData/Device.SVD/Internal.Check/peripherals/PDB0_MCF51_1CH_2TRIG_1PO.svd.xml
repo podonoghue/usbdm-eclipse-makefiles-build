@@ -1,0 +1,658 @@
+<!--
+Devices using this peripheral: 
+      MCF51JF
+      MCF51JU
+-->
+      <peripheral>
+         <?sourceFile "PDB0_MCF51_1CH_2TRIG_1PO" ?>
+         <name>PDB0</name>
+         <description>Programmable Delay Block (1 channels, 2 trigger, 1 pulse outputs)</description>
+         <prependToName>PDB0</prependToName>
+         <baseAddress>0xFFFF8540</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SC</name>
+               <description>Status and Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>LDOK</name>
+                     <description>Load OK\n
+Writing 1 to this bit updates the internal registers MOD, IDLY, CHnDLYm, DACINTx,and POyDLY from their buffers. \n
+The new values will take effect according to the LDMOD</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CONT</name>
+                     <description>Continuous Mode Enable\n
+Enables the PDB operation in Continuous mode rather than one-shot</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>One-Shot mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Continuous mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MULT</name>
+                     <description>Multiplication Factor Select for Prescaler\n
+Counter clock frequency = Peripheral clock / (PRESCALER factor x MULT factor)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>x1</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>x10</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>x20</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>x40</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PDBIE</name>
+                     <description>PDB Interrupt Enable\n
+Enables the PDB interrupt. When this field is set and DMAEN is cleared, PDBIF generates a PDB interrupt</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PDBIF</name>
+                     <description>PDB Interrupt Flag\n
+This field is set when the counter value is equal to the IDLY register. Writing zero clears this field</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Counter=IDLY event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PDBEN</name>
+                     <description>PDB Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PDB disabled\tCounter is off and all pre-trigger and trigger outputs are low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PDB enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRGSEL</name>
+                     <description>Trigger Input Source Select\n
+The trigger input source can be internal or external (EXTRG pin), or the software trigger</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Trigger-In 0</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Trigger-In 1</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Trigger-In 2</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Trigger-In 3</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Trigger-In 4</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Trigger-In 5</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Trigger-In 6</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Trigger-In 7</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Trigger-In 8</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Trigger-In 9</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Trigger-In 10</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Trigger-In 11</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Trigger-In 12</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Trigger-In 13</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Trigger-In 14</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Software trigger</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRESCALER</name>
+                     <description>Prescaler Divider Select\n
+Counter clock frequency = Peripheral clock / (PRESCALER factor x MULT factor)</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Prescaler = 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Prescaler = 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Prescaler = 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Prescaler = 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Prescaler = 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Prescaler = 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Prescaler = 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Prescaler = 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>DMA Enable\n
+When DMA is enabled, the PDBIF flag generates a DMA request instead of an interrupt</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SWTRIG</name>
+                     <description>Software Trigger\n
+When software trigger is selected, writing 1 to this field resets and restarts the counter. \n
+Writing 0 to this field has no effect. Reading this field yields 0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>PDBEIE</name>
+                     <description>PDB Sequence Error Interrupt Enable\n
+Enables the channel sequence error flags to generate a sequence error interrupt</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LDMOD</name>
+                     <description>Load Mode Select\n
+Selects when to load the MOD, IDLY, CHnDLYm, INTx, and POyDLY registers, after 1 is written to LDOK</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Immediate load</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PDB counter = MOD value</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Next trigger event</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>PDB counter = MOD value or trigger event</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MOD</name>
+               <description>Modulus Register\n
+Specifies the period of the counter. When the counter reaches this value, it will be reset back to zero. \n
+If the PDB is in Continuous mode, the count begins anew. \n
+Reading this field returns the value that is effective for the current cycle of PDB</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MOD</name>
+                     <description>PDB Modulus</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CNT</name>
+               <description>Counter Register\n
+Contains the current value of the counter</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CNT</name>
+                     <description>PDB Counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IDLY</name>
+               <description>Interrupt Delay Register\n
+Specifies the delay value to schedule the PDB interrupt. \n
+It can be used to schedule an independent interrupt at some point in the PDB cycle. \n
+If enabled, a PDB interrupt is generated, when the counter is equal to the IDLY. \n
+Reading this field returns the value that is effective for the current cycle of the PDB</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>IDLY</name>
+                     <description>PDB Interrupt Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <cluster>
+               <dim>1</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>CH,@pCH@i@f</name>
+               <addressOffset>0x10</addressOffset>
+               <register>
+                  <name>C1</name>
+                  <description>Channel %s Control Register 1</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EN</name>
+                        <description>PDB Channel Pre-Trigger Enable\n
+Enable the PDB ADC pre-trigger outputs. Only lower M pre-trigger bits are implemented</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Pre-trigger disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Pre-trigger enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TOS</name>
+                        <description>PDB Channel Pre-Trigger Output Select\n
+Selects the PDB ADC pre-trigger outputs. Only lower M pre-trigger fields are implemented</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Bypass mode\tThe pre-trigger asserts one peripheral clock cycle after a rising edge is detected on selected trigger input source or software trigger is selected and SWTRIG is written with 1</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Delay mode\tPDB channel&apos;s corresponding pre-trigger asserts when the counter reaches the channel delay register and one peripheral clock cycle after a rising edge is detected on selected trigger input source or software trigger is selected and SETRIG is written with 1</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BB</name>
+                        <description>PDB Channel Pre-Trigger Back-to-Back Operation Enable\n
+Enables the ADC conversions complete to trigger the next PDB channel pre-trigger and trigger output, so that the ADC conversions can be triggered on next set of configuration and results registers. \n
+Only lower M pre-trigger bits are implemented</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>S</name>
+                  <description>Channel %s Status Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>ERR</name>
+                        <description>PDB Channel Sequence Error Flags</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No error\tSequence error not detected on PDB channel&apos;s corresponding pre-trigger</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Error\tSequence error detected on PDB channel&apos;s corresponding pre-trigger. ADCn block can be triggered for a conversion by one pre-trigger from PDB channel n. When one conversion, which is triggered by one of the pre-triggers from PDB channel n, is in progress, new trigger from PDB channel&apos;s corresponding pre-trigger m cannot be accepted by ADCn, and ERR[m] is set. Writing 1&apos;s to clear the sequence error flags</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CF</name>
+                        <description>PDB Channel Flags\n
+The CF[m] bit is set when the PDB counter matches the CHnDLYm. Write 0 to clear these bits</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No match\thas occurred since flag last cleared</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Match\thas occurred since flag last cleared</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>2</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <dimIndex>0,1</dimIndex>
+                  <name>DLY%s</name>
+                  <description>Channel n Delay %s Register\n
+Specifies the delay value for the channel&apos;s corresponding pre-trigger. \n
+The pre-trigger asserts when the counter is equal to DLY. \n
+Reading this field returns the value that is effective for the current cycle</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DLY</name>
+                        <description>PDB Channel Delay</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <cluster>
+               <dim>1</dim>
+               <dimIncrement>8</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>DAC,@pDAC@i@f</name>
+               <addressOffset>0x20</addressOffset>
+               <register>
+                  <name>INTC</name>
+                  <description>DAC Interval Trigger n Control Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TOE</name>
+                        <description>DAC Interval Trigger Enable</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>EXT</name>
+                        <description>DAC External Trigger Input Enable\n
+Enables the external trigger for DAC interval counter</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled\tDAC interval counter is reset and counting starts when a rising edge is detected on selected trigger input source or software trigger is selected and SWTRIG is written with 1</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled\tDAC external trigger input enabled. DAC interval counter is bypassed and DAC external trigger input triggers the DAC interval trigger</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>INT</name>
+                  <description>DAC Interval n Register\n
+Specifies the interval value for DAC interval trigger. DAC interval trigger triggers DAC[1:0] update when the DAC interval counter is equal to the DACINT. Reading this field returns the value of internal register that is effective for the current PDB cycle</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>INT</name>
+                        <description>DAC Interval</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <register>
+               <name>POEN</name>
+               <description>Pulse-Out Enable Register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>POEN</name>
+                     <description>PDB Pulse-Out Enable\n
+Enables the pulse output. Only lower Y bits are implemented in this MCU</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>1</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>PO%sDLY</name>
+               <description>Pulse-Out %s Delay Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DLY2</name>
+                     <description>PDB Pulse-Out Delay 2 (low change time)\n
+Pulse-Out goes low when the PDB counter is equal to the DLY2. \n
+Reading these bits returns the value that is effective for the current cycle</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>DLY1</name>
+                     <description>PDB Pulse-Out Delay 1 (high change time)\n
+Pulse-Out goes high when the PDB counter is equal to the DLY1. \n
+Reading these bits returns the value that is effective for the current cycle</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>
