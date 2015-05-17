@@ -28,7 +28,7 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.Clock-setup" />
          </applyWhen>
-         <copy source="Startup_Code/clock-MKL03.c" target="Startup_Code/clock.c" />
+         <copy source="Startup_Code/clock-MGC_Lite.c" target="Startup_Code/clock.c" />
          <copy source="Project_Headers/clock_configure-MKL43.h" target="Project_Headers/clock_configure.h" />
       </projectActionList>
       <projectActionList>

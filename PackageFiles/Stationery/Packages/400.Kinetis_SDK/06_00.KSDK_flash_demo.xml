@@ -6,22 +6,7 @@
    <projectActionList id="KSDK-flash_demo" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-flash_demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -37,19 +22,20 @@
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-flash-demo" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/platform\drivers\src\flash\C90TFS\drvsrc\source"  target="flash"  type="link" sourcePathType="absolute" />
-   		<copy source="usbdm_kds_path/demos/flash_demo/src/flash_demo.c"     target="Sources/flash_demo.c"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/flash_demo/src/flash_demo.h"     target="Sources/flash_demo.h"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/flash_demo/src/flash_swap.c"     target="Sources/flash_swap.c"      sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/flash/C90TFS/drvsrc/source"                      target="flash"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/flash_demo/hardware_init.c"  target="board/hardware_init.c"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/flash_demo/main.c"           target="Sources/main.c"            sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/flash_demo/flash_demo.h"     target="Sources/flash_demo.h"      sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/flash_demo/flash_swap.c"     target="Sources/flash_swap.c"      sourcePathType="absolute" />
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/drivers/src/flash/C90TFS/drvsrc/include&quot;</value>
@@ -58,6 +44,6 @@
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/drivers/src/flash/C90TFS/drvsrc/include&quot;</value>
          </projectOption>
-   	</projectActionList>
+      </projectActionList>
    </projectActionList>
 </root>

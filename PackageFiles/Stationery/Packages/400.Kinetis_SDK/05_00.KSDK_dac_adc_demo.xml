@@ -6,21 +6,7 @@
    <projectActionList id="KSDK-dac_adc_demo" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-dac_adc_demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -37,18 +23,19 @@ It also demonstrates how to configure the ADC in ’Blocking Mode’ and read AD
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-dac_adc_demo" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-   		<copy source="usbdm_kds_path/demos/dac_adc_demo/src/demo_state_machine.c" target="Sources/demo_state_machine.c" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/dac_adc_demo/src/demo_state_machine.h" target="Sources/demo_state_machine.h" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/dac_adc_demo/src/main.c"               target="Sources/main.c"               sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/dac_adc_demo/hardware_init.c"  target="board/hardware_init.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/dac_adc_demo/main.c"               target="Sources/main.c"               sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/dac_adc_demo/demo_state_machine.c" target="Sources/demo_state_machine.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/dac_adc_demo/demo_state_machine.h" target="Sources/demo_state_machine.h" sourcePathType="absolute" />
+      </projectActionList>
    </projectActionList>
 </root>

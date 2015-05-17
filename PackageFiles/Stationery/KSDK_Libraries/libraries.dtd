@@ -32,7 +32,7 @@
    <!ATTLIST preclusion idRef CDATA #REQUIRED>
 
 <!ELEMENT variableRef EMPTY >
-   <!ATTLIST variableRef condition 		(isTrue|matches|lessThan|lessThanOrEqual|equal|greaterThan|greaterThanOrEqual) "isTrue">
+   <!ATTLIST variableRef condition 		(isTrue|isDefined|matches|lessThan|lessThanOrEqual|equal|greaterThan|greaterThanOrEqual) "isTrue">
    <!ATTLIST variableRef idRef         CDATA    #REQUIRED>
    <!ATTLIST variableRef value         CDATA    #IMPLIED>
    <!ATTLIST variableRef defaultValue  CDATA    #IMPLIED>

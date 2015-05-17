@@ -101,19 +101,19 @@ static const BDMState_t defaultBDMState = {
       true,            // useOnlyEp0;           - JB16 BDM only use EP0
       T_OFF,           // targetType;           - Target connected to BDM
       BDM_INACTIVE};   // activityFlag;         - Indicates the BDM has been asked to do something interesting
-DLL_LOCAL
+CPP_DLL_LOCAL
 BDMState_t bdmState = defaultBDMState;
 
 //! Structure describing characteristics of currently open BDM
 static const USBDM_bdmInformation_t defaultBdmInfo =
                    {sizeof(USBDM_bdmInformation_t), 0, 0, 0, 0, BDM_CAP_NONE, 100, 100};
-DLL_LOCAL
+CPP_DLL_LOCAL
 USBDM_bdmInformation_t bdmInfo = defaultBdmInfo;
 
-DLL_LOCAL
+CPP_DLL_LOCAL
 bool bdmInfoValid = false;
 
-DLL_LOCAL
+CPP_DLL_LOCAL
 bool pendingResetRelease = false;
 
 //! Options for BDM
@@ -137,7 +137,7 @@ static const USBDM_ExtendedOptions_t defaultBdmOptions = {
       100,                 // resetReleaseInterval    - How long to wait after reset release to release other signals
       100,                 // resetRecoveryInterval   - How long to wait after reset sequence complete
 };
-DLL_LOCAL
+CPP_DLL_LOCAL
 USBDM_ExtendedOptions_t bdmOptions = defaultBdmOptions;
 
 // The following option reduces the rate of polling of the BDM by the codewarrior

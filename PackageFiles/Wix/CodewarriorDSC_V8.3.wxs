@@ -70,28 +70,25 @@
       <!-- CW for DSC support -->
       <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_USBDM">
          <Component Id='C.CODEWARRIOR_DSC_V8_3.Files' Guid='38a3f397-4ffd-4edb-8642-d086279430e8' >
-            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'        DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'        DiskId='1' Source='bin\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
 
-            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_1'    DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_2'    DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_1'     DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_2'     DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
 
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1'  DiskId='1' Source='bin\usbdm.4.dll'/>
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1d' DiskId='1' Source='bin\usbdm-debug.4.dll'/>
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2'   DiskId='1' Source='bin\usbdm-system.4.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2d'  DiskId='1' Source='bin\usbdm-system-debug.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
 	    
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_3'  DiskId='1' Source='bin\usbdm-dsc.4.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_3d' DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
-
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1'  DiskId='1' Source='bin\usbdm-gdi-dsc-legacy.4.dll'   KeyPath='yes' />
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1d' DiskId='1' Source='bin\usbdm-gdi-dsc-legacy-debug.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc-legacy.4.dll'   KeyPath='yes' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc-legacy-debug.4.dll'/>
          </Component>
       </DirectoryRef>
 
       <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_DefaultConnections">
          <Component Id='C.CODEWARRIOR_DSC_V8_3.DefaultConnections' Guid='380703a8-a803-4f46-9c57-3e2e0d34dd13' >
-            <File Id='CODEWARRIOR_DSC_V8_3_DefaultConnections' DiskId='1' Source='WizardPatches\RC_56800E_USBDM.xml' KeyPath='yes' />
+            <File Id='CODEWARRIOR_DSC_V8_3_DefaultConnections' DiskId='1' Source='$(var.SrcDir)\WizardPatches\RC_56800E_USBDM.xml' KeyPath='yes' />
          </Component>
       </DirectoryRef>
 

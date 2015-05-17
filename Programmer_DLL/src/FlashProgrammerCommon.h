@@ -54,7 +54,7 @@ protected:
       ICG_ClockParameters_t icg;
       MCG_ClockParameters_t mcg;
       ICS_ClockParameters_t ics;
-   } ;
+   };
 
    USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage);
    USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency);

@@ -10,7 +10,10 @@
             radioGroup="group-ksdk-library-import-os-abstraction" 
             >
          <enableWhen>
-            <preclusion idRef="projectOptionValue.KSDK-KL03Z4-library-enable" />
+            <and>
+               <preclusion idRef="projectOptionValue.KSDK-KL02Z4-library-enable" />
+               <preclusion idRef="projectOptionValue.KSDK-KL03Z4-library-enable" />
+            </and>
          </enableWhen>
       </variable>
       <projectActionList>

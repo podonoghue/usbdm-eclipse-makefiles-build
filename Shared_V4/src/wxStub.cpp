@@ -9,6 +9,33 @@
  */
 
 #include <wx/app.h>
+
+// The Eclipse parser is confused by the wxWidgets definitions of _WIN32 etc
+#if defined(__unix__) && defined (WIN32)
+#undef WIN32
+#endif
+#if defined(__unix__) && defined (_WIN32)
+#undef _WIN32
+#endif
+
+#if !defined(CPP_DLL_LOCAL)
+   #ifdef _WIN32
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __declspec(dllexport)
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __declspec(dllimport)
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL  __attribute__
+   #else
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __attribute__ ((visibility ("default")))
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
+   #endif
+#endif
+
 #include "UsbdmSystem.h"
 
 //===================================================================
@@ -17,13 +44,15 @@
 #define MINIMAL_APP MinimalApp
 #endif
 
-class MINIMAL_APP : public  wxApp {
+class CPP_DLL_EXPORT MINIMAL_APP : public  wxApp {
 
    DECLARE_CLASS( MINIMAL_APP )
 
 public:
    MINIMAL_APP() : wxApp() {
       LOGGING_E;
+      UsbdmSystem::Log::print("MINIMAL_APP()\n");
+      fprintf(stderr, "wxPluginApp()");
    }
 
    ~MINIMAL_APP(){
@@ -32,6 +61,12 @@ public:
    void hello() {
       LOGGING;
    }
+//#ifdef __unix__
+//   bool Yield(bool onlyIfNeeded = false) {
+//      UsbdmSystem::Log::print("Doing Yield()\n");
+//      return false;
+//   }
+//#endif
 };
 
 IMPLEMENT_APP_NO_MAIN( MINIMAL_APP )
@@ -39,7 +74,7 @@ IMPLEMENT_CLASS( MINIMAL_APP, wxApp )
 
 static bool wxInitializationDone = false;
 
-static bool wx_dll_open(void) {
+bool __attribute__ ((constructor)) wx_dll_open(void) {
    LOGGING;
 
    int argc = 1;
@@ -65,7 +100,7 @@ static bool wx_dll_open(void) {
    return true;
 }
 
-static bool wx_dll_close(void) {
+bool  __attribute__ ((destructor)) wx_dll_close(void) {
    LOGGING_E;
 
    if (wxInitializationDone) {
@@ -80,7 +115,7 @@ static bool wx_dll_close(void) {
    return true;
 }
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <windef.h>
 
 extern "C" WINAPI __declspec(dllexport)

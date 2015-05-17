@@ -395,7 +395,7 @@ int bootloaderDialogue::loadS1S9File(FILE *fp) {
 
    //   dumpFile(&flashImageDescription);
    wxString fileInformation;
-   fileInformation.Printf(_(
+   fileInformation.Printf( (wxFormatString)_(
             "Serial # =\n"
             "  %s\n\n"
             "Hardware Version =\n"
@@ -1422,10 +1422,10 @@ bool BootloaderApp::OnInit() {
    wxImage::AddHandler(new wxGIFHandler);
 #endif
 
-#ifndef _WIN32
-   // Otherwise wxWidgets doesn't look in the correct location
-   ((wxStandardPaths&)wxStandardPaths::Get()).SetInstallPrefix(_(USBDM_INSTALL_DIRECTORY));
-#endif
+//#ifndef _WIN32
+//   // Otherwise wxWidgets doesn't look in the correct location
+//   ((wxStandardPaths&)wxStandardPaths::Get()).SetInstallPrefix(_(USBDM_INSTALL_DIRECTORY));
+//#endif
 
    SetAppName(_("usbdm")); // So application files are kept in the correct directory
 

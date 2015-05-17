@@ -425,7 +425,7 @@
          <flashProgramRef ref="DSC-56F8323-flash-program" />
       </device>
       <!-- 
-         MC56F82313, MC56F82316
+         MC56F82313, MC56F82316 
        -->
       <device family="DSC" name="MC56F82313">
          <clock type="External" />
@@ -434,7 +434,7 @@
             <memoryRange start="w:0x000000" size="w:2K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
             <securityEntryRef ref="DSC-FTFA-security" />
             <memoryRange start="w:0x000000" size="w:8K" />
          </memory>
@@ -448,6 +448,7 @@
             <tclScriptRef ref="DSC-FTFA-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFA-flash-program" />
+         <note>16KB Flash+4KB RAM, MC56F823XXRM</note>         
       </device>
       <device name="MC56F82316" alias="MC56F82313"></device>
       <!-- 
@@ -460,7 +461,7 @@
             <memoryRange start="w:0x000000" size="w:3K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
             <securityEntryRef ref="DSC-FTFA-security" />
             <memoryRange start="w:0x000000" size="w:16K" />
          </memory>
@@ -474,9 +475,10 @@
             <tclScriptRef ref="DSC-FTFA-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFA-flash-program" />
+         <note>32KB Flash+6KB RAM, MC56F823XXRM</note>         
       </device>
       <!-- 
-         MC56F84XXX subFamily
+         MC56F827XX subFamily
        -->
       <!-- 
          MC56F82723, MC56F82726, MC56F82728
@@ -488,7 +490,7 @@
             <memoryRange start="w:0x000000" size="w:3K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
             <securityEntryRef ref="DSC-FTFA-security" />
             <memoryRange start="w:0x000000" size="w:16K" />
          </memory>
@@ -499,6 +501,7 @@
             <tclScriptRef ref="DSC-FTFA-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFA-flash-program" />
+         <note>32KB Flash+6KB RAM, MC56F827XXRM</note>         
       </device>
       <device name="MC56F82726" alias="MC56F82723"></device>
       <device name="MC56F82728" alias="MC56F82723"></device>
@@ -512,7 +515,7 @@
             <memoryRange start="w:0x000000" size="w:4K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
             <securityEntryRef ref="DSC-FTFA-security" />
             <memoryRange start="w:0x000000" size="w:24K" />
          </memory>
@@ -523,6 +526,7 @@
             <tclScriptRef ref="DSC-FTFA-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFA-flash-program" />
+         <note>48KB Flash+8KB RAM, MC56F827XXRM</note>         
       </device>
       <device name="MC56F82736" alias="MC56F82733"></device>
       <device name="MC56F82738" alias="MC56F82733"></device>
@@ -539,7 +543,7 @@
             <memoryRange start="w:0x004000" size="w:32K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="512">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
             <securityEntryRef ref="DSC-FTFA-security" />
             <memoryRange start="w:0x000000" size="w:32K" />
          </memory>
@@ -553,6 +557,7 @@
             <tclScriptRef ref="DSC-FTFA-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFA-flash-program" />
+         <note>64KB Flash+8KB RAM, MC56F827XXRM</note>         
       </device>
       <device name="MC56F82746" alias="MC56F82743"></device>
       <device name="MC56F82748" alias="MC56F82743"></device>      
@@ -566,7 +571,7 @@
             <memoryRange start="w:0x000000" size="w:4K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="2048">
             <securityEntryRef ref="DSC-FTFL-security" />
             <memoryRange start="w:0x000000" size="w:32K" />
          </memory>
@@ -580,6 +585,7 @@
             <tclScriptRef ref="DSC-FTFL-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFL-flash-program" />
+         <note>64KB Flash+32KB Flex+8KB RAM, MC56F844XXRM, MC56F8455XRM</note>         
       </device>
       <device name="MC56F84442" alias="MC56F84441"></device>
       <!-- 
@@ -592,7 +598,7 @@
             <memoryRange start="w:0x000000" size="w:8K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="2048">
             <securityEntryRef ref="DSC-FTFL-security" />
             <memoryRange start="w:0x000000" size="w:48K" />
          </memory>
@@ -606,6 +612,7 @@
             <tclScriptRef ref="DSC-FTFL-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFL-flash-program" />
+         <note>96KB Flash+32KB Flex+16KB RAM, MC56F844XXRM, MC56F8455XRM</note>         
       </device>
       <device name="MC56F84452" alias="MC56F84451"></device>
       <!-- 
@@ -618,7 +625,7 @@
             <memoryRange start="w:0x000000" size="w:12K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="2048">
             <securityEntryRef ref="DSC-FTFL-security" />
             <memoryRange start="w:0x000000" size="w:64K" />
          </memory>
@@ -632,11 +639,14 @@
             <tclScriptRef ref="DSC-FTFL-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFL-flash-program" />
+         <note>128KB Flash+32KB Flex+24KB RAM, MC56F844XXRM, MC56F8458XRM, MC56F847XXRM</note>         
       </device>
       <device name="MC56F84540" alias="MC56F84441"></device>
-      <device name="MC56F84543" alias="MC56F84441"></device>
+      <device name="MC56F84543" alias="MC56F84441"></device>   
+         
       <device name="MC56F84550" alias="MC56F84451"></device>
       <device name="MC56F84553" alias="MC56F84451"></device>
+
       <device name="MC56F84565" alias="MC56F84462"></device>
       <device name="MC56F84567" alias="MC56F84462"></device>
       <!-- 
@@ -649,7 +659,7 @@
             <memoryRange start="w:0x000000" size="w:16K" />
          </memory>
          <!-- Program Space -->
-         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="1024">
+         <memory registerAddress="w:0xE3C0" type="pROM" securityAddress="w:0x0200" sectorSize="2048">
             <securityEntryRef ref="DSC-FTFL-security" />
             <memoryRange start="w:0x000000" size="w:128K" />
          </memory>
@@ -663,11 +673,14 @@
             <tclScriptRef ref="DSC-FTFL-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="DSC-FTFL-flash-program" />
+         <note>256KB Flash+32KB Flex+32KB RAM, MC56F844XXRM, MC56F8458XRM, MC56F847XXRM</note>         
       </device>
       <device name="MC56F84587" alias="MC56F84585"></device>
+      
       <device name="MC56F84763" alias="MC56F84462"></device>
       <device name="MC56F84766" alias="MC56F84462"></device>
       <device name="MC56F84769" alias="MC56F84462"></device>
+      
       <device name="MC56F84786" alias="MC56F84585"></device>
       <device name="MC56F84789" alias="MC56F84585"></device>
       

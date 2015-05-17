@@ -5,15 +5,23 @@
  *      Author: PODonoghue
  */
 
+#include <string>
+
 #ifdef WIN32
-#define _WIN32_WINNT 0x0600       //< Required for later system calls.
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0600      //!< Required for later system calls.
+#endif
 #include <windows.h>
 #include <shlobj.h>
+
+#ifndef KEY_WOW64_32KEY
+#define KEY_WOW64_32KEY 0x0200
+#endif
 #include <sys/stat.h>
 
 #include "UsbdmSystem.h"
 
-// Name of directory to create in %APPDATA% for usbdm settings
+//! Name of directory to create in %APPDATA% for usbdm settings
 #define CONFIGURATION_DIRECTORY_NAME "usbdm"
 #define CONFIG_WITH_SLASHES "/" CONFIGURATION_DIRECTORY_NAME "/"
 
@@ -61,6 +69,12 @@ static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::str
     return nError;
 }
 
+/* Obtain the path of a file within the same directory as the module
+ *
+ * @param path to append to directory
+ *
+ * @return directory or NULL if failed
+ */
 std::string UsbdmSystem::getModulePath(const std::string &path) {
    static char buff[MAX_PATH];
    if (GetModuleFileNameA(NULL, buff, sizeof(buff)) == 0) {
@@ -73,12 +87,15 @@ std::string UsbdmSystem::getModulePath(const std::string &path) {
    return std::string(buff).append(path);
 }
 
+/*!
+ * Checks if a file exists
+ */
 bool UsbdmSystem::fileExists(const std::string &path) {
    struct stat buffer;
    return (stat(path.c_str(), &buffer) == 0);
 }
 
-/* Obtain the path of a file within the application directory (read only)
+/* Obtain the path of a file within the application directory
  *
  * @param path to append to directory
  *
@@ -92,7 +109,7 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getApplicationPath(const std::str
    if (!fileExists(fullPath)) {
       std::string applicationDirectory("");
       HKEY hKey;
-      if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ, &hKey) != ERROR_SUCCESS) ||
+      if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
             (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
          log.print("Failed to get USBDM path from registry\n");
       }
@@ -101,7 +118,7 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getApplicationPath(const std::str
    return fullPath;
 }
 
-/* Obtain the path of a file within the resource directory (read only)
+/* Obtain the path of a file within the resource directory
  *
  * @param path to append to directory
  *
@@ -148,5 +165,18 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getDataPath(const std::string &pa
    }
    return std::string(configFilePath).append(path);
 }
+
+
+//void tryit(void) {
+//   HKEY hKey;
+//   LONG lRes = RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo", 0, KEY_READ|KEY_WOW64_32KEY, &hKey);
+//   bool bExistsAndSuccess (lRes == ERROR_SUCCESS);
+//   bool bDoesNotExistsSpecifically (lRes == ERROR_FILE_NOT_FOUND);
+//   std::string strValueOfBinDir;
+//   std::string strKeyDefaultValue;
+//   GetStringRegKey(hKey, "BinDir", strValueOfBinDir, "bad");
+//   GetStringRegKey(hKey, "", strKeyDefaultValue, "bad");
+//}
+
 
 #endif

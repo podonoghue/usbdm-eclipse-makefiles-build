@@ -43,7 +43,6 @@ using namespace std;
 #include "UsbdmSystem.h"
 #include "GDI.h"
 #include "Names.h"
-#include "USBDM_AUX.h"
 #include "USBDM_API.h"
 #include "USBDM_API_Private.h"
 #include "Metrowerks.h"
@@ -83,12 +82,11 @@ const string processorKey(("com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.DSC Debu
 //! Key to use to obtain project home directory
 //const string homeKey(("com.freescale.cdt.debug.cw.core.settings.GdiConnection.Generic.eclipseHome"));
 
-
 #if !defined(LEGACY)
 //! Key to use to obtain USBDM options from Codewarrior
 #if TARGET == CFVx
 // Had to use different key to avoid clash with CFV1
-static const string baseKey = ("net.sourceforge.usbdm.connections.usbdm.cfvx");
+static const string baseKey = ("net.sourceforge.usbdm.connections.usbdm.cfvx.");
 #else
 static const string baseKey = ("net.sourceforge.usbdm.connections.usbdm.");
 #endif
@@ -158,12 +156,12 @@ DiReturnT mtwksSetMEE(DiUInt32T dnExecId) {
    DiUInt32T meeValue = dnExecId;
    if (metrowerksCallbackFunction == NULL) {
       log.print("- callback not set\n");
-      return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
+      //TODO
+//      return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
+      return DI_ERR_NONFATAL;
    }
 
-  metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION,
-                             MTWKS_CB_SETMEEID,
-                             &meeValue, &rc);
+  metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_CB_SETMEEID, &meeValue, &rc);
   return DI_OK;
 }
 
@@ -185,7 +183,8 @@ DiReturnT mtwksDisplayLine(const char *format, ...) {
 
    if (callbackFunction == NULL) {
       log.print("- callback not set\n");
-      return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
+      // Ignore
+      return DI_OK;
    }
 
    if (format == NULL) {
@@ -197,9 +196,7 @@ DiReturnT mtwksDisplayLine(const char *format, ...) {
       va_end(list);
    }
    log.print("(%s)\n", mtwksDisplayLineBuffer);
-   callbackFunction(DI_CB_MTWKS_EXTENSION,
-                    MTWKS_CB_DISPLAYLINE,
-                    mtwksDisplayLineBuffer, &rc);
+   callbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_CB_DISPLAYLINE, mtwksDisplayLineBuffer, &rc);
    return DI_OK;
 }
 
@@ -234,9 +231,7 @@ DiReturnT rc;
 //         deviceTypeAccess.section,
 //         deviceTypeAccess.entry);
 
-   metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION,
-                              MTWKS_CB_PROJECTACCESS,
-                              &deviceTypeAccess, &rc);
+   metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_CB_PROJECTACCESS, &deviceTypeAccess, &rc);
 //   log.print("Callback(MTWKS_CB_PROJECTACCESS, Section: %s, Entry: %s, %c) => %s\n",
 //         deviceTypeAccess.section,
 //         deviceTypeAccess.entry,
@@ -264,7 +259,7 @@ static USBDM_ErrorCode getAttribute(const string &key, int &value, int defaultVa
 
    value = defaultValue;
 	if (mtwksGetStringValue(keyBuffer.c_str(), sValue) != DI_OK) {
-	   log.print("(%s) => Failed\n", (const char *)key.c_str());
+	   log.print("(%s) => Failed\n", (const char *)keyBuffer.c_str());
 	   value = defaultValue;
 		return BDM_RC_ILLEGAL_PARAMS;
 	}
@@ -408,7 +403,7 @@ USBDM_ErrorCode getDeviceData(const TargetType_t targetType, DeviceData &deviceD
       deviceData.setClockTrimFreq(0);
    }
    int eraseOptions;
-   getAttribute(KeyEraseMethod, eraseOptions, (int)DeviceData::eraseMass);
+   getAttribute(KeyEraseMethod, eraseOptions, (int)DeviceData::eraseAll);
    deviceData.setEraseOption((DeviceData::EraseOptions)eraseOptions);
 
    int securityOption;
@@ -422,15 +417,14 @@ USBDM_ErrorCode getDeviceData(const TargetType_t targetType, DeviceData &deviceD
 //!
 //!  @return error code, see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode loadSettings(TargetType_t             targetType,
-                             USBDM_ExtendedOptions_t &bdmOptions,
-			  			           string                  &bdmSerialNumber
-						           ) {
+USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface) {
    LOGGING;
-   log.print("- %s\n", getTargetTypeName(targetType));
+   log.print("- %s\n", getTargetTypeName(bdmInterface->getBdmOptions().targetType));
+
+   USBDM_ExtendedOptions_t bdmOptions;
 
    bdmOptions.size       = sizeof(USBDM_ExtendedOptions_t);
-   bdmOptions.targetType = targetType;
+   bdmOptions.targetType = bdmInterface->getBdmOptions().targetType;
    USBDM_ErrorCode bdmRC = USBDM_GetDefaultExtendedOptions(&bdmOptions);
    if (bdmRC != BDM_RC_OK) {
       return bdmRC;
@@ -446,41 +440,45 @@ USBDM_ErrorCode loadSettings(TargetType_t             targetType,
 //   metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_MSG, &message3, &rc);
 //   char message4[] = " Message\n";
 //   metrowerksCallbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_MSG, &message4, &rc);
-	getAttribute(KeySetTargetVdd, 				bdmOptions.targetVdd, 				bdmOptions.targetVdd);
-	getAttribute(KeyCycleTargetVddOnReset, 	bdmOptions.cycleVddOnReset, 		bdmOptions.cycleVddOnReset);
-	getAttribute(KeyCycleTargetVddOnConnect, 	bdmOptions.cycleVddOnConnect, 	bdmOptions.cycleVddOnConnect);
-	getAttribute(KeyLeaveTargetPowered, 		bdmOptions.leaveTargetPowered, 	bdmOptions.leaveTargetPowered);
-	getAttribute(KeyMaskInterrupt, 				bdmOptions.maskInterrupts, 		bdmOptions.maskInterrupts);
-	getAttribute(KeyAutomaticReconnect, 		bdmOptions.autoReconnect, 			bdmOptions.autoReconnect);
-	getAttribute(KeyUseResetSignal,           bdmOptions.useResetSignal, 		bdmOptions.useResetSignal);
-	getAttribute(KeyUsePSTSignals,            bdmOptions.usePSTSignals,   		bdmOptions.usePSTSignals);
-	getAttribute(KeyUseAltBDMClock,           bdmOptions.bdmClockSource, 		bdmOptions.bdmClockSource);
-	getAttribute(KeyConnectionSpeed,          bdmOptions.interfaceFrequency,   bdmOptions.interfaceFrequency);
-	bdmOptions.interfaceFrequency /= 1000; // Convert to kHz
-
+   getAttribute(KeySetTargetVdd,             bdmOptions.targetVdd,            bdmOptions.targetVdd);
+   getAttribute(KeyCycleTargetVddOnReset,    bdmOptions.cycleVddOnReset,      bdmOptions.cycleVddOnReset);
+   getAttribute(KeyCycleTargetVddOnConnect,  bdmOptions.cycleVddOnConnect,    bdmOptions.cycleVddOnConnect);
+   getAttribute(KeyLeaveTargetPowered,       bdmOptions.leaveTargetPowered,   bdmOptions.leaveTargetPowered);
+   getAttribute(KeyMaskInterrupt,            bdmOptions.maskInterrupts,       bdmOptions.maskInterrupts);
+   getAttribute(KeyAutomaticReconnect,       bdmOptions.autoReconnect,        bdmOptions.autoReconnect);
+   getAttribute(KeyUseResetSignal,           bdmOptions.useResetSignal,       bdmOptions.useResetSignal);
+   getAttribute(KeyUsePSTSignals,            bdmOptions.usePSTSignals,        bdmOptions.usePSTSignals);
+   getAttribute(KeyUseAltBDMClock,           bdmOptions.bdmClockSource,       bdmOptions.bdmClockSource);
+   getAttribute(KeyConnectionSpeed,          bdmOptions.interfaceFrequency,   bdmOptions.interfaceFrequency);
+   bdmOptions.interfaceFrequency /= 1000; // Convert to kHz
+   
    getAttribute(KeyPowerOffDuration,         bdmOptions.powerOffDuration,       bdmOptions.powerOffDuration);
    getAttribute(KeyPowerOnRecoveryInterval,  bdmOptions.powerOnRecoveryInterval,bdmOptions.powerOnRecoveryInterval);
    getAttribute(KeyResetDuration,            bdmOptions.resetDuration,          bdmOptions.resetDuration);
    getAttribute(KeyResetReleaseInterval,     bdmOptions.resetReleaseInterval,   bdmOptions.resetReleaseInterval);
    getAttribute(KeyResetRecoveryInterval,    bdmOptions.resetRecoveryInterval,  bdmOptions.resetRecoveryInterval);
 
+   string bdmSerialNumber;
 	getAttribute(KeyDefaultBdmSerialNumber,   bdmSerialNumber,                 emptyString);
-	printBdmOptions(&bdmOptions);
+	bdmInterface->setBdmSerialNumber(bdmSerialNumber);
+
+	bdmInterface->getBdmOptions() = bdmOptions;
+
 	return BDM_RC_OK;
 }
 #endif
 
 #ifdef LEGACY
-DiReturnT loadNames(string &deviceName, string &projectPath) {
+USBDM_ErrorCode loadNames(string &deviceName, string &projectPath) {
    DiReturnT rc;
    LOGGING_E;
 
    if (metrowerksCallbackFunction == NULL) {
       log.print("- callback not set\n");
-      return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
+      return BDM_RC_FEATURE_NOT_SUPPORTED;
    }
 
-   // Set autodetect & obtain device Name
+   // Set auto-detect & obtain device Name
    autoConfig_t configValue;
    configValue.options  = 0x01;
    configValue.deviceID = 0x00;
@@ -488,7 +486,7 @@ DiReturnT loadNames(string &deviceName, string &projectPath) {
                               MTWKS_LEGACY_CB_COLDFIREAUTOCONFIG,
                               &configValue, &rc);
    if (rc != DI_OK) {
-      return setErrorState(rc, ("MTWKS_LEGACY_CB_COLDFIREAUTOCONFIG failed"));
+      return BDM_RC_FEATURE_NOT_SUPPORTED;
    }
 
    log.print("metrowerksCallbackFunction(MTWKS_CB_HC12AUTOCONFIG) => "
@@ -502,6 +500,6 @@ DiReturnT loadNames(string &deviceName, string &projectPath) {
    projectPath += deviceName;
    projectPath += "_";
 
-   return DI_OK;
+   return BDM_RC_OK;
 }
 #endif

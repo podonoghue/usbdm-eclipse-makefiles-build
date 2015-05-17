@@ -1,0 +1,23 @@
+#!/bin/sh
+# Where Eclipse files are
+ECLIPSE_HOME=.
+
+# Where to place test files
+TEST_DIR=${ECLIPSE_HOME}/Tests
+
+# Where DLLs to link against are kept
+DEVICE_DATA=${ECLIPSE_HOME}/PackageFiles/DeviceData
+
+mkdir -p ${TEST_DIR}
+
+# Executables that are produced as part of USBDM
+cp "${ECLIPSE_HOME}/PackageFiles/bin/x86_64-linux-gnu/"*                "${TEST_DIR}"
+cp "${ECLIPSE_HOME}/PackageFiles/lib/x86_64-linux-gnu/"*                "${TEST_DIR}"
+
+# Misc commands
+cp "${ECLIPSE_HOME}/PackageFiles/Miscellaneous/"*.tcl  "${TEST_DIR}"
+
+# Device Data
+cp -P -r "${ECLIPSE_HOME}/${DEVICE_DATA}"              "${TEST_DIR}/DeviceData"
+
+

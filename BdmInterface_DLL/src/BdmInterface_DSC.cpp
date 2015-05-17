@@ -1,5 +1,5 @@
 /*
- * BdmInterfaceARM.cpp
+ * BdmInterfaceDSC.cpp
  *
  *  Created on: 13 Apr 2015
  *      Author: podonoghue
@@ -205,7 +205,8 @@ USBDM_ErrorCode BdmInterface_DSC::readReg(unsigned int reg, unsigned long *value
 
 USBDM_ErrorCode BdmInterface_DSC::readMemory(unsigned memorySpace, unsigned byteCount, unsigned address, unsigned char *data) {
    switch(memorySpace&MS_SIZE) {
-   case MS_Byte: break;
+   case MS_Byte:
+      break;
    case MS_Word:
    case MS_Long:
       // Convert byte => word address
@@ -221,7 +222,8 @@ USBDM_ErrorCode BdmInterface_DSC::readMemory(unsigned memorySpace, unsigned byte
 
 USBDM_ErrorCode BdmInterface_DSC::writeMemory(unsigned memorySpace, unsigned byteCount, unsigned address, unsigned const char *data) {
    switch(memorySpace&MS_SIZE) {
-   case MS_Byte: break;
+   case MS_Byte:
+      break;
    case MS_Word:
    case MS_Long:
       // Convert byte => word address

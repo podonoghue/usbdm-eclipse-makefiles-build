@@ -2,10 +2,10 @@
  * @file     MKE06Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKE06Z4.
- *           Equivalent: FRDM-KE06Z, MKE06Z128M4, MKE06Z64M4
+ *           Equivalent: FRDM_KE06Z, MKE06Z128M4, MKE06Z64M4
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

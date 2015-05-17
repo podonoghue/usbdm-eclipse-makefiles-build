@@ -27,11 +27,27 @@
    +====================================================================
     \endverbatim
 */
+
 #ifndef _USBDM_API_H_
 #define _USBDM_API_H_
 
-#include <stdint.h>
-#include <stdio.h>
+#if !defined(CPP_DLL_LOCAL)
+   #ifdef _WIN32
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __declspec(dllexport)
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __declspec(dllimport)
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL  __attribute__
+   #else
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __attribute__ ((visibility ("default")))
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
+   #endif
+#endif
 
 //==================================================
 #if defined __cplusplus
@@ -52,40 +68,21 @@
 #endif
 #endif
 
-#if defined(_WIN32) && !defined(DLL_LOCAL)
-   // Functions exported from a library
-   #define DLL_EXPORT WINAPI __declspec(dllexport)
-
-   // Functions imported from a library
-   #define DLL_IMPORT WINAPI __declspec(dllimport)
-
-   // Functions local to a library
-   #define DLL_LOCAL
-#endif
-
-#if !defined(DLL_LOCAL)
-   //! Functions exported from a library
-   #define DLL_EXPORT __attribute__ ((visibility ("default")))
-   //! Functions imported from a library
-   #define DLL_IMPORT __attribute__ ((visibility ("default")))
-
-   //! Functions local to a library
-   #define DLL_LOCAL  __attribute__ ((visibility ("hidden")))
-#endif
-
 #ifdef USBDM_DLL_EXPORTS
-   //! These definitions are used when USBDM_API is being exported (creating DLL)
-   #define USBDM_API      EXTERN_C DLL_EXPORT
-   #define OSBDM_API_JM60 EXTERN_C DLL_EXPORT
+   //! Building the DLL
+   #define USBDM_API      EXTERN_C CPP_DLL_EXPORT
+   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT
 #else
-   //! This definition is used when USBDM_API is being imported (linking against DLL)
-   #define USBDM_API      EXTERN_C DLL_IMPORT
-   //! This definition is used when OSBDM_API is being imported (linking against DLL)
-   #define OSBDM_API_JM60 EXTERN_C DLL_IMPORT
+   //! Importing the DLL
+   #define USBDM_API      EXTERN_C CPP_DLL_IMPORT
+   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT
 #endif
 //==================================================
 
 #include "USBDM_ErrorMessages.h"
+#include <stdint.h>
+#include <stdio.h>
+
 
 #if defined __cplusplus
     extern "C" {
@@ -1667,7 +1664,7 @@ USBDM_ErrorCode USBDM_JTAG_Read( unsigned char bitCount,
                                  unsigned char exit,
                                  unsigned char *buffer);
 
-//! JTAG - read data from JTAG shift register
+//! JTAG - read/write data from/to JTAG shift register
 //! SHIFT_DR => TMS=Nx0, TDI=0, TDO=NxData (captured)
 //!
 //!  @param exit action after shift, see \ref JTAG_ExitActions_t \n

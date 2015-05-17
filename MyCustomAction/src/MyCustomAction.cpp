@@ -206,6 +206,7 @@ static void tests(void) {
 }
 #endif
 
+#if 0
 struct PluginInformation {
    const char *feature;
    const char *dropinPath;
@@ -423,3 +424,4 @@ extern "C" UINT __stdcall RemoveLinkFiles(MSIHANDLE hInstall) {
    rc = RemoveCodewarriorLinkFiles(hInstall);
    return rc;
 }
+#endif

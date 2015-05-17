@@ -2,10 +2,10 @@
  * @file     MK60DZ10.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK60DZ10.
- *           Equivalent: MK60DN256ZM10, MK60DN512ZM10, TWR-K60N512, MK60DX256ZM10, PK60N512
+ *           Equivalent: MK60DN256ZM10, MK60DN512ZM10, MK60DX256ZM10, TWR_K60N512, PK60N512
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

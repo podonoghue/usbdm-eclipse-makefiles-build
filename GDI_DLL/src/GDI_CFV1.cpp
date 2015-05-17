@@ -154,26 +154,26 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    if (dnRegNumber>cfv1regID_FIRST_DEBUG_regID_BYTE) {
       switch (dnRegNumber) {
          case cfv1regID_xcsr_byte :
-            rc = USBDM_WriteControlReg(value);
+            rc = bdmInterface->writeControlReg(value);
             if (rc != BDM_RC_OK) {
                log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                     "XCSR.byte", dnRegNumber, USBDM_GetErrorString(rc));
+                     "XCSR.byte", dnRegNumber, bdmInterface->getErrorString(rc));
                return setErrorState(DI_ERR_NONFATAL, rc);
             }
             break;
          case cfv1regID_csr2_byte :
-            rc = USBDM_WriteDReg(CFV1_DRegCSR2byte,value);
+            rc = bdmInterface->writeDReg(CFV1_DRegCSR2byte,value);
             if (rc != BDM_RC_OK) {
                log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                     "CSR2.byte", dnRegNumber, USBDM_GetErrorString(rc));
+                     "CSR2.byte", dnRegNumber, bdmInterface->getErrorString(rc));
                return setErrorState(DI_ERR_NONFATAL, rc);
             }
             break;
          case cfv1regID_csr3_byte :
-            rc = USBDM_WriteDReg(CFV1_DRegCSR3byte,value);
+            rc = bdmInterface->writeDReg(CFV1_DRegCSR3byte,value);
             if (rc != BDM_RC_OK) {
                log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                     "CSR3.byte", dnRegNumber, USBDM_GetErrorString(rc));
+                     "CSR3.byte", dnRegNumber, bdmInterface->getErrorString(rc));
                return setErrorState(DI_ERR_NONFATAL, rc);
             }
             break;
@@ -185,19 +185,19 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    }
    else if (dnRegNumber>cfv1regID_FIRST_DEBUG_REG) {
       int regNum = dnRegNumber-cfv1regID_FIRST_DEBUG_REG;
-      rc = USBDM_WriteDReg(regNum,value);
+      rc = bdmInterface->writeDReg(regNum,value);
       if (rc != BDM_RC_OK) {
          log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-               getCFV1DebugRegName(regNum), dnRegNumber, USBDM_GetErrorString(rc));
+               getCFV1DebugRegName(regNum), dnRegNumber, bdmInterface->getErrorString(rc));
          return setErrorState(DI_ERR_NONFATAL, rc);
       }
    }
    else if (dnRegNumber > cfv1regID_FIRST_CONTROL_REG) {
       int regNum = dnRegNumber-cfv1regID_FIRST_CONTROL_REG;
-      rc = USBDM_WriteCReg(regNum,value);
+      rc = bdmInterface->writeCReg(regNum,value);
       if (rc != BDM_RC_OK) {
          log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-               getCFV1ControlRegName(regNum), dnRegNumber, USBDM_GetErrorString(rc));
+               getCFV1ControlRegName(regNum), dnRegNumber, bdmInterface->getErrorString(rc));
          return setErrorState(DI_ERR_NONFATAL, rc);
       }
    }
@@ -209,18 +209,18 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
                pcWritten    = true;
                pcResetValue = value;
             }
-            rc = USBDM_WriteCReg(CFV1_CRegPC,value);
+            rc = bdmInterface->writeCReg(CFV1_CRegPC,value);
             if (rc != BDM_RC_OK) {
                log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                     "PC", dnRegNumber, USBDM_GetErrorString(rc));
+                     "PC", dnRegNumber, bdmInterface->getErrorString(rc));
                return setErrorState(DI_ERR_NONFATAL, rc);
             }
             break;
          case cfv1regID_sr :
-            rc = USBDM_WriteCReg(CFV1_CRegSR,value);
+            rc = bdmInterface->writeCReg(CFV1_CRegSR,value);
             if (rc != BDM_RC_OK) {
                log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                     "SR", dnRegNumber, USBDM_GetErrorString(rc));
+                     "SR", dnRegNumber, bdmInterface->getErrorString(rc));
                return setErrorState(DI_ERR_NONFATAL, rc);
             }
             break;
@@ -230,10 +230,10 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
                rc = BDM_RC_ILLEGAL_PARAMS;
             }
             else {
-               rc = USBDM_WriteReg(dnRegNumber,value);
+               rc = bdmInterface->writeReg(dnRegNumber,value);
                if (rc != BDM_RC_OK) {
                   log.print("DiRegisterWrite(%s(0x%X)) Failed, reason= %s\n",
-                        getCFV1RegName(dnRegNumber), dnRegNumber, USBDM_GetErrorString(rc));
+                        getCFV1RegName(dnRegNumber), dnRegNumber, bdmInterface->getErrorString(rc));
                   return setErrorState(DI_ERR_NONFATAL, rc);
                }
             }
@@ -242,7 +242,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    }
    if (rc != BDM_RC_OK) {
       log.error("0x%X Failed, reason= %s\n",
-           dnRegNumber, USBDM_GetErrorString(rc));
+           dnRegNumber, bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -273,13 +273,13 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    if (dnRegNumber>cfv1regID_FIRST_DEBUG_regID_BYTE)
       switch (dnRegNumber) {
          case cfv1regID_xcsr_byte :
-            rc = USBDM_ReadStatusReg(&dataValue);
+            rc = bdmInterface->readStatusReg(&dataValue);
             break;
          case cfv1regID_csr2_byte :
-            rc = USBDM_ReadDReg(CFV1_DRegCSR2byte,&dataValue);
+            rc = bdmInterface->readDReg(CFV1_DRegCSR2byte,&dataValue);
             break;
          case cfv1regID_csr3_byte :
-            rc = USBDM_ReadDReg(CFV1_DRegCSR3byte,&dataValue);
+            rc = bdmInterface->readDReg(CFV1_DRegCSR3byte,&dataValue);
             break;
          default                  :
             log.print("DiRegisterRead(Illegal Reg# 0x%X(%d)\n", dnRegNumber, dnRegNumber);
@@ -287,16 +287,16 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
             break;
       }
    else if (dnRegNumber>cfv1regID_FIRST_DEBUG_REG)
-      rc = USBDM_ReadDReg(dnRegNumber-cfv1regID_FIRST_DEBUG_REG,&dataValue);
+      rc = bdmInterface->readDReg(dnRegNumber-cfv1regID_FIRST_DEBUG_REG,&dataValue);
    else if (dnRegNumber > cfv1regID_FIRST_CONTROL_REG)
-      rc = USBDM_ReadCReg(dnRegNumber-cfv1regID_FIRST_CONTROL_REG,&dataValue);
+      rc = bdmInterface->readCReg(dnRegNumber-cfv1regID_FIRST_CONTROL_REG,&dataValue);
    else {
       switch (dnRegNumber) {
          case cfv1regID_pc :
-            rc = USBDM_ReadCReg(CFV1_CRegPC,&dataValue);
+            rc = bdmInterface->readCReg(CFV1_CRegPC,&dataValue);
             break;
          case cfv1regID_sr :
-            rc = USBDM_ReadCReg(CFV1_CRegSR,&dataValue);
+            rc = bdmInterface->readCReg(CFV1_CRegSR,&dataValue);
             break;
          default : // D0-7, A0-7
             if (dnRegNumber>15) {
@@ -304,7 +304,7 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
                rc = BDM_RC_ILLEGAL_PARAMS;
             }
             else
-               rc = USBDM_ReadReg(dnRegNumber,&dataValue);
+               rc = bdmInterface->readReg(dnRegNumber,&dataValue);
             break;
       }
    }
@@ -370,7 +370,7 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
       log.print("() - Only a single step is supported!\n");
       return setErrorState(DI_ERR_PARAM, ("Only a single step is allowed"));
    }
-   BDMrc = USBDM_TargetStep();
+   BDMrc = bdmInterface->step();
    if (BDMrc != BDM_RC_OK) {
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
    }
@@ -403,9 +403,9 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
          return setErrorState(DI_ERR_COMMUNICATION, bdmRc);
       }
    }
-   log.print("Calling USBDM_GetBDMStatus()\n");
+   log.print("Calling bdmInterface->getBDMStatus()\n");
    USBDMStatus_t USBDMStatus;
-   USBDM_GetBDMStatus(&USBDMStatus);
+   bdmInterface->getBDMStatus(&USBDMStatus);
 //   pdesExitStatus->szReason = (DiStringT)getBDMStatusName(&USBDMStatus);
    if (USBDMStatus.connection_state == SPEED_NO_INFO) {
       log.print("=> NO_INFO\n");
@@ -418,7 +418,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       mtwksDisplayLine("Target RESET detected\n");
    }
    unsigned long status;
-   BDMrc = USBDM_ReadStatusReg(&status);
+   BDMrc = bdmInterface->readStatusReg(&status);
    if (BDMrc != BDM_RC_OK) {
       log.print("=> Status read failed\n");
       return setErrorState(DI_OK);
@@ -455,8 +455,8 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
          // Without this code the debugger is a bit misleading as it halts at the
          // start of the exception handler but then does the reset on resume!
          unsigned long PCValue;
-         USBDM_ReadCReg(CFV1_CRegPC, &PCValue);
-         USBDM_WriteCReg(CFV1_CRegPC, PCValue);
+         bdmInterface->readCReg(CFV1_CRegPC, &PCValue);
+         bdmInterface->writeCReg(CFV1_CRegPC, PCValue);
 #endif
       }
    }

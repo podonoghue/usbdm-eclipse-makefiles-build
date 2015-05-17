@@ -2,10 +2,10 @@
  * @file     MCF5225x.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MCF5225x.
- *           Equivalent: TWR-MCF52259, MCF52252, MCF52255, MCF52254, MCF52256, MCF52259, MCF52258
+ *           Equivalent: MCF52252, MCF52255, MCF52254, MCF52256, MCF52259, MCF52258, TWR_MCF52259
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

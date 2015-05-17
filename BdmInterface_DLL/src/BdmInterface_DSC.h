@@ -1,5 +1,5 @@
 /*
- * BdmInterfaceARM.h
+ * BdmInterfaceDSC.h
  *
  *  Created on: 13 Apr 2015
  *      Author: podonoghue

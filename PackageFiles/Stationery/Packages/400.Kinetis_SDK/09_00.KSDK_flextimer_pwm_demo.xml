@@ -6,27 +6,14 @@
    <projectActionList id="KSDK-flextimer_pwm_demo" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-flextimer_pwm_demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <variable id="projectOptionValue.KSDK-flextimer-pwm-demo" 
             name="FlexTimer PWM Demo" 
             description=
-"This application demonstrates the FTM edge-aligned PWM function.\n
+"Todo - This application demonstrates the FTM edge-aligned PWM function.\n
 It outputs the PWM to control the intensity of the LED."
             radioGroup="group-ksdk-demo" >
          <enableWhen>
@@ -36,16 +23,18 @@ It outputs the PWM to control the intensity of the LED."
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
-            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-flextimer-pwm-demo" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-   		<copy source="usbdm_kds_path/demos/ftm_pwm/src/ftm_pwm.c"     target="Sources/ftm_pwm.c"      sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/ftm_pwm/hardware_init.c"  target="board/hardware_init.c"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/ftm_pwm/main.c"           target="Sources/main.c"            sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/ftm_pwm/ftm_pwm.c"        target="Sources/ftm_pwm.c"      sourcePathType="absolute" />
+      </projectActionList>
    </projectActionList>
 </root>

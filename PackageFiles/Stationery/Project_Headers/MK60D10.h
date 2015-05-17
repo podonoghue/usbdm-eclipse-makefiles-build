@@ -2,10 +2,10 @@
  * @file     MK60D10.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK60D10.
- *           Equivalent: MK60DN512M10, MK60DX256M10, MK60DN256M10
+ *           Equivalent: MK60DN512M10, MK60DX256M10, TWR_K60D100M, MK60DN256M10
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

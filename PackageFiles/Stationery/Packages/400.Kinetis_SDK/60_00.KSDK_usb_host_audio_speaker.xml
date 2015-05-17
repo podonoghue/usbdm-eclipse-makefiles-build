@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demos -->
+   <projectActionList id="demo.KSDK-usb-host-audio-speaker" root="">
+      <applyWhen>
+         <and>
+            <variableRef idRef="demo.KSDK-usb-host-audio-speaker" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-usb-host-audio-speaker" 
+            name="USB Host Audio Speaker Example" 
+            description="The board will transfer data to an attached USB speaker"
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+                  <and>
+                     <variableRef idRef="demo.KSDK-usb-with-rtos"/>
+                     <or>
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+                     </or>
+                  </and>
+               </or>
+            </and>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-usb-host-audio-speaker" />
+            </and>
+         </applyWhen>
+         <deleteResource target="Sources/main.c" /> 
+         
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/readme.pdf" type="link" target="doc/readme.pdf"      sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/hardware_init.c"    target="board/hardware_init.c"      sourcePathType="absolute" />
+         
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/audio_speaker.c"    target="Sources/audio_speaker.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/audio_speaker.h"    target="Sources/audio_speaker.h"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/audio8k16S.c"       target="Sources/audio8k16S.c"       sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/hidkeyboard.c"      target="Sources/hidkeyboard.c"      sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/audio/speaker/hidkeyboard.h"      target="Sources/hidkeyboard.h"      sourcePathType="absolute" />
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hub&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/printer&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hub&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/printer&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+         </projectOption>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other" replace="true">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other" replace="true">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+</root>

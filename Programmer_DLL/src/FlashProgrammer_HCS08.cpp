@@ -273,7 +273,6 @@ inline uint32_t getData16Target(uint8_t *data) {
 //=======================================================================
 //
 FlashProgrammer_HCS08::FlashProgrammer_HCS08() :
-      flashReady(false),
       initTargetDone(false),
       currentFlashOperation(OpNone),
       currentFlashAlignment(0),

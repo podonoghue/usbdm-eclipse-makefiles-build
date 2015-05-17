@@ -2,10 +2,10 @@
  * @file     MKL03Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL03Z4.
- *           Equivalent: FRDM-KL03Z, MKL03Z32M4, MKL03Z16M4, MKL03Z8M4
+ *           Equivalent: FRDM_KL03Z, MKL03Z32M4, MKL03Z16M4, MKL03Z8M4
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

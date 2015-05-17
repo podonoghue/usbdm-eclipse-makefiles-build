@@ -47,10 +47,10 @@ protected:
    };
 
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
+   MemoryRegionConstPtr    flashMemoryRegionPtr;
    uint32_t                targetBusFrequency;           //! kHz
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
    bool                    securityNeedsSelectiveErase;  //!< Indicates security area needs to be selectively erased
-   MemoryRegionConstPtr    flashMemoryRegionPtr;
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
@@ -79,8 +79,8 @@ public:
    DeviceData*     getDeviceData() { return &parameters; }
    USBDM_ErrorCode checkTargetUnSecured();
    USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0);
+   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
    USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
    USBDM_ErrorCode confirmSDID(void);
 

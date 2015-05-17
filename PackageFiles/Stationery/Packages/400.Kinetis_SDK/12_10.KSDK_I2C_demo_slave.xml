@@ -6,22 +6,7 @@
    <projectActionList id="KSDK-I2C-slave-comm" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk0264</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-I2C-master-slave-comm" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -40,14 +25,16 @@ It also features low power wakeup of the slave board by using I2C address matchi
       </variable>
       <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-I2C-comm-slave" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/demos/i2c_comm/src/i2c_slave_lowpower_wakeup.c" target="Sources/i2c_slave_lowpower_wakeup.c" sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_comm/hardware_init.c"        target="board/hardware_init.c"       sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_comm/slave/main.c"           target="Sources/main.c"              sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_comm/slave/fsl_i2c_irq.c"    target="Sources/fsl_i2c_irq.c"       sourcePathType="absolute" />
+      </projectActionList>
    </projectActionList>
 </root>

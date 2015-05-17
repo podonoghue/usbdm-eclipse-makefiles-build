@@ -58,6 +58,9 @@ INCLUDE "MemoryMap-$(targetDeviceName).ld"
 
 ENTRY(Reset_Handler)
 
+PROVIDE(__stack_size__ = __stack_size);
+PROVIDE(__heap_size__  = __heap_size);
+
 PROVIDE(__HardReset = Reset_Handler);
 
 /* Needed for -nostartfiles linker option call main directly */
@@ -97,21 +100,21 @@ SECTIONS
       . = ALIGN(4);
       /* preinit data */
       PROVIDE_HIDDEN (__preinit_array_start = .);
-      KEEP(*(.preinit_array))
+      KEEP(*(.preinit_array*))
       PROVIDE_HIDDEN (__preinit_array_end = .);
 
       . = ALIGN(4);
       /* init data */
       PROVIDE_HIDDEN (__init_array_start = .);
       KEEP(*(SORT(.init_array.*)))
-      KEEP(*(.init_array))
+      KEEP(*(.init_array*))
       PROVIDE_HIDDEN (__init_array_end = .);
 
       . = ALIGN(4);
       /* finit data */
       PROVIDE_HIDDEN (__fini_array_start = .);
       KEEP(*(SORT(.fini_array.*)))
-      KEEP(*(.fini_array))
+      KEEP(*(.fini_array*))
       PROVIDE_HIDDEN (__fini_array_end = .);
 
       KEEP(*(.jcr*))
@@ -133,11 +136,13 @@ SECTIONS
    } > rom
    __exidx_end = .;
 
-   __etext = .;
+   __etext = .;    /* define a global symbol at end of code */
+   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
    .data : AT (__etext)
    {
       __data_start__ = .;
+      __DATA_RAM = .;
       *(vtable)
       *(.data*)
 
@@ -149,23 +154,26 @@ SECTIONS
    .bss :
    {
       . = ALIGN(4);
+      __START_BSS = .;
       __bss_start__ = .;
+      *(.bss)
       *(.bss*)
       *(COMMON)
       . = ALIGN(4);
       __bss_end__ = .;
+      __END_BSS = .;
    } > ram
     
    /* Minimum HEAP - from top of BSS */
    .heap :
    {
       . = ALIGN(4);
-      PROVIDE ( end = . );
       PROVIDE ( __end__ = . );
+      PROVIDE ( end = . );
       PROVIDE ( _end = . );
       __HeapBase = .;
       __heap_addr = .;
-      . = . + __heap_size;
+      . = . + __heap_size__;
    } > ram
 
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
@@ -176,7 +184,7 @@ SECTIONS
       . = ALIGN(4);
       __HeapLimit = .;
       __StackLimit = .;
-      . = . + __stack_size;
+      . = . + __stack_size__;
       __StackTop = .;
    } > ram
 
@@ -191,14 +199,14 @@ SECTIONS
   +----------------------+ __data_end__ = __bss_start__      0x1FFFFF68
   | BSS                  |
   |                      |
-  +----------------------+ __bss_end__ = __HeapBase        0x1FFFFF84
+  +----------------------+ __bss_end__ = __HeapBase          0x1FFFFF84
   | Heap                 |
-  | (__heap_size)        |  (minimum heap)                   (size=0x120)
+  | (__heap_size__)      |  (minimum heap)                   (size=0x120)
   +----------------------+                                   0x200000A4
   |//////////////////////|
-  +----------------------+ __HeapLimit = __StackLimit        0x200001ff
+  +----------------------+ __HeapLimit = __StackLimit        0x200001fc
   | Stack                |
-  | (__stack_size)       |                                   (size=0x100)
+  | (__stack_size__)     |                                   (size=0x100)
   +----------------------+ __StackTop                        0x200002ff
   
   */

@@ -209,6 +209,8 @@ protected:
    SecurityDescriptionConstPtr   securityDescriptionPtr;             //!< How to parse security value
    SecurityOptions_t             lastSecurityOption;                 //!< Last security option before selecting custom
 
+   wxString                      currentDirectory;
+
 public:
    UsbdmDialogue(wxWindow* parent, const wxString& title, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);
    virtual ~UsbdmDialogue();

@@ -49,7 +49,8 @@ public:
    virtual USBDM_ExtendedOptions_t   &getBdmOptions();
 
    virtual USBDM_ErrorCode            getBDMStatus(USBDMStatus_t *usbdmStatus);
-
+   virtual RetryMode                  getInitialConnectRetryMode();
+   virtual RetryMode                  getSoftConnectRetryMode();
    virtual USBDM_ErrorCode            targetConnectWithRetry(USBDMStatus_t *usbdmStatus, RetryMode retry=retryAlways);
    virtual USBDM_ErrorCode            targetConnectWithRetry(RetryMode retry=retryAlways);
    virtual USBDM_ErrorCode            targetConnectWithDelayedConfirmation(RetryMode retryMode);
@@ -104,6 +105,9 @@ protected:
 
    Callback                   callbackPtr;             //!< Callback function for errors
    WxPluginPtr                wxPlugin;
+
+   RetryMode                  initialConnectRetryMode;
+   RetryMode                  softConnectRetryMode;
 
 protected:
    long                       callback(std::string message, std::string  caption, long style);

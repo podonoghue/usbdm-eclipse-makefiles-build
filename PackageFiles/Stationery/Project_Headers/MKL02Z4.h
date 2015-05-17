@@ -2,10 +2,10 @@
  * @file     MKL02Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL02Z4.
- *           Equivalent: FRDM-KL02Z, MKL02Z32M4, MKL02Z16M4, MKL02Z8M4
+ *           Equivalent: MKL02Z32M4, MKL02Z16M4, FRDM_KL02Z, MKL02Z8M4
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

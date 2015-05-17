@@ -25,6 +25,7 @@
 ]>
 <!-- 
 ToDo - review flash block sizes for MK20-MK70
+      V4.11.1.20   - Added MK22FN128M10
       V4.10.6.260  - Added MK24, various corrections
       V4.10.6.250a - Corrected MK64FX/FN..M12 RAM boundaries
       V4.10.6.250  - Added default TCL script
@@ -302,6 +303,9 @@ NOTES:
       <memory id="kinetis8K_8K_Ram" type="ram">
          <memoryRange middle="0x20000000" size="16K" name= "ram" />
       </memory>
+      <memory id="kinetis8K_16K_Ram" type="ram">
+         <memoryRange start="0x1FFFC000" size="24K" name= "ram" />
+      </memory>
       <memory id="kinetis8K_24K_Ram" type="ram">
          <memoryRange start="0x1FFFE000" size="32K" name= "ram" />
       </memory>
@@ -310,6 +314,9 @@ NOTES:
       </memory>
       <memory id="kinetis16K_32K_Ram" type="ram">
          <memoryRange start="0x1FFFC000" size="48K" name= "ram" />
+      </memory>
+      <memory id="kinetis32K_64K_Ram" type="ram">
+         <memoryRange start="0x1FFF8000" size="96K" name= "ram" />
       </memory>
       <memory id="kinetis32K_32K_Ram" type="ram">
          <memoryRange middle="0x20000000" size="64K" name= "ram" />
@@ -430,6 +437,15 @@ NOTES:
       <memory id="FTFA_PFlash0_SEC_256K_1KS" type="flash" registerAddress="0x40020000" sectorSize="1024" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-KL-security" />
          <memoryRange start="0x00000000" size="256K" />
+      </memory>
+      <!--  No security -->
+      <memory id="FTFA_PFlash1_64K_1KS" type="flash" registerAddress="0x40020000" sectorSize="1024" alignment="4" securityAddress="0x0400">
+         <securityEntryRef ref="Kinetis-KL-security" />
+         <memoryRange start="0x00010000" size="64K" />
+      </memory>
+      <memory id="FTFA_PFlash1_128K_1KS" type="flash" registerAddress="0x40020000" sectorSize="1024" alignment="4" securityAddress="0x0400">
+         <securityEntryRef ref="Kinetis-KL-security" />
+         <memoryRange start="0x00020000" size="128K" />
       </memory>
       <!--  
          Flash Block (Kinetis-K) - 2K sector size 
@@ -1154,6 +1170,51 @@ NOTES:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       
+<!-- MKL27Z4 -->
+      <device name="MKL27Z32M4"  family="CortexM0plus" subfamily="MKL27Z4">
+         <memoryRef ref="kinetis2K_6K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" />
+         <sdid value="0x27140C80" mask="0xFFFF0FF0"/>
+         <tclScriptRef ref="Kinetis-KLxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KL27P64M48SF2RM</note>
+      </device>
+      <device name="MKL27Z64M4"  family="CortexM0plus" subfamily="MKL27Z4">
+         <memoryRef ref="kinetis4K_12K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" />
+         <sdid value="0x27151C85" mask="0xFFFF0FF0"/>
+         <tclScriptRef ref="Kinetis-KLxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KL27P64M48SF2RM</note>
+      </device>
+<!-- MKL27Z256M4 -->
+      <device name="MKL27Z128M4" family="CortexM0plus" subfamily="MKL27Z256M4">
+         <memoryRef ref="kinetis8K_24K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
+         <memoryRef ref="FTFA_PFlash1_64K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" />
+         <sdid value="0x27150D80" mask="0xFFFF0FF0"/>
+         <tclScriptRef ref="Kinetis-KLxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KL27P64M48SF6RM</note>
+      </device>
+      <device name="MKL27Z256M4" family="CortexM0plus" subfamily="MKL27Z256M4">
+         <memoryRef ref="kinetis8K_24K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
+         <memoryRef ref="FTFA_PFlash1_128K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" />
+         <sdid value="0x27160D80" mask="0xFFFF0FF0"/>
+         <tclScriptRef ref="Kinetis-KLxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KL27P64M48SF6RM</note>
+      </device>
+      
 <!-- MKL34Z4 -->
       <device name="MKL34Z64M4"  family="CortexM0plus" subfamily="MKL34Z4">
          <memoryRef ref="kinetis2K_6K_Ram" />
@@ -1290,6 +1351,83 @@ NOTES:
          <flashProgramRef ref="Kinetis-MKM-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>8x17 LCD</note>
+      </device>
+
+<!-- ===================================================================================== -->
+<!-- MKV10Z7 -->
+      <device name="MKV10Z16M7" family="CortexM0plus" subfamily="MKV10Z7">
+         <memoryRef ref="kinetis2K_6K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
+         <sdid value="0x10600000" mask="0xFFF00000"/>
+         <tclScriptRef ref="Kinetis-KMxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKM-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KV10P48M75RM</note>
+      </device>
+      <device name="MKV10Z32M7" family="CortexM0plus" subfamily="MKV10Z7">
+         <memoryRef ref="kinetis2K_6K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
+         <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
+         <sdid value="0x10600000" mask="0xFFF00000"/>
+         <tclScriptRef ref="Kinetis-KMxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MKM-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>KV10P48M75RM</note>
+      </device>
+<!-- MKV30F10 -->
+      <device name="MKV30F64M10" family="CortexM4F" subfamily="MKV30F10">
+         <memoryRef ref="kinetis8K_8K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
+         <memoryRef ref="kinetisIO_MK" /> <!--  check -->
+         <sdid value="0x30600280" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>KV30P64M100SFARM</note>
+      </device>
+      <device name="MKV30F128M10" family="CortexM4F" subfamily="MKV30F10">
+         <memoryRef ref="kinetis8K_8K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x30600280" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>KV30P64M100SFARM</note>
+      </device>
+<!-- MKV31F10-->
+      <device name="MKV31F128M10" family="CortexM4F" subfamily="MKV31F10">
+         <memoryRef ref="kinetis8K_16K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x31600680" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>KV31P100M120SF8RM</note>
+      </device>
+<!-- MKV31F12-->
+      <device name="MKV31F256M12" family="CortexM4F" subfamily="MKV31F12">
+         <memoryRef ref="kinetis16K_32K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x31600A80" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>KV31P100M120SF8RM</note>
+      </device>
+      <device name="MKV31F512M12" family="CortexM4F" subfamily="MKV31F12">
+         <memoryRef ref="kinetis32K_64K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
+         <memoryRef ref="FTFA_PFlash1_256K_2KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x31601E80" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>KV31P100M120SF7RM</note>
       </device>
 
 <!-- ===================================================================================== -->
@@ -1738,6 +1876,17 @@ NOTES:
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
          <note>K22P48M50SF4RM,K22P64M50SF4RM,K22P80M50SF4RM,K22P121M50SF4RM</note>
+      </device>
+<!-- MK22-M10 -->
+      <device name="MK22FN128M10" family="CortexM4F" subfamily="K22F12810">
+         <memoryRef ref="kinetis8K_16K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x22000680" mask="0xFFF00F80"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K22P121M120SF8RM</note>
       </device>
 <!-- MK22-M12 -->
       <device name="MK22FN256M12" family="CortexM4F" subfamily="MK22F51212">
@@ -2402,6 +2551,7 @@ NOTES:
       <device name="FRDM_KL05Z"      alias="MKL05Z32M4"     hardware="frdmkl05z" />
       <device name="FRDM_KL25Z"      alias="MKL25Z128M4"    hardware="frdmkl25z" />
       <device name="FRDM_KL26Z"      alias="MKL26Z64M4"     hardware="frdmkl26z" />
+      <device name="FRDM_KL27Z"      alias="MKL27Z64M4"     hardware="frdmkl27z" />
       <device name="FRDM_KL43Z"      alias="MKL43Z256M4"    hardware="frdmkl43z" />
       <device name="FRDM_KL46Z"      alias="MKL46Z256M4"    hardware="frdmkl46z" />
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />

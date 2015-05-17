@@ -144,12 +144,13 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
 
    if (strcmp(pszCommand, "rs08_vpp_powersupply_on") == 0) {
       // Set BDM options for programming
+      //TODO - update
       USBDM_SetExtendedOptions(&bdmProgrammingOptions);
-      USBDM_TargetReset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
+      bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
 
-      rc = USBDM_SetTargetVpp(BDM_TARGET_VPP_STANDBY);
+      rc = bdmInterface->setTargetVpp(BDM_TARGET_VPP_STANDBY);
       if (rc == BDM_RC_OK)
-         rc = USBDM_GetBDMStatus(&USBDMStatus);
+         rc = bdmInterface->getBDMStatus(&USBDMStatus);
       if (rc != BDM_RC_OK)
          return setErrorState(DI_ERR_NONFATAL, rc);
       if (USBDMStatus.flash_state != BDM_TARGET_VPP_STANDBY)
@@ -157,9 +158,9 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
       return setErrorState(DI_OK);
    }
    else if (strcmp(pszCommand, "rs08_vpp_on") == 0) {
-      rc = USBDM_SetTargetVpp(BDM_TARGET_VPP_ON);
+      rc = bdmInterface->setTargetVpp(BDM_TARGET_VPP_ON);
       if (rc == BDM_RC_OK)
-         rc = USBDM_GetBDMStatus(&USBDMStatus);
+         rc = bdmInterface->getBDMStatus(&USBDMStatus);
       if (rc != BDM_RC_OK)
          return setErrorState(DI_ERR_NONFATAL, rc);
       if (USBDMStatus.flash_state != BDM_TARGET_VPP_ON)
@@ -167,11 +168,11 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
       return setErrorState(DI_OK);
    }
    else if (strcmp(pszCommand, "rs08_vpp_off") == 0) {
-      rc = USBDM_SetTargetVpp(BDM_TARGET_VPP_OFF);
+      rc = bdmInterface->setTargetVpp(BDM_TARGET_VPP_OFF);
       if (rc != BDM_RC_OK)
-         rc = USBDM_TargetReset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
+         rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
       if (rc != BDM_RC_OK)
-         rc = USBDM_GetBDMStatus(&USBDMStatus);
+         rc = bdmInterface->getBDMStatus(&USBDMStatus);
       if (rc != BDM_RC_OK)
          return setErrorState(DI_ERR_NONFATAL, rc);
       if (USBDMStatus.flash_state != BDM_TARGET_VPP_ON)
@@ -179,7 +180,7 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
       return setErrorState(DI_OK);
    }
    else if (strcmp(pszCommand, "rs08_vpp_status") == 0) {
-      rc = USBDM_GetBDMStatus(&USBDMStatus);
+      rc = bdmInterface->getBDMStatus(&USBDMStatus);
       if (rc != BDM_RC_OK)
          return setErrorState(DI_ERR_NONFATAL, rc);
       if (USBDMStatus.flash_state != BDM_TARGET_VPP_ON)
@@ -218,7 +219,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
 
    // CCR & PC are a special cases that require a read of CCR_PC before write
    if ((dnRegNumber == 0)||(dnRegNumber == 5)) {
-      rc = USBDM_ReadReg(RS08_RegCCR_PC, &ccr_pcValue);
+      rc = bdmInterface->readReg(RS08_RegCCR_PC, &ccr_pcValue);
       if (rc != BDM_RC_OK) {
          return setErrorState(DI_ERR_NONFATAL, rc);
       }
@@ -230,15 +231,15 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
       }
    }
    switch (dnRegNumber) {
-      case  0 : /* PC  */ rc = USBDM_WriteReg(RS08_RegCCR_PC, value);    break;
-      case  1 : /* A   */ rc = USBDM_WriteReg(RS08_RegA,      value);    break;
-      case  3 : /* SPC */ rc = USBDM_WriteReg(RS08_RegSPC,    value);    break;
-      case  5 : /* CCR */ rc = USBDM_WriteReg(RS08_RegCCR_PC, value);    break;
+      case  0 : /* PC  */ rc = bdmInterface->writeReg(RS08_RegCCR_PC, value);    break;
+      case  1 : /* A   */ rc = bdmInterface->writeReg(RS08_RegA,      value);    break;
+      case  3 : /* SPC */ rc = bdmInterface->writeReg(RS08_RegSPC,    value);    break;
+      case  5 : /* CCR */ rc = bdmInterface->writeReg(RS08_RegCCR_PC, value);    break;
       default  : /*   ? */ return setErrorState(DI_ERR_PARAM, ("Illegal register identifier"));
    }
    if (rc != BDM_RC_OK) {
 //      log.print("DiRegisterWrite(0x%X,%s) Failed, reason= %s\n",
-//            dnRegNumber, DSC_GetRegisterName(regNum), USBDM_GetErrorString(rc));
+//            dnRegNumber, DSC_GetRegisterName(regNum), bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -265,12 +266,12 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    CHECK_ERROR_STATE();
 
    switch (dnRegNumber) {
-      case  0 : /* PC  */ rc = USBDM_ReadReg(RS08_RegCCR_PC, &dataValue);
+      case  0 : /* PC  */ rc = bdmInterface->readReg(RS08_RegCCR_PC, &dataValue);
                           dataValue &= 0x3FFF;
                           break;
-      case  1 : /* A   */ rc = USBDM_ReadReg(RS08_RegA,      &dataValue);   break;
-      case  3 : /* SPC */ rc = USBDM_ReadReg(RS08_RegSPC,    &dataValue);   break;
-      case  5 : /* CCR */ rc = USBDM_ReadReg(RS08_RegCCR_PC, &dataValue);
+      case  1 : /* A   */ rc = bdmInterface->readReg(RS08_RegA,      &dataValue);   break;
+      case  3 : /* SPC */ rc = bdmInterface->readReg(RS08_RegSPC,    &dataValue);   break;
+      case  5 : /* CCR */ rc = bdmInterface->readReg(RS08_RegCCR_PC, &dataValue);
                           dataValue = (dataValue>>14) & 0x3;
                           break;
       default  : /*   ? */ return setErrorState(DI_ERR_PARAM, ("Illegal register identifier"));
@@ -323,10 +324,10 @@ DiReturnT DiBreakpointSet ( DiBpResultT *pdnBreakpointId,
 
    breakpointId = 1;
 
-   USBDM_WriteDReg(RS08_DRegBKPT, (uint32_t)bkptAddress);
+   bdmInterface->writeDReg(RS08_DRegBKPT, (uint32_t)bkptAddress);
    currentBreakPointAddress = bkptAddress;
-   USBDM_ReadStatusReg(&bdmscrValue);
-   USBDM_WriteControlReg(bdmscrValue|RS08_BDCSCR_BKPTEN|breakpointModifier);
+   bdmInterface->readStatusReg(&bdmscrValue);
+   bdmInterface->writeControlReg(bdmscrValue|RS08_BDCSCR_BKPTEN|breakpointModifier);
    log.print("DiBreakpointSet(0x%4X, #%d:%s)\n",
          (uint32_t)bkptAddress, breakpointId, breakpointModifier?"E/D":"E");
    pdnBreakpointId->dbBp   = dbBreakpoint;
@@ -350,8 +351,8 @@ DiReturnT DiBreakpointClear ( DiUInt32T dnBreakpointId ) {
 
    breakpointId = 0;
 
-   USBDM_ReadStatusReg(&bdmscrValue);
-   USBDM_WriteControlReg(bdmscrValue&~(RS08_BDCSCR_BKPTEN|RS08_BDCSCR_FTS));
+   bdmInterface->readStatusReg(&bdmscrValue);
+   bdmInterface->writeControlReg(bdmscrValue&~(RS08_BDCSCR_BKPTEN|RS08_BDCSCR_FTS));
 
    return setErrorState(DI_OK);
 }
@@ -386,7 +387,7 @@ USBDM_ErrorCode BDMrc;
       log.print("DiExecSingleStep() - Only a single step is supported!\n");
       return setErrorState(DI_ERR_PARAM, ("Only a single step is allowed"));
    }
-   BDMrc = USBDM_TargetStep();
+   BDMrc = bdmInterface->step();
 #endif
    if (BDMrc != BDM_RC_OK) {
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
@@ -421,7 +422,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       }
    }
    USBDMStatus_t USBDMStatus;
-   USBDM_GetBDMStatus(&USBDMStatus);
+   bdmInterface->getBDMStatus(&USBDMStatus);
 //   pdesExitStatus->szReason = (DiStringT)getBDMStatusName(&USBDMStatus);
 
    if (USBDMStatus.connection_state == SPEED_NO_INFO) {
@@ -435,7 +436,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       mtwksDisplayLine("Target RESET detected\n");
    }
    unsigned long status;
-   BDMrc = USBDM_ReadStatusReg(&status);
+   BDMrc = bdmInterface->readStatusReg(&status);
    if (BDMrc != BDM_RC_OK) {
       log.print("=> Status read failed\n");
       return setErrorState(DI_OK);
@@ -460,8 +461,8 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
          // Without this code the debugger is a bit misleading as it halts at the
          // start of the exception handler but then does the reset on resume!
          unsigned long PCValue;
-         USBDM_ReadCReg(CFV1_CRegPC, &PCValue);
-         USBDM_WriteCReg(CFV1_CRegPC, PCValue);
+         bdmInterface->readCReg(CFV1_CRegPC, &PCValue);
+         bdmInterface->writeCReg(CFV1_CRegPC, PCValue);
 #endif
       }
    }

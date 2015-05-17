@@ -2,13 +2,17 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
+
    <!-- Extra Optional files for Coldfire V1 -->
    <projectActionList id="Options-file-list-CFV1" >
       <applyWhen>
-         <deviceFamilyIs>CFV1</deviceFamilyIs>
+         <and>
+            <deviceFamilyIs>CFV1</deviceFamilyIs>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
       </applyWhen>
       <variable id="projectOptionValue.Clock-setup" 
-         name="Clock setup code" 
+         name="Clock setup code"   
          description="Adds code for basic clock initialization - check assumptions made" 
          checkGroup="group-additional-options"/>
       <projectActionList>
@@ -19,5 +23,6 @@
          <copy source="Project_Headers/clock_configure-cfv1.h"         target="Project_Headers/clock_configure.h" />
       </projectActionList>
    </projectActionList>
-
+   
 </root>
+

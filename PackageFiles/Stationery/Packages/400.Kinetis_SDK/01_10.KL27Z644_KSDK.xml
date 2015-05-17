@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY DEVICE_NAME       "KL27Z644">
+<!ENTITY MQX_DEVICE        "mkl27z64m">
+<!ENTITY LINKER_FILE_NAME  "MKL27Z256xxx4_flash.ld">
+<!ENTITY CPU_NAME          "CPU_MKL27Z64VLH4">
+
+<!-- Derived -->
+<!ENTITY MDEVICE_NAME      "M&DEVICE_NAME;">
+]
+>
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for FRDM board -->
+   <projectActionList id="&DEVICE_NAME;-KSDK" root="">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceNameMatches>MKL27Z64M4</deviceNameMatches>
+               <deviceNameMatches>FRDM_KL27Z</deviceNameMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </applyWhen>
+         <constant id="kdsTargetName"  value="&DEVICE_NAME;"/>
+         <constant id="mqxTargetName"  value="&MQX_DEVICE;" />
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/devices/&MDEVICE_NAME;/startup&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/devices/&MDEVICE_NAME;/startup&quot;</value>
+         </projectOption>
+         <!-- C Linker User objects -->
+         <projectOption id="gnu.c.link.option.userobjs" config="debug">
+            <value>&quot;${workspace_loc:/ksdk_lib_&DEVICE_NAME;_$(kdsOperatingSystem)_usbdm/Debug/libksdk_&DEVICE_NAME;.a}&quot;</value>
+         </projectOption>
+         <!-- CPP Linker User objects -->
+         <projectOption id="gnu.cpp.link.option.userobjs" config="debug">
+            <value>&quot;${workspace_loc:/ksdk_lib_&DEVICE_NAME;_$(kdsOperatingSystem)_usbdm/Debug/libksdk_&DEVICE_NAME;.a}&quot;</value>
+         </projectOption>
+         <!-- C Linker User objects -->
+         <projectOption id="gnu.c.link.option.userobjs" config="release">
+            <value>&quot;${workspace_loc:/ksdk_lib_&DEVICE_NAME;_$(kdsOperatingSystem)_usbdm/Release/libksdk_&DEVICE_NAME;.a}&quot;</value>
+         </projectOption>
+         <!-- CPP Linker User objects -->
+         <projectOption id="gnu.cpp.link.option.userobjs" config="release">
+            <value>&quot;${workspace_loc:/ksdk_lib_&DEVICE_NAME;_$(kdsOperatingSystem)_usbdm/Release/libksdk_&DEVICE_NAME;.a}&quot;</value>
+         </projectOption>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
+            <value>&quot;--defsym=__heap_size__=0x2000&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
+            <value>&quot;--defsym=__heap_size__=0x2000&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>&CPU_NAME;</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>&CPU_NAME;</value>
+         </projectOption>
+         <createFolder type="" target="startup" />
+         <copy source="startup/newlib_stubs.c" target="startup/newlib_stubs.c" />
+         <copy source="usbdm_kds_path/platform/devices/startup.c"                                    target="startup/startup.c"                 type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/startup.h"                                    target="startup/startup.h"                 type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/gcc/startup_&MDEVICE_NAME;.S"  target="startup/startup_&MDEVICE_NAME;.S"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/system_&MDEVICE_NAME;.c"       target="startup/system_&MDEVICE_NAME;.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/system_&MDEVICE_NAME;.h"       target="startup/system_&MDEVICE_NAME;.h"   type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

@@ -16,7 +16,7 @@ void usleep(int64_t usec)
 }
 #endif /* COMPAT_USLEEP */
 
-//#ifdef COMPAT_MINGW_MS_VSNPRINTF
+#ifdef _WIN32
 /*
  * This fixes linking with precompiled libusb-1.0.18-win and
  * libusb-1.0.19-rc1-win: "undefined reference to __ms_vsnprintf". See:
@@ -28,4 +28,4 @@ int  __attribute__((dllexport)) __cdecl __ms_vsnprintf(char * __restrict__ d,siz
 {
    return vsnprintf(d, n, format, arg);
 }
-//#endif /* COMPAT_MINGW_MS_VSNPRINTF */
+#endif /* _WIN32 */

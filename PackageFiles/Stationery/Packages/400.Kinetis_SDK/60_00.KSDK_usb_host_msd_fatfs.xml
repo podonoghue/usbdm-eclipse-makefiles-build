@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demos -->
+   <projectActionList id="demo.KSDK-usb-host-msd-fatfs" root="">
+      <applyWhen>
+         <and>
+            <variableRef idRef="demo.KSDK-usb-host-msd-fatfs" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-usb-host-msd-fatfs" 
+            name="USB Host MSD FATFS example" 
+            description="The board will transfer data from an attached USB FAT formatted disk"
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+                  <and>
+                     <variableRef idRef="demo.KSDK-usb-with-rtos"/>
+                     <or>
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                        <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+                     </or>
+                  </and>
+               </or>
+            </and>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-usb-host-msd-fatfs" />
+            </and>
+         </applyWhen>
+         <deleteResource target="Sources/main.c" /> 
+         
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/msd/msd_fatfs/readme.pdf" type="link" target="doc/readme.pdf"      sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/msd/msd_fatfs/hardware_init.c"    target="board/hardware_init.c"   sourcePathType="absolute" />
+         
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/fsl_usb_disk/src/msd_diskio.c"          target="Sources/msd_diskio.c"                 sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/fsl_usb_disk/msd_diskio.h"              target="Sources/msd_diskio.h"                 sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/diskio.c"            target="Sources/fatfs/diskio.c"  sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/diskio.h"            target="Sources/fatfs/diskio.h"  sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/ff.c"                target="Sources/fatfs/ff.c"      sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/ff.h"                target="Sources/fatfs/ff.h"      sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/ffconf.h"            target="Sources/fatfs/ffconf.h"  sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/middleware/filesystem/fatfs/option/unicode.c"    target="Sources/fatfs/option/unicode.c" sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/msd/msd_fatfs/main.c"          target="Sources/main.c"                 sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/usb/host/msd/msd_fatfs/msd_fat_demo.c"  target="Sources/msd_fat_demo.c"         sourcePathType="absolute" />
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/usb/facility/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hub&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/printer&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources/fatfs}&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/usb/facility/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(demo.KDS.boardName)&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hid&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/hub&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/msd&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/phdc&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/printer&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+            <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources/fatfs}&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>USB_DISK_ENABLE=1</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>USB_DISK_ENABLE=1</value>
+         </projectOption>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+</root>

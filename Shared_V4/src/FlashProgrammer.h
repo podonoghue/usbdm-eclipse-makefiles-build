@@ -50,8 +50,8 @@ public:
 
    virtual USBDM_ErrorCode checkTargetUnSecured() = 0;
    virtual USBDM_ErrorCode massEraseTarget() = 0;
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT errorCallBack=NULL, bool doRamWrites=false) = 0;
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT errorCallBack=NULL) = 0;
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL, bool doRamWrites=false) = 0;
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL) = 0;
    virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID) = 0;
    virtual USBDM_ErrorCode confirmSDID(void) = 0;
    virtual USBDM_ErrorCode getCalculatedTrimValue(uint16_t &value) = 0;

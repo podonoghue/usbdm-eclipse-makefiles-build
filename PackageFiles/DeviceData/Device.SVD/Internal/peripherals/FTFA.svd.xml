@@ -1,5 +1,6 @@
 <!--
 Devices using this peripheral: 
+      MK24F25612
       MKL02Z4
       MKL03Z4
       MKL04Z4
@@ -10,6 +11,8 @@ Devices using this peripheral:
       MKL24Z4
       MKL25Z4
       MKL26Z4
+      MKL27Z4
+      MKL27Z256M4
       MKL34Z4
       MKL36Z4
       MKL43Z4

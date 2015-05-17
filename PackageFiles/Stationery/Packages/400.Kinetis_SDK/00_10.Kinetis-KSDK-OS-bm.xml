@@ -6,14 +6,7 @@
    <projectActionList id="KSDK-operating-system-bm" root="">
       <applyWhen>
          <and>
-            <or>
-               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
-            </or>
+            <variableRef idRef="kdsOptionsAvailable" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -30,6 +23,14 @@
             <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
          </applyWhen>
          <constant id="kdsOperatingSystem" value="bm" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_BM</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_BM</value>
+         </projectOption>
       </projectActionList>
    </projectActionList>
 

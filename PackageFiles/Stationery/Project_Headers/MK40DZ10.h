@@ -2,10 +2,10 @@
  * @file     MK40DZ10.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK40DZ10.
- *           Equivalent: MK40DN512ZM10, MK40DX256ZM10, MK40DX128ZM10, TWR-K40X256
+ *           Equivalent: TWR_K40X256, MK40DN512ZM10, MK40DX256ZM10, MK40DX128ZM10
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

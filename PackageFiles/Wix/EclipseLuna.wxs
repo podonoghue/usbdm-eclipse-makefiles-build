@@ -12,6 +12,9 @@
    <?define DescSRecord="Freescale S-Record binary file" ?>
    <?define ExplorerMenuOpen="Open" ?>
 
+   <?define P2Application="org.eclipse.equinox.p2.director" ?>
+   <?define FeatureGroup="net.sourceforge.usbdm.cdt.feature.feature.group" ?>
+
    <Fragment>
       <!--======================================================
                Directory structure
@@ -20,11 +23,11 @@
          <Directory Id='D.$(var.ECLIPSE_VER)_APPS' Name="Apps">
             <!-- Eclipse directory structure-->
             <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT" Name="Eclipse-$(var.ECLIPSE_VER)">
-               <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
+               <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
                   <!-- PE directory structure -->
-                  <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
-                     <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
-                        <Directory Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
+                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
+                     <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
+                        <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
                      </Directory>
                   </Directory>
             </Directory>
@@ -53,18 +56,28 @@
       <!--=================================================================================
            Actions
       ==================================================================================-->
-      <!-- Refresh Eclipse plugins -->
+      <!-- Install Eclipse plugins -->
       <CustomAction
-         Id="Ca.CreateKDSRefreshPluginsCommand_$(var.ECLIPSE_VER)_$(var.ECLIPSE_VER)"
-         Property="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)"
-         Value="&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipse&quot; -initialize -nosplash"
+         Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
          
-      <CustomAction Id="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction
+         Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
+         Execute="immediate"/>
+         
+      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
-          <Custom Action="Ca.CreateKDSRefreshPluginsCommand_$(var.ECLIPSE_VER)_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
-          <Custom Action="Ca.EclipseRefreshPluginsCommand_$(var.ECLIPSE_VER)"                      Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+          
+          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" Before="RemoveFiles"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
       </InstallExecuteSequence>
       
       <!--======================================================
@@ -82,9 +95,9 @@
       <!-- 
            Processor Expert plugin support 
       -->
-      <DirectoryRef Id="D.Eclipse_$(var.ECLIPSE_VER)_PE_Config_Compiler">
+      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler">
          <Component Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' Guid='43413763-3fc8-44c4-9150-db08515bbb95' >
-            <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='bin/net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
+            <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='$(var.SrcDir)\bin\net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
          </Component>
       </DirectoryRef>
 
@@ -92,7 +105,7 @@
             Eclipse feature
       =======================================================-->
       <Feature Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT'
-            Title='Eclipse $(var.ECLIPSE_VER) Plugins'
+            Title='Eclipse $(var.ECLIPSE_VER) CDT Plugins'
             Description='Add USBDM CDT support to Eclipse:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
             ConfigurableDirectory="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
             AllowAdvertise="no"
@@ -105,9 +118,9 @@
          <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />
          <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.GdbServer' />
-         <ComponentGroupRef Id='Cg.EclipsePlugins' />
-         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
-         <ComponentGroupRef Id='Cg.StationeryInstall'/>
+         <ComponentGroupRef Id='Cg.UpdateSite' />
+         <ComponentGroupRef Id='Cg.DeviceDataInstall' />
+         <ComponentGroupRef Id='Cg.StationeryInstall' />
       </Feature>
 
    </Fragment>

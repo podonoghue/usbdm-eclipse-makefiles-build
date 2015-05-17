@@ -16,7 +16,7 @@
    <!ATTLIST projectActionList root  CDATA  #IMPLIED>
 
 <!-- Condition controlling when list action is applied -->
-<!ELEMENT applyWhen (and|or|not|variableRef|deviceNameIs|deviceFamilyIs|deviceSubfamilyIs|deviceNameMatches|deviceFamilyMatches|deviceSubfamilyMatches|hardwareIs|hardwareMatches)>
+<!ELEMENT applyWhen (and|or|not|variableRef|deviceNameIs|deviceFamilyIs|deviceSubfamilyIs|deviceNameMatches|deviceFamilyMatches|deviceSubfamilyMatches|hardwareIs|hardwareMatches|requirement|preclusion)>
 
 <!ELEMENT and ((and|or|not|variableRef|deviceNameIs|deviceFamilyIs|deviceSubfamilyIs|deviceNameMatches|deviceFamilyMatches|deviceSubfamilyMatches|hardwareIs|hardwareMatches|requirement|preclusion)*) >
 <!ELEMENT or  ((and|or|not|variableRef|deviceNameIs|deviceFamilyIs|deviceSubfamilyIs|deviceNameMatches|deviceFamilyMatches|deviceSubfamilyMatches|hardwareIs|hardwareMatches|requirement|preclusion)*) >
@@ -25,14 +25,17 @@
 <!-- Condition controlling when list action is applied -->
 <!ELEMENT enableWhen (and|or|not|requirement|preclusion)>
 
+<!-- Allows dynamic checking if a dialogue check-box is selected -->
 <!ELEMENT requirement EMPTY >
    <!ATTLIST requirement idRef CDATA #REQUIRED>
 
+<!-- Allows dynamic checking if a dialogue check-box is not selected -->
 <!ELEMENT preclusion EMPTY >
    <!ATTLIST preclusion idRef CDATA #REQUIRED>
 
+<!-- Allows testing of a variable -->
 <!ELEMENT variableRef EMPTY >
-   <!ATTLIST variableRef condition 		(isTrue|matches|lessThan|lessThanOrEqual|equal|greaterThan|greaterThanOrEqual) "isTrue">
+   <!ATTLIST variableRef condition 		(isTrue|isDefined|matches|lessThan|lessThanOrEqual|equal|greaterThan|greaterThanOrEqual) "isTrue">
    <!ATTLIST variableRef idRef         CDATA    #REQUIRED>
    <!ATTLIST variableRef value         CDATA    #IMPLIED>
    <!ATTLIST variableRef defaultValue  CDATA    #IMPLIED>

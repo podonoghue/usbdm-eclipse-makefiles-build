@@ -11,7 +11,7 @@
 #ifdef _WIN32
 #include "PluginFactory_WIN32.h"
 #else
-#error "No support for this OS"
+#include "PluginFactory_Linux.h"
 #endif
 
 #endif /* SOURCE_PLUGINFACTORY_H_ */

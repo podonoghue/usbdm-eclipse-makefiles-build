@@ -2,10 +2,10 @@
  * @file     MK20D5.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK20D5.
- *           Equivalent: MK20DX128M5, FRDM-K20D50M, MK20DN64M5, MK20DX32M5, MK20DN32M5, MK20DX64M5, MK20DN128M5
+ *           Equivalent: MK20DX128M5, MK20DN64M5, MK20DX32M5, MK20DN32M5, MK20DX64M5, MK20DN128M5, FRDM_K20D50M
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

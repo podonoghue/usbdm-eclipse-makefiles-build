@@ -120,25 +120,25 @@
       <!-- CW for Coldfire support -->
       <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFire_USBDM">
          <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.Files' Guid='6072e6a2-7c0a-4c4a-8769-88d40b7945c2' >
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_1'         DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_2'         DiskId='1' Source='bin\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
 
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_1'     DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_2'     DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_1'     DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_2'     DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
 
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1'   DiskId='1' Source='bin\usbdm.4.dll'/>
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1d'  DiskId='1' Source='bin\usbdm-debug.4.dll'/>
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2'   DiskId='1' Source='bin\usbdm-system.4.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2d'  DiskId='1' Source='bin\usbdm-system-debug.4.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
 	    
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1'   DiskId='1' Source='bin\usbdm-gdi-cfvx-legacy.4.dll' KeyPath='yes' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1d'  DiskId='1' Source='bin\usbdm-gdi-cfvx-legacy-debug.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx-legacy.4.dll' KeyPath='yes' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx-legacy-debug.4.dll'/>
          </Component>
       </DirectoryRef>
 
       <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_DefaultConnections">
          <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.DefaultConnections' Guid='097f2440-1f51-4b0c-81a8-aa5363b263be' >
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_DefaultConnections' DiskId='1' Source='WizardPatches\RC_CF_USBDM.xml' KeyPath='yes' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_DefaultConnections' DiskId='1' Source='$(var.SrcDir)\WizardPatches\RC_CF_USBDM.xml' KeyPath='yes' />
          </Component>
       </DirectoryRef>
 

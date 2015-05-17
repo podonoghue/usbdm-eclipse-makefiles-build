@@ -2,10 +2,10 @@
  * @file     MK22F51212.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK22F51212.
- *           Equivalent: MK22FN256M12, FRDM-K22F, MK22FN512M12
+ *           Equivalent: MK22FN256M12, TWR_K22F120M, FRDM_K22F, MK22FN512M12
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 
@@ -31,7 +31,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /*!<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /*!<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /*!<  15 System Tick Timer                                                                */
-/* ----------------------   MK64D10 VectorTable                      ---------------------- */
+/* ----------------------   MK22F51212 VectorTable                   ---------------------- */
   DMA0_IRQn                     =   0,   /*!<  16 DMA channel 0 transfer complete interrupt                                        */
   DMA1_IRQn                     =   1,   /*!<  17 DMA channel 1 transfer complete interrupt                                        */
   DMA2_IRQn                     =   2,   /*!<  18 DMA channel 2 transfer complete interrupt                                        */
@@ -55,7 +55,7 @@ typedef enum {
   PMC_IRQn                      =  20,   /*!<  36 PMC Low Voltage Detect, Low Voltage Warning                                      */
   LLWU_IRQn                     =  21,   /*!<  37 LLWU Low Leakage Wakeup                                                          */
   WDOG_IRQn                     =  22,   /*!<  38 WDOG interrupt                                                                   */
-  RNG_IRQn                      =  23,   /*!<  39 WDOG interrupt                                                                   */
+  RNG_IRQn                      =  23,   /*!<  39 Random Number Generator                                                          */
   I2C0_IRQn                     =  24,   /*!<  40 I2C0 interrupt                                                                   */
   I2C1_IRQn                     =  25,   /*!<  41 I2C1 interrupt                                                                   */
   SPI0_IRQn                     =  26,   /*!<  42 SPI0 interrupt                                                                   */
@@ -6230,7 +6230,7 @@ typedef struct {                                /*!<       UART1 Structure      
 #define UART2_BASE_PTR                 (UART2)
 
 /* ================================================================================ */
-/* ================           USB0 (file:USB0_CLK_RECOVER)         ================ */
+/* ================           USB0 (file:USB0_CLK_RECOVER_0)       ================ */
 /* ================================================================================ */
 
 /**

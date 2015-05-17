@@ -6,9 +6,7 @@
    <projectActionList id="KSDK-adc-tpm-trigger" root="">
       <applyWhen>
          <and>
-            <or>
-	<hardwareMatches>^frdmkl03z48m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-adc-tpm-trigger" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -25,20 +23,21 @@ as the hardware trigger source for the ADC function"
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-adc-tpm-trigger" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-   		<copy source="usbdm_kds_path/demos/adc_hw_trigger/src/adc_hw_trigger.c" target="Sources/adc_hw_trigger.c" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/adc_hw_trigger.h" target="Sources/adc_hw_trigger.h" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/fsl_adc_irq.c"    target="Sources/fsl_adc_irq.c"    sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/tpm_trigger.c"    target="Sources/tpm_trigger.c"  sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/hardware_init.c"  target="board/hardware_init.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/main.c"           target="Sources/main.c"           sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/adc_hw_trigger.h" target="Sources/adc_hw_trigger.h" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/fsl_adc_irq.c"    target="Sources/fsl_adc_irq.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/tpm_trigger.c"    target="Sources/tpm_trigger.c"    sourcePathType="absolute" />
+      </projectActionList>
       <projectActionList>
          <!-- Only for devices with DAC -->
          <applyWhen>
@@ -51,7 +50,7 @@ as the hardware trigger source for the ADC function"
                </or>
             </and>
          </applyWhen>
-         <copy source="usbdm_kds_path/demos/adc_hw_trigger/src/dac_gen_wave.c"   target="Sources/dac_gen_wave.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/adc_hw_trigger/dac_gen_wave.c"   target="Sources/dac_gen_wave.c" sourcePathType="absolute" />
          <!-- C Defines -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>USE_DAC_OUT_AS_SOURCE</value>

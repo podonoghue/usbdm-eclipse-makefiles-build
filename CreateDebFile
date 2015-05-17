@@ -1,0 +1,195 @@
+#!/bin/bash
+
+# Version Information
+MAJOR=4
+MINOR=10
+MICRO=6
+NANO=240
+DEBIAN_VERSION=1
+VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
+
+SOURCE_DIRECTORY=.
+
+#======================================================
+# Create ARCH dependent DEB file
+#======================================================
+# $1 - BITNESS
+#
+makeDebFile() {
+
+   local BITNESS="$1"
+
+   # Where to find 32-bit libraries and binaries
+   USBDM_SOURCE_LIBDIR32=${SOURCE_DIRECTORY}/PackageFiles/lib/i386-linux-gnu
+   USBDM_SOURCE_BINDIR32=${SOURCE_DIRECTORY}/PackageFiles/bin/i386-linux-gnu
+   # Where to find 64-bit libraries and binaries
+   USBDM_SOURCE_LIBDIR64=${SOURCE_DIRECTORY}/PackageFiles/lib/x86_64-linux-gnu
+   USBDM_SOURCE_BINDIR64=${SOURCE_DIRECTORY}/PackageFiles/bin/x86_64-linux-gnu
+
+   if [[ (${BITNESS} == "32") ]]; then
+      # Where to construct the install tree
+      DUMMY_ROOT="../usbdm_${VERSION}-${DEBIAN_VERSION}-i386"
+   else
+      # Where to construct the install tree
+      DUMMY_ROOT="../usbdm_${VERSION}-${DEBIAN_VERSION}-amd64"
+   fi
+
+   USBDM_LIBDIR32="${DUMMY_ROOT}/usr/lib/i386-linux-gnu/usbdm"
+   USBDM_LIBDIR64="${DUMMY_ROOT}/usr/lib/x86_64-linux-gnu/usbdm"
+
+   if [[ (${BITNESS} == "32") ]]; then
+      # Where to copy libraries from
+      USBDM_SOURCE_LIBDIR=${USBDM_SOURCE_LIBDIR32}
+      # Where to copy executables from
+      USBDM_SOURCE_BINDIR=${USBDM_SOURCE_BINDIR32}
+      # Where to copy libraries to
+   #   USBDM_LIBDIR="${DUMMY_ROOT}/usr/lib"
+      USBDM_LIBDIR="${USBDM_LIBDIR32}"
+   else
+      # Where to copy libraries from
+      USBDM_SOURCE_LIBDIR=${USBDM_SOURCE_LIBDIR64}
+      # Where to copy executables from
+      USBDM_SOURCE_BINDIR=${USBDM_SOURCE_BINDIR64}
+      # Where to copy libraries to
+      USBDM_LIBDIR="${USBDM_LIBDIR64}"
+   fi
+
+   # Shared files
+   USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
+   # Shared document files
+   USBDM_SHARED_DOC_DIR="${DUMMY_ROOT}/usr/share/doc/usbdm"
+   # Binary files
+   USBDM_BINDIR="${DUMMY_ROOT}/usr/bin"
+   # Control files
+   USBDM_CONTROL_DIR="${DUMMY_ROOT}/DEBIAN"
+   # Icon files
+   PIXMAP_DIR="${DUMMY_ROOT}/usr/share/pixmaps"
+   # Where to put .desktop files
+   LINUX_APPLICATIONS_DIR="${DUMMY_ROOT}/usr/share/applications"
+   # Where to put Man page files
+   USBDM_MANUAL_DIR="${DUMMY_ROOT}/usr/share/man/man1"
+
+   if [[ ! -d ${SOURCE_DIRECTORY} ]]; then
+      echo Unable to locate Source directory "${SOURCE_DIRECTORY}"
+   fi
+
+   if [[ -e ${DUMMY_ROOT} ]]; then
+      echo rm -R ${DUMMY_ROOT}
+      rm -R ${DUMMY_ROOT}
+   fi
+
+   mkdir -pv ${PIXMAP_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/Hardware-Chip.png ${PIXMAP_DIR}
+
+   mkdir -pv ${LINUX_APPLICATIONS_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/*.desktop       ${LINUX_APPLICATIONS_DIR}
+   chmod  644 ${LINUX_APPLICATIONS_DIR}/*.desktop
+
+   mkdir -pv ${USBDM_SHARED_DOC_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/changelog.Debian.gz   ${USBDM_SHARED_DOC_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/copyright             ${USBDM_SHARED_DOC_DIR}
+
+   mkdir -pv ${USBDM_SHARED_DIR}
+   mkdir -pv ${USBDM_SHARED_DIR}/CDT_Plugins
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/CDT_Plugins/plugins"             ${USBDM_SHARED_DIR}/CDT_Plugins
+   mkdir -pv ${USBDM_SHARED_DIR}/CW_Plugins
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/CW_Plugins/plugins"              ${USBDM_SHARED_DIR}/CW_Plugins
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/WizardPatches"                   ${USBDM_SHARED_DIR}
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/DeviceData"                      ${USBDM_SHARED_DIR}
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/Stationery"                      ${USBDM_SHARED_DIR}
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/Examples"                        ${USBDM_SHARED_DIR}
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/FlashImages"                     ${USBDM_SHARED_DIR}
+   cp -p -r "${SOURCE_DIRECTORY}/PackageFiles/LaunchConfig"                    ${USBDM_SHARED_DIR}
+
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/nano.specs           ${USBDM_SHARED_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/*.xlkr               ${USBDM_SHARED_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/error.wav            ${USBDM_SHARED_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/TryProgrammer   ${USBDM_SHARED_DIR}	
+   chmod -f 755 ${USBDM_SHARED_DIR}/TryProgrammer
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/usbdm.rules     ${USBDM_SHARED_DIR}
+   cp -p "${SOURCE_DIRECTORY}/PackageFiles"/Scripts/*.tcl                      ${USBDM_SHARED_DIR}
+
+   mkdir -pv ${USBDM_LIBDIR}
+   cp -p -r "${USBDM_SOURCE_LIBDIR}"/*      ${USBDM_LIBDIR}
+   rm -f ${USBDM_LIBDIR}/*-debug*
+   #rm -f ${USBDM_LIBDIR}/*.so
+   strip ${USBDM_LIBDIR}/*
+   chmod 644  ${USBDM_LIBDIR}/*
+
+   if [[ (${BITNESS} == "64") && -e ${USBDM_SOURCE_LIBDIR32} ]]; then
+      # Include i386 version for Codewarrior
+      echo "Doing i386 libs"
+
+      I386_LIBS="libUsbdmJniWrapper.so libusbdm.so"
+
+      mkdir -pv ${USBDM_LIBDIR32}
+
+      for I386_LIB in ${I386_LIBS}; do
+         echo "Copying '${I386_LIB}'"
+         cp -pv "${USBDM_SOURCE_LIBDIR32}/${I386_LIB}"* ${USBDM_LIBDIR32}   
+      done
+      strip ${USBDM_LIBDIR32}/*
+      chmod 644  ${USBDM_LIBDIR32}/*
+   fi
+
+   mkdir -pv ${USBDM_BINDIR}
+   cp -p -r "${USBDM_SOURCE_BINDIR}"/*      ${USBDM_BINDIR}
+   rm -f ${USBDM_BINDIR}/*-debug*
+   rm -f ${USBDM_BINDIR}/*SocketServer*
+   rm -f ${USBDM_BINDIR}/*PipeServer*
+   rm -f ${USBDM_BINDIR}/CopyFlash
+   rm -f ${USBDM_BINDIR}/*TestImage
+   rm -f ${USBDM_BINDIR}/*Example
+   strip ${USBDM_BINDIR}/*
+   chmod 755  ${USBDM_BINDIR}/*
+
+   mkdir -pv ${USBDM_MANUAL_DIR}
+   #echo ${SOURCE_DIRECTORY}/Documentation/ManPages/*
+   for MANPAGE_FILE in ${SOURCE_DIRECTORY}/Documentation/ManPages/*; do   
+      cp -p ${MANPAGE_FILE} ${MANPAGE_FILE}.1
+      gzip --best -f ${MANPAGE_FILE}.1
+      mv ${MANPAGE_FILE}.1.gz ${USBDM_MANUAL_DIR}
+   done
+   chmod 644 ${USBDM_MANUAL_DIR}/* 
+
+   mkdir -pv ${USBDM_CONTROL_DIR}
+   for CONTROL_FILE in postinst prerm; do
+      cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/${CONTROL_FILE} ${USBDM_CONTROL_DIR}/${CONTROL_FILE}
+      chmod 755 ${USBDM_CONTROL_DIR}/${CONTROL_FILE} 
+   done
+
+   if [[ (${BITNESS} == "32") ]]; then
+      cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.i386         ${USBDM_CONTROL_DIR}/control
+   else
+      cp -p "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.amd64        ${USBDM_CONTROL_DIR}/control
+   fi
+   chmod 755 ${USBDM_CONTROL_DIR}/control 
+
+   find ${DUMMY_ROOT} -type d -exec chmod 755 {} \;
+   find ${USBDM_LIBDIR} -type f -executable -exec chmod 755 {} \; -exec strip {} \;
+   find ${USBDM_LIBDIR} -type f -name \*.so\* -exec chmod 644 {} \;
+   find ${DUMMY_ROOT} -type f ! -executable -exec chmod 644 {} \;
+
+   echo fakeroot dpkg-deb --build ${DUMMY_ROOT}
+   fakeroot dpkg-deb --build ${DUMMY_ROOT}
+
+   echo lintian ${DUMMY_ROOT}.deb   
+   lintian ${DUMMY_ROOT}.deb 
+}
+
+# Build for native ARCH
+echo "========================================="
+echo "Building `getconf LONG_BIT` version"
+echo "========================================="
+makeDebFile `getconf LONG_BIT`
+
+# Build for i386 on x86_64 platform
+#if [ `getconf LONG_BIT` != 32 ]; then
+#   echo "========================================="
+#   echo "Building 32 version on x86_64 platform"
+#   echo "========================================="
+#   makeDebFile 32
+#fi
+
+exit
+

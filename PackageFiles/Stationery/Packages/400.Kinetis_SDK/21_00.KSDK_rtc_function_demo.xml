@@ -6,16 +6,7 @@
    <projectActionList id="KSDK-rtc-function-demo" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-rtc-function-demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -36,15 +27,16 @@ Periperhal Driver. It supports these features:\n
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
-   		<applyWhen>
+      <projectActionList>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-rtc-function-demo" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-   		<copy source="usbdm_kds_path/demos/rtc_func/src/rtc_func.c" target="Sources/rtc_func.c" sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/hardware_init.c"  target="board/hardware_init.c"             sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/main.c"           target="Sources/main.c"                    sourcePathType="absolute" />
+      </projectActionList>
    </projectActionList>
 </root>

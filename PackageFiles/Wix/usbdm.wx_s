@@ -584,14 +584,14 @@
                Description='Add USBDM support to various versions of CodeWarrior software.'
                AllowAdvertise="no"
                Level='1'>
-            <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
-            <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
             <FeatureRef Id='F.CW_FOR_MCU_V10.3'/>
             <FeatureRef Id='F.CW_FOR_MCU_V10.4'/>
             <FeatureRef Id='F.CW_FOR_MCU_V10.5'/>
             <FeatureRef Id='F.CW_FOR_MCU_V10.6'/>
             <FeatureRef Id='F.CW_FOR_MICROCONTROLLERS_V6_3' />
             <FeatureRef Id='F.CWS12_X_V5_1' />
+            <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
+            <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
          </Feature>
          <FeatureRef Id='F.KINETIS_DESIGN_STUDIO' />
          <FeatureRef Id='F.ECLIPSE_JUNO_CDT' />

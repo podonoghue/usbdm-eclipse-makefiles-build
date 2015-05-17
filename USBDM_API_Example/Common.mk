@@ -36,7 +36,7 @@ ifeq ($(UNAME_S),Windows)
    TARGET_BINDIR   ?= ../PackageFiles/bin/i386-win-gnu
    TARGET_LIBDIR   ?= ../PackageFiles/bin/i386-win-gnu
    BUILDDIR_SUFFIX ?= .i386
-   VSUFFIX         ?= .4
+   VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
@@ -134,37 +134,37 @@ endif
 #===========================================================
 # System Library
 ifdef DEBUG
-   USBDM_SYSTEM_LIBS    := -lusbdm-system-debug.4
+   USBDM_SYSTEM_LIBS    := -lusbdm-system-debug$(VSUFFIX)
 else
-   USBDM_SYSTEM_LIBS    := -lusbdm-system.4
+   USBDM_SYSTEM_LIBS    := -lusbdm-system$(VSUFFIX)
 endif
 
 #===========================================================
 # Device Library
 ifdef DEBUG
-   USBDM_DEVICE_LIBS    := -lusbdm-device-database-debug.4
+   USBDM_DEVICE_LIBS    := -lusbdm-device-database-debug$(VSUFFIX)
 else
-   USBDM_DEVICE_LIBS    := -lusbdm-device-database.4
+   USBDM_DEVICE_LIBS    := -lusbdm-device-database$(VSUFFIX)
 endif
 
 #===========================================================
 # Programmer Library
 ifdef DEBUG
-   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08-debug.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z-debug.4
+   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z-debug$(VSUFFIX)
 else
-   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08.4
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z.4
+   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z$(VSUFFIX)
 endif
 
 #===========================================================
@@ -288,7 +288,7 @@ endif
 
 #=============================================================
 # Common USBDM DLLs in debug and non-debug versions as needed
-USBDM_WX_LIBS := -lusbdm-wx.4
+USBDM_WX_LIBS := -lusbdm-wx-plugin$(VSUFFIX)
 
 _LIB_USB_SHARED  := usb-1.0
 _LIB_USB_STATIC  := usb-static-1.0
@@ -296,25 +296,31 @@ _LIB_USB_STATIC  := usb-static-1.0
 ifeq ($(UNAME_S),Windows)
    LIB_USB = -l$(_LIB_USB_STATIC)
    ifdef DEBUG
-      USBDM_LIBS     := -lusbdm-debug.4 
-      USBDM_TCL_LIBS := -lusbdm-tcl-debug.4 
-      USBDM_DSC_LIBS := -lusbdm-dsc-debug.4 
+      USBDM_LIBS     := -lusbdm-debug$(VSUFFIX) 
+      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_DSC_LIBS := -lusbdm-dsc-debug$(VSUFFIX) 
    else
-      USBDM_LIBS     := -lusbdm.4 
-      USBDM_TCL_LIBS := -lusbdm-tcl.4 
-      USBDM_DSC_LIBS := -lusbdm-dsc.4 
+      USBDM_LIBS     := -lusbdm$(VSUFFIX) 
+      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
    LIB_USB = -l$(_LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
-      USBDM_TCL_LIBS := -lusbdm-tcl-debug 
+      USBDM_TCL_LIBS := -ldeleteMe
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
    else
       USBDM_LIBS     := -lusbdm
-      USBDM_TCL_LIBS := -lusbdm-tcl 
+      USBDM_TCL_LIBS := -ldeleteMe
       USBDM_DSC_LIBS := -lusbdm-dsc 
    endif
+endif
+
+ifdef DEBUG
+   FLASHIMAGE_LIBS     := -lusbdm-flash-image-debug$(VSUFFIX) 
+else
+   FLASHIMAGE_LIBS     := -lusbdm-flash-image$(VSUFFIX) 
 endif
 
 #===========================================================
@@ -370,14 +376,3 @@ endif
 #===========================================================
 # Look in shared Library dir first
 LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIRS)
-
-#===========================================================
-# Common Definitions for building Programmer, GDI & GDB
-GDI_DEFS        = -DTARGET=$(TARGET) -DGDI
-GDI_LEGACY_DEFS = -DTARGET=$(TARGET) -DGDI -DLEGACY
-
-ifeq ($(UNAME_S),Windows)
-# Windows version of Codewarrior packs structs
-GDI_DEFS        = -DPACK_STRUCTS=1 -DTARGET=$(TARGET) -DGDI
-endif
-

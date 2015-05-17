@@ -2812,8 +2812,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
    log.print("\tprogressCallBack = %p\n",                 progressCallBack);
    log.print("\tDevice = \'%s\'\n",                       parameters.getTargetName().c_str());
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   parameters.getClockTrimFreq(),
-                                                               parameters.getClockTrimNVAddress(),
-                                                               parameters.getClockAddress());
+                                                          parameters.getClockTrimNVAddress(),
+                                                          parameters.getClockAddress());
    log.print("\tRam[%4.4X...%4.4X]\n",                    parameters.getRamStart(), parameters.getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(parameters.getEraseOption()));
    log.print("\tSecurity=%s\n",                           getSecurityName(parameters.getSecurity()));
@@ -2938,8 +2938,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
    log.print("\tprogressCallBack = %p\n",                 progressCallBack);
    log.print("\tDevice = \'%s\'\n",                       parameters.getTargetName().c_str());
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   parameters.getClockTrimFreq(),
-                                                               parameters.getClockTrimNVAddress(),
-                                                               parameters.getClockAddress());
+                                                          parameters.getClockTrimNVAddress(),
+                                                          parameters.getClockAddress());
    log.print("\tRam[%4.4X...%4.4X]\n",                    parameters.getRamStart(), parameters.getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(parameters.getEraseOption()));
    log.print("\tSecurity=%s\n",                           getSecurityName(parameters.getSecurity()));

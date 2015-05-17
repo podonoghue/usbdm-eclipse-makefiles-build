@@ -7,13 +7,13 @@
    <projectActionList id="KSDK-operating-system-freeRTOS" root="" >
       <applyWhen>
          <and>
-            <or>
-               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
-            </or>
+            <not>
+               <deviceSubfamilyMatches>MKL02Z4</deviceSubfamilyMatches>
+            </not>
+            <not>
+               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
+            </not>
+            <variableRef idRef="kdsOptionsAvailable" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>

@@ -58,7 +58,7 @@ using namespace std;
  * Create the plugin instance
  */
 extern "C"
-FlashImage* USBDM_FLASHIMAGE_DECLSPEC createPluginInstance(TargetType_t targetType) {
+FlashImage* createPluginInstance(TargetType_t targetType) {
    return new FlashImageImp(targetType);
 }
 
@@ -196,10 +196,9 @@ EnumeratorImp::EnumeratorImp(FlashImageImp &memoryImage, uint32_t address) : mem
    LOGGING_Q;
 
    if (!isValid()) {
-      // address is not valid - advance to next valid address
+      // Address is not valid - advance to next valid address
+      // Fix it
       if (nextValid()) {
-         // Fix it
-         nextValid();
          log.print("Advanced to 0x%08X\n", this->address);
       }
       else {

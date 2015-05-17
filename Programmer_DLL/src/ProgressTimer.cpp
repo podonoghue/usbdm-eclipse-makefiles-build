@@ -14,6 +14,22 @@
 //! @param progressCallBack - Call back used to post messages
 //! @param maximum          - Maximum cumulative value for progress
 //!
+ProgressTimer::ProgressTimer()
+   : progressCallBack(0),
+     maximumBytes(100),
+     message(0),
+     lastBytesDone(0),
+     bytesDone(0)
+{
+   gettimeofday(&timeCreation, NULL);
+   timeStart = timeCreation;
+}
+
+//! Create timer
+//!
+//! @param progressCallBack - Call back used to post messages
+//! @param maximum          - Maximum cumulative value for progress
+//!
 ProgressTimer::ProgressTimer(CallBackT progressCallBack, unsigned maximum)
    : progressCallBack(progressCallBack),
      maximumBytes(maximum),

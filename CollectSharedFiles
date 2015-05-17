@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Where libs to link against are kept
+SHARED_LIB=Shared_V4/lib
+
+MAJOR=4
+MINOR=10
+
+LIB_SUFFIX=.so.${MAJOR}.${MINOR}
+
+if [[ ! -e ${SHARED_LIB} ]]; then
+   mkdir ${SHARED_LIB}
+fi
+
+# Collect DLLs that are produced as part of USBDM
+cp "wxPlugin_DLL/usbdm-wxPlugin/"*.so.*                  ${SHARED_LIB}
+cp "USBDM_DLL/usbdm/"*.so.*                              ${SHARED_LIB}
+cp "USBDM_DLL/usbdm-debug/"*.so.*                        ${SHARED_LIB}
+cp "USBDM_DSC_DLL/usbdm-dsc/"*.so.*                      ${SHARED_LIB}
+cp "USBDM_DSC_DLL/usbdm-dsc-debug/"*.so.*                ${SHARED_LIB}
+cp "Usbdm_TCL/usbdm-tcl/"*.so.*                          ${SHARED_LIB}
+cp "Usbdm_TCL/usbdm-tcl-debug/"*.so.*                    ${SHARED_LIB}
+
+SHARED_LIBS="libusbdm-wxPlugin libusbdm-wxStub libusbdm libusbdm-debug libusbdm-dsc libusbdm-dsc-debug libusbdm-tcl libusbdm-tcl-debug"
+for FILE in ${SHARED_LIBS}; do
+   if [[ -e Shared_V4/lib/${FILE}.so.${MAJOR}.${MINOR} ]]; then
+      if [[ ! -e ${SHARED_LIB}/${FILE}.so.${MAJOR} ]]; then
+         ln -s ${FILE}.so.${MAJOR}.${MINOR}    ${SHARED_LIB}/${FILE}.so.${MAJOR}
+      fi
+      if [[ ! -e ${SHARED_LIB}/${FILE}.so ]]; then
+         ln -s ${FILE}.so.${MAJOR}.${MINOR}    ${SHARED_LIB}/${FILE}.so
+      fi
+   fi
+done
+

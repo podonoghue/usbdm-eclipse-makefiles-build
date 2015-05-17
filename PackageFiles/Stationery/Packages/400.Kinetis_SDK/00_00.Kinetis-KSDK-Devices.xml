@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK - CPU name, also enable KDS options -->
+   <projectActionList id="Kinetis-KSDK-devices" >
+      <projectActionList><applyWhen><deviceNameIs>MKL02Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z8VFG4" />    </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL02Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z16VFG4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL02Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z32VFG4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL02Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z32VFM4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL03Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z8VFG4" />    </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL03Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z16VFG4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL03Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z32CAF4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL03Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z32VFK4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL04Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL04Z8VFK4" />    </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL04Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL04Z16VFK4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL04Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL04Z32VFK4" />   </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL05Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z8VFK4" />    </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL05Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z16VFK4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL05Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z32VFK4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL05Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z32VFK4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL25Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z32VFM4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL25Z64M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z64VFM4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL25Z128M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z128VLK4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL25Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z128VLK4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL26Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL26Z32VFM4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL26Z64M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL26Z64VFM4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL26Z128M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL26Z128CAL4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL26Z256M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL26Z256VLH4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL26Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL26Z128VLH4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL27Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL27Z32VDA4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL27Z64M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL27Z64VDA4" />   </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL27Z128M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL27Z128VFM4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL27Z256M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL27Z256VFM4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL27Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL27Z256VLH4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL43Z128M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL43Z128VLH4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL43Z256M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL43Z256VLH4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL43Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL43Z256VLH4" />  </projectActionList>
+                                                                                         
+      <projectActionList><applyWhen><deviceNameIs>MKL46Z128M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL46Z128VLH4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MKL46Z256M4</deviceNameIs>   </applyWhen><constant id="kds.cpuname" value="CPU_MKL46Z256VLL4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL46Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL46Z256VLL4" />  </projectActionList>
+
+      <projectActionList><applyWhen><deviceNameIs>MK22FN512M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN512VLH12" /> </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MK22FN1M0M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK24FN1M0VDC12" /> </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_K22F</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN512VLH12" />  </projectActionList>
+
+      <projectActionList><applyWhen><deviceNameIs>MK64FN1M0M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK64FN1M0VDC12" /> </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_K64F</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MK64FN1M0VDC12" />  </projectActionList>
+
+   </projectActionList>
+</root>

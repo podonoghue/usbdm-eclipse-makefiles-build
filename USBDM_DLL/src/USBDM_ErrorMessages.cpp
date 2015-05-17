@@ -153,7 +153,7 @@ static const char *fileLoaderErrorMessages[] = {
 //!
 //! @return pointer to static string describing the error
 //!
-DLL_LOCAL
+CPP_DLL_LOCAL
 const char *getErrorName(unsigned int error) {
    static const char unknownErrorMessage[] = "Unknown Error";
    const char *errorName = 0;

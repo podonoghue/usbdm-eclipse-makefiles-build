@@ -309,15 +309,19 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
    appSettings->load();
 
    // Display USBDM dialogue to get settings
-   GdiDialoguePluginPtr pp = GdiDialoguePluginFactory::createPlugin();
-   rc = pp->execute(bdmInterface, appSettings);
+   GdiDialoguePluginPtr dialogue = GdiDialoguePluginFactory::createPlugin();
+   bool forceDisplay = false;
 
-   if (rc != BDM_RC_OK) {
-      bdmInterface->closeBdm();
-      log.print("dialogue.execute() failed, reason = %s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   appSettings->save();
+   do {
+      rc = dialogue->execute(bdmInterface, appSettings, forceDisplay);
+      if (rc != BDM_RC_OK) {
+         return rc;
+      }
+      forceDisplay = true;
+      appSettings->save();
+      rc = bdmInterface->initBdm();
+   } while (rc != BDM_RC_OK);
+
 #else
    // Load the settings from the Eclipse environment
    rc = loadSettings(bdmInterface);
@@ -326,23 +330,13 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
       log.print("loadSettings() failed, reason = %s\n", bdmInterface->getErrorString(rc));
       return rc;
    }
+   rc = bdmInterface->initBdm();
 #endif
 
-   bdmOptions = bdmInterface->getBdmOptions();
+   initialConnectOptions = bdmInterface->getInitialConnectRetryMode();
+   softConnectOptions    = bdmInterface->getSoftConnectRetryMode();
+   bdmOptions            = bdmInterface->getBdmOptions();
 
-   // Cycle Vdd on connect is done by GDI instead of BDM H/W
-   if ((bdmOptions.targetVdd != BDM_TARGET_VDD_OFF) && bdmOptions.cycleVddOnConnect) {
-      initialConnectOptions = (BdmInterface::RetryMode)(BdmInterface::retryWithInit|BdmInterface::retryAlways|BdmInterface::retryByReset|BdmInterface::retryByPower|BdmInterface::retryDelayedCheck);
-      softConnectOptions    = (BdmInterface::RetryMode)(BdmInterface::retryAlways|BdmInterface::retryByPower);
-   }
-   else {
-      initialConnectOptions = (BdmInterface::RetryMode)(BdmInterface::retryWithInit|BdmInterface::retryAlways|BdmInterface::retryByReset|BdmInterface::retryDelayedCheck);
-      softConnectOptions    = (BdmInterface::RetryMode)(BdmInterface::retryAlways);
-   }
-   // Tell BDM not to do it
-   bdmOptions.cycleVddOnConnect = false;
-
-   rc = bdmInterface->initBdm();
    if (rc != BDM_RC_OK) {
       bdmInterface->closeBdm();
       log.print("initBdm() failed, reason = %s\n", bdmInterface->getErrorString(rc));
@@ -464,7 +458,7 @@ DiReturnT DiGdiClose ( DiBoolT fClose ) {
 #endif
 
 #if defined(LEGACY) && !defined(TEST_APP)
-   UsbdmSystem::Log::closeLogFile();
+//   UsbdmSystem::Log::closeLogFile();
 #endif
 
    return DI_OK;
@@ -1109,6 +1103,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
    MemorySpace_t   memorySpace;                     // Memory space & size
    int             organization;                    // For display
    uint32_t        endAddress;                      // End address
+   uint32_t        numBytes;
 
    CHECK_ERROR_STATE();
 
@@ -1117,17 +1112,49 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
 	   case 1 :
          memorySpace  = MS_Byte;
          organization = UsbdmSystem::BYTE_DISPLAY|UsbdmSystem::BYTE_ADDRESS;
-         endAddress   = address + dnBufferItems - 1;
+         numBytes     = dnBufferItems;
+         endAddress   = address + numBytes - 1;
          break;
       case 2 :
          memorySpace  = MS_Word;
          organization = UsbdmSystem::WORD_DISPLAY|UsbdmSystem::BYTE_ADDRESS;
-         endAddress   = address + 2*dnBufferItems - 1;
+         numBytes     = 2*dnBufferItems;
+         endAddress   = address + numBytes - 1;
          break;
       case 4 :
          memorySpace  = MS_Long;
          organization = UsbdmSystem::LONG_DISPLAY|UsbdmSystem::BYTE_ADDRESS;
-         endAddress   = address + 4*dnBufferItems - 1;
+         numBytes     = 4*dnBufferItems;
+         endAddress   = address + numBytes - 1;
+         break;
+      case 0x13 : // DSC (cw-e) (byte address, elements=1 bytes)
+         memorySpace  = MS_XByte;
+         organization = UsbdmSystem::WORD_ADDRESS|UsbdmSystem::BYTE_DISPLAY;
+         numBytes     = dnBufferItems;
+         endAddress   = address + numBytes - 1;
+         break;
+      case 0x10 : // DSC (cw)
+      case 0x14 : // DSC (cw-e, word address, elements=2 bytes)
+         memorySpace  = MS_XWord;
+         organization = UsbdmSystem::WORD_ADDRESS|UsbdmSystem::WORD_DISPLAY;
+         address     *= 2; // Change to byte address from DSC word address
+         numBytes     = 2*dnBufferItems;
+         endAddress   = address + numBytes - 1;
+         break;
+      case 0x15 : // DSC
+         memorySpace  = MS_XLong;
+         organization = UsbdmSystem::WORD_ADDRESS|UsbdmSystem::LONG_DISPLAY;
+         address     *= 2; // Change to byte address from DSC word address
+         numBytes     = 4*dnBufferItems;
+         endAddress   = address + numBytes - 1;
+         break;
+      case 0x11 : // DSC (cw-e, word address, elements=2bytes)
+      case 0x17 :
+         memorySpace  = MS_PWord;
+         organization = UsbdmSystem::WORD_ADDRESS|UsbdmSystem::WORD_DISPLAY;
+         address     *= 2; // Change to byte address from DSC word address
+         numBytes     = 2*dnBufferItems;
+         endAddress   = address + numBytes - 1;
          break;
       default :
          log.print("(daTarget.dmsMemSpace=0x%X, address=0x%4.4X, dnBufferItems=%d)\n"
@@ -1144,6 +1171,12 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
          address,
          endAddress,
          ARM_GetMemoryName(address));
+#elif TARGET == MC56F80xx
+   log.print("(daTarget.dmsMemSpace=%2X, dnBufferItems=%3d, [w:0x%06X...w:0x%06X])\n",
+         daTarget.dmsMemSpace,
+         dnBufferItems,
+         address/2,
+         endAddress/2);
 #else
    log.print("(daTarget.dmsMemSpace=%2X, dnBufferItems=%3d, [0x%06X...0x%06X])\n",
          daTarget.dmsMemSpace,
@@ -1195,14 +1228,14 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
             case MS_Word :
                memoryReadWriteBuffer[sub++] = value[2];
                memoryReadWriteBuffer[sub++] = value[3];
-               address += 2; // Advance address
+               address += 2; // Advance word address
                break;
             case MS_Long :
                memoryReadWriteBuffer[sub++] = value[0];
                memoryReadWriteBuffer[sub++] = value[1];
                memoryReadWriteBuffer[sub++] = value[2];
                memoryReadWriteBuffer[sub++] = value[3];
-               address += 4; // Advance address
+               address += 4; // Advance long address
                break;
          }
       }
@@ -1232,14 +1265,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
       if (!writeDone) {
          // Write data directly to memory
          USBDM_ErrorCode rc = BDM_RC_OK;
-#if TARGET == ARM && 0
-         // ARM is special case - ignore write size and use longs!
-         rc = ARM_WriteMemory(memorySpace, sub, writeAddress, memoryReadWriteBuffer);
-#elif TARGET == MC56F80xx
          rc = bdmInterface->writeMemory(memorySpace, sub, writeAddress, memoryReadWriteBuffer);
-#else
-         rc = bdmInterface->writeMemory(memorySpace, sub, writeAddress, memoryReadWriteBuffer);
-#endif
          if (rc != BDM_RC_OK) {
             return setErrorState(DI_ERR_NONFATAL, rc);
          }
@@ -1261,7 +1287,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
 //!     BDM_RC_OK    => OK \n
 //!     other        => Error code - see \ref USBDM_ErrorCode
 //!
-static USBDM_ErrorCode bdmInterface->readMemory(MemorySpace_t memorySpace, int byteCount, int address, uint8_t *buffer) {
+static USBDM_ErrorCode ARM_ReadMemory(MemorySpace_t memorySpace, int byteCount, int address, uint8_t *buffer) {
    USBDM_ErrorCode rc = BDM_RC_OK;
    int index = 0;
    if ((address&0x01) != 0) {
@@ -1323,23 +1349,58 @@ DiReturnT DiMemoryRead ( DiAddrT       daTarget,
    uint32_t        address      = (U32c)daTarget;   // Load address
    MemorySpace_t   memorySpace;                     // Memory space & size
    uint32_t        endAddress;                      // End address
+   uint32_t        numBytes;                        // Number of bytes to transfer
 
    switch(daTarget.dmsMemSpace) {
       case 0 : // Treat 0 as byte
-      case 1 : // byte
+      case 1 : // Byte
          memorySpace  = MS_Byte;
 //         organization = BYTE_DISPLAY|BYTE_ADDRESS;
-         endAddress = address + 1*dnBufferItems - 1;
+         numBytes   = dnBufferItems;
+         endAddress = address + numBytes - 1;
          break;
-      case 2 : // word
+      case 2 : // Word
          memorySpace  = MS_Word;
 //         organization = WORD_DISPLAY|BYTE_ADDRESS;
-         endAddress = address + 2*dnBufferItems - 1;
+         numBytes   = 2*dnBufferItems;
+         endAddress = address + numBytes - 1;
          break;
       case 4 : // Long
          memorySpace  = MS_Long;
 //         organization = LONG_DISPLAY|BYTE_ADDRESS;
-         endAddress = address + 4*dnBufferItems - 1;
+         numBytes   = 4*dnBufferItems;
+         endAddress = address + numBytes - 1;
+         break;
+      case 0x13 :  // DSC Byte (cw-e, word address, elements=2bytes)
+	     // Treat as Word because bytes are written in pairs
+         memorySpace  = MS_XWord;
+//         organization = BYTE_ADDRESS|BYTE_DISPLAY;
+         address   *= 2; // Change to byte address from DSC word address
+         numBytes   = 2*dnBufferItems;
+         endAddress = address + numBytes - 1;
+         break;
+      case 0x10 :  // DSC (cw)
+      case 0x14 :  // DSC (cw-e, word address, elements=2bytes)
+         memorySpace  = MS_XWord;
+//         organization = WORD_ADDRESS|WORD_DISPLAY;
+         address   *= 2; // Change to byte address from DSC word address
+         numBytes   = 2*dnBufferItems;
+         endAddress = address + numBytes - 1;
+         break;
+      case 0x15 :
+         memorySpace  = MS_XLong;
+//         organization = WORD_ADDRESS|LONG_DISPLAY;
+         address   *= 2; // Change to byte address from DSC word address
+         numBytes   = 4*dnBufferItems;
+         endAddress = address + numBytes - 1;
+         break;
+      case 0x11 :  // DSC (cw-e, word address, elements=2bytes)
+      case 0x17 :
+         memorySpace  = MS_PWord;
+//         organization = WORD_ADDRESS|WORD_DISPLAY;
+         address   *= 2; // Change to byte address from DSC word address
+         numBytes   = 2*dnBufferItems;
+         endAddress = address + numBytes - 1;
          break;
       default :
          log.print("(daTarget.dmsMemSpace=0x%X, address=0x%4.4X, dnBufferItems=%d)\n"
@@ -1357,6 +1418,12 @@ DiReturnT DiMemoryRead ( DiAddrT       daTarget,
          endAddress,
          getMemSpaceName(memorySpace),
          ARM_GetMemoryName(address));
+#elif TARGET == MC56F80xx
+   log.print("(daTarget.dmsMemSpace=%X, dnBufferItems=%d, [w:0x%06X...w:0x%06X])\n",
+         daTarget.dmsMemSpace,
+         dnBufferItems,
+         address/2,
+         endAddress/2);
 #else
    log.print("(daTarget.dmsMemSpace=%X, dnBufferItems=%d, [0x%06X...0x%06X])\n",
          daTarget.dmsMemSpace,
@@ -1368,7 +1435,7 @@ DiReturnT DiMemoryRead ( DiAddrT       daTarget,
 
    unsigned offset = 0;
    while (dnBufferItems>0) {
-      unsigned blockSize = dnBufferItems*(memorySpace&MS_SIZE);
+      uint32_t blockSize = numBytes;
       if (blockSize > sizeof(memoryReadWriteBuffer)) {
          blockSize = sizeof(memoryReadWriteBuffer);
       }
@@ -1406,7 +1473,9 @@ DiReturnT DiMemoryRead ( DiAddrT       daTarget,
          pdmvBuffer[offset++] = (U32c)((v1<<24)+(v2<<16)+(v3<<8)+v4);
          dnBufferItems--;
       }
+      numBytes -= blockSize;
    }
+   assert(numBytes == 0);
    return setErrorState(DI_OK);
 }
 

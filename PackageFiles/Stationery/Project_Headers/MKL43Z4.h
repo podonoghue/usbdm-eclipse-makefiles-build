@@ -2,10 +2,10 @@
  * @file     MKL43Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL43Z4.
- *           Equivalent: MKL43Z256M4, MKL43Z128M4, FRDM-KL43Z
+ *           Equivalent: MKL43Z256M4, MKL43Z128M4, FRDM_KL43Z
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 
@@ -2094,7 +2094,7 @@ typedef struct {                                /*!<       LPUART0 Structure    
 #define LPUART1_BASE_PTR               (LPUART1)
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_LITE)                  ================ */
+/* ================           MCG (file:MCG_LITE_0)                ================ */
 /* ================================================================================ */
 
 /**
@@ -3951,7 +3951,7 @@ typedef struct {                                /*!<       UART2 Structure      
 #define UART2_BASE_PTR                 (UART2)
 
 /* ================================================================================ */
-/* ================           USB0 (file:USB0_MK_MKL)              ================ */
+/* ================           USB0 (file:USB0_CLK_RECOVER_1)       ================ */
 /* ================================================================================ */
 
 /**
@@ -4015,6 +4015,12 @@ typedef struct {                                /*!<       USB0 Structure       
    __IO uint8_t   USBTRC0;                      /*!< 010C: USB Transceiver Control Register 0                           */
    __I  uint8_t   RESERVED25[7];                /*!< 010D:                                                              */
    __IO uint8_t   USBFRMADJUST;                 /*!< 0114: Frame Adjust Register                                        */
+   __I  uint8_t   RESERVED26[43];               /*!< 0115:                                                              */
+   __IO uint8_t   CLK_RECOVER_CTRL;             /*!< 0140: USB Clock recovery control                                   */
+   __I  uint8_t   RESERVED27[3];                /*!< 0141:                                                              */
+   __IO uint8_t   CLK_RECOVER_IRC_EN;           /*!< 0144: IRC48M oscillator enable register                            */
+   __I  uint8_t   RESERVED28[23];               /*!< 0145:                                                              */
+   __IO uint8_t   CLK_RECOVER_INT_STATUS;       /*!< 015C: Clock recovery separated interrupt status                    */
 } USB0_Type;
 
 
@@ -4080,12 +4086,6 @@ typedef struct {                                /*!<       USB0 Structure       
 #define USB_OTGSTAT_ID_MASK                      (0x01UL << USB_OTGSTAT_ID_SHIFT)                    /*!< USB0_OTGSTAT: ID Mask                   */
 #define USB_OTGSTAT_ID_SHIFT                     7                                                   /*!< USB0_OTGSTAT: ID Position               */
 /* ------- OTGCTL Bit Fields                        ------ */
-#define USB_OTGCTL_OTGEN_MASK                    (0x01UL << USB_OTGCTL_OTGEN_SHIFT)                  /*!< USB0_OTGCTL: OTGEN Mask                 */
-#define USB_OTGCTL_OTGEN_SHIFT                   2                                                   /*!< USB0_OTGCTL: OTGEN Position             */
-#define USB_OTGCTL_DMLOW_MASK                    (0x01UL << USB_OTGCTL_DMLOW_SHIFT)                  /*!< USB0_OTGCTL: DMLOW Mask                 */
-#define USB_OTGCTL_DMLOW_SHIFT                   4                                                   /*!< USB0_OTGCTL: DMLOW Position             */
-#define USB_OTGCTL_DPLOW_MASK                    (0x01UL << USB_OTGCTL_DPLOW_SHIFT)                  /*!< USB0_OTGCTL: DPLOW Mask                 */
-#define USB_OTGCTL_DPLOW_SHIFT                   5                                                   /*!< USB0_OTGCTL: DPLOW Position             */
 #define USB_OTGCTL_DPHIGH_MASK                   (0x01UL << USB_OTGCTL_DPHIGH_SHIFT)                 /*!< USB0_OTGCTL: DPHIGH Mask                */
 #define USB_OTGCTL_DPHIGH_SHIFT                  7                                                   /*!< USB0_OTGCTL: DPHIGH Position            */
 /* ------- ISTAT Bit Fields                         ------ */
@@ -4249,6 +4249,8 @@ typedef struct {                                /*!<       USB0 Structure       
 #define USB_USBTRC0_USB_RESUME_INT_SHIFT         0                                                   /*!< USB0_USBTRC0: USB_RESUME_INT Position   */
 #define USB_USBTRC0_SYNC_DET_MASK                (0x01UL << USB_USBTRC0_SYNC_DET_SHIFT)              /*!< USB0_USBTRC0: SYNC_DET Mask             */
 #define USB_USBTRC0_SYNC_DET_SHIFT               1                                                   /*!< USB0_USBTRC0: SYNC_DET Position         */
+#define USB_USBTRC0_USB_CLK_RECOVERY_INT_MASK    (0x01UL << USB_USBTRC0_USB_CLK_RECOVERY_INT_SHIFT)  /*!< USB0_USBTRC0: USB_CLK_RECOVERY_INT Mask */
+#define USB_USBTRC0_USB_CLK_RECOVERY_INT_SHIFT   2                                                   /*!< USB0_USBTRC0: USB_CLK_RECOVERY_INT Position*/
 #define USB_USBTRC0_USBRESMEN_MASK               (0x01UL << USB_USBTRC0_USBRESMEN_SHIFT)             /*!< USB0_USBTRC0: USBRESMEN Mask            */
 #define USB_USBTRC0_USBRESMEN_SHIFT              5                                                   /*!< USB0_USBTRC0: USBRESMEN Position        */
 #define USB_USBTRC0_USBRESET_MASK                (0x01UL << USB_USBTRC0_USBRESET_SHIFT)              /*!< USB0_USBTRC0: USBRESET Mask             */
@@ -4257,6 +4259,21 @@ typedef struct {                                /*!<       USB0 Structure       
 #define USB_USBFRMADJUST_ADJ_MASK                (0xFFUL << USB_USBFRMADJUST_ADJ_SHIFT)              /*!< USB0_USBFRMADJUST: ADJ Mask             */
 #define USB_USBFRMADJUST_ADJ_SHIFT               0                                                   /*!< USB0_USBFRMADJUST: ADJ Position         */
 #define USB_USBFRMADJUST_ADJ(x)                  (((uint8_t)(((uint8_t)(x))<<USB_USBFRMADJUST_ADJ_SHIFT))&USB_USBFRMADJUST_ADJ_MASK) /*!< USB0_USBFRMADJUST                       */
+/* ------- CLK_RECOVER_CTRL Bit Fields              ------ */
+#define USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN_MASK (0x01UL << USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN_SHIFT) /*!< USB0_CLK_RECOVER_CTRL: RESTART_IFRTRIM_EN Mask*/
+#define USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN_SHIFT 5                                              /*!< USB0_CLK_RECOVER_CTRL: RESTART_IFRTRIM_EN Position*/
+#define USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN_MASK (0x01UL << USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN_SHIFT) /*!< USB0_CLK_RECOVER_CTRL: RESET_RESUME_ROUGH_EN Mask*/
+#define USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN_SHIFT 6                                           /*!< USB0_CLK_RECOVER_CTRL: RESET_RESUME_ROUGH_EN Position*/
+#define USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN_MASK (0x01UL << USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN_SHIFT) /*!< USB0_CLK_RECOVER_CTRL: CLOCK_RECOVER_EN Mask*/
+#define USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN_SHIFT 7                                                /*!< USB0_CLK_RECOVER_CTRL: CLOCK_RECOVER_EN Position*/
+/* ------- CLK_RECOVER_IRC_EN Bit Fields            ------ */
+#define USB_CLK_RECOVER_IRC_EN_REG_EN_MASK       (0x01UL << USB_CLK_RECOVER_IRC_EN_REG_EN_SHIFT)     /*!< USB0_CLK_RECOVER_IRC_EN: REG_EN Mask    */
+#define USB_CLK_RECOVER_IRC_EN_REG_EN_SHIFT      0                                                   /*!< USB0_CLK_RECOVER_IRC_EN: REG_EN Position*/
+#define USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK       (0x01UL << USB_CLK_RECOVER_IRC_EN_IRC_EN_SHIFT)     /*!< USB0_CLK_RECOVER_IRC_EN: IRC_EN Mask    */
+#define USB_CLK_RECOVER_IRC_EN_IRC_EN_SHIFT      1                                                   /*!< USB0_CLK_RECOVER_IRC_EN: IRC_EN Position*/
+/* ------- CLK_RECOVER_INT_STATUS Bit Fields        ------ */
+#define USB_CLK_RECOVER_INT_STATUS_OVF_ERROR_MASK (0x01UL << USB_CLK_RECOVER_INT_STATUS_OVF_ERROR_SHIFT) /*!< USB0_CLK_RECOVER_INT_STATUS: OVF_ERROR Mask*/
+#define USB_CLK_RECOVER_INT_STATUS_OVF_ERROR_SHIFT 4                                                 /*!< USB0_CLK_RECOVER_INT_STATUS: OVF_ERROR Position*/
 
 /* USB0 - Peripheral instance base addresses */
 #define USB0_BasePtr                   0x40072000UL

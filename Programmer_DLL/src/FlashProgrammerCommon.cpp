@@ -40,7 +40,10 @@
 #include "Utils.h"
 #include "Names.h"
 
-FlashProgrammerCommon::FlashProgrammerCommon() {
+FlashProgrammerCommon::FlashProgrammerCommon() :
+   flashReady(false),
+   progressTimer(new ProgressTimer()) {
+
    LOGGING_E;
    flashReady = false;
 }

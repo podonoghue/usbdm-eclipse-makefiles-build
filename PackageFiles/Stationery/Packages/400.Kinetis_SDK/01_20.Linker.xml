@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="KSDK-linker-parameters">
+      <projectActionList id="KSDK-linker-parameters-os-bm">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+         </applyWhen>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(bmStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(bmHeapSize)&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(bmStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(bmHeapSize)&quot;</value>
+         </projectOption>
+      </projectActionList>
+      
+      <projectActionList id="KSDK-linker-parameters-freertos-bm">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+         </applyWhen>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(freertosStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(freertosHeapSize)&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(freertosStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(freertosHeapSize)&quot;</value>
+         </projectOption>
+      </projectActionList>
+      
+      <projectActionList id="KSDK-linker-parameters-os-mqx">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+         </applyWhen>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(mqxStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(mqxHeapSize)&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(mqxStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(mqxHeapSize)&quot;</value>
+         </projectOption>
+      </projectActionList>
+      
+      <projectActionList id="KSDK-linker-parameters-os-ucosii">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+         </applyWhen>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(ucosiiStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(ucosiiHeapSize)&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(ucosiiStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(ucosiiHeapSize)&quot;</value>
+         </projectOption>
+      </projectActionList>
+      
+      <projectActionList id="KSDK-linker-parameters-os-ucosiii">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+         </applyWhen>
+         <!-- C Link options -->
+         <projectOption id="gnu.c.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(ucosiiiStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(ucosiiiHeapSize)&quot;</value>
+         </projectOption>
+         <!-- C++ Link options -->
+         <projectOption id="gnu.cpp.link.option.other">
+            <value>&quot;--defsym=__stack_size__=$(ucosiiiStackSize)&quot;</value>
+            <value>&quot;--defsym=__heap_size__=$(ucosiiiHeapSize)&quot;</value>
+         </projectOption>
+      </projectActionList>
+   
+   </projectActionList>
+</root>

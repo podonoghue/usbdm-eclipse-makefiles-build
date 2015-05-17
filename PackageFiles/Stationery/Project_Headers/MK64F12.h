@@ -2,10 +2,10 @@
  * @file     MK64F12.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK64F12.
- *           Equivalent: MK64FX512M12, MK64FN1M0M12, FRDM-K64F
+ *           Equivalent: FRDM_K64F, MK64FX512M12, MK64FN1M0M12, TWR_K64F120M
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 
@@ -8193,7 +8193,7 @@ typedef struct {                                /*!<       UART1 Structure      
 #define UART5_BASE_PTR                 (UART5)
 
 /* ================================================================================ */
-/* ================           USB0 (file:USB0_CLK_RECOVER)         ================ */
+/* ================           USB0 (file:USB0_CLK_RECOVER_0)       ================ */
 /* ================================================================================ */
 
 /**

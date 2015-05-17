@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <!-- Freescale group-ksdk-demoes -->
+   <projectActionList id="KSDK-bubble-level" root="">
+      <applyWhen>
+         <and>
+            <variableRef idRef="demo.KSDK-bubble-level" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.KSDK-bubble-level" 
+            name="Bubble Level" 
+            description=
+"The bubble level application demonstrates basic usage of the on-board accelerometer to implement a\n
+bubble level. A bubble level utilizes two axes to visually show deviation from a level plane (0 degrees)\n
+on a given access. \n
+This demo uses the FTM to modulate the duty cycle of two onboard LEDs to gradually increase LED intensity\n
+as the board deviates from a level state.\n
+\n
+Optionally, if you would like to observe the raw accelerometer X-Y data, you can connect to the board's virtual COM port."
+            radioGroup="group-ksdk-demo" >
+         <enableWhen>
+            <and>
+               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <!--  Common files -->
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.KSDK-bubble-level" />
+            </and>
+         </applyWhen>
+         <deleteResource target="Sources/main.c" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/hardware_init.c"        target="board/hardware_init.c"         sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/main.c"                 target="Sources/main.c"                sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/fsl_fxos8700_driver.c"  target="Sources/fsl_fxos8700_driver.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/fsl_fxos8700_driver.h"  target="Sources/fsl_fxos8700_driver.h" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/fsl_i2c_irq.c"          target="Sources/fsl_adc_irq.c"         sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/bubble_level_ftm/fxos_def.h"             target="Sources/fxos_def.h"            sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

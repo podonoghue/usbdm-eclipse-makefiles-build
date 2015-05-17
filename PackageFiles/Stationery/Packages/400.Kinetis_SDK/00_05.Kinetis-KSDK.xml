@@ -6,20 +6,25 @@
    <projectActionList id="Kinetis-KSDK" root="usbdm_resource_path/Stationery/ARM/">
       <applyWhen>
          <and>
-            <or>
-               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
-               
-               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK24F25612</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
-
-            </or>
-            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+            <variableRef idRef="kds.cpuname" condition="isDefined" />
+            <variableRef idRef="outputType"  condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
+      
+      <!-- This constant enable KDS options -->
+      <constant id="kdsOptionsAvailable" value="true" />
+      
+      <projectActionList>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>$(kds.cpuname)</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>$(kds.cpuname)</value>
+         </projectOption>
+      </projectActionList>
+
       <variable id="projectOptionValue.Kinetis-SDK-enable" 
          name="Kinetis Software Development Kit (KSDK)"
          description="Adds the Kinetis SDK base files to the project" 
@@ -47,7 +52,7 @@
             <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
-            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/devices&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
@@ -57,7 +62,7 @@
             <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
-            <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+            <value>&quot;${usbdm_kds_path}/platform/devices&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
@@ -66,21 +71,29 @@
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
             <value>KDS</value>
             <value>NDEBUG</value>
+            <value>_DEBUG=0</value>
+            <value>BOARD_DEBUG_UART_BAUD=115200</value>
          </projectOption>
          <!-- C++ Defines -->
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
             <value>KDS</value>
             <value>NDEBUG</value>
+            <value>_DEBUG=0</value>
+            <value>BOARD_DEBUG_UART_BAUD=115200</value>
          </projectOption>
          <!-- C Defines -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="debug">
             <value>KDS</value>
             <value>DEBUG</value>
+            <value>_DEBUG=1</value>
+            <value>BOARD_DEBUG_UART_BAUD=115200</value>
          </projectOption>
          <!-- C++ Defines -->
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
             <value>KDS</value>
             <value>DEBUG</value>
+            <value>_DEBUG=1</value>
+            <value>BOARD_DEBUG_UART_BAUD=115200</value>
          </projectOption>
          <!-- Turn off Extra warnings -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.warnings.extrawarn">
@@ -93,8 +106,11 @@
          <!-- Remove unused Linker -->
          <!-- deleteResource target="Project_Settings/Linker_Files" / -->
          <createFolder type="" target="doc" />
-         <copy source="usbdm_kds_path/doc/Kinetis SDK API Reference Manual.html"            target="doc/Kinetis SDK API Reference Manual.html"            type="link" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/doc/Kinetis SDK Demo Applications User's Guide.html"  target="doc/Kinetis SDK Demo Applications User's Guide.html"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_API_Reference_Manual.html"                             target="doc/Kinetis SDK API Reference Manual.html"                                  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_Demo_Applications_User_s_Guide.html"                   target="doc/Kinetis SDK Demo Applications User's Guide.html"                        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/usb/Integration of the USB Stack and Kinetis SDK.pdf"                      target="doc/Integration of the USB Stack and Kinetis SDK.pdf"                       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"  target="doc/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"        target="doc/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"         type="link" sourcePathType="absolute" />
          <createFolder type="" target="utilities" />
          <copy source="usbdm_kds_path/platform/utilities/src/fsl_debug_console.c"  target="utilities/fsl_debug_console.c"  type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/utilities/inc/fsl_debug_console.h"  target="utilities/fsl_debug_console.h"  type="link" sourcePathType="absolute" />

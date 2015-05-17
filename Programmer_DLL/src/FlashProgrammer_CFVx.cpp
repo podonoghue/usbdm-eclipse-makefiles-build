@@ -253,7 +253,6 @@ inline uint32_t getData16Target(uint8_t *data) {
 //=======================================================================
 //
 FlashProgrammer_CFVx::FlashProgrammer_CFVx() :
-      flashReady(false),
       initTargetDone(false),
       currentFlashOperation(OpNone),
       currentFlashAlignment(0),
@@ -704,24 +703,26 @@ USBDM_ErrorCode FlashProgrammer_CFVx::initialiseTargetFlash() {
 //!
 USBDM_ErrorCode FlashProgrammer_CFVx::massEraseTarget(void) {
    LOGGING;
+   USBDM_ErrorCode rc = BDM_RC_OK;
 
    if (progressTimer != NULL) {
       progressTimer->restart("Mass Erasing Target");
    }
-   USBDM_ErrorCode rc;
-#if (TARGET != CFVx)
-   // Don't do on CFVx as script has to change mode anyway
-   rc = initialiseTarget();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
-   // Do Mass erase using TCL script
-   rc = runTCLCommand("massEraseTarget");
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-// Don't reset device as it may only be temporarily unsecured!
+   do {
+      // Temporarily switch to JTAG mode
+      bdmInterface->getBdmOptions().targetType = T_JTAG;
+      rc = bdmInterface->initBdm();
+      if(rc != BDM_RC_OK) {
+         continue;
+      }
+      // Do Mass erase using TCL script
+      rc = runTCLCommand("massEraseTarget");
+      if (rc != PROGRAMMING_RC_OK) {
+         continue;
+      }
+   } while (0);
+   bdmInterface->getBdmOptions().targetType = T_CFVx;
+
    return PROGRAMMING_RC_OK;
 }
 
@@ -2187,7 +2188,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::doFlashBlock(FlashImagePtr flashImage,
    uint32_t lastContiguous;  // Last contiguous address in memory space
    if (!memoryRegionPtr->findLastContiguous(flashAddress&memoryAddressMask, &lastContiguous, memorySpace)) {
       // This should never fail!
-      log.error("Block %s[0x%06X...] is within target memory BUT location not found!.\n", getMemSpaceName(memorySpace), flashAddress&memoryAddressMask);
+      log.error("Block %s[0x%06X...] is within target memory BUT location not found!\n", getMemSpaceName(memorySpace), flashAddress&memoryAddressMask);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
@@ -2279,11 +2280,12 @@ USBDM_ErrorCode FlashProgrammer_CFVx::doFlashBlock(FlashImagePtr flashImage,
       log.error("Error: sector size is 0\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   USBDM_ErrorCode rc = loadTargetProgram(memoryRegionPtr, flashOperation);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
+   if (flashOperation != OpWriteRam) {
+      USBDM_ErrorCode rc = loadTargetProgram(memoryRegionPtr, flashOperation);
+      if (rc != PROGRAMMING_RC_OK) {
+         return rc;
+      }
    }
-
    // Maximum size of data to write
    unsigned int maxSplitBlockSize = targetProgramInfo.maxDataSize;
 

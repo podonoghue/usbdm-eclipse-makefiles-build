@@ -4,7 +4,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MK22F51212_VectorTable</name>
-         <description>MK64D10 VectorTable</description>
+         <description>MK22F51212 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>DMA channel 0 transfer complete interrupt</description>
@@ -122,7 +122,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>RNG</name>
-            <description>WDOG interrupt</description>
+            <description>Random Number Generator</description>
             <value>23</value>
          </interrupt>
          <interrupt>

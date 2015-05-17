@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="FRDM-Blinky-MK-" >
+   <projectActionList id="FRDM-Blinky-MK" >
       <applyWhen>
          <and>
             <or>

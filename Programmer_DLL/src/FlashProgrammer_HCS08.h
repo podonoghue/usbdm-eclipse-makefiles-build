@@ -76,13 +76,10 @@ protected:
 
    typedef USBDM_ErrorCode (*CallBackT)(USBDM_ErrorCode status, int percent, const char *message);
 
-   DeviceData              parameters;                   //!< Parameters describing the target device
-   bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code
    FlashOperationInfo      flashOperationInfo;           //!< Describes flash operation
 
-   FlashProgramConstPtr    currentFlashProgram;          //!< Current program for flash operation
    FlashOperation          currentFlashOperation;        //!< Current operation loaded
    uint32_t                currentFlashAlignment;        //!< Alignment applicable to flash operation
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
@@ -128,8 +125,8 @@ public:
 
    USBDM_ErrorCode checkTargetUnSecured();
    USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0);
+   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
    USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
    USBDM_ErrorCode confirmSDID(void);
 

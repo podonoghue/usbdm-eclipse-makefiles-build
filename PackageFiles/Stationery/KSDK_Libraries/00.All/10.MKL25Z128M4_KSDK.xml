@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd"
+[
+<!ENTITY USBDM_DEVICE      "MKL25Z128M4">          <!-- USBDM device name -->         
+<!ENTITY KDS_DEVICE        "KL25Z4">               <!-- KDS device name -->           
+<!ENTITY CPU_NAME          "CPU_MKL25Z128VLK4">    <!-- Name used in header files -->           
+<!ENTITY MQX_DEVICE        "mkl25z128m">           <!-- Name used by MQX --> 
+<!ENTITY HARDWARE_NAME     "frdmkl25z">             <!-- Hardware EVB -->
+]
+>
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for -->
+   <projectActionList id="&KDS_DEVICE;-KSDK-library" root="">
+      <variable id="projectOptionValue.KSDK-&KDS_DEVICE;-library-enable" 
+            name="&KDS_DEVICE; (FRDM_KL25Z)" 
+            description="&KDS_DEVICE; Library"
+            radioGroup="group-ksdk-library-import-device" 
+            >
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.KSDK-&KDS_DEVICE;-library-enable" />
+         </applyWhen>
+         <!-- Project variables/constants -->
+         <constant id="kdsTargetName"        value="&KDS_DEVICE;" />
+         <constant id="mqxTargetName"        value="&MQX_DEVICE;" />
+         <constant id="projectArtifactName"  value="ksdk_&KDS_DEVICE;" />
+         <constant id="targetDevice"         value="&USBDM_DEVICE;" />
+         <constant id="targetDeviceName"     value="&USBDM_DEVICE;" />
+         <constant id="linkerRamSize"        value="0x2000" />
+         <constant id="linkerFlashSize"      value="0x2000" />
+         <constant id="usbDeviceName"        value="&HARDWARE_NAME;" /> <!-- enables USB library -->
+         <constant id="usbHostName"          value="&HARDWARE_NAME;" /> <!-- enables USB library -->
+	 	 
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/devices/M&KDS_DEVICE;/startup&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/platform/devices/M&KDS_DEVICE;/startup&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>&CPU_NAME;</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>&CPU_NAME;</value>
+         </projectOption>
+         <!-- Creating a library -->
+         <projectOption id="gnu.c.link.option.shared" replace="true">
+            <value>true</value>
+         </projectOption>
+
+         <!-- adc16 -->
+         <copy source="usbdm_kds_path/platform/drivers/src/adc16/fsl_adc16_common.c" target="platform/adc16/drivers/fsl_adc16_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/adc16/fsl_adc16_driver.c" target="platform/adc16/drivers/fsl_adc16_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_adc16_driver.h"       target="platform/adc16/drivers/fsl_adc16_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/adc16/fsl_adc16_hal.c"        target="platform/adc16/hal/fsl_adc16_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_adc16_hal.h"              target="platform/adc16/hal/fsl_adc16_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- clock -->
+         <copy source="usbdm_kds_path/platform/system/src/clock/fsl_clock_manager_common.c"                 target="platform/clock/system/fsl_clock_manager_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/clock/fsl_clock_manager.c"                        target="platform/clock/system/fsl_clock_manager.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_clock_manager.h"                              target="platform/clock/system/fsl_clock_manager.h"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/clock/M&KDS_DEVICE;/fsl_clock_M&KDS_DEVICE;.c"  target="platform/clock/system/fsl_clock_M&KDS_DEVICE;.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/clock/M&KDS_DEVICE;/fsl_clock_M&KDS_DEVICE;.h"  target="platform/clock/system/fsl_clock_M&KDS_DEVICE;.h" type="link" sourcePathType="absolute" />
+         <!-- cmp -->
+         <copy source="usbdm_kds_path/platform/drivers/src/cmp/fsl_cmp_common.c"   target="platform/cmp/drivers/fsl_cmp_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/cmp/fsl_cmp_driver.c"   target="platform/cmp/drivers/fsl_cmp_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_cmp_driver.h"       target="platform/cmp/drivers/fsl_cmp_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/cmp/fsl_cmp_hal.c"          target="platform/cmp/hal/fsl_cmp_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_cmp_hal.h"              target="platform/cmp/hal/fsl_cmp_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- cop -->
+         <copy source="usbdm_kds_path/platform/drivers/src/cop/fsl_cop_common.c"   target="platform/cop/drivers/fsl_cop_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/cop/fsl_cop_driver.c"   target="platform/cop/drivers/fsl_cop_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_cop_driver.h"       target="platform/cop/drivers/fsl_cop_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/cop/fsl_cop_hal.c"          target="platform/cop/hal/fsl_cop_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_cop_hal.h"              target="platform/cop/hal/fsl_cop_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- dac -->
+         <copy source="usbdm_kds_path/platform/drivers/src/dac/fsl_dac_common.c"   target="platform/dac/drivers/fsl_dac_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/dac/fsl_dac_driver.c"   target="platform/dac/drivers/fsl_dac_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_dac_driver.h"       target="platform/dac/drivers/fsl_dac_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/dac/fsl_dac_hal.c"          target="platform/dac/hal/fsl_dac_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_dac_hal.h"              target="platform/dac/hal/fsl_dac_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- dma -->
+         <copy source="usbdm_kds_path/platform/drivers/src/dma/fsl_dma_common.c"   target="platform/dma/drivers/fsl_dma_common.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/dma/fsl_dma_driver.c"   target="platform/dma/drivers/fsl_dma_driver.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_dma_driver.h"       target="platform/dma/drivers/fsl_dma_driver.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_dma_request.h"      target="platform/dma/drivers/fsl_dma_request.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/dma/fsl_dma_hal.c"          target="platform/dma/hal/fsl_dma_hal.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_dma_hal.h"              target="platform/dma/hal/fsl_dma_hal.h"         type="link" sourcePathType="absolute" />
+         <!-- dmamux -->
+         <copy source="usbdm_kds_path/platform/hal/src/dmamux/fsl_dmamux_hal.c"    target="platform/dmamux/hal/fsl_dmamux_hal.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_dmamux_hal.h"           target="platform/dmamux/hal/fsl_dmamux_hal.h"  type="link" sourcePathType="absolute" />
+         <!-- gpio -->
+         <copy source="usbdm_kds_path/platform/drivers/src/gpio/fsl_gpio_common.c"         target="platform/gpio/drivers/fsl_gpio_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/gpio/fsl_gpio_driver.c"         target="platform/gpio/drivers/fsl_gpio_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_gpio_driver.h"              target="platform/gpio/drivers/fsl_gpio_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/gpio/fsl_gpio_hal.c"                target="platform/gpio/hal/fsl_gpio_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_gpio_hal.h"                     target="platform/gpio/hal/fsl_gpio_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- hwtimer -->
+         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_pit.c"       target="platform/hwtimer/system/fsl_hwtimer_pit.c"     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_hwtimer_pit.h"               target="platform/hwtimer/system/fsl_hwtimer_pit.h"     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_systick.c"   target="platform/hwtimer/system/fsl_hwtimer_systick.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_hwtimer_systick.h"           target="platform/hwtimer/system/fsl_hwtimer_systick.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer.c"           target="platform/hwtimer/system/fsl_hwtimer.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_hwtimer.h"                   target="platform/hwtimer/system/fsl_hwtimer.h"         type="link" sourcePathType="absolute" />
+         <!-- i2c -->
+         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_master_driver.c"    target="platform/i2c/drivers/master/fsl_i2c_master_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_i2c_master_driver.h"        target="platform/i2c/drivers/master/fsl_i2c_master_driver"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_slave_driver.c"     target="platform/i2c/drivers/slave/fsl_i2c_slave_driver.c"   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_i2c_slave_driver.h"         target="platform/i2c/drivers/slave/fsl_i2c_slave_driver"     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_common.c"           target="platform/i2c/drivers/fsl_i2c_common.c"               type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_shared_function.c"  target="platform/i2c/drivers/fsl_i2c_shared_function.c"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_i2c_shared_function.h"      target="platform/i2c/drivers/fsl_i2c_shared_function.h"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/i2c/fsl_i2c_hal.c"                  target="platform/i2c/hal/fsl_i2c_hal.c"                      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_i2c_hal.h"                      target="platform/i2c/hal/fsl_i2c_hal.h"                      type="link" sourcePathType="absolute" />
+         <!-- interrupt -->
+         <copy source="usbdm_kds_path/platform/system/src/interrupt/fsl_interrupt_manager.c" target="platform/interrupt/system/fsl_interrupt_manager.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_interrupt_manager.h"           target="platform/interrupt/system/fsl_interrupt_manager.h"        type="link" sourcePathType="absolute" />
+         <!-- llwu -->
+         <copy source="usbdm_kds_path/platform/hal/src/llwu/fsl_llwu_hal.c"           target="platform/llwu/hal/fsl_llwu_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_llwu_hal.h"                target="platform/llwu/hal/fsl_llwu_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- lpsci -->
+         <copy source="usbdm_kds_path/platform/drivers/src/lpsci/fsl_lpsci_common.c"  target="platform/lpsci/drivers/fsl_lpsci_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/lpsci/fsl_lpsci_driver.c"  target="platform/lpsci/drivers/fsl_lpsci_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_lpsci_driver.h"        target="platform/lpsci/drivers/fsl_lpsci_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/lpsci/fsl_lpsci_hal.c"         target="platform/lpsci/hal/fsl_lpsci_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_lpsci_hal.h"               target="platform/lpsci/hal/fsl_lpsci_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- lptmr -->
+         <copy source="usbdm_kds_path/platform/drivers/src/lptmr/fsl_lptmr_common.c"  target="platform/lptmr/drivers/fsl_lptmr_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/lptmr/fsl_lptmr_driver.c"  target="platform/lptmr/drivers/fsl_lptmr_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_lptmr_driver.h"        target="platform/lptmr/drivers/fsl_lptmr_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/lptmr/fsl_lptmr_hal.c"         target="platform/lptmr/hal/fsl_lptmr_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_lptmr_hal.h"               target="platform/lptmr/hal/fsl_lptmr_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- mcg -->
+         <copy source="usbdm_kds_path/platform/hal/src/mcg/fsl_mcg_hal_modes.c"       target="platform/mcg/hal/fsl_mcg_hal_modes.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_mcg_hal_modes.h"           target="platform/mcg/hal/fsl_mcg_hal_modes.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/mcg/fsl_mcg_hal.c"             target="platform/mcg/hal/fsl_mcg_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_mcg_hal.h"                 target="platform/mcg/hal/fsl_mcg_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- osc -->
+         <copy source="usbdm_kds_path/platform/hal/src/osc/fsl_osc_hal.c"         target="platform/osc/hal/fsl_osc_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_osc_hal.h"             target="platform/osc/hal/fsl_osc_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- pit -->
+         <copy source="usbdm_kds_path/platform/drivers/src/pit/fsl_pit_common.c"  target="platform/pit/drivers/fsl_pit_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/pit/fsl_pit_driver.c"  target="platform/pit/drivers/fsl_pit_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_pit_driver.h"      target="platform/pit/drivers/fsl_pit_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/pit/fsl_pit_irq.c"     target="platform/pit/drivers/fsl_pit_irq.c"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/pit/fsl_pit_hal.c"         target="platform/pit/hal/fsl_pit_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_pit_hal.h"             target="platform/pit/hal/fsl_pit_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- pmc -->
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_pmc_hal.h"             target="platform/pmc/hal/fsl_pmc_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- port -->
+         <copy source="usbdm_kds_path/platform/hal/src/port/fsl_port_hal.c"       target="platform/port/hal/fsl_port_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_port_hal.h"            target="platform/port/hal/fsl_port_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- power -->
+         <copy source="usbdm_kds_path/platform/system/src/power/fsl_power_manager_common.h"  target="platform/power/system/fsl_power_manager_common.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/power/fsl_power_manager.c"         target="platform/power/system/fsl_power_manager.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/inc/fsl_power_manager.h"               target="platform/power/system/fsl_power_manager.h"        type="link" sourcePathType="absolute" />
+         <!-- rcm -->
+         <copy source="usbdm_kds_path/platform/hal/src/rcm/fsl_rcm_hal.c"           target="platform/rcm/hal/fsl_rcm_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_rcm_hal.h"               target="platform/rcm/hal/fsl_rcm_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- rtc -->
+         <copy source="usbdm_kds_path/platform/drivers/src/rtc/fsl_rtc_common.c"    target="platform/rtc/drivers/fsl_rtc_common.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/rtc/fsl_rtc_driver.c"    target="platform/rtc/drivers/fsl_rtc_driver.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_rtc_driver.h"        target="platform/rtc/drivers/fsl_rtc_driver.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/rtc/fsl_rtc_hal.c"           target="platform/rtc/hal/fsl_rtc_hal.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_rtc_hal.h"               target="platform/rtc/hal/fsl_rtc_hal.h"        type="link" sourcePathType="absolute" />
+         <!-- sim -->
+         <copy source="usbdm_kds_path/platform/hal/src/sim/M&KDS_DEVICE;/fsl_sim_hal_M&KDS_DEVICE;.c" target="platform/sim/hal/fsl_sim_hal_M&KDS_DEVICE;.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/sim/M&KDS_DEVICE;/fsl_sim_hal_M&KDS_DEVICE;.h" target="platform/sim/hal/fsl_sim_hal_M&KDS_DEVICE;.h" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_sim_hal.h"                                   target="platform/sim/hal/fsl_sim_hal.h"                type="link" sourcePathType="absolute" />
+         <!-- smc -->
+         <copy source="usbdm_kds_path/platform/hal/src/smc/fsl_smc_hal.c"               target="platform/smc/hal/fsl_smc_hal.c" type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_smc_hal.h"                   target="platform/smc/hal/fsl_smc_hal.h" type="link" sourcePathType="absolute" />
+         <!-- spi -->
+         <copy source="usbdm_kds_path/platform/drivers/src/spi/fsl_spi_master_driver.c"        target="platform/spi/drivers/master/fsl_spi_master_driver.c"      type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_spi_master_driver.h"            target="platform/spi/drivers/master/fsl_spi_master_driver"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/spi/fsl_spi_slave_driver.c"         target="platform/spi/drivers/slave/fsl_spi_slave_driver.c"        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_spi_slave_driver.h"             target="platform/spi/drivers/slave/fsl_spi_slave_driver"          type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/spi/fsl_spi_common.c"               target="platform/spi/drivers/fsl_spi_common.c"                    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/spi/fsl_spi_shared_function.c"      target="platform/spi/drivers/fsl_spi_shared_function.c"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/spi/fsl_spi_shared_function.h"      target="platform/spi/drivers/fsl_spi_shared_function.h"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/spi/fsl_spi_hal.c"                      target="platform/spi/hal/fsl_spi_hal.c"                          type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_spi_hal.h"                          target="platform/spi/hal/fsl_spi_hal.h"                          type="link" sourcePathType="absolute" />
+         <!-- tpm -->
+         <copy source="usbdm_kds_path/platform/drivers/src/tpm/fsl_tpm_common.c"        target="platform/tpm/drivers/fsl_tpm_common.c"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/tpm/fsl_tpm_driver.c"        target="platform/tpm/drivers/fsl_tpm_driver.c"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_tpm_driver.h"            target="platform/tpm/drivers/fsl_tpm_driver.h"    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/tpm/fsl_tpm_hal.c"               target="platform/tpm/hal/fsl_tpm_hal.c"           type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_tpm_hal.h"                   target="platform/tpm/hal/fsl_tpm_hal.h"           type="link" sourcePathType="absolute" />
+         <!-- tsi -->
+         <copy source="usbdm_kds_path/platform/drivers/src/tsi/fsl_tsi_common.c"             target="platform/tsi/drivers/fsl_tsi_common.c"              type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/tsi/fsl_tsi_driver.c"             target="platform/tsi/drivers/fsl_tsi_driver.c"              type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_tsi_driver.h"                 target="platform/tsi/drivers/fsl_tsi_driver.h"              type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/tsi/fsl_tsi_v4_driver_specific.c" target="platform/tsi/drivers/fsl_tsi_v4_driver_specific.c"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/tsi/fsl_tsi_hal.c"                    target="platform/tsi/hal/fsl_tsi_hal.c"                     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_tsi_hal.h"                        target="platform/tsi/hal/fsl_tsi_hal.h"                     type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c"        target="platform/tsi/hal/fsl_tsi_v4_hal_specific.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_tsi_v4_hal_specific.h"            target="platform/tsi/hal/fsl_tsi_v4_hal_specific.h"         type="link" sourcePathType="absolute" />
+         <!-- uart -->
+         <copy source="usbdm_kds_path/platform/drivers/src/uart/fsl_uart_common.c"      target="platform/uart/drivers/fsl_uart_common.c"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/src/uart/fsl_uart_driver.c"      target="platform/uart/drivers/fsl_uart_driver.c"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/inc/fsl_uart_driver.h"           target="platform/uart/drivers/fsl_uart_driver.h"       type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/src/uart/fsl_uart_hal.c"             target="platform/uart/hal/fsl_uart_hal.c"              type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_uart_hal.h"                  target="platform/uart/hal/fsl_uart_hal.h"              type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>

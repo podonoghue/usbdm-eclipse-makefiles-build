@@ -255,7 +255,6 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
       pcResetValue = regValue;
    }
    if (regNum == DSC_UnknownReg) {
-//      rc = BDM_RC_OK;
       rc = BDM_RC_ILLEGAL_PARAMS;
    }
    else {
@@ -263,7 +262,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    }
    if (rc != BDM_RC_OK) {
       log.error("0x%X,%s Failed, reason= %s\n",
-            dnRegNumber, getDSCRegName(regNum), USBDM_GetErrorString(rc));
+            dnRegNumber, getDSCRegName(regNum), bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -296,7 +295,7 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    }
    if (rc != BDM_RC_OK) {
       log.print("DiRegisterRead(0x%X,%s) Failed, reason= %s\n",
-            dnRegNumber, getDSCRegName(regNum), USBDM_GetErrorString(rc));
+            dnRegNumber, getDSCRegName(regNum), bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    *drvValue = (U32c)dataValue;
@@ -356,7 +355,7 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
       log.print("() - Only a single step is supported!\n");
       return setErrorState(DI_ERR_PARAM, ("Only a single step is allowed"));
    }
-   BDMrc = USBDM_TargetStep();
+   BDMrc = bdmInterface->step();
    if (BDMrc != BDM_RC_OK) {
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
    }
@@ -376,8 +375,8 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    LOGGING;
 
    USBDM_ErrorCode      BDMrc;
-   static DiExitCauseT  lastStatus     = DI_WAIT_USER;
-   static int pollCount = 0;
+   static DiExitCauseT  lastStatus  = DI_WAIT_USER;
+   static int           pollCount   = 0;
 
    // Defaults
    pdesExitStatus->dscCause = DI_WAIT_UNKNOWN;
@@ -403,7 +402,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    unsigned int status;
    BDMrc = bdmInterface->getStatus(&status);
    if (BDMrc != BDM_RC_OK) {
-      log.print("DiExecGetStatus() - Failed, BDMrc=%s\n", USBDM_GetErrorString(BDMrc));
+      log.print("DiExecGetStatus() - Failed, BDMrc=%s\n", bdmInterface->getErrorString(BDMrc));
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
    }
    OnceStatus_t onceStatus = (OnceStatus_t)status;
@@ -418,8 +417,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       if ((lastStatus != pdesExitStatus->dscCause) || (pollCount++>20)) {
          pollCount = 0;
 //         log.print("DiExecGetStatus() - %s\n", getOnceStatusName(onceStatus));
-         log.print("DiExecGetStatus() status change => DI_WAIT_MISCELLANEOUS, (%s)\n",
-               pdesExitStatus->szReason);
+         log.print("DiExecGetStatus() status change => DI_WAIT_MISCELLANEOUS, (%s)\n", pdesExitStatus->szReason);
       }
       break;
    case executeMode :
@@ -430,8 +428,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       if ((lastStatus != pdesExitStatus->dscCause) || (pollCount++>20)) {
          pollCount = 0;
 //         log.print("DiExecGetStatus() - %s\n", getOnceStatusName(onceStatus));
-         log.print("DiExecGetStatus() status change => DI_WAIT_RUNNING, (%s)\n",
-               pdesExitStatus->szReason);
+         log.print("DiExecGetStatus() status change => DI_WAIT_RUNNING, (%s)\n", pdesExitStatus->szReason);
       }
       break;
    }

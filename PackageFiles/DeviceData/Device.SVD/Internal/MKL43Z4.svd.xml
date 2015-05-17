@@ -18,7 +18,7 @@
 <!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE3_FILT2.svd.xml">
 <!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0.svd.xml">
 <!ENTITY LPUART0      SYSTEM "peripherals/LPUART0_MKLx3.svd.xml">
-<!ENTITY MCG          SYSTEM "peripherals/MCG_LITE.svd.xml">
+<!ENTITY MCG          SYSTEM "peripherals/MCG_LITE_0.svd.xml">
 <!ENTITY MCM          SYSTEM "peripherals/MCM_MKL.svd.xml">
 <!ENTITY MTB          SYSTEM "peripherals/MTB_0.svd.xml">
 <!ENTITY MTBDWT       SYSTEM "peripherals/MTBDWT_MKL.svd.xml">
@@ -39,7 +39,7 @@
 <!ENTITY TPM0         SYSTEM "peripherals/TPM0_6CH.svd.xml">
 <!ENTITY TPM1         SYSTEM "peripherals/TPM1_2CH.svd.xml">
 <!ENTITY UART2        SYSTEM "peripherals/UART2_MKL.svd.xml">
-<!ENTITY USB0         SYSTEM "peripherals/USB0_MK_MKL.svd.xml">
+<!ENTITY USB0         SYSTEM "peripherals/USB0_CLK_RECOVER_1.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MKL43Z4</name>

@@ -6,28 +6,13 @@
    <projectActionList id="KSDK-hello-world" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk0264</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-hello-world" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <variable id="projectOptionValue.KSDK-hello-world" 
-            name="Hello World Demo" 
-            description=
+         name="Hello World Demo" 
+         description=
 "The Hello World project is a simple demonstration program that uses the KSDK software. It prints \n
 the 'Hello World' message to the terminal using the KSDK UART drivers. The purpose of this demo is to\n
 show how to use the UART and to provide a simple project for debugging and further development"
@@ -39,16 +24,18 @@ show how to use the UART and to provide a simple project for debugging and furth
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-hello-world" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/demos/hello_world/src/hello_world.c"   target="Sources/hello_world.c" sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/hardware_init.c"  target="board/hardware_init.c"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/main.c"           target="Sources/main.c"            sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/fsl_lptmr_irq.c"  target="Sources/fsl_lptmr_irq.c"   sourcePathType="absolute" />
+      </projectActionList>
    </projectActionList>
 </root>

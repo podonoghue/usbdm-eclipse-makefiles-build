@@ -205,7 +205,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       PROVIDE ( _end = . );
       __HeapBase = .;
       __heap_addr = .;
-      . = . + __heap_size;
+      . = . + __heap_size__;
    } > ram
 
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
@@ -213,11 +213,11 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    .stack :
    {
       /* Make sure location doesn't move backwards as causes cryptic messages */
-      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size - __sram_u_size - 3));
+      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size__ - __sram_u_size - 3));
       . = ALIGN(4);
       __HeapLimit = .;
       __StackLimit = .;
-      . = . + __stack_size;
+      . = . + __stack_size__;
       __StackTop = .;
    } > ram
 
@@ -265,12 +265,12 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
   |                      |
   +----------------------+ __bss_end__ = __HeapBase          0x1FFFFF84
   | Heap                 |
-  | (__heap_size)        |  (minimum heap)                   (size=0x120)
+  | (__heap_size__)      |  (minimum heap)                   (size=0x120)
   +----------------------+                                   0x200000A4
   |//////////////////////|
   +----------------------+ __HeapLimit = __StackLimit        0x200001fc
   | Stack                |
-  | (__stack_size)       |                                   (size=0x100)
+  | (__stack_size__)     |                                   (size=0x100)
   +----------------------+ __StackTop                        0x200002ff
   | Bitband/BME (sram_u) |
   | (__sram_u_size)      |                                   (size=1)

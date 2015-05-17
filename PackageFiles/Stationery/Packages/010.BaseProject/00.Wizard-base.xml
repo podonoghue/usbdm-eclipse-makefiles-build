@@ -20,6 +20,12 @@
          width="2"
          span="2"
        />
+      <group id="group-ksdk-usb-demo"
+         name="Kinetis SDK Demo"
+         row="2"
+         width="2"
+         span="2"
+       />
       
       <!-- Variables defined externally by New project Wizard -->
       <!-- Default power option -->

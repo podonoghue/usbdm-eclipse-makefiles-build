@@ -75,13 +75,10 @@ protected:
       ADDRESS_A23    = 1UL<<23,  //!< A23 bit for Flex/DataFlash on ARM/CFV1+
    };
 
-   DeviceData              parameters;                   //!< Parameters describing the target device
-   bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code
    FlashOperationInfo      flashOperationInfo;           //!< Describes flash operation
 
-   FlashProgramConstPtr    currentFlashProgram;          //!< Current program for flash operation
    FlashOperation          currentFlashOperation;        //!< Current operation loaded
    uint32_t                currentFlashAlignment;        //!< Alignment applicable to flash operation
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
@@ -132,8 +129,8 @@ public:
    USBDM_ErrorCode runTCLCommand(const char *command);
    USBDM_ErrorCode massEraseTarget();
    USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0);
+   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
    USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
    USBDM_ErrorCode confirmSDID(void);
 

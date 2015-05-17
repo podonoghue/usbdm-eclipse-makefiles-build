@@ -6,15 +6,7 @@
    <projectActionList id="KSDK-I2C-bm-rtos-master-comm" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-I2C-bm-rtos-master-slave" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -32,17 +24,27 @@
       </variable>
       <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-I2C-comm-bm-rtos-master" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_irq.c"  target="Sources/fsl_i2c_irq.c"   type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/i2c_rtos.c"           target="Sources/i2c_rtos.c"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/i2c_rtos.h"           target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/task_master.c"        target="Sources/task_master.c"   sourcePathType="absolute" />
-   	</projectActionList>
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/hardware_init.c"  target="board/hardware_init.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/main.c"           target="Sources/main.c"          sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_master.c"    target="Sources/task_master.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/fsl_i2c_irq.c"    target="Sources/fsl_i2c_irq.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/i2c_rtos.h"       target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <!-- value>&quot;${usbdm_kds_path}/platform/drivers/i2c&quot;</value> -->
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+         </projectOption>
+      </projectActionList>
    </projectActionList>
 </root>

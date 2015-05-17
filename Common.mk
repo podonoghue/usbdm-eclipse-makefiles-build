@@ -70,6 +70,7 @@ ifeq ($(UNAME_S),Windows)
    GPP      := $(MINGWBIN)/g++
    WINDRES  := $(MINGWBIN)/windres
    STRIP    := $(MINGWBIN)/strip
+   STRIPFLAGS := --strip-unneeded
    #PROGRAM_DIR = C:/"Program Files"
    PROGRAM_DIR = C:/'Program Files (x86)'
 else
@@ -91,6 +92,8 @@ else
    MAKE     := make
    GCC      := gcc
    GPP      := g++
+   STRIP    := strip
+   STRIPFLAGS := --strip-unneeded
    WINDRES  := 
 endif
 
@@ -134,37 +137,45 @@ endif
 #===========================================================
 # System Library
 ifdef DEBUG
-   USBDM_SYSTEM_LIBS    := -lusbdm-system-debug.$(MAJOR_VERSION)
+   USBDM_SYSTEM_LIBS    := -lusbdm-system-debug$(VSUFFIX)
 else
-   USBDM_SYSTEM_LIBS    := -lusbdm-system.$(MAJOR_VERSION)
+   USBDM_SYSTEM_LIBS    := -lusbdm-system$(VSUFFIX)
 endif
 
 #===========================================================
 # Device Library
 ifdef DEBUG
-   USBDM_DEVICE_LIBS    := -lusbdm-device-database-debug.$(MAJOR_VERSION)
+   USBDM_DEVICE_LIBS    := -lusbdm-device-database-debug$(VSUFFIX)
 else
-   USBDM_DEVICE_LIBS    := -lusbdm-device-database.$(MAJOR_VERSION)
+   USBDM_DEVICE_LIBS    := -lusbdm-device-database$(VSUFFIX)
+endif
+
+#===========================================================
+# Dynamic Library loading
+ifdef DEBUG
+   USBDM_DYNAMIC_LIBS    := -ldl
+else
+   USBDM_DYNAMIC_LIBS    := -ldl
 endif
 
 #===========================================================
 # Programmer Library
 ifdef DEBUG
-   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08-debug.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z-debug.$(MAJOR_VERSION)
+   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08-debug$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z-debug$(VSUFFIX)
 else
-   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08.$(MAJOR_VERSION)
-   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z.$(MAJOR_VERSION)
+   USBDM_PROGRAMMERS_LIBS   := -lusbdm-programmer-arm$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfv1$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-cfvx$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs08$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-hcs12$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08$(VSUFFIX)
+   USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z$(VSUFFIX)
 endif
 
 #===========================================================
@@ -288,7 +299,7 @@ endif
 
 #=============================================================
 # Common USBDM DLLs in debug and non-debug versions as needed
-USBDM_WX_LIBS := -lusbdm-wx-plugin.$(MAJOR_VERSION)
+USBDM_WX_LIBS := -lusbdm-wx-plugin$(VSUFFIX)
 
 _LIB_USB_SHARED  := usb-1.0
 _LIB_USB_STATIC  := usb-static-1.0
@@ -296,13 +307,13 @@ _LIB_USB_STATIC  := usb-static-1.0
 ifeq ($(UNAME_S),Windows)
    LIB_USB = -l$(_LIB_USB_STATIC)
    ifdef DEBUG
-      USBDM_LIBS     := -lusbdm-debug.$(MAJOR_VERSION) 
+      USBDM_LIBS     := -lusbdm-debug$(VSUFFIX) 
       USBDM_TCL_LIBS := -ldeleteMe
-      USBDM_DSC_LIBS := -lusbdm-dsc-debug.$(MAJOR_VERSION) 
+      USBDM_DSC_LIBS := -lusbdm-dsc-debug$(VSUFFIX) 
    else
-      USBDM_LIBS     := -lusbdm.$(MAJOR_VERSION) 
+      USBDM_LIBS     := -lusbdm$(VSUFFIX) 
       USBDM_TCL_LIBS := -ldeleteMe
-      USBDM_DSC_LIBS := -lusbdm-dsc.$(MAJOR_VERSION) 
+      USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
    LIB_USB = -l$(_LIB_USB_SHARED)
@@ -318,9 +329,9 @@ else
 endif
 
 ifdef DEBUG
-   FLASHIMAGE_LIBS     := -lusbdm-flash-image-debug.$(MAJOR_VERSION) 
+   FLASHIMAGE_LIBS     := -lusbdm-flash-image-debug$(VSUFFIX) 
 else
-   FLASHIMAGE_LIBS     := -lusbdm-flash-image.$(MAJOR_VERSION) 
+   FLASHIMAGE_LIBS     := -lusbdm-flash-image$(VSUFFIX) 
 endif
 
 #===========================================================

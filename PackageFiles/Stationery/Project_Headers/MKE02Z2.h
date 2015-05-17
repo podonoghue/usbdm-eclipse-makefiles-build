@@ -2,10 +2,10 @@
  * @file     MKE02Z2.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKE02Z2.
- *           Equivalent: MKE02Z64M2, MKE02Z32M2, FRDM-KE02Z, MKE02Z16M2
+ *           Equivalent: MKE02Z64M2, MKE02Z32M2, MKE02Z16M2, FRDM_KE02Z
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

@@ -51,6 +51,7 @@
 #include "DeviceInterface.h"
 
 #include "FlashProgrammerFactory.h"
+#include "UsbdmWxConstants.h"
 
 using namespace std;
 
@@ -131,9 +132,9 @@ FlashProgrammerApp::FlashProgrammerApp() :
    program        = false;
 }
 
-USBDM_ErrorCode callBack(USBDM_ErrorCode status, int percent, const char *message) {
+USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const char *message) {
    fprintf(stdout, "%d%%: %s", percent, message);
-   return PROGRAMMING_RC_OK;
+   return status;
 }
 
 void FlashProgrammerApp::doCommandLineProgram() {
@@ -165,7 +166,7 @@ void FlashProgrammerApp::doCommandLineProgram() {
       if (program) {
          // Program & Verify
          if (verbose) {
-            rc = flashProgrammer->programFlash(flashImage, callBack);
+            rc = flashProgrammer->programFlash(flashImage, programmerCallBack);
          }
          else {
             rc = flashProgrammer->programFlash(flashImage, NULL);
@@ -175,7 +176,7 @@ void FlashProgrammerApp::doCommandLineProgram() {
       else {
          // Verify only
          if (verbose) {
-            rc = flashProgrammer->verifyFlash(flashImage, callBack);
+            rc = flashProgrammer->verifyFlash(flashImage, programmerCallBack);
          }
          else{
             rc = flashProgrammer->verifyFlash(flashImage);
@@ -330,7 +331,20 @@ void FlashProgrammerApp::logUsageError(wxCmdLineParser& parser, const wxString& 
 #endif
 }
 
-static long callback(std::string message, std::string  caption, long style) {
+/*!
+ * This callback will cause connections etc to fail quietly on error rather
+ * than use a WxWidget dialogue.
+ * Used for command line mode
+ */
+static long connectionNullCallback(std::string message, std::string  caption, long style) {
+   return UsbdmWxConstants::NO;
+}
+
+/*!
+ * This callback will display a WxWidget dialogue
+ * Used for GUI mode
+ */
+static long connectionCallback(std::string message, std::string  caption, long style) {
    return wxMessageBox(message, caption, style);
 }
 
@@ -433,12 +447,12 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       if (!success) {
          parser.Usage();
       }
-      bdmInterface = BdmInterfaceFactory::createInterface(targetType, callback);
+      bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionCallback);
       deviceInterface.reset(new DeviceInterface(targetType));
       return success;
    }
 
-   bdmInterface = BdmInterfaceFactory::createInterface(targetType);
+   bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionNullCallback);
    deviceInterface.reset(new DeviceInterface(targetType));
    noGUI = true;
 

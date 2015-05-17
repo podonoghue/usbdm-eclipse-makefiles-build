@@ -8,7 +8,7 @@
 #include "BdmInterface_JTAG.h"
 
 
-BdmInterface_JTAG::BdmInterface_JTAG() : BdmInterfaceCommon(T_ARM) {
+BdmInterface_JTAG::BdmInterface_JTAG() : BdmInterfaceCommon(T_JTAG) {
 }
 
 BdmInterface_JTAG::~BdmInterface_JTAG() {

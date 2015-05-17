@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Build with native BITNESS
+echo make -f Makefile clean
+make -f Makefile clean
+
+# Uncomment to build 32-bit binaries on linux 64-bit
+#echo make -f Makefile clean BITNESS=32
+#make -f Makefile clean BITNESS=32
+

@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../libraries.dtd">
 
 <root version="1.0">
-   <!-- Freescale Kinetis SDK for FRDM-M22F board -->
+   <!-- Freescale Kinetis SDK Bare Metal Support -->
    <projectActionList id="bare-metal-KSDK-library" root="">
       <variable id="projectOptionValue.KSDK-bare-metal-library-enable" 
             name="Bare metal" 

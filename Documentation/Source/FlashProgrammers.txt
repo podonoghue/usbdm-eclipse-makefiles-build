@@ -21,9 +21,12 @@
 \subsection subsectionUsage Usage:
   
   <b>FlashProgrammer \<options\> \<BinaryFilename\> </b> \n
-  If neither of the \b -program or \b -verify options are given then all options are \b ignored and a GUI interface is opened. \n
+  If neither of the \b -program or \b -verify options are given then all options apart from -target are \b ignored and a GUI interface is opened. \n
+  You may rename the executable to e.g. ARMProgrammer to automatically select ARM target.
   - \b BinaryFilename \n The name of the S19 or ELF binary file to program.\n
   - \b Options (order is not significant). 
+     -  \b -bdm=bdm_name                  \n Serial number of preferred BDM to use.
+     -  \b -requiredBDM=bdm_name          \n Serial number of required BDM to use.
      -  \b -device=device_name            \n Target device e.g. MC9S08AW16A, MCF51CN128.
      -  \b -erase=erase_option            \n Selects erase method used (Mass, All, Selective, None).
      -  \b -execute                       \n Leave target power on & reset to normal mode at completion.
@@ -34,10 +37,11 @@
      -  \b -power=dur,\b rec              \n Power off duration & recovery times (ms). 
      -  \b -program                       \n Program and verify flash contents.
      -  \b -reset=dur,\b rel,\b rec       \n Reset duration, release & recovery times (ms). 
-     -  \b -secure                        \n Leave device secured after programming.
-     -  \b -security=value                \n Explicit security value to use (as hex string)
+     -  \b -security=value                \n Security value (unsecured, image, smart).
+     -  \b -securityValue=value           \n Explicit security value to use (as hex string)
      -  \b -speed                         \n Communication speed on some targets (kHz).
      -  \b -trim=trim_frequency           \n Trim internal clock to frequency (in kHz) e.g. 32.7.
+     -  \b -target=target                 \n Type of target e.g. RS08,HCS08,HCS12,S12Z,CFV1,CFVX,ARM,MC56F
      -  \b -unsecure                      \n Leave device unsecured after programming.
      -  \b -vdd=vdd_value                 \n Supply Vdd to target (3V3 or 5V).
      -  \b -verify                        \n Verify flash contents.\n

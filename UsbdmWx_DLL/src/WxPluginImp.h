@@ -9,6 +9,7 @@
 #define SRC_WXPLUGINIMP_H_
 
 #include "WxPlugin.h"
+#include <string>
 
 class WXPLUGIN_DECLSPEC WxPluginImp : public WxPlugin {
 

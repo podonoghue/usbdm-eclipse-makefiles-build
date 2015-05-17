@@ -2,8 +2,8 @@
 include src/usbdm-gdi-common.mk
 
 # List source file to include from current directory
-SRC   += GdiDialogueSkeleton.cpp
-SRC   += GdiDialogue.cpp
+#SRC   += GdiDialogueSkeleton.cpp
+#SRC   += GdiDialogue.cpp
 
 SRC   += GDI_CFVx.cpp
 

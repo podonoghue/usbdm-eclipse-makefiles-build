@@ -24,9 +24,10 @@ BdmInterfacePtr BdmInterfaceFactory::createInterface(TargetType_t targetType, Bd
       case T_CFVx      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-cfvx-debug.4.dll");  break;
       case T_HCS08     : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-hcs08-debug.4.dll"); break;
       case T_HCS12     : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-hcs12-debug.4.dll"); break;
+      case T_JTAG      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-jtag-debug.4.dll");  break;
       case T_RS08      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-rs08-debug.4.dll");  break;
       case T_S12Z      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-s12z-debug.4.dll");  break;
-      case T_MC56F80xx : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-dsc-debug.4.dll");  break;
+      case T_MC56F80xx : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-dsc-debug.4.dll");   break;
       default:
          UsbdmSystem::Log::error("Target not supported\n");
          return p;
@@ -45,9 +46,10 @@ BdmInterfacePtr BdmInterfaceFactory::createInterface(TargetType_t targetType, Bd
       case T_CFVx      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-cfvx.4.dll");  break;
       case T_HCS08     : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-hcs08.4.dll"); break;
       case T_HCS12     : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-hcs12.4.dll"); break;
+      case T_JTAG      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-jtag.4.dll");  break;
       case T_RS08      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-rs08.4.dll");  break;
       case T_S12Z      : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-s12z.4.dll");  break;
-      case T_MC56F80xx : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-dsc.4.dll");  break;
+      case T_MC56F80xx : p = PluginFactory<BdmInterface>::createPlugin("usbdm-interface-dsc.4.dll");   break;
       default:
          UsbdmSystem::Log::error("Target not supported\n");
          return p;

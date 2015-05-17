@@ -4,7 +4,6 @@
 SRC += Example.cpp
 SRC += BdmInterfaceFactory.cpp
 SRC += AppSettings.cpp
-SRC += MetrowerksInterface.cpp
 SRC += Names.cpp
 SRC += Utils.cpp
 

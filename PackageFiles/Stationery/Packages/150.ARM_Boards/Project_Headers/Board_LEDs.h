@@ -199,6 +199,19 @@
 
 #endif
 
+#if defined(MCU_MKL27Z4)
+// MCU_MKL27Z4
+//==========================================================
+#define LED_RED_PORT               B   // Port register
+#define LED_RED_NUM                18  // Pin number
+
+#define LED_GREEN_PORT             B
+#define LED_GREEN_NUM              19
+
+#define LED_BLUE_PORT              A
+#define LED_BLUE_NUM               13
+
+#endif
 
 #if defined(MCU_MKL43Z4)
 // FRDM_KL43Z

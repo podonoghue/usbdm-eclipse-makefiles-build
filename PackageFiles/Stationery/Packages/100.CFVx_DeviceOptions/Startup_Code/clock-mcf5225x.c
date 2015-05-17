@@ -37,7 +37,7 @@ void SystemCoreClockUpdate(void) {
    uint32_t refClk = OSCCLK_CLOCK;
 
 #ifdef CLOCK_SYNSR_OCOSC_MASK
-   switch(CLOCK_SYNSR & (CLOCK_SYNSR_EXTOSC_MASK|CLOCK_SYNSR_OCOSC_MASK|CLOCK_SYNSR_CRYOSC_MASK)) {
+   switch(CLOCK->SYNSR & (CLOCK_SYNSR_EXTOSC_MASK|CLOCK_SYNSR_OCOSC_MASK|CLOCK_SYNSR_CRYOSC_MASK)) {
       case (CLOCK_SYNSR_EXTOSC_MASK):
       case (CLOCK_SYNSR_CRYOSC_MASK):
          refClk = OSCCLK_CLOCK;
@@ -49,19 +49,19 @@ void SystemCoreClockUpdate(void) {
    }
 #endif
 
-   uint32_t cchr = 1 + ((CLOCK_CCHR & CLOCK_CCHR_CCHR_MASK)>>CLOCK_CCHR_CCHR_SHIFT);
+   uint32_t cchr = 1 + ((CLOCK->CCHR & CLOCK_CCHR_CCHR_MASK)>>CLOCK_CCHR_CCHR_SHIFT);
    refClk /= cchr;
 
-   if ((CLOCK_SYNCR&(CLOCK_SYNCR_PLLEN_MASK|CLOCK_SYNCR_CLKSRC_MASK)) == (CLOCK_SYNCR_PLLEN_MASK|CLOCK_SYNCR_CLKSRC_MASK)) {
+   if ((CLOCK->SYNCR&(CLOCK_SYNCR_PLLEN_MASK|CLOCK_SYNCR_CLKSRC_MASK)) == (CLOCK_SYNCR_PLLEN_MASK|CLOCK_SYNCR_CLKSRC_MASK)) {
       // PLL output clock drives the system clock
-      uint32_t mfd  = 2*((CLOCK_SYNCR&CLOCK_SYNCR_MFD(0xFFFF))>>CLOCK_SYNCR_MFD_SHIFT)+4;
-      uint32_t rfd  = 1<<((CLOCK_SYNCR&CLOCK_SYNCR_RFD(0xFFFF))>>CLOCK_SYNCR_RFD_SHIFT);
+      uint32_t mfd  = 2*((CLOCK->SYNCR&CLOCK_SYNCR_MFD(0xFFFF))>>CLOCK_SYNCR_MFD_SHIFT)+4;
+      uint32_t rfd  = 1<<((CLOCK->SYNCR&CLOCK_SYNCR_RFD(0xFFFF))>>CLOCK_SYNCR_RFD_SHIFT);
       SystemCoreClock = (refClk*mfd)/rfd;
    }
    else {
       // PLL reference clock (input clock) drives the system clock.
       SystemCoreClock = refClk;
    }
-   SystemCoreClock >>= ((CLOCK_LPCR & CLOCK_LPCR_LPD_MASK)>>CLOCK_LPCR_LPD_SHIFT);
+   SystemCoreClock >>= ((CLOCK->LPCR & CLOCK_LPCR_LPD_MASK)>>CLOCK_LPCR_LPD_SHIFT);
 }
 

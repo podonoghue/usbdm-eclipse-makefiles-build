@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../libraries.dtd"
+[
+<!ENTITY KDS_DEVICE        "K22F51212">          <!-- KDS device name -->
+]
+>
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for -->
+   <projectActionList id="&KDS_DEVICE;-KSDK-usb-library" root="">
+   <projectActionList>
+      <applyWhen>
+         <variableRef idRef="usbDeviceName" condition="isDefined" />
+      </applyWhen>
+      <!-- usb -->
+      <!-- C Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+         <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(usbDeviceName)&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>         
+      </projectOption>
+      <!-- C++ Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+         <value>&quot;${usbdm_kds_path}/usb/adapter/sources&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/adapter/sources/sdk&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/hal&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/include/$(usbDeviceName)&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/audio&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/cdc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/common&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/composite&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/hid&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/include/config&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/msd&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/classes/phdc&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/device/sources/controller/khci&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>         
+      </projectOption>
+
+      <createFolder type="" target="usb_core" />
+      <createFolder type="" target="usb_core/adapter" />
+      <copy source="usbdm_kds_path/usb/adapter/sources/adapter_types.h" target="usb_core/adapter/adapter_types.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/adapter/sources/adapter.h"       target="usb_core/adapter/adapter.h"       type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/adapter/sdk" />
+      <copy source="usbdm_kds_path/usb/adapter/sources/sdk/adapter_cfg.h" target="usb_core/adapter/sdk/adapter_cfg.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/adapter/sources/sdk/adapter_sdk.c" target="usb_core/adapter/sdk/adapter_sdk.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/adapter/sources/sdk/adapter_sdk.h" target="usb_core/adapter/sdk/adapter_sdk.h" type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device" />
+      
+      <createFolder type="" target="usb_core/device/include" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/include/$(usbDeviceName)/usb_device_config.h"  target="usb_core/device/include/usb_device_config.h"          type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/include/usb_device_stack_interface.h"  target="usb_core/device/include/usb_device_stack_interface.h" type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources" />
+      <createFolder type="" target="usb_core/device/sources/bsp" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/bsp/$(usbDeviceName)/usb_dev_bsp.c"    target="usb_core/device/sources/bsp/usb_dev_bsp.c"          type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/audio" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/audio/usb_audio.h" target="usb_core/device/sources/class_driver/audio/usb_audio.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/audio/usb_audio.c" target="usb_core/device/sources/class_driver/audio/usb_audio.c" type="link" sourcePathType="absolute" />
+
+      <createFolder type="" target="usb_core/device/sources/class_driver/cdc" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/cdc/usb_cdc_pstn.h" target="usb_core/device/sources/class_driver/cdc/usb_cdc_pstn.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/cdc/usb_cdc_pstn.c" target="usb_core/device/sources/class_driver/cdc/usb_cdc_pstn.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/cdc/usb_cdc.h"      target="usb_core/device/sources/class_driver/cdc/usb_cdc.h"      type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/cdc/usb_cdc.c"      target="usb_core/device/sources/class_driver/cdc/usb_cdc.c"      type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/common" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/common/usb_class_internal.h" target="usb_core/device/sources/class_driver/common/usb_class_internal.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/common/usb_class.c"          target="usb_core/device/sources/class_driver/common/usb_class.c" type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/composite" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/composite/usb_composite.c" target="usb_core/device/sources/class_driver/composite/usb_composite.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/composite/usb_composite.h" target="usb_core/device/sources/class_driver/composite/usb_composite.h" type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/hid" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/hid/usb_hid.c" target="usb_core/device/sources/class_driver/hid/usb_hid.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/hid/usb_hid.h" target="usb_core/device/sources/class_driver/hid/usb_hid.h" type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/msd" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/msd/usb_msc_scsi.c" target="usb_core/device/sources/class_driver/msd/usb_msc_scsi.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/msd/usb_msc_scsi.h" target="usb_core/device/sources/class_driver/msd/usb_msc_scsi.h" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/msd/usb_msc.c"      target="usb_core/device/sources/class_driver/msd/usb_msc.c"      type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/msd/usb_msc.h"      target="usb_core/device/sources/class_driver/msd/usb_msc.h"      type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/include" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_audio.h"      target="usb_core/device/sources/class_driver/include/usb_class_audio.h"      type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_cdc.h"        target="usb_core/device/sources/class_driver/include/usb_class_cdc.h"        type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_composite.h"  target="usb_core/device/sources/class_driver/include/usb_class_composite.h"  type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_hid.h"        target="usb_core/device/sources/class_driver/include/usb_class_hid.h"        type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_msc.h"        target="usb_core/device/sources/class_driver/include/usb_class_msc.h"        type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class_phdc.h"       target="usb_core/device/sources/class_driver/include/usb_class_phdc.h"       type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/include/usb_class.h"            target="usb_core/device/sources/class_driver/include/usb_class.h"            type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/device/sources/class_driver/phdc" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/phdc/usb_phdc.c" target="usb_core/device/sources/class_driver/phdc/usb_phdc.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/classes/phdc/usb_phdc.h" target="usb_core/device/sources/class_driver/phdc/usb_phdc.h" type="link" sourcePathType="absolute" />
+
+      <createFolder type="" target="usb_core/device/sources/controller" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/usb_dev.c"         target="usb_core/device/sources/controller/usb_dev.c"       type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/usb_dev.h"         target="usb_core/device/sources/controller/usb_dev.h"       type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/usb_framework.c"   target="usb_core/device/sources/controller/usb_framework.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/usb_framework.h"   target="usb_core/device/sources/controller/usb_framework.h" type="link" sourcePathType="absolute" />
+
+      <createFolder type="" target="usb_core/device/sources/controller/khci" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/khci/device_khci_interface.c" target="usb_core/device/sources/controller/khci/device_khci_interface.c" type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/khci/khci_dev_misc.h"         target="usb_core/device/sources/controller/khci/khci_dev_misc.h"         type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/khci/khci_dev.h"              target="usb_core/device/sources/controller/khci/khci_dev.h"              type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/device/sources/controller/khci/khci_dev.c"              target="usb_core/device/sources/controller/khci/khci_dev.c"              type="link" sourcePathType="absolute" />
+      
+      <createFolder type="" target="usb_core/include" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/compiler.h"  target="usb_core/include/compiler.h"   type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/types.h"     target="usb_core/include/types.h"      type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb_desc.h"  target="usb_core/include/usb_desc.h"   type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb_error.h" target="usb_core/include/usb_error.h"  type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb_misc.h"  target="usb_core/include/usb_misc.h"   type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb_opt.h"   target="usb_core/include/usb_opt.h"    type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb_types.h" target="usb_core/include/usb_types.h"  type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/include/usb.h"       target="usb_core/include/usb.h"        type="link" sourcePathType="absolute" />
+   </projectActionList>
+   </projectActionList>
+</root>

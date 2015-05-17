@@ -25,7 +25,7 @@
     \verbatim
    Change History
    -=========================================================================================
-   | 15 Mar 2015 | Complete redesign using wxFormBuilder                   - pgo V4.10.6.260
+   | 15 Mar 2015 | Complete redesign using wxFormBuilder                   - pgo V4.11.1.10
    +=========================================================================================
    \endverbatim
 */
@@ -559,6 +559,8 @@ void UsbdmDialogue::loadSettings(const AppSettings &appSettings) {
    sound               = appSettings.getValue(settingsKey+".playSounds", 0);
 
    doTrim = deviceInterface->getCurrentDevice()->getClockTrimFreq() != 0;
+
+   currentDirectory = appSettings.getValue(settingsKey+".currentDirectory", "");
 }
 
 /*! Load settings from a settings object
@@ -571,8 +573,9 @@ void UsbdmDialogue::saveSettings(AppSettings &appSettings) {
    bdmInterface->saveSettings(appSettings);
    deviceInterface->saveSettings(appSettings);
 
-   appSettings.addValue(settingsKey+".autoFileLoad",  autoFileLoad?1:0);
-   appSettings.addValue(settingsKey+".playSounds",    (int)sound);
+   appSettings.addValue(settingsKey+".autoFileLoad",     autoFileLoad?1:0);
+   appSettings.addValue(settingsKey+".playSounds",       (int)sound);
+   appSettings.addValue(settingsKey+".currentDirectory", currentDirectory);
 }
 
 /*!
@@ -2429,13 +2432,13 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
                          "SREC Hex files (*.s19,*.sx,*.s)|*.s19;*.sx;*.s|"
                          "Elf files (*.afx,*.axf,*.elf)|*.afx;*.axf;*.elf|"
                          "All Files|*");
-   wxString defaultDir = wxEmptyString;
    wxString defaultFilename = wxEmptyString;
-   wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_OPEN);
+   wxFileDialog dialog(this, caption, currentDirectory, defaultFilename, wildcard, wxFD_OPEN);
    int getCancelOK = dialog.ShowModal();
    if (getCancelOK != wxID_OK) {
       return;
    }
+   currentDirectory = dialog.GetDirectory();
    loadHexFile(dialog.GetPath(), !incrementalLoad || !fileLoaded);
    update();
 }
@@ -2649,15 +2652,6 @@ void UsbdmDialogue::OnUnlockButtonClick( wxCommandEvent& event ) {
       return;
    }
    do {
-//      // Temporarily switch to JTAG mode
-//      bdmInterface->getBdmOptions().targetType = T_JTAG;
-//      USBDM_ErrorCode flashRc = bdmInterface->initBdm();
-//
-//      if(flashRc != BDM_RC_OK) {
-//         log.print("initBdm() failed\n");
-//         reportError(flashRc);
-//         continue;
-//      }
       FlashProgrammerPtr flashprogrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
 
       bdmInterface->initBdm();

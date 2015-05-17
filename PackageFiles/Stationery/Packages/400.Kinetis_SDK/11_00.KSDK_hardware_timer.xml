@@ -6,22 +6,7 @@
    <projectActionList id="KSDK-hardware-timer" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk22120mk0264</hardwareMatches>
-    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-    <hardwareMatches>^twrkv31f120m</hardwareMatches>
-    <hardwareMatches>^twrkv10z75m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-hardware-timer" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -38,16 +23,19 @@ A Hardware Timer interrupt is created and fires multiple times until it reaches 
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <!--  Common files -->
-   		<applyWhen>
+         <applyWhen>
             <and>
-            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-hardware-timer" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/demos/hwtimer_demo/src/hwtimer_demo.c"   target="Sources/hwtimer_demo.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hwtimer_demo/hardware_init.c"  target="board/hardware_init.c"             sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hwtimer_demo/main.c"           target="Sources/main.c"                    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_pit_irq.c"                      target="Sources/fsl_hwtimer_pit_irq.c"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_systick_irq.c"                  target="Sources/fsl_hwtimer_systick_irq.c" sourcePathType="absolute" />
          <!-- C Link options -->
          <projectOption id="gnu.c.link.option.other">
             <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
@@ -56,6 +44,6 @@ A Hardware Timer interrupt is created and fires multiple times until it reaches 
          <projectOption id="gnu.cpp.link.option.other">
             <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
          </projectOption>
-   	</projectActionList>
+      </projectActionList>
    </projectActionList>
 </root>

@@ -92,9 +92,6 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByName(string deviceName) {
 
 /**
  * @param targetType Type of target, affects options shown
- * @param callback   Callback function used to display errors and obtain user response
- *
- * note If no callback is provided then a wxWidgets dialogue is used.
  */
 DeviceInterface::DeviceInterface(TargetType_t targetType) : targetType(targetType) {
 

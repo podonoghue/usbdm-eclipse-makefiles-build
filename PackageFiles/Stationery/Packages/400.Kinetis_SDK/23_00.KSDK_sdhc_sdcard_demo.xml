@@ -6,11 +6,7 @@
    <projectActionList id="KSDK-sdhc-sdcard-demo" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-sdhc-sdcard-demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -28,19 +24,19 @@ and the erase operation."
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
-   		<applyWhen>
+      <projectActionList>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-sdhc-sdcard-demo" />
             </and>
-   		</applyWhen>
+         </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/platform/composite/src/sdcard"             target="sdcard"   type="link"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/fsl_gpio_irq.c"      target="Sources/fsl_gpio_irq.c" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/sdhc_sdcard.h"       target="Sources/sdhc_sdcard.h"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/sdhc_sdcard/src/main.c"              target="Sources/main.c"         sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/platform/drivers/src/sdhc/fsl_sdhc_irq.c"  target="Sources/fsl_sdhc_irq.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/composite/sdcard"             target="sdcard"   type="link"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/sdhc_sdcard/fsl_gpio_irq.c"      target="Sources/fsl_gpio_irq.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/sdhc_sdcard/sdhc_sdcard.h"       target="Sources/sdhc_sdcard.h"  sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/sdhc_sdcard/main.c"              target="Sources/main.c"         sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/drivers/sdhc/fsl_sdhc_irq.c"  target="Sources/fsl_sdhc_irq.c" sourcePathType="absolute" />
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/composite/inc&quot;</value>
@@ -49,6 +45,6 @@ and the erase operation."
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/composite/inc&quot;</value>
          </projectOption>
-   	</projectActionList>
+      </projectActionList>
    </projectActionList>
 </root>

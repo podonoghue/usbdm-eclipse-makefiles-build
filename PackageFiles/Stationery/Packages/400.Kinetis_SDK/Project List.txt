@@ -47,7 +47,7 @@
 
 2. ADC Hardware Trigger Demo - adc_tpm_trigger
 ------------------------------------
-	<hardwareMatches>^frdmkl03z48m</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
 
 3. ADC Low Power
 ------------------------------------
@@ -229,7 +229,7 @@
 ------------------------------------------
     <hardwareMatches>^frdmk22f</hardwareMatches>
     <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03z</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
     <hardwareMatches>^frdmkl46z</hardwareMatches>
     <hardwareMatches>^twrk22f120m</hardwareMatches>
     <hardwareMatches>^twrk24f120m</hardwareMatches>
@@ -240,7 +240,7 @@
 ------------------------------------------
     <hardwareMatches>^frdmk22f</hardwareMatches>
     <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl03</hardwareMatches>
+    <hardwareMatches>^frdmkl03z48m</hardwareMatches>
     <hardwareMatches>^frdmkl46z</hardwareMatches>
     <hardwareMatches>^twrk22f120m</hardwareMatches>
     <hardwareMatches>^twrk24f120m</hardwareMatches>
@@ -262,20 +262,20 @@
 
 (24.) Thermistor Lab Demo
 ------------------------------------------
-	<hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
 
 25. Watchdog Timer Reset Demo
 ------------------------------------------
-	<hardwareMatches>^frdmk22fk02</hardwareMatches>
-	<hardwareMatches>^frdmk22fk0264</hardwareMatches>
-	<hardwareMatches>^frdmk64fv
-	<hardwareMatches>^twrk22f120m</hardwareMatches>
-	<hardwareMatches>^twrk22f120mk02</hardwareMatches>
-	<hardwareMatches>^twrk24f120m</hardwareMatches>
-	<hardwareMatches>^twrk60d100m</hardwareMatches>
-	<hardwareMatches>^twrk64f120m</hardwareMatches>
-	<hardwareMatches>^twrkv10z75m</hardwareMatches>
-	<hardwareMatches>^twrkv31f120m</hardwareMatches>
-	<hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
+    <hardwareMatches>^frdmk22fk02</hardwareMatches>
+    <hardwareMatches>^frdmk22fk0264</hardwareMatches>
+    <hardwareMatches>^frdmk64fv
+    <hardwareMatches>^twrk22f120m</hardwareMatches>
+    <hardwareMatches>^twrk22f120mk02</hardwareMatches>
+    <hardwareMatches>^twrk24f120m</hardwareMatches>
+    <hardwareMatches>^twrk60d100m</hardwareMatches>
+    <hardwareMatches>^twrk64f120m</hardwareMatches>
+    <hardwareMatches>^twrkv10z75m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120m</hardwareMatches>
+    <hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
 
 	

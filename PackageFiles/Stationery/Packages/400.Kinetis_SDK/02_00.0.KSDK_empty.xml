@@ -6,13 +6,7 @@
    <projectActionList id="KSDK-empty-project" root="">
       <applyWhen>
          <and>
-            <or>
-               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MKL46Z4</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK22F51212</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK64F12</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>MK60D10</deviceSubfamilyMatches>
-            </or>
+            <variableRef idRef="kdsOptionsAvailable" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -23,28 +17,34 @@
          <enableWhen>
             <and>
                <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+               </or>
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
-   		<applyWhen>
+      <projectActionList>
+         <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
                <variableRef idRef="projectOptionValue.KSDK-empty" />
             </and>
-   		</applyWhen>
-         <copy source="Sources/main-empty.c" target="Sources/main.c" replace="true"/>
+         </applyWhen>
+         <!-- Basic 'empty' project -->
+         <copy source="Sources/main-empty.c"          target="Sources/main.c"        replace="true"/>
+         <copy source="Sources/hardware_init-empty.c" target="board/hardware_init.c" replace="true"/>
          <projectActionList>
             <applyWhen>
-                <or>
-                  <hardwareMatches>^frdmkl03z</hardwareMatches>
-                  <hardwareMatches>^frdmkl46z</hardwareMatches>
-                  <hardwareMatches>^frdmk22f</hardwareMatches>
-                  <hardwareMatches>^frdmk64f</hardwareMatches>
-               </or>
+               <variableRef idRef="demo.KDS.useblinky" />
             </applyWhen>
-            <copy source="Sources/main-board.c" target="Sources/main.c" replace="true"/>
+            <!-- KDS Blinky example -->
+            <copy source="Sources/main-blinky.c"          target="Sources/main.c"        replace="true"/>
+            <copy source="Sources/hardware_init-blinky.c" target="board/hardware_init.c" replace="true"/>
          </projectActionList>
-   	</projectActionList>
+      </projectActionList>
    </projectActionList>
 </root>

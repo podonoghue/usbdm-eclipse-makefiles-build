@@ -8,8 +8,9 @@
 #include <string>
 
 #ifdef WIN32
+
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501      //!< Required for later system calls.
+#define _WIN32_WINNT 0x0600      //!< Required for later system calls.
 #endif
 #include <windows.h>
 #include <shlobj.h>
@@ -22,95 +23,68 @@
 #define CONFIGURATION_DIRECTORY_NAME "usbdm"
 #define CONFIG_WITH_SLASHES "/" CONFIGURATION_DIRECTORY_NAME "/"
 
-LONG GetDWORDRegKey(HKEY hKey, const std::string &strValueName, DWORD &nValue, DWORD nDefaultValue)
-{
-    nValue = nDefaultValue;
-    DWORD dwBufferSize(sizeof(DWORD));
-    DWORD nResult(0);
-    LONG nError = ::RegQueryValueExA(hKey,
-        strValueName.c_str(),
-        0,
-        NULL,
-        reinterpret_cast<LPBYTE>(&nResult),
-        &dwBufferSize);
-    if (ERROR_SUCCESS == nError) {
-        nValue = nResult;
-    }
-    return nError;
-}
-
-LONG GetBoolRegKey(HKEY hKey, const std::string &strValueName, bool &bValue, bool bDefaultValue)
-{
-    DWORD nDefValue((bDefaultValue) ? 1 : 0);
-    DWORD nResult(nDefValue);
-    LONG nError = GetDWORDRegKey(hKey, strValueName.c_str(), nResult, nDefValue);
-    if (ERROR_SUCCESS == nError) {
-        bValue = (nResult != 0) ? true : false;
-    }
-    return nError;
-}
-
-
-LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::string &strValue, const std::string &strDefaultValue)
+/*!
+ * Get registry value as string
+ *
+ * @param hKey             - Registry Key from call to RegOpenKeyExA()
+ * @param strValueName     - Value name
+ * @param strValue         - Return value
+ * @param strDefaultValue  - Default value returned if key not found
+ *
+ * @return error code
+ */
+static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::string &strValue, const std::string &strDefaultValue)
 {
     strValue = strDefaultValue;
     char szBuffer[512];
-    DWORD dwBufferSize = sizeof(szBuffer);
-    ULONG nError;
-    nError = RegQueryValueExA(hKey, strValueName.c_str(), 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
+    memset(szBuffer, 0, sizeof(szBuffer));
+    DWORD dwBufferSize = sizeof(szBuffer) - 1;
+    LONG nError = RegQueryValueExA(hKey, strValueName.c_str(), 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
     if (ERROR_SUCCESS == nError) {
         strValue = szBuffer;
     }
     return nError;
 }
 
-//! Obtain the path of the application directory (read only)
-//!
-//! @param applicationDirectory - String to return path
-//!
-//! @return error code - true => success \n
-//!                    - false => failure
-//!
-bool getUsbdmApplicationPath(std::string &applicationDirectory) {
+/* Obtain the path of the application directory
+ *
+ * @param path - Path found
+ *
+ * @return false if failed
+ */
+bool getUsbdmApplicationPath(std::string &path) {
    HKEY hKey;
-   LONG lRes = RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey);
-   if (lRes != ERROR_SUCCESS) {
-      return false;
-   }
-   lRes = GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "bad");
-   if (lRes != ERROR_SUCCESS) {
+   if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
+       (GetStringRegKey(hKey, "InstallationDirectory", path, "") != ERROR_SUCCESS)) {
       return false;
    }
    return true;
 }
 
-//! Obtain the path of the resource directory (read only)
-//!
-//! @param applicationDirectory - String to return path
-//!
-//! @return error code -n true => success \n
-//!                    - false => failure
-//!
+/* Obtain the path of the resource directory
+ *
+ * @param path - Path found
+ *
+ * @return false if failed
+ */
 bool getUsbdmResourcePath(std::string &path) {
-
    return getUsbdmApplicationPath(path);
 }
 
-//! Obtain the path of the configuration directory
-//!
-//! @param applicationDirectory - String to return path
-//!
-//! @return error code - true => success \n
-//!                    - false => failure
-//!
-//! @note The configuration directory will be created if it doesn't aleady exist.
-//!
-bool getUsbdmDataPath(std::string &applicationDirectory) {
+/* Obtain the path of the configuration directory
+ *
+ * @param path - Path found
+ *
+ * @return false if failed
+ *
+ * @note The configuration directory will be created if it doesn't already exist.
+ */
+bool getUsbdmDataPath(std::string &path) {
    static char configFilePath[MAX_PATH];
 
    memset(configFilePath, '\0', MAX_PATH);
    // Obtain local app folder
-   if (SHGetFolderPath(NULL,
+   if (SHGetFolderPathA(NULL,
          CSIDL_APPDATA|CSIDL_FLAG_CREATE,
          NULL,
          0,
@@ -124,26 +98,12 @@ bool getUsbdmDataPath(std::string &applicationDirectory) {
    strcat(configFilePath, CONFIG_WITH_SLASHES);
 
    // Check if folder exists or can be created
-   if ((GetFileAttributes(configFilePath) == INVALID_FILE_ATTRIBUTES) &&
-         (SHCreateDirectoryEx( NULL, configFilePath, NULL ) != S_OK)) {
+   if ((GetFileAttributesA(configFilePath) == INVALID_FILE_ATTRIBUTES) &&
+         (SHCreateDirectoryExA( NULL, configFilePath, NULL ) != S_OK)) {
       return false;
    }
-   applicationDirectory = configFilePath;
-
+   path = std::string(configFilePath);
    return true;
 }
-
-
-//void tryit(void) {
-//   HKEY hKey;
-//   LONG lRes = RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo", 0, KEY_READ|KEY_WOW64_32KEY, &hKey);
-//   bool bExistsAndSuccess (lRes == ERROR_SUCCESS);
-//   bool bDoesNotExistsSpecifically (lRes == ERROR_FILE_NOT_FOUND);
-//   std::string strValueOfBinDir;
-//   std::string strKeyDefaultValue;
-//   GetStringRegKey(hKey, "BinDir", strValueOfBinDir, "bad");
-//   GetStringRegKey(hKey, "", strKeyDefaultValue, "bad");
-//}
-
 
 #endif

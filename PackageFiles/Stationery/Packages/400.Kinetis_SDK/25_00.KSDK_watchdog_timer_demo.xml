@@ -6,19 +6,7 @@
    <projectActionList id="KSDK-watchdog-timer-reset-demo" root="">
       <applyWhen>
          <and>
-            <or>
-	<hardwareMatches>^frdmk22fk02</hardwareMatches>
-	<hardwareMatches>^frdmk22fk0264</hardwareMatches>
-	<hardwareMatches>^frdmk64fv</hardwareMatches>
-	<hardwareMatches>^twrk22f120m</hardwareMatches>
-	<hardwareMatches>^twrk22f120mk02</hardwareMatches>
-	<hardwareMatches>^twrk24f120m</hardwareMatches>
-	<hardwareMatches>^twrk60d100m</hardwareMatches>
-	<hardwareMatches>^twrk64f120m</hardwareMatches>
-	<hardwareMatches>^twrkv10z75m</hardwareMatches>
-	<hardwareMatches>^twrkv31f120m</hardwareMatches>
-	<hardwareMatches>^twrkv31f120mkv30</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-watchdog-timer-reset-demo" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -43,7 +31,7 @@ a device. The overflow time for a Watchdog timer is approximately 2 seconds."
             </and>
    		</applyWhen>
          <deleteResource target="Sources/main.c" />
-   		<copy source="usbdm_kds_path/demos/wdog_reset/src/wdog_reset.c" target="Sources/wdog_reset.c" sourcePathType="absolute" />
+   		<copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/wdog_reset/wdog_reset.c" target="Sources/wdog_reset.c" sourcePathType="absolute" />
    	</projectActionList>
    </projectActionList>
 </root>

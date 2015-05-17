@@ -2,10 +2,10 @@
  * @file     MCF51JF.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MCF51JF.
- *           Equivalent: TWR-JF128, MCF51JF
+ *           Equivalent: TWR_JF128, MCF51JF
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

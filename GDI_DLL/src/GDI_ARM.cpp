@@ -155,40 +155,40 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    switch (dnRegNumber) {
       // These regs are read together so need RMW sequence
       case arm_RegCONTROL :
-         USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue &= ~(0xFF<<24);
          dataValue |= (value&0xFF)<<24;
-         rc = USBDM_WriteReg(ARM_RegMISC, dataValue);
+         rc = bdmInterface->writeReg(ARM_RegMISC, dataValue);
          break;
       case arm_RegFAULTMASK :
-         USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue &= ~(0xFF<<16);
          dataValue |= (value&0xFF)<<16;
          value = dataValue;
-         rc = USBDM_WriteReg(ARM_RegMISC, dataValue);
+         rc = bdmInterface->writeReg(ARM_RegMISC, dataValue);
          break;
       case arm_RegBASEPRI :
-         USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue &= ~(0xFF<<8);
          dataValue |= (value&0xFF)<<8;
          value = dataValue;
-         rc = USBDM_WriteReg(ARM_RegMISC, dataValue);
+         rc = bdmInterface->writeReg(ARM_RegMISC, dataValue);
          break;
       case arm_RegPRIMASK :
-         USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue &= ~(0xFF);
          dataValue |= (value&0xFF);
          value = dataValue;
-         rc = USBDM_WriteReg(ARM_RegMISC, dataValue);
+         rc = bdmInterface->writeReg(ARM_RegMISC, dataValue);
          break;
       default:
-         rc = USBDM_WriteReg(regNum, value);
+         rc = bdmInterface->writeReg(regNum, value);
          break;
    }
    log.print("%s(%d) <= 0x%08X\n", getARMRegName(regNum), regNum, (uint32_t)value);
    if (rc != BDM_RC_OK) {
       log.error("%s(0x%X) Failed, reason= %s\n",
-            getARMRegName(regNum), regNum, USBDM_GetErrorString(rc));
+            getARMRegName(regNum), regNum, bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -219,23 +219,23 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    switch (dnRegNumber) {
       // These regs are read together so need RMW sequence
       case arm_RegCONTROL :
-         rc = USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         rc = bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue = (dataValue>>24)&0xFF;
          break;
       case arm_RegFAULTMASK :
-         rc = USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         rc = bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue = (dataValue>>16)&0xFF;
          break;
       case arm_RegBASEPRI :
-         rc = USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         rc = bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue = (dataValue>>8)&0xFF;
          break;
       case arm_RegPRIMASK :
-         rc = USBDM_ReadReg(ARM_RegMISC, &dataValue);
+         rc = bdmInterface->readReg(ARM_RegMISC, &dataValue);
          dataValue = (dataValue)&0xFF;
          break;
       default:
-         rc = USBDM_ReadReg(regNum, &dataValue);
+         rc = bdmInterface->readReg(regNum, &dataValue);
          break;
    }
    if (rc != BDM_RC_OK) {
@@ -300,7 +300,7 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
       log.print("() - Only a single step is supported!\n");
       return setErrorState(DI_ERR_PARAM, ("Only a single step is allowed"));
    }
-   BDMrc = USBDM_TargetStep();
+   BDMrc = bdmInterface->step();
    if (BDMrc != BDM_RC_OK) {
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
    }
@@ -319,7 +319,7 @@ static USBDM_ErrorCode armReadMemoryWord(unsigned long address, unsigned long *d
    LOGGING_Q;
 
    uint8_t           buff[4];
-   USBDM_ErrorCode   rc = USBDM_ReadMemory(4, 4, address, buff);
+   USBDM_ErrorCode   rc = bdmInterface->readMemory(4, 4, address, buff);
 
    *data = (buff[0])+(buff[1]<<8)+(buff[2]<<16)+(buff[3]<<24);
    switch(address) {
@@ -347,7 +347,7 @@ static USBDM_ErrorCode armReadMemoryWord(unsigned long address, unsigned long *d
 //!
 static USBDM_ErrorCode armWriteMemoryWord(unsigned long address, unsigned long data) {
    uint8_t         buff[4] = {(data)&0xFF, (data>>8)&0xFF, (data>>16)&0xFF, (data>>24)&0xFF};
-   USBDM_ErrorCode rc      = USBDM_WriteMemory(4, 4, address, buff);
+   USBDM_ErrorCode rc      = bdmInterface->writeMemory(4, 4, address, buff);
 
    switch(address) {
    case DEMCR:
@@ -401,9 +401,9 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    }
    if (BDMrc != BDM_RC_OK) {
       log.print("Failed, rc=%s, failureCount=%d\n",
-            USBDM_GetErrorString(BDMrc), failureCount);
+            bdmInterface->getErrorString(BDMrc), failureCount);
       mtwksDisplayLine("DiExecGetStatus() - Failed, rc=%s, failureCount=%d\n",
-            USBDM_GetErrorString(BDMrc), failureCount);
+            bdmInterface->getErrorString(BDMrc), failureCount);
       if (failureCount++ > 10) {
          // Give up after 10 tries!
          log.print("Returning FATAL error\n");

@@ -55,13 +55,13 @@
       <!-- Freemaster Support -->
       <DirectoryRef Id="D.FREEMASTER_V$(var.FM_VER)_Plugins_bdm">
          <Component Id='C.FREEMASTER_V$(var.FM_VER).Files' Guid='63c671e0-0672-4e34-9114-78f006b1f811' >
-            <File Id='FREEMASTER_V$(var.FM_VER)Files1' DiskId='1' Source='bin\usbdm.4.dll'  KeyPath='yes'  />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files2' DiskId='1' Source='bin\usbdm-arm.4.dll' />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='bin\usbdm-dsc.4.dll' />
-<!--            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='FREEMASTER_V$(var.FM_VER)Files1' DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'  KeyPath='yes'  />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files2' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-arm.4.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
+<!--            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='$(var.SrcDir)\bin\libusb-1.0.dll' /> -->
 
-            <File Id='FREEMASTER_V$(var.FM_VER)Files4' DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files5' DiskId='1' Source='bin\libstdc++-6.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files4' DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files5' DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
          </Component>
       </DirectoryRef>
 

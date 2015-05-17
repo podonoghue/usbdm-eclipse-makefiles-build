@@ -55,9 +55,9 @@ FILE *UsbdmSystem::openApplicationFile(const std::string &path) {
    FILE *fp = fopen(fullPath.c_str(), "rt");
    if (fp == NULL) {
       // Try module directory
+      fullPath = getModulePath(path);
       fp = fopen(fullPath.c_str(), "rt");
    }
-   fullPath = getModulePath(path);
    return fp;
 }
 
@@ -89,12 +89,11 @@ int                          UsbdmSystem::Log::currentLogLevel = 100;       //!<
 bool                         UsbdmSystem::Log::loggingEnabled  = true;      //!< Log on/off
 UsbdmSystem::Log::Timestamp  UsbdmSystem::Log::timestampMode   = relative;  //!< Time-stamp messages
 
-/*! \brief Get time in milliseconds
+/*! \brief Get current time in milliseconds
  *
  *  @return time value
  */
-double UsbdmSystem::Log::getCurrentTime(void)
-{
+double UsbdmSystem::Log::getCurrentTime(void) {
    struct timeval tv;
    if (gettimeofday(&tv, NULL) != 0) {
       return 0;
@@ -122,6 +121,9 @@ double UsbdmSystem::Log::getTimeStamp(void) {
          break;
    }
    lastTimestamp = getCurrentTime();
+   if (timestamp<.001) {
+      timestamp = 0;
+   }
    return timestamp;
 }
 
@@ -130,7 +132,7 @@ double UsbdmSystem::Log::getTimeStamp(void) {
  *  @param name Name of the function to use in messages
  *  @param when Whether to log entry/exit etc of this function
  */
-USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::Log(const char *name, When when) : when(when) {
+UsbdmSystem::Log::Log(const char *name, When when) : when(when) {
    indent++;
    lastName      = currentName;
    lastLogLevel  = currentLogLevel;
@@ -143,7 +145,7 @@ USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::Log(const char *name, When when) : when(
 /*!  \brief Record exit from a function
  *
  */
-USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::~Log(){
+UsbdmSystem::Log::~Log(){
    if ((when==exit)||(when==both)) {
       print("Exit ================\n");
    }
@@ -159,7 +161,7 @@ USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::~Log(){
  *
  *  @note logging is enabled and timestamp disabled
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::openLogFile(const char *logFileName, const char *description){
+void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *description){
 
    if (logFile != NULL) {
       fclose(logFile);
@@ -198,11 +200,11 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::openLogFile(const char *logFileName
    fflush(logFile);
 }
 
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::setLogFileHandle(FILE *newLogFile) {
+void  UsbdmSystem::Log::setLogFileHandle(FILE *newLogFile) {
    logFile = newLogFile;
 }
 
-FILE* USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::getLogFileHandle() {
+FILE* UsbdmSystem::Log::getLogFileHandle(void) {
    return logFile;
 }
 
@@ -210,7 +212,7 @@ FILE* USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::getLogFileHandle() {
  *
  *  @param value - true/false => on/off logging
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::enableLogging(bool value) {
+void UsbdmSystem::Log::enableLogging(bool value) {
    loggingEnabled = value;
 }
 
@@ -219,26 +221,26 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::enableLogging(bool value) {
  *  @param level - level to log below \n
  *         A 0 value suppresses logging below the current level.
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::setLoggingLevel(int level) {
+void UsbdmSystem::Log::setLoggingLevel(int level) {
    currentLogLevel = indent + level;
 }
 /*!  \brief Get logging level relative to current level
  *
  */
-int USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::getLoggingLevel() {
+int UsbdmSystem::Log::getLoggingLevel() {
    return indent - currentLogLevel;
 }
 /*! \brief Sets timestamping mode
  *
  *  @param mode - mode of timestamping
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::enableTimestamp(UsbdmSystem::Log::Timestamp mode) {
+void UsbdmSystem::Log::enableTimestamp(UsbdmSystem::Log::Timestamp mode) {
    timestampMode = mode;
 }
 /*!  \brief Close the log file
  *
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::closeLogFile() {
+void UsbdmSystem::Log::closeLogFile() {
    if (logFile == NULL) {
       return;
    }
@@ -258,7 +260,7 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::closeLogFile() {
  *
  *  @param format Format and parameters as for printf()
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::printq(const char *format, ...) {
+void UsbdmSystem::Log::printq(const char *format, ...) {
    va_list list;
    if ((logFile == NULL) || (!loggingEnabled) || (indent > currentLogLevel)) {
       return;
@@ -276,7 +278,7 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::printq(const char *format, ...) {
  *
  *  @param format Format and parameters as for printf()
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::print(const char *format, ...)  {
+void UsbdmSystem::Log::print(const char *format, ...)  {
    va_list list;
    if ((logFile == NULL) || (!loggingEnabled) || (indent > currentLogLevel)) {
       return;
@@ -301,7 +303,7 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::print(const char *format, ...)  {
  *
  *  @param format Format and parameters as for printf()
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::error(const char *format, ...)  {
+void UsbdmSystem::Log::error(const char *format, ...)  {
    va_list list;
    if (logFile == NULL) {
       return;
@@ -325,7 +327,7 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::error(const char *format, ...)  {
  *
  *  @param format Format and parameters as for printf()
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::warning(const char *format, ...) {
+void UsbdmSystem::Log::warning(const char *format, ...) {
    va_list list;
    if (logFile == NULL) {
       return;
@@ -352,7 +354,7 @@ void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::warning(const char *format, ...) {
  * @param startAddress Address to display against values
  * @param organisation Size of data & address increment
  */
-void USBDM_SYSTEM_DECLSPEC UsbdmSystem::Log::printDump(const uint8_t *data,
+void UsbdmSystem::Log::printDump(const uint8_t *data,
       unsigned int size,
       unsigned int startAddress,
       unsigned int organization) {

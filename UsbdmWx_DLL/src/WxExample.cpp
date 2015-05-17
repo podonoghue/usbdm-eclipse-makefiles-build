@@ -7,6 +7,8 @@
 
 #include "WxPluginFactory.h"
 
+#include <wx/app.h>
+
 using namespace UsbdmWxConstants;
 
 class OpenLog {
@@ -21,11 +23,17 @@ public:
 };
 
 int main() {
+   fprintf(stderr, "Starting\n");
    OpenLog openLog;
    LOGGING;
+   fprintf(stderr, "After\n");
+
+   log.print("wxTheApp  = %p\n", wxTheApp);
 
    log.print("Loading plug-in\n");
    WxPluginPtr p = WxPluginFactory::createWxPlugin();
+
+   log.print("wxTheApp  = %p\n", wxTheApp);
 
    log.print("Calling display @0x%p\n", p.get());
    p->display("hello", "there", YES_NO|NO_DEFAULT);

@@ -2,10 +2,10 @@
  * @file     MKL25Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL25Z4.
- *           Equivalent: MKL25Z128M4, MKL25Z64M4, MKL25Z32M4, FRDM-KL25Z
+ *           Equivalent: FRDM_KL25Z, MKL25Z128M4, MKL25Z64M4, MKL25Z32M4
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

@@ -67,10 +67,6 @@ Includes example clock initialisation, port, PIT, LPTMR,
 RTC, FTM(PWM and OC), ADC operations and I2C (accelerometer).
 Includes example code demonstrating use of printf() with on-chip UART.
       </example>
-      <example description="Tower MCF51JF128 Basic"          family="COLDFIRE"   path="MCF51JF128_Tower.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire">
-Example project for Tower MCF51JF128 board
-Includes example port operations.
-      </example>
       <example description="Tower MCF51JF128 Demonstration"  family="COLDFIRE"   path="MCF51JF128_Tower_Demo.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.codesourceryColdfire">
 Example project for Tower MCF51JF128 board
 Includes example clock initialisation, port, PIT, LPTMR, 

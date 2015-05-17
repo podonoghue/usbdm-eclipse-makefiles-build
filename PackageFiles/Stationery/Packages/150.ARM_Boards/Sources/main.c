@@ -45,6 +45,7 @@ int main(void) {
    for(;;) {
       count++;
       greenLedToggle();
+//      printf("...tick...\n");
       delay();
    }
    return 0;

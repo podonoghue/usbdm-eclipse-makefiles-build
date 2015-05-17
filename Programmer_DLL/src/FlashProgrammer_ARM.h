@@ -143,8 +143,8 @@ public:
 
    USBDM_ErrorCode checkTargetUnSecured();
    USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT errorCallBack=0);
+   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
    USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
    USBDM_ErrorCode confirmSDID(void);
 

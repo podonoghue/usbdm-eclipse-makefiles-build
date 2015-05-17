@@ -16,13 +16,13 @@
             </or>
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.FRDM-Blinky" 
+      <variable id="projectOptionValue.TWR-Blinky" 
          name="Blinky example" 
-         description="Add Blinky Example code for Freedom board"
+         description="Add Blinky Example code for Tower board"
          checkGroup="group-additional-options" />
       <projectActionList>
          <applyWhen>
-            <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+            <variableRef idRef="projectOptionValue.TWR-Blinky" />
          </applyWhen>
          <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
          <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />

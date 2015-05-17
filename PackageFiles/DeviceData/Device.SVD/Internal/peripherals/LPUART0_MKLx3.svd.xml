@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
       MKL03Z4
+      MKL27Z4
+      MKL27Z256M4
       MKL43Z4
 -->
       <peripheral>

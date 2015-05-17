@@ -151,6 +151,16 @@ USBDM_ErrorCode BdmInterfaceCommon::initBdm(void) {
 
    USBDM_ErrorCode rc = BDM_RC_OK;
 
+   // Cycle Vdd on connect is done by Interface instead of BDM H/W
+   if ((bdmOptions.targetVdd != BDM_TARGET_VDD_OFF) && bdmOptions.cycleVddOnConnect) {
+      initialConnectRetryMode = (BdmInterface::RetryMode)(BdmInterface::retryWithInit|BdmInterface::retryAlways|BdmInterface::retryByReset|BdmInterface::retryByPower|BdmInterface::retryDelayedCheck);
+      softConnectRetryMode    = (BdmInterface::RetryMode)(BdmInterface::retryAlways|BdmInterface::retryByPower);
+   }
+   else {
+      initialConnectRetryMode = (BdmInterface::RetryMode)(BdmInterface::retryWithInit|BdmInterface::retryAlways|BdmInterface::retryByReset|BdmInterface::retryDelayedCheck);
+      softConnectRetryMode    = (BdmInterface::RetryMode)(BdmInterface::retryAlways);
+   }
+
    int getYesNo = NO;
    do {
       // Initialise the BDM interface before use
@@ -172,7 +182,12 @@ USBDM_ErrorCode BdmInterfaceCommon::initBdm(void) {
             bdmOptions.usePSTSignals = false;
          }
       }
-      rc = USBDM_SetExtendedOptions(&bdmOptions);
+      USBDM_ExtendedOptions_t options = bdmOptions;
+
+      // Tell BDM not to do cycle Vdd sa done by interface
+      options.cycleVddOnConnect = false;
+
+      rc = USBDM_SetExtendedOptions(&options);
       if (rc != BDM_RC_OK) {
          getYesNo = handleError(rc);
          continue;
@@ -243,6 +258,9 @@ BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
 
    bdmOptions.size            = sizeof(USBDM_ExtendedOptions_t);
    bdmOptions.targetType      = targetType;
+
+   initialConnectRetryMode = (BdmInterface::RetryMode)(BdmInterface::retryWithInit|BdmInterface::retryAlways);
+   softConnectRetryMode    = (BdmInterface::RetryMode)(BdmInterface::retryAlways);
 
    USBDM_Init();
    USBDM_GetDefaultExtendedOptions(&bdmOptions);
@@ -461,6 +479,14 @@ USBDM_ErrorCode BdmInterfaceCommon::retryConnection(USBDMStatus_t *usbdmStatus) 
    USBDM_ControlPins(PIN_RELEASE);                     // Release all pins
    milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
    return rc;
+}
+
+BdmInterfaceCommon::RetryMode BdmInterfaceCommon::getInitialConnectRetryMode() {
+   return initialConnectRetryMode;
+}
+
+BdmInterfaceCommon::RetryMode BdmInterfaceCommon::getSoftConnectRetryMode() {
+   return softConnectRetryMode;
 }
 
 USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(BdmInterfaceCommon::RetryMode retry) {
@@ -1035,12 +1061,15 @@ USBDM_ErrorCode  BdmInterfaceCommon::setOptionsWithRetry(USBDM_ExtendedOptions_t
    LOGGING;
    USBDM_ErrorCode rc;
 
+   // Save copy of options
    this->bdmOptions = *bdmOptions;
-   // Power cycle is done by GDI not BDM
-   bdmOptions->cycleVddOnConnect = false;
+
+   // Power cycle is done by Interface not BDM
+   USBDM_ExtendedOptions_t options = *bdmOptions;
+   options.cycleVddOnConnect = false;
    int getYesNo = NO;
    do {
-      rc = USBDM_SetExtendedOptions(bdmOptions);
+      rc = USBDM_SetExtendedOptions(&options);
       if (rc != BDM_RC_OK) {
          getYesNo = handleError(rc);
       }

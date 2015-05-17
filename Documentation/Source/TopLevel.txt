@@ -30,9 +30,11 @@
  \subsection QuickLinks Quick Links
 
    - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
-   - @htmlonly <a href="USBDM_V4.10/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="USBDM_V4.11/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
    - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
    - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
+   
+    @htmlonly <iframe width="420" height="315" src="https://www.youtube.com/embed/8MCxv4lBirU" frameborder="0" allowfullscreen></iframe>@endhtmlonly 
    
 <hr>
 \subsection JS16Designs JS16 based versions (Current designs)
@@ -144,7 +146,7 @@ The table below shows the support provided by each version and provides links to
   <td width=60 valign=top > <p  align=center >Serial Port</p> </td>
  </tr>
  <tr>
-  <td valign=top > <p><a href="USBDM_V4.10/USBDM_JB16/html/index.html"><b>USBDM_JB16 (Unsupported)</b></a></p> </td>
+  <td valign=top > <p><a href="USBDM_V4.11/USBDM_JB16/html/index.html"><b>USBDM_JB16 (Unsupported)</b></a></p> </td>
   <td valign=top > <p  align=center >No</p> </td>
   <td valign=top > <p  align=center >  </p> </td>
   <td valign=top > <p  align=center >X </p> </td>
@@ -210,7 +212,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >  </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/USBDM_JS16/html/index.html"><b>USBDM_JS16CWJ</b></a></p>  </td>
   <td valign=top >  <p  align=center >No </p>  </td>
   <td valign=top >  <p  align=center >   </p>  </td>
   <td valign=top >  <p  align=center >X  </p>  </td>
@@ -221,7 +223,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >   </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_SWD_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/USBDM_JS16/html/index.html"><b>USBDM_SWD_JS16CWJ</b></a></p>  </td>
   <td valign=top >  <p  align=center >Yes</p>  </td>
   <td valign=top >  <p  align=center >   </p>  </td>
   <td valign=top >  <p  align=center >X  </p>  </td>
@@ -232,7 +234,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >   </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_JS16/html/index.html"><b>USBDM_SWD_SER_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/USBDM_JS16/html/index.html"><b>USBDM_SWD_SER_JS16CWJ</b></a></p>  </td>
   <td valign=top >  <p  align=center >Yes</p>  </td>
   <td valign=top >  <p  align=center >   </p>  </td>
   <td valign=top >  <p  align=center >X  </p>  </td>
@@ -243,7 +245,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >X  </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_CF_JS16/html/index.html"><b>USBDM_CF_JS16CWJ</b></a></p>  </td>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/USBDM_CF_JS16/html/index.html"><b>USBDM_CF_JS16CWJ</b></a></p>  </td>
   <td valign=top >  <p  align=center >Yes </p>  </td>
   <td valign=top >  <p  align=center >    </p>  </td>
   <td valign=top >  <p  align=center >    </p>  </td>
@@ -254,7 +256,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >    </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/USBDM_CF_JMxx/html/index.html"><b>USBDM_CF_JMxxCLD_V3</b></a><br>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/USBDM_CF_JMxx/html/index.html"><b>USBDM_CF_JMxxCLD_V3</b></a><br>
                          Also supports Tower systems.
                     </p>  
   </td>
@@ -268,7 +270,7 @@ The table below shows the support provided by each version and provides links to
   <td valign=top >  <p  align=center >X   </p>  </td>
  </tr>
  <tr>
-  <td valign=top >  <p  ><a href="USBDM_V4.10/Freedom/html/index.html"><b>USBDM_OpenSDA</b></a><br>
+  <td valign=top >  <p  ><a href="USBDM_V4.11/Freedom/html/index.html"><b>USBDM_OpenSDA</b></a><br>
                          Custom OpenSDA (FRDM-KL25Z).
                     </p>  
   </td>
@@ -295,7 +297,7 @@ The table below shows the support provided by each version and provides links to
    -  Please note that these design are different from the <b>Freescale OSBDM-JM60</b> design which was proceeding
       independently while I was doing the above designs.
    
- \section sectionHistory History
+ \section sectionHistoryLink History
    \ref pageHistory
 
  \section Credits Credits
@@ -327,8 +329,9 @@ The table below shows the support provided by each version and provides links to
    -  Xerces XML parser - http://xerces.apache.org/xerces-c
    -  Windows Installer XML (WiX) toolset http://wix.sourceforge.net/
    
- \section sectionQueries Queries
-   Any queries please post on the Freescale @htmlonly <a href="http://forums.freescale.com/freescale/board?board.id=OSBDM08">OSBDM Discussion Board</a>. @endhtmlonly \n
+  \section sectionQueries Queries
+   Any queries please post on the Freescale 
+   @htmlonly <a href="http://forums.freescale.com/freescale/board?board.id=OSBDM08">OSBDM Discussion Board</a>. @endhtmlonly \n
 
  \section whereToGetThem Some Commercial versions of USBDM BDMs
  I am aware of several companies producing commercial versions of USBDMs of various kinds:

@@ -22,7 +22,7 @@
       <!-- C Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" replace="true">
          <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
-         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/devices&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>
@@ -32,7 +32,7 @@
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths" replace="true">
          <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
-         <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include/device&quot;</value>
+         <value>&quot;${usbdm_kds_path}/platform/devices&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/hal/inc&quot;</value>
          <value>&quot;${usbdm_kds_path}/platform/drivers/inc&quot;</value>

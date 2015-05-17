@@ -44,4 +44,7 @@ typedef union {
 
 #define DEVICE_DATABASE_DIRECTORY "DeviceData"
 
+#ifndef WIN32
+#define USBDM_INSTALL_DIRECTORY "/usr"
+#endif
 #endif /*COMMON_H_*/

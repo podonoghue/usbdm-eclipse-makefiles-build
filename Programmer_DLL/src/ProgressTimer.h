@@ -33,6 +33,10 @@ private:
    int             bytesDone;
 
 public:
+   //! Create NULL timer
+   //!
+   ProgressTimer();
+
    //! Create timer
    //!
    //! @param progressCallBack - Call back used to post messages

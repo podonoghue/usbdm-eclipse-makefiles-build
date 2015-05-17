@@ -9,6 +9,7 @@ Devices using this peripheral:
       MK21D5
       MK22D5
       MK24F12
+      MK24F25612
       MK30D7
       MK30D10
       MK40D7
@@ -32,6 +33,8 @@ Devices using this peripheral:
       MKL24Z4
       MKL25Z4
       MKL26Z4
+      MKL27Z4
+      MKL27Z256M4
       MKL34Z4
       MKL36Z4
       MKL43Z4

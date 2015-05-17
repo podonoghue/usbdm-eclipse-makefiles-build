@@ -2,10 +2,10 @@
  * @file     MKL46Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL46Z4.
- *           Equivalent: MKL46Z128M4, MKL46Z256M4, FRDM-KL46Z
+ *           Equivalent: MKL46Z128M4, MKL46Z256M4, FRDM_KL46Z
  *
  * @version  V0.0
- * @date     2015/02
+ * @date     2015/04
  *
  *******************************************************************************************************/
 

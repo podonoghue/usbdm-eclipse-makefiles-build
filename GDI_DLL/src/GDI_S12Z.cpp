@@ -153,7 +153,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    if (dnRegNumber > S12Z_RegCCR) {
       return setErrorState(DI_ERR_PARAM, ("Illegal register identifier"));
    }
-   rc = USBDM_WriteReg(dnRegNumber,  value);
+   rc = bdmInterface->writeReg(dnRegNumber,  value);
    if ((dnRegNumber == S12Z_RegPC) && !pcWritten) {
       log.print("Saving initial PC write = 0x%08X)\n", (uint32_t)value);
       pcWritten    = true;
@@ -161,7 +161,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    }
    if (rc != BDM_RC_OK) {
       log.error("0x%X Failed, reason= %s\n",
-           dnRegNumber, USBDM_GetErrorString(rc));
+           dnRegNumber, bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -185,7 +185,7 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    if (dnRegNumber > S12Z_RegCCR) {
       return setErrorState(DI_ERR_PARAM, ("Illegal register identifier"));
    }
-   rc = USBDM_ReadReg(dnRegNumber,  &dataValue);
+   rc = bdmInterface->readReg(dnRegNumber,  &dataValue);
    if (rc != BDM_RC_OK) {
       log.print("DiRegisterRead(0x%X) => error\n", dnRegNumber);
       return setErrorState(DI_ERR_NONFATAL, rc);
@@ -234,10 +234,10 @@ DiReturnT DiBreakpointSet ( DiBpResultT *pdnBreakpointId,
 //
 //   breakpointId = 1;
 //
-//   USBDM_WriteDReg(HCS08_DRegBKPT, (uint32_t)bkptAddress);
+//   bdmInterface->writeDReg(HCS08_DRegBKPT, (uint32_t)bkptAddress);
 //   currentBreakPointAddress = bkptAddress;
-//   USBDM_ReadStatusReg(&bdmscrValue);
-//   USBDM_WriteControlReg(bdmscrValue|HC08_BDCSCR_BKPTEN|breakpointModifier);
+//   bdmInterface->readStatusReg(&bdmscrValue);
+//   bdmInterface->writeControlReg(bdmscrValue|HC08_BDCSCR_BKPTEN|breakpointModifier);
 //   log.print("DiBreakpointSet(0x%4X, #%d:%s)\n",
 //         (uint32_t)bkptAddress, breakpointId, breakpointModifier?"E/D":"E");
 //   pdnBreakpointId->dbBp   = dbBreakpoint;
@@ -263,8 +263,8 @@ DiReturnT DiBreakpointClear ( DiUInt32T dnBreakpointId ) {
 //
 //   breakpointId = 0;
 //
-//   USBDM_ReadStatusReg(&bdmscrValue);
-//   USBDM_WriteControlReg(bdmscrValue&~(HC08_BDCSCR_BKPTEN|HC08_BDCSCR_FTS));
+//   bdmInterface->readStatusReg(&bdmscrValue);
+//   bdmInterface->writeControlReg(bdmscrValue&~(HC08_BDCSCR_BKPTEN|HC08_BDCSCR_FTS));
 //
 //   return setErrorState(DI_OK);
    return setErrorState(DI_ERR_NOTSUPPORTED);
@@ -339,20 +339,20 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
  */
    if (bdmOptions.maskInterrupts) {
       log.print("DiExecSingleStep() - checking if interrupt masking needed\n");
-      USBDM_ReadReg(HCS08_RegCCR, &ccrValue);
+      bdmInterface->readReg(HCS08_RegCCR, &ccrValue);
       if ((ccrValue&interruptMask) != 0) {
          // Interrupts already masked - just step
-         BDMrc = USBDM_TargetStep();
+         BDMrc = bdmInterface->step();
       }
       else {
          // Mask interrupts
          log.print("DiExecSingleStep() - masking interrupts\n");
-         USBDM_WriteReg(HCS08_RegCCR, ccrValue|interruptMask);
+         bdmInterface->writeReg(HCS08_RegCCR, ccrValue|interruptMask);
          // Get current instruction opcode
-         USBDM_ReadReg(HCS08_RegPC, &pcValue);
-         USBDM_ReadMemory(1,1,pcValue,&currentOpcode);
+         bdmInterface->readReg(HCS08_RegPC, &pcValue);
+         bdmInterface->readMemory(1,1,pcValue,&currentOpcode);
          // Do a step
-         BDMrc = USBDM_TargetStep();
+         BDMrc = bdmInterface->step();
          switch(currentOpcode) {
             case cliOpcode  :
             case waitOpcode :
@@ -367,21 +367,21 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
             case tpaOpcode :
                // Fix A & CCR  (clear I flag)
                log.print("DiExecSingleStep() - fixing A & CCR reg\n");
-               USBDM_WriteReg(HCS08_RegA, ccrValue&~interruptMask);
-               USBDM_WriteReg(HCS08_RegCCR, ccrValue&~interruptMask);
+               bdmInterface->writeReg(HCS08_RegA, ccrValue&~interruptMask);
+               bdmInterface->writeReg(HCS08_RegCCR, ccrValue&~interruptMask);
                break;
             default :
                // Fix CCR (clear I flag)
                // Unmask interrupts
                log.print("DiExecSingleStep() - fixing CCR reg\n");
-               USBDM_ReadReg(HCS08_RegCCR, &ccrValue);
-               USBDM_WriteReg(HCS08_RegCCR, ccrValue&~interruptMask);
+               bdmInterface->readReg(HCS08_RegCCR, &ccrValue);
+               bdmInterface->writeReg(HCS08_RegCCR, ccrValue&~interruptMask);
                break;
          }
       }
    }
    else
-      BDMrc = USBDM_TargetStep();
+      BDMrc = bdmInterface->step();
 #endif
    if (BDMrc != BDM_RC_OK) {
       return setErrorState(DI_ERR_NONFATAL, BDMrc);
@@ -416,7 +416,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       }
    }
    USBDMStatus_t USBDMStatus;
-   USBDM_GetBDMStatus(&USBDMStatus);
+   bdmInterface->getBDMStatus(&USBDMStatus);
 //   pdesExitStatus->szReason = (DiStringT)getBDMStatusName(&USBDMStatus);
 
    if (USBDMStatus.connection_state == SPEED_NO_INFO) {
@@ -430,7 +430,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
       mtwksDisplayLine("Target RESET detected\n");
    }
    unsigned long status;
-   BDMrc = USBDM_ReadStatusReg(&status);
+   BDMrc = bdmInterface->readStatusReg(&status);
    if (BDMrc != BDM_RC_OK) {
       log.print("=> Status read failed\n");
       return setErrorState(DI_OK);
@@ -455,8 +455,8 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
          // Without this code the debugger is a bit misleading as it halts at the
          // start of the exception handler but then does the reset on resume!
          unsigned long PCValue;
-         USBDM_ReadCReg(CFV1_CRegPC, &PCValue);
-         USBDM_WriteCReg(CFV1_CRegPC, PCValue);
+         bdmInterface->readCReg(CFV1_CRegPC, &PCValue);
+         bdmInterface->writeCReg(CFV1_CRegPC, PCValue);
 #endif
       }
    }

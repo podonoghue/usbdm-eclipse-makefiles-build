@@ -35,7 +35,7 @@ USBDM_ErrorCode bdm_usb_transaction(unsigned int   txSize,
                                     unsigned int   timeout=DEFAULT_USB_TIMEOUT_VALUE /* ms */,
                                     unsigned int  *actualRxSize = 0);
 // Used if actual rxSize is needed
-DLL_LOCAL
+CPP_DLL_LOCAL
 inline USBDM_ErrorCode bdm_usb_transaction(unsigned int   txSize,
                                            unsigned int  *rxSize,
                                            unsigned char *data,

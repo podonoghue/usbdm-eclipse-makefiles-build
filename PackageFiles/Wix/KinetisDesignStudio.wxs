@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define KDS_VER="V2_2_0" ?> 
+   <?define ECLIPSE_VER="KDS" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -12,21 +12,24 @@
    <?define DescSRecord="Freescale S-Record binary file" ?>
    <?define ExplorerMenuOpen="Open" ?>
 
+   <?define P2Application="org.eclipse.equinox.p2.director" ?>
+   <?define FeatureGroup="net.sourceforge.usbdm.cdt.feature.feature.group" ?>
+
    <Fragment>
       <!--======================================================
                Directory structure
       =======================================================-->
       <DirectoryRef Id='TARGETDIR'>
-         <Directory Id='D.$(var.KDS_VER)_APPS' Name="Apps">
+         <Directory Id='D.$(var.ECLIPSE_VER)_APPS' Name="Apps">
             <!-- Kinetis Design Studio directory structure-->
             <Directory Id="D.KINETIS_DESIGN_STUDIO">
                <!-- Eclipse directory structure -->
-               <Directory Id="D.KDSEclipse" Name="Eclipse">
-                  <Directory Id="D.KDSDropins" Name="dropins"/>
+               <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT" Name="Eclipse">
+                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
                   <!-- PE directory structure -->
-                  <Directory Id="D.ProcessorExpert" Name="ProcessorExpert">
-                     <Directory Id="D.PE_Config" Name="Config">
-                        <Directory Id="D.PE_Config_Compiler" Name="Compiler"/>
+                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
+                     <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
+                        <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
                      </Directory>
                   </Directory>
                </Directory>
@@ -45,8 +48,8 @@
       =======================================================-->
      
       <!-- Check for presence of Kinetis Design Studio -->
-      <Property Id="P.KINETIS_DESIGN_STUDIO">
-         <RegistrySearch Id="Rs.KINETIS_DESIGN_STUDIO"
+      <Property Id="P.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
+         <RegistrySearch Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
                     Root="HKLM"
                     Win64="no"
                     Key="SOFTWARE\SOMNIUM Technologies\Kinetis Design Studio"
@@ -56,24 +59,34 @@
 
       <!-- Modify default install path for Kinetis Design Studio -->
       <Property Id="D.KINETIS_DESIGN_STUDIO">
-         <RegistrySearchRef Id="Rs.KINETIS_DESIGN_STUDIO" />
+         <RegistrySearchRef Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT" />
       </Property>
       
       <!--=================================================================================
            Actions
       ==================================================================================-->
-      <!-- Refresh Eclipse plugins -->
+      <!-- Install Eclipse plugins -->
       <CustomAction
-         Id="Ca.CreateKDSRefreshPluginsCommand_$(var.KDS_VER)_$(var.KDS_VER)"
-         Property="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)"
-         Value="&quot;[D.KDSEclipse]kinetis-design-studio&quot; -initialize -nosplash"
+         Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
          
-      <CustomAction Id="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction
+         Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
+         Execute="immediate"/>
+         
+      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
-          <Custom Action="Ca.CreateKDSRefreshPluginsCommand_$(var.KDS_VER)_$(var.KDS_VER)" After="CostFinalize"><![CDATA[$C.KINETIS_DESIGN_STUDIO.Marker>2]]></Custom>
-          <Custom Action="Ca.KDSRefreshPluginsCommand_$(var.KDS_VER)"                      Before="InstallFinalize"><![CDATA[$C.KINETIS_DESIGN_STUDIO.Marker>2]]></Custom>
+          <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+          
+          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" Before="RemoveFiles"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
       </InstallExecuteSequence>
       
       <!--======================================================
@@ -83,28 +96,22 @@
            USBDM Marker
       -->
       <DirectoryRef Id="D.KINETIS_DESIGN_STUDIO">
-         <Component Id='C.KINETIS_DESIGN_STUDIO.Marker' Guid='dff40fe6-cdc9-4771-bcb5-b7f4a830d0df' >
-            <File Id='KINETIS_DESIGN_STUDIO_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+         <Component Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' Guid='dff40fe6-cdc9-4771-bcb5-b7f4a830d0df' >
+            <File Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
       
-      <DirectoryRef Id="D.KDSLib">
-         <Component Id='C.KDSLib.Nano' Guid='6737ac6e-29ec-42bd-907f-91b94f545f8f' >
-            <File Id='NanoSpecs' DiskId='1' Source='bin/nano.specs' KeyPath='yes' />
-         </Component>
-      </DirectoryRef>
-
       <!-- 
            Processor Expert plugin support 
       -->
-      <DirectoryRef Id="D.PE_Config_Compiler">
-         <Component Id='C.PE_Config' Guid='db84fae4-f3a9-45a8-b503-c18ac8bd1724' >
-            <File Id='Compiler_xlkr' DiskId='1' Source='bin/net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
+      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler">
+         <Component Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' Guid='db84fae4-f3a9-45a8-b503-c18ac8bd1724' >
+            <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='$(var.SrcDir)\bin\net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
          </Component>
       </DirectoryRef>
 
       <!--======================================================
-            KDS feature
+            Eclipse feature
       =======================================================-->
       <Feature Id='F.KINETIS_DESIGN_STUDIO'
             Title='Kinetis Design Studio Plugins'
@@ -113,17 +120,16 @@
             AllowAdvertise="no"
             Level='100'>
          <Condition Level='1'>
-            <![CDATA[Installed OR P.KINETIS_DESIGN_STUDIO]]>
+            <![CDATA[Installed OR P.ECLIPSE_$(var.ECLIPSE_VER)_CDT]]>
          </Condition>
          <ComponentRef Id='C.ProgramMenuFolder' />
-         <ComponentRef Id='C.KINETIS_DESIGN_STUDIO.Marker' />
-         <ComponentRef Id='C.KDSLib.Nano' />
-         <ComponentRef Id='C.PE_Config' />
+         <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' />
+         <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />
          <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.GdbServer' />
-         <ComponentGroupRef Id='Cg.EclipsePlugins' />
-         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
-         <ComponentGroupRef Id='Cg.StationeryInstall'/>
+         <ComponentGroupRef Id='Cg.UpdateSite' />
+         <ComponentGroupRef Id='Cg.DeviceDataInstall' />
+         <ComponentGroupRef Id='Cg.StationeryInstall' />
       </Feature>
 
    </Fragment>

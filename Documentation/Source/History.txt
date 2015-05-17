@@ -3,6 +3,30 @@
 
 \section sectionHistory Revision History
 
+V4.11.1.20 (May 2015) 
+======================================================================================= 
+- Legacy DSC support added
+- KSDK support updated for Kinetis SDK 1.2.0
+- Tested with Kinetis Design Studion 3.0.0
+- Eclipse plugin installation method changed (should be more reliable)
+
+Bugs & Limitations
+- KDS traps on exit??
+- MQX options in KDS new project wizard are not operational
+
+V4.11.1.10 (May 2015) 
+======================================================================================= 
+   - Refactoring of files
+   - Now uses a C++ plugin structure for most DLLs
+   - Added KL27, MKV30, MKV31 families (wizard may be incomplete)
+   - USBDM New Project Wizard now include KSDK options
+   - Improvements to handling of LLS/VLLSx states on Kinetis when using GDB
+      - Option to set connection timeout to indefinite period
+      - Options to trap VLLSx reset exits
+      
+Bugs & Limitations
+- Legacy DSC support is not provided
+
 V4.10.6.260 (February 2015)
 ======================================================================================= 
    - Improvements to handling of LLS and VLLSx states on Kinetis devices with GDB
@@ -611,18 +635,6 @@ V1.0 (Dec 2009) Initial Release
      value is intended for lower frequency cystals.  A 1M resistor is recommended.  I have had no problems with boards using the 10M 
      value but there may be some issues with some crystals or chips.  I don't recommend changing the value in existing hardware unless
      there are problems.
-
-  \section sectionQueries Queries
-   Any queries please post on the Freescale 
-   @htmlonly <a href="http://forums.freescale.com/freescale/board?board.id=OSBDM08">OSBDM Discussion Board</a>. @endhtmlonly \n
-
- \section sectionReferences References
-   -  Doxygen Documentation tool - http://www.stack.nl/~dimitri/doxygen/index.html
-   -  OSBDM - http://forums.freescale.com/freescale/board?board.id=OSBDM08
-   -  Tool Command Language (TCL) http://www.tcl.tk/
-   -  Ultimate Packer for eXecutables (UPX) has been used to pack DLLs and EXEs - http://upx.sourceforge.net/ 
-   -  WxWidgets Cross Platform Library has been used for the GUI - http://www.wxwidgets.org/
-   -  Xerces XML parser http://xerces.apache.org/xerces-c/
 
 */
 

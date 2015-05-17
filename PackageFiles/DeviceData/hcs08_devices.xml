@@ -1962,10 +1962,6 @@
       ====================================================================================
       Experimental
        -->
-      <!-- 
-      ====================================================================================
-      Experimental
-       -->
       <device family="HCS08" name="FXTH87xx11-Full-Erase">
          <memory type="ram">
             <memoryRange start="0x000090" end="0x28F" />
@@ -1980,6 +1976,21 @@
       </device>
       
       <device name="FXTH870000" alias="FXTH87xx11" hidden="true"> </device>
+      
+      <!-- device family="HCS08" name="MC1323x">
+         <memory type="ram">
+            <memoryRange start="0x000080" end="0x0017FF" />
+         </memory>
+         <memory pageAddress="0x0078" registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
+            <securityEntryRef ref="HCS08-default-security" />
+            <memoryRange start="0x002080" end="0x007FFF" />
+            <memoryRange start="0x008000" end="0x00BFFF" pageStart="0" pages="128K" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <sdid value="0x2044" /> <!- MC13234 ->
+         <sdid value="0x3044" /> <!- MC13237 ->
+      </device -->
+      
       <!-- 
       ====================================================================================
       Experimental

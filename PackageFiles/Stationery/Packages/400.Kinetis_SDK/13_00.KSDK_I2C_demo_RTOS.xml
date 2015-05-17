@@ -6,21 +6,13 @@
    <projectActionList id="KSDK-I2C-comm-rtos" root="">
       <applyWhen>
          <and>
-            <or>
-    <hardwareMatches>^frdmk22f</hardwareMatches>
-    <hardwareMatches>^frdmk64f</hardwareMatches>
-    <hardwareMatches>^frdmkl46z</hardwareMatches>
-    <hardwareMatches>^twrk22f120m</hardwareMatches>
-    <hardwareMatches>^twrk24f120m</hardwareMatches>
-    <hardwareMatches>^twrk60d100m</hardwareMatches>
-    <hardwareMatches>^twrk64f120m</hardwareMatches>
-            </or>
+            <variableRef idRef="demo.KSDK-I2C-comm-rtos" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <variable id="projectOptionValue.KSDK-I2C-comm-rtos" 
-            name="I2C Communication Demo (RTOS)" 
-            description=
+         name="I2C Communication Demo (RTOS)" 
+         description=
 "The I2C communication application demonstrates I2C data communication between two boards or \n
 two interfaces on the same board.\n
 It also features low power wakeup of the slave board by using I2C address matching."
@@ -37,7 +29,7 @@ It also features low power wakeup of the slave board by using I2C address matchi
             </and>
          </enableWhen>
       </variable>
-   	<projectActionList>
+      <projectActionList>
          <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
@@ -45,21 +37,22 @@ It also features low power wakeup of the slave board by using I2C address matchi
             </and>
          </applyWhen>
          <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/platform/drivers/src/i2c/fsl_i2c_irq.c"  target="Sources/fsl_i2c_irq.c"   type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/i2c_rtos.c"           target="Sources/i2c_rtos.c"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/i2c_rtos.h"           target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/task_master.c"        target="Sources/task_master.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/task_sample.c"        target="Sources/task_sample.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/demos/i2c_rtos/src/task_slave.c"         target="Sources/task_slave.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/hardware_init.c"  target="board/hardware_init.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/main.c"           target="Sources/main.c"          sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_master.c"    target="Sources/task_master.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_sample.c"    target="Sources/task_sample.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_slave.c"     target="Sources/task_slave.c"    sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/fsl_i2c_irq.c"    target="Sources/fsl_i2c_irq.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/i2c_rtos.h"       target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${usbdm_kds_path}/demos/i2c_rtos/src&quot;</value>
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
          </projectOption>
          <!-- C++ Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <!-- value>&quot;${usbdm_kds_path}/platform/drivers/src/i2c&quot;</value> -->
-            <value>&quot;${usbdm_kds_path}/demos/i2c_rtos/src&quot;</value>
+            <!-- value>&quot;${usbdm_kds_path}/platform/drivers/i2c&quot;</value> -->
+            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
          </projectOption>
-   	</projectActionList>
+      </projectActionList>
    </projectActionList>
 </root>

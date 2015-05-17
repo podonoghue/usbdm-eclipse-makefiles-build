@@ -149,7 +149,7 @@ extern "C" {
 //     <6=> Bypassed low power external (BLPE)
 //     <7=> PLL Bypassed External (PBE)
 //     <8=> PLL Engaged External (PEE)
-#define CLOCK_MODE 8
+#define CLOCK_MODE 1
 
 // Clock modes
 #define CLOCK_MODE_NONE     0
@@ -174,14 +174,14 @@ extern "C" {
 //  <o> FLL Output clock frequency (Hz) <name=fllTargetFrequency>
 //  <i> Used for MCGFLLCLK system clock
 //  <i> Used for main MCGOUTCLK system clock if FEI or FEE mode is selected.
-#define FLL_TARGET_CLOCK 96000000UL
+#define FLL_TARGET_CLOCK 83886080UL
 
 // SYSTEM_MCGOUT_CLOCK =======================================
 //
 //  <o> System MCGOUT Clock (Hz) <name=system_mcgout_clock> <constant>
 //  <i> MCG Main clock output
 //  <i> Derived from slow IRC, fast IRC, ERC, FLL or PLL
-#define SYSTEM_MCGOUT_CLOCK 120000000UL
+#define SYSTEM_MCGOUT_CLOCK 83886080UL
 
 // SYSTEM_MCGIR_CLOCK =======================================
 //
@@ -196,7 +196,7 @@ extern "C" {
 //  <i> Clocks the ARM Cortex-M4 core and bus masters
 //  <i> Derived from MCGOUT Clock after division by OUTDIV1
 //  <i> Must be less than or equal to 120 MHz.
-#define SYSTEM_CORE_CLOCK 120000000UL
+#define SYSTEM_CORE_CLOCK 83886080UL
 
 // SYSTEM_BUS_CLOCK =======================================
 //
@@ -205,7 +205,7 @@ extern "C" {
 //  <i> Derived from MCGOUT Clock after division by OUTDIV2
 //  <i> Must be less than or equal to 60 MHz and less than or equal to the Core Clock frequency.
 //  <i> Must be an integer divisor of the Core Clock.
-#define SYSTEM_BUS_CLOCK 60000000UL
+#define SYSTEM_BUS_CLOCK 41943040UL
 
 // SYSTEM_FLEXBUS_CLOCK =======================================
 //
@@ -213,7 +213,7 @@ extern "C" {
 //  <i> Clocks the flexbus interface
 //  <i> Derived from MCGOUT clock after division by OUTDIV3.
 //  <i> Must be less than or equal to 50 MHz and less than or equal to the Bus Clock frequency.
-#define SYSTEM_FLEXBUS_CLOCK 40000000UL
+#define SYSTEM_FLEXBUS_CLOCK 27962026UL
 
 // SYSTEM_FLASH_CLOCK =======================================
 //
@@ -222,7 +222,7 @@ extern "C" {
 //  <i> Derived from MCGOUT clock after division by OUTDIV4.
 //  <i> Must be less than or equal to 25 MHz and less than or equal to the Bus Clock frequency.
 //  <i> Must be an integer divisor of the Core Clock.
-#define SYSTEM_FLASH_CLOCK 24000000UL
+#define SYSTEM_FLASH_CLOCK 16777216UL
 
 // <h> System Clock dividers
 // SIM_CLKDIV1_OUTDIV1 ================================
@@ -438,7 +438,7 @@ extern "C" {
 //   <i> This option is determined by the Clock Mode selection
 //      <0=> External Reference Clock
 //      <1=> Slow Internal Clock
-#define MCG_C1_IREFS_V 0
+#define MCG_C1_IREFS_V 1
 #define MCG_C1_IREFS_M (MCG_C1_IREFS_V<<MCG_C1_IREFS_SHIFT)
 
 // MCG_C1_IRCLKEN ==============================
@@ -603,7 +603,7 @@ extern "C" {
 //   <i> Selects PLL or FLL output [MCG_C6_PLLS]
 //     <0=> FLL is selected
 //     <1=> PLL is selected
-#define MCG_C6_PLLS_V    1
+#define MCG_C6_PLLS_V    0
 #define MCG_C6_PLLS_M   (MCG_C6_PLLS_V<<MCG_C6_PLLS_SHIFT)
 
 // MCG_C6_CME0 ==============================
