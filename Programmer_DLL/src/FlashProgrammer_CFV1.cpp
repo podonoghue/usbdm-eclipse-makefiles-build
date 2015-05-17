@@ -245,7 +245,6 @@ inline uint32_t getData16Target(uint8_t *data) {
 //=======================================================================
 //
 FlashProgrammer_CFV1::FlashProgrammer_CFV1() :
-      flashReady(false),
       initTargetDone(false),
       currentFlashOperation(OpNone),
       currentFlashAlignment(0),

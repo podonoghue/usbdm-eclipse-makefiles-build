@@ -13,6 +13,7 @@
 *.a
 *.lib
 *.obj
+*.i386/
 
 # Everything in build dirs
 Debug/

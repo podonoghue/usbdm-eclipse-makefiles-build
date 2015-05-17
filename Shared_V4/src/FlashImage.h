@@ -25,14 +25,8 @@
     \endverbatim
 */
 
-#ifndef  _FLASHIMAGE_H_
-#define  _FLASHIMAGE_H_
-
-#include <tr1/memory>
-#include <stdint.h>
-#include <string>
-
-#include "USBDM_API.h"
+#ifndef  FLASHIMAGE_H_
+#define  FLASHIMAGE_H_
 
 #if !defined(CPP_DLL_LOCAL)
    #ifdef _WIN32
@@ -41,7 +35,7 @@
       //! Functions imported from a library
       #define CPP_DLL_IMPORT __declspec(dllimport)
       //! Functions local to a library
-      #define CPP_DLL_LOCAL  __attribute__
+      #define CPP_DLL_LOCAL
    #else
       //! Functions exported from a library
       #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
@@ -57,12 +51,18 @@
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_EXPORT
 // Incorprating library directly
 #elif defined(LINK_USBDM_FLASH_DLL)
-   //! Link to routines directly
+//! Link to routines directly
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_LOCAL
 #else
 // Dynamically linking to library
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_IMPORT
 #endif
+
+#include <tr1/memory>
+#include <stdint.h>
+#include <string>
+
+#include "USBDM_API.h"
 
 /*! Represents a memory image containing loaded file(s)
  */
@@ -115,4 +115,4 @@ public:
 
 typedef std::tr1::shared_ptr<FlashImage> FlashImagePtr;
 
-#endif // _FLASHIMAGE_H_
+#endif // FLASHIMAGE_H_

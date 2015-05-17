@@ -24,7 +24,8 @@ DIRS = \
   JS16_Bootloader      \
   FirmwareChanger      \
   MergeXML             \
-  USBDM_API_Example
+  USBDM_API_Example    \
+  USBDM_Programmer_API_Example
   
 ifeq ($(UNAME_S),Windows)
 DIRS += \

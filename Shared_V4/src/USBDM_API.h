@@ -38,7 +38,7 @@
       //! Functions imported from a library
       #define CPP_DLL_IMPORT __declspec(dllimport)
       //! Functions local to a library
-      #define CPP_DLL_LOCAL  __attribute__
+      #define CPP_DLL_LOCAL
    #else
       //! Functions exported from a library
       #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
@@ -70,12 +70,12 @@
 
 #ifdef USBDM_DLL_EXPORTS
    //! Building the DLL
-   #define USBDM_API      EXTERN_C CPP_DLL_EXPORT
-   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT
+   #define USBDM_API      EXTERN_C CPP_DLL_EXPORT WINAPI
+   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT WINAPI
 #else
    //! Importing the DLL
-   #define USBDM_API      EXTERN_C CPP_DLL_IMPORT
-   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT
+   #define USBDM_API      EXTERN_C CPP_DLL_IMPORT WINAPI
+   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT WINAPI
 #endif
 //==================================================
 

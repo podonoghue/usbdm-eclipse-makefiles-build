@@ -147,7 +147,7 @@ typedef enum  {
 #if defined(USBDM_DLL_EXPORTS)
 // Only available internally to USBDM library
 CPP_DLL_LOCAL
-const char *getErrorName(unsigned int error);
+extern const char *getErrorName(unsigned int error);
 #endif
 
 #endif /* USBDMERRORMESSAGES_H_ */

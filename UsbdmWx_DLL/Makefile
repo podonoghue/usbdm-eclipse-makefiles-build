@@ -20,8 +20,8 @@ usbdm-wx-plugin-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' DEBUG='Y'
 
-all: ExampleWxApp-debug 
 all: usbdm-wx-plugin-debug usbdm-wx-plugin 
+all: ExampleWxApp-debug 
 
 clean:
 	${RMDIR} ExampleWxApp-debug$(BUILDDIR_SUFFIX) usbdm-wx-plugin-debug$(BUILDDIR_SUFFIX) usbdm-wx-plugin$(BUILDDIR_SUFFIX)

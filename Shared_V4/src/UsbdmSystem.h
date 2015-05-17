@@ -35,7 +35,7 @@
       //! Functions imported from a library
       #define CPP_DLL_IMPORT __declspec(dllimport)
       //! Functions local to a library
-      #define CPP_DLL_LOCAL  __attribute__
+      #define CPP_DLL_LOCAL
    #else
       //! Functions exported from a library
       #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
@@ -51,6 +51,7 @@
 #define USBDM_SYSTEM_DECLSPEC CPP_DLL_EXPORT
 // Incorprating library directly
 #elif defined(LINK_USBDM_SYSTEM_DLL)
+//! Link to routines directly
 #define USBDM_SYSTEM_DECLSPEC CPP_DLL_LOCAL
 #else
 // Dynamically linking to library
@@ -60,6 +61,9 @@
 #include <stdint.h>
 #include <string>
 
+
+/*! System routines: Logging, paths
+ */
 class USBDM_SYSTEM_DECLSPEC UsbdmSystem {
 
 private:
@@ -89,7 +93,7 @@ public:
       };
 
 #ifdef LOG
-   class Log {
+   class USBDM_SYSTEM_DECLSPEC Log {
    public:
       enum When      {neither, entry, exit, both};
       enum Timestamp {none, relative, incremental };

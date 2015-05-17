@@ -9,7 +9,7 @@ SRC += GdiDialogue.cpp
 SRC += BdmInterfaceFactory.cpp
 SRC += AppSettings.cpp
 SRC += Utils.cpp
-SRC += wxStub.cpp
+SRC += WxStub.cpp
 SRC += Names.cpp
 
 # Shared files $(SHARED_SRC)
