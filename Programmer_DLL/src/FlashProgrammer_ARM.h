@@ -13,7 +13,7 @@
 
 #include "FlashProgrammerCommon.h"
 
-class USBDM_FLASHPROGRAMMER_DECLSPEC FlashProgrammer_ARM : public FlashProgrammerCommon {
+class FlashProgrammer_ARM : public FlashProgrammerCommon {
 
 public:
    FlashProgrammer_ARM();

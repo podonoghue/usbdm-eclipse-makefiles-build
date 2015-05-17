@@ -58,7 +58,7 @@ using namespace std;
  * Create the plugin instance
  */
 extern "C"
-FlashImage* createPluginInstance(TargetType_t targetType) {
+USBDM_FLASHIMAGE_DECLSPEC FlashImage* createPluginInstance(TargetType_t targetType) {
    return new FlashImageImp(targetType);
 }
 

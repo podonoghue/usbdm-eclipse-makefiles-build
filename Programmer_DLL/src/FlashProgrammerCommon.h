@@ -15,7 +15,7 @@
 
 class ProgressTimer;
 
-class USBDM_FLASHPROGRAMMER_DECLSPEC FlashProgrammerCommon : public FlashProgrammer {
+class FlashProgrammerCommon : public FlashProgrammer {
 
 public:
    FlashProgrammerCommon();

@@ -107,14 +107,14 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
          throw MyException("Module failed to load\n");
       }
    }
-
    log.print("Module \'%s\' loaded @0x%p\n", moduleName, moduleHandle);
 
    newInstance  = (int (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
-      throw MyException("Entry point not found in module\n");
+      char buff[1000];
+      snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
+      throw MyException(std::string(buff));
    }
-
    log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
 }
 

@@ -10,7 +10,7 @@
 class  MemoryPage;
 class  EnumeratorImp;
 
-class USBDM_FLASHIMAGE_DECLSPEC FlashImageImp : public FlashImage {
+class FlashImageImp : public FlashImage {
 
    friend MemoryPage;
    friend EnumeratorImp;
@@ -57,7 +57,6 @@ public:
    virtual USBDM_ErrorCode       loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false);
 
 protected:
-
    static const char*      get_pFlagsName(unsigned int flags);
    static const char*      get_ptTypeName(unsigned int type);
 

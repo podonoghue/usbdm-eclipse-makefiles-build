@@ -72,7 +72,6 @@ typedef enum {
    SEC_CUSTOM       = 4,   //!< Use custom value
 } SecurityOptions_t;
 
-
 /*
  * ============================================================================================
  */
@@ -175,10 +174,10 @@ private:
 
 public:
    SecurityDescription(std::string desc) : securityDescription(desc) {}
-    ~SecurityDescription() {}
-    const std::string toString() const;
-    const std::string getSecurityDescription() const;
-    void              setSecurityDescription(std::string s);
+   ~SecurityDescription() {}
+   const std::string toString() const;
+   const std::string getSecurityDescription() const;
+   void              setSecurityDescription(std::string s);
 };
 
 typedef std::tr1::shared_ptr<SecurityDescription>       SecurityDescriptionPtr;
