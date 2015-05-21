@@ -11,12 +11,14 @@
 #include "WxPlugin.h"
 #include <string>
 
-class WXPLUGIN_DECLSPEC WxPluginImp : public WxPlugin {
+class WxPluginImp : public WxPlugin {
 
 public:
    virtual long display(std::string message, std::string caption, long style);
    virtual ~WxPluginImp() {};
-   WxPluginImp() {};
+   WxPluginImp() {
+      LOGGING_E;
+   };
 };
 
 #endif /* SRC_WXPLUGINIMP_H_ */

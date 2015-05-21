@@ -29,7 +29,7 @@ LDFLAGS += $(LFLAGS)
 
 # Extra C Definitions
 DEFS += $(CDEFS)  # From command line
-DEFS += 
+DEFS +=
 
 # Look for include files in each of the modules
 INCS := $(patsubst %,-I%,$(SOURCEDIRS))

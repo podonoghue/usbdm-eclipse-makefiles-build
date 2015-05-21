@@ -6,7 +6,7 @@
  */
 
 #include "BdmInterface_ARM.h"
-
+#include "PluginHelper.h"
 
 BdmInterface_ARM::BdmInterface_ARM() : BdmInterfaceCommon(T_ARM) {
 }
@@ -41,6 +41,6 @@ USBDM_ErrorCode BdmInterface_ARM::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_ARM();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_ARM>(pp);
 }

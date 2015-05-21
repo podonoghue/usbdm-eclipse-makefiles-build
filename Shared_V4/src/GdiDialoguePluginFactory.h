@@ -17,11 +17,7 @@ public:
     * Create dialogue plugin
     */
    static GdiDialoguePluginPtr createPlugin() {
-#ifdef LOG
-      return PluginFactory<GdiDialoguePlugin>::createPlugin("usbdm-gdi-dialogue-debug.4.dll");
-#else
-      return PluginFactory<GdiDialoguePlugin>::createPlugin("usbdm-gdi-dialogue.4.dll");
-#endif
+      return PluginFactory<GdiDialoguePlugin>::createPlugin(DLL_NAME("usbdm-gdi-dialogue"));
    }
 protected:
    GdiDialoguePluginFactory() {};

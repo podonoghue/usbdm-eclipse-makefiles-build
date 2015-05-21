@@ -6,7 +6,7 @@
  */
 
 #include "BdmInterface_HCS08.h"
-
+#include "PluginHelper.h"
 
 BdmInterface_HCS08::BdmInterface_HCS08() : BdmInterfaceCommon(T_HCS08) {
 }
@@ -26,6 +26,6 @@ USBDM_ErrorCode BdmInterface_HCS08::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_HCS08();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_HCS08>(pp);
 }

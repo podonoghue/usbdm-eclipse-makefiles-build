@@ -1,8 +1,7 @@
 # List source file to include from current directory
 SRC += Version.rc
 SRC += DSC_Utilities.c
-SRC += UsbdmTclInterperImp.cpp
-SRC += BdmInterfaceFactory.cpp
+SRC += UsbdmTclInterpreterImp.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(VPATH) $(SHARED_SRC)

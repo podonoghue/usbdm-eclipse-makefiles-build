@@ -3,6 +3,14 @@
  *
  *  Created on: 11 Apr 2015
  *      Author: podonoghue
+
+\verbatim
+Change History
+-====================================================================================
+| 14 Sep 2015 | Created - pgo
++====================================================================================
+\endverbatim
+
  */
 
 #include <wx/msgdlg.h>
@@ -10,6 +18,7 @@
 
 #include "UsbdmSystem.h"
 #include "WxPluginImp.h"
+#include "PluginHelper.h"
 
 long WxPluginImp::display(std::string message, std::string caption, long style) {
    LOGGING;
@@ -22,13 +31,11 @@ long WxPluginImp::display(std::string message, std::string caption, long style) 
    return rc;
 }
 
-extern "C" WxPluginImp WXPLUGIN_DECLSPEC *createPluginInstance();
-
 /*
- * Create the plugin instance
+ * Create the plug-in instance
  */
 extern "C"
-WxPluginImp* createPluginInstance() {
-   LOGGING;
-   return new WxPluginImp();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<WxPluginImp>(pp);
 }
+

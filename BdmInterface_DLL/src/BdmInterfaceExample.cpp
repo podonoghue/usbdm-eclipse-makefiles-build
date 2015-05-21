@@ -24,7 +24,7 @@ int main() {
    LOGGING;
 
    log.print("Loading plug-in\n");
-   BdmInterfacePtr bdmInterface = BdmInterfaceFactory::createInterface(T_ARM);
+   BdmInterfacePtr bdmInterface = BdmInterfaceFactory::createInterface(T_ARM, 0);
 
    log.print("Initialising BDMn\n");
    bdmInterface->initBdm();

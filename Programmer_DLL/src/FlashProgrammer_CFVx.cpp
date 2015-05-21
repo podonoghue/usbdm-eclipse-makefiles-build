@@ -100,6 +100,7 @@
 #include "MetrowerksInterface.h"
 #endif
 #include "Names.h"
+#include "PluginHelper.h"
 
 #include "FlashProgrammer_CFVx.h"
 
@@ -3089,6 +3090,10 @@ USBDM_ErrorCode FlashProgrammer_CFVx::programFlash(FlashImagePtr flashImage,
    return rc;
 }
 
-extern "C" FlashProgrammer USBDM_FLASHPROGRAMMER_DECLSPEC *createPluginInstance() {
-   return new FlashProgrammer_CFVx();
+/*
+ * Create the plugin instance
+ */
+extern "C"
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<FlashProgrammer_CFVx>(pp);
 }

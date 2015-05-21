@@ -2,7 +2,6 @@
 
 # List source file to include from current directory
 SRC += Example.cpp
-SRC += BdmInterfaceFactory.cpp
 SRC += AppSettings.cpp
 SRC += Names.cpp
 SRC += Utils.cpp

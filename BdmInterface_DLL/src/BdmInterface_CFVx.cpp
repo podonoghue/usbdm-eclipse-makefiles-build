@@ -6,7 +6,7 @@
  */
 
 #include "BdmInterface_CFVx.h"
-
+#include "PluginHelper.h"
 
 BdmInterface_CFVx::BdmInterface_CFVx() : BdmInterfaceCommon(T_CFVx) {
 }
@@ -26,6 +26,6 @@ USBDM_ErrorCode BdmInterface_CFVx::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_CFVx();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_CFVx>(pp);
 }

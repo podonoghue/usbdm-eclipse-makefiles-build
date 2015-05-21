@@ -19,6 +19,7 @@
 #include "UsbdmWxConstants.h"
 #include "WxPluginFactory.h"
 #include "BdmInterfaceCommon.h"
+#include "PluginHelper.h"
 
 using namespace std;
 using namespace UsbdmWxConstants;
@@ -27,8 +28,8 @@ using namespace UsbdmWxConstants;
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createDefaultPluginInstance() {
-   return new BdmInterfaceCommon(T_OFF);
+size_t CPP_DLL_EXPORT createDefaultPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterfaceCommon>(pp, T_OFF);
 }
 
 string BdmInterfaceCommon::getDllVersionString() {

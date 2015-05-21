@@ -94,6 +94,7 @@
 #include "MetrowerksInterface.h"
 #endif
 #include "Names.h"
+#include "PluginHelper.h"
 
 #include "FlashProgrammer_DSC.h"
 
@@ -2518,7 +2519,10 @@ USBDM_ErrorCode FlashProgrammer_DSC::getCalculatedTrimValue(uint16_t &value) {
    return PROGRAMMING_RC_OK;
 }
 
-
-extern "C" FlashProgrammer USBDM_FLASHPROGRAMMER_DECLSPEC *createPluginInstance() {
-   return new FlashProgrammer_DSC();
+/*
+ * Create the plugin instance
+ */
+extern "C"
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<FlashProgrammer_DSC>(pp);
 }

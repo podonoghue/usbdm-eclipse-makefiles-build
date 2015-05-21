@@ -7,6 +7,7 @@
 #include "GdiDialoguePluginImp.h"
 #include "GdiDialogue.h"
 #include "UsbdmSystem.h"
+#include "PluginHelper.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ GdiDialoguePluginImp::~GdiDialoguePluginImp() {
    LOGGING_E;
 }
 
-USBDM_ErrorCode GDI_DIALOGUE_PLUGIN_DECLSPEC GdiDialoguePluginImp::execute(BdmInterfacePtr bdmInterface, AppSettingsPtr appSettings, bool forceDisplay) {
+USBDM_ErrorCode GdiDialoguePluginImp::execute(BdmInterfacePtr bdmInterface, AppSettingsPtr appSettings, bool forceDisplay) {
    GdiDialogue dialogue(NULL, bdmInterface);
    USBDM_ErrorCode rc = dialogue.execute(appSettings, forceDisplay);
    dialogue.Destroy();
@@ -29,6 +30,6 @@ USBDM_ErrorCode GDI_DIALOGUE_PLUGIN_DECLSPEC GdiDialoguePluginImp::execute(BdmIn
  * Create the plugin instance
  */
 extern "C"
-GdiDialoguePlugin* GDI_DIALOGUE_PLUGIN_DECLSPEC createPluginInstance() {
-   return new GdiDialoguePluginImp();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<GdiDialoguePluginImp>(pp);
 }

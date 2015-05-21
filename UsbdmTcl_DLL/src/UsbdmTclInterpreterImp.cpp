@@ -1,5 +1,5 @@
 /*
- * UsbdmTclInterperImp.cpp
+ * UsbdmTclInterpreterImp.cpp
  *
  *  Created on: 12 April 2015
  *      Author: podonoghue
@@ -7,6 +7,8 @@
 \verbatim
 Change History
 -====================================================================================
+| 21 May 2015 | Removed closing stdio etc as hangs module unload  - pgo - V4.11.1.30
+| 21 May 2015 | Changes to module load & unload                   - pgo - V4.11.1.30
 | 16 May 2015 | Modified printfs etc go via TCL stdout/stderr     - pgo - V4.11.1.30
 | 12 Apr 2015 | Major re-factor                                   - pgo - V4.11.1.10
 | 12 Nov 2014 | Minor mod to finding executable - not implemented - pgo - V4.10.6.230
@@ -15,7 +17,7 @@ Change History
 \endverbatim
 
  */
-#include "UsbdmTclInterperImp.h"
+#include "UsbdmTclInterpreterImp.h"
 
 #include <stdint.h>
 #include <limits.h>
@@ -27,11 +29,12 @@ Change History
 #include "tcl.h"
 #include "Names.h"
 #include "Common.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 #include "TargetDefines.h"
 #include "WxPluginFactory.h"
 #include "BdmInterfaceFactory.h"
 #include "DSC_Utilities.h"
+#include "PluginHelper.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -43,15 +46,16 @@ using namespace UsbdmWxConstants;
  * Create the plugin instance
  */
 extern "C"
-UsbdmTclInterper __declspec(dllexport) *createPluginInstance(BdmInterfacePtr bdmInterface) {
-   return new UsbdmTclInterperImp(bdmInterface);
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
 }
+
 /*
  * Create the plugin instance
  */
 extern "C"
-UsbdmTclInterper __declspec(dllexport) *createScriptPluginInstance(int argc, char *argv[]) {
-   return new UsbdmTclInterperImp();
+size_t CPP_DLL_EXPORT createInteractivePluginInstance(void *pp) {
+   return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
 }
 
 static WxPluginPtr                 wxPlugin;
@@ -65,57 +69,64 @@ static std::vector<BdmInformation> bdmList;
  * ===========================================================
  */
 
-UsbdmTclInterperImp::UsbdmTclInterperImp() {
+int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
+   Tcl_Main(argc, argv, appInitProc);
+   return EXIT_SUCCESS;
+};
+
+void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
+   LOGGING;
+   if (!Tcl_InterpDeleted(interp)) {
+      log.print("Deleting interp@%p\n", interp);
+      Tcl_DeleteInterp(interp);
+   }
+}
+
+/**!
+ * Create instance of the TCL interpreter
+ *
+ * @param doInit - Used to supproess initialisation. should be true if used with
+ *                 UsbdmTclInterpreterImp::main() for shell as it does its own initialisation
+ */
+UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
    LOGGING;
 
    tclChannel   = 0;
-   logFile      = 0;
-   bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, 0);
 
 #ifdef __unix__
    // Load wxWindows Stub
    (void)dlopen(WXSTUB_DLL_NAME, RTLD_NOW|RTLD_NODELETE);
 #endif
 
-   setTCLExecutable();
+   if (doInit) {
+      setTCLExecutable();
+      interp.reset(Tcl_CreateInterp(), deleteInterpreter);
+      Tcl_Init(interp.get());
+      log.print("Created interp@%p\n", interp.get());
+      registerUSBDMCommands(interp.get());
+   }
 }
 
-int UsbdmTclInterperImp::main(int argc, char *argv[]) {
-   Tcl_Main(argc, argv, appInitProc);
-
-   return EXIT_SUCCESS;
-};
-
-UsbdmTclInterperImp::UsbdmTclInterperImp(BdmInterfacePtr bdmInterface) {
-   LOGGING_Q;
-
-   ::bdmInterface = bdmInterface;
-   if (bdmInterface == 0) {
-      log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
-   }
-   setTCLExecutable();
-
+void UsbdmTclInterpreterImp::redirectStdOut() {
+   LOGGING;
    FILE *fp = UsbdmSystem::Log::getLogFileHandle();
-
-   Tcl_FindExecutable("usbdm");
-   interp.reset(Tcl_CreateInterp(), Tcl_DeleteInterp);
 
 #ifdef __WIN32__
    if (fp == NULL) {
       // Create sink
       fp = fopen ("nul", "w");
    }
-   logFile = fp;
-   int fileNo = fileno(fp);
+   if (fp == NULL) {
+      log.print("(fp == NULL)\n");
+   }
+   int fileNo = dup(fileno(fp));
 
-//   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
+   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
    HANDLE fileHandle = (HANDLE)_get_osfhandle(fileNo);
-//   log.print("createTclInterpreter() fileHandle == %p\n", fileHandle );
+   log.print("createTclInterpreter() fileHandle == %p\n", fileHandle );
    tclChannel = Tcl_MakeFileChannel(fileHandle, TCL_WRITABLE);
-//   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
-   Tcl_RegisterChannel(0, tclChannel);
+   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
 #else
-   //PRINT_ERROR("(tclChannel == 0)\n");
    if (fp == NULL) {
       // Create sink
       fp = fopen ("/dev/null", "w");
@@ -123,52 +134,65 @@ UsbdmTclInterperImp::UsbdmTclInterperImp(BdmInterfacePtr bdmInterface) {
    if (fp == NULL) {
       PRINT_ERROR("(fp == NULL)\n");
    }
-   logFile = fp;
-   int fileNo = fileno(fp);
+   int fileNo = dup(fileno(fp));
    log.print("createTclInterpreter() fileNo == %d\n", fileNo );
    tclChannel = Tcl_MakeFileChannel(fileNo, TCL_WRITABLE);
    log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
-   Tcl_RegisterChannel(0, tclChannel);
 #endif
 
    // Register channel
    Tcl_RegisterChannel(interp.get(), tclChannel);
-//   log.print("createTclInterpreter() Registered channel = %p\n", tclChannel); fflush(logFile);
+   log.print("createTclInterpreter() Registered channel = %p\n", tclChannel);
 
    // Redirect stdout/stderr
-//   log.print("createTclInterpreter() Redirecting stdout\n"); fflush(logFile);
+   log.print("createTclInterpreter() Redirecting stdout\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDOUT);
 
-//   log.print("createTclInterpreter() Redirecting stderr\n"); fflush(logFile);
+   log.print("createTclInterpreter() Redirecting stderr\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDERR);
-
-   registerUSBDMCommands(interp.get());
 
    Tcl_Flush(tclChannel);
 }
 
-UsbdmTclInterperImp::~UsbdmTclInterperImp() {
-   LOGGING_Q;
-   if (interp != 0) {
-      Tcl_DeleteInterp(interp.get());
+void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
+   LOGGING;
+   log.print("doRedirect = %s\n", doRedirect?"TRUE":"FALSE");
+   ::bdmInterface = bdmInterface;
+   if (bdmInterface == 0) {
+      log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
    }
-   interp.reset();
-   wxPlugin.reset();
-   bdmInterface.reset();
+   if (doRedirect) {
+      redirectStdOut();
+   }
 }
 
+UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
+   LOGGING;
+   wxPlugin.reset();
+   log.print("After wxPlugin.reset()\n");
+   bdmInterface.reset();
+   log.print("After bdmInterface.reset()\n");
+// Following crashes on unload???
+   Tcl_SetStdChannel(0, TCL_STDOUT);
+   Tcl_SetStdChannel(0, TCL_STDERR);
+   log.print("After Tcl_SetStdChannel()\n");
+   Tcl_UnregisterChannel(interp.get(), tclChannel);
+   log.print("After Tcl_UnregisterChannel()\n");
+   interp.reset();
+   log.print("After interp.reset()\n");
+}
 #if defined(__linux__)
 #include <unistd.h>
 #endif
 
-int UsbdmTclInterperImp::setTCLExecutable() {
+int UsbdmTclInterpreterImp::setTCLExecutable() {
    LOGGING_Q;
 
 #ifdef __WIN32
    // Not necessary in WIN32??
    char executableName[MAX_PATH];
    if (GetModuleFileNameA(NULL, executableName, sizeof(executableName)) > 0) {
-//      log.print("Doing Tcl_FindExecutable(%s)\n", executableName);
+      log.print("Doing Tcl_FindExecutable(%s)\n", executableName);
       Tcl_FindExecutable(executableName);
    }
 #elif defined(__linux__)
@@ -229,8 +253,19 @@ static void listBdms() {
    PRINT("Found %d devices\n", numDevices);
 }
 
-int UsbdmTclInterperImp::appInitProc(Tcl_Interp *interp) {
+class MyLock {
+public:
+   MyLock() {
+      Tcl_Preserve(this);
+   }
+   ~MyLock() {
+      Tcl_Release(this);
+   }
+};
+
+int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
    LOGGING;
+   MyLock lock;
 
    PRINT("USBDMScript incorporating TCL - Copyright(c) 2011\n");
    PRINT("Press ? for help\n");
@@ -242,11 +277,14 @@ int UsbdmTclInterperImp::appInitProc(Tcl_Interp *interp) {
    return TCL_OK;
 }
 
-USBDM_ErrorCode UsbdmTclInterperImp::evalTclScript(const char *script) {
+USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
    LOGGING_Q;
+   MyLock lock;
 
+   Tcl_Preserve(this);
    int rcTCL = Tcl_Eval(interp.get(), script);
    const char *result = getTclResult();
+   Tcl_Release(this);
 
    USBDM_ErrorCode rc = BDM_RC_OK;
    if (rcTCL != TCL_OK) {
@@ -265,15 +303,14 @@ USBDM_ErrorCode UsbdmTclInterperImp::evalTclScript(const char *script) {
          if (eptr != result) {
             rc = (USBDM_ErrorCode)temp;
          }
-         else if (logFile != NULL) {
+         else {
             log.error("Non-numeric return value = %s\n", result);
             return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
          }
       }
    }
-   if (logFile != NULL) {
+   if (tclChannel != NULL) {
       Tcl_Flush(tclChannel);
-      fflush(logFile);
       if (rcTCL != TCL_OK) {
          // Try to PRINT TCL stack frame
          Tcl_Obj *options = Tcl_GetReturnOptions(interp.get(), rcTCL);
@@ -300,8 +337,9 @@ USBDM_ErrorCode UsbdmTclInterperImp::evalTclScript(const char *script) {
  *
  * @return a point to the result string (a static buffer)
  */
-const char *UsbdmTclInterperImp::getTclResult() {
+const char *UsbdmTclInterpreterImp::getTclResult() {
    LOGGING_Q;
+   MyLock lock;
 
    static char buff[200];
    const char *res = Tcl_GetStringResult(interp.get());
@@ -482,7 +520,7 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
          return TCL_ERROR;
       }
    }
-   if (deviceNum>(int)bdmList.size()) {
+   if (deviceNum>=(int)bdmList.size()) {
       PRINT("Illegal BDM number\n");
       return TCL_ERROR;
    }
@@ -496,6 +534,15 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    PRINT("BDM Version = %s\n", bdmInterface->getBdmVersionString().c_str());
 
    return TCL_OK;
+}
+
+/*!
+ * This callback will cause connections etc to fail quietly on error rather
+ * than use a WxWidget dialogue
+ */
+long nullCallback(std::string message, std::string caption, long style) {
+   fprintf(stderr, "Failing on error message %s:%s\n", caption.c_str(), message.c_str());
+   return UsbdmWxConstants::NO;
 }
 
 //! Set target Type
@@ -553,7 +600,7 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       return TCL_ERROR;
    }
    bdmInterface.reset();
-   bdmInterface = BdmInterfaceFactory::createInterface(targetType);
+   bdmInterface = BdmInterfaceFactory::createInterface(targetType, nullCallback);
    bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_3V3;
    log.print(printBdmOptions(&bdmInterface->getBdmOptions()));
 
@@ -2969,7 +3016,7 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 
     bdmInterface->closeBdm();
     bdmInterface.reset();
-    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF);
+    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, nullCallback);
 
     wxPlugin.reset();
 
@@ -3144,7 +3191,7 @@ const char *name;
       { NULL, NULL }
 };
 
-void UsbdmTclInterperImp::registerUSBDMCommands(Tcl_Interp *interp) {
+void UsbdmTclInterpreterImp::registerUSBDMCommands(Tcl_Interp *interp) {
    int index;
    /*
     *  Register our TCL commands.

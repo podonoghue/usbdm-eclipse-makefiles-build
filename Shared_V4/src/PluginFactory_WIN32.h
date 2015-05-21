@@ -22,30 +22,39 @@ template <class T>
 class PluginFactory {
 
 protected:
-   static std::string dllName;
-   static int (*__attribute__((__stdcall__)) newInstance)(...);
-   static int instanceCount;
-   static HINSTANCE moduleHandle;
+   static std::string   dllName;
+   static size_t        (*__attribute__((__stdcall__)) newInstance)(...);
+   static int           instanceCount;
+   static HINSTANCE     moduleHandle;
 
    PluginFactory() {};
    ~PluginFactory() {};
 
-public:
-
+protected:
    static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING_Q;
+      LOGGING;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-      std::tr1::shared_ptr<T> pp((T*)(*newInstance)(), deleter);
+      log.print("Getting size\n");
+      size_t classSize = (*newInstance)(0);
+      log.print("Calling new\n");
+      void *p = ::operator new(classSize);
+      log.print("Allocated storage @%p, size = %d\n", p, classSize);
+      log.print("Calling placement constructor\n");
+      (*newInstance)(p);
+      std::tr1::shared_ptr<T> pp((T*)p, deleter);
       instanceCount++;
       return pp;
    }
 
 protected:
    static void deleter(T *p) {
-      LOGGING_E;
-      delete p;
+      LOGGING;
+      log.print("Calling destructor\n");
+      p->~T();
+      log.print("Deallocating storage @%p\n", p);
+      ::operator delete(p);
       if (--instanceCount == 0) {
          unloadClass();
       }
@@ -55,7 +64,7 @@ protected:
 };
 
 template <class T> HINSTANCE PluginFactory<T>::moduleHandle = 0;
-template <class T> int (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(...) = 0;
+template <class T> size_t (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
 
 using namespace std;
@@ -108,8 +117,11 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       }
    }
    log.print("Module \'%s\' loaded @0x%p\n", moduleName, moduleHandle);
-
-   newInstance  = (int (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
+   char executableName[MAX_PATH];
+   if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
+      log.print("Module path = %s\n", executableName);
+   }
+   newInstance  = (size_t (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
       char buff[1000];
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
@@ -123,12 +135,14 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
  */
 template <class T>
 void PluginFactory<T>::unloadClass() {
-   LOGGING_Q;
-   log.print("Unloading module from @0x%p\n", moduleHandle);
+   LOGGING;
+   log.print("Unloading module @0x%p\n", moduleHandle);
    if (FreeLibrary(moduleHandle) == 0) {
+      log.print("Unloading module at @0x%p failed\n", moduleHandle);
       printSystemErrorMessage();
       // Ignore error as can't throw in destructor
    }
+   log.print("Unloading module @0x%p done\n", moduleHandle);
    moduleHandle = 0;
    newInstance = 0;
 }

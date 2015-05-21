@@ -100,6 +100,7 @@
 #include "MetrowerksInterface.h"
 #endif
 #include "Names.h"
+#include "PluginHelper.h"
 
 #include "FlashProgrammer_HCS08.h"
 
@@ -3334,6 +3335,10 @@ USBDM_ErrorCode FlashProgrammer_HCS08::programFlash(FlashImagePtr flashImage,
    return rc;
 }
 
-extern "C" FlashProgrammer USBDM_FLASHPROGRAMMER_DECLSPEC *createPluginInstance() {
-   return new FlashProgrammer_HCS08();
+/*
+ * Create the plugin instance
+ */
+extern "C"
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<FlashProgrammer_HCS08>(pp);
 }

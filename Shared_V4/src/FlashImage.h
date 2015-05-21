@@ -93,6 +93,8 @@ protected:
 public:
    virtual ~FlashImage() {};
 
+   virtual void                 setTargetType(TargetType_t targetType) = 0;
+
    virtual USBDM_ErrorCode      loadFile(const std::string &filePath, TargetType_t  targetType, bool clearBuffer=true) = 0;
    virtual void                 clear() = 0;
    virtual bool                 isEmpty() const = 0;

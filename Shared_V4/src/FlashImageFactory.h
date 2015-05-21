@@ -15,20 +15,12 @@ class FlashImageFactory : public PluginFactory<FlashImage> {
 private:
    FlashImageFactory() {}
    ~FlashImageFactory() {}
-   static std::tr1::shared_ptr<FlashImage> createPlugin(std::string dllName) { return FlashImagePtr(); }
 
 public:
    static FlashImagePtr createFlashImage(TargetType_t targetType) {
       LOGGING;
-      if (newInstance == 0) {
-#ifdef LOG
-         loadClass("usbdm-flash-image-debug.4.dll", "createPluginInstance");
-#else
-         loadClass("usbdm-flash-image.4.dll", "createPluginInstance");
-#endif
-      }
-      FlashImagePtr pp((FlashImage*)(*newInstance)(targetType), deleter);
-      instanceCount++;
+      FlashImagePtr pp = createPlugin(DLL_NAME("usbdm-flash-image"), "createPluginInstance");
+      pp->setTargetType(targetType);
       return pp;
    }
 };

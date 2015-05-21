@@ -10,6 +10,7 @@
 
 #include "UsbdmWxConstants.h"
 #include "Utils.h"
+#include "PluginHelper.h"
 
 using namespace UsbdmWxConstants;
 
@@ -260,6 +261,6 @@ USBDM_ErrorCode BdmInterface_DSC::getStatus(unsigned int *status) {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_DSC();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_DSC>(pp);
 }

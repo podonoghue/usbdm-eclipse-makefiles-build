@@ -4,10 +4,10 @@
 #MODULE    = module
 #TARGET    = BUILDDIR
 
-# default to 'module'
+# Makefiles in subdirs used to collect targets (default 'module.mk')
 MODULE ?= module
 
-# default to same as build directory
+# Main target name (default same as build directory)
 TARGET ?= $(BUILDDIR)
 
 TARGET_DLL=$(LIB_PREFIX)$(TARGET)$(LIB_SUFFIX)
@@ -35,7 +35,7 @@ INCS := $(patsubst %,-I%,$(SOURCEDIRS))
 LIBDIRS += 
 
 # Extra libraries
-LIBS += 
+LIBS +=
 
 # Each module will add to this
 SRC :=
@@ -83,7 +83,7 @@ $(BUILDDIR)/%.o : %.cpp
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -o $@  $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) ${EXELIBS}
+	$(CC) -o $@ $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
 
 # How to copy EXE to target directory
 #==============================================
@@ -98,7 +98,7 @@ $(TARGET_BINDIR)/$(TARGET_EXE): $(BUILDDIR)/$(TARGET_EXE)
 $(BUILDDIR)/$(TARGET_DLL): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
+	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS)
 
 # How to copy LIBRARY to target directory
 #==============================================

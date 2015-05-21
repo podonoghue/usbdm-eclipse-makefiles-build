@@ -6,6 +6,7 @@
  */
 
 #include "UsbdmTclInterpreterFactory.h"
+#include "BdmInterfaceFactory.h"
 
 /*
  * ===========================================================
@@ -30,7 +31,7 @@ public:
 int main(int argc, char *argv[]) {
    OpenLog ol;
 
-   UsbdmTclInterperPtr ti = UsbdmTclInterperFactory::createUsbdmTclInterper();
+   UsbdmTclInterperPtr ti = UsbdmTclInterperFactory::createInteractiveTclInterper(BdmInterfaceFactory::createInterface(T_OFF));
    ti->main(argc, argv);
 }
 #endif

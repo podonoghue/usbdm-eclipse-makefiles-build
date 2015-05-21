@@ -6,7 +6,6 @@ SRC += Version.rc
 SRC += GdiDialoguePluginImp.cpp
 SRC += GdiDialogueSkeleton.cpp
 SRC += GdiDialogue.cpp
-SRC += BdmInterfaceFactory.cpp
 SRC += AppSettings.cpp
 SRC += Utils.cpp
 SRC += WxStub.cpp

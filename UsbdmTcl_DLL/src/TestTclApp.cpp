@@ -41,6 +41,16 @@ public:
 //      "}\n"
 //      ;
 
+class Dummy {
+public:
+   Dummy() {
+      LOGGING;
+   }
+   ~Dummy() {
+      LOGGING;
+   }
+};
+
 int main(void) {
    OpenLog openLog;
    LOGGING;
@@ -52,20 +62,31 @@ int main(void) {
    BdmInterfacePtr bdmInterface = BdmInterfaceFactory::createInterface(T_ARM);
    bdmInterface->initBdm();
 
-   log.print("Creating UsbdmTclInterperPtr\n");
-   UsbdmTclInterperPtr p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
-
-   log.print("evalTclScript - \n[script]\n");
-   p->evalTclScript(script.c_str());
-   log.print("getTclResult - \n[%s]\n", p->getTclResult());
-
-   log.print("evalTclScript - \n[%s]\n", "initTarget \"\"");
-   p->evalTclScript("initTarget \"\"");
-   log.print("getTclResult - \n[%s]\n", p->getTclResult());
-
-   log.print("evalTclScript - \n[%s]\n", "massEraseTarget");
-   p->evalTclScript("massEraseTarget");
-   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+//
+//   log.print("evalTclScript - \n[script]\n");
+//   p->evalTclScript(script.c_str());
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+//
+//   log.print("evalTclScript - \n[%s]\n", "puts \"hello\" \"\"");
+//   p->evalTclScript("puts hello \"\"");
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+//
+//   log.print("evalTclScript - \n[%s]\n", "puts \"bye bye\"");
+//   p->evalTclScript("puts bye bye");
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+//
+//   p.reset();
+//
+//   log.print("Creating UsbdmTclInterperPtr\n");
+//   p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+//
+//   log.print("evalTclScript - \n[script]\n");
+//   p->evalTclScript(script.c_str());
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+//
+//   log.print("evalTclScript - \n[%s]\n", "puts \"hello\" \"\"");
+//   p->evalTclScript("puts hello \"\"");
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
 
 //   log.print("evalTclScript - \n[%s]\n", script);
 //   p->evalTclScript(script.c_str());
@@ -78,9 +99,29 @@ int main(void) {
 //
 //   log.print("evalTclScript - \n[puts \"hello\"\n c]\n");
 //   p->evalTclScript("puts \"hello\"\n c");
-//
-//   log.print("evalTclScript - \n[puts \"hello\"\n d]\n");
-//   p->evalTclScript("puts \"hello\"\n d");
+
+//   log.print("evalTclScript - \n[puts \"hello\"\n]\n");
+//   p->evalTclScript("puts \"hello\"\n");
+//   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+
+   log.print("Creating UsbdmTclInterperPtr\n");
+   UsbdmTclInterperPtr p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+   log.print("evalTclScript - \n[puts \"hello\"\n]\n");
+   p->evalTclScript("puts \"hello\"\n");
+   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+   log.print("Deleting p\n");
+   p.reset();
+
+   log.print("Creating UsbdmTclInterperPtr\n");
+   p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+   log.print("evalTclScript - \n[puts \"hello\"\n]\n");
+   p->evalTclScript("puts \"hello\"\n");
+   log.print("getTclResult - \n[%s]\n", p->getTclResult());
+   log.print("Deleting p\n");
+   p.reset();
+
+
+   log.print("Exiting\n");
 
    return 0;
 }

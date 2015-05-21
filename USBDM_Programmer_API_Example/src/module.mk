@@ -6,6 +6,4 @@ SRC += Version.rc
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
 
-SRC   += BdmInterfaceFactory.cpp
-SRC   += FlashProgrammerFactory.cpp
 SRC   += DeviceInterface.cpp

@@ -6,7 +6,7 @@
  */
 
 #include "BdmInterface_JTAG.h"
-
+#include "PluginHelper.h"
 
 BdmInterface_JTAG::BdmInterface_JTAG() : BdmInterfaceCommon(T_JTAG) {
 }
@@ -18,6 +18,6 @@ BdmInterface_JTAG::~BdmInterface_JTAG() {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_JTAG();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_JTAG>(pp);
 }

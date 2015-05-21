@@ -46,18 +46,6 @@
    #endif
 #endif
 
-#if defined(COMPILE_GDI_DIALOGUE_PLUGIN_DLL)
-// Buiding Library
-#define GDI_DIALOGUE_PLUGIN_DECLSPEC CPP_DLL_EXPORT
-// Incorprating library directly
-#elif defined(LINK_GDI_DIALOGUE_PLUGIN_DLL)
-//! Link to routines directly
-#define GDI_DIALOGUE_PLUGIN_DECLSPEC CPP_DLL_LOCAL
-#else
-// Dynamically linking to library
-#define GDI_DIALOGUE_PLUGIN_DECLSPEC CPP_DLL_IMPORT
-#endif
-
 #include <tr1/memory>
 
 #include "USBDM_API.h"
@@ -66,7 +54,7 @@
 
 class GdiDialoguePlugin;
 
-class GDI_DIALOGUE_PLUGIN_DECLSPEC GdiDialoguePlugin {
+class GdiDialoguePlugin {
 public:
    /*!
     *  Creates and displays the Dialogue to obtain settings from the user.

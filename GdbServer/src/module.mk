@@ -26,6 +26,4 @@ SRC += Names.cpp
 SRC += Utils.cpp
 SRC += UsbdmDialogueSkeleton.cpp
 SRC += UsbdmDialogue.cpp
-SRC += BdmInterfaceFactory.cpp
 SRC += DeviceInterface.cpp
-SRC += FlashProgrammerFactory.cpp

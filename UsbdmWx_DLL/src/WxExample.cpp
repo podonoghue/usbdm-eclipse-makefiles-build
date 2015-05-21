@@ -40,6 +40,7 @@ int main() {
 
    p->display("bye", "bye", YES_NO|NO_DEFAULT);
 
+   p.reset();
    p = WxPluginFactory::createWxPlugin();
 
    log.print("Calling display @0x%p\n", p.get());

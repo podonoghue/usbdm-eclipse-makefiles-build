@@ -51,6 +51,7 @@
 #include "Utils.h"
 
 #include "FlashImageImp.h"
+#include "PluginHelper.h"
 
 using namespace std;
 
@@ -58,8 +59,8 @@ using namespace std;
  * Create the plugin instance
  */
 extern "C"
-USBDM_FLASHIMAGE_DECLSPEC FlashImage* createPluginInstance(TargetType_t targetType) {
-   return new FlashImageImp(targetType);
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<FlashImageImp>(pp);
 }
 
 const char* FlashImageImp::get_pFlagsName(unsigned int flags) {
@@ -334,16 +335,21 @@ void EnumeratorImp::lastValid() {
 /*!
  *   Constructor - creates an empty Flash image
  */
-FlashImageImp::FlashImageImp(TargetType_t targetType) :
-      targetType(targetType),
+FlashImageImp::FlashImageImp() :
+      targetType(T_NONE),
       wordAddresses(false),
       firstAllocatedAddress((unsigned )(-1)),
       lastAllocatedAddress(0),
       lastPageNumAccessed((uint16_t )(-1)),
       lastMemoryPageAccessed(NULL),
       elementCount(0),
-      littleEndian(false) {
+      littleEndian(false),
+      allowOverwrite(false),
+      fp(0) {
+}
 
+void FlashImageImp::setTargetType(TargetType_t targetType) {
+   this->targetType = targetType;
    if (targetType == T_MC56F80xx) {
       wordAddresses = true;
    }

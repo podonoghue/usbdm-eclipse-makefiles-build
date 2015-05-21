@@ -32,13 +32,14 @@ protected:
    bool                              littleEndian;           //!< Target is little-endian
    std::string                       sourceFilename;         //!< Name of last file loaded
    std::string                       sourcePath;             //!< Path of last file loaded
-   FILE                             *fp;
    bool                              allowOverwrite;
+   FILE                             *fp;
 
 public:
-   FlashImageImp(TargetType_t targetType);
+   FlashImageImp();
    virtual ~FlashImageImp();
 
+   virtual void                  setTargetType(TargetType_t targetType);
    virtual void                  clear();
    virtual bool                  isValid(uint32_t address);
    virtual Enumerator           *getEnumerator(uint32_t address = 0);

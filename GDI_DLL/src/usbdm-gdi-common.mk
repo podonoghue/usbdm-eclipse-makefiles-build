@@ -6,8 +6,6 @@ SRC += Version.rc
 SRC += GDI_Common.cpp
 SRC += MetrowerksInterface.cpp
 SRC += FindWindow.cpp
-SRC += BdmInterfaceFactory.cpp
-SRC += FlashProgrammerFactory.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)

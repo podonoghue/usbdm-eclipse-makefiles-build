@@ -100,6 +100,7 @@
 #include "MetrowerksInterface.h"
 #endif
 #include "Names.h"
+#include "PluginHelper.h"
 
 #include "FlashProgrammer_HCS12.h"
 
@@ -3221,6 +3222,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setDeviceData(const DeviceData &theParame
    return PROGRAMMING_RC_OK;
 }
 
-extern "C" FlashProgrammer USBDM_FLASHPROGRAMMER_DECLSPEC *createPluginInstance() {
-   return new FlashProgrammer_HCS12();
+/*
+ * Create the plugin instance
+ */
+extern "C"
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<FlashProgrammer_HCS12>(pp);
 }

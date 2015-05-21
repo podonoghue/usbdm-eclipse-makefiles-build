@@ -46,24 +46,12 @@
    #endif
 #endif
 
-#if defined(COMPILE_WX_PLUGIN_DLL)
-// Buiding Library
-#define WXPLUGIN_DECLSPEC CPP_DLL_EXPORT
-// Incorprating library directly
-#elif defined(LINK_GDI_DIALOGUE_PLUGIN_DLL)
-//! Link to routines directly
-#define WXPLUGIN_DECLSPEC CPP_DLL_LOCAL
-#else
-// Dynamically linking to library
-#define WXPLUGIN_DECLSPEC CPP_DLL_IMPORT
-#endif
-
 #include <tr1/memory>
 #include <string>
 
 #include "UsbdmWxConstants.h"
 
-class WXPLUGIN_DECLSPEC WxPlugin {
+class WxPlugin {
 
 public:
    virtual long display(std::string message, std::string caption, long style) = 0;

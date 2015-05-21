@@ -104,7 +104,7 @@ $(TARGET_BINDIR)/$(TARGET_EXE): $(BUILDDIR)/$(TARGET_EXE)
 	@echo --
 	@echo -- Copying $? to $@
 	$(CP) $? $@
-	$(STRIP) --strip-all $@
+	$(STRIP) $(STRIPFLAGS) $@
 
 # How to link a LIBRARY
 #==============================================
@@ -119,7 +119,7 @@ $(TARGET_LIBDIR)/$(TARGET_DLL): $(BUILDDIR)/$(TARGET_DLL)
 	@echo --
 	@echo -- Copying $? to $@
 	$(CP) $? $@
-	$(STRIP) --strip-all $@
+	$(STRIP) $(STRIPFLAGS) $@
 ifneq ($(UNAME_S),Windows)
 	$(LN) $(TARGET_DLL) $(TARGET_LIBDIR)/$(LIB_PREFIX)$(TARGET)$(LIB_MAJOR_SUFFIX)
 	$(LN) $(TARGET_DLL) $(TARGET_LIBDIR)/$(LIB_PREFIX)$(TARGET)$(LIB_NO_SUFFIX)

@@ -6,7 +6,7 @@
  */
 
 #include "BdmInterface_S12Z.h"
-
+#include "PluginHelper.h"
 
 BdmInterface_S12Z::BdmInterface_S12Z() : BdmInterfaceCommon(T_S12Z) {
 }
@@ -26,6 +26,6 @@ USBDM_ErrorCode BdmInterface_S12Z::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-BdmInterface* __declspec(dllexport) createPluginInstance() {
-   return new BdmInterface_S12Z();
+size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+   return TcreatePluginInstance<BdmInterface_S12Z>(pp);
 }

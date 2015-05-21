@@ -10,7 +10,7 @@
 
 #include "GdiDialoguePlugin.h"
 
-class GDI_DIALOGUE_PLUGIN_DECLSPEC GdiDialoguePluginImp: public GdiDialoguePlugin {
+class GdiDialoguePluginImp: public GdiDialoguePlugin {
 public:
    GdiDialoguePluginImp();
    virtual ~GdiDialoguePluginImp();

@@ -4,7 +4,6 @@
 #MODULE    = module
 #TARGET    = BUILDDIR
 
-
 # Makefiles in subdirs used to collect targets (default 'module.mk')
 MODULE ?= module
 
