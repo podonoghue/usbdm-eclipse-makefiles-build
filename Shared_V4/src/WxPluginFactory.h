@@ -16,6 +16,12 @@ class WxPluginFactory: public PluginFactory<WxPlugin> {
 
 public:
    static WxPluginPtr createWxPlugin() {
+#if defined(__linux__)
+      // HACK for linux - never unload plug-in once loaded
+      if (dummy == 0) {
+         dummy =  createPlugin(DLL_NAME("usbdm-wx-plugin"), "createPluginInstance");
+      }
+#endif
       return createPlugin(DLL_NAME("usbdm-wx-plugin"), "createPluginInstance");
    }
 

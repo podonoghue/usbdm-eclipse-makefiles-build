@@ -44,7 +44,7 @@ all: TestTclApp
 clean:
 	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIX)   $(TARGET)-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} UsbdmScript$(BUILDDIR_SUFFIX) UsbdmScript-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} TestTclApp
+	${RMDIR} TestTclApp$(BUILDDIR_SUFFIX)
 
 .PHONY: all clean 
 .PHONY: $(TARGET) $(TARGET)-debug

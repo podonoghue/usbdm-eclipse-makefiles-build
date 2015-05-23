@@ -258,14 +258,14 @@ CFF_API int bdm_nop(void) {
 CFF_API int bdm_ta(void) {
    LOGGING_E;
    USBDM_ControlPins(PIN_TA_LOW, 0);
-   milliSleep(500 /* ms */);
+   UsbdmSystem::milliSleep(500 /* ms */);
    USBDM_ControlPins(PIN_RELEASE, 0);
    return 0;
 }
 CFF_API int bdm_bkpt(void) {
    LOGGING_E;
    USBDM_ControlPins(PIN_BKPT_LOW, 0);
-   milliSleep(500 /* ms */);
+   UsbdmSystem::milliSleep(500 /* ms */);
    USBDM_ControlPins(PIN_RELEASE, 0);
    return 0;
 }

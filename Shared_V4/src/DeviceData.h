@@ -1,12 +1,63 @@
-/*
- * DeviceData.hpp
- *
- *  Created on: 27/02/2010
- *      Author: podonoghue
- */
+/*! \file
+    \brief Header file for DeviceData.cpp
+
+    \verbatim
+    Copyright (C) 2015  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Change History
+   +====================================================================
+   | 27 Feb 2010 | Created
+   +====================================================================
+    \endverbatim
+*/
 
 #ifndef DEVICEDATA_HPP_
 #define DEVICEDATA_HPP_
+
+#if !defined(CPP_DLL_LOCAL)
+   #ifdef _WIN32
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __declspec(dllexport)
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __declspec(dllimport)
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL
+   #else
+      //! Functions exported from a library
+      #define CPP_DLL_EXPORT __attribute__ ((visibility ("default")))
+      //! Functions imported from a library
+      #define CPP_DLL_IMPORT __attribute__ ((visibility ("default")))
+      //! Functions local to a library
+      #define CPP_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
+   #endif
+#endif
+
+#if defined(COMPILE_DEVICE_DATA_DLL)
+// Building Library
+#define DEVICE_DATA_DESCSPEC CPP_DLL_EXPORT
+// Incorporating library directly
+#elif defined(LINK_DEVICE_DATA_DLL)
+//! Link to routines directly
+#define DEVICE_DATA_DESCSPEC CPP_DLL_LOCAL
+#else
+// Dynamically linking to library
+#define DEVICE_DATA_DESCSPEC CPP_DLL_IMPORT
+#endif
+
 #include <vector>
 #include <map>
 #include <string>
@@ -75,11 +126,11 @@ typedef enum {
 /*
  * ============================================================================================
  */
-class EnumValuePair;
+class DEVICE_DATA_DESCSPEC EnumValuePair;
 
 //! Information on clock types
 //!
-class ClockTypes {
+class DEVICE_DATA_DESCSPEC ClockTypes {
 private:
    //! Mappings for Clock types
    static const EnumValuePair clockNames[];
@@ -96,7 +147,7 @@ public:
 /*
  * ============================================================================================
  */
-class SharedInformationItem {
+class DEVICE_DATA_DESCSPEC SharedInformationItem {
 
 public:
    SharedInformationItem() {}
@@ -111,7 +162,7 @@ typedef std::tr1::shared_ptr<SharedInformationItem> SharedInformationItemPtr;
 /*
  * ============================================================================================
  */
-class TclScript : public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC TclScript : public SharedInformationItem {
 
 private:
    std::string script;
@@ -128,7 +179,7 @@ typedef std::tr1::shared_ptr<const TclScript>   TclScriptConstPtr;
 /*
  * ============================================================================================
  */
-class RegisterDescription: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC RegisterDescription: public SharedInformationItem {
 
 private:
    std::string description;
@@ -149,7 +200,7 @@ typedef std::tr1::shared_ptr<const RegisterDescription>   RegisterDescriptionCon
 /*
  * ============================================================================================
  */
-class FlashProgram: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC FlashProgram: public SharedInformationItem {
 
 private:
    std::string flashProgram;
@@ -167,7 +218,7 @@ typedef std::tr1::shared_ptr<const FlashProgram> FlashProgramConstPtr;
 /*
  * ============================================================================================
  */
-class SecurityDescription: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC SecurityDescription: public SharedInformationItem {
 
 private:
    std::string securityDescription;
@@ -186,7 +237,7 @@ typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConst
 /*
  * ============================================================================================
  */
-class GnuInfoList: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC GnuInfoList: public SharedInformationItem {
 
 public:
    GnuInfoList() {}
@@ -200,7 +251,7 @@ typedef std::tr1::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
 /*
  * ============================================================================================
  */
-class GnuInfo {
+class DEVICE_DATA_DESCSPEC GnuInfo {
 
 public:
    GnuInfo() {}
@@ -214,7 +265,7 @@ typedef std::tr1::shared_ptr<const GnuInfo> GnuInfoConstPtr;
  * ============================================================================================
  */
 
-class SecurityInfo: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC SecurityInfo: public SharedInformationItem {
 
 public:
    enum SecType {unsecure, secure, custom};
@@ -245,7 +296,7 @@ typedef std::tr1::shared_ptr<const SecurityInfo> SecurityInfoConstPtr;
  * ============================================================================================
  */
 
-class SecurityEntry: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC SecurityEntry: public SharedInformationItem {
 private:
    SecurityDescriptionPtr  securityDescription;
    SecurityInfoPtr         unsecureInformation;
@@ -279,7 +330,7 @@ typedef std::tr1::shared_ptr<const SecurityEntry> SecurityEntryConstPtr;
  * ============================================================================================
  */
 
-class FlexNVMInfo: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC FlexNVMInfo: public SharedInformationItem {
 
 public:
    class EeepromSizeValue {
@@ -338,7 +389,7 @@ typedef std::tr1::shared_ptr<const FlexNVMInfo> FlexNVMInfoConstPtr;
 // This may be used to represent a non-contiguous range of memory locations that are related
 // e.g. two ranges of Flash that are controlled by the same Flash controller as occurs in some HCS08s
 //
-class MemoryRegion: public SharedInformationItem {
+class DEVICE_DATA_DESCSPEC MemoryRegion: public SharedInformationItem {
 
 private:
    MemoryRegion(MemoryRegion &);
@@ -527,7 +578,7 @@ typedef std::tr1::shared_ptr<const MemoryRegion> MemoryRegionConstPtr;
 /*
  * ============================================================================================
  */
-class TargetSDID {
+class DEVICE_DATA_DESCSPEC TargetSDID {
 
 public:
    uint32_t mask; // 0 => wildcard
@@ -537,7 +588,7 @@ public:
 
 //! Information about a target device
 //!
-class DeviceData {
+class DEVICE_DATA_DESCSPEC DeviceData {
 
 public:
    //! How to handle erasing of flash before programming
@@ -679,7 +730,7 @@ typedef std::tr1::shared_ptr<const DeviceData> DeviceDataConstPtr;
 
 //! Database of device information
 //!
-class DeviceDataBase {
+class DEVICE_DATA_DESCSPEC DeviceDataBase {
 
 private:
    std::vector<DeviceDataPtr>                            deviceData;         //! List of devices

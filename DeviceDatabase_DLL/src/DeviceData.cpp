@@ -1550,7 +1550,7 @@ int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
 //! \brief Loads the known devices list from the configuration file.
 //!
 void DeviceDataBase::loadDeviceData() {
-   LOGGING_Q;
+   LOGGING;
    string deviceFile;
    try {
       switch(targetType) {
@@ -1568,7 +1568,7 @@ void DeviceDataBase::loadDeviceData() {
             log.print("Unknown target type\n");
             throw MyException("DeviceDataBase::loadDeviceData() - illegal target type");
       }
-      string deviceFilePath = UsbdmSystem::getApplicationPath(deviceFile);
+      string deviceFilePath = UsbdmSystem::getResourcePath(deviceFile);
       log.print("Device File = \'%s\'\n", (const char *)deviceFilePath.c_str());
       if (deviceFilePath.empty()) {
          throw MyException("DeviceDataBase::loadDeviceData() - failed to find device database file");

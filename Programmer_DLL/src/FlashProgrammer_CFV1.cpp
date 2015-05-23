@@ -93,7 +93,7 @@
 #include "USBDM_DSC_API.h"
 #endif
 #include "UsbdmTclInterpreterFactory.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 #ifdef GDI
 #include "GDI.h"
 #include "MetrowerksInterface.h"
@@ -1427,7 +1427,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::executeTargetProgram(uint8_t *pBuffer, uin
    int timeout = 400; // x 10 ms
    unsigned long runStatus;
    do {
-      milliSleep(10);
+      UsbdmSystem::milliSleep(10);
 #ifdef LOG
       log.printq(".");
       if (progressTimer != 0) {
@@ -1546,7 +1546,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::determineTargetSpeed(void) {
       log.error("bdmInterface->go failed\n");
       return PROGRAMMING_RC_ERROR_BDM;
    }
-   milliSleep(1000);
+   UsbdmSystem::milliSleep(1000);
    if (bdmInterface->halt() != BDM_RC_OK) {
       log.error("bdmInterface->halt failed\n");
       return PROGRAMMING_RC_ERROR_BDM;

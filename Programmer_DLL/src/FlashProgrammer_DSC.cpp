@@ -88,7 +88,7 @@
 #include "SimpleSRecords.h"
 #include "USBDM_DSC_API.h"
 #include "UsbdmTclInterpreterFactory.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 #ifdef GDI
 #include "GDI.h"
 #include "MetrowerksInterface.h"
@@ -1134,7 +1134,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::executeTargetProgram(uint8_t *pBuffer, uint
    // Wait for target stop at execution completion
    int timeout = 400; // x 10 ms
    do {
-      milliSleep(10);
+      UsbdmSystem::milliSleep(10);
 #ifdef LOG
       log.printq(".");
       if (progressTimer != 0) {
@@ -1237,7 +1237,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::determineTargetSpeed(void) {
       log.error("bdmInterface->go failed\n");
       return PROGRAMMING_RC_ERROR_BDM;
    }
-   milliSleep(1000);
+   UsbdmSystem::milliSleep(1000);
    if (bdmInterface->halt() != BDM_RC_OK) {
       log.error("bdmInterface->halt failed\n");
       return PROGRAMMING_RC_ERROR_BDM;

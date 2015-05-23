@@ -8,6 +8,7 @@
 #include "WxPluginFactory.h"
 
 #include <wx/app.h>
+#include "Utils.h"
 
 using namespace UsbdmWxConstants;
 
@@ -23,10 +24,8 @@ public:
 };
 
 int main() {
-   fprintf(stderr, "Starting\n");
    OpenLog openLog;
    LOGGING;
-   fprintf(stderr, "After\n");
 
    log.print("wxTheApp  = %p\n", wxTheApp);
 
@@ -37,15 +36,15 @@ int main() {
 
    log.print("Calling display @0x%p\n", p.get());
    p->display("hello", "there", YES_NO|NO_DEFAULT);
-
    p->display("bye", "bye", YES_NO|NO_DEFAULT);
+
+   UsbdmSystem::milliSleep(2000);
 
    p.reset();
    p = WxPluginFactory::createWxPlugin();
 
    log.print("Calling display @0x%p\n", p.get());
    p->display("hello", "there", YES_NO|NO_DEFAULT);
-
    p->display("bye", "bye", YES_NO|NO_DEFAULT);
    return 0;
 }

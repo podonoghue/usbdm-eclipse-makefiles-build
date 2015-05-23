@@ -54,29 +54,44 @@
 //! Usual C interface for C++
 #define EXTERN_C  extern "C"
 #else
-//! Usual C interface for C++
+//! Usual C interface for C
 #ifndef EXTERN_C
 #define EXTERN_C
 #endif
 #endif
 
-#if defined(_WIN32) && !defined (WINAPI)
-#ifdef __GNUC__
-   #define WINAPI __attribute__((__stdcall__))
-#else
-   #define WINAPI __stdcall
-#endif
+#if defined(WIN32)
+   #if !defined (WINAPI)
+      #ifdef __GNUC__
+         #define WINAPI __attribute__((__stdcall__))
+      #else
+         #define WINAPI
+      #endif
+   #endif
 #endif
 
-#ifdef USBDM_DLL_EXPORTS
-   //! Building the DLL
-   #define USBDM_API      EXTERN_C CPP_DLL_EXPORT WINAPI
-   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT WINAPI
+#ifdef WIN32
+   #ifdef USBDM_DLL_EXPORTS
+      //! Building the DLL
+      #define USBDM_API      EXTERN_C CPP_DLL_EXPORT WINAPI
+      #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT WINAPI
+   #else
+      //! Importing the DLL
+      #define USBDM_API      EXTERN_C CPP_DLL_IMPORT WINAPI
+      #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT WINAPI
+   #endif
 #else
-   //! Importing the DLL
-   #define USBDM_API      EXTERN_C CPP_DLL_IMPORT WINAPI
-   #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT WINAPI
+   #ifdef USBDM_DLL_EXPORTS
+      //! Building the DLL
+      #define USBDM_API      EXTERN_C CPP_DLL_EXPORT
+      #define OSBDM_API_JM60 EXTERN_C CPP_DLL_EXPORT
+   #else
+      //! Importing the DLL
+      #define USBDM_API      EXTERN_C CPP_DLL_IMPORT
+      #define OSBDM_API_JM60 EXTERN_C CPP_DLL_IMPORT
+   #endif
 #endif
+
 //==================================================
 
 #include "USBDM_ErrorMessages.h"

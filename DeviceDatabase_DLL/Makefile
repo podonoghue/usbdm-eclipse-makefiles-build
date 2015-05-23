@@ -2,8 +2,8 @@ include ../Common.mk
 
 TARGET  = usbdm-device-database
 MODULE = module
-
-DLL_DEFS ='-DCOMPILE_USBDM_DEVICE_DATABASE_DLL'
+             
+DLL_DEFS ='-DCOMPILE_DEVICE_DATA_DLL'
 
 $(TARGET):
 	@echo ''

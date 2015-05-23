@@ -423,7 +423,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithDelayedConfirmation(RetryMo
 
    if (retryMode&retryDelayedCheck) {
       // Check if still connected after a while (WDOG check)
-      milliSleep(20);
+      UsbdmSystem::milliSleep(20);
    }
    unsigned long BDMStatusReg;
    rc = USBDM_ReadStatusReg(&BDMStatusReg);
@@ -452,15 +452,15 @@ USBDM_ErrorCode BdmInterfaceCommon::retryConnection(USBDMStatus_t *usbdmStatus) 
    }
    else if (bdmOptions.targetType == T_CFVx) {
       USBDM_ControlPins(PIN_BKPT_LOW|PIN_RESET_3STATE);   // Release RESET (BKPT stays low)
-      milliSleep(bdmOptions.resetReleaseInterval);        // Make sure BKPT/BKGD are seen after reset
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);        // Make sure BKPT/BKGD are seen after reset
       USBDM_ControlPins(PIN_RELEASE);                     // Release all pins
-      milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
    }
    else {
       USBDM_ControlPins(PIN_BKGD_LOW|PIN_RESET_3STATE);   // Release RESET (BKGD stays low)
-      milliSleep(bdmOptions.resetReleaseInterval);        // Make sure BKPT/BKGD are seen after reset
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);        // Make sure BKPT/BKGD are seen after reset
       USBDM_ControlPins(PIN_RELEASE);                     // Release all pins
-      milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
    }
 
    // Get status twice to clear spurious reset flag
@@ -478,7 +478,7 @@ USBDM_ErrorCode BdmInterfaceCommon::retryConnection(USBDMStatus_t *usbdmStatus) 
    rc = targetConnectWithDelayedConfirmation(retryDelayedCheck);  // Try connect again
 
    USBDM_ControlPins(PIN_RELEASE);                     // Release all pins
-   milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);       // Give target time to recover from reset
    return rc;
 }
 
@@ -560,7 +560,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       // BKPT should wake the target but appears not to work if actually in
       // low power mode as opposed to just stopped
       USBDM_ControlPins(PIN_BKPT_LOW); // Assert BKPT
-      milliSleep(100);
+      UsbdmSystem::milliSleep(100);
       USBDM_ControlPins(PIN_RELEASE); // Release BKPT
       rc = USBDM_Connect();
       if (rc == BDM_RC_OK) {
@@ -623,9 +623,9 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
          if (retryMode&retryByPower) {
             // Try power cycle first
             USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-            milliSleep(bdmOptions.powerOffDuration);
+            UsbdmSystem::milliSleep(bdmOptions.powerOffDuration);
             USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-            milliSleep(bdmOptions.powerOnRecoveryInterval);
+            UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
             rc = retryConnection(usbdmStatus);
             if (rc == BDM_RC_OK) {
                break;
@@ -771,7 +771,7 @@ USBDM_ErrorCode BdmInterfaceCommon::setTargetTypeWithRetry() {
       if (firstTryFlag && (rc == BDM_RC_VDD_NOT_PRESENT)) {
          // Target power can sometimes take a long while to rise
          // Give it another second to reduce 'noise'
-         milliSleep(1000);
+         UsbdmSystem::milliSleep(1000);
          rc = USBDM_SetTargetType(bdmOptions.targetType);
          firstTryFlag = false;
       }

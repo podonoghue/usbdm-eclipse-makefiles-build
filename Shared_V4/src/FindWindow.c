@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include "FindWindow.h"
 
+#ifdef WIN32
+
+// Not currently used
+
 //! A rather crude effort to locate an Eclipse window - Any one!
 //!
 //! @return HWND of Any Eclipse window located
@@ -39,3 +43,4 @@ const int MaxTitleSize = 1024;           // Size for console window titles.
 
    return(hwndFound);
 }
+#endif

@@ -5,8 +5,9 @@ SRC += Version.rc
 
 SRC += GDI_Common.cpp
 SRC += MetrowerksInterface.cpp
-SRC += FindWindow.cpp
+#SRC += FindWindow.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
+SRC   += Names.cpp

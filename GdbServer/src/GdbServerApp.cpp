@@ -80,7 +80,7 @@ private:
    bool                        verify;
    bool                        program;
    bool                        verbose;
-   wxString                    hexFileName;
+//   wxString                    hexFileName;
    double                      trimFrequency;
    long                        trimNVAddress;
    int                         returnValue;
@@ -89,7 +89,7 @@ private:
    DeviceInterfacePtr          deviceInterface;
    AppSettingsPtr              appSettings;
 
-   void doCommandLineProgram();
+//   void doCommandLineProgram();
 
 public:
    GdbServerApp();
@@ -137,73 +137,73 @@ USBDM_ErrorCode callBack(USBDM_ErrorCode status, int percent, const char *messag
    return PROGRAMMING_RC_OK;
 }
 
-void GdbServerApp::doCommandLineProgram() {
-   LOGGING;
-   FlashImagePtr      flashImage      = FlashImageFactory::createFlashImage(targetType);
-   FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
-
-   do {
-      // Initialise the BDM
-      if (bdmInterface->initBdm() != BDM_RC_OK) {
-         returnValue = 1;
-         break;
-      }
-      if (!hexFileName.IsEmpty() &&
-         (flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType) != BDM_RC_OK)) {
-         log.print("Failed to load Hex file\n");
-         returnValue = 1;
-         break;
-      }
-      // Copy device description and change mutable settings
-      DeviceDataPtr &deviceData = deviceInterface->getCurrentDevice();
-      if (deviceData->getSecurity() == SEC_CUSTOM) {
-         deviceData->setCustomSecurity(customSecurityValue);
-      }
-      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(*deviceData);
-      if (rc != BDM_RC_OK) {
-         continue;
-      }
-      if (program) {
-         // Program & Verify
-         if (verbose) {
-            rc = flashProgrammer->programFlash(flashImage, callBack);
-         }
-         else {
-            rc = flashProgrammer->programFlash(flashImage, NULL);
-         }
-
-      }
-      else {
-         // Verify only
-         if (verbose) {
-            rc = flashProgrammer->verifyFlash(flashImage, callBack);
-         }
-         else{
-            rc = flashProgrammer->verifyFlash(flashImage);
-         }
-      }
-      if (rc != PROGRAMMING_RC_OK) {
-         log.print("- failed, rc = %s\n", bdmInterface->getErrorString(rc));
-#ifdef _UNIX_
-         fprintf(stderr, "GDBServerApp::doCommandLineProgram() - failed, rc = %s\n", USBDM_GetErrorString(rc));
-#endif
-         returnValue = 1;
-         break;
-      }
-   } while (false);
-
-   log.print(" Closing BDM\n");
-   if (bdmInterface->getBdmOptions().leaveTargetPowered) {
-      bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_NORMAL));
-   }
-   bdmInterface->closeBdm();
-
-#ifdef _UNIX_
-   if (returnValue == 0) {
-      fprintf(stdout, "Operation completed successfully\n");
-   }
-#endif
-}
+//void GdbServerApp::doCommandLineProgram() {
+//   LOGGING;
+//   FlashImagePtr      flashImage      = FlashImageFactory::createFlashImage(targetType);
+//   FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
+//
+//   do {
+//      // Initialise the BDM
+//      if (bdmInterface->initBdm() != BDM_RC_OK) {
+//         returnValue = 1;
+//         break;
+//      }
+////      if (!hexFileName.IsEmpty() &&
+////         (flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType) != BDM_RC_OK)) {
+////         log.print("Failed to load Hex file\n");
+////         returnValue = 1;
+////         break;
+////      }
+//      // Copy device description and change mutable settings
+//      DeviceDataPtr &deviceData = deviceInterface->getCurrentDevice();
+//      if (deviceData->getSecurity() == SEC_CUSTOM) {
+//         deviceData->setCustomSecurity(customSecurityValue);
+//      }
+//      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(*deviceData);
+//      if (rc != BDM_RC_OK) {
+//         continue;
+//      }
+//      if (program) {
+//         // Program & Verify
+//         if (verbose) {
+//            rc = flashProgrammer->programFlash(flashImage, callBack);
+//         }
+//         else {
+//            rc = flashProgrammer->programFlash(flashImage, NULL);
+//         }
+//
+//      }
+//      else {
+//         // Verify only
+//         if (verbose) {
+//            rc = flashProgrammer->verifyFlash(flashImage, callBack);
+//         }
+//         else{
+//            rc = flashProgrammer->verifyFlash(flashImage);
+//         }
+//      }
+//      if (rc != PROGRAMMING_RC_OK) {
+//         log.print("- failed, rc = %s\n", bdmInterface->getErrorString(rc));
+//#ifdef _UNIX_
+//         fprintf(stderr, "GDBServerApp::doCommandLineProgram() - failed, rc = %s\n", USBDM_GetErrorString(rc));
+//#endif
+//         returnValue = 1;
+//         break;
+//      }
+//   } while (false);
+//
+//   log.print(" Closing BDM\n");
+//   if (bdmInterface->getBdmOptions().leaveTargetPowered) {
+//      bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_NORMAL));
+//   }
+//   bdmInterface->closeBdm();
+//
+//#ifdef _UNIX_
+//   if (returnValue == 0) {
+//      fprintf(stdout, "Operation completed successfully\n");
+//   }
+//#endif
+//}
 
 bool GdbServerApp::OnInit() {
    LOGGING;
@@ -221,7 +221,6 @@ bool GdbServerApp::OnInit() {
       log.print("Failed OnInit()\n");
       return false;
    }
-
    // Create empty app settings
    appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "GDB Server settings"));
    if (!noGUI) {
@@ -276,6 +275,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_SWITCH, _("exitOnClose"),   NULL, _("Exit Server when connection closed"),                             wxCMD_LINE_VAL_NONE   },
       { wxCMD_LINE_OPTION, _("flexNVM"),       NULL, _("FlexNVM parameters (eeprom,partition hex values)"),               wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("masserase"),     NULL, _("Equivalent to erase=Mass") },
+      { wxCMD_LINE_SWITCH, _("maskInterrupts"),NULL, _("Mask interrupts when stepping") },
       { wxCMD_LINE_SWITCH, _("noerase"),       NULL, _("Equivalent to erase=None") },
       { wxCMD_LINE_OPTION, _("nvloc"),         NULL, _("Trim non-volatile memory location (hex)"),                        wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("power"),         NULL, _("Power timing (off,recovery) 100-10000 ms"),                       wxCMD_LINE_VAL_STRING },
@@ -317,7 +317,7 @@ void GdbServerApp::OnInitCmdLine(wxCmdLineParser& parser) {
 }
 
 void GdbServerApp::logUsageError(wxCmdLineParser& parser, const wxString& text){
-   UsbdmSystem::Log::error(text);
+   UsbdmSystem::Log::error("%s", (const char *)text.ToAscii());
 #if (wxCHECK_VERSION(2, 9, 0))
    parser.AddUsageText(text);
 #endif
@@ -331,11 +331,11 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    bool      success = true;
 
    verbose      = false;
-
-   if (parser.GetParamCount() > 0) {
-      // file to load may always be given
-      hexFileName = parser.GetParam(0);
-   }
+//   if (parser.GetParamCount() > 0) {
+//      // File to load may always be given
+//      hexFileName = parser.GetParam(0);
+//      log.print("Hex file = %s\n", (const char*)hexFileName.ToAscii());
+//   }
 
    // "-target=..." option may always be given
    if (parser.Found(_("target"), &sValue)) {
@@ -354,29 +354,32 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
    }
    else {
+      wxString argv0(argv[0]);
+
       // Determine target from name of program
-      log.print("argv[0] = %s\n", (const char *)argv[0].c_str());
-      if (argv[0].Contains(_("CFV1"))) {
+      log.print("argv0 = %s\n", (const char *)argv0.c_str());
+      if (argv0.Contains(_("CFV1"))) {
          log.print("Setting target CFV1\n");
          targetType = T_CFV1;
       }
-      else if (argv[0].Contains(_("CFVX"))) {
+      else if (argv0.Contains(_("CFVX"))) {
          log.print("Setting target CFVX\n");
          targetType = T_CFVx;
       }
-      else if (argv[0].Contains(_("ARM"))) {
+      else if (argv0.Contains(_("ARM"))) {
          log.print("Setting target ARM\n");
          targetType = T_ARM;
       }
       else {
-         log.print("Setting default target RS08");
+         log.print("Setting default target ARM\n");
          targetType = T_ARM;
       }
    }
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    deviceInterface.reset(new DeviceInterface(targetType));
 
-   // Ignore other options unless a device is given
+   // If a device is given the server will open without the GUI configuration dialogue
+   // and it will not load default parameters.
    if (!parser.Found(_("device"), &sValue)) {
       if (!success) {
          parser.Usage();
@@ -384,6 +387,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       return success;
    }
 
+   // Have device name - no GUI
    noGUI = true;
 
 #ifdef _UNIX_
@@ -412,6 +416,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    else if ((targetType==T_HCS12) || (targetType==T_S12Z) || (targetType==T_CFV1) || (targetType==T_CFVx) || (targetType==T_MC56F80xx)) {
       deviceData->setEraseOption(DeviceData::eraseAll);
    }
+   bdmInterface->setMaskISR(parser.Found(_("maskInterrupts")));
    if (parser.Found(_("masserase"))) {
       deviceData->setEraseOption(DeviceData::eraseMass);
    }

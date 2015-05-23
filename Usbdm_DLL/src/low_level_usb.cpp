@@ -146,32 +146,6 @@ static libusb_device_handle *usbDeviceHandle = NULL;
 // Indicates LIBUSB has been initialized
 static bool initialised = FALSE;
 
-//**********************************************************
-//!
-//! Sleep for given number of milliseconds (or longer!)
-//!
-//! @param milliSeconds - number of milliseconds to sleep
-//!
-DLL_LOCAL
-void milliSleep(int milliSeconds) {
-
-#ifdef __unix__
-   LOGGING;
-   int rc;
-   struct timespec sleepStruct = { 0, 1000000L*milliSeconds };
-   log.print("%ld ns\n", sleepStruct.tv_nsec);
-   do {
-      rc = nanosleep(&sleepStruct, &sleepStruct);
-      if ((rc < 0) && (errno == EINTR))
-         log.print("milliSleep() - Sleep interrupted\n");
-      else if (sleepStruct.tv_sec > 0)
-         log.print("milliSleep() - time not completed!!\n");
-   } while ((rc < 0) && (errno == EINTR));
-#else
-   Sleep(milliSeconds);
-#endif
-}
-
 libusb_context *context;
 
 //**********************************************************
@@ -632,7 +606,7 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
                );
       if (rc < 0) {
          log.error("libusb_control_transfer(sz=%d) failed - Transfer error (USB error = %s) - retry %d \n", size, libusb_error_name((libusb_error)rc), retry);
-         milliSleep(100); // So we don't monopolize the USB
+         UsbdmSystem::milliSleep(100); // So we don't monopolize the USB
       }
    } while ((rc < 0) && (--retry>0));
 
@@ -882,7 +856,7 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
       if ((rc == LIBUSB_SUCCESS)  && (dummyBuffer[0] == BDM_RC_BUSY)) {
          // The BDM has indicated it's busy for a while - try again in 10 ms
          log.error("BDM Busy (timeoutValue=%d ms, backoff=%d ms)\n", timeoutValue, backoff);
-         milliSleep(backoff); // So we don't monopolise the USB
+         UsbdmSystem::milliSleep(backoff); // So we don't monopolise the USB
          backoff *= 2; // Try 1,2,4,8,16 ... ms
       }
    } while ((rc == LIBUSB_SUCCESS) && (dummyBuffer[0] == BDM_RC_BUSY)  && (backoff<=backoffLimit));
@@ -1042,7 +1016,7 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
    if (commandToggle != receivedCommandToggle) {
       // Single retry on toggle error (clear any pending Rx)
       log.error("USB Toggle error, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
-      milliSleep(100);
+      UsbdmSystem::milliSleep(100);
       rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
       receivedCommandToggle = (inData[0]&0x80) != 0;
       if ((rc == BDM_RC_USB_ERROR) || (commandToggle != receivedCommandToggle)) {

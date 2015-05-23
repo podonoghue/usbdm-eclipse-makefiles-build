@@ -1,0 +1,6 @@
+#!/bin/bash
+sudo rm -vf /usr/share/usbdm/CDT_Plugins/plugins/net.sourceforge.usbdm.*.jar
+sudo cp -vf PackageFiles/CDT_Plugins/plugins/net.sourceforge.usbdm.*.jar /usr/share/usbdm/CDT_Plugins/plugins
+rm -vf PackageFiles/CDT_Plugins/plugins/net.sourceforge.usbdm.*.jar
+sudo /opt/eclipse/eclipse -initialize
+

@@ -281,13 +281,13 @@ static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
    // For debug
    armReadMemoryWord(DEMCR, &demcrValue);
 
-   milliSleep(bdmOptions.resetDuration);
+   UsbdmSystem::milliSleep(bdmOptions.resetDuration);
 
    // Release MDM-AP software reset
    mdm_ap_control &= ~(MDM_AP_Control_Debug_Request|MDM_AP_Control_System_Reset_Request);
    USBDM_ErrorCode rc2 = USBDM_WriteCReg(ARM_CRegMDM_AP_Control, mdm_ap_control);
-   milliSleep(bdmOptions.resetReleaseInterval);
-   milliSleep(bdmOptions.resetRecoveryInterval);
+   UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
    if (rc2 != BDM_RC_OK) {
       return rc2;
    }
@@ -316,14 +316,14 @@ USBDM_ErrorCode resetDebugInterface(void) {
    unsigned long pollValue;
    do {
       USBDM_ReadDReg(ARM_DRegCONTROL, &pollValue);
-//      milliSleep(50);
+//      UsbdmSystem::milliSleep(50);
    } while(((pollValue & CDBGSTACK) == 0)  && (--timeout >0));
 
    rc = USBDM_WriteDReg(ARM_DRegCONTROL, dpControlStatBaseValue);
    timeout = 5;
    do {
       USBDM_ReadDReg(ARM_DRegCONTROL, &pollValue);
-//      milliSleep(50);
+//      UsbdmSystem::milliSleep(50);
    } while(((pollValue & CDBGSTACK) != 0)  && (--timeout >0));
 
    return rc;
@@ -400,7 +400,7 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
                log.error("DHCSR write failed\n");
                continue;
             }
-            milliSleep(bdmOptions.resetDuration);
+            UsbdmSystem::milliSleep(bdmOptions.resetDuration);
             if (!armDebugInformation.MDM_AP_present) {
                // Not Kinetis
                log.print("armSoftwareReset()- Attempting to disable ST Watchdog\n");
@@ -409,7 +409,7 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
          } while (0);
          // Release hardware reset
          USBDM_ControlPins(PIN_RELEASE);
-         milliSleep(bdmOptions.resetRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          // Check reset rise
          rc = USBDM_ControlPins(PIN_RESET_3STATE);
          break;
@@ -417,7 +417,7 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
          log.print("Doing Software reset\n");
          // Make sure any pending hardware reset is released first
          USBDM_ControlPins(PIN_RESET_3STATE);
-         milliSleep(bdmOptions.resetRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          // Do software (local) reset via ARM debug function
          if (armDebugInformation.MDM_AP_present) {
             kinetisSoftwareReset(targetMode);
@@ -577,7 +577,7 @@ static USBDM_ErrorCode debugPowerUp(void) {
       if ((dataIn & (CSYSPWRUPACK|CDBGPWRUPACK)) == (unsigned long)(CSYSPWRUPACK|CDBGPWRUPACK)) {
          break;
       }
-      milliSleep(20);
+      UsbdmSystem::milliSleep(20);
    } while(retry-- > 0);
    if ((dataIn & (CSYSPWRUPACK|CDBGPWRUPACK)) != (unsigned long)(CSYSPWRUPACK|CDBGPWRUPACK)) {
       return BDM_RC_ARM_PWR_UP_FAIL;

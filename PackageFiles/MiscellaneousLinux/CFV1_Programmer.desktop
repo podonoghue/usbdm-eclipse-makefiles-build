@@ -2,7 +2,7 @@
 Name=CFV1_FlashProgrammer
 Comment=Flash programmer for CFV1 devices
 Keywords=CFV1;Programmer;
-Exec=/usr/bin/CFV1_FlashProgrammer
+Exec=/usr/bin/FlashProgrammer -target=cfv1
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

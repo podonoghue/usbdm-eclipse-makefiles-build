@@ -70,6 +70,7 @@ ifeq ($(UNAME_S),Windows)
    GPP      := $(MINGWBIN)/g++
    WINDRES  := $(MINGWBIN)/windres
    STRIP    := $(MINGWBIN)/strip
+   STRIPFLAGS := --strip-unneeded
    #PROGRAM_DIR = C:/"Program Files"
    PROGRAM_DIR = C:/'Program Files (x86)'
 else
@@ -91,6 +92,8 @@ else
    MAKE     := make
    GCC      := gcc
    GPP      := g++
+   STRIP    := strip
+   STRIPFLAGS := --strip-unneeded
    WINDRES  := 
 endif
 
@@ -109,6 +112,13 @@ ifeq ($(UNAME_S),Windows)
    WIN32_GUI_OPTS     := -Wl,--subsystem,windows -mwindows
 else
    WIN32_GUI_OPTS     := 
+endif
+
+#Should change to using $(GUI_OPTS)
+ifeq ($(UNAME_S),Windows)
+	GUI_OPTS := $(WIN32_GUI_OPTS)
+else
+   GUI_OPTS     := 
 endif
 
 #===========================================================
@@ -145,6 +155,14 @@ ifdef DEBUG
    USBDM_DEVICE_LIBS    := -lusbdm-device-database-debug$(VSUFFIX)
 else
    USBDM_DEVICE_LIBS    := -lusbdm-device-database$(VSUFFIX)
+endif
+
+#===========================================================
+# Dynamic Library loading
+ifeq ($(UNAME_S),Windows)
+   USBDM_DYNAMIC_LIBS    := 
+else
+   USBDM_DYNAMIC_LIBS    := -ldl
 endif
 
 #===========================================================

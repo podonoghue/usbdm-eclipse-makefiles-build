@@ -24,6 +24,9 @@ Change History
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
+#include <cstdlib>
+#include <unistd.h>
+#include <cerrno>
 
 #include "ArmDefinitions.h"
 #include "tcl.h"
@@ -41,6 +44,10 @@ Change History
 #endif
 
 using namespace UsbdmWxConstants;
+
+static void printChannel(int ch, const char *format, ...) __attribute__ ((format (printf, 2, 3)));
+#define PRINT(format, ...)       printChannel(TCL_STDOUT, format, ##__VA_ARGS__)
+#define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
 /*
  * Create the plugin instance
@@ -93,10 +100,10 @@ UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
 
    tclChannel   = 0;
 
-#ifdef __unix__
-   // Load wxWindows Stub
-   (void)dlopen(WXSTUB_DLL_NAME, RTLD_NOW|RTLD_NODELETE);
-#endif
+//#ifdef __unix__
+//   // Load wxWindows Stub
+//   (void)dlopen(WXSTUB_DLL_NAME, RTLD_NOW|RTLD_NODELETE);
+//#endif
 
    if (doInit) {
       setTCLExecutable();
@@ -111,7 +118,7 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
    LOGGING;
    FILE *fp = UsbdmSystem::Log::getLogFileHandle();
 
-#ifdef __WIN32__
+#ifdef WIN32
    if (fp == NULL) {
       // Create sink
       fp = fopen ("nul", "w");
@@ -134,9 +141,9 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
    if (fp == NULL) {
       PRINT_ERROR("(fp == NULL)\n");
    }
-   int fileNo = dup(fileno(fp));
-   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
-   tclChannel = Tcl_MakeFileChannel(fileNo, TCL_WRITABLE);
+   long fileNo = dup(fileno(fp));
+   log.print("createTclInterpreter() fileNo == %ld\n", fileNo );
+   tclChannel = Tcl_MakeFileChannel((ClientData)fileNo, TCL_WRITABLE);
    log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
 #endif
 
@@ -213,8 +220,6 @@ int UsbdmTclInterpreterImp::setTCLExecutable() {
 //
 //=============================================================
 //
-static void printChannel(int ch, const char *format, ...) __attribute__ ((format (printf, 2, 3)));
-
 /*! \brief Provides a PRINT function which prints data to TCL stdout
  *
  *  @param format Format and parameters as for PRINT()
@@ -238,9 +243,6 @@ static void printChannel(int ch, const char *format, ...)  {
      Tcl_Flush(channel);
    }
 }
-
-#define PRINT(format, ...)       printChannel(TCL_STDOUT, format, ##__VA_ARGS__)
-#define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
 static void listBdms() {
    PRINT("BDM List:\n");
@@ -281,10 +283,8 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
    LOGGING_Q;
    MyLock lock;
 
-   Tcl_Preserve(this);
    int rcTCL = Tcl_Eval(interp.get(), script);
    const char *result = getTclResult();
-   Tcl_Release(this);
 
    USBDM_ErrorCode rc = BDM_RC_OK;
    if (rcTCL != TCL_OK) {
@@ -427,24 +427,24 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    }
    const char *arg = Tcl_GetString(argv[1]);
 
-   if (strnicmp(arg, "?", 1) == 0) {
+   if (strncasecmp(arg, "?", 1) == 0) {
       PRINT("setTargetVdd <0|3|5|on|off>\n");
    }
-   else if (strnicmp(arg, "0", 1) == 0) {
+   else if (strncasecmp(arg, "0", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_OFF;
    }
-   else if (strnicmp(arg, "3", 1) == 0) {
+   else if (strncasecmp(arg, "3", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_3V3;
    }
-   else if (strnicmp(arg, "5", 1) == 0) {
+   else if (strncasecmp(arg, "5", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_5V;
    }
-   else if (strnicmp(arg, "on", 2) == 0) {
+   else if (strncasecmp(arg, "on", 2) == 0) {
       immediateEffect = true;
       if (checkUsbdmRC(interp, bdmInterface->setTargetVdd(BDM_TARGET_VDD_ENABLE)))
          return TCL_ERROR;
       }
-   else if (strnicmp(arg, "off", 2) == 0) {
+   else if (strncasecmp(arg, "off", 2) == 0) {
       immediateEffect = true;
       if (checkUsbdmRC(interp, bdmInterface->setTargetVdd(BDM_TARGET_VDD_DISABLE)))
          return TCL_ERROR;
@@ -465,19 +465,19 @@ static int cmd_setMemorySpace(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
       }
       // memory space value 0,N,X,P
       const char *arg = Tcl_GetString(argv[1]);
-      if (strnicmp(arg, "0", 5) == 0) {
+      if (strncasecmp(arg, "0", 5) == 0) {
          defaultMemorySpace = MS_None;
       }
-      else if (strnicmp(arg, "N", 5) == 0) {
+      else if (strncasecmp(arg, "N", 5) == 0) {
          defaultMemorySpace = MS_None;
       }
-      else if (strnicmp(arg, "U", 5) == 0) {
+      else if (strncasecmp(arg, "U", 5) == 0) {
          defaultMemorySpace = MS_None;
       }
-      else if (strnicmp(arg, "X", 5) == 0) {
+      else if (strncasecmp(arg, "X", 5) == 0) {
          defaultMemorySpace = MS_Data;
       }
-      else if (strnicmp(arg, "P", 5) == 0) {
+      else if (strncasecmp(arg, "P", 5) == 0) {
          defaultMemorySpace = MS_Program;
       }
       else {
@@ -555,44 +555,44 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    const char *arg = Tcl_GetString(argv[1]);
    bigEndian = true;
    TargetType_t targetType = T_OFF;
-   if (strnicmp(arg, "HCS12", 5) == 0) {
+   if (strncasecmp(arg, "HCS12", 5) == 0) {
       targetType = T_HC12;
    }
-   else if (strnicmp(arg, "HCS08", 5) == 0) {
+   else if (strncasecmp(arg, "HCS08", 5) == 0) {
       targetType = T_HCS08;
    }
-   else if (strnicmp(arg, "RS08", 4) == 0) {
+   else if (strncasecmp(arg, "RS08", 4) == 0) {
       targetType = T_RS08;
    }
-   else if (strnicmp(arg, "CFV1", 4) == 0) {
+   else if (strncasecmp(arg, "CFV1", 4) == 0) {
       targetType = T_CFV1;
    }
-   else if (strnicmp(arg, "CFVx", 4) == 0) {
+   else if (strncasecmp(arg, "CFVx", 4) == 0) {
       targetType = T_CFVx;
    }
-   else if (strnicmp(arg, "ARM", 3) == 0) {
+   else if (strncasecmp(arg, "ARM", 3) == 0) {
       targetType = T_ARM;
       bigEndian = false;
    }
-   else if (strnicmp(arg, "SWD", 3) == 0) {
+   else if (strncasecmp(arg, "SWD", 3) == 0) {
       targetType = T_ARM;
       bigEndian = false;
    }
-   else if (strnicmp(arg, "KIN", 3) == 0) {
+   else if (strncasecmp(arg, "KIN", 3) == 0) {
       targetType = T_ARM;
       bigEndian = false;
    }
-   else if (strnicmp(arg, "JTAG", 4) == 0) {
+   else if (strncasecmp(arg, "JTAG", 4) == 0) {
       targetType = T_JTAG;
    }
-   else if (strnicmp(arg, "DSC", 4) == 0) {
+   else if (strncasecmp(arg, "DSC", 4) == 0) {
       targetType = T_MC56F80xx;
       bigEndian = false;
    }
-   else if (strnicmp(arg, "S12Z", 3) == 0) {
+   else if (strncasecmp(arg, "S12Z", 3) == 0) {
       targetType = T_S12Z;
    }
-   else if (strnicmp(arg, "OFF", 4) == 0) {
+   else if (strncasecmp(arg, "OFF", 4) == 0) {
       targetType = T_OFF;
    }
    else {
@@ -602,7 +602,7 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType, nullCallback);
    bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_3V3;
-   log.print(printBdmOptions(&bdmInterface->getBdmOptions()));
+   log.print("%s", printBdmOptions(&bdmInterface->getBdmOptions()));
 
    PRINT("USBDM DLL Version = %s\n", bdmInterface->getDllVersionString().c_str());
 
@@ -620,18 +620,18 @@ static int cmd_setVpp(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       return TCL_ERROR;
    }
    const char *arg = Tcl_GetString(argv[1]);
-   if (strnicmp(arg, "?", 1) == 0) {
+   if (strncasecmp(arg, "?", 1) == 0) {
       PRINT("setTargetVpp <standby|on|off>\n");
    }
-   else if (strnicmp(arg, "standby", 2) == 0) {
+   else if (strncasecmp(arg, "standby", 2) == 0) {
       if (checkUsbdmRC(interp, bdmInterface->setTargetVpp(BDM_TARGET_VPP_STANDBY)))
          return TCL_ERROR;
    }
-   else if (strnicmp(arg, "on", 2) == 0) {
+   else if (strncasecmp(arg, "on", 2) == 0) {
       if (checkUsbdmRC(interp, bdmInterface->setTargetVpp(BDM_TARGET_VPP_ON)))
          return TCL_ERROR;
    }
-   else if (strnicmp(arg, "off", 2) == 0) {
+   else if (strncasecmp(arg, "off", 2) == 0) {
       if (checkUsbdmRC(interp, bdmInterface->setTargetVpp(BDM_TARGET_VPP_OFF)))
          return TCL_ERROR;
    }
@@ -797,25 +797,25 @@ static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    while (argc-- > 1) {
       const char *arg = Tcl_GetString(argv[argc]);
 
-      if (strnicmp(arg, "?", 1) == 0) {
+      if (strncasecmp(arg, "?", 1) == 0) {
          PRINT("pinSet RST|TRST|BKGD|TA|BKPT = 0|L|1|H|3|T\n");
       }
-      if (strnicmp(arg, "RST=", 4) == 0) {
+      if (strncasecmp(arg, "RST=", 4) == 0) {
          value |= getPinControlValue(arg+4)<<PIN_RESET_OFFS;
       }
-      else if (strnicmp(arg, "TRST=", 5) == 0) {
+      else if (strncasecmp(arg, "TRST=", 5) == 0) {
          value |= getPinControlValue(arg+5)<<PIN_TRST_OFFS;
       }
-      else if (strnicmp(arg, "BKGD=", 5) == 0) {
+      else if (strncasecmp(arg, "BKGD=", 5) == 0) {
          value |= getPinControlValue(arg+5)<<PIN_BKGD_OFFS;
       }
-      else if (strnicmp(arg, "TA=", 3) == 0) {
+      else if (strncasecmp(arg, "TA=", 3) == 0) {
          value |= getPinControlValue(arg+3)<<PIN_TA_OFFS;
       }
-      else if (strnicmp(arg, "BKPT=", 5) == 0) {
+      else if (strncasecmp(arg, "BKPT=", 5) == 0) {
          value |= getPinControlValue(arg+5)<<PIN_BKPT_OFFS;
       }
-      else if (strnicmp(arg, "SWD=", 4) == 0) {
+      else if (strncasecmp(arg, "SWD=", 4) == 0) {
          value |= getPinControlValue(arg+4)<<PIN_SWD_OFFS;
       }
       else {
@@ -1392,7 +1392,7 @@ static int strToULong(const char *start, uint32_t *value) {
       PRINT("strToLong() - No number found\n");
       return TCL_ERROR;
    }
-   if ((ULONG_MAX == value_t) && ERANGE == errno) { // too large
+   if ((ULONG_MAX == value_t) && (ERANGE == errno)) { // too large
      PRINT("strToULong() - Number too large\n");
      return TCL_ERROR;
    }
@@ -1428,7 +1428,7 @@ static int getAddress(Tcl_Obj *const arg, uint32_t *value, int *memorySpace) {
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    if (targetType == T_MC56F80xx) {
       // Check for memory space info
-      if (strnicmp(sAddress, "X:", 2) == 0) {
+      if (strncasecmp(sAddress, "X:", 2) == 0) {
          if (memorySpace == NULL) {
             PRINT("Illegal address modifier in arg \'%s\'\n", sAddress);
             return TCL_ERROR;
@@ -1436,7 +1436,7 @@ static int getAddress(Tcl_Obj *const arg, uint32_t *value, int *memorySpace) {
          *memorySpace |= MS_Data;
          sAddress += 2;
       }
-      else if (strnicmp(sAddress, "P:", 2) == 0) {
+      else if (strncasecmp(sAddress, "P:", 2) == 0) {
          if (memorySpace == NULL) {
             PRINT("Illegal address modifier in arg \'%s\'\n", sAddress);
             return TCL_ERROR;
@@ -1450,7 +1450,7 @@ static int getAddress(Tcl_Obj *const arg, uint32_t *value, int *memorySpace) {
       }
    }
    else if (targetType == T_HC12) {
-      if (strnicmp(sAddress, "G:", 2) == 0) {
+      if (strncasecmp(sAddress, "G:", 2) == 0) {
          if (memorySpace == NULL) {
             PRINT("Illegal address modifier in arg \'%s\'\n", sAddress);
             return TCL_ERROR;
@@ -2731,19 +2731,19 @@ static int jtagShiftCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *c
    }
    // # exitMode
    const char *arg = Tcl_GetString(argv[++argCount]);
-   if (strnicmp(arg, "S", 1) == 0) {
+   if (strncasecmp(arg, "S", 1) == 0) {
       exitMode = JTAG_STAY_SHIFT;
    }
-   else if (strnicmp(arg, "R", 1) == 0) {
+   else if (strncasecmp(arg, "R", 1) == 0) {
       exitMode = JTAG_EXIT_IDLE; // Run-test/Idle
    }
-   else if (strnicmp(arg, "T", 1) == 0) {
+   else if (strncasecmp(arg, "T", 1) == 0) {
       exitMode = JTAG_EXIT_IDLE; // run-Test/Idle
    }
-   else if (strnicmp(arg, "D", 1) == 0) {
+   else if (strncasecmp(arg, "D", 1) == 0) {
       exitMode = JTAG_EXIT_SHIFT_DR;
    }
-   else if (strnicmp(arg, "I", 1) == 0) {
+   else if (strncasecmp(arg, "I", 1) == 0) {
       exitMode = JTAG_EXIT_SHIFT_IR;
    }
    else {
@@ -2977,13 +2977,13 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    if (sStyle != NULL) {
       char *s = strtok(sStyle, "| \n\t");
       while (s != NULL) {
-         if       (strnicmp(s, "OK",    2)==0)  style |= OK;
-         else if  (strnicmp(s, "YES_NO",3)==0)  style |= YES_NO;
-         else if  (strnicmp(s, "CANCEL",3)==0)  style |= CANCEL;
-         else if  (strnicmp(s, "I_EXC", 5)==0)  style |= ICON_ERROR;
-         else if  (strnicmp(s, "I_ERR", 5)==0)  style |= ICON_ERROR;
-         else if  (strnicmp(s, "I_QUES",6)==0)  style |= ICON_QUESTION;
-         else if  (strnicmp(s, "I_INF", 5)==0)  style |= ICON_INFORMATION;
+         if       (strncasecmp(s, "OK",    2)==0)  style |= OK;
+         else if  (strncasecmp(s, "YES_NO",3)==0)  style |= YES_NO;
+         else if  (strncasecmp(s, "CANCEL",3)==0)  style |= CANCEL;
+         else if  (strncasecmp(s, "I_EXC", 5)==0)  style |= ICON_ERROR;
+         else if  (strncasecmp(s, "I_ERR", 5)==0)  style |= ICON_ERROR;
+         else if  (strncasecmp(s, "I_QUES",6)==0)  style |= ICON_QUESTION;
+         else if  (strncasecmp(s, "I_INF", 5)==0)  style |= ICON_INFORMATION;
          //      else if  (stricmp(s, "YES_DEFAULT"))     style |= wxYES_DEFAULT;
          //      else if  (stricmp(s, "NO_DEFAULT"))      style |= wxNO_DEFAULT;
          //      else if  (stricmp(s, "CANCEL_DEFAULT"))  style |= wxCANCEL_DEFAULT;
@@ -3108,11 +3108,11 @@ static int cmd_setByteSex(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
    }
    // Control value
    const char *currentToken = Tcl_GetString(argv[1]);
-   if (strnicmp(currentToken, "big", 3) == 0) {
+   if (strncasecmp(currentToken, "big", 3) == 0) {
       bigEndian = true;
       PRINT("bytesex => Big-endian\n");
    }
-   else if (strnicmp(currentToken, "little", 6) == 0) {
+   else if (strncasecmp(currentToken, "little", 6) == 0) {
       bigEndian = false;
       PRINT("bytesex => Little-endian\n");
    }

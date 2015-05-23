@@ -1,0 +1,65 @@
+#!/bin/bash
+set -e
+
+#======================================================
+#  KDS Instance Installation
+#======================================================
+installKDSInstance() {
+
+   local KDS_DIR="$1"
+   local KDS_TOOLCHAIN_LIB_DIR="${KDS_DIR}/toolchain/arm-none-eabi/lib"
+   local KDS_ECLIPSE_DIR="${KDS_DIR}/eclipse"
+   local KDS_PE_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
+   local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
+   local KDS_NANO_SPECS_FILENAME="nano.specs"
+
+   if [[ ! -d ${KDS_DIR} ]]; then
+      echo " ${KDS_DIR} Not Found"
+      return
+   fi
+
+
+   echo found $KDS_DIR
+}
+
+#======================================================
+#  KDS Installation
+#======================================================
+installKDS() {
+
+   local KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
+
+   echo 
+   echo "Checking for KDS directories"
+   echo "=================================================================="
+   for KDS_DIR in $KDS_DIR_LIST; do
+      echo -n "Looking for Freescale KDS in '${KDS_DIR}'"
+      if [[ -d ${KDS_DIR} ]]; then
+         echo " - Found"
+         installKDSInstance ${KDS_DIR}
+      else
+         echo " - Not Found"
+      fi
+   done
+}
+
+installEclipse() {
+
+   local ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse*"
+
+   echo 
+   echo "Checking for Eclipse directories"
+   echo "=================================================================="
+   for ECLIPSE_DIR in $ECLIPSE_DIR_LIST; do
+      echo -n "Looking for Eclipse in '${ECLIPSE_DIR}'"
+      if [[ -d ${ECLIPSE_DIR} ]]; then
+         echo " - Found"
+         installKDSInstance ${ECLIPSE_DIR}
+      else
+        echo " - Not Found"
+      fi
+   done
+}
+
+installKDS
+installEclipse

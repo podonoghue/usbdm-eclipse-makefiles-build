@@ -2452,7 +2452,7 @@ USBDM_ErrorCode DSC_TargetReset(TargetMode_t targetMode) {
    do {
       // Apply reset
       USBDM_ControlPins(PIN_RESET_LOW);
-      milliSleep(bdmOptions.resetDuration);
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
 
       // Reset JTAG interface & select core TAP
       rc = enableCoreTAP();
@@ -2474,7 +2474,7 @@ USBDM_ErrorCode DSC_TargetReset(TargetMode_t targetMode) {
    } while (false);
 
    USBDM_ControlPins(PIN_RELEASE);
-   milliSleep(bdmOptions.resetRecoveryInterval);
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
    if (rc == BDM_RC_OK) {
       rc = DSC_Connect();
    }

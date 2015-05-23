@@ -13,8 +13,8 @@ VPATH := $(VPATH) $(SHARED_SRC)
 INCS += -I$(SHARED_SRC)
 SRC += UsbdmSystem.cpp
 ifeq ($(UNAME_S),Windows)
-SRC += WinPaths.cpp
+SRC += UsbdmSystemWin.cpp
 else
-SRC += LinuxPaths.cpp
+SRC += UsbdmSystemLinux.cpp
 endif
 SRC += Names.cpp

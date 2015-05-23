@@ -25,6 +25,7 @@
     \verbatim
    Change History
    +=========================================================================================
+   | 20 May 2015 | Added milliSleep                                           - pgo 4.11.2.30
    |  1 Dec 2014 | Added format information for logging print()s              - pgo 4.10.6.230
    |  1 Dec 2012 | Changed logging extensively                                - pgo - V4.10.4
    | 16 Nov 2009 | Relocated log file directory for Vista.                    - pgo
@@ -43,6 +44,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef __unix__
+#include <time.h>
+#include <errno.h>
+#else
+#include <windows.h>
+#endif
+
 #include "UsbdmSystem.h"
 #include "Version.h"
 
@@ -50,6 +58,12 @@
 #undef UNICODE
 #endif
 
+/* Open a file within the application directory - read-only
+ *
+ * @param path to append to directory
+ *
+ * @return directory or NULL if failed
+ */
 FILE *UsbdmSystem::openApplicationFile(const std::string &path) {
    std::string fullPath = getApplicationPath(path);
    FILE *fp = fopen(fullPath.c_str(), "rt");
@@ -61,6 +75,12 @@ FILE *UsbdmSystem::openApplicationFile(const std::string &path) {
    return fp;
 }
 
+/* Open a file within the resource directory - read-only
+ *
+ * @param path to append to directory
+ *
+ * @return directory or NULL if failed
+ */
 FILE *UsbdmSystem::openResourceFile(const std::string &path) {
    std::string fullPath = getResourcePath(path);
    FILE *fp = fopen(fullPath.c_str(), "rt");
@@ -72,9 +92,37 @@ FILE *UsbdmSystem::openResourceFile(const std::string &path) {
    return fp;
 }
 
-FILE *UsbdmSystem::openDataFile(const std::string &path, const std::string &mode) {
-   std::string fullPath = getDataPath(path);
+/* Open a file within the configuration directory - read-write
+ * This is a per-user read/write directory for configurations
+ *
+ * @param path to append to directory
+ *
+ * @return directory or NULL if failed
+ */
+FILE *UsbdmSystem::openConfigurationFile(const std::string &path, const std::string &mode) {
+   std::string fullPath = getConfigurationPath(path);
    return fopen(fullPath.c_str(), mode.c_str());
+}
+
+/*
+ *  Sleep for given number of milliseconds (or longer!)
+ *
+ *  @param milliSeconds - number of milliseconds to sleep
+ */
+void UsbdmSystem::milliSleep(int milliSeconds) {
+#ifdef __unix__
+   int rc;
+   struct timespec sleepStruct;
+   sleepStruct.tv_sec  = milliSeconds/1000;
+   sleepStruct.tv_nsec = (milliSeconds%1000)*1000000L;
+   do {
+      rc = nanosleep(&sleepStruct, &sleepStruct);
+   } while ((rc < 0) && (errno == EINTR));
+#elif defined(_WIN32)
+   Sleep(milliSeconds);
+#else
+#error "Don't know how to sleep!"
+#endif
 }
 
 #ifdef LOG
@@ -146,10 +194,10 @@ UsbdmSystem::Log::Log(const char *name, When when) : when(when) {
  *
  */
 UsbdmSystem::Log::~Log(){
+   currentLogLevel = lastLogLevel;
    if ((when==exit)||(when==both)) {
       print("Exit ================\n");
    }
-   currentLogLevel = lastLogLevel;
    currentName     = lastName;
    indent--;
 }
@@ -169,7 +217,7 @@ void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *descript
 
    logFile = NULL;
    std::string logName(logFileName);
-   std::string dataPath = UsbdmSystem::getDataPath(logName);
+   std::string dataPath = UsbdmSystem::getConfigurationPath(logName);
 
    if (dataPath.size() > 0) {
       logFile = fopen(dataPath.c_str(), "wt");

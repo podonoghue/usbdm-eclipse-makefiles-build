@@ -48,6 +48,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <map>
+#include <tr1/memory>
 
 #pragma GCC visibility push(default)
 
@@ -466,7 +467,7 @@ DeviceXmlParser::~DeviceXmlParser() {
 //! @throws MyException() - on any error
 //!
 void DeviceXmlParser::loadFile(const string &xmlFile) {
-   LOGGING_E;
+   LOGGING;
 
    parser = new XercesDOMParser();
    parser->setDoNamespaces( true );
@@ -490,7 +491,7 @@ void DeviceXmlParser::loadFile(const string &xmlFile) {
 
 // Create a TCL script from XML element
 TclScriptPtr DeviceXmlParser::parseTCLScript(DOMElement *xmlTclScript) {
-   LOGGING_Q;
+   LOGGING;
    // Type of node (must be a TCL script)
    DualString sTag (xmlTclScript->getTagName());
    if (!XMLString::equals(sTag.asXMLString(), tag_tclScript.asXMLString())) {
@@ -508,7 +509,7 @@ TclScriptPtr DeviceXmlParser::parseTCLScript(DOMElement *xmlTclScript) {
 
 // Create a Register description from an XML element
 RegisterDescriptionPtr DeviceXmlParser::parseRegisterDescription(DOMElement *xmlRegisterDescription) {
-   LOGGING_Q;
+   LOGGING;
 
    // Type of node (must be a RegisterDescription node)
    DualString sTag (xmlRegisterDescription->getTagName());
@@ -537,7 +538,7 @@ RegisterDescriptionPtr DeviceXmlParser::parseRegisterDescription(DOMElement *xml
 //! Create a flashProgram from XML element
 //!
 FlashProgramPtr DeviceXmlParser::parseFlashProgram(DOMElement *xmlFlashProgram) {
-   LOGGING_Q;
+   LOGGING;
 
    // Type of node (must be a flashProgram)
    DualString sTag (xmlFlashProgram->getTagName());
@@ -557,7 +558,7 @@ FlashProgramPtr DeviceXmlParser::parseFlashProgram(DOMElement *xmlFlashProgram) 
 //! Create security information from node
 //!
 SecurityInfoPtr DeviceXmlParser::parseSecurityInfo(DOMElement *currentProperty) {
-   LOGGING_Q;
+   LOGGING;
 
    // Type of node (must be a flashProgram)
    DualString sTag (currentProperty->getTagName());
@@ -608,7 +609,7 @@ SecurityInfoPtr DeviceXmlParser::parseSecurityInfo(DOMElement *currentProperty) 
 //!   </securityInfo>
 //!</securityEntry>
 SecurityEntryPtr DeviceXmlParser::parseSecurityEntry(DOMElement *currentProperty) {
-   LOGGING_E;
+   LOGGING;
 
    // Type of node (must be a flashProgram)
    DualString sTag (currentProperty->getTagName());
@@ -668,9 +669,9 @@ SecurityEntryPtr DeviceXmlParser::parseSecurityEntry(DOMElement *currentProperty
 //! Create security information from node
 //!
 SecurityDescriptionPtr DeviceXmlParser::parseSecurityDescription(DOMElement *currentProperty) {
-   LOGGING_Q;
+   LOGGING;
 
-//   LOGGING_Q;
+//   LOGGING;
    // Type of node (must be a flashProgram)
    DualString sTag (currentProperty->getTagName());
    if (!XMLString::equals(sTag.asXMLString(), tag_securityDescription.asXMLString())) {
@@ -696,7 +697,7 @@ SecurityDescriptionPtr DeviceXmlParser::parseSecurityDescription(DOMElement *cur
 //! Create shared elements from document
 //!
 void DeviceXmlParser::parseSharedXML(void) {
-   LOGGING_E;
+   LOGGING;
 
    setCurrentName("Shared Data");
 
@@ -828,7 +829,7 @@ FlexNVMInfo::FlexNvmPartitionValue DeviceXmlParser::parsePartitionEntry(DOMEleme
 //! @return FlexNVMInfo node created
 //!
 FlexNVMInfoPtr DeviceXmlParser::parseFlexNVMInfo(DOMElement *flexNVMInfoElement) {
-   LOGGING_Q;
+   LOGGING;
 
    static unsigned defaultBackingRatio = 16;
 
@@ -868,7 +869,7 @@ FlexNVMInfoPtr DeviceXmlParser::parseFlexNVMInfo(DOMElement *flexNVMInfoElement)
 //!         != 0 - fail
 //!
 MemoryRegionPtr DeviceXmlParser::parseFlashMemoryDetails(DOMElement *currentProperty, MemType_t memoryType, uint32_t &defaultSectorSize, uint8_t &defaultAlignment) {
-   LOGGING_Q;
+   LOGGING;
    long ppageAddress    = 0;
    long registerAddress = 0;
    long securityAddress = 0;
@@ -939,7 +940,7 @@ MemoryRegionPtr DeviceXmlParser::parseFlashMemoryDetails(DOMElement *currentProp
 //!         != 0 - fail
 //!
 MemoryRegionPtr DeviceXmlParser::parseMemory(DOMElement *currentProperty) {
-   LOGGING_Q;
+   LOGGING;
 
    // <memory>
    DualString sMemoryType(currentProperty->getAttribute(attr_type.asXMLString()));
@@ -1245,7 +1246,7 @@ MemoryRegionPtr DeviceXmlParser::parseMemory(DOMElement *currentProperty) {
  *          != 0 - fail
  */
 DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
-   LOGGING_Q;
+   LOGGING;
 
    // Default device characteristics
    // These are initialized from the default device (if any) in the XML
@@ -1528,7 +1529,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
  *          != 0 - fail
  */
 DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
-   LOGGING_Q;
+   LOGGING;
 
    // Create new device
    DeviceDataPtr itDev = DeviceDataPtr(new DeviceData(targetType));
@@ -1614,7 +1615,7 @@ DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
 //!         != 0 - fail
 //!
 void DeviceXmlParser::parseDeviceXML(void) {
-   LOGGING_Q;
+   LOGGING;
 
    DOMChildIterator deviceIt(document, tag_device.asCString());
    if (deviceIt.getCurrentElement() == NULL) {
@@ -1677,7 +1678,7 @@ void DeviceXmlParser::parseDeviceXML(void) {
          if (itDev->getSDIDAddress() == 0x0) {
             itDev->setSDIDAddress(aliasedDevice->getSDIDAddress());
          }
-//         log.print("Adding Alias Device %s\n", targetName.asCString());
+         log.print("Adding Alias Device %s\n", targetName.asCString());
          deviceDataBase->addDevice(itDev);
       }
       else {
@@ -1695,12 +1696,12 @@ void DeviceXmlParser::parseDeviceXML(void) {
          }
          if (isDefault) {
             // Add device as default
-//            log.print("Setting default device %s\n", targetName.asCString());
+            log.print("Setting default device %s\n", targetName.asCString());
             deviceDataBase->setDefaultDevice(itDev);
          }
          else {
             // Add general device
-//            log.print("Adding Device %s\n", targetName.asCString());
+            log.print("Adding Device %s\n", targetName.asCString());
             deviceDataBase->addDevice(itDev);
          }
       }
@@ -1716,15 +1717,15 @@ void DeviceXmlParser::parseDeviceXML(void) {
 //!         != 0 => fail
 //!
 void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string &deviceFilePath, DeviceDataBase *deviceDataBase) {
-   LOGGING_Q;
-   log.setLoggingLevel(0); // Don't log below this level
+   LOGGING;
+   log.setLoggingLevel(0); // Don't log below this leveln
    try {
       xercesc::XMLPlatformUtils::Initialize();
    }
    catch (...) {
       throw MyException("DeviceXmlParser::loadDeviceData((): Exception in XMLPlatformUtils::Initialize()");
    }
-   DeviceXmlParser* deviceXmlParser = new DeviceXmlParser(targetType, deviceDataBase);
+   std::tr1::shared_ptr<DeviceXmlParser> deviceXmlParser(new DeviceXmlParser(targetType, deviceDataBase));
    try {
       try {
          // Load the XML
@@ -1755,11 +1756,10 @@ void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string 
    }
    catch (...) {
       log.error("Unknown Exception\n");
-      XMLPlatformUtils::Terminate();
+//      XMLPlatformUtils::Terminate();
       // Translate other exceptions
       throw MyException("DeviceXmlParser::loadDeviceData() - Exception in loadFile(), parseSharedXML() or parseDeviceXML()\n");
    }
-   delete deviceXmlParser;
-
-   XMLPlatformUtils::Terminate();
+   //TODO - causes crash on function exit, allocation?
+//   XMLPlatformUtils::Terminate();
 }

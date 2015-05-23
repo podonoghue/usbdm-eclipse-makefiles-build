@@ -246,7 +246,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         
    if (writeClockRegister(ICSSC, clockParameters->icsSC) != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
-   milliSleep(100);
+   UsbdmSystem::milliSleep(100);
    if (USBDM_Connect() != BDM_RC_OK) { // re-connect after possible FLL change
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
@@ -305,7 +305,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         
    if (writeClockRegister(ICGC2, clockParameters->icgC2) != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
-   milliSleep(100);
+   UsbdmSystem::milliSleep(100);
    if (USBDM_Connect() != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
@@ -380,7 +380,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
        (writeClockRegister(MCGT, clockParameters->mcgCT) != BDM_RC_OK)) {
          return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
-   milliSleep(100);
+   UsbdmSystem::milliSleep(100);
    if (USBDM_Connect() != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
@@ -676,7 +676,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
       if (trimCheck != trimMSB) {
          return PROGRAMMING_RC_ERROR_BDM_WRITE;
       }
-      //milliSleep(100);
+      //UsbdmSystem::milliSleep(100);
       // Measure sync multiple times
       for(index=numAverage; index>0; index--) {
          // Check target speed
@@ -722,7 +722,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
       if (trimCheck != trimMSB) {
          return PROGRAMMING_RC_ERROR_BDM_WRITE;
       }
-      //milliSleep(100);
+      //UsbdmSystem::milliSleep(100);
       // Measure sync multiple times
       for(index=numAverage; index>0; index--) {
          // Check target speed

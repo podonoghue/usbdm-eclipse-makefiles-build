@@ -21,10 +21,19 @@ std::string getEnvVar(const std::string & key)
     return (val == 0) ? std::string("") : std::string(val);
 }
 
+/* Obtain the path of a file within the same directory as the module
+ * NOTE IMPLEMENTED ON LINUX
+ * @param path to append to directory
+ *
+ * @return directory or NULL if failed
+ */
 std::string UsbdmSystem::getModulePath(const std::string &path) {
    return path;
 }
 
+/*!
+ * Checks if a file exists
+ */
 bool UsbdmSystem::fileExists(const std::string &path) {
    struct stat buffer;
    return (stat(path.c_str(), &buffer) == 0);
@@ -55,7 +64,8 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
    return res.append(path);
 }
 
-/* Obtain the path of the configuration directory
+/* Obtain the path of a file within the configuration directory
+ * This is a per-user read/write directory for configurations
  *
  * @param path to append to directory
  *
@@ -63,7 +73,7 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
  *
  * @note The configuration directory will be created if it doesn't already exist.
  */
-std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getDataPath(const std::string &path) {
+std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getConfigurationPath(const std::string &path) {
    LOGGING_Q;
 
    std::string res = getEnvVar("HOME").append("/.usbdm/");

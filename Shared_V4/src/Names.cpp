@@ -53,11 +53,12 @@ const char *getHardwareDescription(unsigned int hardwareVersion) {
   /* 21 */  "USBDM_TWR_HCS08       - Tower HCS08 boards",
   /* 22 */  "USBDM_TWR_CFVx        - Tower CFVx boards",
   /* 23 */  "USBDM-SWD-SER-JS16    - Minimal BDM for HCS08,HCS12,CFV1,ARM-SWD (JS16CWJ) with serial",
-         };
+   };
    const char *hardwareName = "Unknown";
    hardwareVersion &= 0x3F; // mask out BDM processor type
-   if (hardwareVersion < sizeof(hardwareDescriptions)/sizeof(hardwareDescriptions[0]))
+   if (hardwareVersion < sizeof(hardwareDescriptions)/sizeof(hardwareDescriptions[0])) {
       hardwareName = hardwareDescriptions[hardwareVersion];
+   }
    return hardwareName;
 }
 

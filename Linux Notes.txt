@@ -1,0 +1,3 @@
+RxTx Java library?
+sudo aptitude install librxtx-java
+

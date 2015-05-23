@@ -7,3 +7,9 @@ VPATH := $(SHARED_SRC) $(VPATH)
 
 INCS  += -I$(SHARED_SRC)
 SRC += Utils.cpp
+SRC += UsbdmSystem.cpp
+ifeq ($(UNAME_S),Windows)
+SRC += UsbdmSystemWin.cpp
+else
+SRC += UsbdmSystemLinux.cpp
+endif

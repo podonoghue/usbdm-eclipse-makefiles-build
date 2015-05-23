@@ -1,6 +1,6 @@
 include ../Common.mk
 
-TARGET = GdbServer
+TARGET = UsbdmGdbServer
 MODULE = module
 
 EXE_DEFS = -DGDB_SERVER -DUSE_ICON -DGDB

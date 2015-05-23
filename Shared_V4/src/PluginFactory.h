@@ -20,9 +20,9 @@
 #endif
 #else
 #ifdef LOG
-#define DLL_NAME(x) "lib" x "-debug.4.so"
+#define DLL_NAME(x) "lib" x "-debug.so.4"
 #else
-#define DLL_NAME(x) "lib" x ".4.so"
+#define DLL_NAME(x) "lib" x ".so.4"
 #endif
 #endif
 

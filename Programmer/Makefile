@@ -1,6 +1,6 @@
 include ../Common.mk
 
-TARGET = FlashProgrammer
+TARGET = UsbdmFlashProgrammer
 MODULE = module
 
 EXE_DEFS = -DFLASH_PROGRAMMER -DUSE_ICON

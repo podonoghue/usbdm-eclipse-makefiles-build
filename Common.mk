@@ -114,6 +114,13 @@ else
    WIN32_GUI_OPTS     := 
 endif
 
+#Should change to using $(GUI_OPTS)
+ifeq ($(UNAME_S),Windows)
+	GUI_OPTS := $(WIN32_GUI_OPTS)
+else
+   GUI_OPTS     := 
+endif
+
 #===========================================================
 # WDI
 # Header files in local dir

@@ -54,7 +54,8 @@ endif
 ifneq ($(UNAME_S),Windows)
 #LIBS += $(USBDM_WX_LIBS) # Needed for 64-bit, Why?
 endif
-LIBS += $(FLASHIMAGE_LIBS)
+#LIBS += $(FLASHIMAGE_LIBS)
+LIBS += $(USBDM_DYNAMIC_LIBS)
 
 # Each module will add to this
 SRC :=
@@ -102,7 +103,7 @@ $(BUILDDIR)/%.o : %.cpp
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -o $@ $(WIN32_GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
+	$(CC) -o $@ $(GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
 
 # How to copy EXE to target directory
 #==============================================

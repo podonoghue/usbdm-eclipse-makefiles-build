@@ -12,4 +12,3 @@ VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
 SRC   += Utils.cpp
 SRC   += AppSettings.cpp
-SRC   += Names.cpp

@@ -31,40 +31,11 @@
    \endverbatim
 */
 
-#ifdef __unix__
-#include <time.h>
-#include <errno.h>
-#else
-#include <windows.h>
-#endif
-
 #include <string>
 
 #include "Utils.h"
 
 using namespace std;
-
-//**********************************************************
-//!
-//! Sleep for given number of milliseconds (or longer!)
-//!
-//! @param milliSeconds - number of milliseconds to sleep
-//!
-void milliSleep(int milliSeconds) {
-#ifdef __unix__
-   int rc;
-   struct timespec sleepStruct;
-   sleepStruct.tv_sec  = milliSeconds/1000;
-   sleepStruct.tv_nsec = (milliSeconds%1000)*1000000L;
-   do {
-      rc = nanosleep(&sleepStruct, &sleepStruct);
-   } while ((rc < 0) && (errno == EINTR));
-#elif defined(_WIN32)
-   Sleep(milliSeconds);
-#else
-#error "Don't know how to sleep!"
-#endif
-}
 
 /*! Convert a single HEX character ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *

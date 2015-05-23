@@ -20,6 +20,7 @@
 
 #include "ArmDefinitions.h"
 #include "Utils.h"
+#include "UsbdmSystem.h"
 
 // Required API
 #define USBDM_API_VERSION_REQUIRED (0x40905) // Need V4.9.5
@@ -93,7 +94,7 @@ USBDM_ErrorCode tryUnlock(void) {
    // Expect this to fail as USB communications is lost - very crude!!!
    USBDM_Debug(debugCommand);
    for (unsigned attempt = 0; attempt<100; attempt++) {
-      milliSleep(100);
+      UsbdmSystem::milliSleep(100);
       rc = openBDM(0);
       if (rc == BDM_RC_OK) {
          break;

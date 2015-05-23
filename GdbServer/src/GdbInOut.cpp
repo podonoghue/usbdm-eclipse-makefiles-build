@@ -38,7 +38,7 @@
 #include <fcntl.h>
 #endif
 #include <stdio.h>
-
+#include <cstdarg>
 #include <pthread.h>
 //#include <unistd.h>
 

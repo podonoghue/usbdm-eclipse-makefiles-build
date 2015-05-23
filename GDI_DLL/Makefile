@@ -113,18 +113,33 @@ GDI_LEGACY_DEFS := -DGDI
 GDI_LEGACY_DEFS += -DLEGACY
 
 $(TARGET)-cfvx-legacy:
+	@echo ''
+	@echo  Building $@
+	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-cfvx-legacy BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx'
 
 $(TARGET)-cfvx-legacy-debug:
+	@echo ''
+	@echo  Building $@
+	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-cfvx-legacy BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx' DEBUG='Y'
 
 $(TARGET)-dsc-legacy:
+	@echo ''
+	@echo  Building $@
+	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-dsc-legacy BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=MC56F80xx'
 
 $(TARGET)-dsc-legacy-debug:
+	@echo ''
+	@echo  Building $@
+	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-dsc-legacy BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=MC56F80xx' DEBUG='Y'
 
 ExampleCFVxGDIApp-debug:
+	@echo ''
+	@echo  Building $@
+	@echo "================================================================"
 	$(MAKE) exe -f LegacyTarget.mk MODULE=$@ BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx -DTEST_APP=1' DEBUG='Y'
 
 #------------------------------------------------------------

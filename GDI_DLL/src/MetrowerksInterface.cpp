@@ -48,7 +48,7 @@ using namespace std;
 #include "Metrowerks.h"
 #include "MetrowerksInterface.h"
 #include "DeviceData.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 
 const string emptyString("");
 DiReturnT setErrorState(DiReturnT errorCode, const char *errorString = NULL);

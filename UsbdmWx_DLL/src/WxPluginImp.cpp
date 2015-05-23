@@ -13,12 +13,48 @@ Change History
 
  */
 
+#include <wx/wx.h>
+#include <wx/window.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
+#include <wx/filefn.h>
+#include <wx/app.h>
+#include <wx/evtloop.h>
 #include <wx/msgdlg.h>
+
+
+#include <wx/msgdlg.h>
+#include <wx/app.h>
+//#include <wx/events.h>
 #include <wx/app.h>
 
 #include "UsbdmSystem.h"
 #include "WxPluginImp.h"
 #include "PluginHelper.h"
+
+#if defined(__linux__)
+//! Used to make sure that any pending events are handled
+//!
+static void runGuiEventLoop(void) {
+#if wxCHECK_VERSION(2, 9, 0)
+   wxEventLoopBase  *originalEventLoop = wxEventLoop::GetActive();
+   wxEventLoopBase  *eLoop = originalEventLoop;
+#else
+   wxEventLoop  *originalEventLoop = wxEventLoop::GetActive();
+   wxEventLoop  *eLoop = originalEventLoop;
+#endif
+   if (eLoop == NULL) {
+      eLoop = new wxEventLoop;
+   }
+   wxEventLoopBase::SetActive(eLoop);
+   while (eLoop->Pending()) {
+//      fprintf(stderr, "eLoop->Pending == TRUE #1\n");
+      eLoop->Dispatch();
+   }
+//   fprintf(stderr, "eLoop->Pending == FALSE #1\n");
+   wxEventLoopBase::SetActive(originalEventLoop);
+}
+#endif
 
 long WxPluginImp::display(std::string message, std::string caption, long style) {
    LOGGING;
@@ -27,6 +63,9 @@ long WxPluginImp::display(std::string message, std::string caption, long style) 
    log.print("Caption   = %s\n", caption.c_str());
    log.print("Style     = %ld\n", style);
    long rc =  wxMessageBox(message, caption, style);
+#if defined(__linux__)
+   runGuiEventLoop();
+#endif
    log.print("After\n");
    return rc;
 }

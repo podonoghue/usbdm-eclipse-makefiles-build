@@ -19,28 +19,39 @@ class PluginFactory {
 
 protected:
    static std::string dllName;
-   static T* ((* newInstance)(...));
+   static size_t ((* newInstance)(...));
    static int instanceCount;
    static void *moduleHandle;
+   static std::tr1::shared_ptr<T> dummy;
 
    PluginFactory() {};
    ~PluginFactory() {};
 
 protected:
    static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING_Q;
+      LOGGING;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-      std::tr1::shared_ptr<T> pp((T*)(*newInstance)(), deleter);
+      log.print("Getting size\n");
+      size_t classSize = (*newInstance)(0);
+      log.print("Calling new\n");
+      void *p = ::operator new(classSize);
+      log.print("Allocated storage @%p, size = %ld\n", p, classSize);
+      log.print("Calling placement constructor\n");
+      (*newInstance)(p);
+      std::tr1::shared_ptr<T> pp((T*)p, deleter);
       instanceCount++;
       return pp;
    }
 
 protected:
    static void deleter(T *p) {
-      LOGGING_E;
-      delete p;
+      LOGGING;
+      log.print("Calling destructor\n");
+      p->~T();
+      log.print("Deallocating storage @%p\n", p);
+      ::operator delete(p);
       if (--instanceCount == 0) {
          unloadClass();
       }
@@ -50,8 +61,10 @@ protected:
 };
 
 template <class T> void * PluginFactory<T>::moduleHandle = 0;
-template <class T> T* (*PluginFactory<T>::newInstance)(...) = 0;
+template <class T> size_t (*PluginFactory<T>::newInstance)(...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
+//template <class T> std::tr1::shared_ptr<WxPlugin> PluginFactory<T>::dummy;
+template <class T> std::tr1::shared_ptr<T> PluginFactory<T>::dummy;
 
 using namespace std;
 
@@ -95,7 +108,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    }
    log.print("Module \'%s\' loaded @0x%p\n", moduleName, moduleHandle);
 
-   newInstance  = (T* (*)(...))dlsym(moduleHandle, createInstanceFunctioName);
+   newInstance  = (size_t (*)(...))dlsym(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
       char buff[1000];
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
@@ -109,12 +122,14 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
  */
 template <class T>
 void PluginFactory<T>::unloadClass() {
-   LOGGING_Q;
-   log.print("Unloading module from @0x%p\n", moduleHandle);
-   if (dlclose(moduleHandle) == 0) {
+   LOGGING;
+   log.print("Unloading module @0x%p\n", moduleHandle);
+   if (dlclose(moduleHandle) != 0) {
+      log.print("Unloading module at @0x%p failed\n", moduleHandle);
       printSystemErrorMessage();
       // Ignore error as can't throw in destructor
    }
+   log.print("Unloading module @0x%p done\n", moduleHandle);
    moduleHandle = 0;
    newInstance = 0;
 }

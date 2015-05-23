@@ -12,12 +12,6 @@
 #include <string>
 #endif
 
-/*! Wait for period of time
- *
- * @param milliSeconds - Time to wait in milliseconds
- */
-void milliSleep(int milliSeconds);
-
 /*! Convert a single HEX character ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
  * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced

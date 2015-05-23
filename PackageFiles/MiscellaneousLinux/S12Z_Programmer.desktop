@@ -2,7 +2,7 @@
 Name=S12Z_FlashProgrammer
 Comment=Flash programmer for S12Z devices
 Keywords=HCS12;S12Z;Programmer;
-Exec=/usr/bin/S12Z_FlashProgrammer
+Exec=/usr/bin/FlashProgrammer -target=s12z
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

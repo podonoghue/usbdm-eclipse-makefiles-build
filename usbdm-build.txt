@@ -1,0 +1,69 @@
+======================================================
+XERCES-C
+========================================
+Using MSYS!!
+GCC = V4.5
+in xerces root
+./configure LDFLAGS=-Wl,-no-undefined --disable-pretty-make CFLAGS=-O3 CXXFLAGS=-O3
+cd src
+make clean
+make
+
+Using MSYS!!
+GCC >= V4.6
+For some reason it fails to make the shared DLLs (visibility problems?).  Use the following:
+in xerces root
+./configure LDFLAGS=-Wl,-no-undefined --disable-pretty-make CFLAGS="-O3 -g0" CXXFLAGS="-O3 -g0"
+cd src
+make
+cd .libs
+a2dll libxerces-c.a -o libxerces-c-3-1.dll -L/c/Apps/MinGW/bin -llibstdc++-6
+strip libxerces-c-3-1.dll
+cd ..
+make install
+
+You can strip the DLLs to reduce their size
+
+Things I tried....
+===========================================
+ar -x libxxerces-c.a
+gcc -shared -L/c/Apps/MinGW/bin -lmsvcrt -ladvapi32 -lkernel32 -llibstdc++-6 *.o -o libxerces-c-3-1.dll  
+gcc -shared -L/c/Apps/MinGW/bin -llibstdc++-6 *.o -o libxerces-c-3-1.dll 
+
+
+./configure LDFLAGS=-Wl,-no-undefined --disable-pretty-make CFLAGS="-O3 -g0 -fno-keep-inline-dllexport" CXXFLAGS="-O3 -g0 -fno-keep-inline-dllexport"
+
+./configure LDFLAGS=-Wl,-no-undefined 
+
+//====  WORKED ====//
+mkdir build
+cd build/
+../configure --prefix=/mingw/ LDFLAGS=-no-undefined --disable-pretty-make
+//====  WORKED ====//
+ 
+//====  ATTEMP?? ====//
+mkdir build
+cd build/
+../configure --prefix=/mingw/ LDFLAGS=-Wl,-no-undefined --disable-pretty-make CFLAGS=-O3 CXXFLAGS=-O3  
+//====  WORKED ====//
+ 
+ 
+======================================================
+wxWidgets
+======================================================
+Need the unicode non-debug build shared & static
+Using command line
+cd ...\wx\build\msw
+mingw32-make -f makefile.gcc BUILD=release UNICODE=1 SHARED=0
+mingw32-make -f makefile.gcc BUILD=release UNICODE=1 SHARED=1
+
+==================================================
+# Find GCC defs
+==================================================
+echo . | gcc -dM -E -
+
+=======================================================
+# libwidi
+==================================================
+configure --with-ddkdir="f:/Apps/ddk" --with-userdir="f:/Apps/serialInf"  --enable-examples-build --enable-debug-log
+configure --with-ddkdir="f:/Apps/ddk" --with-userdir="f:/Apps/serialInf"  --enable-examples-build

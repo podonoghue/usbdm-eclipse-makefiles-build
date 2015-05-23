@@ -238,7 +238,7 @@ bool FlashProgrammerApp::OnInit() {
    else {
       // Create the main application window
       ProgrammerDialogue *dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface);
-      SetTopWindow(dialogue);
+      SetTopWindow((wxWindow*)dialogue);
       dialogue->execute(appSettings, hexFileName);
       dialogue->Destroy();
 //      appSettings->printToLog();
@@ -325,7 +325,7 @@ void FlashProgrammerApp::OnInitCmdLine(wxCmdLineParser& parser) {
 }
 
 void FlashProgrammerApp::logUsageError(wxCmdLineParser& parser, const wxString& text){
-   UsbdmSystem::Log::error(text);
+   UsbdmSystem::Log::error("%s", (const char *)text.c_str());
 #if (wxCHECK_VERSION(2, 9, 0))
    parser.AddUsageText(text);
 #endif
@@ -398,41 +398,43 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
    }
    else {
+      wxString argv0(argv[0]);
+
       // Determine target from name of program
-//      log.print("argv[0] = %s\n", (const char *)argv[0].c_str());
-      if (argv[0].Contains(_("RS08"))) {
+//      log.print("argv0 = %s\n", (const char *)argv0.c_str());
+      if (argv0.Contains(_("RS08"))) {
          log.print("Setting target RS08\n");
          targetType = T_RS08;
       }
-      else if (argv[0].Contains(_("HCS08"))) {
+      else if (argv0.Contains(_("HCS08"))) {
          log.print("Setting target HCS08\n");
          targetType = T_HCS08;
       }
-      else if (argv[0].Contains(_("HCS12"))) {
+      else if (argv0.Contains(_("HCS12"))) {
          log.print("Setting target HCS12\n");
          targetType = T_HCS12;
       }
-      else if (argv[0].Contains(_("CFV1"))) {
+      else if (argv0.Contains(_("CFV1"))) {
          log.print("Setting target CFV1\n");
          targetType = T_CFV1;
       }
-      else if (argv[0].Contains(_("CFVX"))) {
+      else if (argv0.Contains(_("CFVX"))) {
          log.print("Setting target CFVX\n");
          targetType = T_CFVx;
       }
-      else if (argv[0].Contains(_("ARM"))) {
+      else if (argv0.Contains(_("ARM"))) {
          log.print("Setting target ARM\n");
          targetType = T_ARM;
       }
-      else if (argv[0].Contains(_("MC56F"))) {
+      else if (argv0.Contains(_("MC56F"))) {
          log.print("Setting target MC56F\n");
          targetType = T_MC56F80xx;
       }
-      else if (argv[0].Contains(_("S12Z"))) {
+      else if (argv0.Contains(_("S12Z"))) {
          log.print("Setting target S12Z\n");
          targetType = T_S12Z;
       }
-      else if (argv[0].Contains(_("MC56F"))) {
+      else if (argv0.Contains(_("MC56F"))) {
          log.print("Setting target T_MC56F80xx\n");
          targetType = T_MC56F80xx;
       }

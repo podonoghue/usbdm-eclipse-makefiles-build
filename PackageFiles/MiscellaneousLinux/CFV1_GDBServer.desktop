@@ -2,7 +2,7 @@
 Name=CFV1_GDBServer
 Comment=GDB Server for Coldfire V1 devices
 Keywords=Coldfire;GDB;
-Exec=/usr/bin/CFV1_GDBServer
+Exec=/usr/bin/GdbServer -target=cfv1
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

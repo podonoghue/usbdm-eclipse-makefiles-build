@@ -131,9 +131,9 @@ USBDM_ErrorCode BdmInterface_DSC::targetConnectWithRetry(USBDMStatus_t *usbdmSta
          if (retryMode&retryByPower) {
             // Try power cycle first
             USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-            milliSleep(bdmOptions.powerOffDuration);
+            UsbdmSystem::milliSleep(bdmOptions.powerOffDuration);
             USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-            milliSleep(bdmOptions.powerOnRecoveryInterval);
+            UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
             rc = retryConnection(usbdmStatus);
             if (rc == BDM_RC_OK) {
                break;

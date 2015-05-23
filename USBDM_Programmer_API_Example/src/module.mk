@@ -7,3 +7,4 @@ VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
 
 SRC   += DeviceInterface.cpp
+SRC   += Names.cpp

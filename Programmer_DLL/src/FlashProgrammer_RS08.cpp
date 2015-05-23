@@ -86,7 +86,7 @@
 #include "USBDM_DSC_API.h"
 #endif
 #include "UsbdmTclInterpreterFactory.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 #ifdef GDI
 #include "GDI.h"
 #include "MetrowerksInterface.h"
@@ -844,7 +844,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::writeFlashBlock( unsigned int        byteC
       int reTry = 2;
       do {
          if (byteCount>8) {
-            milliSleep( 5 /* ms */);
+            UsbdmSystem::milliSleep( 5 /* ms */);
          }
          rc = bdmInterface->readMemory(1, sizeof(flashStatus), 0xD, &flashStatus);
       } while ((rc == BDM_RC_OK) && (flashStatus != 0) && (reTry-->0) );

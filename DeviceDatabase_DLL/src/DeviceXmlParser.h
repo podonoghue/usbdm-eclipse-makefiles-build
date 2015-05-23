@@ -123,11 +123,11 @@ private:
    void          loadFile(const std::string &xmlFile);
 
    DeviceXmlParser(TargetType_t targetType, DeviceDataBase *deviceDataBase);
-   ~DeviceXmlParser(void);
    void setCurrentName(const char *name);
 
 public:
    static void loadDeviceData(TargetType_t targetType, const std::string &deviceFilePath, DeviceDataBase *deviceDataBase);
+   ~DeviceXmlParser(void);
 };
 
 #endif /* XMLPARSER_H_ */

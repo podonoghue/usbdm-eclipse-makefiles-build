@@ -2,7 +2,7 @@
 Name=HCS12_FlashProgrammer
 Comment=Flash programmer for HCS12 devices
 Keywords=HCS12;Programmer;
-Exec=/usr/bin/HCS12_FlashProgrammer
+Exec=/usr/bin/FlashProgrammer -target=hcs12
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

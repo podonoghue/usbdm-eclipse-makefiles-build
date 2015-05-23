@@ -128,7 +128,8 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
    return getApplicationPath(path);
 }
 
-/* Obtain the path of the configuration directory
+/* Obtain the path of a file within the configuration directory
+ * This is a per-user read/write directory for configurations
  *
  * @param path to append to directory
  *
@@ -136,7 +137,7 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
  *
  * @note The configuration directory will be created if it doesn't already exist.
  */
-std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getDataPath(const std::string &path) {
+std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getConfigurationPath(const std::string &path) {
    LOGGING_Q;
    static char configFilePath[MAX_PATH];
 

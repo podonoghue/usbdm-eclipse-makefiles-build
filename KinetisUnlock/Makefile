@@ -3,7 +3,7 @@ include ../Common.mk
 TARGET = KinetisUnlock
 MODULE = module
 
-EXE_DEFS = -DUSE_ICON
+EXE_DEFS = -DUSE_ICON -DLINK_USBDM_SYSTEM_DLL
 
 $(TARGET):
 	@echo ''

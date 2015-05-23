@@ -79,7 +79,7 @@ Change History
 #include "DeviceData.h"
 #include "MetrowerksInterface.h"
 #include "Names.h"
-#include "wxPlugin.h"
+#include "WxPlugin.h"
 #include "FindWindow.h"
 #include "BdmInterfaceFactory.h"
 #include "Utils.h"
@@ -1662,7 +1662,7 @@ DiReturnT DiExecStop ( void ) {
    int retry =10;
    do {
       bdmInterface->controlPins(PIN_BKPT_LOW);
-      milliSleep(100);
+      UsbdmSystem::milliSleep(100);
       bdmInterface->controlPins(PIN_RELEASE);
       BDMrc = bdmInterface->targetConnectWithRetry(BdmInterface::retryNever);
    } while ((BDMrc != BDM_RC_OK) && (retry-->0));

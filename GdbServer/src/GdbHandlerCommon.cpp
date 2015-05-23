@@ -403,7 +403,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       // Ignored
       int delayValue = atoi(command+sizeof("delay"));
       reportGdbPrintf(M_INFO, "Executing delay %d ms\n", delayValue);
-      milliSleep(delayValue);
+      UsbdmSystem::milliSleep(delayValue);
       gdbInOut->sendGdbHexString("O", "Done", -1);
       gdbInOut->sendGdbString("OK");
    }

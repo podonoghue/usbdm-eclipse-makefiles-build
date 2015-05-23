@@ -2,7 +2,7 @@
 Name=ARM_FlashProgrammer
 Comment=Flash programmer for ARM devices
 Keywords=ARM;Programmer;
-Exec=/usr/bin/ARM_FlashProgrammer
+Exec=/usr/bin/FlashProgrammer -target=arm
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

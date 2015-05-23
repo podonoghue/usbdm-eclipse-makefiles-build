@@ -1,0 +1,49 @@
+#!/bin/bash
+# Packages required for building under linux
+# ====================================================
+# G++ 			(4:4.7.2-1ubuntu2)
+# openjdk-7-jre
+# default-jre-headless
+
+echo This installs the packages to build i386 version
+echo
+
+if [ "$1" == "" ]; then
+   BITNESS=`getconf LONG_BIT`
+   echo "Native ${BITNESS} bit"
+elif [ "$1" == "32" ]; then
+   BITNESS=32
+   echo "${BITNESS} bit"
+elif [ "$1" == "64" ]; then
+   BITNESS=64
+   echo "${BITNESS} bit"
+else
+   echo "Usage $0 [32|64]"
+fi
+
+#exit
+
+if [ "${BITNESS}" == "32" ]; then
+# Native build
+# =====================================================
+sudo apt-get -y install libusb-1.0-0-dev
+sudo apt-get -y install libtcl8.5-dev
+sudo apt-get -y install libxerces-c-dev
+sudo apt-get -y install libwxgtk2.8-dev
+
+elif [ "${BITNESS}" == "64" ]; then
+# On 64-bit to build 32-bit usbdm library for KDS
+# =====================================================
+sudo apt-get -y install gcc-multilib
+sudo apt-get -y install g++-4.8-multilib
+sudo apt-get -y install build-essential
+sudo apt-get -y install libc6-dev-i386
+sudo apt-get -y install libusb-1.0-0-dev:i386
+sudo apt-get -y install libtcl8.5-dev:i386
+sudo apt-get -y install libxerces-c-dev:i386
+sudo apt-get -y install libwxgtk2.8-dev:i386
+fi
+
+# Note:
+# Different architectures of libxerces & libwxgtk2 are not compatible
+

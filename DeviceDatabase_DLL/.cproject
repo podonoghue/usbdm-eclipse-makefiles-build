@@ -32,12 +32,18 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Shared_V4/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${XERCES}/src&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.599082413" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="COMPILE_DEVICE_DATA_DLL"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1505888809" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.609775866" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
 								<option id="gnu.c.compiler.option.include.paths.279223919" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Shared_V4/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${XERCES}/src&quot;"/>
+								</option>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1912302201" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="COMPILE_DEVICE_DATA_DLL"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.462768406" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

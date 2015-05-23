@@ -107,11 +107,11 @@ void AppSettings::writeToFile(FILE *fp, const string &comment) const {
 }
 
 /*!
- *  Open file from Application data directory
+ *  Open file from Application configuration directory
  */
-FILE *openDataFile(string fileName, const char *attributes) {
+FILE *openConfigurationFile(string fileName, const char *attributes) {
    LOGGING_Q;
-   std::string filePath = UsbdmSystem::getDataPath(fileName);
+   std::string filePath = UsbdmSystem::getConfigurationPath(fileName);
    if (filePath.length() == 0) {
       return NULL;
    }
@@ -127,7 +127,7 @@ bool AppSettings::save() const {
 
 //   printToLog();
 
-   FILE *fp = openDataFile(fileName, "wt");
+   FILE *fp = openConfigurationFile(fileName, "wt");
    if (fp== NULL) {
       log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fileName.c_str());
       return false;
@@ -219,7 +219,7 @@ void AppSettings::loadFromFile(FILE *fp) {
  */
 bool AppSettings::load() {
    LOGGING_Q;
-   FILE *fp = openDataFile(fileName, "rt");
+   FILE *fp = openConfigurationFile(fileName, "rt");
    if (fp== NULL) {
       log.error("AppSettings::loadFromAppDirFile() - Failed to open Settings File for reading: File = \'%s\'\n",
             fileName.c_str());

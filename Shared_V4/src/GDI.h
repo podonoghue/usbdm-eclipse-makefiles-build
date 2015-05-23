@@ -34,8 +34,10 @@
 #ifndef GDI_H_
 #define GDI_H_
 
-#ifndef WINAPI
-#define WINAPI __stdcall
+#ifdef WIN32
+   #ifndef WINAPI
+   #define WINAPI __stdcall
+   #endif
 #endif
 
 #if defined __cplusplus
