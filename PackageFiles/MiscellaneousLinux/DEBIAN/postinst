@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+
 # Automatically added by dh_installdocs
 if [ "$1" = "configure" ]; then
   if [ -d /usr/doc -a ! -e /usr/doc/parted -a -d /usr/share/doc/parted ]; then
@@ -27,33 +28,22 @@ installUSBHardware() {
 #  Eclipse Plugin Installation
 #======================================================
 # $1 - Eclipse directory
-# $2 - USBDM plugin directory
+# $2 - Feature Group
 #
 installEclipsePlugins() {
 
-   local ECLIPSE_DIR="$1"
-   local ECLIPSE_DROPIN_DIR="${ECLIPSE_DIR}/dropins"
-   local USBDM_PLUGIN_DIR="$2"
+   P2_APPLICATION="org.eclipse.equinox.p2.director"
 
-   if [[ ! -d ${ECLIPSE_DROPIN_DIR} ]]; then
-      echo " Dropin directory ${ECLIPSE_DROPIN_DIR} Not Found"
-      return
-   fi
+   local ECLIPSE_DIR="$1"
+   local FEATURE_GROUP="$2"
 
    echo 
-   echo "Installing Eclipse CDT plugins to ${ECLIPSE_DROPIN_DIR}"
+   echo "Installing Eclipse CDT plugins to ${ECLIPSE_DIR}"
    echo "=================================================================="
-   if [[ -d "${ECLIPSE_DROPIN_DIR}/usbdm" ]]; then
-      rm -rfv "${ECLIPSE_DROPIN_DIR}/usbdm"
-   fi
-   mkdir -pv "${ECLIPSE_DROPIN_DIR}/usbdm"
-   ln -sv  ${USBDM_PLUGIN_DIR}/* "${ECLIPSE_DROPIN_DIR}/usbdm"
-   
-   echo "Refreshing Eclipse"
    for FILENAME in cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
-         echo "${ECLIPSE_DIR}/${FILENAME} -clean -initialize -noSplash"
-         ${ECLIPSE_DIR}/${FILENAME} -clean -initialize -noSplash
+         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP}
+         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP} || true
       fi
    done
 }
@@ -72,7 +62,7 @@ installEclipse() {
       echo -n "Looking for Eclipse in '${ECLIPSE_DIR}'"
       if [[ -d ${ECLIPSE_DIR} ]]; then
          echo " - Found"
-         installEclipsePlugins ${ECLIPSE_DIR} ${USBDM_CDT_PLUGINS_DIR}
+         installEclipsePlugins ${ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
       else
         echo " - Not Found"
       fi
@@ -89,21 +79,22 @@ installKDSInstance() {
    local KDS_ECLIPSE_DIR="${KDS_DIR}/eclipse"
    local KDS_PE_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
    local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
-   local KDS_NANO_SPECS_FILENAME="nano.specs"
+   #local KDS_NANO_SPECS_FILENAME="nano.specs"
    
    # Add USBDM plugins to eclipse
-   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${USBDM_CDT_PLUGINS_DIR}
+   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
 
    # Add Toolchain nano.specs files
-   local SOURCE="${USBDM_SHARED_DIR}/${KDS_NANO_SPECS_FILENAME}"
-   local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
+   # KDS now used the OS GNU tools - not their own version
+   #local SOURCE="${USBDM_SHARED_DIR}/${KDS_NANO_SPECS_FILENAME}"
+   #local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
    
-   echo Installing nano.specs files...
-   if [[ -d ${KDS_TOOLCHAIN_LIB_DIR} ]]; then
-      ln -svf ${SOURCE} ${DESTINATION}
-   else
-     echo " Toolchain directory '${KDS_TOOLCHAIN_LIB_DIR}' - Not Found"
-   fi
+   #echo Installing nano.specs files...
+   #if [[ -d ${KDS_TOOLCHAIN_LIB_DIR} ]]; then
+   #   ln -svf ${SOURCE} ${DESTINATION}
+   #else
+   #  echo " Toolchain directory '${KDS_TOOLCHAIN_LIB_DIR}' - Not Found"
+   #fi
 
    # Add PE files
    local SOURCE="${USBDM_SHARED_DIR}/${KDS_PR_XLKR_FILENAME}"
@@ -163,16 +154,17 @@ installCodewarriorInstance() {
    WIZARD_DIRECTORY="${CODEWARRIOR_DIR}/MCU/lib/wizard_data"
    ECLIPSE_CWIDE="${CODEWARRIOR_DIR}/eclipse/cwide"
 
-   CF_GDI_TARGETS="usbdm-cfv1-gdi.so usbdm-cfvx-gdi.so usbdm-cfv1-gdi-debug.so usbdm-cfvx-gdi-debug.so"
-   HCS_GDI_TARGETS="usbdm-hcs08-gdi.so usbdm-rs08-gdi.so usbdm-hcs08-gdi-debug.so usbdm-rs08-gdi-debug.so"
-   S12Z_GDI_TARGETS="usbdm-s12z-gdi.so usbdm-s12z-gdi-debug.so"
-   ARM_GDI_TARGETS="usbdm-arm-gdi.so usbdm-arm-gdi-debug.so"
-   DSC_GDI_TARGETS="usbdm-dsc-gdi.so usbdm-dsc-gdi-debug.so"
+   CF_GDI_TARGETS="libusbdm-gdi-cfv1.so libusbdm-gdi-cfvx.so libusbdm-gdi-cfv1-debug.so libusbdm-gdi-cfvx-debug.so"
+   HCS_GDI_TARGETS="libusbdm-gdi-hcs08.so libusbdm-gdi-rs08.so libusbdm-gdi-hcs08-debug.so libusbdm-gdi-rs08-debug.so"
+   S12Z_GDI_TARGETS="libusbdm-gdi-s12z.so libusbdm-gdi-s12z-debug.so"
+   ARM_GDI_TARGETS="libusbdm-gdi-arm.so libusbdm-gdi-arm-debug.so"
+   DSC_GDI_TARGETS="libusbdm-gdi-dsc.so libusbdm-gdi-dsc-debug.so"
 
    echo
    echo "Installing CFV1 & CFVx GDI files to '${CF_GDI_DIRECTORY}'"
    echo "=================================================================="
    for FILENAME in ${CF_GDI_TARGETS}; do
+      echo "Linking ..."
       local SOURCE="${USBDM_LIB_DIR}/lib${FILENAME}.${VERSION}"
       local DESTINATION="${CF_GDI_DIRECTORY}/${FILENAME}"
       ln -svf ${SOURCE} ${DESTINATION}
@@ -241,10 +233,12 @@ installCodewarriorInstance() {
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.changewizard_"  
    ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
 
+   echo 
+   echo "Refreshing Eclipse"
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
-   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${USBDM_CW_PLUGINS_DIR}
+   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${CW_FEATURE_GROUP}
 }
 
 #======================================================
@@ -275,15 +269,17 @@ libraryUpdate() {
       return
    fi 
 
-#   ldconfig ${USBDM_LIB_DIR}
+   echo ldconfig ${USBDM_LIB_DIR}
+   ldconfig ${USBDM_LIB_DIR}
 }
 
 #================================
 # USBDM Version
 #
 MAJOR=4
-MINOR=10
+MINOR=11
 VERSION=${MAJOR}.${MINOR}
+CP_OPTIONS=-p
 
 # Where to find files (relative to /)
 DUMMY_ROOT=""
@@ -299,10 +295,12 @@ else
 fi 
 
 USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
-USBDM_CDT_PLUGINS_DIR="${USBDM_SHARED_DIR}/CDT_Plugins"
-USBDM_CW_PLUGINS_DIR="${USBDM_SHARED_DIR}/CW_Plugins"
+USBDM_UPDATE_SITE="${USBDM_SHARED_DIR}/UpdateSite"
 USBDM_CW_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
 USBDM_CW_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
+
+CDT_FEATURE_GROUP="net.sourceforge.usbdm.cdt.feature.feature.group"
+CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
 
 # System directories
 LIB_DIR="/usr/lib"
@@ -313,5 +311,5 @@ installUSBHardware
 installEclipse
 installKDS
 installCodewarrior
-libraryUpdate
+#libraryUpdate $1
 

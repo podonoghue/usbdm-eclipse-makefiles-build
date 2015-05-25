@@ -1,8 +1,9 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=CFVx_FlashProgrammer
 Comment=Flash programmer for CFVx devices
 Keywords=CFVx;Programmer;
-Exec=/usr/bin/FlashProgrammer -target=cfvx
+Exec=/usr/bin/UsbdmFlashProgrammer -target=cfvx
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

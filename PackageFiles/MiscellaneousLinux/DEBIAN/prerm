@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+
 # Automatically added by dh_installdocs
 if [ \( "$1" = "upgrade" -o "$1" = "remove" \) -a -L /usr/doc/parted ]; then
   rm -fv /usr/doc/parted
@@ -9,7 +10,7 @@ fi
 #======================================================
 #  USB Hardware Removal
 #======================================================
-uninstallUSBHardware() {
+removeUSBHardware() {
 
    echo
    echo "Removing rules file from ${RULES_DIR}"
@@ -21,29 +22,22 @@ uninstallUSBHardware() {
 #  Eclipse Plugin Removal
 #======================================================
 # $1 - Eclipse directory
+# $2 - Feature Group
 #
-uninstallEclipsePlugins() {
+removeEclipsePlugins() {
+
+   P2_APPLICATION="org.eclipse.equinox.p2.director"
 
    local ECLIPSE_DIR="$1"
-   local ECLIPSE_DROPIN_DIR="${ECLIPSE_DIR}/dropins"
-
-   if [[ ! -d ${ECLIPSE_DROPIN_DIR} ]]; then
-      echo " Dropin directory ${ECLIPSE_DROPIN_DIR} Not Found"
-      return
-   fi
+   local FEATURE_GROUP="$2"
 
    echo 
-   echo "Removing Eclipse CDT plugins from ${ECLIPSE_DROPIN_DIR}"
+   echo "Removing Eclipse CDT plugins from ${ECLIPSE_DIR}"
    echo "=================================================================="
-   if [[ -d "${ECLIPSE_DROPIN_DIR}/usbdm" ]]; then
-      rm -rfv "${ECLIPSE_DROPIN_DIR}/usbdm"
-   fi
-
-   echo "Refreshing Eclipse"
    for FILENAME in cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
-         echo "${ECLIPSE_DIR}/${FILENAME} -clean -initialize -noSplash"
-         ${ECLIPSE_DIR}/${FILENAME} -clean -initialize -noSplash
+         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP}
+         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP} || true
       fi
    done
 }
@@ -51,7 +45,7 @@ uninstallEclipsePlugins() {
 #======================================================
 #  Eclipse Removal
 #======================================================
-uninstallEclipse() {
+removeEclipse() {
 
    local ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse*"
 
@@ -62,7 +56,7 @@ uninstallEclipse() {
       echo -n "Looking for Eclipse in '${ECLIPSE_DIR}'"
       if [[ -d ${ECLIPSE_DIR} ]]; then
          echo " - Found"
-         uninstallEclipsePlugins ${ECLIPSE_DIR}
+         removeEclipsePlugins ${ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
       else
         echo " - Not Found"
       fi
@@ -72,27 +66,28 @@ uninstallEclipse() {
 #======================================================
 #  KDS Instance Removal
 #======================================================
-uninstallKDSInstance() {
+removeKDSInstance() {
 
    local KDS_DIR="$1"
    local KDS_TOOLCHAIN_LIB_DIR="${KDS_DIR}/toolchain/arm-none-eabi/lib"
    local KDS_ECLIPSE_DIR="${KDS_DIR}/eclipse"
    local KDS_PE_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
    local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
-   local KDS_NANO_SPECS_FILENAME="nano.specs"
+   #local KDS_NANO_SPECS_FILENAME="nano.specs"
    
    # Remove USBDM plugins to eclipse
-   uninstallEclipsePlugins ${KDS_ECLIPSE_DIR}
+   removeEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
 
    # Add Toolchain nano.specs files
-   local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
+   # KDS now used the OS GNU tools - not their own version
+   #local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
    
-   echo Removing nano.specs files...
-   if [[ -f ${DESTINATION} ]]; then
-      rm -fv ${DESTINATION}
-   else
-     echo " Specs file '${DESTINATION}' - Not Found"
-   fi
+   #echo Removing nano.specs files...
+   #if [[ -f ${DESTINATION} ]]; then
+   #   rm -fv ${DESTINATION}
+   #else
+   #  echo " Specs file '${DESTINATION}' - Not Found"
+   #fi
 
    # Remove PE files
    local DESTINATION="${KDS_PE_DIR}/${KDS_PR_XLKR_FILENAME}"
@@ -108,7 +103,7 @@ uninstallKDSInstance() {
 #======================================================
 #  KDS Removal
 #======================================================
-uninstallKDS() {
+removeKDS() {
 
    local KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
 
@@ -119,7 +114,7 @@ uninstallKDS() {
       echo -n "Looking for Freescale KDS in '${KDS_DIR}'"
       if [[ -d ${KDS_DIR} ]]; then
          echo " - Found"
-         uninstallKDSInstance ${KDS_DIR}
+         removeKDSInstance ${KDS_DIR}
       else
          echo " - Not Found"
       fi
@@ -129,7 +124,7 @@ uninstallKDS() {
 #======================================================
 #  Codewarrior Instance Removal
 #======================================================
-uninstallCodewarriorInstance() {
+removeCodewarriorInstance() {
 
    local CODEWARRIOR_DIR="$1"
    local CODEWARRIOR_ECLIPSE_DIR="$1/eclipse"
@@ -151,11 +146,11 @@ uninstallCodewarriorInstance() {
    WIZARD_DIRECTORY="${CODEWARRIOR_DIR}/MCU/lib/wizard_data"
    ECLIPSE_CWIDE="${CODEWARRIOR_DIR}/eclipse/cwide"
 
-   CF_GDI_TARGETS="usbdm-cfv1-gdi.so usbdm-cfvx-gdi.so usbdm-cfv1-gdi-debug.so usbdm-cfvx-gdi-debug.so"
-   HCS_GDI_TARGETS="usbdm-hcs08-gdi.so usbdm-rs08-gdi.so usbdm-hcs08-gdi-debug.so usbdm-rs08-gdi-debug.so"
-   S12Z_GDI_TARGETS="usbdm-s12z-gdi.so usbdm-s12z-gdi-debug.so"
-   ARM_GDI_TARGETS="usbdm-arm-gdi.so usbdm-arm-gdi-debug.so"
-   DSC_GDI_TARGETS="usbdm-dsc-gdi.so usbdm-dsc-gdi-debug.so"
+   CF_GDI_TARGETS="libusbdm-gdi-cfv1.so libusbdm-gdi-cfvx.so libusbdm-gdi-cfv1-debug.so libusbdm-gdi-cfvx-debug.so"
+   HCS_GDI_TARGETS="libusbdm-gdi-hcs08.so libusbdm-gdi-rs08.so libusbdm-gdi-hcs08-debug.so libusbdm-gdi-rs08-debug.so"
+   S12Z_GDI_TARGETS="libusbdm-gdi-s12z.so libusbdm-gdi-s12z-debug.so"
+   ARM_GDI_TARGETS="libusbdm-gdi-arm.so libusbdm-gdi-arm-debug.so"
+   DSC_GDI_TARGETS="libusbdm-gdi-dsc.so libusbdm-gdi-dsc-debug.so"
 
    echo
    echo "Removing CFV1 & CFVx GDI files from '${CF_GDI_DIRECTORY}'"
@@ -222,13 +217,13 @@ uninstallCodewarriorInstance() {
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
-   uninstallEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}"
+   removeEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${CW_FEATURE_GROUP}
 }
 
 #======================================================
 #  Codewarrior Removal
 #======================================================
-uninstallCodewarrior() {
+removeCodewarrior() {
 
    echo 
    echo "Checking for Codewarrior directory"
@@ -237,7 +232,7 @@ uninstallCodewarrior() {
       echo -n "Looking for Codewarrior in '${CODEWARRIOR_DIR}'"
       if [[ -d ${CODEWARRIOR_DIR} ]]; then
          echo " - Found"
-         uninstallCodewarriorInstance ${CODEWARRIOR_DIR}
+         removeCodewarriorInstance ${CODEWARRIOR_DIR}
       else
          echo " - Not Found"
       fi
@@ -249,8 +244,9 @@ uninstallCodewarrior() {
 # USBDM Version
 #
 MAJOR=4
-MINOR=10
+MINOR=11
 VERSION=${MAJOR}.${MINOR}
+CP_OPTIONS=-p
 
 # Where to find files (relative to /)
 DUMMY_ROOT=""
@@ -266,18 +262,20 @@ else
 fi 
 
 USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
-USBDM_CDT_PLUGINS_DIR="${USBDM_SHARED_DIR}/CDT_Plugins"
-USBDM_CW_PLUGINS_DIR="${USBDM_SHARED_DIR}/CW_Plugins"
+USBDM_UPDATE_SITE="${USBDM_SHARED_DIR}/UpdateSite"
 USBDM_CW_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
 USBDM_CW_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
+
+CDT_FEATURE_GROUP="net.sourceforge.usbdm.cdt.feature.feature.group"
+CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
 
 # System directories
 LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-uninstallUSBHardware
-uninstallEclipse
-uninstallKDS
-uninstallCodewarrior
+removeUSBHardware
+removeEclipse
+removeKDS
+removeCodewarrior
 

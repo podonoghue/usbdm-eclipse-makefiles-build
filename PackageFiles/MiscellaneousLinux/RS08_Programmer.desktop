@@ -1,8 +1,9 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=RS08_FlashProgrammer
 Comment=Flash programmer for RS08 devices
 Keywords=RS08;Programmer;
-Exec=/usr/bin/FlashProgrammer -target=rs08
+Exec=/usr/bin/UsbdmFlashProgrammer -target=rs08
 Icon=Hardware-Chip
 Terminal=false
 Type=Application

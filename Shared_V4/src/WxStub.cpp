@@ -68,7 +68,8 @@ public:
    MINIMAL_APP() : wxApp() {
       LOGGING_E;
       UsbdmSystem::Log::print("MINIMAL_APP()\n");
-      fprintf(stderr, "wxPluginApp()");
+//      fprintf(stderr, "wxPluginApp()\n");
+//      gtk_disable_setlocale();
    }
 
    ~MINIMAL_APP(){
@@ -123,11 +124,15 @@ bool  __attribute__ ((destructor)) wx_dll_close(void) {
 
    if (wxInitializationDone) {
       log.print("Doing wxEntryCleanup()\n");
+#if !defined(__linux__)
+      //TODO HACK for linux - don't cleanup on exit!
       wxEntryCleanup();
+#endif
+      wxApp::SetInstance(0);
       log.print("Done wxEntryCleanup()\n");
    }
    else {
-      log.print("Skipped wxEntryCleanup()\n");
+//      log.print("Skipped wxEntryCleanup()\n");
    }
 
    return true;

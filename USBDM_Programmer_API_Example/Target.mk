@@ -39,6 +39,7 @@ LIBDIRS +=
 LIBS += $(USBDM_LIBS) 
 LIBS += $(USBDM_SYSTEM_LIBS)
 LIBS += $(USBDM_DEVICE_LIBS)
+LIBS += $(USBDM_DYNAMIC_LIBS)
 
 # Each module will add to this
 SRC :=

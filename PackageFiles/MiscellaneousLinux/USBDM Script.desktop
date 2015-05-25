@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=UsbdmScript
+Comment=USBDM TCL Command Line
+Keywords=USBDM;TCL;
+Exec=/usr/bin/UsbdmScript
+Icon=Hardware-Chip
+Terminal=true
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=USBDM Script
+GenericName[en_AU]=USBDM TCL Script
+Comment[en_AU]=USBDM TCL Command line

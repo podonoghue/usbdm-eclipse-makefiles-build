@@ -218,8 +218,8 @@
       <!--         Application Components & shortcuts            -->
       <DirectoryRef Id='INSTALLDIR'>
 
-         <Component Id='C.Programmer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
-            <File Id='FlashProgrammerEXE'       DiskId='1' Source='$(var.SrcDir)\bin\FlashProgrammer.exe' KeyPath='yes' >
+         <Component Id='C.UsbdmProgrammer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
+            <File Id='UsbdmFlashProgrammerEXE'       DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer.exe' KeyPath='yes' >
                <Shortcut Id="SC_ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
                <Shortcut Id="SC_CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
                <Shortcut Id="SC_CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
@@ -229,15 +229,15 @@
                <Shortcut Id="SC_RS08Programmer"  Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"  Arguments="-target=RS08"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
                <Shortcut Id="SC_S12ZProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"  Arguments="-target=S12Z"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
             </File>
-            <File Id='FlashProgrammerDebugEXE'  DiskId='1' Source='$(var.SrcDir)\bin\FlashProgrammer-debug.exe'         />
+            <File Id='UsbdmFlashProgrammerDebugEXE'  DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer-debug.exe'         />
          </Component>
-         <Component Id='C.GdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418'>
-            <File Id='GdbServerEXE' DiskId='1' Source='$(var.SrcDir)\bin\GdbServer.exe' KeyPath='yes' >
+         <Component Id='C.UsbdmGdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418'>
+            <File Id='UsbdmGdbServerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer.exe' KeyPath='yes' >
                <Shortcut Id="SC.ARMGdbServer"   Directory="D.UsbdmProgramMenuDir"  Name="ARM GDB Server"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
                <Shortcut Id="SC.CFV1GdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFV1 GDB Server"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
                <Shortcut Id="SC.CFVXGdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFVx GDB Server"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
             </File>
-            <File Id='GdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\GdbServer-debug.exe' />
+            <File Id='UsbdmGdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer-debug.exe' />
          </Component>
 
          <Component Id='C.USBDMBootloader' Guid='*'>
@@ -457,21 +457,21 @@
          <FeatureRef Id='F.ECLIPSE_JUNO_CDT' />
          <FeatureRef Id='F.ECLIPSE_KEPLER_CDT' />
          <FeatureRef Id='F.ECLIPSE_LUNA_CDT' />
-         <Feature Id='F.Programmers'
+         <Feature Id='F.UsbdmProgrammers'
             Title='Programmers'
             Description='Stand-alone flash programmers.'
             AllowAdvertise="no"
             Level='1'>
-            <ComponentRef Id='C.Programmer' />
+            <ComponentRef Id='C.UsbdmProgrammer' />
             <ComponentRef Id='C.CommonFiles' />
             <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
          </Feature>
-         <Feature Id='F.GdbServers'
+         <Feature Id='F.UsbdmGdbServers'
             Title='GDB Servers'
             Description='USBDM GDB Servers. &#10;&#10;Socket based server for use with GNU Project Debugger (GDB).'
             AllowAdvertise="no"
             Level='1'>
-            <ComponentRef Id='C.GdbServer' />
+            <ComponentRef Id='C.UsbdmGdbServer' />
             <ComponentRef Id='C.CommonFiles' />
             <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
          </Feature>

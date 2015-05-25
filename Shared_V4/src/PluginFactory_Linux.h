@@ -37,7 +37,7 @@ protected:
       size_t classSize = (*newInstance)(0);
       log.print("Calling new\n");
       void *p = ::operator new(classSize);
-      log.print("Allocated storage @%p, size = %ld\n", p, classSize);
+      log.print("Allocated storage @%p, size = %ld\n", p, (long)classSize);
       log.print("Calling placement constructor\n");
       (*newInstance)(p);
       std::tr1::shared_ptr<T> pp((T*)p, deleter);

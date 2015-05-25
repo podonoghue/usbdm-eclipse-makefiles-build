@@ -1054,7 +1054,7 @@ USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int
       if ((rc != BDM_RC_OK) || (duration_10us == 0)) {
          return rc;
       }
-      milliSleep(1); // use 1 ms
+      UsbdmSystem::milliSleep(1); // use 1 ms
       return USBDM_ControlPins(PIN_RELEASE);
    }
 }
@@ -1177,7 +1177,7 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
    if (rc != BDM_RC_OK) {
       log.print("Error, rc= %s\n", getErrorName(rc));
       USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-      milliSleep(bdmOptions.powerOnRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
       bdmState.targetType = T_OFF;
       return rc;
    }
@@ -1186,7 +1186,7 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
    if (targetType == T_OFF) {
       if (!bdmOptions.leaveTargetPowered) {
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
       }
       return rc;
    }
@@ -1236,11 +1236,11 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
          // Specific power/pin sequence to enter BKGD mode
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKGD_LOW);
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
          USBDM_ControlPins(PIN_RESET_3STATE);
-         milliSleep(bdmOptions.resetReleaseInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
          USBDM_ControlPins(PIN_RELEASE);
-         milliSleep(bdmOptions.resetRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          break;
       case T_RS08:
       case T_HCS08:
@@ -1253,23 +1253,23 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
             USBDM_ControlPins(PIN_BKGD_LOW);
          }
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
          if (bdmOptions.useResetSignal) {
             USBDM_ControlPins(PIN_RESET_3STATE);
-            milliSleep(bdmOptions.resetReleaseInterval);
+            UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
          }
          USBDM_ControlPins(PIN_RELEASE);
-         milliSleep(bdmOptions.resetRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          break;
       case T_CFVx:
          // Specific power/pin sequence to enter BKGD mode
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKPT_LOW);
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
          USBDM_ControlPins(PIN_RESET_3STATE);
-         milliSleep(bdmOptions.resetReleaseInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
          USBDM_ControlPins(PIN_RELEASE);
-         milliSleep(bdmOptions.resetRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          break;
       case T_ARM_JTAG:
       case T_ARM_SWD:
@@ -1279,13 +1279,13 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
          pendingResetRelease = true;
          log.print("ARM - Setting pending reset release\n");
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
          break;
       case T_MC56F80xx:
       case T_EZFLASH:
       case T_JTAG:
          rc = USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-         milliSleep(bdmOptions.powerOnRecoveryInterval);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
          break;
       default:
          log.print("Illegal target type\n");
@@ -1439,7 +1439,7 @@ USBDM_ErrorCode rc;
       log.print("Releasing pending reset and waiting %d ms\n", bdmOptions.resetRecoveryInterval);
       pendingResetRelease = false;
       USBDM_ControlPins(PIN_RESET_3STATE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
    }
    return rc;
 }
@@ -1728,7 +1728,7 @@ static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
       if (rc != BDM_RC_OK) {
          return rc;
       }
-      milliSleep(bdmOptions.powerOffDuration);
+      UsbdmSystem::milliSleep(bdmOptions.powerOffDuration);
       // Note - BKGD may have been set low by the
       // Vdd transition (auto connect interrupt code)
       if (resetMode == RESET_SPECIAL) {
@@ -1741,16 +1741,16 @@ static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
       if (rc != BDM_RC_OK) {
          return rc;
       }
-      milliSleep(bdmOptions.powerOnRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
       USBDM_ControlPins(PIN_RESET_3STATE);
-      milliSleep(bdmOptions.resetReleaseInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {
          return rc;
       }
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       return BDM_RC_OK;
    }
    if (resetMethod == RESET_HARDWARE) {
@@ -1761,16 +1761,16 @@ static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
       else {
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKGD_3STATE);
       }
-      milliSleep(bdmOptions.resetDuration);
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
       USBDM_ControlPins(PIN_RESET_3STATE);
-      milliSleep(bdmOptions.resetReleaseInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {
          return rc;
       }
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       return BDM_RC_OK;
    }
    // RESET_SOFTWARE must be done by BDM
@@ -1778,7 +1778,7 @@ static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
    usb_data[1] = CMD_USBDM_TARGET_RESET;
    usb_data[2] = (resetMethod|resetMode);
    rc = bdm_usb_transaction(3, 1, usb_data);
-   milliSleep(bdmOptions.resetRecoveryInterval);
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
    return rc;
 }
 
@@ -1801,7 +1801,7 @@ static USBDM_ErrorCode resetCFVx(TargetMode_t targetMode) {
    }
    if (resetMethod == RESET_POWER) {
       USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-      milliSleep(bdmOptions.powerOffDuration);
+      UsbdmSystem::milliSleep(bdmOptions.powerOffDuration);
       if (resetMode == RESET_SPECIAL) {
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKPT_LOW);
       }
@@ -1809,16 +1809,16 @@ static USBDM_ErrorCode resetCFVx(TargetMode_t targetMode) {
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKPT_3STATE);
       }
       USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-      milliSleep(bdmOptions.powerOnRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
       USBDM_ControlPins(PIN_RESET_3STATE);
-      milliSleep(bdmOptions.resetReleaseInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {
          return rc;
       }
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       return BDM_RC_OK;
    }
    if (resetMethod == RESET_HARDWARE) {
@@ -1828,16 +1828,16 @@ static USBDM_ErrorCode resetCFVx(TargetMode_t targetMode) {
       else {
          USBDM_ControlPins(PIN_RESET_LOW|PIN_BKPT_3STATE);
       }
-      milliSleep(bdmOptions.resetDuration);
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
       USBDM_ControlPins(PIN_RESET_3STATE);
-      milliSleep(bdmOptions.resetReleaseInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {
          return rc;
       }
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       return BDM_RC_OK;
    }
    return BDM_RC_ILLEGAL_PARAMS;
@@ -1861,12 +1861,12 @@ static USBDM_ErrorCode resetOther(TargetMode_t targetMode) {
    }
    if (resetMethod == RESET_POWER) {
       USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
-      milliSleep(bdmOptions.resetDuration);
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
       USBDM_ControlPins(PIN_RESET_LOW);
       USBDM_SetTargetVdd(BDM_TARGET_VDD_ENABLE);
-      milliSleep(bdmOptions.resetReleaseInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetReleaseInterval);
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {
@@ -1876,9 +1876,9 @@ static USBDM_ErrorCode resetOther(TargetMode_t targetMode) {
    }
    if (resetMethod == RESET_HARDWARE) {
       USBDM_ControlPins(PIN_RESET_LOW);
-      milliSleep(bdmOptions.resetDuration);
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
       USBDM_ControlPins(PIN_RELEASE);
-      milliSleep(bdmOptions.resetRecoveryInterval);
+      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       // Check for reset rise
       rc = USBDM_ControlPins(PIN_RESET_3STATE);
       if (rc != BDM_RC_OK) {

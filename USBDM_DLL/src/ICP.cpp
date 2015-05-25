@@ -146,7 +146,7 @@ USBDM_API ICP_ErrorCode_t USBDM_ICP_Program(unsigned int  addr,
             log.print("Failed bdm_usb_raw_send_ep0()\n");
             return rc;
          }
-         milliSleep(20);
+         UsbdmSystem::milliSleep(20);
          rc = getResult();
 
          if (rc != ICP_RC_OK) {
@@ -226,7 +226,7 @@ USBDM_API ICP_ErrorCode_t USBDM_ICP_Verify(unsigned int  addr,
          return rc;
       }
       // A bit of a hack - delay to allow verify to complete
-      milliSleep(20);
+      UsbdmSystem::milliSleep(20);
       rc = getResult();
       if (rc != ICP_RC_OK) {
          log.print("Failed icp_get_result() rc = %d, (%s)\n", rc,

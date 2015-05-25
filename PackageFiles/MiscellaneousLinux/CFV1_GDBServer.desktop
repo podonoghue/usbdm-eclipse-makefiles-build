@@ -1,8 +1,9 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=CFV1_GDBServer
 Comment=GDB Server for Coldfire V1 devices
 Keywords=Coldfire;GDB;
-Exec=/usr/bin/GdbServer -target=cfv1
+Exec=/usr/bin/UsbdmGdbServer -target=cfv1
 Icon=Hardware-Chip
 Terminal=false
 Type=Application
