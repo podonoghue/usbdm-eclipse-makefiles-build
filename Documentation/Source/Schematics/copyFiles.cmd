@@ -2,7 +2,7 @@
 
 set USBDM_DIR=..\..\..\..
 set PCB_DIR=%USBDM_DIR%\PCB
-set OUTPUT_DIR=..\..\External\USBDM_V4.10
+set OUTPUT_DIR=..\..\External\USBDM_V4.11
 rem set OUTPUT_DIR=..\..\External
 dir %OUTPUT_DIR%
 

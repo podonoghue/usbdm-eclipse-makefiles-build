@@ -12,7 +12,7 @@ tbdml-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=tbdml CDEFS='-DLEGACY_DLL_EXPORTS -DTBDML -DGDI' DEBUG='Y'
 
-tbdml-debug-exe:
+TestTbdml-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
@@ -30,24 +30,24 @@ opensourcebdm-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=osbdm CDEFS='-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI' DEBUG='Y'
 
-opensourcebdm-debug-exe:
+TestOpensourcebdm-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
 	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=osbdm-exe CDEFS='-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI -DTEST_APP' DEBUG='Y'
 
-all: tbdml tbdml-debug tbdml-debug-exe
-all: opensourcebdm opensourcebdm-debug opensourcebdm-debug-exe
+all: tbdml tbdml-debug TestTbdml-debug
+all: opensourcebdm opensourcebdm-debug TestOpensourcebdm-debug
 
 clean:
 	${RMDIR} tbdml$(BUILDDIR_SUFFIX)
 	${RMDIR} tbdml-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} tbdml-debug-exe$(BUILDDIR_SUFFIX)
+	${RMDIR} TestTbdml-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} opensourcebdm$(BUILDDIR_SUFFIX)
 	${RMDIR} opensourcebdm-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} opensourcebdm-debug-exe$(BUILDDIR_SUFFIX)
+	${RMDIR} TestOpensourcebdm-debug$(BUILDDIR_SUFFIX)
 	
 .PHONY: all clean 
 .PHONY: tbdml tbdml-debug
 .PHONY: opensourcebdm opensourcebdm-debug
-.PHONY: tbdml-debug-exe opensourcebdm-debug-exe
+.PHONY: TestTbdml-debug TestOpensourcebdm-debug

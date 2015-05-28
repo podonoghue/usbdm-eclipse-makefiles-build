@@ -15,7 +15,8 @@
    This provides a very inexpensive debugging tool.
     
    While the USBDM firmware may be used with any of the FRDM-xxxx boards it is recommended to use a FRDM-KL25Z or FRDM-K20D50M board as some of the early
-   versions of the other boards have various hardware errors that make connection to an external device difficult.
+   versions of the other boards have various hardware errors that make connection to an external device difficult.  Another attractive choice is the FRDM-K64F.
+   The advantage of this board is that it contains a controlled power supply and already has the required 10-pin connector present. 
    
  \subsection featureSection Features
    This version of the USBDM code combined with the FRDM-xxxx board provides the following features:

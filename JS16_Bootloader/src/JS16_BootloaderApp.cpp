@@ -84,10 +84,12 @@ JS16_BootloaderApp::JS16_BootloaderApp() :
  openLog(),
  dialogue(0),
  returnValue(0) {
+   LOGGING_E;
 }
 
 // Initialise the application
 bool JS16_BootloaderApp::OnInit(void) {
+   LOGGING;
 
    returnValue = 0;
 
@@ -102,7 +104,6 @@ bool JS16_BootloaderApp::OnInit(void) {
    if (!wxApp::OnInit()) {
       return false;
    }
-
    // Create the main application window
    dialogue = new MainDialogue(NULL);
    SetTopWindow(dialogue);

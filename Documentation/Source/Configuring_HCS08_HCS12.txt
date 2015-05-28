@@ -133,7 +133,7 @@ Start the de-bugger in the usual fashion after ensuring the appropriate target d
    </tr>
    </table>
 
- \section PopupDialogues Popups
+ \section HCSPopupDialogues Popups
    <table border="0">
    <tr>
    <td>

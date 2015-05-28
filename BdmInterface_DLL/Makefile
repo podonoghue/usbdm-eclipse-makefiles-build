@@ -113,11 +113,11 @@ $(TARGET)-dsc-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f dscTarget.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) MODULE=$(MODULE)-dsc CDEFS='$(DLL_DEFS)'  DEBUG='Y'
 
-BdmInterfaceExampleApp-debug:
+TestBdmInterface-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=BdmInterfaceExampleApp DEBUG='Y'
+	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=TestBdmInterface DEBUG='Y'
 
 all: $(TARGET)-arm $(TARGET)-arm-debug
 all: $(TARGET)-cfv1 $(TARGET)-cfv1-debug
@@ -128,7 +128,7 @@ all: $(TARGET)-rs08 $(TARGET)-rs08-debug
 all: $(TARGET)-s12z $(TARGET)-s12z-debug
 all: $(TARGET)-jtag $(TARGET)-jtag-debug
 all: $(TARGET)-dsc $(TARGET)-dsc-debug
-all: BdmInterfaceExampleApp-debug
+all: TestBdmInterface-debug
 
 clean:
 	${RMDIR} $(TARGET)-arm$(BUILDDIR_SUFFIX)   $(TARGET)-arm-debug$(BUILDDIR_SUFFIX)
@@ -140,7 +140,7 @@ clean:
 	${RMDIR} $(TARGET)-s12z$(BUILDDIR_SUFFIX)   $(TARGET)-s12z-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} $(TARGET)-jtag$(BUILDDIR_SUFFIX)   $(TARGET)-jtag-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} $(TARGET)-dsc$(BUILDDIR_SUFFIX)   $(TARGET)-dsc-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} BdmInterfaceExampleApp-debug$(BUILDDIR_SUFFIX)
+	${RMDIR} TestBdmInterface-debug$(BUILDDIR_SUFFIX)
 
 .PHONY: all clean 
 .PHONY: $(TARGET)-arm $(TARGET)-arm-debug
@@ -152,4 +152,4 @@ clean:
 .PHONY: $(TARGET)-s12z $(TARGET)-s12z-debug
 .PHONY: $(TARGET)-jtag $(TARGET)-jtag-debug
 .PHONY: $(TARGET)-dsc $(TARGET)-dsc-debug
-.PHONY: BdmInterfaceExampleApp-debug
+.PHONY: TestBdmInterface-debug

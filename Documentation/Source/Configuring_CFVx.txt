@@ -69,7 +69,7 @@
         - Delete the programmer configuration file <b>%%APPDATA%%/usbdm/usbdm_HC12.cfg</b> (or similar for other targets).  
           This will restore the default settings including the dialogue display.\n\n
 
- \section PopupDialogues Popups
+ \section CFVxPopupDialogues Popups
    <table border="0">
    <tr>
    <td>

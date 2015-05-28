@@ -26,7 +26,6 @@
    +====================================================================
     \endverbatim
 */
-#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -239,7 +238,7 @@ int main(void) {
        (USBDM_Open(0) != BDM_RC_OK)) {
       printf("Error: No USBDM device found!\n");
       puts("Press ENTER to continue\n");
-      gets(commandBuffer);
+      (void)fgets(commandBuffer, sizeof(commandBuffer)-2, stdin);
       return 0;
    }
 
@@ -247,7 +246,7 @@ int main(void) {
 
    if (ICP_Version <= 0) {
       puts("Press ENTER to continue\n");
-      gets(commandBuffer);
+      (void)fgets(commandBuffer, sizeof(commandBuffer)-2, stdin);
       goto cleanUp;
    }
 
@@ -294,7 +293,7 @@ int main(void) {
       puts("Temporarily reboot USBDM device into ICP mode (yes/No)?");
    }
 
-   gets(commandBuffer);
+   (void)fgets(commandBuffer, sizeof(commandBuffer)-2, stdin);
    if ((commandBuffer[0] == 'y')||(commandBuffer[0] == 'Y')) {
       USBDM_RebootToICP();
       printf("setBootCommand Complete\n");
@@ -313,11 +312,11 @@ int main(void) {
       puts("******                                  ******");
       puts("**********************************************");
       puts("Press Enter to continue.");
-      gets(commandBuffer);
+      (void)fgets(commandBuffer, sizeof(commandBuffer)-2, stdin);
    }
    else {
       puts("Press Enter to continue.");
-      gets(commandBuffer);
+      (void)fgets(commandBuffer, sizeof(commandBuffer)-2, stdin);
    }
 
 cleanUp:

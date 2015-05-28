@@ -79,7 +79,7 @@
       programmed into the BDM.  This is to prevent accidental upgrade with an incompatible Flash image.
    -  The Bootloader requires the BDM to have already been programmed at least once so that the Bootloader firmware is present in the BDM.
    -  If the BDM contains an old version of the Bootloader firmware (USBDM < V4.0) then it is necessary to take special steps to install the 
-      USB drivers to support both old and new VID/PIDs.  Please see the driver installation instructions. \ref NoteOnFirmwareChange \n\n
+      USB drivers to support both old and new VID/PIDs.  Please see the driver installation instructions. \n\n
        \image html Bootloader.png
 
 */

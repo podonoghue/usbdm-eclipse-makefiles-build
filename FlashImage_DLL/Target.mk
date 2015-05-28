@@ -40,6 +40,7 @@ ifneq ($(UNAME_S),Windows)
 LIBS += -ldl
 LIBS += -lm
 endif
+LIBS += $(USBDM_LIBS) 
 LIBS += $(USBDM_SYSTEM_LIBS)
 
 # Extra libraries for EXE only

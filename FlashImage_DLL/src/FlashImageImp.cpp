@@ -363,6 +363,10 @@ FlashImageImp::~FlashImageImp() {
    clear();
 }
 
+const char *FlashImageImp::getErrorString(USBDM_ErrorCode rc) {
+   return USBDM_GetErrorString(rc);
+}
+
 /*!
  *  Initialises the memory to empty
  */
@@ -505,12 +509,8 @@ MemoryPage *FlashImageImp::allocatePage(uint32_t pageNum) {
  *
  *  @return error code see \ref USBDM_ErrorCode
  */
-USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath,
-      TargetType_t  targetType,
-      bool          clearBuffer) {
+USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer) {
    LOGGING_Q;
-
-   this->targetType = targetType;
 
    sourceFilename = "";
    sourcePath     = "";

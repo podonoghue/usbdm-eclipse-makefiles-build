@@ -1,12 +1,12 @@
 #  Should be placed in /etc/udev/usbdm.rules
-#
+#  Note: HEX numbers must be lower case - yes really!!!!
 #
 # Allow unrestricted access to various BDMs (including USBDM & JS16 bootloader)
+ATTR{idVendor}=="0425", ATTR{idProduct}=="ff02", SYMLINK+="JB16_Bootloader%n", MODE:="0666"
 ATTR{idVendor}=="15a2", ATTR{idProduct}=="0038", SYMLINK+="JS16_Bootloader%n", MODE:="0666"
 ATTR{idVendor}=="0425", ATTR{idProduct}=="1000", SYMLINK+="usbdm-tbdml%n",     MODE:="0666"
 ATTR{idVendor}=="15a2", ATTR{idProduct}=="0021", SYMLINK+="usbdm-osbdm%n",     MODE:="0666"
 ATTR{idVendor}=="0425", ATTR{idProduct}=="1001", SYMLINK+="usbdm-tblcf%n",     MODE:="0666"
-ATTR{idVendor}=="16d0", ATTR{idProduct}=="0567", SYMLINK+="usbdm%n",           MODE:="0666"
 ATTR{idVendor}=="16d0", ATTR{idProduct}=="0567", SYMLINK+="usbdm%n",           MODE:="0666"
 #
 # Allow unrestricted access to USBDM CDC serial port (named ttyUsbdm0 ...)

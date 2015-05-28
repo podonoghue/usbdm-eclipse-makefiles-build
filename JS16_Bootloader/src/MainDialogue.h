@@ -21,38 +21,31 @@
 #include <wx/sizer.h>
 #include <wx/dialog.h>
 
+#include <string.h>
+#include "BootloaderDialogueSkeleton.h"
+
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MainDialogue
 ///////////////////////////////////////////////////////////////////////////////
-class MainDialogue : public wxDialog
+class MainDialogue : public BootloaderDialogueSkeleton
 {
    private:
 
    protected:
-      enum
-      {
-         wxID_PROGRAM = 1000
-      };
+      wxString             customFilename;
+      wxString             customPath;
 
-      wxStaticText* m_staticText;
-      wxRadioBox* m_radioBox;
-      wxButton* Program;
-      wxButton* Cancel;
-      wxStaticText* descriptionText;
+      virtual void OnProgramButtonClick( wxCommandEvent& event );
+      virtual void OnLoadSourceButtonClick( wxCommandEvent& event );
+      virtual void OnRadioBox( wxCommandEvent& event );
 
-      void OnProgramButtonClick( wxCommandEvent& event );
-      void OnRadioBox( wxCommandEvent& event );
-      void setDescription(int bdmType);
+      void setDescription(std::string description);
 
    public:
 
-      MainDialogue( wxWindow* parent, wxWindowID id = wxID_ANY,
-                    const wxString& title = _("JS16 First Stage Bootloader"),
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxSize( 350,400 ),
-                    long style = wxDEFAULT_DIALOG_STYLE );
+      MainDialogue( wxWindow* parent);
       virtual ~MainDialogue();
 
 };

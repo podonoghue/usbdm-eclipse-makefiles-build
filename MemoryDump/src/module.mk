@@ -3,8 +3,11 @@
 # List source file to include from current directory
 SRC += Version.rc
 
-SRC += WxExample.cpp
+SRC += MemoryDumpApp.cpp
+SRC += MemoryDumpDialogueSkeleton.cpp
+SRC += MemoryDumpDialogue.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
+SRC  += Names.cpp

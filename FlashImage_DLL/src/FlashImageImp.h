@@ -40,6 +40,7 @@ public:
    virtual ~FlashImageImp();
 
    virtual void                  setTargetType(TargetType_t targetType);
+   virtual char const           *getErrorString(USBDM_ErrorCode rc);
    virtual void                  clear();
    virtual bool                  isValid(uint32_t address);
    virtual Enumerator           *getEnumerator(uint32_t address = 0);
@@ -49,7 +50,7 @@ public:
    virtual const std::string    &getSourcePathname() const;
    virtual MemoryPage           *getmemoryPage(uint32_t pageNum);
    virtual MemoryPage           *allocatePage(uint32_t pageNum);
-   virtual USBDM_ErrorCode       loadFile(const std::string &filePath, TargetType_t  targetType, bool clearBuffer=true);
+   virtual USBDM_ErrorCode       loadFile(const std::string &filePath, bool clearBuffer=true);
    virtual uint8_t               getValue(uint32_t address);
    virtual void                  setValue(uint32_t address, uint8_t value);
    virtual void                  remove(uint32_t address);

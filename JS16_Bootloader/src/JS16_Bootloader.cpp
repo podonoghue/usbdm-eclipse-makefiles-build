@@ -9,17 +9,18 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
 #include "UsbdmSystem.h"
 #include "ICP.h"
 #include "Names.h"
-#include "FlashImage.h"
+#include "FlashImageFactory.h"
 #include "JS16_Bootloader.h"
 
-ICP_ErrorType programBlock(FlashImage *flashImageDescription, uint32_t size, uint32_t startBlock) {
+ICP_ErrorType programBlock(FlashImagePtr flashImageDescription, uint32_t size, uint32_t startBlock) {
    LOGGING;
    uint8_t buffer[256];
    memset(buffer, 0xFF, sizeof(buffer));
-   ICP_ErrorType rc = ICP_RC_OK;
+   ICP_ErrorType rc = RC_OK;
    while(size>0) {
       uint32_t blockSize = size;
       if (blockSize > sizeof(buffer)) {
@@ -32,7 +33,7 @@ ICP_ErrorType programBlock(FlashImage *flashImageDescription, uint32_t size, uin
       }
       // Program buffer
       rc = ICP_Program(startBlock, blockSize, buffer);
-      if (rc != ICP_RC_OK) {
+      if (rc != RC_OK) {
          return rc;
       }
       startBlock += blockSize;
@@ -41,13 +42,10 @@ ICP_ErrorType programBlock(FlashImage *flashImageDescription, uint32_t size, uin
    return rc;
 }
 
-//#define HEX_FILE "Empty.s19"
-#define HEX_FILE "USBDM_JS16CWJ_V4.sx"
-
-ICP_ErrorType loadFile(FlashImage *flashImageDescription) {
+ICP_ErrorType loadFile(FlashImagePtr flashImageDescription) {
    LOGGING_Q;
    FlashImage::Enumerator *enumerator = flashImageDescription->getEnumerator();
-   ICP_ErrorType progRc = ICP_RC_OK;
+   ICP_ErrorType progRc = RC_OK;
    while (enumerator->isValid()) {
       // Start address of block to program to flash
       uint32_t startBlock = enumerator->getAddress();
@@ -60,7 +58,7 @@ ICP_ErrorType loadFile(FlashImage *flashImageDescription) {
       if (blockSize>0) {
          // Program block [startBlock..endBlock]
          progRc = programBlock(flashImageDescription, blockSize, startBlock);
-         if (progRc != ICP_RC_OK) {
+         if (progRc != RC_OK) {
             log.print("loadFile() - programming failed, Reason= %s\n", ICP_GetErrorName(progRc));
             break;
          }
@@ -73,49 +71,49 @@ ICP_ErrorType loadFile(FlashImage *flashImageDescription) {
    return progRc;
 }
 
-ICP_ErrorType ProgramFlash(const char *hexFileName) {
+ICP_ErrorType ProgramFlash(std::string filePath) {
    LOGGING_Q;
    ICP_ErrorType rc;
 
-   log.print("ProgramFlash() - Loading file \'%s\'\n", hexFileName);
-   FlashImage flashImageDescription;
-   FlashImage::ErrorCode Flashrc = flashImageDescription.loadS1S9File(hexFileName, true);
-   if (Flashrc != FlashImage::SFILE_RC_OK) {
-      log.print("main() - Failed to load file, Reason: %s\n", FlashImage::getErrorMessage(Flashrc));
+   log.print("Loading file \'%s\'\n", filePath.c_str());
+   FlashImagePtr flashImageDescription = FlashImageFactory::createFlashImage(T_ARM);
+   USBDM_ErrorCode Flashrc = flashImageDescription->loadFile(filePath.c_str(), true);
+   if (Flashrc != BDM_RC_OK) {
+      log.print("main() - Failed to load file, Reason: %s\n", flashImageDescription->getErrorString(Flashrc));
       return ICP_RC_FILE_NOT_FOUND;
    }
-   log.print("Total Bytes = %d\n", flashImageDescription.getByteCount());
+   log.print("Total Bytes = %d\n", flashImageDescription->getByteCount());
 
    do {
-      log.print("ProgramFlash() - Initialising\n");
+      log.print("Initialising\n");
       rc = ICP_Init();
-      if (rc != ICP_RC_OK) {
+      if (rc != RC_OK) {
          continue;
       }
-      log.print("ProgramFlash() - Locating devices\n");
+      log.print("Locating devices\n");
       unsigned devCount;
       rc = ICP_FindDevices(&devCount);
-      if (rc != ICP_RC_OK) {
+      if (rc != RC_OK) {
          continue;
       }
-      log.print("ProgramFlash() - Found %d devices\n", devCount);
-      log.print("ProgramFlash() - Opening device\n");
+      log.print("Found %d devices\n", devCount);
+      log.print("Opening device\n");
       rc = ICP_Open(0);
-      if (rc != ICP_RC_OK) {
+      if (rc != RC_OK) {
          continue;
       }
-      log.print("ProgramFlash() - Erasing device\n");
+      log.print("Erasing device\n");
       rc = ICP_MassErase();
-      if (rc != ICP_RC_OK) {
+      if (rc != RC_OK) {
          continue;
       }
-      log.print("ProgramFlash() - Programming device\n");
-      rc = loadFile(&flashImageDescription);
-      if (rc != ICP_RC_OK) {
+      log.print("Programming device\n");
+      rc = loadFile(flashImageDescription);
+      if (rc != RC_OK) {
          continue;
       }
    } while (false);
-   log.print("ProgramFlash() - Closing device\n");
+   log.print("Closing device\n");
    ICP_Close();
    ICP_Exit();
    return rc;

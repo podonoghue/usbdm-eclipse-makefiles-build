@@ -36,6 +36,7 @@
 #include "Common.h"
 #include "ICP.h"
 #include "Names.h"
+#include "hwdesc.h"
 
 //==================================================================================
 // Common ICP routines
@@ -69,7 +70,7 @@ void ICP_Reboot(void) {
    lastCommand = ICP_REBOOT;
 
    ICP_ErrorType rc = (ICP_ErrorType)bdm_usb_raw_send_ep0(ICP_REBOOT, 0, 0, 0, 0);
-   if (rc != ICP_RC_OK) {
+   if (rc != RC_OK) {
       log.print("ICP_Program() - Failed bdm_usb_raw_send_ep0()\n");
       return;
    }
@@ -83,13 +84,13 @@ void ICP_Reboot(void) {
 //! @param data    Pointer to buffer containing data
 //!
 //! @return
-//!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorType
+//!      - == RC_OK => success \n
+//!      - != RC_OK => fail, see \ref ICP_ErrorType
 //!
-ICP_ErrorType ICP_Program(unsigned int  addr,
-                          unsigned int  count,
+ICP_ErrorType ICP_Program(unsigned int   addr,
+                          unsigned int   count,
                           unsigned char *data) {
-   LOGGING_E;
+   LOGGING_Q;
 
    unsigned int dataSize; // Bytes to program this row
    ICP_ErrorType rc;
@@ -116,20 +117,20 @@ ICP_ErrorType ICP_Program(unsigned int  addr,
       }
       if (doBlock) { // Only program non-Blank blocks
          log.print("ICP_Program() - Programming block %4.4X-%4.4X\n", addr, addr+dataSize-1);
-         log.printDump(data, dataSize);
+         log.printDump(data, dataSize, addr);
 
          rc =  (ICP_ErrorType)bdm_usb_raw_send_ep0(ICP_PROGRAM,     // bRequest
                                                    addr,            // wValue  = Start address
                                                    addr+dataSize-1, // wIndex  = End address
                                                    dataSize,        // wLength = # bytes
                                                    data);           // Data to program
-         if (rc != ICP_RC_OK) {
+         if (rc != RC_OK) {
             log.print("ICP_Program() - Failed bdm_usb_raw_send_ep0()\n");
             return rc;
          }
          milliSleep(20);
          rc = getResult();
-         if (rc != ICP_RC_OK) {
+         if (rc != RC_OK) {
             log.print("ICP_Program() - Failed icp_get_result() rc = %d\n", rc);
             return rc;
          }
@@ -142,7 +143,7 @@ ICP_ErrorType ICP_Program(unsigned int  addr,
       count     -= dataSize; // update count
       doneCount += dataSize;
    }
-   return ICP_RC_OK;
+   return RC_OK;
 }
 
 //====================================================================
@@ -152,38 +153,39 @@ ICP_ErrorType ICP_Program(unsigned int  addr,
 //! @param count   number of bytes to erase
 //!
 //! @return
-//!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorType
+//!      - == RC_OK => success \n
+//!      - != RC_OK => fail, see \ref ICP_ErrorType
 //!
 //! @note Flash memory alignment requirements should be taken into account.  The
 //! range erased should be a multiple of the Flash erase block size.
 //!
 ICP_ErrorType ICP_MassErase() {
-   LOGGING_E;
+   LOGGING;
    ICP_ErrorType rc;
 
    lastCommand = ICP_MASS_ERASE;
 
-   rc = (ICP_ErrorType)bdm_usb_raw_send_ep0(ICP_MASS_ERASE,0, 0, 0, 0);
-   if (rc != ICP_RC_OK) {
+   rc = (ICP_ErrorType)bdm_usb_raw_send_ep0(ICP_MASS_ERASE, 0, 0, 0, 0);
+   if (rc != RC_OK) {
       log.print("ICP_MassErase() - Failed bdm_usb_raw_send_ep0()\n");
       return rc;
    }
+   milliSleep(20000);
    rc = getResult();
-   if (rc != ICP_RC_OK) {
+   if (rc != RC_OK) {
       log.print("ICP_MassErase() - Failed icp_get_result() rc = %d, (%s)\n", rc,
             ICP_GetErrorName(rc));
       return rc;
    }
-   return ICP_RC_OK;
+   return RC_OK;
 }
 
 //====================================================================
 //! ICP mode - get result of last ICP command
 //!
 //! @return
-//!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorType
+//!      - == RC_OK => success \n
+//!      - != RC_OK => fail, see \ref ICP_ErrorType
 //!
 static ICP_ErrorType getResult(void) {
    LOGGING_Q;
@@ -194,22 +196,14 @@ static ICP_ErrorType getResult(void) {
    int retry = 5;
    do {
       rc = bdm_usb_raw_recv_ep0(ICP_GET_RESULT, 0, 0, sizeof(buff), buff);
-      if ((rc != ICP_RC_OK) && (retry-- > 0))
+      if ((rc != RC_OK) && (retry-- > 0))
          log.print("getResult() Failed (rc=%d) - retry\n", rc);
-   } while ((rc != ICP_RC_OK) && (retry-- > 0));
+   } while ((rc != RC_OK) && (retry-- > 0));
 
-//   switch (lastCommand) {
-//   case ICP_PROGRAM :   expectedResponse = 0x01;
-//   case ICP_MASS_ERASE:
-//   case ICP_REBOOT:
-//   case ICP_CRC_CHECK:
-//   case ICP_ERASE:
-//      break;
-//   }
    if (buff[0] != 0x01) {
       rc = ICP_RC_COMMAND_FAILED;
    }
-   if (rc != ICP_RC_OK) {
+   if (rc != RC_OK) {
       log.print("getResult() Failed\n");
    }
    return rc;
@@ -224,18 +218,18 @@ static ICP_ErrorType getResult(void) {
 //! This must be done before any other operations.
 //!
 //! @return \n
-//!     ICP_RC_OK => OK \n
+//!     RC_OK => OK \n
 //!     other     => USB Error - see \ref ICP_ErrorType
 //!
 
 bool initialised = false;
 
 ICP_ErrorType ICP_Init(void) {
-   LOGGING_E;
+   LOGGING;
 
    ICP_ErrorType rc = bdm_usb_init();
 
-   initialised = (rc == ICP_RC_OK);
+   initialised = (rc == RC_OK);
 
    return rc;
 }
@@ -245,7 +239,7 @@ ICP_ErrorType ICP_Init(void) {
 //! This must be called after all USBDM operations are finished
 //!
 //! @return \n
-//!     ICP_RC_OK => OK \n
+//!     RC_OK => OK \n
 //!     other     => USB Error - see \ref ICP_ErrorType
 //!
 
@@ -272,7 +266,7 @@ ICP_ErrorType ICP_Exit(void) {
 //! @param deviceCount Number of BDM devices found
 //!
 //! @return \n
-//!     ICP_RC_OK                => OK \n
+//!     RC_OK                => OK \n
 //!     BDM_RC_NO_ICP_DEVICE   => No devices found.
 //!     other                    => other Error - see \ref ICP_ErrorType
 //!
@@ -286,15 +280,15 @@ ICP_ErrorType ICP_FindDevices(unsigned int *deviceCount) {
    ICP_ErrorType rc;
 
    *deviceCount = 0;
-   rc = bdm_usb_findDevices(deviceCount); // look for USBDM devices on all USB busses
-   log.print("ICP_FindDevices(): Usb initialised, found %d device(s)\n", *deviceCount);
+   rc = bdm_usb_findDevices(deviceCount, JS16_BOOT_VID, JS16_BOOT_PID); // look for USBDM devices on all USB busses
+   log.print("ICP_FindDevices(): USB initialised, found %d device(s)\n", *deviceCount);
    return rc;
 }
 
 //! Release USBDM Device list
 //!
 //! @return \n
-//!     ICP_RC_OK => OK \n
+//!     RC_OK => OK \n
 //!     other     => USB Error - see \ref ICP_ErrorType
 //!
 
@@ -313,18 +307,18 @@ ICP_ErrorType ICP_ReleaseDevices(void) {
 //! calling this function.
 //!
 //! @return \n
-//!     ICP_RC_OK => OK \n
+//!     RC_OK => OK \n
 //!     other     => Error code - see \ref ICP_ErrorType
 //!
 
 ICP_ErrorType ICP_Open(unsigned char deviceNo) {
    LOGGING_Q;
 
-   ICP_ErrorType rc = ICP_RC_OK;
+   ICP_ErrorType rc = RC_OK;
 
    log.print("ICP_Open(): Trying to open device #%d\n", deviceNo);
    rc = bdm_usb_open(deviceNo);
-   if (rc != ICP_RC_OK) {
+   if (rc != RC_OK) {
       log.print("ICP_Open(): Failed - rc = %s\n", ICP_GetErrorName(rc));
    }
    return rc;
@@ -333,7 +327,7 @@ ICP_ErrorType ICP_Open(unsigned char deviceNo) {
 //! Closes currently open device
 //!
 //! @return \n
-//!     ICP_RC_OK => OK
+//!     RC_OK => OK
 //!
 
 ICP_ErrorType ICP_Close(void) {
@@ -341,6 +335,6 @@ ICP_ErrorType ICP_Close(void) {
 //   uint8_t debugCommand[2] = {sizeof(debugCommand),BDM_DBG_TESTALTSPEED};
 
    log.print("ICP_Close(): Trying to close the device\n");
-   return ICP_RC_OK;
+   return RC_OK;
 }
 

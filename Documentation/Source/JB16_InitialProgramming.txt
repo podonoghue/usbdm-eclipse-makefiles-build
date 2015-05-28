@@ -1,74 +1,53 @@
 /*!    
  \page installationPage Installation & Initial Programming of BDM Firmware
 
- \section installationSection Installation of Programmers, Codewarrior Legacy and V10 (Eclipse version) interfaces
-
-   - To use USBDM with the various versions of Codewarrior it is necessary to copy files to various locations.  
-     Under Windows a standard installer program is provided. As well as installing the various programmers it also modifies any
-     existing Codewarrior installations to work with a USBDM BDM interface.  This installer only works with the following versions of Codewarrior:\n
-     - CodeWarrior for Coldfire V7.2
-     - CodeWarrior for DSC56800E V8.3
-     - CodeWarrior Development Studio for S12(X) V5.1
-     - CW for MCU v10.1 and/or MCU v10.2
-     - CodeWarrior Development Studio for Microcontrollers V6.3\n
-     
-     <b>Note : </b> It may be necessary to re-install the USBDM software if Codewarrior is updated or re-installed as USBDM modified files may be replaced. \n
-
  \section sectionInitialnstruction Initial Construction and Installation.
+   -  This version of USBDM may be used with several existing types of hardware including the original TBDML circuit.
+      You can compare your hardware with the circuit diagrams provided in the firmware directory to aid in identification.  
+      Alternatively, a new (simplified) design is provided.  
    -  Build the hardware using the information provided in the <b>PCB</b> folder.
    -  The following are provided:
       - PDFs including the circuit diagrams with parts lists and example PCB layouts.
       - PCB layouts in Altium designer format (a trial version of the software may be down loaded from http://altium.com/evaluate/). 
       - PCB layouts exported from Altium designer as Gerber files and NC drill files.
       
- \section sectionInitialProgramming Initial programming of USBDM into a blank device or a device containing an incompatible program.
+ \section sectionInitialProgramming Programming of USBDM into a JB16 device
 
- Refer to the following document for detailed information on how the JB16 is programmed using the Freescale ICP software 
+ Refer to the following document for detailed information on how the JB16 operates in in-circuit-programming (ICP) mode 
  (or search for AN2399 on the Freescale web site): \n
    @htmlonly <a href="http://www.freescale.com/files/microcontrollers/doc/app_note/AN2399.pdf?fsrch=1">
    AN2399 : In-Circuit Programming of FLASH Memory via the Universal Serial Bus for the MC68HC908JB16</a> @endhtmlonly 
 
- -  Make a backup of the TBDML code.\n
-      Make sure you have a copy of your current TBDML/OSBDM code so you can restore it if my code doesn't work with your hardware.
-
-   -  Obtain the USBDM code for the JB16 flash memory.\n
-      Choose a pre-compiled image from the USBDM_Flash_Images directory or re-build the code from scratch using the 
-      source files provided in the source directory.  Refer to the documentation provided in the Zip file for details
-      of the software and how to identify the appropriate configuration file to use.
-
-   -  Initial download of code to JB16 flash\n
-   This initial download of code to the JB16 installs a ICP boot loader.  It is intended that the boot loader code will remain
-   permanently in the JB16 to help prevent (the unlikely) event of the JB16 becoming unusable due to Flash programming failing
-   or being interrupted.\n
-   If the code is updated again the Boot loader is not changed.  The instructions below ONLY APPLY to the INITIAL DOWNLOAD.  
-   Updating the code later is a slightly different process that leaves the loader intact.\n
-   Use whatever method your original TBDML hardware/software used to get into ICP mode.  For most hardware this was holding 
-   port pin A.0 low while plugging in the BDM.\n
-   The Freescale ICP programming software is used to download the code image to the JB16 Flash.  The software requires
-   two files (both in \b Freescale ICP directory):\n
-      -  A file to configure the ICP programming software for MASS erase configuration for this initial download  
-      (\b Initial_Programming_MassErase.imp).
-      -  The Flash file image for the JB16 Flash. This depends upon the hardware being used. Choose the appropriate
-      file to download from the \b USBDM_Flash_Images directory.
-
- \section sectionUpdating Updating the USBDM code after the ICP code has been loaded the first time.
+<b>Discussion</b>
+ -  Make a backup of your TBDML/OSBDM code if modifying existing hardware.\n
+    Make sure you have a copy of your current TBDML/OSBDM code so you can restore it if my code doesn't work with your hardware.
+ -  Obtain the USBDM code for the JB16 flash memory.\n
+    Choose a pre-compiled image from the Flash_Images directory. Refer to the documentation provided in the folder for details
+    of the software and how to identify the appropriate flash image file to use.
+ -  Download of code to JB16 flash using bootloader\n
+    The JB16 chip contain a small USB boot-loader in ROM that is used to update the firmware stored in the Flash.  Unfortunately this
+    boot-loader is incompatible with later versions of Windows (Windows-XP SP3 and later).  Due to this it is unlikely that it would
+    be possible to update the firmware on a Windows machine. The following process assumes a Linux machine but may work
+    on a very early Windows OS.
+ - A blank JB16 will normally boot in ICP mode with the boot-loader active - Refer to AN2399 above.
+   - Alternatively, it will be necessary to use whatever method your original TBDML hardware/software used to get into ICP mode.
+     For most hardware this process required holding port pin A.0 low while plugging in the BDM.  This also applies to USBDM 
+     but it has an alternative software method.\n
+   - If the device already has an existing <b>USBDM firmware</b> present then the software method may be used to get into ICP 
+     mode (see following steps)
+   - A utility <b>JB16 Bootloader</b> is provided to do the actual download to the target - This has only been tested on Linux.
+   
+ \section sectionUpdating Programming Steps.
    -  Do one of the following:
-      -  Hardware triggered ICP - Connect pin A.0 to ground and plug in the cable. The hardware will boot in ICP mode.\n
+      -  Hardware triggered ICP - Connect pin A.0 to ground and plug in the BDM. The hardware will boot in ICP mode.\n
       OR
-      -  Software triggered ICP - Plug in the BDM hardware and run \b Setboot.exe.  Carefully read the messages produced.  
-         Answer yes to the prompt to confirm the change.  The hardware will re-boot into ICP mode. This is not a 
-         persistent change so don't remove the BDM before re-programming.  \n
-         \b Note: Older versions (<1.0) of the ICP code actually re-programmed the flash so that this was a persistent
-         change.  It was necessary to remove and replace the BDM before programming.
-   -  Use the Freescale ICP programming software to download the new OSBDM/TBDML code.
-      It will usually be necessary to use the BLOCK erase configuration file for this (\b Re-programming_BlockErase.imp) so 
-      that the ICP code is unchanged.  The setboot command will advise you if it is <b>desirable to replace the ICP code</b>.  If so
-      use the Mass erase file (\b Initial_Programming_MassErase.imp).  This should be an infrequent event :).
+      -  Software triggered ICP (existing USBDM only) - Just plug in the BDM hardware.
+      
+   - Start the JB16 Bootloader program.
+   \image html JB_Bootloader.png
+   - If updating a BDM with existing USBDM firmware then press the <b>Reboot</b> button.
+   - Select the appropriate firmware to load.
+   - Press the <b>Program</b> button and wait.
+   - Remove and replace the BDM.
 
- \section sectionRemoval Completely removing the USBDM code after the ICP code has been loaded.
-   -  Follow the steps in the previous section to get into ICP mode.
-   -  Use the Freescale ICP programming software to erase the entire Flash memory.
-      It will be necessary to use the MASS erase configuration for this (\b Initial_Programming_MassErase.imp) so that the 
-      ICP code is removed as well as it is only usable with the USBDM code.
-   -  You may now restore your original Flash code and uninstall the USBDM software.
   */

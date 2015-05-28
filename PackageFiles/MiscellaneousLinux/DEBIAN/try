@@ -32,10 +32,10 @@ installEclipsePlugins() {
    echo 
    echo "Installing Eclipse CDT plugins to ${ECLIPSE_DIR}"
    echo "=================================================================="
-   for FILENAME in cwide eclipse; do
+   for FILENAME in kinetis-design-studio cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
          echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP}
-         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP}
+         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP} || true
       fi
    done
 }
@@ -299,7 +299,7 @@ LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-installUSBHardware
+#installUSBHardware
 installEclipse
 installKDS
 installCodewarrior

@@ -3,7 +3,7 @@
 
 \section usbdmForEclipse USBDM Functions in Eclipse (including Kinetis Design Studio)
 
-The following sections assume that the required software has been installed \ref codeSourceryInstallPage
+The following sections assume that the required software has been installed \ref eclipseInstallPage
    
 After installing the USBDM plugin for Eclipse there will be a new menu item allowing convenient access to the USBDM functions.
 \image html "USBDMMenu.png"

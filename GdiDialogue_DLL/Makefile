@@ -2,11 +2,11 @@ include ../Common.mk
 
 EXE_DEFS = -DUSE_ICON -DLEGACY -DMINIMAL_APP=gdiDialoguePluginApp
 
-ExampleGdiDialogueApp-debug:
+TestGdiDialogueApp-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=ExampleGdiDialogueApp TARGET=$@ CDEFS='$(EXE_DEFS)' DEBUG='Y'
+	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=TestGdiDialogueApp TARGET=$@ CDEFS='$(EXE_DEFS)' DEBUG='Y'
 
 usbdm-gdi-dialogue:
 	@echo ''
@@ -20,10 +20,10 @@ usbdm-gdi-dialogue-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=GdiDialoguePlugin TARGET=$@$(VSUFFIX) CDEFS='$(EXE_DEFS) -DCOMPILE_GDI_DIALOGUE_PLUGIN_DLL' DEBUG='Y'
 
-all: ExampleGdiDialogueApp-debug usbdm-gdi-dialogue-debug usbdm-gdi-dialogue 
+all: TestGdiDialogueApp-debug usbdm-gdi-dialogue-debug usbdm-gdi-dialogue 
 
 clean:
-	${RMDIR} ExampleGdiDialogueApp-debug$(BUILDDIR_SUFFIX) usbdm-gdi-dialogue-debug$(BUILDDIR_SUFFIX) usbdm-gdi-dialogue$(BUILDDIR_SUFFIX)
+	${RMDIR} TestGdiDialogueApp-debug$(BUILDDIR_SUFFIX) usbdm-gdi-dialogue-debug$(BUILDDIR_SUFFIX) usbdm-gdi-dialogue$(BUILDDIR_SUFFIX)
 
 .PHONY: all clean 
-.PHONY: ExampleGdiDialogueApp-debug  usbdm-gdi-dialogue usbdm-gdi-dialogue-debug
+.PHONY: TestGdiDialogueApp-debug  usbdm-gdi-dialogue usbdm-gdi-dialogue-debug

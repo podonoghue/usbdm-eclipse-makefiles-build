@@ -26,6 +26,7 @@ static const char *const ICPerrorMessages[] = {
     "Device not open",               // 4   ICP_RC_DEVICE_NOT_OPEN
     "File not found",                // 5   ICP_RC_FILE_NOT_FOUND
     "ICP command failed on target",  // 6   ICP_RC_COMMAND_FAILED
+    "No USBDM device found",         // 7   ICP_RC_NO_USBDM__DEVICE
 };
 
 //! \brief Maps an ICP Error Code # to a string

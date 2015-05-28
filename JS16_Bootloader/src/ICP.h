@@ -11,7 +11,7 @@
 #define  ICP_MAX_DATA_SIZE  (32)   // Flash memory program block size
 
 enum ICP_ErrorType {
-   ICP_RC_OK               ,
+   RC_OK               ,
    ICP_RC_USB_ERROR        ,
    ICP_RC_NO_JS16_DEVICE  ,
    ICP_RC_ILLEGAL_PARAMS   ,

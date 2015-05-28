@@ -1,5 +1,5 @@
 /*!
-\page eclipseLunaInstall Eclipse - Install (Codesourcery, GNU tools)
+\page eclipseInstallPage Eclipse - Install (M68K, GNU tools)
 
 \section requiredSoftware Required Software
 
@@ -8,12 +8,25 @@ Eclipse IDE and USBDM BDM hardware for Kinetis and Coldfire targets on a MS-Wind
 A similar setup works on Linux with obvious changes.\n
 <b>It is important that this software is installed before installing USBDM as USBDM must place plugin components into the already present Eclipse installation</b>
 
+<b>Eclipse Installation Considerations</b> \n
+Some points to note about installing Eclipse plugins (mostly applies to Linux):
+-  Where plug-ins get installed depends upon what write permission you have to the Eclipse plugin directory when the installation is done.
+   If you have write permission then they are installed to the shared plug-in directory within the Eclipse installation, otherwise they
+   are installed to the hidden "$HOME/.eclipse" directory.  This complicates things... 
+-  When installing USBDM from the .deb file the plugin installation is done with sudo privileges.  
+-  The plug-in installation checks for prerequisites (those plug-ins described below).  So...
+-  If you install the CDT plugins (below) with user permissions they will not be seen by the .deb installation done with sudo permissions!\n\n
+
+Two solutions:
+-  Do "sudo eclipse" when installing the CDT plug-ins so that they are installed in a shared fashion. OR
+-  Manually install the USBDM plug-ins from the USBDM Update Site installed as part of the USBDM installation. 
+
 The following software needs to be installed:\n
--  <b>Eclipse Luna</b> \n
+-  <b>Eclipse Kepler or Luna</b> \n
    I do java programming as well as C so I usually download the Java version and add CDT plugins from scratch(in the next step).\n
    If you download the C/C++ version then some of the plugins will already be present. \n
    Download from: http://www.eclipse.org/downloads/\n\n
-   <b>Under Windows you should doenload the 32-bit version.  This will work under Windows 32-bit.\n
+   <b>Under Windows you may download the 32-bit or 64-bit version.  The 32-bit version will work under Windows 64-bit.\n
    Under Linux you should download the version corresponding to you operating system installed.</b>\n\n
    Download either\n
    -  <b>Eclipse IDE for C/C++ Developers</b> (smaller) (add some plugins in next step)\n

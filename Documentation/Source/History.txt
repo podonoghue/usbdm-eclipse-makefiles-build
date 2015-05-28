@@ -3,11 +3,16 @@
 
 \section sectionHistory Revision History
 
+V4.11.1.30 (May 2015) 
+======================================================================================= 
+Linux versions added
+Minor fixes
+
 V4.11.1.20 (May 2015) 
 ======================================================================================= 
 - Legacy DSC support added
 - KSDK support updated for Kinetis SDK 1.2.0
-- Tested with Kinetis Design Studion 3.0.0
+- Tested with Kinetis Design Studio 3.0.0
 - Eclipse plugin installation method changed (should be more reliable)
 
 Bugs & Limitations

@@ -136,11 +136,11 @@ $(TARGET)-dsc-legacy-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-dsc-legacy BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=MC56F80xx' DEBUG='Y'
 
-ExampleCFVxGDIApp-debug:
+TestCFVxGDI-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) exe -f LegacyTarget.mk MODULE=$@ BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx -DTEST_APP=1' DEBUG='Y'
+	$(MAKE) exe -f LegacyTarget.mk MODULE=TestCFVxGDI BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx -DTEST_APP=1' DEBUG='Y'
 
 #------------------------------------------------------------
 
@@ -152,7 +152,7 @@ all: $(TARGET)-hcs08        $(TARGET)-hcs08-debug
 all: $(TARGET)-hcs12        $(TARGET)-hcs12-debug 
 all: $(TARGET)-rs08         $(TARGET)-rs08-debug 
 all: $(TARGET)-s12z         $(TARGET)-s12z-debug 
-all: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug ExampleCFVxGDIApp-debug
+all: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVxGDI-debug
 all: $(TARGET)-dsc-legacy   $(TARGET)-dsc-legacy-debug
 
 clean:
@@ -164,7 +164,7 @@ clean:
 	${RMDIR} $(TARGET)-hcs12$(BUILDDIR_SUFFIX)        $(TARGET)-hcs12-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} $(TARGET)-rs08$(BUILDDIR_SUFFIX)         $(TARGET)-rs08-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} $(TARGET)-s12z$(BUILDDIR_SUFFIX)         $(TARGET)-s12z-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} $(TARGET)-cfvx-legacy$(BUILDDIR_SUFFIX)  $(TARGET)-cfvx-legacy-debug$(BUILDDIR_SUFFIX) ExampleCFVxGDIApp-debug$(BUILDDIR_SUFFIX)
+	${RMDIR} $(TARGET)-cfvx-legacy$(BUILDDIR_SUFFIX)  $(TARGET)-cfvx-legacy-debug$(BUILDDIR_SUFFIX) TestCFVxGDI-debug$(BUILDDIR_SUFFIX)
 	${RMDIR} $(TARGET)-dsc-legacy$(BUILDDIR_SUFFIX)   $(TARGET)-dsc-legacy-debug$(BUILDDIR_SUFFIX)
 
 .PHONY: all clean
@@ -176,5 +176,5 @@ clean:
 .PHONY: $(TARGET)-hcs12        $(TARGET)-hcs12-debug
 .PHONY: $(TARGET)-rs08         $(TARGET)-rs08-debug
 .PHONY: $(TARGET)-s12z         $(TARGET)-s12z-debug
-.PHONY: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug ExampleCFVxGDIApp-debug
+.PHONY: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVxGDI-debug
 .PHONY: $(TARGET)-dsc-legacy   $(TARGET)-dsc-legacy-debug

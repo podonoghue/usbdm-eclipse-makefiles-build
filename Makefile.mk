@@ -22,6 +22,7 @@ DIRS = \
   CreateCTestImage     \
   KinetisUnlock        \
   JS16_Bootloader      \
+  JB16_Bootloader      \
   FirmwareChanger      \
   MergeXML             \
   USBDM_API_Example    \
@@ -30,7 +31,6 @@ DIRS = \
 ifeq ($(UNAME_S),Windows)
 DIRS += \
   Legacy_DLL           \
-  SetBoot              \
   MyCustomAction
 endif
 

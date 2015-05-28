@@ -27,6 +27,7 @@ Change History
 #include <cstdlib>
 #include <unistd.h>
 #include <cerrno>
+#include <stdarg.h>
 
 #include "ArmDefinitions.h"
 #include "tcl.h"
@@ -359,10 +360,6 @@ const char *UsbdmTclInterpreterImp::getTclResult() {
 #define MAX_JTAG_CHAIN_LENGTH    (20)  //!< Max length of JTAG chain supported
 #define MAX_JTAG_IR_CHAIN_LENGTH (100) //!< Max length of JTAG IR chain supported
 #define MAX_KNOWN_DEVICES        (100) //!< Max number of know devices
-
-//static const char *connectionStates[] = {
-//      "Not Connected", "Sync Speed", "Guess Speed", "Manual Speed"
-//};
 
 /**
  * Save a USBDM Error code as last error and converts and sets the TCL return value
@@ -2552,62 +2549,68 @@ static int cmd_setBoot(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    return TCL_OK;
 }
 
-////! Send low-level sync command to BDM
-//static int syncCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//// debug <control_value>
-//   USBDMStatus_t  bdm_status;
-//   unsigned char usb_data[20] = {0};
-//   unsigned char BDMStatus;
-//   float speed;
-//   unsigned int ticks;
-//
-//   if (argc != 1) {
-//      Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
-//      return TCL_ERROR;
-//   }
-//   usb_data[2]=BDM_DBG_SYNC;
-//   USBDM_Debug(usb_data);
-//
-//   if (usb_data[0] != BDM_RC_OK) {
-//      PRINT("sync: Failed\n");
-//      return TCL_ERROR;
-//   }
-//
-////   PRINT(":sync => 0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-////          "%2.2X(%2.2d), 0x%2.2X(%2.2d) \n",
-////          usb_data[0], usb_data[0], usb_data[1], usb_data[1],
-////          usb_data[2], usb_data[2], usb_data[3], usb_data[3] );
-//
-//   BDMStatus = usb_data[1];
-//
-//   bdm_status.ackn_state       = (BDMStatus&S_ACKN)?ACKN:WAIT;
-//   bdm_status.reset_state      = (BDMStatus&S_RESET_STATE)?RSTO_ACTIVE:RSTO_INACTIVE;
-//   switch(BDMStatus&S_COMM_MASK) {
-//      default :
-//      case S_NOT_CONNECTED : bdm_status.connection_state = SPEED_NO_INFO;       break; //!< No connection with target
-//      case S_SYNC_DONE     : bdm_status.connection_state = SPEED_SYNC;          break; //!< Target speed determined by BDM SYNC
-//      case S_GUESS_DONE    : bdm_status.connection_state = SPEED_GUESSED;       break; //!< Target speed guessed
-//      case S_USER_DONE     : bdm_status.connection_state = SPEED_USER_SUPPLIED; break; //!< Target speed specified by user
-//   };
-//
-//   PRINT("status = %s\n", getBDMStatusName(&bdm_status));
-//
-//   PRINT("sync: Status = %s, %s, %s, %s\r\n", bdm_status.ackn_state?"Ackn":"Wait",
-//                                               connectionStates[bdm_status.connection_state],
-//                                               bdm_status.reset_state?"Reset":"No Reset",
-//                                              (BDMStatus&S_POWER_MASK)?"Power":"No Power" );
-//
-//   PRINT("%2.2X 0x%2.2X 0x%2.2X 0x%2.2X \n", usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
-//   PRINT("%2.2X 0x%4.4X \n", *(usb_data+2), *(uint16_t*)(usb_data+2) );
-//
-//   ticks = (usb_data[2]<<8) + usb_data[3];
-//
-//   speed =  (60.0 * 128) / ticks;
-//
-//   PRINT("sync: Speed = %.2f MHz (%d ticks, sync=%.1f us)\n",
-//          speed, ticks, ticks/60.0);
-//   return TCL_OK;
-//}
+#include <USBDM_API.h>
+#include <USBDM_API_Private.h>
+
+//! Send low-level sync command to BDM
+static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+// debug <control_value>
+   static const char *connectionStates[] = {
+         "Not Connected", "Sync Speed", "Guess Speed", "Manual Speed"
+   };
+   USBDMStatus_t  bdm_status;
+   unsigned char usb_data[20] = {0};
+   unsigned char BDMStatus;
+   float speed;
+   unsigned int ticks;
+
+   if (argc != 1) {
+      Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
+      return TCL_ERROR;
+   }
+   usb_data[2]=BDM_DBG_SYNC;
+   USBDM_Debug(usb_data);
+
+   if (usb_data[0] != BDM_RC_OK) {
+      PRINT("sync: Failed\n");
+      return TCL_ERROR;
+   }
+
+//   PRINT(":sync => 0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+//          "%2.2X(%2.2d), 0x%2.2X(%2.2d) \n",
+//          usb_data[0], usb_data[0], usb_data[1], usb_data[1],
+//          usb_data[2], usb_data[2], usb_data[3], usb_data[3] );
+
+   BDMStatus = usb_data[1];
+
+   bdm_status.ackn_state       = (BDMStatus&S_ACKN)?ACKN:WAIT;
+   bdm_status.reset_state      = (BDMStatus&S_RESET_STATE)?RSTO_ACTIVE:RSTO_INACTIVE;
+   switch(BDMStatus&S_COMM_MASK) {
+      default :
+      case S_NOT_CONNECTED : bdm_status.connection_state = SPEED_NO_INFO;       break; //!< No connection with target
+      case S_SYNC_DONE     : bdm_status.connection_state = SPEED_SYNC;          break; //!< Target speed determined by BDM SYNC
+      case S_GUESS_DONE    : bdm_status.connection_state = SPEED_GUESSED;       break; //!< Target speed guessed
+      case S_USER_DONE     : bdm_status.connection_state = SPEED_USER_SUPPLIED; break; //!< Target speed specified by user
+   };
+
+   PRINT("status = %s\n", getBDMStatusName(&bdm_status));
+
+   PRINT("sync: Status = %s, %s, %s, %s\r\n", bdm_status.ackn_state?"Ackn":"Wait",
+                                               connectionStates[bdm_status.connection_state],
+                                               bdm_status.reset_state?"Reset":"No Reset",
+                                              (BDMStatus&S_POWER_MASK)?"Power":"No Power" );
+
+   PRINT("%2.2X 0x%2.2X 0x%2.2X 0x%2.2X \n", usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
+   PRINT("%2.2X 0x%4.4X \n", *(usb_data+2), *(uint16_t*)(usb_data+2) );
+
+   ticks = (usb_data[2]<<8) + usb_data[3];
+
+   speed =  (60.0 * 128) / ticks;
+
+   PRINT("sync: Speed = %.2f MHz (%d ticks, sync=%.1f us)\n",
+          speed, ticks, ticks/60.0);
+   return TCL_OK;
+}
 
 ////! Send debug command to BDM
 //static int debugCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
@@ -3159,6 +3162,7 @@ const char *name;
       { cmd_readCReg,             "rcreg"},
       { cmd_setBoot,              "setboot" },
       { cmd_setSpeed,             "speed" },
+      { cmd_sync,                 "sync" },
       { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_setByteSex,           "setbytesex" },
       { cmd_step,                 "step"},

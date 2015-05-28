@@ -34,7 +34,7 @@ removeEclipsePlugins() {
    echo 
    echo "Removing Eclipse CDT plugins from ${ECLIPSE_DIR}"
    echo "=================================================================="
-   for FILENAME in cwide eclipse; do
+   for FILENAME in kinetis-design-studio cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
          echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP}
          ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP} || true

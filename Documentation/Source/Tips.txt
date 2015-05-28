@@ -40,8 +40,7 @@
       -# Check for any late updates on the sourceforge website
       -# Update the BDM to the firmware version supplied with the software.  \n
         This is done with the provided <b>USBDM Bootloader</b>.  
-        The required files are present in the USBDM installation directory created at step a). \n
-        Please see \ref sectionUpdate for details.
+        The required files are present in the USBDM installation directory created at step a).
 
  <hr>
    

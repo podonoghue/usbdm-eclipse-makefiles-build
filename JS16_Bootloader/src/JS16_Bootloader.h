@@ -7,8 +7,9 @@
 
 #ifndef JS16_BOOTLOADER_H_
 #define JS16_BOOTLOADER_H_
+#include <string.h>
 
 #include "ICP.h"
-ICP_ErrorType ProgramFlash(const char *hexFileName);
+ICP_ErrorType ProgramFlash(std::string hexFileName);
 
 #endif /* JS16_BOOTLOADER_H_ */

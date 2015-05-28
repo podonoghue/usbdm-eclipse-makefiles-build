@@ -1324,7 +1324,7 @@ USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilename, bool clearBuff
 
    log.print("(%s)\n", (const char *)hexFilename.ToAscii());
    loadedFilenameStaticControl->SetLabel(_("Loading File"));
-   rc = flashImage->loadFile((const char*)hexFilename.mb_str(wxConvUTF8), bdmInterface->getBdmOptions().targetType, clearBuffer);
+   rc = flashImage->loadFile((const char*)hexFilename.mb_str(wxConvUTF8), clearBuffer);
    if (rc != BDM_RC_OK) {
       wxMessageBox(_("Failed to read S-File.\n") +
                      hexFilename +

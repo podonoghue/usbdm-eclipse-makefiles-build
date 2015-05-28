@@ -528,7 +528,7 @@ WARN_LOGFILE =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT = USBDM_FRDM-KL25Z_Documentation.txt Software_Installation.txt Driver_Installation.txt FreedomInstallation.txt Configuring_EclipseV10_1.txt EclipseLuna_Install.txt CodeSourcery_Install.txt CodeSourcery_NewProject.txt Building_Software.txt API_Example.txt Tips.txt History.txt What_Is_Provided.txt ..\..\Shared_V4\src\USBDM_ErrorMessages.h ..\..\Shared_V4\src\USBDM_API.h
+INPUT = USBDM_FRDM-KL25Z_Documentation.txt Software_Installation.txt Driver_Installation.txt Freedom_Installation.txt Configuring_EclipseV10.txt Eclipse_Install.txt Eclipse_NewProject.txt Building_Software.txt API_Example.txt Tips.txt History.txt What_Is_Provided.txt ..\..\Shared_V4\src\USBDM_ErrorMessages.h ..\..\Shared_V4\src\USBDM_API.h
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -1033,18 +1033,6 @@ GENERATE_XML = NO
 
 XML_OUTPUT = xml
 
-# The XML_SCHEMA tag can be used to specify an XML schema, 
-# which can be used by a validating XML parser to check the 
-# syntax of the XML files.
-
-XML_SCHEMA = 
-
-# The XML_DTD tag can be used to specify an XML DTD, 
-# which can be used by a validating XML parser to check the 
-# syntax of the XML files.
-
-XML_DTD = 
-
 # If the XML_PROGRAMLISTING tag is set to YES Doxygen will 
 # dump the program listings (including syntax highlighting 
 # and cross-referencing information) to the XML output. Note that 
@@ -1250,7 +1238,7 @@ HAVE_DOT = NO
 # DOTFONTPATH environment variable or by setting DOT_FONTPATH to the directory 
 # containing the font.
 
-DOT_FONTNAME = FreeSans
+DOT_FONTNAME = 
 
 # By default doxygen will tell dot to use the output directory to look for the 
 # FreeSans.ttf font (which doxygen will put there itself). If you specify a 
