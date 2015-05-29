@@ -1307,7 +1307,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
    int checkResult = TRUE;
    int blockResult;
 
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
       log.print("Empty Memory region\n");
@@ -1430,9 +1430,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
 #endif
       // Advance to start of next occupied region
       enumerator->nextValid();
-   }
-   if (enumerator != NULL) {
-      delete enumerator;
    }
    return checkResult?PROGRAMMING_RC_OK:PROGRAMMING_RC_ERROR_FAILED_VERIFY;
 }
@@ -1740,7 +1737,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    log.print("Erase Time = %3.2f s\n", progressTimer->elapsedTime());
 
    // Program flash
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
 
    progressTimer->restart("Programming...");
    log.print("Total Bytes = %d\n", flashImage->getByteCount());
@@ -1775,9 +1772,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
       enumerator->nextValid();
    }
    bdmInterface->setTargetVpp(BDM_TARGET_VPP_OFF);
-
-   delete enumerator;
-   enumerator = NULL;
 
    if (rc != PROGRAMMING_RC_OK) {
       log.print("Erasing failed, Reason= %s\n", bdmInterface->getErrorString(rc));

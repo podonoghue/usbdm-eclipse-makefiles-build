@@ -1,6 +1,6 @@
 include ../Common.mk
 
-TARGET = MemoryDump
+TARGET = UsbdmMemoryDump
 MODULE = module
 
 EXE_DEFS = -DUSE_ICON

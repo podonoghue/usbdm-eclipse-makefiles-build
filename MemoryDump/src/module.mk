@@ -6,6 +6,7 @@ SRC += Version.rc
 SRC += MemoryDumpApp.cpp
 SRC += MemoryDumpDialogueSkeleton.cpp
 SRC += MemoryDumpDialogue.cpp
+SRC += AppSettings.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)

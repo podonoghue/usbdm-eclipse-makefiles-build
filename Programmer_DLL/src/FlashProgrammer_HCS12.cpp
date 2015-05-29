@@ -2263,10 +2263,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
 //! @note - Assumes flash programming code has already been loaded to target.
 //! @note - The memory range must be within one page for paged devices.
 //!
-USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr flashImage,
-                                              unsigned int    blockSize,
-                                              uint32_t       &flashAddress,
-                                              FlashOperation flashOperation) {
+USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr   flashImage,
+                                                    unsigned int    blockSize,
+                                                    uint32_t       &flashAddress,
+                                                    FlashOperation  flashOperation) {
    LOGGING;
    log.print("op=%s, [0x%06X..0x%06X]\n", getFlashOperationName(flashOperation), flashAddress, flashAddress+blockSize-1);
 
@@ -2555,7 +2555,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr flashImage,
 USBDM_ErrorCode FlashProgrammer_HCS12::applyFlashOperation(FlashImagePtr flashImage, FlashOperation  flashOperation) {
    LOGGING;
    USBDM_ErrorCode rc = PROGRAMMING_RC_OK;
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
 
    flashImage->printMemoryMap();
 
@@ -2581,7 +2581,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::applyFlashOperation(FlashImagePtr flashIm
       }
       enumerator->setAddress(startBlock);
    }
-   delete enumerator;
    return rc;
 }
 
@@ -2667,7 +2666,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
    int checkResult = TRUE;
    int blockResult;
 
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
       log.print("Empty Memory region\n");
@@ -2790,9 +2789,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
 #endif
       // Advance to start of next occupied region
       enumerator->nextValid();
-   }
-   if (enumerator != NULL) {
-      delete enumerator;
    }
    return checkResult?PROGRAMMING_RC_OK:PROGRAMMING_RC_ERROR_FAILED_VERIFY;
 }

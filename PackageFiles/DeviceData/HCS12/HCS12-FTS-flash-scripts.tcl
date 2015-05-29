@@ -146,8 +146,8 @@ proc initFlash { busFrequency } {
    wb $::NVM_FPROT   $::NVM_xPROT_VALUE   ;# unprotect Flash
 
    foreach flashRegion $::FLASH_REGIONS {
-      puts "flashRegion = '$flashRegion' type='$type', address='$address'"
       lassign  $flashRegion type address
+      puts "flashRegion = '$flashRegion' type='$type', address='$address'"
       switch $type {
          "EEPROM" {
             ;# Set up Eeprom divider
@@ -302,9 +302,9 @@ proc massEraseTarget { } {
    initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
 
    foreach flashRegion $::FLASH_REGIONS {
-      ;# puts "flashRegion = $flashRegion"
+      puts "flashRegion = $flashRegion"
       lassign  $flashRegion type address
-      ;# puts "type='$type', address='$address'"
+      puts "type='$type', address='$address'"
       switch $type {
          "EEPROM" {
              puts "Erasing Eeprom @$address"

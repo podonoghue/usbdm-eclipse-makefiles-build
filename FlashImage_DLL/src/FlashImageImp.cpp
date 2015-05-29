@@ -24,7 +24,8 @@
 \verbatim
  Change History
 +========================================================================================
-| 10 Feb 15 | Now discard S5 & S6 SRECs                                 V4.10.6.260 - pgo
+| 29 May 15 | Added saveFile()                                          V4.11.1.40  - pgo
+| 10 Feb 15 | Now discards S5 & S6 SRECs                                V4.10.6.260 - pgo
 | 20 Jan 15 | Added DSC ELF file support for newer targets              V4.10.6.250 - pgo
 | 21 Jul 14 | Added S12X ELF file support                               V4.10.6.170 - pgo
 | 20 Oct 12 | Added DSC ELF file support                                V4.10.3     - pgo
@@ -198,9 +199,8 @@ EnumeratorImp::EnumeratorImp(FlashImageImp &memoryImage, uint32_t address) : mem
 
    if (!isValid()) {
       // Address is not valid - advance to next valid address
-      // Fix it
       if (nextValid()) {
-         log.print("Advanced to 0x%08X\n", this->address);
+         log.print("Advanced to next valid address: 0x%08X\n", this->address);
       }
       else {
          log.print("No allocated address found");
@@ -249,19 +249,19 @@ bool EnumeratorImp::setAddress(uint32_t addr) {
  *        false => no occupied locations remain, enumerator is left at last \e unoccupied location
  */
 bool EnumeratorImp::nextValid() {
-   const MemoryPage *memoryPage = NULL;
+   MemoryPagePtr memoryPage;
    uint16_t pageNum, offset;
-   //   log.print("enumerator::nextValid(start=0x%06X)\n", address);
+   //   log.print("start=0x%06X\n", address);
    address++;
    do {
       FlashImageImp::addressToPageOffset(address, pageNum, offset);
-      //      log.print("enumerator::nextValid() checking 0x%06X)\n", address);
+//      log.print("Checking 0x%06X)\n", address);
 
       // At start of page or haven't checked this page yet
       if ((offset == 0) || (memoryPage == NULL)) {
-         typename map<uint32_t, MemoryPage *>::iterator iter = memoryImage.memoryPages.find(pageNum);
+         typename map<uint32_t, MemoryPagePtr>::iterator iter = memoryImage.memoryPages.find(pageNum);
          if (iter == memoryImage.memoryPages.end()) {
-            memoryPage = NULL;
+            memoryPage.reset();
          }
          else {
             memoryPage = iter->second;
@@ -273,15 +273,15 @@ bool EnumeratorImp::nextValid() {
          address += FlashImageImp::PageSize;
          address &= ~FlashImageImp::PageMask;
          if (address > memoryImage.lastAllocatedAddress) {
-            //            address = memoryImage.lastAllocatedAddress;
-            //            log.print("enumerator::nextValid(end  =0x%06X), no remaining valid addresses\n", address);
+//            address = memoryImage.lastAllocatedAddress;
+//            log.print("end = 0x%06X, no remaining valid addresses\n", address);
             return false;
          }
          continue;
       }
       // Check if valid byte in page
       if (memoryPage->isValid(offset)) {
-         //         log.print("enumerator::nextValid(end  =0x%06X)\n", address);
+         //         log.print("end = 0x%06X\n", address);
          return true;
       }
       address++;
@@ -292,36 +292,29 @@ bool EnumeratorImp::nextValid() {
 /*!
  *  Advance location to just before the next unoccupied flash location or page boundary
  *  Assumes current location is occupied.
- *
- *  @return \n
- *         true  => advanced to last occupied location or just before a page boundary
- *         false => no unoccupied locations remain, enumerator is advanced to last occupied location
- *
  */
 void EnumeratorImp::lastValid() {
    uint16_t pageNum, offset;
    LOGGING_Q;
-//   log.print("enumerator::lastValid(start=0x%06X)\n", address);
+//   log.print("start=0x%06X\n", address);
 
    FlashImageImp::addressToPageOffset(address, pageNum, offset);
-   typename map<uint32_t, MemoryPage *>::iterator iter = memoryImage.memoryPages.find(pageNum);
+   typename map<uint32_t, MemoryPagePtr>::iterator iter = memoryImage.memoryPages.find(pageNum);
    if (iter == memoryImage.memoryPages.end()) {
-      //      log.print("enumerator::lastValid(end=0x%06X), start address not allocated\n", address);
+//      log.print("end=0x%06), start address not allocated\n", address);
       return;
    }
-   MemoryPage *memoryPage = iter->second;
+   MemoryPagePtr memoryPage = iter->second;
    do {
-      //      log.print("enumerator::lastValid() checking 0x%06X)\n", address);
+//      log.print("Checking 0x%06X)\n", address);
       if (address == memoryImage.lastAllocatedAddress) {
-         //         log.print("enumerator::lastValid(end=0x%06X), end of memory\n", address);
+//         log.print("end=0x%06X, end of memory\n", address);
          return;
       }
-
       FlashImageImp::addressToPageOffset(address, pageNum, offset);
-
       // Check if at page boundary or probing one ahead fails
       if ((offset == FlashImageImp::PageSize-1) || !memoryPage->isValid(++offset)) {
-         //         log.print("enumerator::lastValid(end=0x%06X)\n", address);
+//         log.print("end=0x%06X\n", address);
          return;
       }
       address++;
@@ -341,13 +334,18 @@ FlashImageImp::FlashImageImp() :
       firstAllocatedAddress((unsigned )(-1)),
       lastAllocatedAddress(0),
       lastPageNumAccessed((uint16_t )(-1)),
-      lastMemoryPageAccessed(NULL),
       elementCount(0),
       littleEndian(false),
       allowOverwrite(false),
-      fp(0) {
+      fp(0),
+      discardFF(true) {
 }
 
+/*!
+ *   Set target type of image
+ *
+ *   @param targetType - Target type to set
+ */
 void FlashImageImp::setTargetType(TargetType_t targetType) {
    this->targetType = targetType;
    if (targetType == T_MC56F80xx) {
@@ -363,6 +361,13 @@ FlashImageImp::~FlashImageImp() {
    clear();
 }
 
+/*!
+ * Get string describing the error code
+ *
+ * @param rc - Error code
+ *
+ * @return String describing the error
+ */
 const char *FlashImageImp::getErrorString(USBDM_ErrorCode rc) {
    return USBDM_GetErrorString(rc);
 }
@@ -373,16 +378,16 @@ const char *FlashImageImp::getErrorString(USBDM_ErrorCode rc) {
 void FlashImageImp::clear(void) {
 
    // Initialise flash image to unused value
-   typename std::map<uint32_t,MemoryPage*>::iterator it = memoryPages.begin();
+   typename std::map<uint32_t,MemoryPagePtr>::iterator it = memoryPages.begin();
    while(it != memoryPages.end()){
-      delete it->second;
+      it->second.reset();
       it++;
    }
    memoryPages.clear();
    firstAllocatedAddress  = (unsigned )(-1);
    lastAllocatedAddress   = 0;
    lastPageNumAccessed    = (uint16_t )(-1);
-   lastMemoryPageAccessed = NULL;
+   lastMemoryPageAccessed.reset();
    elementCount           = 0;
    littleEndian           = false;
 }
@@ -400,15 +405,15 @@ bool FlashImageImp::isValid(uint32_t address) {
    uint16_t pageNum;
    uint16_t offset;
    addressToPageOffset(address, pageNum, offset);
-   MemoryPage *memoryPage = getmemoryPage(pageNum);
+   MemoryPagePtr memoryPage = getmemoryPage(pageNum);
    return (memoryPage != NULL) && (memoryPage->isValid(offset));
 }
 
 /*!
  *   Gets an enumerator for the memory
  */
-FlashImage::Enumerator *FlashImageImp::getEnumerator(uint32_t address) {
-   return new EnumeratorImp(*this, address);
+FlashImage::EnumeratorPtr FlashImageImp::getEnumerator(uint32_t address) {
+   return EnumeratorPtr(new EnumeratorImp(*this, address));
 }
 
 /*!
@@ -425,7 +430,7 @@ bool FlashImageImp::isEmpty() const {
  *  Prints a summary of the Flash memory allocated/used.
  */
 void FlashImageImp::printMemoryMap() {
-   Enumerator *enumerator = getEnumerator();
+   EnumeratorPtr enumerator(getEnumerator());
    UsbdmSystem::Log::print("FlashImageImp::MemorySpace::printMemoryMap()\n");
    while (enumerator->isValid()) {
       // Start address of block
@@ -437,7 +442,6 @@ void FlashImageImp::printMemoryMap() {
       // Move to start of next occupied range
       enumerator->nextValid();
    }
-   delete enumerator;
 }
 
 /*!
@@ -461,16 +465,16 @@ const string & FlashImageImp::getSourcePathname() const {
  *
  * @return  memory page or NULL if not found
  */
-MemoryPage *FlashImageImp::getmemoryPage(uint32_t pageNum) {
-   MemoryPage *memoryPage;
+MemoryPagePtr FlashImageImp::getmemoryPage(uint32_t pageNum) {
+   MemoryPagePtr memoryPage;
    if ((pageNum == lastPageNumAccessed) && (lastMemoryPageAccessed != NULL)) {
       // Used cached copy
       memoryPage = lastMemoryPageAccessed;
    }
    else {
-      typename std::map<uint32_t, MemoryPage *>::iterator iter = memoryPages.find(pageNum);
+      typename std::map<uint32_t, MemoryPagePtr>::iterator iter = memoryPages.find(pageNum);
       if (iter == memoryPages.end()) {
-         memoryPage = NULL;
+         memoryPage.reset();
       }
       else {
          memoryPage = iter->second;
@@ -486,15 +490,15 @@ MemoryPage *FlashImageImp::getmemoryPage(uint32_t pageNum) {
  *
  *   @param pageNum
  */
-MemoryPage *FlashImageImp::allocatePage(uint32_t pageNum) {
+MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
    LOGGING_Q;
-   MemoryPage *memoryPage;
+   MemoryPagePtr memoryPage;
 
    memoryPage = getmemoryPage(pageNum);
    if (memoryPage == NULL) {
       log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PageSize-1));
-      memoryPage = new MemoryPage;
-      memoryPages.insert(pair<const uint32_t, MemoryPage*>(pageNum, memoryPage));
+      memoryPage.reset(new MemoryPage);
+      memoryPages.insert(pair<const uint32_t, MemoryPagePtr>(pageNum, memoryPage));
       // Update cache
       lastMemoryPageAccessed = memoryPage;
    }
@@ -541,6 +545,122 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
 }
 
 /*!
+ *    Save image buffer as a S19 file. \n
+ *
+ *  @param filePath      : Path of file to load
+ *  @param discardFF     : Discard sizable blocks of consecutive 0xFF values (assumed blank)
+ *
+ *  @return error code see \ref USBDM_ErrorCode
+ */
+USBDM_ErrorCode FlashImageImp::saveFile(const std::string &filePath, bool discardFF) {
+   LOGGING;
+   this->discardFF = discardFF;
+   fp = fopen(filePath.c_str(), "wt");
+   if (fp == 0) {
+      return SFILE_RC_FILE_OPEN_FAILED;
+   }
+   FlashImage::EnumeratorPtr e = getEnumerator(0);
+   while (e->isValid()) {
+      uint32_t start = e->getAddress();
+      e->lastValid();
+      uint32_t end = e->getAddress();
+      log.print("[0x%06X..0x%06X]\n", start, end);
+      e->nextValid();
+      uint8_t data[end-start+1];
+      uint8_t *dataPtr = data;
+      for (uint32_t address=start; address<=end; address++) {
+         *dataPtr++ = getValue(address);
+      }
+      writeData(data, start, end-start+1);
+   }
+   fclose(fp);
+   return BDM_RC_OK;
+}
+
+//! Dump a single S-record to stdout
+//!
+//! @param file     file handle for writes
+//! @param buffer   location of data to dump
+//! @param address  base address of data
+//! @param size     number of bytes to dump
+//!
+//! @note size must be less than or equal to \ref maxSrecSize
+//! @note S-records filled with 0xFF are discarded
+//!
+void FlashImageImp::writeSrec(uint8_t *buffer, uint32_t address, unsigned size) {
+   LOGGING;
+   log.print("[0x%06X..0x%06X]\n", address, address+size-1);
+
+   // Discard 0xFF filled records (blank Flash)
+   bool allFF = discardFF;
+   if (discardFF) {
+      for(unsigned sub=0; sub<size; sub++) {
+         if (buffer[sub] != 0xFF ) {
+            allFF = false;
+            break;
+         }
+      }
+   }
+   if ((size == 0) || allFF) {
+      return;
+   }
+   uint8_t *ptr = buffer;
+   uint8_t checkSum;
+   if ((address) < 0x10000U) {
+      fprintf(fp, "S1%02X%04X", size+3, address);
+      checkSum = size+3;
+      checkSum += (address>>8)&0xFF;
+      checkSum += (address)&0xFF;
+   }
+   else if (address < 0x1000000U) {
+      fprintf(fp, "S2%02X%06X", size+4, address);
+      checkSum = size+4;
+      checkSum += (address>>16)&0xFF;
+      checkSum += (address>>8)&0xFF;
+      checkSum += (address)&0xFF;
+   }
+   else {
+      fprintf(fp, "S3%02X%08X", size+5, address);
+      checkSum = size+5;
+      checkSum += (address>>24)&0xFF;
+      checkSum += (address>>16)&0xFF;
+      checkSum += (address>>8)&0xFF;
+      checkSum += (address)&0xFF;
+   }
+   while (size-->0) {
+      checkSum += *ptr;
+      fprintf(fp, "%02X", *ptr++);
+   }
+   checkSum = checkSum^0xFF;
+   fprintf(fp, "%02X\n", checkSum);
+}
+
+//! Dump data as S-records to stdout
+//!
+//! @param file     file handle for writes
+//! @param buffer   location of data to dump
+//! @param address  base address of data
+//! @param size     number of bytes to dump
+//!
+//! @note Regions filled with 0xFF are discarded
+//!
+void FlashImageImp::writeData(uint8_t *buffer, uint32_t address, unsigned size) {
+   LOGGING;
+   log.print("[0x%06X..0x%06X]\n", address, address+size-1);
+   while (size>0) {
+      uint8_t oddBytes = address & (maxSrecSize-1);
+      uint8_t srecSize = maxSrecSize - oddBytes;
+      if (srecSize > size) {
+         srecSize = (uint8_t) size;
+      }
+      writeSrec(buffer, address, srecSize);
+      address += srecSize;
+      buffer  += srecSize;
+      size    -= srecSize;
+   }
+}
+
+/*!
  *  Obtain the value of a Flash memory location
  *
  *  @param address - 32-bit memory address
@@ -550,7 +670,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
 uint8_t FlashImageImp::getValue(uint32_t address) {
    uint16_t         offset;
    uint16_t         pageNum;
-   MemoryPage *memoryPage;
+   MemoryPagePtr    memoryPage;
    addressToPageOffset(address, pageNum, offset);
    memoryPage = getmemoryPage(pageNum);
    if (memoryPage == NULL)
@@ -572,7 +692,7 @@ void FlashImageImp::setValue(uint32_t address, uint8_t value) {
    uint16_t pageNum;
 
    addressToPageOffset(address, pageNum, offset);
-   MemoryPage *memoryPage = allocatePage(pageNum);
+   MemoryPagePtr memoryPage = allocatePage(pageNum);
    if (!memoryPage->isValid(offset)) {
       // new location
       elementCount++;
@@ -586,18 +706,17 @@ void FlashImageImp::setValue(uint32_t address, uint8_t value) {
    }
 }
 
-//=====================================================================
-//! Remove a Flash memory location (set to unprogrammed)
-//!
-//! @param address - 32-bit memory address
-//!
-
+/*
+ * Remove a Flash memory location (set to unprogrammed)
+ *
+ * @param address - 32-bit memory address
+ */
 void FlashImageImp::remove(uint32_t address) {
    uint16_t offset;
    uint16_t pageNum;
 
    addressToPageOffset(address, pageNum, offset);
-   MemoryPage *memoryPage = getmemoryPage(pageNum);
+   MemoryPagePtr memoryPage = getmemoryPage(pageNum);
    if ((memoryPage == NULL) || !memoryPage->isValid(offset)) {
       // Doesn't exist
       return;
@@ -606,14 +725,13 @@ void FlashImageImp::remove(uint32_t address) {
    memoryPage->remove(offset);
 }
 
-//=====================================================================
-//!  Dump the contents of a range of memory
-//!
-//! @param startAddress - start of range
-//! @param endAddress   - end of range
-//!
-//!
-
+/*!
+ *  Dump the contents of a range of memory to log file
+ *
+ * @param startAddress - start of range
+ * @param endAddress   - end of range
+ *
+ */
 void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
    LOGGING_Q;
    uint32_t addr;
@@ -665,15 +783,14 @@ void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
    log.print("\n\n");
 }
 
-//=====================================================================
-//! Load data into Flash image
-//!
-//! @param bufferSize    - size of data to load (in uint8_t)
-//! @param address       - address to load at
-//! @param data          - data to load
-//! @param dontOverwrite - produce error if overwriting existing data
-//!
-
+/*!
+ * Load data into Flash image
+ *
+ * @param bufferSize    - size of data to load (in uint8_t)
+ * @param address       - address to load at
+ * @param data          - data to load
+ * @param dontOverwrite - produce error if overwriting existing data
+ */
 USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
       uint32_t       address,
       const uint8_t data[],
@@ -699,17 +816,16 @@ USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
    return SFILE_RC_OK;
 }
 
-//=====================================================================
-//! Load data into Flash image from byte array
-//!
-//! @param bufferSize    - size of data to load (in bytes)
-//! @param address       - address to load at (byte/word address)
-//! @param data          - data to load
-//! @param dontOverwrite - true to prevent overwriting data
-//!
-//! @note This is only of use if uint8_t is not a byte
-//!
-
+/*!
+ * Load data into Flash image from byte array
+ *
+ * @param bufferSize    - size of data to load (in bytes)
+ * @param address       - address to load at (byte/word address)
+ * @param data          - data to load
+ * @param dontOverwrite - true to prevent overwriting data
+ *
+ * @note This is only of use if uint8_t is not a byte
+ */
 USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
       uint32_t        address,
       const uint8_t   data[],
@@ -751,29 +867,29 @@ USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
    return BDM_RC_OK;
 }
 
-//! Maps Address to PageNum:offset
-//!
-//! @param address - 32-bit address
-//! @param pageNum - page number portion of address
-//! @param offset  - offset within page
-//!
-//! @note - These values do NOT refer to the paging structure used by the target!
-//!
+/*! Maps Address to PageNum:offset
+ *
+ * @param address - 32-bit address
+ * @param pageNum - page number portion of address
+ * @param offset  - offset within page
+ *
+ * @note - These values do NOT refer to the paging structure used by the target!
+ */
 void FlashImageImp::addressToPageOffset(uint32_t address, uint16_t &pageNum, uint16_t &offset) {
    offset  = address & PageMask;
    pageNum = address >> PageBitOffset;
    //      printf("%8.8X=>%2.2X:%4.4X\n", address, pageNum, offset);
 }
 
-//! Maps PageNum:offset to Address
-//!
-//! @param pageNum - page number portion of address
-//! @param offset  - offset within page
-//!
-//! @return 32-bit address
-//!
-//! @note - These values do NOT refer to the paging structure used by the target!
-//!
+/*! Maps PageNum:offset to Address
+ *
+ * @param pageNum - page number portion of address
+ * @param offset  - offset within page
+ *
+ * @return 32-bit address
+ *
+ * @note - These values do NOT refer to the paging structure used by the target!
+ */
 uint32_t FlashImageImp::pageOffsetToAddress(uint16_t pageNum, uint16_t offset) {
    if (offset>=PageSize)
       throw runtime_error("Page offset too large\n");
@@ -838,17 +954,16 @@ int16_t FlashImageImp::targetToNative(int16_t &value) {
    return ((value<<8)&0xFF00) + ((value>>8)&0x00FF);
 }
 
-//=====================================================================
-//!   Load a Freescale S-record file into the buffer. \n
-//!
-//!   The buffer is cleared to 0xFFFF before loading.  Modified locations will
-//!   have a non-0xFF upper byte so used locations can be differentiated. \n
-//!
-//! @param fileName         : Path of file to load
-//!
-//! @return error code see \ref USBDM_ErrorCode
-//!
-
+/*
+ *   Load a Freescale S-record file into the buffer. \n
+ *
+ *   The buffer is cleared to 0xFFFF before loading.  Modified locations will
+ *   have a non-0xFF upper byte so used locations can be differentiated. \n
+ *
+ * @param fileName         : Path of file to load
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    LOGGING_Q;
    char        *ptr;
@@ -967,17 +1082,17 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    return SFILE_RC_OK;
 }
 
-//=====================================================================
-//!   Load a ELF block into the buffer. \n
-//!
-//!   The buffer is cleared to 0xFFFF before loading.  Modified locations will
-//!   have a non-0xFF upper byte so used locations can be differentiated. \n
-//!
-//! @param fp            : Open file pointer
-//! @param fOffset       : Offset to block in file
-//! @param size          : Size of block in bytes
-//! @param addr          : Bytes address to load block
-//!
+/*
+ *   Load a ELF block into the buffer. \n
+ *
+ *   The buffer is cleared to 0xFFFF before loading.  Modified locations will
+ *   have a non-0xFF upper byte so used locations can be differentiated. \n
+ *
+ * @param fp            : Open file pointer
+ * @param fOffset       : Offset to block in file
+ * @param size          : Size of block in bytes
+ * @param addr          : Bytes address to load block
+ */
 USBDM_ErrorCode FlashImageImp::loadElfBlock(FILE *fp,
       long        fOffset,
       Elf32_Word  size,
@@ -1030,12 +1145,11 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(FILE *fp,
    return SFILE_RC_OK;
 }
 
-//=====================================================================
-//! Print ELF Header
-//!
-//! @param elfHeader -  ELF header to print
-//!
-
+/*
+ * Print ELF Header
+ *
+ * @param elfHeader -  ELF header to print
+ */
 void FlashImageImp::printElfHeader(Elf32_Ehdr *elfHeader) {
    UsbdmSystem::Log::print("e_type      = 0x%04X\n"
          "e_machine   = 0x%04X\n"
@@ -1065,12 +1179,11 @@ void FlashImageImp::printElfHeader(Elf32_Ehdr *elfHeader) {
          elfHeader->e_shstrndx );
 }
 
-//=====================================================================
-//! Convert fields in ELF header to native format
-//!
-//! @param elfHeader -  ELF header to convert
-//!
-
+/*
+ * Convert fields in ELF header to native format
+ *
+ * @param elfHeader -  ELF header to convert
+ */
 void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
    // Convert to native format
    elfHeader->e_type      = targetToNative(elfHeader->e_type     );
@@ -1088,12 +1201,11 @@ void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
    elfHeader->e_shstrndx  = targetToNative(elfHeader->e_shstrndx );
 }
 
-//=====================================================================
-//! Print ELF Program Header
-//!
-//! @param programHeader -  ELF Program header to print
-//!
-
+/*
+ * Print ELF Program Header
+ *
+ * @param programHeader -  ELF Program header to print
+ */
 void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
    UsbdmSystem::Log::print("===================\n"
          "p_type                  p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n"
@@ -1109,12 +1221,11 @@ void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
    );
 }
 
-//=====================================================================
-//! Convert fields to native format
-//!
-//! @param elfHeader -  ELF Program header to convert
-//!
-
+/*
+ * Convert fields to native format
+ *
+ * @param elfHeader -  ELF Program header to convert
+ */
 void FlashImageImp::fixElfProgramHeaderSex(Elf32_Phdr *elfHeader) {
    elfHeader->p_type    = targetToNative(elfHeader->p_type  );
    elfHeader->p_offset  = targetToNative(elfHeader->p_offset);
@@ -1126,14 +1237,13 @@ void FlashImageImp::fixElfProgramHeaderSex(Elf32_Phdr *elfHeader) {
    elfHeader->p_align   = targetToNative(elfHeader->p_align );
 }
 
-//=====================================================================
-//!   Load a ELF file into the buffer. \n
-//!
-//! @param filePath         : Path of file to load
-//!
-//! @return error code see \ref USBDM_ErrorCode
-//!
-
+/*
+ *   Load a ELF file into the buffer. \n
+ *
+ * @param filePath         : Path of file to load
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    LOGGING_Q;
    fp = fopen(filePath.c_str(), "rb");

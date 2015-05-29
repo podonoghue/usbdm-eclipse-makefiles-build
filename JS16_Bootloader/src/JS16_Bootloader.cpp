@@ -44,7 +44,7 @@ ICP_ErrorType programBlock(FlashImagePtr flashImageDescription, uint32_t size, u
 
 ICP_ErrorType loadFile(FlashImagePtr flashImageDescription) {
    LOGGING_Q;
-   FlashImage::Enumerator *enumerator = flashImageDescription->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImageDescription->getEnumerator();
    ICP_ErrorType progRc = RC_OK;
    while (enumerator->isValid()) {
       // Start address of block to program to flash
@@ -66,8 +66,6 @@ ICP_ErrorType loadFile(FlashImagePtr flashImageDescription) {
       // Move to start of next occupied range
       enumerator->nextValid();
    }
-   delete enumerator;
-   enumerator = NULL;
    return progRc;
 }
 

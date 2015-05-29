@@ -9,22 +9,48 @@
 
 #include <wx/filedlg.h>
 
-#include "MemoryDumpDialogue.h"
 #include "UsbdmSystem.h"
 #include "Names.h"
+#include "HexNumberGridEditor.h"
+#include "MemoryDumpDialogue.h"
 
 //! Maximum size of a S-record, should be power of 2
 const int maxSrecSize = (1<<4);
 
-MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent) :
+MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings) :
    MemoryDumpDialogueSkeleton(parent),
-   targetType(T_ARM) {
-   memoryRangesGrid->SetColFormatNumber(0);
-   memoryRangesGrid->SetColFormatNumber(1);
+   targetType(T_ARM),
+   appSettings(appSettings)
+{
+   memoryRangesGrid->SetColFormatNumber(2);
+   saveToFileButton->Enable(false);
+
+   wxGridCellAttr *attr;
+   attr = new wxGridCellAttr();
+   attr->SetEditor((wxGridCellEditor *)new HexNumberGridEditor());
+   attr->SetAlignment(wxALIGN_RIGHT, wxALIGN_CENTRE);
+   memoryRangesGrid->SetColAttr(0, attr);
+
+   attr = new wxGridCellAttr();
+   attr->SetEditor((wxGridCellEditor *)new HexNumberGridEditor());
+   attr->SetAlignment(wxALIGN_RIGHT, wxALIGN_CENTRE);
+   memoryRangesGrid->SetColAttr(1, attr);
+
+   attr = new wxGridCellAttr();
+   attr->SetAlignment(wxALIGN_CENTRE, wxALIGN_CENTRE);
+   memoryRangesGrid->SetColAttr(2, attr);
 }
 
 MemoryDumpDialogue::~MemoryDumpDialogue() {
    LOGGING;
+   saveSettings();
+}
+
+int  MemoryDumpDialogue::ShowModal() {
+   loadSettings();
+   int rc = MemoryDumpDialogueSkeleton::ShowModal();
+   saveSettings();
+   return rc;
 }
 
 static const TargetType_t targetTypes[] = {
@@ -41,23 +67,28 @@ void MemoryDumpDialogue::OnTargetTypeRadioBox( wxCommandEvent& event ) {
 void MemoryDumpDialogue::OnSaveToFileButton( wxCommandEvent& event ) {
    LOGGING;
 
+   if (flashImage == 0) {
+      return;
+   }
    wxString caption  = _("Select save location for binary file");
    wxString wildcard = _("SREC Hex files (*.s19,*.sx,*.s)|*.s19;*.sx;*.s|"
                          "All Files|*");
-   wxString defaultFilename = wxEmptyString;
-   wxFileDialog dialog(this, caption, currentDirectory, defaultFilename, wildcard, wxFD_OPEN);
+   wxFileDialog dialog(this, caption, currentDirectory, currentFilename, wildcard, wxFD_SAVE);
    int getCancelOK = dialog.ShowModal();
    if (getCancelOK != wxID_OK) {
       return;
    }
    currentDirectory = dialog.GetDirectory();
-
-   wxString customPath = dialog.GetPath();
-   log.print("customPath     = \'%s\'\n", (const char *)customPath.c_str());
+   currentFilename  = dialog.GetFilename();
+   string filePath(dialog.GetPath());
+   log.print("customPath     = \'%s\'\n", (const char *)filePath.c_str());
+   flashImage->saveFile(filePath);
 }
 
 void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
    LOGGING;
+
+   clearStatus();
 
    writeStatus("Creating Empty flash image...\n");
    flashImage = FlashImageFactory::createFlashImage(targetType);
@@ -80,26 +111,71 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
       if (rc != BDM_RC_OK) {
          break;
       }
-      rc = readMemoryBlock(0x0000, 0x1000);
+      rc = bdmInterface->targetConnectWithRetry();
+      if (rc != BDM_RC_OK) {
+         break;
+      }
+      rc = readMemoryBlocks();
       if (rc != BDM_RC_OK) {
          break;
       }
    } while (0);
    if (rc != BDM_RC_OK) {
       writeStatus("Failed, reason = %s\n", bdmInterface->getErrorString(rc));
+      flashImage.reset();
    }
+   saveToFileButton->Enable((flashImage != 0) && !flashImage->isEmpty());
+   bdmInterface.reset();
+   writeStatus("Done\n");
 }
 
-USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlock(uint32_t address, uint32_t size) {
-   unsigned char data[size];
+struct MemoryRange {
+   uint32_t start;
+   uint32_t end;
+};
 
-   writeStatus("Reading memory[0x%08X..0x%08X]\n", address, address+size-1);
-   USBDM_ErrorCode rc = bdmInterface->readMemory(MS_Byte, size, address, data);
-   if (rc != BDM_RC_OK) {
-      return rc;
+USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks() {
+   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+      long int start, end, width;
+      wxString startValue = memoryRangesGrid->GetCellValue(row,0);
+      wxString endValue   = memoryRangesGrid->GetCellValue(row,0);
+      wxString widthValue = memoryRangesGrid->GetCellValue(row,0);
+
+      if (startValue.IsEmpty() && endValue.IsEmpty() && widthValue.IsEmpty()) {
+         continue;
+      }
+      if (!startValue.ToLong(&start, 16)) {
+         writeStatus("Illegal start address (entry #%d), \'%s\'\n", row+1, (const char *)startValue.c_str());
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      endValue = memoryRangesGrid->GetCellValue(row,1);
+      if (!endValue.ToLong(&end, 16)) {
+         writeStatus("Illegal end address (entry #%d), \'%s\'\n", row+1, (const char *)endValue.c_str());
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      widthValue = memoryRangesGrid->GetCellValue(row,2);
+      if (!widthValue.ToLong(&width) || ((width!=1) && (width!=2) && (width!=4))) {
+         writeStatus("Illegal width (entry #%d), \'%s\'\n", row+1, (const char *)widthValue.c_str());
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      if (start>end) {
+         writeStatus("Illegal range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      unsigned int size = end-start+1;
+      unsigned char data[size];
+      writeStatus("Reading memory[0x%06lX, 0x%06lX, %ld]...\n", start, end, width);
+      USBDM_ErrorCode rc = bdmInterface->readMemory(width, size, start, data);
+      if (rc != BDM_RC_OK) {
+         return rc;
+      }
+      flashImage->loadData(size, start, data);
    }
-   flashImage->loadData(size, address, data);
    return BDM_RC_OK;
+}
+
+void MemoryDumpDialogue::clearStatus() {
+   statusText->Clear();
 }
 
 void MemoryDumpDialogue::writeStatus(const char *format, ...) {
@@ -117,79 +193,80 @@ void MemoryDumpDialogue::writeStatus(const char *format, ...) {
    va_end(list);
 }
 
-//! Dump a single S-record to stdout
-//!
-//! @param file     file handle for writes
-//! @param buffer   location of data to dump
-//! @param address  base address of data
-//! @param size     number of bytes to dump
-//!
-//! @note size must be less than or equal to \ref maxSrecSize
-//! @note S-records filled with 0xFF are discarded
-//!
-void MemoryDumpDialogue::dumpSrec(FILE *file, uint8_t *buffer, uint32_t address, unsigned size) {
+void MemoryDumpDialogue::loadSettings() {
+   LOGGING_E;
+   currentDirectory = appSettings->getValue("directory", "");
+   currentFilename  = appSettings->getValue("filename", "");
+   int targetSelection = appSettings->getValue("targetType", T_ARM);
+   targetTypeRadioBox->SetSelection(targetSelection);
+   targetType = targetTypes[targetSelection];
+   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+      long int start, end, width;
 
-   // Discard 0xFF filled records (blank Flash)
-   bool allFF = true;
-   for(unsigned sub=0; sub<size; sub++) {
-      if (buffer[sub] != 0xFF ) {
-         allFF = false;
-         break;
+      char key[100];
+      snprintf(key, sizeof(key), "dataWidth%d", row);
+      width = appSettings->getValue(key, 0);
+      wxString widthValue = wxString::Format("%d", width);
+      memoryRangesGrid->SetCellValue(widthValue, row, 2);
+      wxString startValue;
+      wxString endValue;
+      if (width>0) {
+         snprintf(key, sizeof(key), "dataStart%d", row);
+         start = appSettings->getValue(key, 0);
+         startValue = wxString::Format("%X", start);
+
+         snprintf(key, sizeof(key), "dataEnd%d", row);
+         end = appSettings->getValue(key, 0);
+         endValue = wxString::Format("%X", end);
       }
+      memoryRangesGrid->SetCellValue(startValue, row, 0);
+      memoryRangesGrid->SetCellValue(endValue,   row, 1);
    }
-   if ((size == 0) || allFF) {
-      return;
-   }
-   uint8_t *ptr = buffer;
-   uint8_t checkSum;
-   if ((address) < 0x10000U) {
-      fprintf(file, "S1%02X%04X", size+3, address);
-      checkSum = size+3;
-      checkSum += (address>>8)&0xFF;
-      checkSum += (address)&0xFF;
-   }
-   else if (address < 0x1000000U) {
-      fprintf(file, "S2%02X%06X", size+4, address);
-      checkSum = size+4;
-      checkSum += (address>>16)&0xFF;
-      checkSum += (address>>8)&0xFF;
-      checkSum += (address)&0xFF;
-   }
-   else {
-      fprintf(file, "S3%02X%08X", size+5, address);
-      checkSum = size+5;
-      checkSum += (address>>24)&0xFF;
-      checkSum += (address>>16)&0xFF;
-      checkSum += (address>>8)&0xFF;
-      checkSum += (address)&0xFF;
-   }
-   while (size-->0) {
-      checkSum += *ptr;
-      fprintf(file, "%02X", *ptr++);
-   }
-   checkSum = checkSum^0xFF;
-   fprintf(file, "%02X\n", checkSum);
 }
 
-//! Dump data as S-records to stdout
-//!
-//! @param file     file handle for writes
-//! @param buffer   location of data to dump
-//! @param address  base address of data
-//! @param size     number of bytes to dump
-//!
-//! @note Regions filled with 0xFF are discarded
-//!
-void MemoryDumpDialogue::dump(FILE *file, uint8_t *buffer, uint32_t address, unsigned size) {
-   while (size>0) {
-      uint8_t oddBytes = address & (maxSrecSize-1);
-      uint8_t srecSize = maxSrecSize - oddBytes;
-      if (srecSize > size) {
-         srecSize = (uint8_t) size;
+void MemoryDumpDialogue::saveSettings() {
+   LOGGING_E;
+   appSettings->addValue("targetType", targetTypeRadioBox->GetSelection());
+   appSettings->addValue("directory", currentDirectory);
+   appSettings->addValue("filename", currentFilename);
+   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+      long int start, end, width;
+      wxString startValue = memoryRangesGrid->GetCellValue(row, 0);
+      wxString endValue   = memoryRangesGrid->GetCellValue(row, 1);
+      wxString widthValue = memoryRangesGrid->GetCellValue(row, 2);
+
+      bool valid = true;
+      if (startValue.IsEmpty() && endValue.IsEmpty() && widthValue.IsEmpty()) {
+         valid = false;
       }
-      dumpSrec(file, buffer, address, srecSize);
-      address += srecSize;
-      buffer  += srecSize;
-      size    -= srecSize;
+      if (!startValue.ToLong(&start, 16)) {
+         valid = false;
+      }
+      endValue = memoryRangesGrid->GetCellValue(row,1);
+      if (!endValue.ToLong(&end, 16)) {
+         valid = false;
+      }
+      widthValue = memoryRangesGrid->GetCellValue(row,2);
+      if (!widthValue.ToLong(&width) || ((width!=1) && (width!=2) && (width!=4))) {
+         valid = false;
+      }
+      if (start>end) {
+         valid = false;
+      }
+      char key[100];
+      if (valid) {
+         snprintf(key, sizeof(key), "dataStart%d", row);
+         appSettings->addValue(key, start);
+         snprintf(key, sizeof(key), "dataEnd%d", row);
+         appSettings->addValue(key, end);
+         snprintf(key, sizeof(key), "dataWidth%d", row);
+         appSettings->addValue(key, width);
+      }
+      else {
+         snprintf(key, sizeof(key), "dataWidth%d", row);
+         appSettings->addValue(key, 0);
+      }
    }
 }
+
+

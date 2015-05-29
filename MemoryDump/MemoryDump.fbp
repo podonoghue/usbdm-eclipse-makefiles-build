@@ -211,9 +211,9 @@
                         <property name="close_button">1</property>
                         <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                         <property name="col_label_size">30</property>
-                        <property name="col_label_values">&quot;Start&quot; &quot;End&quot;</property>
+                        <property name="col_label_values">&quot;Start&quot; &quot;End&quot; &quot;Width&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                        <property name="cols">2</property>
+                        <property name="cols">3</property>
                         <property name="column_sizes"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -463,7 +463,7 @@
                                     <property name="style"></property>
                                     <property name="subclass"></property>
                                     <property name="toolbar_pane">0</property>
-                                    <property name="tooltip">Dump memory ranges to file</property>
+                                    <property name="tooltip">Read memory ranges into buffer</property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
                                     <property name="validator_type">wxDefaultValidator</property>

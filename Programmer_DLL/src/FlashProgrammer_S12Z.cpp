@@ -2582,7 +2582,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doFlashBlock(FlashImagePtr flashImage,
 USBDM_ErrorCode FlashProgrammer_S12Z::applyFlashOperation(FlashImagePtr flashImage, FlashOperation  flashOperation) {
    LOGGING;
    USBDM_ErrorCode rc = PROGRAMMING_RC_OK;
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
 
    log.print("Op=%s, Total Bytes = %d\n",
          getFlashOperationName(flashOperation), flashImage->getByteCount());
@@ -2606,7 +2606,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::applyFlashOperation(FlashImagePtr flashIma
       }
       enumerator->setAddress(startBlock);
    }
-   delete enumerator;
    return rc;
 }
 
@@ -2692,7 +2691,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doReadbackVerify(FlashImagePtr flashImage)
    int checkResult = TRUE;
    int blockResult;
 
-   FlashImage::Enumerator *enumerator = flashImage->getEnumerator();
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
       log.print("Empty Memory region\n");
@@ -2815,9 +2814,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doReadbackVerify(FlashImagePtr flashImage)
 #endif
       // Advance to start of next occupied region
       enumerator->nextValid();
-   }
-   if (enumerator != NULL) {
-      delete enumerator;
    }
    return checkResult?PROGRAMMING_RC_OK:PROGRAMMING_RC_ERROR_FAILED_VERIFY;
 }

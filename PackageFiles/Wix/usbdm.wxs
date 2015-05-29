@@ -219,7 +219,7 @@
       <DirectoryRef Id='INSTALLDIR'>
 
          <Component Id='C.UsbdmProgrammer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
-            <File Id='UsbdmFlashProgrammerEXE'       DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer.exe' KeyPath='yes' >
+            <File Id='UsbdmFlashProgrammerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer.exe' KeyPath='yes' >
                <Shortcut Id="SC_ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
                <Shortcut Id="SC_CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
                <Shortcut Id="SC_CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
@@ -239,32 +239,38 @@
             </File>
             <File Id='UsbdmGdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer-debug.exe' />
          </Component>
-
-         <Component Id='C.USBDMBootloader' Guid='*'>
+         <Component Id='C.FirmwareChanger' Guid='*'>
             <File Id='FirmwareChangerEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\FirmwareChanger.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_7" Directory="D.UsbdmProgramMenuDir" Name="USBDM Firmware Updater"
                   WorkingDirectory='D.FlashImages' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.USBDMScript' Guid='*'>
-            <File Id='USBDMScriptEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\USBDMScript.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_8" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
+         <Component Id='C.UsbdmMemoryDump' Guid='*'>
+            <File Id='UsbdmMemoryDumpEXE' DiskId='1'
+               Source='$(var.SrcDir)\bin\UsbdmMemoryDump.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_8" Directory="D.UsbdmProgramMenuDir" Name="USBDM Memory Dump"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.SetBoot' Guid='*'>
-            <File Id='SetBootEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\SetBoot.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_10" Directory="D.UsbdmProgramMenuDir" Name="JB16 Set boot utility"
+         <Component Id='C.UsbdmScript' Guid='*'>
+            <File Id='UsbdmScriptEXE' DiskId='1'
+               Source='$(var.SrcDir)\bin\UsbdmScript.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_9" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.JS16Bootloader' Guid='*'>
-            <File Id='JS16BootloaderEXE' DiskId='1'
+         <Component Id='C.JB16_Bootloader' Guid='*'>
+            <File Id='JB16_BootloaderEXE' DiskId='1'
+               Source='$(var.SrcDir)\bin\JB16_Bootloader.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_10" Directory="D.UsbdmProgramMenuDir" Name="JB16 Bootloader"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+         <Component Id='C.JS16_Bootloader' Guid='*'>
+            <File Id='JS16_BootloaderEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\JS16_Bootloader.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_11" Directory="D.UsbdmProgramMenuDir" Name="JS16 First Level Bootloader"
+               <Shortcut Id="startmenuUSBDM_11" Directory="D.UsbdmProgramMenuDir" Name="JS16 Bootloader"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
@@ -475,41 +481,51 @@
             <ComponentRef Id='C.CommonFiles' />
             <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
          </Feature>
-         <Feature Id='F.USBDMBootloader'
+         <Feature Id='F.FirmwareChanger'
                Title='Firmware Updater'
                Description='USBDM Firmware Updater and Flash images.&#10;&#10;Needed to upgrade BDM firmware.'
                AllowAdvertise="no"
                Level='1'>
-            <ComponentRef Id='C.USBDMBootloader' />
+            <ComponentRef Id='C.FirmwareChanger' />
             <ComponentRef Id='C.CommonFiles' />
             <ComponentRef Id="C.FlashShortCut" />
             <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>
-         <Feature Id='F.JS16Bootloader'
-               Title='JS16 Bootloader'
-               Description='JS16 Firmware Bootloader and Flash images.&#10;Only needed for intial programming of JS16 BDMs.'
+         <Feature Id='F.UsbdmMemoryDump'
+               Title='Memory Dump'
+               Description='Memory Dump.'
                AllowAdvertise="no"
                Level='1'>
-            <ComponentRef Id='C.JS16Bootloader' />
+            <ComponentRef Id='C.UsbdmMemoryDump' />
             <ComponentRef Id='C.CommonFiles' />
-            <ComponentRef Id="C.FlashShortCut" />
-            <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>
-         <Feature Id='F.USBDMScript'
+         <Feature Id='F.UsbdmScript'
                Title='TCL Interpreter'
                Description='USBDM command line TCL interpreter.'
                AllowAdvertise="no"
                Level='1'>
-            <ComponentRef Id='C.USBDMScript' />
+            <ComponentRef Id='C.UsbdmScript' />
             <ComponentRef Id='C.CommonFiles' />
          </Feature>
-         <Feature Id='F.SetBoot'
-               Title='JB16 Setboot utility'
-               Description='Sets JB16 BDMs into ICP mode for upgrade by Freescale ICP tool.'
+         <Feature Id='F.JB16_Bootloader'
+               Title='JB16 Flash update utility'
+               Description='Allows the contents of the JB16 BDM&apos;s flash to be updated.'
                AllowAdvertise="no"
                Level='1'>
-            <ComponentRef Id='C.SetBoot' />
+            <ComponentRef Id='C.JB16_Bootloader' />
             <ComponentRef Id='C.CommonFiles' />
+            <ComponentRef Id="C.FlashShortCut" />
+            <ComponentGroupRef Id='Cg.FlashImages' />
+         </Feature>
+         <Feature Id='F.JS16_Bootloader'
+               Title='JS16 Flash update utility'
+               Description='JS16 Firmware Bootloader and Flash images.&#10;Only needed for initial programming of JS16 BDMs.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.JS16_Bootloader' />
+            <ComponentRef Id='C.CommonFiles' />
+            <ComponentRef Id="C.FlashShortCut" />
+            <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>
          <Feature Id='F.Documentation'
                Title='Documentation'

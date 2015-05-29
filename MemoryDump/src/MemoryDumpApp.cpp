@@ -68,7 +68,8 @@ class MemoryDumpApp : public wxApp {
    DECLARE_EVENT_TABLE()
 
 private:
-   Logger         logger;
+   Logger          logger;
+   AppSettingsPtr  appsettings;
 
 public:
    MemoryDumpApp();
@@ -116,11 +117,17 @@ bool MemoryDumpApp::OnInit() {
       return false;
    }
 
-   // Create the main application window
-   MemoryDumpDialogue *dialogue = new MemoryDumpDialogue(NULL);
+   appsettings.reset(new AppSettings("MemoryDump.cfg", "Memory Dump Configuration"));
+   appsettings->load();
+//   appsettings->printToLog();
+
+   // Create and display the main application window
+   MemoryDumpDialogue *dialogue = new MemoryDumpDialogue(NULL, appsettings);
    SetTopWindow((wxWindow*)dialogue);
    dialogue->ShowModal();
+   appsettings->save();
    dialogue->Destroy();
+
    return true;
 }
 

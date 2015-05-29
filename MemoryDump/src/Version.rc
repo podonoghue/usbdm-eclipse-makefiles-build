@@ -28,7 +28,7 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "CompanyName",      "pgo"
-            VALUE "FileDescription",  "USBDM Programmer"
+            VALUE "FileDescription",  "USBDM Memory Dump"
             VALUE "FileVersion",      USBDM_VERSION_STRING
             VALUE "InternalName",     ""
             VALUE "ProductName",      "USBDM"

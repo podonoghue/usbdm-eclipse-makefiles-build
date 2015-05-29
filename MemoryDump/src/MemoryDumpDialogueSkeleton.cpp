@@ -27,7 +27,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	memoryRangesGrid->CreateGrid( 10, 2 );
+	memoryRangesGrid->CreateGrid( 10, 3 );
 	memoryRangesGrid->EnableEditing( true );
 	memoryRangesGrid->EnableGridLines( true );
 	memoryRangesGrid->EnableDragGridSize( false );
@@ -39,6 +39,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid->SetColLabelSize( 30 );
 	memoryRangesGrid->SetColLabelValue( 0, wxT("Start") );
 	memoryRangesGrid->SetColLabelValue( 1, wxT("End") );
+	memoryRangesGrid->SetColLabelValue( 2, wxT("Width") );
 	memoryRangesGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
@@ -59,7 +60,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
 	readMemoryButton = new wxButton( m_panel1, wxID_ANY, wxT("Read Memory"), wxDefaultPosition, wxDefaultSize, 0 );
-	readMemoryButton->SetToolTip( wxT("Dump memory ranges to file") );
+	readMemoryButton->SetToolTip( wxT("Read memory ranges into buffer") );
 	
 	bSizer2->Add( readMemoryButton, 0, wxALL, 5 );
 	
