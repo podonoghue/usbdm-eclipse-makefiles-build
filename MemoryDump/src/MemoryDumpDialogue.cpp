@@ -197,7 +197,7 @@ void MemoryDumpDialogue::loadSettings() {
    LOGGING_E;
    currentDirectory = appSettings->getValue("directory", "");
    currentFilename  = appSettings->getValue("filename", "");
-   int targetSelection = appSettings->getValue("targetType", T_ARM);
+   int targetSelection = appSettings->getValue("targetType", 0);
    targetTypeRadioBox->SetSelection(targetSelection);
    targetType = targetTypes[targetSelection];
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {

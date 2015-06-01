@@ -5,7 +5,7 @@ Priority: optional
 Architecture: amd64
 Installed-Size: 403000
 Pre-Depends: multiarch-support 
-Depends: libwxgtk3.0-0, libwxbase3.0-0, libgcc1, libstdc++6, libxerces-c3.1, libc6, libtcl8.5 
+Depends: libwxgtk3.0-0, libwxbase3.0-0, libgcc1, libstdc++6, libxerces-c3.1, libc6, libtcl8.5, libusb-1.0-0 
 Maintainer: Peter O'Donoghue <podonoghue@swin.edu.au>
 Description: Debugger Hardware & Software for Freescale microcontrollers.
  USBDM is a debugger hardware interface for a range of Freescale 

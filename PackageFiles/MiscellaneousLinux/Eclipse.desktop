@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Eclipse
+Comment=Eclipse IDE
+Keywords=Eclipse
+Exec=/opt/eclipse/eclipse
+Icon=/opt/eclipse/icon.xpm
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Eclipse
+GenericName[en_AU]=Eclipse
+Comment[en_AU]=Eclipse IDE

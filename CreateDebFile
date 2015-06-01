@@ -4,7 +4,7 @@
 MAJOR=4
 MINOR=11
 MICRO=1
-NANO=30
+NANO=40
 DEBIAN_VERSION=1
 VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
@@ -116,7 +116,7 @@ makeDebFile() {
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/Scripts/*.tcl                      ${USBDM_SHARED_DIR}
 
    ${MKDIR} ${USBDM_LIBDIR}
-   ${CP} -r "${USBDM_SOURCE_LIBDIR}"/*      ${USBDM_LIBDIR}
+   ${CP} -r -P "${USBDM_SOURCE_LIBDIR}"/*      ${USBDM_LIBDIR}
    #${RM} ${USBDM_LIBDIR}/*-debug*
    chmod 644  ${USBDM_LIBDIR}/*
 

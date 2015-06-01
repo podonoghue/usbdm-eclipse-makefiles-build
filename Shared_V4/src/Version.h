@@ -3,16 +3,15 @@
 */
 
 //! Program versions e.g. Flash programmers
-//#define USBDM_VERSION	     0x4A    //!< Version of the DLL in Hex
 #define USBDM_VERSION_MAJOR  4       //!< DLL Major version #
 #define USBDM_VERSION_MINOR  11      //!< DLL Minor version #
 #define USBDM_VERSION_MICRO  1       //!< DLL Micro version #
-#define USBDM_VERSION_NANO   40      //!< DLL Nano version #
+#define USBDM_VERSION_NANO   50      //!< DLL Nano version #
 
 #ifdef LOG
-#define USBDM_VERSION_STRING "4.11.1.40-Debug" //!< Version as string
+#define USBDM_VERSION_STRING "4.11.1.50-Debug" //!< Version as string
 #else
-#define USBDM_VERSION_STRING "4.11.1.40"       //!< Version as string
+#define USBDM_VERSION_STRING "4.11.1.50"       //!< Version as string
 #endif
 
 // The version of the GDI standard implemented
@@ -23,6 +22,8 @@
 
 //----------------------------------------------------------------------------
 // Revision History
+//-----------+----------------------------------------------------------------
+//   June xx | 4.11.1.50 Build                                           - pgo
 //-----------+----------------------------------------------------------------
 //    May 26 | 4.11.1.40 Build                                           - pgo
 //-----------+----------------------------------------------------------------

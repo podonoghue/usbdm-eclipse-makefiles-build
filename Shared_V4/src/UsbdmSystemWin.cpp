@@ -17,7 +17,6 @@
 #ifndef KEY_WOW64_32KEY
 #define KEY_WOW64_32KEY 0x0200
 #endif
-#include <sys/stat.h>
 
 #include "UsbdmSystem.h"
 
@@ -85,14 +84,6 @@ std::string UsbdmSystem::getModulePath(const std::string &path) {
       *(p+1) = '\0';
    }
    return std::string(buff).append(path);
-}
-
-/*!
- * Checks if a file exists
- */
-bool UsbdmSystem::fileExists(const std::string &path) {
-   struct stat buffer;
-   return (stat(path.c_str(), &buffer) == 0);
 }
 
 /* Obtain the path of a file within the application directory

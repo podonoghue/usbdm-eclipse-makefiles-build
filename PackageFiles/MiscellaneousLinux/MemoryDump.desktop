@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=MemoryDump
+Keywords=ARM;HCS08;RS08;CFV1;CFVx;HCS12
+Exec=/usr/bin/UsbdmMemoryDump
+Icon=Hardware-Chip
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=MemoryDump
+GenericName[en_AU]=Memory Dump
+Comment[en_AU]=USBDM Memory Dump

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -v
+
+LD_LIBRARY_PATH=$HOME/Documents/USBDM/usbdm-eclipse-makefiles-build/PackageFiles/lib/i386-linux-gnu
+export LD_LIBRARY_PATH
+
+$1

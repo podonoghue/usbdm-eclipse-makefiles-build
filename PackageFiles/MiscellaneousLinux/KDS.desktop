@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Eclipse
+Comment=Eclipse IDE
+Keywords=Eclipse
+Exec=/opt/Freescale/KDS_1.1.0/eclipse/kinetis-design-studio
+Icon=/opt/Freescale/KDS_1.1.0/eclipse/kinetis-design-studio/icon.xpm
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Kinetis Design Studio
+GenericName[en_AU]=KDS
+Comment[en_AU]=Kinetis Design Studio IDE

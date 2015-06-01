@@ -1,0 +1,9 @@
+#!/bin/bash
+set -v
+
+#sudo mount ­t debugfs none_debugs /sys/kernel/debug
+#sudo modprobe usbmon
+#sudo ls /sys/kernel/debug/usb/usbmon/               
+sudo cat /sys/kernel/debug/usb/usbmon/3u > usbmon.mon
+./vusb­analyzer usbmon.monTH
+

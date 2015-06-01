@@ -266,15 +266,14 @@ ICP_ErrorType ICP_FindUsbdmDevices(unsigned int *deviceCount) {
 
    ICP_ErrorType rc;
 
-   *deviceCount = 0;
    rc = bdm_usb_findDevices(deviceCount, USBDM_VID, USBDM_PID);
-   if (deviceCount == 0) {
+   if (rc != RC_OK) {
       rc = bdm_usb_findDevices(deviceCount, TBDML_VID, TBDML_PID);
    }
-   if (deviceCount == 0) {
+   if (rc != RC_OK) {
       rc = bdm_usb_findDevices(deviceCount, OSBDM_VID, OSBDM_PID);
    }
-   if (deviceCount == 0) {
+   if (rc != RC_OK) {
       rc = bdm_usb_findDevices(deviceCount, TBLCF_VID, TBLCF_PID);
    }
    if (rc == ICP_RC_NO_JS16_DEVICE) {

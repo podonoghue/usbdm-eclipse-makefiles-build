@@ -50,6 +50,7 @@
 #else
 #include <windows.h>
 #endif
+#include <sys/stat.h>
 
 #include "UsbdmSystem.h"
 #include "Version.h"
@@ -102,6 +103,14 @@ FILE *UsbdmSystem::openResourceFile(const std::string &path) {
 FILE *UsbdmSystem::openConfigurationFile(const std::string &path, const std::string &mode) {
    std::string fullPath = getConfigurationPath(path);
    return fopen(fullPath.c_str(), mode.c_str());
+}
+
+/*!
+ * Checks if a file exists
+ */
+bool UsbdmSystem::fileExists(const std::string &path) {
+   struct stat buffer;
+   return (stat(path.c_str(), &buffer) == 0);
 }
 
 /*

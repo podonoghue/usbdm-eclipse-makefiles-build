@@ -25,6 +25,7 @@
 
     Change History
    +========================================================================================
+   |  31 May 2015 | Removed clear halts as breaks USB3 under linux                   V4.11.1.50
    |  27 Dec 2012 | Changed bdm_usb_recv_epIn() to use geometric backoffs            V4.10.4
    |  30 Nov 2012 | Changed bdmJMxx_usb_transaction() retry method etc               V4.10.4
    |              | Added bdm_usb_reset_connection()
@@ -381,16 +382,17 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
       }
    }
 //   log.print("libusb_claim_interface() done\n");
-   rc = libusb_clear_halt(usbDeviceHandle, EP_IN);
-   if (rc != LIBUSB_SUCCESS) {
-      // Ignore
-      log.error("libusb_clear_halt(...,EP_IN(0x%02X)) failed, rc = %s\n", EP_IN, libusb_error_name((libusb_error)rc));
-   }
-   rc = libusb_clear_halt(usbDeviceHandle, EP_OUT);
-   if (rc != LIBUSB_SUCCESS) {
-      // Ignore
-      log.error("libusb_clear_halt(...,EP_OUT(0x%02X)) failed, rc = %s\n", EP_OUT, libusb_error_name((libusb_error)rc));
-   }
+//   This breaks USB-3 under linux
+//   rc = libusb_clear_halt(usbDeviceHandle, EP_IN);
+//   if (rc != LIBUSB_SUCCESS) {
+//      // Ignore
+//      log.error("libusb_clear_halt(...,EP_IN(0x%02X)) failed, rc = %s\n", EP_IN, libusb_error_name((libusb_error)rc));
+//   }
+//   rc = libusb_clear_halt(usbDeviceHandle, EP_OUT);
+//   if (rc != LIBUSB_SUCCESS) {
+//      // Ignore
+//      log.error("libusb_clear_halt(...,EP_OUT(0x%02X)) failed, rc = %s\n", EP_OUT, libusb_error_name((libusb_error)rc));
+//   }
    return (BDM_RC_OK);
 }
 
@@ -898,14 +900,14 @@ USBDM_ErrorCode bdm_usb_reset_connection(void) {
    if (rc != LIBUSB_SUCCESS) {
       log.error("libusb_set_configuration(1) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
    }
-   rc = libusb_clear_halt(usbDeviceHandle, EP_IN);
-   if (rc != LIBUSB_SUCCESS) {
-      log.error("libusb_clear_halt(...,EP_IN(0x%02X)) failed, rc = %s\n", EP_IN, libusb_error_name((libusb_error)rc));
-   }
-   rc = libusb_clear_halt(usbDeviceHandle, EP_OUT);
-   if (rc != LIBUSB_SUCCESS) {
-      log.error("libusb_clear_halt(...,EP_OUT(0x%02X)) failed, rc = %s\n", EP_OUT, libusb_error_name((libusb_error)rc));
-   }
+//   rc = libusb_clear_halt(usbDeviceHandle, EP_IN);
+//   if (rc != LIBUSB_SUCCESS) {
+//      log.error("libusb_clear_halt(...,EP_IN(0x%02X)) failed, rc = %s\n", EP_IN, libusb_error_name((libusb_error)rc));
+//   }
+//   rc = libusb_clear_halt(usbDeviceHandle, EP_OUT);
+//   if (rc != LIBUSB_SUCCESS) {
+//      log.error("libusb_clear_halt(...,EP_OUT(0x%02X)) failed, rc = %s\n", EP_OUT, libusb_error_name((libusb_error)rc));
+//   }
    if ((USBDM_GetVersion(&version)  != BDM_RC_OK) &&
        (USBDM_GetVersion(&version)  != BDM_RC_OK)) { // Get BDM version - reset USB command handler
       log.error("USBDM_GetVersion() failed\n");

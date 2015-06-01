@@ -38,6 +38,7 @@ removeEclipsePlugins() {
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
          echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP}
          ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -uninstallIU ${FEATURE_GROUP} || true
+         break
       fi
    done
 }

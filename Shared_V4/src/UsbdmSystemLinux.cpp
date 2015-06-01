@@ -1,11 +1,35 @@
-/*
- * LinuxPaths.cpp
- *
- *  Created on: 04/02/2013
- *      Author: pgo
- */
+/*! \file
+    \brief Header file for UsbdmSystemLinux.cpp
+
+    \verbatim
+    Copyright (C) 2015  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Change History
+   +====================================================================
+   |    May 2015 | Added automatic creation of $HOME/.usbdm directory
+   |    May 2015 | Created
+   +====================================================================
+    \endverbatim
+*/
+
 
 #ifndef WIN32
+#include <sys/stat.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
@@ -29,14 +53,6 @@ std::string getEnvVar(const std::string & key)
  */
 std::string UsbdmSystem::getModulePath(const std::string &path) {
    return path;
-}
-
-/*!
- * Checks if a file exists
- */
-bool UsbdmSystem::fileExists(const std::string &path) {
-   struct stat buffer;
-   return (stat(path.c_str(), &buffer) == 0);
 }
 
 /* Obtain the path of a file within the application directory
@@ -77,6 +93,9 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getConfigurationPath(const std::s
    LOGGING_Q;
 
    std::string res = getEnvVar("HOME").append("/.usbdm/");
+   if (!fileExists(res)) {
+      mkdir(res.c_str(), S_IRWXU);
+   }
    return res.append(path);
 }
 

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Codewarrior
+Comment=Codewarrior IDE
+Keywords=Codewarrior
+Exec=/usr/local/Freescale/CodeWarrior_MCU_10.2/eclipse/cwide
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;
+Name[en_AU]=Codewarrior.desktop
+GenericName[en_AU]=Codewarrior
+Comment[en_AU]=Codewarrior IDE
