@@ -43,11 +43,11 @@ MainDialogue::~MainDialogue() {}
 void MainDialogue::OnRebootButtonClick( wxCommandEvent& event ) {
    LOGGING;
 
-   ICP_ErrorType rc = RebootDevice();
-   if (rc != RC_OK) {
-      log.error("Reboot failed, rc = %s\n", ICP_GetErrorName(rc));
+   USBDM_ErrorCode rc = RebootDevice();
+   if (rc != BDM_RC_OK) {
+      log.error("Reboot failed, rc = %s\n", UsbdmSystem::getErrorString(rc));
       wxString msg = wxString::Format(_("Rebooting Failed   \n"
-                                        "Reason: %s."), wxString(ICP_GetErrorName(rc), wxConvUTF8).c_str());
+                                        "Reason: %s."), wxString(UsbdmSystem::getErrorString(rc), wxConvUTF8).c_str());
       wxMessageBox(msg, _("Reboot Error"), wxOK|wxICON_ERROR, this);
    }
    else {
@@ -67,11 +67,11 @@ void MainDialogue::OnProgramButtonClick( wxCommandEvent& event ) {
    else {
       filename = this->customPath;
    }
-   ICP_ErrorType rc = ProgramFlash(filename);
-   if (rc != RC_OK) {
-      log.error("Programming failed, rc = %s\n", ICP_GetErrorName(rc));
+   USBDM_ErrorCode rc = ProgramDevice(filename);
+   if (rc != BDM_RC_OK) {
+      log.error("Programming failed, rc = %s\n", UsbdmSystem::getErrorString(rc));
       wxString msg = wxString::Format(_("Programming Failed   \n"
-                                        "Reason: %s."), wxString(ICP_GetErrorName(rc), wxConvUTF8).c_str());
+                                        "Reason: %s."), wxString(UsbdmSystem::getErrorString(rc), wxConvUTF8).c_str());
       wxMessageBox(msg, _("Programming Error"), wxOK|wxICON_ERROR, this);
    }
    else {
@@ -102,19 +102,37 @@ void MainDialogue::OnRadioBox( wxCommandEvent& event ) {
  */
 void MainDialogue::OnLoadSourceButtonClick( wxCommandEvent& event ) {
    LOGGING_Q;
-   wxString caption         = _("Choose a firmware file");
+   wxString caption  = _("Choose a firmware file");
    wxString wildcard = _("Binary Files(*.s19,*.sx,*.s,*.afx,*.axf,*.elf)|*.s19;*.sx;*.s;*.afx;*.axf;*.elf|"
                          "SREC Hex files (*.s19,*.sx,*.s)|*.s19;*.sx;*.s|"
                          "Elf files (*.afx,*.axf,*.elf)|*.afx;*.axf;*.elf|"
                          "All Files|*");
-   wxString defaultDir      = wxEmptyString;
-   wxString defaultFilename = wxEmptyString;
-   wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_OPEN);
+   wxFileDialog dialog(this, caption, defaultDirectory, "", wildcard, wxFD_OPEN);
    if (dialog.ShowModal() == wxID_OK) {
-      customFilename = dialog.GetFilename();
-      customPath     = dialog.GetPath();
+      customFilename   = dialog.GetFilename();
+      customPath       = dialog.GetPath();
+      defaultDirectory = dialog.GetDirectory();
       log.print("customFilename = \'%s\'\n", (const char *)customFilename.c_str());
       log.print("customPath     = \'%s\'\n", (const char *)customPath.c_str());
    }
    OnRadioBox(event);
+}
+
+//!
+//! @param settings      - Object to load settings from
+//!
+void MainDialogue::loadSettings(const AppSettings &settings) {
+   LOGGING_E;
+
+   defaultDirectory   = settings.getValue("defaultDirectory",       "");
+}
+
+//! Save setting file
+//!
+//! @param settings      - Object to save settings to
+//!
+void MainDialogue::saveSettings(AppSettings &settings) {
+   LOGGING_E;
+
+   settings.addValue("defaultDirectory",   defaultDirectory);
 }

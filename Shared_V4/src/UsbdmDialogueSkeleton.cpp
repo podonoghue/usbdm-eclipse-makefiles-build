@@ -76,6 +76,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	sbSizer5->Add( cycleVddOnConnectionControl, 0, wxALL, 5 );
 	
 	leaveTargetPoweredControl = new wxCheckBox( fInterfacePanel, wxID_ANY, wxT("Leave target powered on exit"), wxDefaultPosition, wxDefaultSize, 0 );
+	leaveTargetPoweredControl->SetValue(true); 
 	leaveTargetPoweredControl->SetToolTip( wxT("BDM supplied Target Vdd is left on when application is closed") );
 	
 	sbSizer5->Add( leaveTargetPoweredControl, 0, wxALL, 5 );

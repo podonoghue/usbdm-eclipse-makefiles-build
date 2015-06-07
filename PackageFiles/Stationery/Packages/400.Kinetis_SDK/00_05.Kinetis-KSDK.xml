@@ -95,6 +95,13 @@
             <value>_DEBUG=1</value>
             <value>BOARD_DEBUG_UART_BAUD=115200</value>
          </projectOption>
+         <!-- KSDK Assume GNU Extensions for GCC C and C++-->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.misc.language" config="debug">
+            <value>net.sourceforge.usbdm.gnu.c.compiler.option.misc.language.gnu99</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.misc.language" config="debug">
+            <value>net.sourceforge.usbdm.gnu.cpp.compiler.option.misc.language.gnupp98</value>
+         </projectOption>
          <!-- Turn off Extra warnings -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.warnings.extrawarn">
             <value>&quot;false&quot;</value>

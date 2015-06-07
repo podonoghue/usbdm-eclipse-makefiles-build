@@ -9,7 +9,9 @@
 #define JS16_BOOTLOADER_H_
 #include <string.h>
 
+#include "USBDM_API.h"
 #include "ICP.h"
-ICP_ErrorType ProgramFlash(std::string hexFileName);
+
+USBDM_ErrorCode ProgramDevice(std::string hexFileName);
 
 #endif /* JS16_BOOTLOADER_H_ */

@@ -311,7 +311,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::OnSetTimeout(wxCommandEvent& WXUNUSED(event)) {
     unsigned long int value = bdmInterface->getConnectionTimeout();
-    wxTextEntryDialog dlg(this, "Enter Timeout value in seconds\n0 means indefinite wait", "Timeout Value", wxString::Format("%d", value));
+    wxTextEntryDialog dlg(this, "Enter Timeout value in seconds\n0 means indefinite wait", "Timeout Value", wxString::Format("%lu", value));
     if (dlg.ShowModal() ==  wxID_OK) {
        wxString s = dlg.GetValue();
        if (!s.ToULong(&value, 10)) {

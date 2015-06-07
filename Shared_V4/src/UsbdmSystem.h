@@ -76,7 +76,7 @@ public:
     *
     * @param path to append to directory
     *
-    * @return directory or NULL if failed
+    * @return path or NULL if failed
     */
    static std::string getApplicationPath(const std::string &path);
    /*
@@ -84,7 +84,7 @@ public:
     *
     * @param path to append to directory
     *
-    * @return directory or NULL if failed
+    * @return path or NULL if failed
     */
    static std::string getResourcePath(const std::string &path);
    /*
@@ -93,7 +93,7 @@ public:
     *
     * @param path to append to directory
     *
-    * @return directory or NULL if failed
+    * @return path or NULL if failed
     *
     * @note The configuration directory will be created if it doesn't already exist.
     */
@@ -140,6 +140,13 @@ public:
     */
    static void milliSleep(int milliSeconds);
 
+   /* Gets string describing a USBDM error code
+    *
+    * @param errorCode - error code returned from USBDM API routine.
+    *
+    * @return - ptr to static string describing the error.
+    */
+   static const char *getErrorString(unsigned errorCode);
 
    enum {
         BYTE_ADDRESS    = (0<<0),  // Addresses identify a byte in memory

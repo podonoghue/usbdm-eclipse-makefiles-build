@@ -104,11 +104,18 @@ bool JS16_BootloaderApp::OnInit(void) {
    if (!wxApp::OnInit()) {
       return false;
    }
+
+   AppSettings settings("JS16_Bootloader.cfg", "JB16 Bootloader");
+   settings.load();
+
    // Create the main application window
    dialogue = new MainDialogue(NULL);
    SetTopWindow(dialogue);
    dialogue->ShowModal();
+   dialogue->saveSettings(settings);
    dialogue->Destroy();
+
+   settings.save();
 
    return true;
 }

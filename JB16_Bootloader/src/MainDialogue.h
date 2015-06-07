@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include "BootloaderDialogueSkeleton.h"
+#include "AppSettings.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -36,6 +37,7 @@ class MainDialogue : public BootloaderDialogueSkeleton
    protected:
       wxString             customFilename;
       wxString             customPath;
+      wxString             defaultDirectory;
 
       virtual void OnRebootButtonClick( wxCommandEvent& event );
       virtual void OnProgramButtonClick( wxCommandEvent& event );
@@ -49,6 +51,8 @@ class MainDialogue : public BootloaderDialogueSkeleton
       MainDialogue( wxWindow* parent);
       virtual ~MainDialogue();
 
+      void loadSettings(const AppSettings &settings);
+      void saveSettings(AppSettings &settings);
 };
 
 #endif //__NONAME_H__

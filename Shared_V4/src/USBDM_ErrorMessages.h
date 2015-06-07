@@ -30,6 +30,10 @@
 #ifndef USBDMERRORMESSAGES_H_
 #define USBDMERRORMESSAGES_H_
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 //! Error codes returned from BDM routines and BDM commands.
 //!
 typedef enum  {
@@ -144,10 +148,8 @@ typedef enum  {
  SFILE_RC_ELF_WRONG_TARGET                     = 206 , //!< ELF is intended for another target
 } USBDM_ErrorCode;
 
-#if defined(USBDM_DLL_EXPORTS)
-// Only available internally to USBDM library
-CPP_DLL_LOCAL
-extern const char *getErrorName(unsigned int error);
+#if defined __cplusplus
+}
 #endif
 
 #endif /* USBDMERRORMESSAGES_H_ */

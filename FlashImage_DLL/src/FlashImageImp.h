@@ -19,10 +19,10 @@ class FlashImageImp : public FlashImage {
    friend EnumeratorImp;
 
 protected:
-   static const int                  PageBitOffset =  (15-sizeof(uint8_t));  // 2**14 = 16K pages
-   static const unsigned             PageSize      =  (1U<<PageBitOffset);
-   static const int                  PageMask      =  (PageSize-1U);
-   static const int                  maxSrecSize   = (1<<4);//! Maximum size of a S-record (2^N)
+   static const int                  PAGE_BIT_OFFSET =  (15-sizeof(uint8_t));  // 2**14 = 16K pages
+   static const unsigned             PAGE_SIZE       =  (1U<<PAGE_BIT_OFFSET);
+   static const int                  PAGE_MASK       =  (PAGE_SIZE-1U);
+   static const int                  MAX_SREC_SIZE   =  (1<<5);//! Maximum size of a S-record (2^N)
 
 protected:
    TargetType_t                      targetType;
@@ -53,8 +53,6 @@ public:
    virtual void                  printMemoryMap();
    virtual unsigned              getByteCount() const;
    virtual const std::string    &getSourcePathname() const;
-   virtual MemoryPagePtr         getmemoryPage(uint32_t pageNum);
-   virtual MemoryPagePtr         allocatePage(uint32_t pageNum);
    virtual USBDM_ErrorCode       loadFile(const std::string &filePath, bool clearBuffer=true);
    virtual USBDM_ErrorCode       saveFile(const std::string &filePath, bool discardFF=true);
    virtual uint8_t               getValue(uint32_t address);
@@ -63,11 +61,17 @@ public:
    virtual void                  dumpRange(uint32_t startAddress, uint32_t endAddress);
    virtual USBDM_ErrorCode       loadData(uint32_t bufferSize, uint32_t address, const uint8_t  data[], bool dontOverwrite = false);
    virtual USBDM_ErrorCode       loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false);
+   virtual unsigned              getFirstAllocatedAddress() { return firstAllocatedAddress; }
+   virtual unsigned              getLastAllocatedAddress()  { return lastAllocatedAddress; }
+   virtual void                  fill(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);
+   virtual void                  fillUnused(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);
 
 protected:
    static const char*      get_pFlagsName(unsigned int flags);
    static const char*      get_ptTypeName(unsigned int type);
 
+   virtual MemoryPagePtr   getmemoryPage(uint32_t pageNum);
+   virtual MemoryPagePtr   allocatePage(uint32_t pageNum);
    uint32_t                targetToNative(uint32_t &);
    uint16_t                targetToNative(uint16_t &);
    int32_t                 targetToNative(int32_t &);

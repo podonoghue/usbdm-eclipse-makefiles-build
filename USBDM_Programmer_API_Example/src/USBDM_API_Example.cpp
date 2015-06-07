@@ -31,7 +31,7 @@ void check(USBDM_ErrorCode rc, const char *file = NULL, unsigned lineNum = 0) {
       return;
    }
    char buff[1000];
-   snprintf(buff, sizeof(buff), "Failed, [%s:#%4d] Reason= %s", file, lineNum,  USBDM_GetErrorString(rc));
+   snprintf(buff, sizeof(buff), "Failed, [%s:#%4d] Reason= %s", file, lineNum,  UsbdmSystem::getErrorString(rc));
    fprintf(stderr, "%s\n", buff);
    UsbdmSystem::Log::print("%s\n", buff);
    throw MyException(buff);
@@ -94,7 +94,7 @@ int main(void) {
       FlashProgrammerPtr flashProgrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
 
       fprintf(stderr, "Setting programmer device data \'%s\'\n", deviceInterface->getCurrentDevice()->getTargetName().c_str());
-      CHECK(flashProgrammer->setDeviceData(*deviceInterface->getCurrentDevice()));
+      CHECK(flashProgrammer->setDeviceData(deviceInterface->getCurrentDevice()));
 
       fprintf(stderr, "Initialising BDM interface\n");
       CHECK(bdmInterface->initBdm());

@@ -64,6 +64,7 @@ using namespace std;
 #include "NumberTextEditCtrl.h"
 #include "Common.h"
 #include "Utils.h"
+#include "ProgressDialogueFactory.h"
 
 const char *logFilename("FirmwareChanger.log");
 const char *configFileName("FirmwareChanger");
@@ -120,58 +121,13 @@ const char *convertStringToUtf(const wxString &str) {
    return utfBuffer;
 }
 
-#if 0
-/*! Convert a single character ('0'-'9', 'a'-'f' or 'A'-'F') into a hex value
- *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
- *
- * @return - a value in the range 0 to 15
- */
-unsigned int hex1ToDecimal(char **ptr) {
-   uint8_t data = *(*ptr)++;
-   if ((data >= '0') && (data <= '9'))
-      return data - '0';
-   if ((data >= 'a') && (data <= 'f'))
-      return data - 'a' + 10;
-   if ((data >= 'A') && (data <= 'F'))
-      return data - 'A' + 10;
-   return 0;
-}
-
-/*! Convert two characters ('0'-'9', 'a'-'f' or 'A'-'F') into a hex value
- *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
- *
- * @return - a value in the range 0 to 255
- */
-unsigned int hex2ToDecimal( char **ptr) {
-   int data  = hex1ToDecimal(ptr);
-   data      = data * 16 + hex1ToDecimal(ptr);
-   return data;
-}
-
-/*! Convert four characters ('0'-'9', 'a'-'f' or 'A'-'F') into a hex value
- *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
- *
- * @return - a value in the range 0 to 65535
- */
-unsigned int hex4ToDecimal( char **ptr) {
-   int data  = hex1ToDecimal(ptr);
-   data      = data * 16 + hex1ToDecimal(ptr);
-   data      = data * 16 + hex1ToDecimal(ptr);
-   data      = data * 16 + hex1ToDecimal(ptr);
-   return data;
-}
-#endif
-
 //! Parses Filename
 //!
 const char *File_ParseTitle(char *Filename, char *Title, int MaxTitle) {
    return "A Title";
 }
 
-void bootloaderDialogue::dumpFile() {
+void FirmwareChangerDialogue::dumpFile() {
    LOGGING_Q;
 
    uint32_t addr;
@@ -179,7 +135,7 @@ void bootloaderDialogue::dumpFile() {
    for (addr = flashImageDescription.firstAddr; addr < flashImageDescription.lastAddr; addr++) {
       if (((addr & 0x001F) == 0) || (addr == flashImageDescription.firstAddr))
          log.print("%4.4X:", addr);
-      log.print("%2.2X", flashImageDescription.flashImage[addr]);
+      log.print("%2.2X", flashImage->getValue(addr));
       if (((addr & 0x001FU) == 0x1FU) && (addr != flashImageDescription.lastAddr-1U))
          log.print("\n");
    }
@@ -191,31 +147,32 @@ void bootloaderDialogue::dumpFile() {
 //! @param serialNumber - New serial number for device
 //!
 //!
-void bootloaderDialogue::setSerialNumber(const wxString &serialNumber) {
+void FirmwareChangerDialogue::setSerialNumber(const wxString &serialNumber) {
    LOGGING;
 
-   if (!flashImageDescription.serialNumberPresent)
+   if (!flashImageDescription.serialNumberPresent) {
       return;
-
-   uint8_t  ICP_Offset             = flashImageDescription.flashImage[flashImageDescription.protectAddr-2]; // Offset to end of ICP block
-   uint16_t ICP_Address            = flashImageDescription.protectAddr-ICP_Offset-sizeof(ICP_dataType);     // Address of ICP block
-   uint16_t SN_Address             = ICP_Address + (intptr_t)&ICP_data.serialNumber - (intptr_t)&ICP_data;
-   uint16_t Checksum_Address       = flashImageDescription.protectAddr-1;
-   int maxSerialNumberLength  = sizeof(ICP_data.serialNumber);
+   }
+   uint8_t  ICP_Offset       = flashImage->getValue(flashImageDescription.protectAddr-2);         // Offset to end of ICP block
+   uint16_t ICP_Address      = flashImageDescription.protectAddr-ICP_Offset-sizeof(ICP_dataType); // Address of ICP block
+   uint16_t SN_Address       = ICP_Address + (intptr_t)&ICP_data.serialNumber - (intptr_t)&ICP_data;
+   uint16_t Checksum_Address = flashImageDescription.protectAddr-1;
 
    // Patch image with serial #
-   strncpy((char*)&flashImageDescription.flashImage[SN_Address], serialNumber.ToUTF8(), maxSerialNumberLength);
+   uint8_t buff[sizeof(ICP_data.serialNumber)];
+   strncpy((char*)buff, serialNumber.ToUTF8(), sizeof(ICP_data.serialNumber));
+   flashImage->loadData(sizeof(ICP_data.serialNumber), SN_Address, buff);
 
    // Fix checksum
    uint8_t checkSum = 0;
    for (int addr = ICP_data.flashStart; addr < Checksum_Address; addr++) {
-      checkSum += flashImageDescription.flashImage[addr];
+      checkSum += flashImage->getValue(addr);
    }
    log.print("Serial # address  = 0x%4X\n", SN_Address);
    log.print("Checksum          = 0x%2X\n", checkSum);
-   log.print("Original checksum = 0x%2X\n", flashImageDescription.flashImage[Checksum_Address]);
+   log.print("Original checksum = 0x%2X\n", flashImage->getValue(Checksum_Address));
 
-   flashImageDescription.flashImage[Checksum_Address] = checkSum;
+   flashImage->setValue(Checksum_Address, checkSum);
    flashImageDescription.serialNumber = serialNumber;
 }
 
@@ -225,21 +182,25 @@ void bootloaderDialogue::setSerialNumber(const wxString &serialNumber) {
 //!
 //! @return success/fail
 //!
-bool bootloaderDialogue::consistencyCheck(unsigned int protectAddress) {
+bool FirmwareChangerDialogue::consistencyCheck(unsigned int protectAddress) {
    LOGGING;
 
-   uint8_t  ICP_Offset  = flashImageDescription.flashImage[protectAddress-2]; // Offset to end of ICP block
-   uint16_t ICP_Address = protectAddress-ICP_Offset-sizeof(ICP_dataType);     // Address of ICP block
-   unsigned addr;
+   uint8_t  ICP_Offset  = flashImage->getValue(protectAddress-2);         // Offset to end of ICP block
+   uint16_t ICP_Address = protectAddress-ICP_Offset-sizeof(ICP_dataType); // Address of ICP block
 
    // Copy ICP data from flash image
-   memcpy(&ICP_data, flashImageDescription.flashImage+ICP_Address, sizeof(ICP_data));
+
+   uint8_t buff[sizeof(ICP_dataType)];
+   for (unsigned index=0; index<sizeof(ICP_dataType); index++) {
+      buff[index] = flashImage->getValue(ICP_Address+index);
+   }
+   memcpy(&ICP_data, buff, sizeof(ICP_data));
 
    // Swap Endian
-   ICP_data.flashStart        = (ICP_data.flashStart<<8)        +
-                                (ICP_data.flashStart>>8);
-   ICP_data.userDetectICP     = (ICP_data.userDetectICP<<8)     +
-                                (ICP_data.userDetectICP>>8);
+   ICP_data.flashStart        = ((ICP_data.flashStart<<8) & 0xFF00) +
+                                ((ICP_data.flashStart>>8) & 0x00FF);
+   ICP_data.userDetectICP     = ((ICP_data.userDetectICP<<8) & 0xFF00) +
+                                ((ICP_data.userDetectICP>>8) & 0x00FF);
 
    // No serial # prior to V3.5
    flashImageDescription.serialNumberPresent = ICP_data.softwareVersion >= 0x35;
@@ -250,12 +211,13 @@ bool bootloaderDialogue::consistencyCheck(unsigned int protectAddress) {
       memcpy((char*)ICP_data.serialNumber, dummySerialNumber, sizeof(dummySerialNumber));
    }
    unsigned char checkSum = 0;
-   for (addr = ICP_data.flashStart; addr < protectAddress-1; addr++) {
-      checkSum += flashImageDescription.flashImage[addr];
+   for (unsigned addr = ICP_data.flashStart; addr < protectAddress-1; addr++) {
+      checkSum += flashImage->getValue(addr);
    }
-   checkSum -= flashImageDescription.flashImage[protectAddress-1];
+   checkSum -= flashImage->getValue(protectAddress-1);
 
-   log.print(  "flashStart     = %4.4X\n"
+   log.printq(
+           "flashStart     = %4.4X\n"
            "userDetectICP  = %4.4X\n"
            "checksum       = %2.2X\n",
            ICP_data.flashStart,
@@ -295,7 +257,12 @@ bool bootloaderDialogue::consistencyCheck(unsigned int protectAddress) {
 //! @return true - ICP data structure initialised from the Flash image
 //!         false - image not valid
 //!
-bool bootloaderDialogue::getICPData(void) {
+bool FirmwareChangerDialogue::getICPData(void) {
+   LOGGING;
+
+   flashImageDescription.firstAddr = flashImage->getFirstAllocatedAddress();
+   flashImageDescription.lastAddr  = flashImage->getLastAllocatedAddress();
+
 // There are two possible image formats (JMxx & UF32) and no way to easily tell them apart!
    const unsigned int JMxxProtectAddress = 0xFC00;  // Start of protected area of JBxx Flash
    const unsigned int UF32ProtectAddress = 0xF800;  // Start of protected area of UF32 Flash
@@ -304,86 +271,31 @@ bool bootloaderDialogue::getICPData(void) {
           consistencyCheck(UF32ProtectAddress);
 }
 
-//!   Load a Freescale S-record file into the buffer
-//!
-//! @param filepath    : path to file
-//!
-int bootloaderDialogue::loadS1S9File(const wxString &filepath) {
+/*
+ *  Load flash image & update display
+ *
+ *  @param path - Path to file to load
+ *
+ *  @return BDM_RC_OK on success
+ *  On failure a dialogue has already been displayed
+ */
+bool FirmwareChangerDialogue::loadFlashImageFile(wxString path) {
    LOGGING;
-
-   FILE *fp = fopen(filepath.To8BitData(), "rt");
-
-   fileLoaded = false;
-   if (fp == NULL) {
-      log.print("Failed to open input file \"%s\"\n", (const char *)filepath.To8BitData());
-      return FLASH_ERR_FAIL;
-   }
-   log.print("Processing input file \"%s\"\n", (const char *)filepath.To8BitData());
-   int rc =  loadS1S9File(fp);
-   fclose(fp);
-   if (rc == FLASH_ERR_OK) {
-      filename = filepath;
-   }
-   return  rc;
-}
-
-//!   Load a Freescale S-record file into the buffer
-//!
-//!   Minimal error checking (file open etc, no S-record validity checks). \n
-//!   A global buffer flashImageDescription is used.
-//!   The buffer is cleared to 0xFF before loading \n
-//!   flashImageDescription is updated appropriately
-//!
-//! \brief Load a Freescale S1S9 file into the flash image buffer
-//!
-//! @param fp : handle of already opened file
-//!
-int bootloaderDialogue::loadS1S9File(FILE *fp) {
-   LOGGING;
-   char *ptr;
-   unsigned int  addr;
-   unsigned int  size;
-   unsigned int  data;
-   char buffer[200];
-   uint16_t  firstAddr = 0xFFFF;
-   uint16_t  lastAddr  = 0x0000;
-   wxString filename;
-
-   filename   = wxEmptyString;
-   fileLoaded = false;
 
    // Clear File information
-   fileInformationStaticTextControl->SetLabel(wxEmptyString);
+   filename   = wxEmptyString;
+   filePath   = wxEmptyString;
+   fileInformationStaticText->SetLabel(wxEmptyString);
 
-   memset(flashImageDescription.flashImage, 0xFF, sizeof(flashImageDescription.flashImage));
+   flashImage.reset();
+   flashImage = FlashImageFactory::createFlashImage(T_HCS08);
 
-   while (fgets(buffer, sizeof(buffer)-1, fp) != NULL) {
-      //log.print("Input:\"%s\"\n",buffer);
-      ptr = buffer;
-      if ((*ptr++ != 'S') || (*ptr++ != '1'))
-         continue;
-      size = hex2ToDecimal( &ptr );
-      addr = hex4ToDecimal( &ptr );
-      //log.print("(%2.2X)%4.4X:",size,addr);
-      size -= 3;
-      while (size-->0){
-         data = hex2ToDecimal( &ptr );
-         //log.print("%2.2X",data);
-         //if (addr >= ProtectAddress)
-         //   continue;
-         if (addr < firstAddr)
-            firstAddr = addr;
-         if (addr > lastAddr)
-            lastAddr = addr;
-         flashImageDescription.flashImage[addr++] = data;
-      }
-      //log.print("\n");
-   }
-   flashImageDescription.lastAddr        = lastAddr;
-   flashImageDescription.firstAddr       = firstAddr;
+   bool isOK = (flashImage->loadFile((const char *)path.c_str()) == BDM_RC_OK) && getICPData();
 
    // Extract the ICP information from the image
-   if (!getICPData()) {
+   if (!isOK) {
+      log.error("Failed to load \'%s\'\n", (const char *)path.c_str());
+      flashImage.reset();
       wxMessageBox(_("Flash Image is invalid.\n"
                      "File is incorrect or corrupt?"),
                    _("Flash File Format Error"),
@@ -392,54 +304,40 @@ int bootloaderDialogue::loadS1S9File(FILE *fp) {
       return FLASH_ERR_FAIL;
    }
    wxString hardwareDescription(getBriefHardwareDescription(flashImageDescription.hardwareVersion), wxConvUTF8);
-
-   //   dumpFile(&flashImageDescription);
    wxString fileInformation;
-   fileInformation.Printf( (wxFormatString)_(
-            "Serial # =\n"
-            "  %s\n\n"
-            "Hardware Version =\n"
-            "  %s\n\n"
-            "Software Version = %d.%d\n"
-#ifdef LOG
-            "Flash Start     \t\t = 0x%4.4X\n"
-            "Protect Address   \t = 0x%4.4X\n"
-            "Code Start Address\t = 0x%4.4X\n"
-            "Code End Address  \t = 0x%4.4X\n"
-            "UserDetectICP()   \t = 0x%4.4X\n"
-#endif
-            ),
-            (const char *)flashImageDescription.serialNumber.c_str(),
-            (const char *)hardwareDescription.c_str(),  // hardware version of this image (from ICP)
-            flashImageDescription.softwareVersion>>4,   // software version of this image (from ICP)
-            flashImageDescription.softwareVersion&0x0F
-#ifdef LOG
-            ,
-            flashImageDescription.flashStart,            // start of user flash area (from ICP)
-            flashImageDescription.protectAddr,           // deduced start of protected area
-            flashImageDescription.firstAddr,             // first non-0xFF address
-            flashImageDescription.lastAddr,              // last non-0xFF address
-            flashImageDescription.userDetectICP          // address of userDetectICP() routine in flash
-#endif
-   );
-//   fileInformationStaticTextControl->SetLabelText(fileInformation);
-   fileInformationStaticTextControl->SetLabel(fileInformation);
+
+   fileInformation.Printf("Serial # = \n  %s\n",              (const char *)flashImageDescription.serialNumber.c_str());
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Hardware Version =\n  %s\n",       (const char *)hardwareDescription.c_str());
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Software Version\t = %d.%d\n",     flashImageDescription.softwareVersion>>4, flashImageDescription.softwareVersion&0x0F);
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Flash Start   \t = 0x%4.4X\n",     flashImageDescription.flashStart);
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Protect Address   \t = 0x%4.4X\n", flashImageDescription.protectAddr);
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Code Start Address\t = 0x%4.4X\n", flashImageDescription.firstAddr);
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("Code End Address\t = 0x%4.4X\n",   flashImageDescription.lastAddr);
+   fileInformationStaticText->AppendText(fileInformation);
+   fileInformation.Printf("UserDetectICP()   \t = 0x%4.4X\n", flashImageDescription.userDetectICP);
+   fileInformationStaticText->AppendText(fileInformation);
+
    parseSerialNumber(flashImageDescription.serialNumber, serialNumberPrefix);
-   fileLoaded = true;
-   if (autoSequence && !autoUpdateBdm) {
+   if (autoSequenceFlag && !autoUpdateBdm) {
       serialNumberToTextControl();
    }
    else {
-      serialNumberTextControl->ChangeValue(flashImageDescription.serialNumber);
+      serialNumberText->ChangeValue(flashImageDescription.serialNumber);
    }
-   return FLASH_ERR_OK;
+   return true;
 }
 
 //! Open a single USBDM device
 //!
 //! @return error code
 //!
-int bootloaderDialogue::openSingleDevice(void) {
+int FirmwareChangerDialogue::openSingleDevice(void) {
    LOGGING;
    unsigned int numDevices;
 
@@ -472,7 +370,7 @@ int bootloaderDialogue::openSingleDevice(void) {
 //!
 //! @return error code
 //!
-int bootloaderDialogue::readBdmInformation(USBDM_bdmInformation_t *info) {
+int FirmwareChangerDialogue::readBdmInformation(USBDM_bdmInformation_t *info) {
    LOGGING;
 
    int rc = openSingleDevice();
@@ -495,7 +393,7 @@ int bootloaderDialogue::readBdmInformation(USBDM_bdmInformation_t *info) {
 //!
 //! @return error code
 //!
-int bootloaderDialogue::readBdmSerialNumber(const char **bdmSerialNumber) {
+int FirmwareChangerDialogue::readBdmSerialNumber(const char **bdmSerialNumber) {
 
    int rc = openSingleDevice();
    if (rc != FLASH_ERR_OK) {
@@ -513,14 +411,13 @@ int bootloaderDialogue::readBdmSerialNumber(const char **bdmSerialNumber) {
 
 //! Open BDM with retry
 //!
-USBDM_ErrorCode reOpenBDM(void) {
+USBDM_ErrorCode FirmwareChangerDialogue::reOpenBDM(void) {
    LOGGING;
 
    int retry;
    unsigned numDevices;
    USBDM_ErrorCode rc = BDM_RC_NO_USBDM_DEVICE;
 
-   bootloaderDialogue::icpPulseCallBack(ICP_RC_OK);
    // Connection is lost so close it.
    USBDM_Close();
    log.print("reOpenBDM(): starting\n");
@@ -529,7 +426,6 @@ USBDM_ErrorCode reOpenBDM(void) {
    do {
       // Retry connection to allow for reboot and re-enumeration time
       // Uses USBDM_FindDevices() every time to avoid confusion with stale devices!
-      bootloaderDialogue::icpPulseCallBack(ICP_RC_OK);
       wxMilliSleep(100);
       log.print("reOpenBDM(): doing USBDM_FindDevices()\n");
       (void)USBDM_FindDevices(&numDevices);
@@ -541,38 +437,84 @@ USBDM_ErrorCode reOpenBDM(void) {
    return rc;
 }
 
-wxProgressDialog *bootloaderDialogue::progressDialogue = NULL;
-
-extern "C"
-ICP_ErrorCode_t bootloaderDialogue::icpProgressCallBack(ICP_ErrorCode_t status, unsigned int percent) {
-   if (percent >= 100)
-      percent = 99;
-   if (progressDialogue != NULL) {
-      progressDialogue->Update(percent);
+USBDM_ErrorCode FirmwareChangerDialogue::doBlockOperation(FlashImagePtr flashImage, uint32_t size, uint32_t startBlock, Operation op) {
+   LOGGING;
+   uint8_t buffer[1024];
+   memset(buffer, 0xFF, sizeof(buffer));
+   USBDM_ErrorCode rc = BDM_RC_OK;
+   while(size>0) {
+      uint32_t blockSize = size;
+      if (blockSize > sizeof(buffer)) {
+         blockSize = sizeof(buffer);
+      }
+      log.print("Doing block [0x%04X...0x%04X]\n", startBlock, startBlock+blockSize-1);
+      // Copy data to buffer
+      for (uint32_t index=0; index<blockSize; index++) {
+         buffer[index] = flashImage->getValue(startBlock+index);
+      }
+      // Program buffer
+      rc = op(startBlock, blockSize, buffer);
+      if (rc != BDM_RC_OK) {
+         log.print("Block [0x%04X...0x%04X] failed\n", startBlock, startBlock+blockSize-1);
+         return rc;
+      }
+      startBlock += blockSize;
+      size       -= blockSize;
    }
-   return status;
+   return rc;
 }
 
-extern "C"
-ICP_ErrorCode_t bootloaderDialogue::icpPulseCallBack(ICP_ErrorCode_t status) {
-   if (progressDialogue != NULL) {
-      progressDialogue->Pulse();
+USBDM_ErrorCode FirmwareChangerDialogue::doFlashOperation(Operation op) {
+   LOGGING_Q;
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
+   USBDM_ErrorCode progRc = BDM_RC_OK;
+   while (enumerator->isValid()) {
+      // Start address of block to program to flash
+      uint32_t startBlock = enumerator->getAddress();
+
+      // Find end of block to program
+      enumerator->lastValid();
+      uint32_t endBlock = enumerator->getAddress();
+      if (endBlock >= flashImageDescription.protectAddr) {
+         log.print("Limiting address to 0x%08X\n",(uint32_t) flashImageDescription.protectAddr-1);
+         endBlock = (uint32_t)flashImageDescription.protectAddr-1;
+      }
+      if (startBlock > endBlock) {
+         // Done
+         break;
+      }
+      uint32_t blockSize = endBlock - startBlock + 1;
+
+      //log.print("Block size = %4.4X (%d)\n", blockSize, blockSize);
+      if (blockSize>0) {
+         // Program block [startBlock..endBlock]
+         progRc = doBlockOperation(flashImage, blockSize, startBlock, op);
+         if (progRc != BDM_RC_OK) {
+            log.print("loadFile() - operation failed, Reason= %s\n", UsbdmSystem::getErrorString(progRc));
+            break;
+         }
+      }
+      // Move to start of next occupied range
+      enumerator->nextValid();
    }
-   return status;
+   return progRc;
 }
 
 //! \brief Update / verify Firmware
 //!
-//! @param flashImage     - The image to program/verify into the flash
 //! @param updateFirmware - True to update firmware before verifying
 //!
-int bootloaderDialogue::doFirmware(int updateFirmware) {
+int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
    LOGGING;
 
    USBDM_Version_t USBDM_Version;
    int  rc;
    USBDM_ErrorCode bdm_rc = BDM_RC_OK;
-   ICP_ErrorCode_t icp_rc = ICP_RC_OK;
+   USBDM_ErrorCode icp_rc = BDM_RC_OK;
+
+   ProgressDialoguePtr callBack = ProgressDialogueFactory::create("Accessing Target", flashImage->getByteCount());
+
+   USBDM_ICP_SetCallback(callBack.get());
 
    rc = openSingleDevice();
    if (rc != FLASH_ERR_OK) {
@@ -612,19 +554,12 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
       return FLASH_ERR_CANCEL;
    }
 #endif
-   wxProgressDialog pd(_("Accessing BDM"),
-         _(""),
-         100,
-         this,
-         wxPD_APP_MODAL|wxPD_ELAPSED_TIME
-   );
-   progressDialogue = &pd;
 
    try {
       bdm_rc = BDM_RC_OK;
       if (USBDM_Version.bdmSoftwareVersion != 0xFF) { // Not already in ICP mode
-         progressDialogue->Update(0, _("Rebooting to ICP mode..."));
          log.print("doFirmware(): Doing ICP reboot of BDM\n");
+         callBack->update(0, "Rebooting to ICP mode...");
          // Cause Target to reboot into ICP mode (ignored if already in ICP mode)
          USBDM_RebootToICP();
          int getYesNo = wxNO;
@@ -661,31 +596,24 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
       }
       if (updateFirmware) {
          // Erase Flash image area (ICP area is protected)
-         USBDM_ICP_SetCallback(icpProgressCallBack);
-         progressDialogue->Update(0, _("Erasing BDM Firmware..."));
+         callBack->update(0, "Erasing BDM Firmware...");
          log.print("doFirmware(): Erasing\n");
-         icp_rc = USBDM_ICP_Erase( flashImageDescription.firstAddr,
-               flashImageDescription.protectAddr-flashImageDescription.firstAddr );
-         if (icp_rc != ICP_RC_OK) {
+         icp_rc = USBDM_ICP_Erase( flashImageDescription.firstAddr, flashImageDescription.protectAddr-flashImageDescription.firstAddr );
+         if (icp_rc != BDM_RC_OK) {
             log.print("doFirmware(): Erasing failed\n");
             errMessage = _("Failed to erase\r\n");
             throw FLASH_ERR_FAIL;
          }
-         //dumpFile(flashImageDescription);
-         // Program the new code
-         USBDM_ICP_SetCallback(icpProgressCallBack);
-         progressDialogue->Update(0, _("Programming BDM Firmware..."));
+         callBack->update(0, "Programming BDM Firmware...");
          log.print("doFirmware(): Programming\n");
-         icp_rc = USBDM_ICP_Program( flashImageDescription.firstAddr,
-               flashImageDescription.protectAddr-flashImageDescription.firstAddr,
-               &flashImageDescription.flashImage[flashImageDescription.firstAddr] );
-         if (icp_rc != ICP_RC_OK) {
+         icp_rc = doFlashOperation(USBDM_ICP_Program);
+         if (icp_rc != BDM_RC_OK) {
             log.print("doFirmware(): Programming failed\n");
             errMessage = _("Programming Failed\r\n");
             throw FLASH_ERR_FAIL;
          }
       }
-      progressDialogue->Update(0, _("Verifying BDM Firmware..."));
+      callBack->update(0, "Verifying BDM Firmware...");
       // Verify the firmware
       log.print("doFirmware(): Verifying\n");
 #ifdef DEBUG_VER
@@ -693,15 +621,12 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
          log.print("doFirmware(): Verifying # %d\r\n", i);
 #endif
 #if !defined(DONT_VERIFY)
-         USBDM_ICP_SetCallback(icpProgressCallBack);
-         icp_rc = USBDM_ICP_Verify( flashImageDescription.firstAddr,
-               flashImageDescription.protectAddr-flashImageDescription.firstAddr,
-               &flashImageDescription.flashImage[flashImageDescription.firstAddr] );
-         if (icp_rc != ICP_RC_OK) {
-            log.print("doFirmware(): Verifying failed\n");
-            errMessage = _("Flash memory failed to verify. \r\n");
-            throw FLASH_ERR_FAIL;
-         }
+      icp_rc = doFlashOperation(USBDM_ICP_Verify);
+      if (icp_rc != BDM_RC_OK) {
+         log.print("doFirmware(): Verifying failed\n");
+         errMessage = _("Flash memory failed to verify. \r\n");
+         throw FLASH_ERR_FAIL;
+      }
 #endif
 #ifdef DEBUG_VER
       }
@@ -710,7 +635,7 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
    catch (...) {
       rc = FLASH_ERR_FAIL;
    }
-   progressDialogue->Update(0, _("Doing normal re-boot..."));
+   callBack->update(0, "Doing normal re-boot...");
    log.print("doFirmware(): Doing Normal reboot (ignore errors)\n");
    USBDM_ICP_Reboot();   // Cause Target to reboot into normal mode
    if (reOpenBDM() != BDM_RC_OK) {
@@ -725,11 +650,10 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
    }
    if (reOpenBDM() != BDM_RC_OK) {
       errMessage = _("Failed to re-open after 2nd reboot\r\n");
-      statusStaticTextControl->SetLabel(_("Status: Last flash operation failed"));
+      statusStaticText->SetLabel(_("Status: Last flash operation failed"));
       return FLASH_ERR_FAIL;
    }
-   progressDialogue->Close();
-   progressDialogue = NULL;
+   callBack->close();
    log.print("doFirmware() getting serial #\n");
 
    const char *buffer;
@@ -738,107 +662,56 @@ int bootloaderDialogue::doFirmware(int updateFirmware) {
 
    USBDM_Close();
 
-   statusStaticTextControl->SetLabel(_("Status: Last flash operation successful"));
+   statusStaticText->SetLabel(_("Status: Last flash operation successful"));
    log.print("doFirmware(): Successful\n");
 
    return rc;
 }
 
-/*
- * bootloaderDialogue type definition
- */
-IMPLEMENT_DYNAMIC_CLASS( bootloaderDialogue, wxDialog )
-
-/*
- * bootloaderDialogue event table definition
- */
-BEGIN_EVENT_TABLE( bootloaderDialogue, wxDialog )
-   EVT_BUTTON( ID_FILE_LOAD_BUTTON,             bootloaderDialogue::OnFileLoadButtonClick )
-   EVT_TEXT(   ID_SERIALNUM_TEXTCTRL,           bootloaderDialogue::OnSerialnumTextctrlTextUpdated )
-   EVT_TEXT(   ID_AUTO_SEQUENCE_TEXTCTRL,       bootloaderDialogue::OnAutoSequenceTextControlTextUpdated )
-
-//   EVT_TEXT(   ID_AUTO_SEQUENCE_TEXTCTRL,       bootloaderDialogue::OnAutosequenceTextctrlTextUpdated )
-   EVT_BUTTON( ID_READ_SERIAL_NUM_BUTTON,       bootloaderDialogue::OnReadSerialNumButtonClick )
-   EVT_CHECKBOX( ID_AUTO_SEQUENCE_CHECKBOX,     bootloaderDialogue::OnAutoSequenceCheckboxClick )
-   EVT_CHECKBOX( ID_AUTO_SELECT_FILE_CHECKBOX,  bootloaderDialogue::OnAutoUpdateBdmCheckboxClick )
-
-   EVT_BUTTON( ID_PROGRAM_FLASH_BUTTON,         bootloaderDialogue::OnProgramFlashButtonClick )
-   EVT_BUTTON( ID_VERIFY_FLASH_BUTTON,          bootloaderDialogue::OnVerifyFlashButtonClick )
-   EVT_BUTTON( ID_EXIT_BUTTON,                  bootloaderDialogue::OnExitButtonClick )
-END_EVENT_TABLE()
-
-/*
- * bootloaderDialogue constructors
- */
-bootloaderDialogue::bootloaderDialogue() {
+FirmwareChangerDialogue::FirmwareChangerDialogue( wxWindow* parent)
+  : FirmwareChangerSkeleton(parent) {
     Init();
 }
 
-bootloaderDialogue::bootloaderDialogue( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style ) {
-
-    Init();
-    Create(parent, id, caption, pos, size, style);
-}
-
 /*
- * bootloaderDialogue creator
+ * FirmwareChangerDialogue destructor
  */
-bool bootloaderDialogue::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style ) {
-   SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
-   wxDialog::Create( parent, id, caption, pos, size, style );
-   CreateControls();
-   if (GetSizer()) {
-      GetSizer()->SetSizeHints(this);
-   }
-   Centre();
-   return true;
-}
-
-/*
- * bootloaderDialogue destructor
- */
-bootloaderDialogue::~bootloaderDialogue() {
+FirmwareChangerDialogue::~FirmwareChangerDialogue() {
 }
 
 /*
  * Member initialisation
  */
-void bootloaderDialogue::Init() {
-   LOGGING;
+void FirmwareChangerDialogue::Init() {
+   LOGGING_E;
 
-   log.print("bootloaderDialogue::Init()\n");
+   autoSelectFirmwareCheckbox->SetValue(autoUpdateBdm);
 
-   loadSourceButtonControl          = NULL;
-   filenameStaticTextControl        = NULL;
-   serialNumberTextControl          = NULL;
-   readSerialNumberButtonControl    = NULL;
-   fileInformationStaticTextControl = NULL;
-   statusStaticTextControl          = NULL;
-   programFlashButtonControl        = NULL;
-   verifyButtonControl              = NULL;
-   exitButtonControl                = NULL;
-   autoSequenceControl              = NULL;
-   autoSelectFileControl            = NULL;
-   autoSequenceTextControl          = NULL;
+   serialNumberText->SetMaxLength(sizeof(ICP_data.serialNumber));
+   serialNumberText->SetValue(serialNumber);
+   serialNumberText->Enable(!autoSequenceFlag);
 
-   serialNumber                     = wxEmptyString;
-   serialNumberPrefix               = wxEmptyString;
-   autoSequence                     = false;
-   autoSequenceNumber               = 1;
-   autoUpdateBdm                    = false;
-   fileLoaded                       = false;
+   autoSequenceText->SetDecimalValue(autoSequenceNumber);
+   autoSequenceText->Enable(autoSequenceFlag);
+
+   autoSequenceCheckbox->SetValue(autoSequenceFlag);
+
+   if (autoSequenceFlag) {
+      serialNumberToTextControl();
+   }
 }
 
 //!
 //! @param settings      - Object to load settings from
 //!
-void bootloaderDialogue::loadSettings(const AppSettings &settings) {
+void FirmwareChangerDialogue::loadSettings(const AppSettings &settings) {
    LOGGING_E;
 
    autoUpdateBdm      = settings.getValue("autoUpdateBdm",          true);
-   autoSequence       = settings.getValue("autoSequence",           false);
+   autoSequenceFlag   = settings.getValue("autoSequence",           false);
    autoSequenceNumber = settings.getValue("autoSequenceNumber",     1);
-   serialNumber       = wxString(settings.getValue("serialNumber", "USBDM").c_str(), wxConvUTF8);
+   defaultDirectory   = settings.getValue("defaultDirectory",       "");
+   serialNumber       = settings.getValue("serialNumber",           "USBDM");
    parseSerialNumber(serialNumber, serialNumberPrefix);
 }
 
@@ -846,122 +719,27 @@ void bootloaderDialogue::loadSettings(const AppSettings &settings) {
 //!
 //! @param settings      - Object to save settings to
 //!
-void bootloaderDialogue::saveSettings(AppSettings &settings) {
+void FirmwareChangerDialogue::saveSettings(AppSettings &settings) {
    LOGGING_E;
 
    settings.addValue("autoUpdateBdm",      autoUpdateBdm);
-   settings.addValue("autoSequence",       autoSequence);
+   settings.addValue("autoSequence",       autoSequenceFlag);
    settings.addValue("autoSequenceNumber", autoSequenceNumber);
+   settings.addValue("defaultDirectory",   defaultDirectory);
    settings.addValue("serialNumber",       serialNumber.ToAscii());
-}
-
-/*
- * Control creation for bootloaderDialogue
- */
-void bootloaderDialogue::CreateControls() {
-   LOGGING_E;
-
-   bootloaderDialogue* itemDialog1 = this;
-
-   wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
-   itemDialog1->SetSizer(itemBoxSizer2);
-
-   //==========================================================================
-   wxStaticBox* itemStaticBoxSizer3Static = new wxStaticBox(itemDialog1, wxID_ANY, _("File to Load"));
-   wxStaticBoxSizer* itemStaticBoxSizer3 = new wxStaticBoxSizer(itemStaticBoxSizer3Static, wxVERTICAL);
-   itemBoxSizer2->Add(itemStaticBoxSizer3, 0, wxGROW|wxALL, 5);
-
-   wxBoxSizer* itemBoxSizer3a = new wxBoxSizer(wxHORIZONTAL);
-   itemStaticBoxSizer3->Add(itemBoxSizer3a, 0, wxGROW|wxALL, 5);
-
-   loadSourceButtonControl = new wxButton( itemDialog1, ID_FILE_LOAD_BUTTON, _("&Load Source File"), wxDefaultPosition, wxDefaultSize, 0 );
-   itemBoxSizer3a->Add(loadSourceButtonControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   autoSelectFileControl = new wxCheckBox( itemDialog1, ID_AUTO_SELECT_FILE_CHECKBOX, _("Auto select BDM firmware"), wxDefaultPosition, wxDefaultSize, 0 );
-   autoSelectFileControl->SetValue(autoUpdateBdm);
-   itemBoxSizer3a->Add(autoSelectFileControl, 0, wxALIGN_LEFT|wxALL|wxALIGN_CENTER_VERTICAL, 5);
-
-   filenameStaticTextControl = new wxStaticText( itemDialog1, wxID_STATIC, _("No file loaded"), wxDefaultPosition, wxDefaultSize, 0 );
-   itemStaticBoxSizer3->Add(filenameStaticTextControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   //==========================================================================
-   wxStaticBox* itemStaticBoxSizer6Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Serial Number"));
-   wxStaticBoxSizer* itemStaticBoxSizer6 = new wxStaticBoxSizer(itemStaticBoxSizer6Static, wxVERTICAL);
-   itemBoxSizer2->Add(itemStaticBoxSizer6, 0, wxGROW|wxALL, 5);
-
-   wxBoxSizer* itemBoxSizer6a = new wxBoxSizer(wxHORIZONTAL);
-   itemStaticBoxSizer6->Add(itemBoxSizer6a, 0, wxGROW|wxALL, 5);
-
-   serialNumberTextControl = new wxTextCtrl( itemDialog1, ID_SERIALNUM_TEXTCTRL, serialNumber, wxDefaultPosition, wxDefaultSize, 0 );
-   serialNumberTextControl->SetMaxLength(sizeof(ICP_data.serialNumber));
-   serialNumberTextControl->SetValue(serialNumber);
-   serialNumberTextControl->Enable(!autoSequence);
-   itemBoxSizer6a->Add(serialNumberTextControl, 1, wxEXPAND|wxALL, 5);
-
-   autoSequenceTextControl = new NumberTextEditCtrl( itemDialog1, ID_AUTO_SEQUENCE_TEXTCTRL, _(""), wxDefaultPosition, wxDefaultSize, 0 );
-   autoSequenceTextControl->SetMaxLength(5);
-   autoSequenceTextControl->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
-   autoSequenceTextControl->Enable(autoSequence);
-   autoSequenceTextControl->SetDecimalValue(autoSequenceNumber);
-   itemBoxSizer6a->Add(autoSequenceTextControl, 0, wxALL, 5);
-
-   wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-   itemStaticBoxSizer6->Add(itemBoxSizer6, 0, wxGROW|wxALL, 5);
-
-   readSerialNumberButtonControl = new wxButton( itemDialog1, ID_READ_SERIAL_NUM_BUTTON, _("Read from Device"), wxDefaultPosition, wxDefaultSize, 0 );
-   itemBoxSizer6->Add(readSerialNumberButtonControl, 1, wxALIGN_LEFT|wxALL, 5);
-
-   autoSequenceControl = new wxCheckBox( itemDialog1, ID_AUTO_SEQUENCE_CHECKBOX, _("Auto sequence"), wxDefaultPosition, wxDefaultSize, 0 );
-   autoSequenceControl->SetValue(autoSequence);
-   itemBoxSizer6->Add(autoSequenceControl, 0, wxALIGN_LEFT|wxALL|wxALIGN_CENTER_VERTICAL, 5);
-
-   //==========================================================================
-   wxStaticBox* itemStaticBoxSizer5Static = new wxStaticBox(itemDialog1, wxID_ANY, _("File Information"));
-   wxStaticBoxSizer* itemStaticBoxSizer5 = new wxStaticBoxSizer(itemStaticBoxSizer5Static, wxHORIZONTAL);
-   itemBoxSizer2->Add(itemStaticBoxSizer5, 0, wxGROW|wxALL, 5);
-
-   fileInformationStaticTextControl = new wxStaticText( itemDialog1, wxID_STATIC, _("Information about the loaded file"), wxDefaultPosition, wxSize(300, 200), 0 );
-   itemStaticBoxSizer5->Add(fileInformationStaticTextControl, 0, wxGROW|wxALL, 5);
-
-   //==========================================================================
-   statusStaticTextControl = new wxStaticText( itemDialog1, wxID_STATIC, _("Status: Idle"), wxDefaultPosition, wxDefaultSize, 0 );
-   itemBoxSizer2->Add(statusStaticTextControl, 0, wxGROW|wxALL, 5);
-
-   //==========================================================================
-   wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
-   itemBoxSizer2->Add(itemBoxSizer8, 0, wxGROW|wxALL, 5);
-
-   programFlashButtonControl = new wxButton( itemDialog1, ID_PROGRAM_FLASH_BUTTON, _("&Program Flash"), wxDefaultPosition, wxDefaultSize, 0 );
-   programFlashButtonControl->Enable(false);
-   itemBoxSizer8->Add(programFlashButtonControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   itemBoxSizer8->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   verifyButtonControl = new wxButton( itemDialog1, ID_VERIFY_FLASH_BUTTON, _("&Verify Flash"), wxDefaultPosition, wxDefaultSize, 0 );
-   verifyButtonControl->Enable(false);
-   itemBoxSizer8->Add(verifyButtonControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   itemBoxSizer8->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   exitButtonControl = new wxButton( itemDialog1, ID_EXIT_BUTTON, _("&Exit"), wxDefaultPosition, wxDefaultSize, 0 );
-   itemBoxSizer8->Add(exitButtonControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-   if (autoSequence) {
-      serialNumberToTextControl();
-   }
 }
 
 /*
  * Should we show tooltips?
  */
-bool bootloaderDialogue::ShowToolTips() {
+bool FirmwareChangerDialogue::ShowToolTips() {
     return true;
 }
 
 /*
  * Get bitmap resources
  */
-wxBitmap bootloaderDialogue::GetBitmapResource( const wxString& name ) {
+wxBitmap FirmwareChangerDialogue::GetBitmapResource( const wxString& name ) {
 
     wxUnusedVar(name);
     return wxNullBitmap;
@@ -970,7 +748,7 @@ wxBitmap bootloaderDialogue::GetBitmapResource( const wxString& name ) {
 /*
  * Get icon resources
  */
-wxIcon bootloaderDialogue::GetIconResource( const wxString& name ) {
+wxIcon FirmwareChangerDialogue::GetIconResource( const wxString& name ) {
 
     wxUnusedVar(name);
     return wxNullIcon;
@@ -979,18 +757,17 @@ wxIcon bootloaderDialogue::GetIconResource( const wxString& name ) {
 /*
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_FILE_LOAD_BUTTON
  */
-void bootloaderDialogue::OnFileLoadButtonClick( wxCommandEvent& event ) {
-   wxString caption = _("Choose a firmware file");
-   wxString wildcard = _("Hex files (*.sx,*.s1?)|*.sx;*.s1?|All Files|*");
-   wxString defaultDir = wxEmptyString;
-   wxString defaultFilename = wxEmptyString;
+void FirmwareChangerDialogue::OnLoadFirmwareButtonClick( wxCommandEvent& event ) {
+   wxString caption           = _("Choose a firmware file");
+   wxString wildcard          = _("Hex files (*.sx,*.s1?)|*.sx;*.s1?|All Files|*");
+   wxString defaultDir        = defaultDirectory;
+   wxString defaultFilename   = wxEmptyString;
    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_OPEN);
    if (dialog.ShowModal() == wxID_OK) {
-      loadS1S9File(dialog.GetPath());
-      if (fileLoaded) {
-         // Update so just the filename
-         wxString firmwareFilename = dialog.GetFilename();
-         filename = firmwareFilename;
+      int rc = loadFlashImageFile(dialog.GetPath());
+      if (rc == BDM_RC_OK) {
+         filename         = dialog.GetFilename();
+         defaultDirectory = dialog.GetDirectory();
       }
    }
    updateControls();
@@ -999,18 +776,18 @@ void bootloaderDialogue::OnFileLoadButtonClick( wxCommandEvent& event ) {
 /*
  * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
  */
-void bootloaderDialogue::OnSerialnumTextctrlTextUpdated( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnSerialnumTextctrlTextUpdated( wxCommandEvent& event ) {
 }
 
 /*
  * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
  */
-void bootloaderDialogue::OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event ) {
-   autoSequenceNumber = autoSequenceTextControl->GetDecimalValue();
+void FirmwareChangerDialogue::OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event ) {
+   autoSequenceNumber = autoSequenceText->GetDecimalValue();
    serialNumberToTextControl();
 }
 
-int bootloaderDialogue::readSerialNumber(void) {
+int FirmwareChangerDialogue::readSerialNumber(void) {
    const char *bdmDescription;
    int rc = readBdmSerialNumber(&bdmDescription);
    if (rc != FLASH_ERR_OK) {
@@ -1022,7 +799,7 @@ int bootloaderDialogue::readSerialNumber(void) {
       return rc;
    }
    serialNumber = convertUtfToString(bdmDescription);
-   serialNumberTextControl->ChangeValue(serialNumber);
+   serialNumberText->ChangeValue(serialNumber);
 
    textControlToSerialNumber();
    return rc;
@@ -1031,26 +808,26 @@ int bootloaderDialogue::readSerialNumber(void) {
 /*
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
  */
-void bootloaderDialogue::OnReadSerialNumButtonClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnReadSerialNumButtonClick( wxCommandEvent& event ) {
    if ((readSerialNumber() == FLASH_ERR_OK) &&
-        autoSequence) {
+        autoSequenceFlag) {
       serialNumberToTextControl();
    }
 }
 
-void bootloaderDialogue::serialNumberToTextControl(void) {
+void FirmwareChangerDialogue::serialNumberToTextControl(void) {
    LOGGING;
 
    serialNumber  = serialNumberPrefix;
    serialNumber += wxString::Format(_("-%04d"), autoSequenceNumber);
-   serialNumberTextControl->SetValue(serialNumber);
-   log.print("bootloaderDialogue::serialNumberToTextControl(): s=\'%s\' p=\'%s\'\n",
+   serialNumberText->SetValue(serialNumber);
+   log.print("FirmwareChangerDialogue::serialNumberToTextControl(): s=\'%s\' p=\'%s\'\n",
          (const char *)serialNumber.c_str(),
          (const char *)serialNumberPrefix.c_str()
          );
 }
 
-void bootloaderDialogue::parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix) {
+void FirmwareChangerDialogue::parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix) {
    unsigned separatorIndex = serialNumber.length()-1;
    while (isdigit((char)serialNumber.at(separatorIndex))) {
       separatorIndex--;
@@ -1064,10 +841,10 @@ void bootloaderDialogue::parseSerialNumber(const wxString &serialNumber, wxStrin
    serialNumberPrefix = serialNumber.substr(0,separatorIndex+1);
 }
 
-void bootloaderDialogue::textControlToSerialNumber(void) {
+void FirmwareChangerDialogue::textControlToSerialNumber(void) {
    LOGGING_Q;
 
-   parseSerialNumber(serialNumberTextControl->GetValue(), serialNumberPrefix);
+   parseSerialNumber(serialNumberText->GetValue(), serialNumberPrefix);
    log.print(" s=\'%s\' p=\'%s\'\n",
          (const char *)serialNumber.c_str(),
          (const char *)serialNumberPrefix.c_str()
@@ -1077,11 +854,11 @@ void bootloaderDialogue::textControlToSerialNumber(void) {
 /*
  * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_BUTTON
  */
-void bootloaderDialogue::OnAutoSequenceCheckboxClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnAutoSequenceCheckboxClick( wxCommandEvent& event ) {
    LOGGING_Q;
-   autoSequence = event.IsChecked();
-   log.print(", value = %s\n", autoSequence?"True":"False");
-   if (autoSequence) {
+   autoSequenceFlag = event.IsChecked();
+   log.print(", value = %s\n", autoSequenceFlag?"True":"False");
+   if (autoSequenceFlag) {
       // Auto turned on
       // Create serial number from existing text + auto serial number
       textControlToSerialNumber();
@@ -1092,12 +869,13 @@ void bootloaderDialogue::OnAutoSequenceCheckboxClick( wxCommandEvent& event ) {
 
 char *firmwareFilepaths[100] = {0};
 
-int bootloaderDialogue::loadUpdateInformation() {
+int FirmwareChangerDialogue::loadUpdateInformation() {
    LOGGING;
    string flashImageListFile("FlashImages/FlashImagesList.txt");
-   string path = UsbdmSystem::getApplicationPath(flashImageListFile);
+   string path = UsbdmSystem::getResourcePath(flashImageListFile);
    FILE *fp = fopen(path.c_str(), "rt");
    if (fp == NULL) {
+      log.error("Failed to open \'%s\'\n", path.c_str());
       wxMessageBox(_("Unable to open file image configuration file.\n"
             "Please check that USBDM has been correctly installed."),
             _("Configuration error "),
@@ -1139,7 +917,7 @@ int bootloaderDialogue::loadUpdateInformation() {
    return FLASH_ERR_OK;
 }
 
-int bootloaderDialogue::doAutoUpdate() {
+int FirmwareChangerDialogue::doAutoUpdate() {
    LOGGING;
    USBDM_bdmInformation_t bdmInfo;
 
@@ -1155,11 +933,12 @@ int bootloaderDialogue::doAutoUpdate() {
       return rc;
    }
    unsigned bdmType = bdmInfo.ICPhardwareVersion & 0x3F;
+
    // Re-read the update file
    if (loadUpdateInformation() != FLASH_ERR_OK) {
       return FLASH_ERR_FAIL;
    }
-   log.print("bootloaderDialogue::autoLoadFile(): ICPhardwareVersion = %d (%s)\n", bdmType, getBriefHardwareDescription(bdmType));
+   log.print("FirmwareChangerDialogue::autoLoadFile(): ICPhardwareVersion = %d (%s)\n", bdmType, getBriefHardwareDescription(bdmType));
    if (bdmType > (sizeof(firmwareFilepaths)/sizeof(firmwareFilepaths[0])) ||
          (firmwareFilepaths[bdmType] == NULL)) {
       wxMessageBox(_("Unrecognised or unsupported BDM device   \n\n"
@@ -1171,9 +950,8 @@ int bootloaderDialogue::doAutoUpdate() {
                    );
       return FLASH_ERR_FAIL;
    }
-   FILE *fp = UsbdmSystem::openApplicationFile(firmwareFilepaths[bdmType]);
-   if (fp == NULL) {
-      wxMessageBox(_("The Flash update file cannot be opened.\n\n"
+   if (!loadFlashImageFile(UsbdmSystem::getResourcePath(firmwareFilepaths[bdmType]))) {
+      wxMessageBox(_("The Flash update file cannot be loaded.\n\n"
                      "Please check that USBDM has been correctly installed."),
                    _("Flash image error"),
                    wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
@@ -1181,36 +959,36 @@ int bootloaderDialogue::doAutoUpdate() {
                    );
       return FLASH_ERR_FAIL;
    }
-   rc = loadS1S9File(fp);
-   if (rc == FLASH_ERR_OK) {
-      // Get current serial number from device (if possible)
-      readSerialNumber();
-      autoUpdateBdm = true;
-   }
-   fclose(fp);
+
+   filename = firmwareFilepaths[bdmType];
+
+   // Get current serial number from device (if possible)
+   readSerialNumber();
+   autoUpdateBdm = true;
+
    return rc;
 }
 
-void bootloaderDialogue::updateControls(void) {
-   autoSelectFileControl->SetValue(autoUpdateBdm);
-   loadSourceButtonControl->Enable(!autoUpdateBdm);
-   autoSequenceTextControl->Enable(!autoUpdateBdm && autoSequence);
-   serialNumberTextControl->Enable(!autoUpdateBdm && !autoSequence);
-   readSerialNumberButtonControl->Enable(!autoUpdateBdm);
-   autoSequenceControl->Enable(!autoUpdateBdm);
-   programFlashButtonControl->Enable(fileLoaded);
-   verifyButtonControl->Enable(fileLoaded);
+void FirmwareChangerDialogue::updateControls(void) {
+   autoSelectFirmwareCheckbox->SetValue(autoUpdateBdm);
+   loadFirmwareButton->Enable(!autoUpdateBdm);
+   autoSequenceText->Enable(!autoUpdateBdm && autoSequenceFlag);
+   serialNumberText->Enable(!autoUpdateBdm && !autoSequenceFlag);
+   readSerialNumberButton->Enable(!autoUpdateBdm);
+   autoSequenceCheckbox->Enable(!autoUpdateBdm);
+   programFlashButton->Enable(flashImage != 0);
+   verifyButton->Enable(flashImage != 0);
    if (autoUpdateBdm) {
-      filenameStaticTextControl->SetLabel(_("Flash image file has been automatically selected"));
+      filenameStaticText->SetLabel(_("Flash image file has been automatically selected"));
    }
-   else if (fileLoaded) {
-      filenameStaticTextControl->SetLabel(filename);
+   else if (flashImage != 0) {
+      filenameStaticText->SetLabel(filename);
    }
    else {
-      filenameStaticTextControl->SetLabel(_("No file loaded"));
+      filenameStaticText->SetLabel(_("No file loaded"));
    }
    if (!autoUpdateBdm) {
-      if (autoSequence) {
+      if (autoSequenceFlag) {
          serialNumberToTextControl();
       }
       else {
@@ -1221,7 +999,7 @@ void bootloaderDialogue::updateControls(void) {
 
 //! Enable auto load
 //!
-void bootloaderDialogue::setAutoLoad(bool value) {
+void FirmwareChangerDialogue::setAutoLoad(bool value) {
    if (value || autoUpdateBdm) {
       doAutoUpdate();
       updateControls();
@@ -1231,11 +1009,10 @@ void bootloaderDialogue::setAutoLoad(bool value) {
 /*
  * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_BUTTON
  */
-void bootloaderDialogue::OnAutoUpdateBdmCheckboxClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnAutoSelectFirmwareCheckboxClick( wxCommandEvent& event ) {
    LOGGING_Q;
 
-   autoUpdateBdm = event.IsChecked();
-   log.print("bootloaderDialogue::OnAutoUpdateBdmCheckboxClick(), value = %s\n", autoUpdateBdm?"True":"False");
+   log.print("FirmwareChangerDialogue::OnAutoUpdateBdmCheckboxClick(), value = %s\n", event.IsChecked()?"True":"False");
    autoUpdateBdm = false;
    if (event.IsChecked()) {
       doAutoUpdate();
@@ -1246,16 +1023,16 @@ void bootloaderDialogue::OnAutoUpdateBdmCheckboxClick( wxCommandEvent& event ) {
 /*
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PROGRAM_FLASH_BUTTON
  */
-void bootloaderDialogue::OnProgramFlashButtonClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnProgramFlashButtonClick( wxCommandEvent& event ) {
 
    // Update in case BDM has changed
    if (autoUpdateBdm && (doAutoUpdate() != FLASH_ERR_OK)) {
       updateControls();
       return;
    }
-   setSerialNumber(serialNumberTextControl->GetValue());
+   setSerialNumber(serialNumberText->GetValue());
    int rc = doFirmware(true);
-   statusStaticTextControl->SetLabel(_("Status: Idle"));
+   statusStaticText->SetLabel(_("Status: Idle"));
    if (rc == FLASH_ERR_OK) {
       wxMessageBox(_("The update of the Firmware has completed successfully.\n\n"
                      "Presss OK to continue."),
@@ -1274,8 +1051,8 @@ void bootloaderDialogue::OnProgramFlashButtonClick( wxCommandEvent& event ) {
                    this
                    );
    }
-   if (autoSequence && !autoUpdateBdm) {
-      autoSequenceTextControl->SetDecimalValue(++autoSequenceNumber);
+   if (autoSequenceFlag && !autoUpdateBdm) {
+      autoSequenceText->SetDecimalValue(++autoSequenceNumber);
       serialNumberToTextControl();
    }
    updateControls();
@@ -1284,7 +1061,7 @@ void bootloaderDialogue::OnProgramFlashButtonClick( wxCommandEvent& event ) {
 /*
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_VERIFY_FLASH_BUTTON
  */
-void bootloaderDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
    int rc;
 
    // Update in case BDM has changed
@@ -1292,7 +1069,7 @@ void bootloaderDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
       updateControls();
       return;
    }
-   setSerialNumber(serialNumberTextControl->GetValue());
+   setSerialNumber(serialNumberText->GetValue());
 
 #ifdef DEBUG_REBOOT
    for (int i=0; i<DEBUG_REBOOT;i++) {
@@ -1304,10 +1081,10 @@ void bootloaderDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
       log.print("OnVerifyFlashButtonClick() - #%d OK\n", i);
    }
 #endif
-   statusStaticTextControl->SetLabel(_("Status: Idle"));
+   statusStaticText->SetLabel(_("Status: Idle"));
    if (rc == FLASH_ERR_OK) {
       wxMessageBox(_("The verification of the Firmware has completed successfully.\n\n"
-                     "Presss OK to continue."),
+                     "Press OK to continue."),
                    _("Firmware Verify Completed"),
                    wxOK|wxICON_INFORMATION|wxSTAY_ON_TOP|wxCENTER,
                    this
@@ -1328,14 +1105,14 @@ void bootloaderDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
 /*
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_EXIT_BUTTON
  */
-void bootloaderDialogue::OnExitButtonClick( wxCommandEvent& event ) {
+void FirmwareChangerDialogue::OnExitButtonClick( wxCommandEvent& event ) {
    EndModal(0);
 }
 
 class OpenLog {
 public:
    OpenLog() {
-      UsbdmSystem::Log::openLogFile("Flashprogrammer.log", "Flash Programmer");
+      UsbdmSystem::Log::openLogFile("FirmwareChanger.log", "Firmware Changer");
       UsbdmSystem::Log::setLoggingLevel(100);
    }
    ~OpenLog() {
@@ -1343,10 +1120,10 @@ public:
    }
 };
 /*!
- * BootloaderApp class declaration
+ * FirmwareChangerApp class declaration
  */
-class BootloaderApp: public wxApp {
-    DECLARE_CLASS( BootloaderApp )
+class FirmwareChangerApp: public wxApp {
+    DECLARE_CLASS( FirmwareChangerApp )
     DECLARE_EVENT_TABLE()
 
 private:
@@ -1355,7 +1132,7 @@ private:
 
 public:
     // Constructor
-    BootloaderApp();
+    FirmwareChangerApp();
 
     void Init();
 
@@ -1371,26 +1148,26 @@ public:
 };
 
 // Implements MyApp& GetApp()
-DECLARE_APP(BootloaderApp)
+DECLARE_APP(FirmwareChangerApp)
 
-IMPLEMENT_APP( BootloaderApp )
-
-/*
- * BootloaderApp type definition
- */
-IMPLEMENT_CLASS( BootloaderApp, wxApp )
+IMPLEMENT_APP( FirmwareChangerApp )
 
 /*
- * BootloaderApp event table definition
+ * FirmwareChangerApp type definition
  */
-BEGIN_EVENT_TABLE( BootloaderApp, wxApp )
+IMPLEMENT_CLASS( FirmwareChangerApp, wxApp )
+
+/*
+ * FirmwareChangerApp event table definition
+ */
+BEGIN_EVENT_TABLE( FirmwareChangerApp, wxApp )
 
 END_EVENT_TABLE()
 
 /*
- * Constructor for BootloaderApp
+ * Constructor for FirmwareChangerApp
  */
-BootloaderApp::BootloaderApp() :
+FirmwareChangerApp::FirmwareChangerApp() :
    openLog(),
    doAutoLoad(false)
 {
@@ -1401,13 +1178,13 @@ BootloaderApp::BootloaderApp() :
 /*
  * Member initialisation
  */
-void BootloaderApp::Init() {
+void FirmwareChangerApp::Init() {
 }
 
 /*
- * Initialisation for BootloaderApp
+ * Initialisation for FirmwareChangerApp
  */
-bool BootloaderApp::OnInit() {
+bool FirmwareChangerApp::OnInit() {
 
 #if wxUSE_XPM
    wxImage::AddHandler(new wxXPMHandler);
@@ -1439,9 +1216,8 @@ bool BootloaderApp::OnInit() {
    AppSettings settings(configFileName, "Firmware Changer");
    settings.load();
 
-   bootloaderDialogue *dialogue = new bootloaderDialogue();
+   FirmwareChangerDialogue *dialogue = new FirmwareChangerDialogue(0);
    dialogue->loadSettings(settings);
-   dialogue->Create(NULL);
    dialogue->setAutoLoad(doAutoLoad);
    dialogue->ShowModal();
    dialogue->saveSettings(settings);
@@ -1452,9 +1228,9 @@ bool BootloaderApp::OnInit() {
 }
 
 /*
- * Cleanup for BootloaderApp
+ * Cleanup for FirmwareChangerApp
  */
-int BootloaderApp::OnExit() {
+int FirmwareChangerApp::OnExit() {
 
    return wxApp::OnExit();
 }
@@ -1464,7 +1240,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_NONE }
 };
 
-void BootloaderApp::OnInitCmdLine(wxCmdLineParser& parser) {
+void FirmwareChangerApp::OnInitCmdLine(wxCmdLineParser& parser) {
     parser.SetDesc (g_cmdLineDesc);
     // must refuse '/' as parameter starter or cannot use "/path" style paths
     parser.SetSwitchChars (_("-"));
@@ -1481,7 +1257,7 @@ void BootloaderApp::OnInitCmdLine(wxCmdLineParser& parser) {
 
 //! Process command line arguments
 //!
-bool BootloaderApp::OnCmdLineParsed(wxCmdLineParser& parser) {
+bool FirmwareChangerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    LOGGING;
    if (parser.Found(_("auto"))) {
       doAutoLoad = true;

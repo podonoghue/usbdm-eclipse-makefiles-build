@@ -105,8 +105,8 @@ class MemoryPage {
  */
 
 public:
-   uint8_t data[FlashImageImp::PageSize];           //!< Page of memory
-   uint8_t validBits[FlashImageImp::PageSize/8];    //!< Indicates valid bytes in data
+   uint8_t data[FlashImageImp::PAGE_SIZE];           //!< Page of memory
+   uint8_t validBits[FlashImageImp::PAGE_SIZE/8];    //!< Indicates valid bytes in data
 
 public:
    MemoryPage();
@@ -129,7 +129,7 @@ MemoryPage::MemoryPage() {
  * Indicates if a page[index] has been written to
  */
 bool MemoryPage::isValid(unsigned index) const {
-   if (index >= FlashImageImp::PageSize) {
+   if (index >= FlashImageImp::PAGE_SIZE) {
       throw MyException("Page index out of range");
    }
    return (validBits[index/8] & (1<<(index&0x7)))?true:false;
@@ -139,7 +139,7 @@ bool MemoryPage::isValid(unsigned index) const {
  * Sets page[index] to value & marks as valid
  */
 void MemoryPage::setValue(unsigned index, uint8_t value) {
-   if (index >= FlashImageImp::PageSize) {
+   if (index >= FlashImageImp::PAGE_SIZE) {
       throw runtime_error("Page index out of range");
    }
    data[index]         = value;
@@ -150,7 +150,7 @@ void MemoryPage::setValue(unsigned index, uint8_t value) {
  *  Sets page[index] to 0xFF & marks as invalid
  */
 void MemoryPage::remove(unsigned index) {
-   if (index >= FlashImageImp::PageSize) {
+   if (index >= FlashImageImp::PAGE_SIZE) {
       throw runtime_error("Page index out of range");
    }
    data[index]         = (uint8_t)-1;
@@ -270,8 +270,8 @@ bool EnumeratorImp::nextValid() {
       if (memoryPage == NULL) {
          // Unallocated page - move to start of next page
          //         log.print("enumerator::nextValid(a=0x%06X) - skipping unallocated page #0x%X\n", address, pageNum);
-         address += FlashImageImp::PageSize;
-         address &= ~FlashImageImp::PageMask;
+         address += FlashImageImp::PAGE_SIZE;
+         address &= ~FlashImageImp::PAGE_MASK;
          if (address > memoryImage.lastAllocatedAddress) {
 //            address = memoryImage.lastAllocatedAddress;
 //            log.print("end = 0x%06X, no remaining valid addresses\n", address);
@@ -313,7 +313,7 @@ void EnumeratorImp::lastValid() {
       }
       FlashImageImp::addressToPageOffset(address, pageNum, offset);
       // Check if at page boundary or probing one ahead fails
-      if ((offset == FlashImageImp::PageSize-1) || !memoryPage->isValid(++offset)) {
+      if ((offset == FlashImageImp::PAGE_SIZE-1) || !memoryPage->isValid(++offset)) {
 //         log.print("end=0x%06X\n", address);
          return;
       }
@@ -496,7 +496,7 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
 
    memoryPage = getmemoryPage(pageNum);
    if (memoryPage == NULL) {
-      log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PageSize-1));
+      log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PAGE_SIZE-1));
       memoryPage.reset(new MemoryPage);
       memoryPages.insert(pair<const uint32_t, MemoryPagePtr>(pageNum, memoryPage));
       // Update cache
@@ -648,8 +648,8 @@ void FlashImageImp::writeData(uint8_t *buffer, uint32_t address, unsigned size) 
    LOGGING;
    log.print("[0x%06X..0x%06X]\n", address, address+size-1);
    while (size>0) {
-      uint8_t oddBytes = address & (maxSrecSize-1);
-      uint8_t srecSize = maxSrecSize - oddBytes;
+      uint8_t oddBytes = address & (MAX_SREC_SIZE-1);
+      uint8_t srecSize = MAX_SREC_SIZE - oddBytes;
       if (srecSize > size) {
          srecSize = (uint8_t) size;
       }
@@ -827,44 +827,36 @@ USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
  * @note This is only of use if uint8_t is not a byte
  */
 USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
-      uint32_t        address,
-      const uint8_t   data[],
-      bool            dontOverwrite) {
+                                             uint32_t        address,
+                                             const uint8_t   data[],
+                                             bool            dontOverwrite) {
    LOGGING_Q;
-   //    log.print("FlashImageImp::loadData(0x%04X...0x%04X)\n", address, address+bufferSize-1);
-   if (sizeof(uint8_t) == 1) {
-      // Copy directly to buffer
-      uint32_t bufferAddress = 0;
-      while (bufferAddress < bufferSize) {
-         unsigned value;
-         value = data[bufferAddress++];
-         if (!this->isValid(address) || !dontOverwrite) {
-            this->setValue(address, value);
-         }
-         //         log.print("FlashImageImp::loadDataBytes() - image[0x%06X] <= 0x%04X\n", address, value);
-         address++;
+//    log.print("FlashImageImp::loadData(0x%04X...0x%04X)\n", address, address+bufferSize-1);
+   uint32_t bufferAddress = 0;
+   while (bufferAddress < bufferSize) {
+      if (!this->isValid(address) || !dontOverwrite) {
+         this->setValue(address, data[bufferAddress++]);
       }
-   }
-   else {
-      if ((bufferSize&0x01) != 0) {
-         log.print("FlashImageImp::loadDataBytes() - Error: Odd buffer size\n");
-         return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-      }
-      // Convert to little-endian native & copy to buffer
-      uint32_t bufferAddress = 0;
-      while (bufferAddress < bufferSize) {
-         unsigned value;
-         value = data[bufferAddress++];
-         value = (data[bufferAddress++]<<8)+value;
-         //         log.print("FlashImageImp::loadDataBytes() - image[0x%06X] <= 0x%04X\n", address, value);
-         if (!this->isValid(address) || !dontOverwrite) {
-            this->setValue(address, value);
-         }
-         //         log.print("FlashImageImp::loadDataBytes() - image[0x%06X] <= 0x%04X\n", address, value);
-         address++;
-      }
+//         log.print("FlashImageImp::loadDataBytes() - image[0x%06X] <= 0x%04X\n", address, value);
+      address++;
    }
    return BDM_RC_OK;
+}
+
+void FlashImageImp::fill(uint32_t size, uint32_t address, uint8_t fillValue) {
+   while (size-->0) {
+      setValue(address++, fillValue);
+   }
+}
+
+void FlashImageImp::fillUnused(uint32_t size, uint32_t address, uint8_t fillValue) {
+   while (size-->0) {
+      if (isValid(address)) {
+         // Already allocated address
+         continue;
+      }
+      setValue(address++, fillValue);
+   }
 }
 
 /*! Maps Address to PageNum:offset
@@ -876,8 +868,8 @@ USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
  * @note - These values do NOT refer to the paging structure used by the target!
  */
 void FlashImageImp::addressToPageOffset(uint32_t address, uint16_t &pageNum, uint16_t &offset) {
-   offset  = address & PageMask;
-   pageNum = address >> PageBitOffset;
+   offset  = address & PAGE_MASK;
+   pageNum = address >> PAGE_BIT_OFFSET;
    //      printf("%8.8X=>%2.2X:%4.4X\n", address, pageNum, offset);
 }
 
@@ -891,9 +883,9 @@ void FlashImageImp::addressToPageOffset(uint32_t address, uint16_t &pageNum, uin
  * @note - These values do NOT refer to the paging structure used by the target!
  */
 uint32_t FlashImageImp::pageOffsetToAddress(uint16_t pageNum, uint16_t offset) {
-   if (offset>=PageSize)
+   if (offset>=PAGE_SIZE)
       throw runtime_error("Page offset too large\n");
-   return (pageNum << PageBitOffset) + offset;
+   return (pageNum << PAGE_BIT_OFFSET) + offset;
 }
 
 /*! Convert a 32-bit unsigned number between Target and Native format
@@ -1255,7 +1247,7 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
 
    Elf32_Ehdr elfHeader;
    if (fread(&elfHeader, 1, sizeof(elfHeader), fp) != sizeof(elfHeader)) {
-      return SFILE_RC_ELF_FORMAT_ERROR;
+      return SFILE_RC_UNKNOWN_FILE_FORMAT;
    }
    //   log.print("FlashImageImp::MemorySpace::loadElfFile() - \n");
    //   printElfHeader(&elfHeader);
@@ -1273,6 +1265,9 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    //   log.print("FlashImageImp::MemorySpace::loadElfFile() - elfHeader.e_machine = 0x%X(%d) \n", elfHeader.e_machine, elfHeader.e_machine);
    //   printElfHeader(&elfHeader);
 
+   /*
+    * If we get this far we assume we have an ELF file so any error will be ELF format errors
+    */
    if ((elfHeader.e_type != ET_EXEC) || (elfHeader.e_phoff == 0) || (elfHeader.e_phentsize == 0) || (elfHeader.e_phnum == 0)) {
       log.error("Invalid format\n");
       fclose(fp);

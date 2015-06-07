@@ -21,8 +21,7 @@ USBDM_ErrorCode DeviceInterface::loadDeviceDatabase(void) {
       deviceDatabase.reset(new DeviceDataBase(targetType));
    }
    DeviceDataConstPtr defaultDevice = deviceDatabase->getDefaultDevice();
-   currentDevice = DeviceDataPtr(new DeviceData(targetType));
-   currentDevice->shallowCopy(*defaultDevice);
+   currentDevice = defaultDevice->shallowCopy();
    currentDeviceIndex = 0;
    return rc;
 }
@@ -53,12 +52,12 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
       newDeviceIndex = 0;
       rc = BDM_RC_UNKNOWN_DEVICE;
    }
-   currentDevice->shallowCopy((*deviceDatabase)[newDeviceIndex]);
+   currentDevice = (*deviceDatabase)[newDeviceIndex].shallowCopy();
    if (currentDevice->isAlias()) {
       // Keep device name & SDIDs but update device details from real device
-      string aliasedName = currentDevice->getTargetName();
+      string aliasedName                        = currentDevice->getTargetName();
       const std::vector<TargetSDID> targetSDIDs = currentDevice->getTargetSDIDs();
-      currentDevice->shallowCopy(*deviceDatabase->findDeviceFromName(aliasedName));
+      currentDevice = deviceDatabase->findDeviceFromName(aliasedName)->shallowCopy();
       log.print("devIndex=%d, aliased(%s) => %s\n",
                      newDeviceIndex, (const char *)aliasedName.c_str(), (const char *)currentDevice->getTargetName().c_str());
       currentDevice->setTargetName(aliasedName);

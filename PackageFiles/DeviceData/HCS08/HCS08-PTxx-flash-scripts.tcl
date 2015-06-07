@@ -20,7 +20,8 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.240 - Added return error codes
+;#  V4.11.1.50  - initFlash{} now queries target for speed
+;#  V4.10.4.240 - Added return error codes
 ;#  V4.10.4 - Changed return code handling
 ;# 
 
@@ -120,13 +121,21 @@ proc initTarget { flashRegions } {
 ;#
 ;#  busFrequency - Target bus busFrequency in kHz
 ;#
-proc initFlash { busFrequency } {
+proc initFlash { {busSpeedkHz 0} } {
    puts "initFlash {}"
    
-   set cfmclkd [calculateFlashDivider $busFrequency]
+   if { [expr $busSpeedkHz == 0] } {
+      puts "initFlash() - Measuring bus frequency"
+      ;# Get target speed from BDM connection speed
+      set busSpeedkHz [expr [speed]/1000]
+   }
+   puts "initFlash {} busSpeedkHz = $busSpeedkHz"
+   set cfmclkd [calculateFlashDivider  $busSpeedkHz]
 
    ;# Set up Flash divider
    wb $::NVM_FCLKDIV $cfmclkd             ;# Flash divider
+   rb $::NVM_FCLKDIV
+   
    wb $::NVM_FPROT   $::NVM_xPROT_VALUE   ;# unprotect Flash
    wb $::NVM_EPROT   $::NVM_xPROT_VALUE   ;# unprotect EEPROM
    
@@ -230,8 +239,6 @@ proc massEraseTarget { } {
    ;# Should be temporarily unsecure
    ;# Confirm unsecured
    return [ isUnsecure ]
-
-   ;# Flash is now Blank and unsecured
 }
 
 ;######################################################################################

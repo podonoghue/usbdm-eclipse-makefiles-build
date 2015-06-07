@@ -3,7 +3,7 @@ include ../Common.mk
 TARGET = JB16_Bootloader
 MODULE = module
 
-EXE_DEFS = -DUSE_ICON -DLINK_USBDM_SYSTEM_DLL
+EXE_DEFS = -DUSE_ICON
 
 $(TARGET):
 	@echo ''

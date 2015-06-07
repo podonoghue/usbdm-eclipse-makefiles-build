@@ -42,7 +42,8 @@
 
 FlashProgrammerCommon::FlashProgrammerCommon() :
    flashReady(false),
-   progressTimer(new ProgressTimer()) {
+   progressTimer(new ProgressTimer()),
+   calculatedClockTrimValue(0) {
 
    LOGGING_E;
    flashReady = false;
@@ -73,7 +74,7 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
       return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
    }
    // Run initial TCL script (loads routines)
-   TclScriptConstPtr script = parameters.getFlashScripts();
+   TclScriptConstPtr script = device->getFlashScripts();
    if (!script) {
       log.error("No TCL script found\n");
       return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
@@ -135,7 +136,7 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    }
    USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command);
    if (rc != BDM_RC_OK) {
-      log.error("Failed - rc = %d (%s)\n", rc, USBDM_GetErrorString(rc));
+      log.error("Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
    }
    return rc;
 }
@@ -147,23 +148,18 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
 //!
 //! @return error code see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceData &theParameters) {
+USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device) {
    LOGGING_Q;
    currentFlashProgram.reset();
-   parameters = theParameters;
-   log.print("Target=%s\n", parameters.getTargetName().c_str());
+   this->device = device;
+   log.print("Target=%s\n", device->getTargetName().c_str());
    releaseTCL();
    initTCL();
    return PROGRAMMING_RC_OK;
 }
 
-//=======================================================================
-//! Get device data for flash operations
-//!
-//! @return the parameters previously set
-//!
-DeviceData* FlashProgrammerCommon::getDeviceData() {
-   return &parameters;
+DeviceDataConstPtr FlashProgrammerCommon::getDeviceData() {
+   return device;
 }
 
 //! Clock register write with retry
@@ -211,15 +207,15 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         
                                                     ICS_ClockParameters_t *clockParameters){
    LOGGING_E;
 
-   const uint32_t ICSC1   = parameters.getClockAddress();
-   const uint32_t ICSC2   = parameters.getClockAddress()+1;
-   const uint32_t ICSTRIM = parameters.getClockAddress()+2;
-   const uint32_t ICSSC   = parameters.getClockAddress()+3;
+   const uint32_t ICSC1   = device->getClockAddress();
+   const uint32_t ICSC2   = device->getClockAddress()+1;
+   const uint32_t ICSTRIM = device->getClockAddress()+2;
+   const uint32_t ICSSC   = device->getClockAddress()+3;
 
    unsigned long bdmFrequency;
 
    log.print("ICS Clock: Ad=0x%08X, C1=0x%02X, C2=0x%02X, SC=0x%02X\n",
-           parameters.getClockAddress(),
+           device->getClockAddress(),
            clockParameters->icsC1,
            clockParameters->icsC2,
            clockParameters->icsSC
@@ -254,7 +250,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
    bdmFrequency *= 1000; // Convert to Hz
-   *busFrequency = bdmFrequency*parameters.getBDMtoBUSFactor();
+   *busFrequency = bdmFrequency*device->getBDMtoBUSFactor();
    log.print("BDM Speed = %ld kHz, Bus Speed = %ld kHz\n",
          bdmFrequency/1000, *busFrequency/1000);
    return PROGRAMMING_RC_OK;
@@ -275,18 +271,18 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         
                                                     ICG_ClockParameters_t *clockParameters){
    LOGGING_E;
 
-   const uint32_t ICGC1    = parameters.getClockAddress();
-   const uint32_t ICGC2    = parameters.getClockAddress()+1;
+   const uint32_t ICGC1    = device->getClockAddress();
+   const uint32_t ICGC2    = device->getClockAddress()+1;
 // const uint32_t ICGS1    = parameters.getClockAddress()+2;
 // const uint32_t ICGS2    = parameters.getClockAddress()+3;
 // const uint32_t ICGFLTU  = parameters.getClockAddress()+4;
 // const uint32_t ICGFLTL  = parameters.getClockAddress()+5;
-   const uint32_t ICGTRIM  = parameters.getClockAddress()+6;
+   const uint32_t ICGTRIM  = device->getClockAddress()+6;
 
    unsigned long bdmFrequency;
 
    log.print("ICG Clock: Ad=0x%4.4X, C1=0x%02X, C2=0x%02X\n",
-           parameters.getClockAddress(),
+           device->getClockAddress(),
            clockParameters->icgC1,
            clockParameters->icgC2
            );
@@ -313,7 +309,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
    bdmFrequency *= 1000; // Convert to Hz
-   *busFrequency = bdmFrequency*parameters.getBDMtoBUSFactor();
+   *busFrequency = bdmFrequency*device->getBDMtoBUSFactor();
    log.print("BDM Speed = %ld kHz, Bus Speed = %ld kHz\n",
          bdmFrequency/1000, *busFrequency/1000);
    return PROGRAMMING_RC_OK;
@@ -334,17 +330,17 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
                                                     MCG_ClockParameters_t *clockParameters){
    LOGGING_E;
 
-   const uint32_t MCGC1    = parameters.getClockAddress();
-   const uint32_t MCGC2    = parameters.getClockAddress()+1;
-   const uint32_t MCGTRIM  = parameters.getClockAddress()+2;
-   const uint32_t MCGSC    = parameters.getClockAddress()+3;
-   const uint32_t MCGC3    = parameters.getClockAddress()+4;
-   const uint32_t MCGT     = parameters.getClockAddress()+5;
+   const uint32_t MCGC1    = device->getClockAddress();
+   const uint32_t MCGC2    = device->getClockAddress()+1;
+   const uint32_t MCGTRIM  = device->getClockAddress()+2;
+   const uint32_t MCGSC    = device->getClockAddress()+3;
+   const uint32_t MCGC3    = device->getClockAddress()+4;
+   const uint32_t MCGT     = device->getClockAddress()+5;
 
    unsigned long bdmFrequency;
 
    log.print("MCG Clock: Ad=0x%08X, C1=0x%02X, C2=0x%02X, C3=0x%02X, SC=0x%02X, CT/C4=0x%02X\n",
-           parameters.getClockAddress(),
+           device->getClockAddress(),
            clockParameters->mcgC1,
            clockParameters->mcgC2,
            clockParameters->mcgC3,
@@ -376,7 +372,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
    if (writeClockRegister(MCGC3, clockParameters->mcgC3) != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
-   if ((parameters.getClockType() != S08MCGV1) &&
+   if ((device->getClockType() != S08MCGV1) &&
        (writeClockRegister(MCGT, clockParameters->mcgCT) != BDM_RC_OK)) {
          return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
@@ -388,7 +384,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
       return PROGRAMMING_RC_ERROR_FAILED_CLOCK;
    }
    bdmFrequency *= 1000; // Convert to Hz
-   *busFrequency = bdmFrequency*parameters.getBDMtoBUSFactor();
+   *busFrequency = bdmFrequency*device->getBDMtoBUSFactor();
    log.print("BDM Speed = %ld kHz, Bus Speed = %ld kHz\n",
          bdmFrequency/1000, *busFrequency/1000);
    return PROGRAMMING_RC_OK;
@@ -414,7 +410,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureExternal_Clock(unsigned long  *b
       return PROGRAMMING_RC_ERROR_BDM_CONNECT;
    }
    bdmFrequency *= 1000; // Convert to Hz
-   *busFrequency = bdmFrequency*parameters.getBDMtoBUSFactor();
+   *busFrequency = bdmFrequency*device->getBDMtoBUSFactor();
    log.print("BDM Speed = %ld kHz, Bus Speed = %ld kHz\n",
          bdmFrequency/1000, *busFrequency/1000);
    return PROGRAMMING_RC_OK;
@@ -474,7 +470,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureTargetClock(unsigned long  *busF
 
 //   log.print("Configuring Target clock\n");
 
-   switch (parameters.getClockType()) {
+   switch (device->getClockType()) {
       case CLKEXT:
       case CLKINVALID:
          return configureExternal_Clock(busFrequency);
@@ -568,7 +564,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
    static const int minTrim        =   5;   // Minimum acceptable trim value
    static const int SearchOffset   =   8;   // Linear sweep range is +/- this value
    static const unsigned char zero =   0;
-   const unsigned long targetBDMFrequency = targetBusFrequency/parameters.getBDMtoBUSFactor();
+   const unsigned long targetBDMFrequency = targetBusFrequency/device->getBDMtoBUSFactor();
    int numAverage;     // Number of times to repeat measurements
 
    double sumX          = 0.0;
@@ -780,7 +776,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
    if (USBDM_GetSpeedHz(&bdmSpeed) != BDM_RC_OK) {
       return PROGRAMMING_RC_ERROR_BDM_CONNECT;
    }
-   *measuredBusFrequency = bdmSpeed*parameters.getBDMtoBUSFactor();
+   *measuredBusFrequency = bdmSpeed*device->getBDMtoBUSFactor();
    return rc;
 }
 
@@ -804,7 +800,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *cloc
          /* .icsTrim = */ 0x80, // TRIM=default
          /* .icsSC   = */ 0x00, // LOLIE=0, CME=0, SCFTRIM=0
    };
-   uint32_t           ICSTRIM             = parameters.getClockAddress()+2;
+   uint32_t           ICSTRIM             = device->getClockAddress()+2;
    unsigned int  clockMultiplier;
    unsigned long targetBusFrequency;
    unsigned long originalBusFrequency;
@@ -812,7 +808,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *cloc
    uint16_t           trimValue;
    USBDM_ErrorCode rc;
 
-   switch (parameters.getClockType()) {
+   switch (device->getClockType()) {
       case S08ICSV1:
       case S08ICSV3:
       case RS08ICSV1:
@@ -833,10 +829,10 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *cloc
          return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }
 
-   targetBusFrequency = parameters.getClockTrimFreq()*(clockMultiplier/8/2);
+   targetBusFrequency = device->getClockTrimFreq()*(clockMultiplier/8/2);
 
    log.print("TrimF = %.2f kHz, clock Multiplier=%d => Trim bus Freq=%.2f kHz\n",
-         parameters.getClockTrimFreq()/1000.0, clockMultiplier/8/2, targetBusFrequency/1000.0);
+         device->getClockTrimFreq()/1000.0, clockMultiplier/8/2, targetBusFrequency/1000.0);
 
    // Program clock for a low speed to improve accuracy of trimming
    rc = configureICS_Clock(&originalBusFrequency, clockParameters);
@@ -844,14 +840,14 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *cloc
       return rc;
    }
    log.print("Clock Freq = %4.2f kHz, Bus Freq=%4.2f kHz\n",
-         parameters.getClockTrimFreq()/1000.0, targetBusFrequency/1000.0);
+         device->getClockTrimFreq()/1000.0, targetBusFrequency/1000.0);
 
    rc = FlashProgrammerCommon::trimTargetClock(ICSTRIM, targetBusFrequency, &trimValue, &measuredBusFrequency, TRUE);
 
    log.print("rc=%d, Desired Freq = %.2f kHz,"
          " Meas. Freq=%.2f kHz, Trim=0x%02X/%1.1X\n",
          rc,
-         parameters.getClockTrimFreq()/1000.0,
+         device->getClockTrimFreq()/1000.0,
          (measuredBusFrequency/(clockMultiplier/16))/1000.0,
          trimValue>>1, trimValue&0x01);
 
@@ -880,7 +876,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *cloc
          /* .mcgCT   = */ 0x00, // DMX32=0, DRS=0
    };
 
-   uint32_t MCGTRIM                = parameters.getClockAddress()+2;
+   uint32_t MCGTRIM                = device->getClockAddress()+2;
    unsigned int  clockMultiplier;
    unsigned long targetBusFrequency;
    unsigned long originalBusFrequency;
@@ -888,7 +884,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *cloc
    uint16_t trimValue;
    USBDM_ErrorCode rc;
 
-   switch (parameters.getClockType()) {
+   switch (device->getClockType()) {
       case S08MCGV2:
       case S08MCGV3:
          clockMultiplier = 512;
@@ -900,12 +896,12 @@ USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *cloc
          return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }
 
-   targetBusFrequency = parameters.getClockTrimFreq()*(clockMultiplier/8/2);
+   targetBusFrequency = device->getClockTrimFreq()*(clockMultiplier/8/2);
 
    *clockParameters = MCG_LowSpeedParameters;
 
    log.print("TrimF = %.2f kHz, clock Multiplier=%d => Trim bus Freq=%.2f kHz\n",
-         parameters.getClockTrimFreq()/1000.0, (1024/8/2), targetBusFrequency/1000.0);
+         device->getClockTrimFreq()/1000.0, (1024/8/2), targetBusFrequency/1000.0);
 
    // Program clock for a low speed to improve accuracy of trimming
    rc = configureMCG_Clock(&originalBusFrequency, clockParameters);
@@ -921,7 +917,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *cloc
    }
    log.print("Desired Freq = %.2f kHz, "
          "Meas. Freq=%.2f kHz, Trim=0x%02X/%1.1X\n",
-         parameters.getClockTrimFreq()/1000.0,
+         device->getClockTrimFreq()/1000.0,
          (measuredBusFrequency/(clockMultiplier/16))/1000.0,
          trimValue>>1, trimValue&0x01);
 
@@ -944,8 +940,8 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *cloc
          /* .icgFilter = */ 0x00, // Not used
          /* .icgTrim   = */ 0x80, // TRIM=128
    };
-   uint32_t ICGTRIM                 = parameters.getClockAddress()+6;
-   unsigned long targetBusFrequency = parameters.getClockTrimFreq()*4;
+   uint32_t ICGTRIM                 = device->getClockAddress()+6;
+   unsigned long targetBusFrequency = device->getClockTrimFreq()*4;
    unsigned long originalBusFrequency;
    unsigned long measuredBusFrequency;
    uint16_t trimValue;
@@ -959,12 +955,12 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *cloc
       return rc;
    }
    log.print("TrimF = %.2f kHz, clock Multiplier=%d => Trim bus Freq=%.2f kHz\n",
-         parameters.getClockTrimFreq()/1000.0, 4, targetBusFrequency/1000.0);
+         device->getClockTrimFreq()/1000.0, 4, targetBusFrequency/1000.0);
 
    rc = FlashProgrammerCommon::trimTargetClock(ICGTRIM, targetBusFrequency, &trimValue, &measuredBusFrequency, FALSE);
 
    log.print("Desired Freq = %.1f kHz, Meas. Freq=%.1f kHz, Trim=%02X\n",
-         parameters.getClockTrimFreq()/1000.0,
+         device->getClockTrimFreq()/1000.0,
          (measuredBusFrequency/4)/1000.0,
          trimValue>>1);
 
@@ -994,22 +990,22 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
    uint16_t  ftrimMergeValue;
 
    // Assume no trim or failure
-   parameters.setClockTrimValue(0);
+   calculatedClockTrimValue = 0;
 
    // No trimming required
-   if (parameters.getClockTrimFreq() == 0) {
+   if (device->getClockTrimFreq() == 0) {
       return PROGRAMMING_RC_OK;
    }
 
 #if TARGET == RS08
-   uint32_t NVTRIM_address  = parameters.getClockTrimNVAddress();
-   uint32_t NVFTRIM_address = parameters.getClockTrimNVAddress()+1;
+   uint32_t NVTRIM_address  = device->getClockTrimNVAddress();
+   uint32_t NVFTRIM_address = device->getClockTrimNVAddress()+1;
 #else
-   uint32_t NVFTRIM_address = parameters.getClockTrimNVAddress();
-   uint32_t NVTRIM_address  = parameters.getClockTrimNVAddress()+1;
+   uint32_t NVFTRIM_address = device->getClockTrimNVAddress();
+   uint32_t NVTRIM_address  = device->getClockTrimNVAddress()+1;
 #endif
 
-   switch (parameters.getClockType()) {
+   switch (device->getClockType()) {
       case CLKEXT:
       case CLKINVALID:
          return PROGRAMMING_RC_OK;
@@ -1021,8 +1017,8 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
          rc = trimICG_Clock(&clockTrimParameters.icg);
          if (rc != PROGRAMMING_RC_OK)
             return rc;
-         parameters.setClockTrimValue(clockTrimParameters.icg.icgTrim<<1);
-         flashImage->setValue(parameters.getClockTrimNVAddress(),
+         calculatedClockTrimValue = (clockTrimParameters.icg.icgTrim<<1);
+         flashImage->setValue(device->getClockTrimNVAddress(),
                                          clockTrimParameters.icg.icgTrim);
          return PROGRAMMING_RC_OK;
       case S08ICSV1:
@@ -1037,11 +1033,10 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
          if (rc != PROGRAMMING_RC_OK) {
             return rc;
          }
-         parameters.setClockTrimValue((clockTrimParameters.ics.icsTrim<<1)|
-                                       (clockTrimParameters.ics.icsSC&0x01));
+         calculatedClockTrimValue = ((clockTrimParameters.ics.icsTrim<<1)|(clockTrimParameters.ics.icsSC&0x01));
          flashImage->setValue(NVTRIM_address, clockTrimParameters.ics.icsTrim);
          // The FTRIM bit may be combined with other bits such as DMX32 or DRS
-         ftrimMergeValue = flashImage->getValue(parameters.getClockTrimNVAddress());
+         ftrimMergeValue = flashImage->getValue(device->getClockTrimNVAddress());
          if (((ftrimMergeValue&0xFF) == 0xFF)||(ftrimMergeValue >= 0xFF00U)) {
             // Image location is unused or contains the unprogrammed FLASH value
             // So no value to merge trim with - clear all other bits
@@ -1058,11 +1053,10 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
          if (rc != PROGRAMMING_RC_OK) {
             return rc;
          }
-         parameters.setClockTrimValue((clockTrimParameters.mcg.mcgTrim<<1)|
-                                      (clockTrimParameters.mcg.mcgSC&0x01));
-         flashImage->setValue(parameters.getClockTrimNVAddress()+1,
+         calculatedClockTrimValue = ((clockTrimParameters.mcg.mcgTrim<<1)|(clockTrimParameters.mcg.mcgSC&0x01));
+         flashImage->setValue(device->getClockTrimNVAddress()+1,
                                          clockTrimParameters.mcg.mcgTrim);
-         flashImage->setValue(parameters.getClockTrimNVAddress(),
+         flashImage->setValue(device->getClockTrimNVAddress(),
                                          clockTrimParameters.mcg.mcgSC&0x01);
          return PROGRAMMING_RC_OK;
       case MKMCGV1:
@@ -1083,17 +1077,17 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
    uint32_t start = 0;
 
    // Not using trim -> do nothing
-   if ((parameters.getClockTrimNVAddress() == 0) ||
-       (parameters.getClockTrimFreq() == 0)) {
+   if ((device->getClockTrimNVAddress() == 0) ||
+       (device->getClockTrimFreq() == 0)) {
       log.print("Not using trim, no adjustment to image\n");
       return PROGRAMMING_RC_OK;
    }
-   switch (parameters.getClockType()) {
+   switch (device->getClockType()) {
       case S08ICGV1:
       case S08ICGV2:
       case S08ICGV3:
       case S08ICGV4:
-         start = parameters.getClockTrimNVAddress();
+         start = device->getClockTrimNVAddress();
          size  = 2;
          break;
       case S08ICSV1:
@@ -1106,7 +1100,7 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
       case S08MCGV3:
       case RS08ICSOSCV1:
       case RS08ICSV1:
-         start = parameters.getClockTrimNVAddress();
+         start = device->getClockTrimNVAddress();
          size  = 2;
          break;
       case CLKEXT:

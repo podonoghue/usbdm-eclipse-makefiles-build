@@ -20,7 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.240 - Added return error codes
+;#  V4.10.4.240 - Added return error codes
 ;#  V4.10.6.130 - Changed initTarget() to catch errors
 ;#  V4.10.4     - Changed return code handling
 ;# 
@@ -86,9 +86,11 @@ proc initTarget { arg } {
 
 ;######################################################################################
 ;#
-;#  busFrequency - Target bus frequency in kHz
+;#  busSpeedkHz - Target bus frequency in kHz
 ;#
-proc initFlash { busFrequency } {
+proc initFlash { {busSpeedkHz 0} } {
+   puts "initFlash {}"
+   
 ;# Not used
    
    return
@@ -132,6 +134,8 @@ proc readDBGCR { } {
 ;#
 proc massEraseTarget { } {
 
+   puts "massEraseTarget{}"
+
    ;# reset target to be sure
    reset s s
    
@@ -156,12 +160,16 @@ proc massEraseTarget { } {
       puts "Flash mass erase failed"
       return $::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND
    }
+
    return
 }
 
 ;######################################################################################
 ;#
-proc isUnsecure { } {
+proc isUnsecure { } {  
+   puts "isUnsecure{} - Checking XCSR.byte security"
+
+   ;# Check security bits in XCSR.byte
    set securityValue [ rdreg $::CFV1_DRegXCSRbyte ]
    if [ expr ( $securityValue & ($::CFV1_XCSR_SEC|$::CFV1_XCSR_ENBDM) ) != $::CFV1_XCSR_ENBDM ] {
       puts "isUnsecure{} - Target is secured!"

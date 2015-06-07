@@ -105,12 +105,11 @@ protected:
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,
-                                   unsigned long *measuredBusFrequency, int do9BitTrim);
+                                   unsigned long *measuredBusFrequency, int do9BitTrim) { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
    USBDM_ErrorCode trimMCG_Clock(MK_MCG_ClockParameters_t *clockParameters);
-   USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage);
    USBDM_ErrorCode configureMCG_Clock(unsigned long *busFrequency, MK_MCG_ClockParameters_t *clockParameters);
-   USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency);
-   USBDM_ErrorCode configureExternal_Clock(unsigned long *busFrequency);
+   USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
+   USBDM_ErrorCode configureExternal_Clock(unsigned long *busFrequency)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);
    USBDM_ErrorCode initSmallTargetBuffer(uint8_t *buffer);
@@ -134,23 +133,20 @@ protected:
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
    USBDM_ErrorCode loadLargeTargetProgram(uint8_t *buffer, uint32_t loadAddress, uint32_t size,
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
-   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage);
+   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; };
    USBDM_ErrorCode partitionFlexNVM(void);
 
 public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   USBDM_ErrorCode checkTargetUnSecured();
-   USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
-   USBDM_ErrorCode confirmSDID(void);
-
-   USBDM_ErrorCode getCalculatedTrimValue(uint16_t &value);
-   USBDM_ErrorCode resetAndConnectTarget(void);
-
+   virtual USBDM_ErrorCode checkTargetUnSecured();
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
+   virtual USBDM_ErrorCode confirmSDID(void);
+   virtual USBDM_ErrorCode resetAndConnectTarget(void);
 };
 
 #endif /* SOURCE_FLASHPROGRAMMER_ARM_H_ */

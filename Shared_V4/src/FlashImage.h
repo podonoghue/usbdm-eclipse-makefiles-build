@@ -161,14 +161,14 @@ public:
    /*!
     *  Initialises the memory to empty
     */
-   virtual void                 clear() = 0;
+   virtual void clear() = 0;
    /*!
     * Check if image is entirely empty (never written to)
     *
     * @return true=>image is entirely empty,\n
     *               image is not empty
     */
-   virtual bool                 isEmpty() const = 0;
+   virtual bool isEmpty() const = 0;
    /*!
     *  Checks if the memory location is valid (has been written to)
     *
@@ -178,11 +178,11 @@ public:
     *          true   => location has been previously written to \n
     *          false  => location is invalid
     */
-   virtual bool                 isValid(uint32_t address) = 0;
+   virtual bool isValid(uint32_t address) = 0;
    /*!
     *  Returns an approximate count of occupied bytes
     */
-   virtual unsigned             getByteCount() const = 0;
+   virtual unsigned getByteCount() const = 0;
    /*!
     *  Obtain the value of a Flash memory location
     *
@@ -190,7 +190,8 @@ public:
     *
     *  @return - uint8_t value (dummy value of 0xFF.. is unallocated address)
     */
-   virtual uint8_t              getValue(uint32_t address) = 0;
+   virtual uint8_t  getValue(uint32_t address) = 0;
+
    /*!
     *   Set a Flash memory location
     *
@@ -199,7 +200,7 @@ public:
     *
     *   @note Allocates a memory location if necessary
     */
-   virtual void                 setValue(uint32_t address, uint8_t value) = 0;
+   virtual void setValue(uint32_t address, uint8_t value) = 0;
    /*
     * Remove a Flash memory location (set to unprogrammed)
     *
@@ -248,6 +249,37 @@ public:
     * @note This is only of use if uint8_t is not a byte
     */
    virtual USBDM_ErrorCode      loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false) = 0;
+
+   /*
+    * Get first allocated address
+    *
+    * @return - first allocated address
+    */
+   virtual unsigned getFirstAllocatedAddress() = 0;
+
+   /*
+    * Get last allocated address
+    *
+    * @return - last allocated address
+    */
+   virtual unsigned getLastAllocatedAddress() = 0;
+
+   /*!
+    *  Fills a range of memory with a value
+    *
+    *  @param fillValue - value to use for fill
+    *  @param size      - size of range to fill
+    *  @param address   -  start address of range
+    */
+   virtual void fill(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF) = 0;
+   /*!
+    *  Fills unused bytes within a range of memory with a value
+    *
+    *  @param fillValue - value to use for fill
+    *  @param size      - size of range to fill
+    *  @param address   -  start address of range
+    */
+   virtual void fillUnused(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF) = 0;
 };
 
 typedef std::tr1::shared_ptr<FlashImage> FlashImagePtr;

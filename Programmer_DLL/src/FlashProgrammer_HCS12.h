@@ -113,7 +113,6 @@ protected:
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
    USBDM_ErrorCode loadLargeTargetProgram(uint8_t *buffer, uint32_t loadAddress, uint32_t size,
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
-   USBDM_ErrorCode probeMemory(MemorySpace_t memorySpace, uint32_t address);
    USBDM_ErrorCode getPageAddress(MemoryRegionConstPtr memoryRegionPtr, uint32_t address, uint8_t *pageNo);
    USBDM_ErrorCode setPageRegisters(uint32_t physicalAddress);
    USBDM_ErrorCode partitionFlexNVM(void);
@@ -122,22 +121,15 @@ public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   USBDM_ErrorCode setDeviceData(const DeviceData &theParameters);
-   DeviceData*     getDeviceData() { return &parameters; }
-   USBDM_ErrorCode checkTargetUnSecured();
-   USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
-   USBDM_ErrorCode confirmSDID(void);
-   USBDM_ErrorCode checkUnsupportedTarget();
-
-   USBDM_ErrorCode getCalculatedTrimValue(uint16_t &value) {
-      value = parameters.getClockTrimValue();
-      return PROGRAMMING_RC_OK;
-   }
-   USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode checkTargetUnSecured();
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
+   virtual USBDM_ErrorCode confirmSDID(void);
+   virtual USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
+   virtual USBDM_ErrorCode checkUnsupportedTarget();
 };
 
 #endif // SOURCE_FLASHPROGRAMMER_HCS12_H_

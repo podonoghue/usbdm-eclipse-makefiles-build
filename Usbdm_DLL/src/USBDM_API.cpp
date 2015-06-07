@@ -84,6 +84,7 @@
 #include "Names.h"
 #include "TargetDefines.h"
 #include "armInterface.h"
+#include "hwdesc.h"
 
 #ifdef WIN32
 #include "ICP.h"
@@ -196,6 +197,8 @@ USBDM_ErrorCode USBDM_Exit(void) {
    LOGGING_E;
    USBDM_ErrorCode rc = bdm_usb_exit();
 
+   bdm_usb_releaseDevices();
+
    log.closeLogFile();
 
    bdmState.initialised = false;
@@ -241,7 +244,7 @@ USBDM_API
 const char *USBDM_GetErrorString(USBDM_ErrorCode errorCode) {
 const char *errMsg;
    LOGGING_Q;
-   errMsg = getErrorName(errorCode);
+   errMsg = UsbdmSystem::getErrorString(errorCode);
    log.print("%d => \'%s\'\n", errorCode, errMsg);
    return errMsg;
 }
@@ -269,13 +272,20 @@ const char *errMsg;
 USBDM_API
 USBDM_ErrorCode USBDM_FindDevices(unsigned int *deviceCount) {
    LOGGING_Q;
+   static const UsbId usbIds[] = {
+       {USBDM_VID, USBDM_PID},
+       {TBDML_VID, TBDML_PID},
+       {OSBDM_VID, OSBDM_PID},
+       {TBLCF_VID, TBLCF_PID},
+       {0,0}
+   };
    *deviceCount = 0;
 
    if (!bdmState.initialised) {
       return BDM_RC_NOT_INITIALISED;
    }
-
-   USBDM_ErrorCode rc = bdm_usb_findDevices(deviceCount); // look for USBDM devices on all USB busses
+   // look for USBDM devices on all USB busses
+   USBDM_ErrorCode rc = bdm_usb_findDevices(deviceCount, usbIds);
    log.print("USB initialised, found %d device(s)\n", *deviceCount);
    return rc;
 }
@@ -454,17 +464,10 @@ USBDM_ErrorCode USBDM_GetVersion(USBDM_Version_t *version) {
    if (!bdmState.initialised) {
       return BDM_RC_NOT_INITIALISED;
    }
-
    USBDM_ErrorCode rc;
    static const USBDM_Version_t defaultVersion = {0,0,0,0};
    unsigned rxSize;
-
-   usb_data[0] = 10;                // receive 5 bytes
-   usb_data[1] = CMD_USBDM_GET_VER; // command
-   usb_data[3] = 1;
-   usb_data[4] = 0;
-   usb_data[5] = 0;
-   rc = bdm_usb_recv_ep0(usb_data, &rxSize); // USB EP0
+   rc = bdm_usb_getversion(usb_data, &rxSize);
    if (rc != BDM_RC_OK) {
       *version = defaultVersion;
    }
@@ -1077,11 +1080,8 @@ USBDM_ErrorCode USBDM_BDMCommand(unsigned int txSize, unsigned int rxSize, unsig
       return BDM_RC_ILLEGAL_PARAMS;
    }
    log.print("s=%d, d=0x%02X, 0x%02X, \n", txSize, data[0], data[1]);
-   usb_data[0] = 0;
-   usb_data[1] = CMD_CUSTOM_COMMAND;
-   memcpy(usb_data+2, data, txSize);
 
-   USBDM_ErrorCode rc = bdm_usb_transaction(txSize+2, rxSize, usb_data);
+   USBDM_ErrorCode rc = bdm_usb_transaction(txSize, rxSize, usb_data);
    return rc;
 }
 
@@ -1175,7 +1175,7 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
    rc = bdm_usb_transaction(3, 1, usb_data, 1000);
 
    if (rc != BDM_RC_OK) {
-      log.print("Error, rc= %s\n", getErrorName(rc));
+      log.print("Error, rc= %s\n", UsbdmSystem::getErrorString(rc));
       USBDM_SetTargetVdd(BDM_TARGET_VDD_DISABLE);
       UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
       bdmState.targetType = T_OFF;
@@ -1332,7 +1332,7 @@ USBDM_ErrorCode USBDM_GetCommandStatus(void) {
    usb_data[0] = 0;
    usb_data[1] = CMD_USBDM_GET_COMMAND_RESPONSE;
    rc = bdm_usb_transaction(2, 1, usb_data);
-   log.print("=>%s\n", getErrorName(rc));
+   log.print("=>%s\n", UsbdmSystem::getErrorString(rc));
 
    return rc;
 }

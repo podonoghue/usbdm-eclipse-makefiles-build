@@ -271,7 +271,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::resetAndConnectTarget(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
-   if (parameters.getTargetName().empty()) {
+   if (device->getTargetName().empty()) {
       return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }
    flashReady     = false;
@@ -325,13 +325,13 @@ USBDM_ErrorCode FlashProgrammer_DSC::resetAndConnectTarget(void) {
 //! @note Assumes the target device has already been opened & USBDM options set.
 //! @note Assumes the target has been reset in SPECIAL mode
 //!
-USBDM_ErrorCode FlashProgrammer_DSC::readTargetChipId(uint32_t *targetSDID) {
+USBDM_ErrorCode FlashProgrammer_DSC::readTargetChipId(uint32_t *targetSDID, bool doInit) {
    LOGGING_E;
-   bool doInit = (targetType == T_ARM);
+   doInit = doInit || (targetType == T_ARM);
 
    *targetSDID = 0x0000;
 
-   if (parameters.getTargetName().empty()) {
+   if (device->getTargetName().empty()) {
       log.error("Target name not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -348,10 +348,10 @@ USBDM_ErrorCode FlashProgrammer_DSC::readTargetChipId(uint32_t *targetSDID) {
    }
    // Do a sanity check on SDID (may get these values if secured w/o any error being signaled)
    if ((*targetSDID == 0xFFFF) || (*targetSDID == 0x0000)) {
-      log.error("A=0x%06X - Value invalid (0x%04X)\n", parameters.getSDIDAddress(), *targetSDID);
+      log.error("A=0x%06X - Value invalid (0x%04X)\n", device->getSDIDAddress(), *targetSDID);
       return PROGRAMMING_RC_ERROR_BDM_READ;
    }
-   log.print("A=0x%06X => 0x%08X\n", parameters.getSDIDAddress(), *targetSDID);
+   log.print("A=0x%06X => 0x%08X\n", device->getSDIDAddress(), *targetSDID);
    return PROGRAMMING_RC_OK;
 }
 
@@ -367,12 +367,12 @@ USBDM_ErrorCode FlashProgrammer_DSC::confirmSDID() {
    uint32_t targetSDID;
    USBDM_ErrorCode rc;
 
-   if (parameters.getTargetName().empty()) {
+   if (device->getTargetName().empty()) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Don't check Target SDID if zero
-   if ((parameters.getSDID().mask == 0x0000) || (parameters.getSDID().value == 0x0000)) {
+   if ((device->getSDID().mask == 0x0000) || (device->getSDID().value == 0x0000)) {
       log.print("V=0x0000 => Skipping check\n");
       return PROGRAMMING_RC_OK;
    }
@@ -380,16 +380,16 @@ USBDM_ErrorCode FlashProgrammer_DSC::confirmSDID() {
    rc = readTargetChipId(&targetSDID);
    if (rc != PROGRAMMING_RC_OK) {
       log.error("M=0x%8.8X, V=0x%8.8X => Failed, error reading SDID, reason = %s\n",
-                     parameters.getSDID().mask,
-                     parameters.getSDID().value,
+                     device->getSDID().mask,
+                     device->getSDID().value,
             bdmInterface->getErrorString(rc));
       // Return this error even though the cause may be different
       return PROGRAMMING_RC_ERROR_WRONG_SDID;
    }
-   if (!parameters.isThisDevice(targetSDID)) {
+   if (!device->isThisDevice(targetSDID)) {
       log.error("M=0x%8.8X, V=0x%8.8X => Failed (Target SDID=0x%8.8X)\n",
-            parameters.getSDID().mask,
-            parameters.getSDID().value,
+            device->getSDID().mask,
+            device->getSDID().value,
             targetSDID);
       return PROGRAMMING_RC_ERROR_WRONG_SDID;
    }
@@ -454,16 +454,25 @@ USBDM_ErrorCode FlashProgrammer_DSC::initialiseTargetFlash() {
 //!
 //! @return error code, see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode FlashProgrammer_DSC::massEraseTarget(void) {
+USBDM_ErrorCode FlashProgrammer_DSC::massEraseTarget(bool resetTarget) {
    LOGGING;
+
+   if (resetTarget) {
+      resetAndConnectTarget();
+   }
+   SetProgrammingMode pmode(bdmInterface);
 
    if (progressTimer != NULL) {
       progressTimer->restart("Mass Erasing Target");
    }
-   USBDM_ErrorCode rc = initialiseTarget();
+   USBDM_ErrorCode rc;
+#if (TARGET != CFVx)
+   // Don't do on CFVx as script has to change mode anyway
+   rc = initialiseTarget();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+#endif
    // Do Mass erase using TCL script
    rc = runTCLCommand("massEraseTarget");
    if (rc != PROGRAMMING_RC_OK) {
@@ -515,7 +524,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::massEraseTarget(void) {
 //!
 USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashOperation flashOperation) {
    LOGGING;
-   FlashProgramConstPtr flashProgram = parameters.getFlashProgram();
+   FlashProgramConstPtr flashProgram = device->getFlashProgram();
    if (!flashProgram) {
       log.error("No flash program found for target\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
@@ -539,7 +548,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(MemoryRegionConstPtr memo
    FlashProgramConstPtr flashProgram = memoryRegionPtr->getFlashprogram();
    if (!flashProgram) {
       // Try to get device general routines
-      flashProgram = parameters.getCommonFlashProgram();
+      flashProgram = device->getCommonFlashProgram();
    }
    if (!flashProgram) {
       log.error("Failed, no flash program found for target\n");
@@ -618,9 +627,9 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashProgramConstPtr flas
 
    MemorySpace_t memorySpace = MS_XWord;
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, parameters.getRamStart());
+   rc = probeMemory(memorySpace, device->getRamStart());
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, parameters.getRamEnd());
+      rc = probeMemory(memorySpace, device->getRamEnd());
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
@@ -690,7 +699,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (parameters.getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@w:0x%04X (relocated from=w:0x%04X)\n",
                codeLoadAddress, loadAddress);
@@ -723,7 +732,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = parameters.getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -757,12 +766,12 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<parameters.getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>parameters.getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
       log.error("Data buffer location [w:0x%06X..w:0x%06X] is outside target RAM [w:0x%06X-w:0x%06X]\n",
             (targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)/2,
             (targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize)/2-1,
-            parameters.getRamStart()/2, (parameters.getRamEnd()-1)/2+1);
+            device->getRamStart()/2, (device->getRamEnd()-1)/2+1);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (targetProgramInfo.maxDataSize<40) {
@@ -1289,7 +1298,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::eraseFlash(void) {
 
    // Process each flash region
    for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = parameters.getMemoryRegion(index);
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
          break;
       }
@@ -1346,7 +1355,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::selectiveEraseFlashSecurity(void) {
    progressTimer->restart("Erasing all flash security areas...");
    // Process each flash region
    for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = parameters.getMemoryRegion(index);
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
          break;
       }
@@ -1432,7 +1441,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::getTargetBusSpeed(unsigned long *busFrequen
    if ((bdmStatus.connection_state == SPEED_SYNC) &&
        (bdmInterface->getSpeedHz(&connectionFrequency) == BDM_RC_OK)) {
       // Use speed determined by BDM SYNC pulse
-      *busFrequency = parameters.getBDMtoBUSFactor()*connectionFrequency;
+      *busFrequency = device->getBDMtoBUSFactor()*connectionFrequency;
       log.print("Using SYNC method, Bus Frequency = %ld kHz\n",
             (unsigned long)round(*busFrequency/1000.0));
       return PROGRAMMING_RC_OK;
@@ -1443,7 +1452,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::getTargetBusSpeed(unsigned long *busFrequen
        (bdmStatus.connection_state == SPEED_GUESSED) &&
        (bdmInterface->getSpeedHz(&connectionFrequency) == BDM_RC_OK)) {
       // Use speed determined by BDM guessing
-      *busFrequency = parameters.getBDMtoBUSFactor()*connectionFrequency;
+      *busFrequency = device->getBDMtoBUSFactor()*connectionFrequency;
       log.print(" - Using Approximate method, Bus Frequency = %ld kHz\n",
             (unsigned long)round(*busFrequency/1000.0));
       return PROGRAMMING_RC_ERROR_SPEED_APPROX;
@@ -1562,7 +1571,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage, 
    }
    SecurityInfoConstPtr securityInfo;
    bool dontOverwrite =  false;
-   switch (parameters.getSecurity()) {
+   switch (device->getSecurity()) {
       case SEC_SECURED:
          log.print("Setting image as secured\n");
          securityInfo = flashRegion->getSecureInfo();
@@ -1592,7 +1601,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage, 
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    int size = securityInfo->getSize();
-   if (parameters.getSecurity() == SEC_DEFAULT) {
+   if (device->getSecurity() == SEC_DEFAULT) {
       // Check if security area exists in image
       // If so - selective erase if needed
       for(int index=0; index<size; index++) {
@@ -1619,8 +1628,8 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage, 
    // Save contents of current security area in Flash
    recordSecurityArea(securityAddress, size, memory);
    if (memcmp(data, memory, size) == 0) {
-      if ((parameters.getEraseOption() == DeviceData::eraseMass) ||
-          (parameters.getEraseOption() == DeviceData::eraseNone)) {
+      if ((device->getEraseOption() == DeviceData::eraseMass) ||
+          (device->getEraseOption() == DeviceData::eraseNone)) {
          // Clear security area in image to prevent re-programming
          log.print("Clearing security area as already valid and not being erased\n");
          for(int index=0; index<size; index++) {
@@ -1660,7 +1669,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage) 
    securityNeedsSelectiveErase = false; // Assume security areas are valid
    deleteSecurityAreas();
    for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = parameters.getMemoryRegion(index);
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
          break;
       }
@@ -1715,12 +1724,12 @@ USBDM_ErrorCode FlashProgrammer_DSC::doFlashBlock(FlashImagePtr   flashImage,
       memorySpace       = MS_PWord;
    }
    // Locate containing Memory region (Programmable or RAM)
-   MemoryRegionConstPtr memoryRegionPtr = parameters.getMemoryRegionFor(flashAddress&memoryAddressMask, memorySpace);
+   MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegionFor(flashAddress&memoryAddressMask, memorySpace);
    if (memoryRegionPtr == NULL) {
       log.error("Block %s[0x%06X...] is not within target memory.\n", getMemSpaceName(memorySpace), flashAddress&memoryAddressMask);
-      MemoryRegionPtr regPtr = parameters.getMemoryRegion(0);
+      MemoryRegionConstPtr regPtr = device->getMemoryRegion(0);
       log.error("Region 0=%s[0x%06X...0x%06X]\n", regPtr->getMemoryTypeName(), regPtr->getMemoryRange(0)->start, regPtr->getMemoryRange(0)->end);
-      regPtr = parameters.getMemoryRegion(1);
+      regPtr = device->getMemoryRegion(1);
       log.error("Region 0=%s[0x%06X...0x%06X]\n", regPtr->getMemoryTypeName(), regPtr->getMemoryRange(0)->start, regPtr->getMemoryRange(0)->end);
       return PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
    }
@@ -2080,7 +2089,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::doReadbackVerify(FlashImagePtr flashImage) 
 
       while (regionSize>0) {
          // Get memory block containing address
-         MemoryRegionConstPtr memRegion = parameters.getMemoryRegionFor(memoryAddress, memorySpace);
+         MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(memoryAddress, memorySpace);
          if (memRegion == NULL) {
             log.error("Verifying Block %s[0x%8.8X..0x%8.8X] - Not in valid memory region\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+regionSize-1);
             return PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
@@ -2243,19 +2252,19 @@ USBDM_ErrorCode FlashProgrammer_DSC::verifyFlash(FlashImagePtr flashImage,
                                                  CallBackT     progressCallBack) {
    LOGGING;
    USBDM_ErrorCode rc;
-   if ((this == NULL) || (parameters.getTargetName().empty())) {
+   if ((this == NULL) || (device->getTargetName().empty())) {
       log.print("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    log.print("===========================================================\n");
    log.print("\tprogressCallBack = %p\n",                 progressCallBack);
-   log.print("\tDevice = \'%s\'\n",                       parameters.getTargetName().c_str());
-   log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   parameters.getClockTrimFreq(),
-                                                               parameters.getClockTrimNVAddress(),
-                                                               parameters.getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    parameters.getRamStart(), parameters.getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(parameters.getEraseOption()));
-   log.print("\tSecurity=%s\n",                           getSecurityName(parameters.getSecurity()));
+   log.print("\tDevice = \'%s\'\n",                       device->getTargetName().c_str());
+   log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
+                                                               device->getClockTrimNVAddress(),
+                                                               device->getClockAddress());
+   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
+   log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(device->getEraseOption()));
+   log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("===========================================================\n");
 
@@ -2270,7 +2279,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::verifyFlash(FlashImagePtr flashImage,
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
-   if (parameters.getTargetName().empty()) {
+   if (device->getTargetName().empty()) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -2331,8 +2340,9 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
                                                   bool          doRamWrites) {
    LOGGING;
 
-   USBDM_ErrorCode rc;
-   if ((this == NULL) || (parameters.getTargetName().empty())) {
+   SetProgrammingMode pmode(bdmInterface);
+
+   if ((this == NULL) || (device->getTargetName().empty())) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -2349,26 +2359,26 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
          "\tSecurity=%s\n"
          "\tTotal bytes=%d\n"
          "\tdoRamWrites=%s\n",
-         parameters.getTargetName().c_str(),
-         parameters.getClockTrimFreq(),
-         parameters.getClockTrimNVAddress(),
-         parameters.getClockAddress(),
-         parameters.getRamStart(),
-         parameters.getRamEnd(),
-         DeviceData::getEraseOptionName(parameters.getEraseOption()),
-         getSecurityName(parameters.getSecurity()),
+         device->getTargetName().c_str(),
+         device->getClockTrimFreq(),
+         device->getClockTrimNVAddress(),
+         device->getClockAddress(),
+         device->getRamStart(),
+         device->getRamEnd(),
+         DeviceData::getEraseOptionName(device->getEraseOption()),
+         getSecurityName(device->getSecurity()),
          flashImage->getByteCount(),
          doRamWrites?"T":"F");
 #else
    log.print("===========================================================\n");
    log.print("\tprogressCallBack = %p\n",                 progressCallBack);
-   log.print("\tDevice = \'%s\'\n",                       parameters.getTargetName().c_str());
-   log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   parameters.getClockTrimFreq(),
-                                                          parameters.getClockTrimNVAddress(),
-                                                          parameters.getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    parameters.getRamStart(), parameters.getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(parameters.getEraseOption()));
-   log.print("\tSecurity=%s\n",                           getSecurityName(parameters.getSecurity()));
+   log.print("\tDevice = \'%s\'\n",                       device->getTargetName().c_str());
+   log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
+                                                          device->getClockTrimNVAddress(),
+                                                          device->getClockAddress());
+   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
+   log.print("\tErase=%s\n",                              DeviceData::getEraseOptionName(device->getEraseOption()));
+   log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");
    log.print("===========================================================\n");
@@ -2381,11 +2391,13 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
    flashReady = FALSE;
    currentFlashProgram.reset();
 
+   USBDM_ErrorCode rc;
+
    rc = initTCL();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
-   if (parameters.getTargetName().empty()) {
+   if (device->getTargetName().empty()) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -2395,7 +2407,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
    // Ignore some errors if mass erasing target as it is possible to mass
    // erase some targets without a complete debug connection
    if ((rc != BDM_RC_OK) &&
-       ((parameters.getEraseOption() != DeviceData::eraseMass) ||
+       ((device->getEraseOption() != DeviceData::eraseMass) ||
         ((rc != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
          (rc != BDM_RC_SECURED) &&                    // Secured device
          (rc != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
@@ -2406,7 +2418,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
    bool secured = checkTargetUnSecured() != PROGRAMMING_RC_OK;
 
    // Check target security
-   if (secured && (parameters.getEraseOption() != DeviceData::eraseMass)) {
+   if (secured && (device->getEraseOption() != DeviceData::eraseMass)) {
       // Can't program if secured
       return PROGRAMMING_RC_ERROR_SECURED;
    }
@@ -2416,26 +2428,30 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
       return rc;
    }
    // Mass erase if selected
-   if (parameters.getEraseOption() == DeviceData::eraseMass) {
-      rc = massEraseTarget();
+   if (device->getEraseOption() == DeviceData::eraseMass) {
+      rc = massEraseTarget(false);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
    }
+#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == CFVx) || (TARGET == MC56F80xx) || (TARGET == S12Z)
    // Check target SDID
    rc = confirmSDID();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+#endif
    // Modify flash image according to security options
    rc = setFlashSecurity(flashImage);
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+#if (TARGET == CFVx) || (TARGET == MC56F80xx)// || (TARGET == ARM)
    rc = determineTargetSpeed();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+#endif
    // Set up for Flash operations (clock etc)
    rc = initialiseTargetFlash();
    if (rc != PROGRAMMING_RC_OK) {
@@ -2444,18 +2460,18 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
    //
    // The above leaves the Flash ready for programming
    //
-   if (parameters.getEraseOption() == DeviceData::eraseMass) {
+   if (device->getEraseOption() == DeviceData::eraseMass) {
       // Erase the security area as Mass erase programs it to a non-blank value
       rc = selectiveEraseFlashSecurity();
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
    }
-   if (parameters.getEraseOption() == DeviceData::eraseAll) {
+   if (device->getEraseOption() == DeviceData::eraseAll) {
       // Erase all flash arrays
       rc = eraseFlash();
    }
-   else if (parameters.getEraseOption() == DeviceData::eraseSelective) {
+   else if (device->getEraseOption() == DeviceData::eraseSelective) {
       // Selective erase area to be programmed - this may have collateral damage!
       rc = doSelectiveErase(flashImage);
    }
@@ -2504,15 +2520,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
          programTime, flashImage->getByteCount()/(1+1024*programTime),  rc);
 
    return rc;
-}
-
-USBDM_ErrorCode FlashProgrammer_DSC::setFlashTrimValues(FlashImagePtr flashImage) {
-   return BDM_RC_OK;
-}
-
-USBDM_ErrorCode FlashProgrammer_DSC::getCalculatedTrimValue(uint16_t &value) {
-   value = parameters.getClockTrimValue();
-   return PROGRAMMING_RC_OK;
 }
 
 /*

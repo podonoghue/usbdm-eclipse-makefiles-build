@@ -13,11 +13,12 @@
 #include <string.h>
 
 #include "BdmInterface.h"
+#include "DeviceData.h"
 
 class DeviceData;
 
 DiReturnT getAttribute(const char *key, int *value, int defaultValue);
-USBDM_ErrorCode getDeviceData(const TargetType_t targetType, DeviceData &deviceData);
+USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData);
 USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface);
 
 // Unused

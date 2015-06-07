@@ -20,8 +20,10 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.240 - Added return error codes
-;#  V4.10.4 - Changed return code handling
+;#  V4.11.1.50  - initFlash{} now queries target for speed
+;#  V4.11.1.50  - Changed security checking routine (now does blank check first)
+;#  V4.10.4.240 - Added return error codes
+;#  V4.10.4     - Changed return code handling
 ;# 
 
 ;######################################################################################
@@ -95,16 +97,25 @@ proc initTarget { flashAddresses } {
 
 ;######################################################################################
 ;#
-;#  busFrequency - Target bus busFrequency in kHz
+;#  busSpeedkHz - Target bus frequency in kHz
 ;#
-proc initFlash { busFrequency } {
+proc initFlash { {busSpeedkHz 0} } {
    puts "initFlash {}"
    
-   set cfmclkd [calculateFlashDivider $busFrequency]
+   if { [expr $busSpeedkHz == 0] } {
+      puts "initFlash() - Measuring bus frequency"
+      ;# Get target speed from BDM connection speed
+      set busSpeedkHz [expr [speed]/1000]
+   }
+   puts "initFlash {} busSpeedkHz = $busSpeedkHz"
+   set cfmclkd [calculateFlashDivider  $busSpeedkHz]
 
-   ;# Set up Flash
-   wb $::HCS08_FCDIV $cfmclkd ;# Flash divider
-   wb $::HCS08_FPROT 0xFF     ;# unprotect Flash
+   ;# Set Flash clock divider
+   wb $::HCS08_FCDIV $cfmclkd
+   rb $::HCS08_FCDIV
+   
+   ;# unprotect Flash
+   wb $::HCS08_FPROT 0xFF
    
    return
 }
@@ -127,7 +138,6 @@ proc calculateFlashDivider { busFrequency } {
    }
    set cfmclkd [expr $cfmclkd | (($busFrequency-1)/200)]
    set flashClk [expr $busFrequency / (($cfmclkd&0x3F)+1)]
-   
    puts "cfmclkd = $cfmclkd, flashClk = $flashClk"
    if { [expr ($flashClk<150)||($flashClk>200)] } {
       puts "Not possible to find suitable flash clock divider"
@@ -143,7 +153,8 @@ proc calculateFlashDivider { busFrequency } {
 ;#  value   - data value to use
 ;#
 proc executeFlashCommand { cmd address value } {
-
+   ;# puts "executeFlashCommand {}"
+   
    ;# Clear FPVIOL and FACCERR
    wb $::HCS08_FSTAT    [expr ($::HCS08_FSTAT_FPVIOL|$::HCS08_FSTAT_FACCERR)]
    wb $address $value                         ;# Write to flash to buffer address and data
@@ -178,15 +189,9 @@ proc executeFlashCommand { cmd address value } {
 ;#
 proc massEraseTarget { } {
 
-   ;# Get target speed from BDM connection speed
-   set busSpeedkHz [expr [speed]/1000]
-   set cfmclkd [calculateFlashDivider  $busSpeedkHz]
-
-   ;# Set Flash clock divider
-   wb $::HCS08_FCDIV $cfmclkd
-
-   ;# unprotect Flash
-   wb $::HCS08_FPROT 0xFF
+   puts "massEraseTarget{}"
+   
+   initFlash
 
    ;# Mass erase flash (& EEPROM)
    ;# puts "Mass erasing device"
@@ -195,18 +200,6 @@ proc massEraseTarget { } {
       executeFlashCommand $::HCS08_FCMD_MASS_ERASE $flashAddress 0xFF
    }
    
-   ;# Blankcheck flash (to temporarily unsecure flash)
-   ;# puts "Doing blank check"
-   foreach flashAddress $::FLASH_ADDRESSES {
-      ;# puts "executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF"
-      executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF
-      set status  [rb $::HCS08_FSTAT]
-      if [ expr (($status & $::HCS08_FSTAT_FBLANK) == 0) ] {
-         ;# puts [ format "Flash blank check failed HCS08_FSTAT=0x%02X" $status ]
-         puts "Flash blank check failed"
-	 error $::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND
-      }
-   }
    ;# Should be temporarily unsecure
    ;# Confirm unsecured
    return [ isUnsecure ]
@@ -215,12 +208,30 @@ proc massEraseTarget { } {
 ;######################################################################################
 ;#
 proc isUnsecure { } {
+   
+   ;# Check security bits in FOPT
+   puts "isUnsecure{} - Checking FOPT security"
    set securityValue [rb $::HCS08_FOPT]
-   if [ expr ( $securityValue & $::HCS08_FOPT_SEC_MASK ) != $::HCS08_FOPT_SEC_UNSEC ] {
-      puts "isUnsecure{} - Target is secured!"
-      return $::PROGRAMMING_RC_ERROR_SECURED
+   if [ expr ( $securityValue & $::HCS08_FOPT_SEC_MASK ) == $::HCS08_FOPT_SEC_UNSEC ] {
+      puts "isUnsecure{} - Target is unsecured"
+      return 0
    }
-   puts "isUnsecure{} - Target is unsecured"
+   puts "isUnsecure{} - FOPT security check failed - doing blank check!"
+
+   initFlash
+
+   ;# Blankcheck flash (to temporarily unsecure flash if entirely blank)
+   foreach flashAddress $::FLASH_ADDRESSES {
+      ;# puts "executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF"
+      executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF
+      set status  [rb $::HCS08_FSTAT]
+      if [ expr (($status & $::HCS08_FSTAT_FBLANK) == 0) ] {
+         ;# puts [ format "Flash blank check failed HCS08_FSTAT=0x%02X" $status ]
+         puts "isUnsecure{} - Flash not blank (and still secured)"
+         return $::PROGRAMMING_RC_ERROR_SECURED
+      }
+   }
+   puts "isUnsecure{} - Flash is blank and temporarily unsecured"
    return 0
 }
 

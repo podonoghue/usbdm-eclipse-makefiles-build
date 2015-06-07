@@ -28,7 +28,7 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "CompanyName",      "pgo"
-            VALUE "FileDescription",  "JS16 1st level bootloader"
+            VALUE "FileDescription",  "JB16 1st level bootloader"
             VALUE "FileVersion",      USBDM_VERSION_STRING
             VALUE "InternalName",     ""
             VALUE "ProductName",      "USBDM"

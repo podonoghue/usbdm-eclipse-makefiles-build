@@ -750,10 +750,6 @@ uint32_t DeviceData::getClockTrimNVAddress() const {
    return clockTrimNVAddress;
 }
 
-uint16_t DeviceData::getClockTrimValue() const {
-   return clockTrimValue;
-}
-
 unsigned long DeviceData::getClockTrimFreq() /*Hz*/ const {
    return clockTrimFreq;
 }
@@ -917,10 +913,6 @@ void DeviceData::setClockTrimNVAddress(uint32_t addr) {
    clockTrimNVAddress = addr;
 }
 
-void DeviceData::setClockTrimValue(uint16_t value)   {
-   clockTrimValue = value;
-}
-
 void DeviceData::setClockTrimFreq(unsigned long hertz) /*Hz*/   {
    clockTrimFreq = hertz;
 }
@@ -1011,9 +1003,10 @@ const EnumValuePair ClockTypes::clockNames[] = {
    EnumValuePair(  0,              ""),
 };
 
-DeviceData *DeviceData::shallowCopy(const DeviceData &other) {
-   *this = other;
-   return this;
+DeviceDataPtr DeviceData::shallowCopy() const {
+   DeviceData *copy = new DeviceData(targetType, targetName);
+   *copy = *this;
+   return DeviceDataPtr(copy);
 }
 
 //! Returns the default non-volatile flash location for the clock trim value
@@ -1714,8 +1707,7 @@ DeviceData::DeviceData(
                watchdogAddress(0),
                SDIDAddress(0),
                security(SEC_DEFAULT),
-               eraseOption(eraseAll),
-               clockTrimValue(0) {
+               eraseOption(eraseAll) {
 
    flexNVMParameters.eeepromSize  = 0xFF;
    flexNVMParameters.partionValue = 0xFF;
@@ -1733,7 +1725,7 @@ const string DeviceData::toString() const {
    stream << "clockTrimFreq         = " << (snprintf(buff, sizeof(buff), "0x%ld kHz",  this->clockTrimFreq),             buff) << endl;
    stream << "clockDefaultTrimFreq  = " << (snprintf(buff, sizeof(buff), "0x%d kHz",   this->getDefaultClockTrimFreq()), buff) << endl;
    stream << "clockTrimNVAddress    = " << (snprintf(buff, sizeof(buff), "0x%08X",     this->clockTrimNVAddress),        buff) << endl;
-   stream << "clockTrimValue        = " << (snprintf(buff, sizeof(buff), "0x%d",       this->clockTrimValue),            buff) << endl;
+//   stream << "clockTrimValue        = " << (snprintf(buff, sizeof(buff), "0x%d",       this->clockTrimValue),            buff) << endl;
    stream << "connectionFreq        = " << (snprintf(buff, sizeof(buff), "0x%ld",      this->connectionFreq),            buff) << endl;
    stream << "security              = " << getSecurityName(this->security)                                                     << endl;
    stream << "clockType             = " << this->clockType                                                                     << endl;

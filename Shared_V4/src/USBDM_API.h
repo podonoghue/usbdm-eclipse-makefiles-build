@@ -98,7 +98,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-
 #if defined __cplusplus
     extern "C" {
 #else
@@ -746,22 +745,6 @@ typedef enum {
    JTAG_SHIFT_DR         = 0,     //!< Enter SHIFT-DR (from TEST-LOGIC-RESET or RUN-TEST/IDLE)
    JTAG_SHIFT_IR         = 1,     //!< Enter SHIFT-IR (from TEST-LOGIC-RESET or RUN-TEST/IDLE)
 } JTAG_ExitActions_t;
-
-//=======================================================================
-//
-//  ICP Mode
-//
-//=======================================================================
-
-//! Error codes returned by JMxx BDM when in ICP mode
-//!
-typedef enum {
-   ICP_RC_OK          = 0,    //!< No error
-   ICP_RC_ILLEGAL     = 1,    //!< Illegal command or parameters
-   ICP_RC_FLASH_ERR   = 2,    //!< Flash failed to program etc
-   ICP_RC_VERIFY_ERR  = 3,    //!< Verify failed
-} ICP_ErrorCode_t;
-
 
 //=======================================================================
 //
@@ -1758,13 +1741,13 @@ void USBDM_RebootToICP(void);
 //!
 //! @return
 //!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorCode_t
+//!      - != ICP_RC_OK => fail, see \ref USBDM_ErrorCode
 //!
 //! @note Flash memory alignment requirements should be taken into account.  The
 //! range erased should be a multiple of the Flash erase block size.
 //!
 USBDM_API
-ICP_ErrorCode_t  USBDM_ICP_Erase( unsigned int addr,
+USBDM_ErrorCode  USBDM_ICP_Erase( unsigned int addr,
                                   unsigned int count);
 
 //! ICP mode - program BDM Flash memory
@@ -1775,10 +1758,10 @@ ICP_ErrorCode_t  USBDM_ICP_Erase( unsigned int addr,
 //!
 //! @return
 //!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorCode_t
+//!      - != ICP_RC_OK => fail, see \ref USBDM_ErrorCode
 //!
 USBDM_API
-ICP_ErrorCode_t  USBDM_ICP_Program( unsigned int  addr,
+USBDM_ErrorCode  USBDM_ICP_Program( unsigned int  addr,
                                     unsigned int  count,
                                     unsigned char *data);
 
@@ -1790,10 +1773,10 @@ ICP_ErrorCode_t  USBDM_ICP_Program( unsigned int  addr,
 //!
 //! @return
 //!      - == ICP_RC_OK => success \n
-//!      - != ICP_RC_OK => fail, see \ref ICP_ErrorCode_t
+//!      - != ICP_RC_OK => fail, see \ref USBDM_ErrorCode
 //!
 USBDM_API
-ICP_ErrorCode_t  USBDM_ICP_Verify( unsigned int  addr,
+USBDM_ErrorCode  USBDM_ICP_Verify( unsigned int  addr,
                                    unsigned int  count,
                                    unsigned char *data);
 
@@ -1809,13 +1792,15 @@ ICP_ErrorCode_t  USBDM_ICP_Verify( unsigned int  addr,
 USBDM_API
 void USBDM_ICP_Reboot( void );
 
-//====================================================================
-//! ICP callback
-// @param status  - used to indicate error status (not currently used)
-// @param percent - percentage of progress with current operation
-// @icpCallBackT  - call-back function type
-//!
-typedef ICP_ErrorCode_t (*icpCallBackT)(ICP_ErrorCode_t status, unsigned int percent);
+#ifdef __cplusplus
+// Only available to C++
+
+/*!
+ *  Class ICP callback
+ *
+ *  Used to indicate error status and progress
+ */
+class ProgressDialogue;
 
 //====================================================================
 //! ICP mode - Set ICP Callback function
@@ -1828,12 +1813,13 @@ typedef ICP_ErrorCode_t (*icpCallBackT)(ICP_ErrorCode_t status, unsigned int per
 //! @note The callback is cleared after each ICP operation completes
 //!
 USBDM_API
-void USBDM_ICP_SetCallback(icpCallBackT icpCallBack_);
+void USBDM_ICP_SetCallback(ProgressDialogue *icpCallBack);
 
 #ifdef COMMANDLINE
 void dll_initialize(HINSTANCE _hDLLInst);
 void dll_uninitialize(void);
 #endif // COMMANDLINE
+#endif //__cplusplus
 
 #if defined __cplusplus
     }

@@ -29,14 +29,14 @@
 
 \verbatim
  Change History
-+===========================================================================================
++=============================================================================================
+|  3 Jun 2015 | Moved to UsbdmSystem                                           - pgo - V4.11.1
 |  4 May 2012 | Unified error code handling                                    - pgo - V4.9.5
-+===========================================================================================
++=============================================================================================
 \endverbatim
 */
 #include "USBDM_API.h"
-//#include "UsbdmSystem.h"
-#include "USBDM_ErrorMessages.h"
+#include "UsbdmSystem.h"
 
 //! Error message string from Error #
 static const char *const errorMessages[] = {
@@ -153,28 +153,26 @@ static const char *fileLoaderErrorMessages[] = {
 //!
 //! @return pointer to static string describing the error
 //!
-CPP_DLL_LOCAL
-const char *getErrorName(unsigned int error) {
+const char *UsbdmSystem::getErrorString(unsigned errorCode) {
    static const char unknownErrorMessage[] = "Unknown Error";
    const char *errorName = 0;
+   errorCode &= ~BDM_RC_ERROR_HANDLED;
 
-   error &= ~BDM_RC_ERROR_HANDLED;
-
-   if (error >= SFILE_RC_FIRST_MESSAGE) {
-      error -= SFILE_RC_FIRST_MESSAGE;
-      if (error < sizeof(fileLoaderErrorMessages)/sizeof(fileLoaderErrorMessages[0])) {
-         errorName = fileLoaderErrorMessages[error];
+   if (errorCode >= SFILE_RC_FIRST_MESSAGE) {
+      errorCode -= SFILE_RC_FIRST_MESSAGE;
+      if (errorCode < sizeof(fileLoaderErrorMessages)/sizeof(fileLoaderErrorMessages[0])) {
+         errorName = fileLoaderErrorMessages[errorCode];
       }
    }
-   else if (error >= PROGRAMMING_RC_ERROR_FIRST_MESSAGE) {
-      error -= PROGRAMMING_RC_ERROR_FIRST_MESSAGE;
-      if (error < sizeof(programmingErrorMessages)/sizeof(programmingErrorMessages[0])) {
-         errorName = programmingErrorMessages[error];
+   else if (errorCode >= PROGRAMMING_RC_ERROR_FIRST_MESSAGE) {
+      errorCode -= PROGRAMMING_RC_ERROR_FIRST_MESSAGE;
+      if (errorCode < sizeof(programmingErrorMessages)/sizeof(programmingErrorMessages[0])) {
+         errorName = programmingErrorMessages[errorCode];
       }
    }
    else {
-      if (error < sizeof(errorMessages)/sizeof(errorMessages[0])) {
-         errorName = errorMessages[error];
+      if (errorCode < sizeof(errorMessages)/sizeof(errorMessages[0])) {
+         errorName = errorMessages[errorCode];
       }
    }
    if (errorName == 0) {

@@ -35,7 +35,7 @@ protected:
    GdbInOut                   *gdbInOut;
    BdmInterfacePtr             bdmInterface;
    DeviceInterfacePtr          deviceInterface;
-   DeviceData                  deviceData;
+   DeviceDataPtr        const &deviceData;
    bool                        useFastRegisterRead;
    RunState                    runState;
    GdbTargetStatus             gdbTargetStatus;

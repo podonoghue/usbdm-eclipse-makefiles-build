@@ -120,25 +120,14 @@ public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   USBDM_ErrorCode initTCL(void);
-   USBDM_ErrorCode releaseTCL(void);
-   USBDM_ErrorCode setDeviceData(const DeviceData &theParameters);
-   DeviceData*     getDeviceData() { return &parameters; }
-   USBDM_ErrorCode checkTargetUnSecured();
-   USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
-   USBDM_ErrorCode runTCLCommand(const char *command);
-   USBDM_ErrorCode massEraseTarget();
-   USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
-   USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID);
-   USBDM_ErrorCode confirmSDID(void);
-
-   USBDM_ErrorCode getCalculatedTrimValue(uint16_t &value) {
-      value = parameters.getClockTrimValue();
-      return PROGRAMMING_RC_OK;
-   }
-   USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode checkTargetUnSecured();
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
+   virtual USBDM_ErrorCode confirmSDID(void);
+   virtual USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
 };
 
 #endif // SOURCE_FLASHPROGRAMMER_S12Z_H_

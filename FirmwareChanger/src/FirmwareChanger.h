@@ -15,11 +15,14 @@
 /*!
  * Includes
  */
-#include <wx/wx.h>
+#include <tr1/memory>
+
+#include "FirmwareChangerSkeleton.h"
 #include "Common.h"
 #include "AppSettings.h"
 #include "NumberTextEditCtrl.h"
 #include "USBDM_API.h"
+#include "FlashImageFactory.h"
 
 /*!
  * Control identifiers
@@ -41,7 +44,6 @@ typedef struct {
    uint16_t   flashStart;          //!< start of user flash area (from ICP)
    uint16_t   userDetectICP;       //!< address of userDetectICP() routine in flash
    char      *sourceFilename;      //!< name of file loaded
-   uint8_t    flashImage[0x10000]; //!< buffer for Flash image
    bool       serialNumberPresent; //!< indicates if the flash image supports serial numbers
    wxString   serialNumber;        //!< serial number (if any)
 } FlashImageData;
@@ -58,43 +60,26 @@ typedef struct {
 } ICP_dataType;
 
 /*!
- * bootloaderDialogue class declaration
+ * FirmwareChangerDialogue class declaration
  */
-class bootloaderDialogue : public wxDialog
-{
-    DECLARE_DYNAMIC_CLASS( bootloaderDialogue )
-    DECLARE_EVENT_TABLE()
+class FirmwareChangerDialogue : public FirmwareChangerSkeleton {
 
-private:
-    // Controls
-    wxButton                 *loadSourceButtonControl;
-    wxStaticText             *filenameStaticTextControl;
-    wxTextCtrl               *serialNumberTextControl;
-    wxButton                 *readSerialNumberButtonControl;
-    wxStaticText             *fileInformationStaticTextControl;
-    wxStaticText             *statusStaticTextControl;
-    wxButton                 *programFlashButtonControl;
-    wxButton                 *verifyButtonControl;
-    wxButton                 *exitButtonControl;
-    wxCheckBox               *autoSequenceControl;
-    wxCheckBox               *autoSelectFileControl;
-    NumberTextEditCtrl       *autoSequenceTextControl;
-
-    static wxProgressDialog  *progressDialogue;
+protected:
     FlashImageData            flashImageDescription;
     wxString                  errMessage;
     ICP_dataType              ICP_data;
     wxString                  serialNumber;
     wxString                  serialNumberPrefix;
     wxString                  filename;
+    wxString                  defaultDirectory;
+    wxString                  filePath;
+    FlashImagePtr             flashImage;
 
-    bool                      autoSequence;
+    bool                      autoSequenceFlag;
     int                       autoSequenceNumber;
     bool                      autoUpdateBdm;
-    bool                      fileLoaded;
 
-    int    loadS1S9File(const wxString &filepath);
-    int    loadS1S9File(FILE *fp);
+    bool   loadFlashImageFile(wxString path);
     void   setSerialNumber(const wxString &serialNumber);
     bool   consistencyCheck(unsigned int protectAddress);
     int    doFirmware(int  updateFirmware);
@@ -105,14 +90,18 @@ private:
     int    loadUpdateInformation();
     int    doAutoUpdate();
     int    readSerialNumber(void);
+    USBDM_ErrorCode reOpenBDM(void);
+
+    typedef USBDM_ErrorCode (__attribute__((__stdcall__))Operation)(unsigned int, unsigned int, unsigned char*);
+
+    USBDM_ErrorCode doBlockOperation(FlashImagePtr, uint32_t, uint32_t, Operation);
+    USBDM_ErrorCode doFlashOperation(Operation);
 
     int    openSingleDevice(void);
     void   serialNumberToTextControl(void);
     void   textControlToSerialNumber(void);
     void   parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix);
-
     void   updateControls(void);
-
 
 public:
     enum {
@@ -128,60 +117,40 @@ public:
        ID_AUTO_SELECT_FILE_CHECKBOX,
     };
 
-    static ICP_ErrorCode_t icpProgressCallBack(ICP_ErrorCode_t status, unsigned int percent);
-    static ICP_ErrorCode_t icpPulseCallBack(ICP_ErrorCode_t status);
-
     /// Constructors
-    bootloaderDialogue();
-    bootloaderDialogue( wxWindow* parent,
-                         wxWindowID id = SYMBOL_BOOTLOADERDIALOGUE_IDNAME,
-                         const wxString& caption = SYMBOL_BOOTLOADERDIALOGUE_TITLE,
-                         const wxPoint& pos = SYMBOL_BOOTLOADERDIALOGUE_POSITION,
-                         const wxSize& size = SYMBOL_BOOTLOADERDIALOGUE_SIZE,
-                         long style = SYMBOL_BOOTLOADERDIALOGUE_STYLE );
+    FirmwareChangerDialogue( wxWindow* parent);
 
     /// Destructor
-    ~bootloaderDialogue();
-
-    /// Creation
-    bool Create( wxWindow* parent,
-                 wxWindowID id = SYMBOL_BOOTLOADERDIALOGUE_IDNAME,
-                 const wxString& caption = SYMBOL_BOOTLOADERDIALOGUE_TITLE,
-                 const wxPoint& pos = SYMBOL_BOOTLOADERDIALOGUE_POSITION,
-                 const wxSize& size = SYMBOL_BOOTLOADERDIALOGUE_SIZE,
-                 long style = SYMBOL_BOOTLOADERDIALOGUE_STYLE );
+    ~FirmwareChangerDialogue();
 
     /// Initialises member variables
     void Init();
 
-    /// Creates the controls and sizers
-    void CreateControls();
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_FILE_LOAD_BUTTON
-    void OnFileLoadButtonClick( wxCommandEvent& event );
+    virtual void OnLoadFirmwareButtonClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PROGRAM_FLASH_BUTTON
-    void OnProgramFlashButtonClick( wxCommandEvent& event );
+    virtual void OnProgramFlashButtonClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_VERIFY_FLASH_BUTTON
-    void OnVerifyFlashButtonClick( wxCommandEvent& event );
+    virtual void OnVerifyFlashButtonClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_EXIT_BUTTON
-    void OnExitButtonClick( wxCommandEvent& event );
+    virtual void OnExitButtonClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
-    void OnSerialnumTextctrlTextUpdated( wxCommandEvent& event );
+    virtual void OnSerialnumTextctrlTextUpdated( wxCommandEvent& event );
 
     ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    void OnReadSerialNumButtonClick( wxCommandEvent& event );
+    virtual void OnReadSerialNumButtonClick( wxCommandEvent& event );
 
     ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    void OnAutoSequenceCheckboxClick( wxCommandEvent& event );
+    virtual void OnAutoSequenceCheckboxClick( wxCommandEvent& event );
 
     ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    void OnAutoUpdateBdmCheckboxClick( wxCommandEvent& event );
+    virtual void OnAutoSelectFirmwareCheckboxClick( wxCommandEvent& event );
 
-    void OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event );
+    virtual void OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event );
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );

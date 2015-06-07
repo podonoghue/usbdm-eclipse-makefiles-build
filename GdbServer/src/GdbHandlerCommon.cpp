@@ -34,7 +34,7 @@ GdbHandlerCommon::GdbHandlerCommon(TargetType_t targetType, GdbInOut *gdbInOut, 
    gdbInOut(gdbInOut),
    bdmInterface(bdmInterface),
    deviceInterface(deviceInterface),
-   deviceData(*deviceInterface->getCurrentDevice()) {
+   deviceData(deviceInterface->getCurrentDevice()) {
    LOGGING;
 
    if (gdbCallBackPtr == 0) {
@@ -669,10 +669,10 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
 USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    LOGGING;
 
-   if (deviceData.getEraseOption() == DeviceData::eraseNone) {
+   if (deviceData->getEraseOption() == DeviceData::eraseNone) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
-   if (deviceData.getSecurity() == SEC_SECURED) {
+   if (deviceData->getSecurity() == SEC_SECURED) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
 
@@ -715,7 +715,7 @@ void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferS
    xmlPtr += sizeof(xmlPrefix)-1; // Discard trailing '\0'
 
    for (int memIndex=0; true; memIndex++) {
-      MemoryRegionPtr pMemoryregion(deviceData.getMemoryRegion(memIndex));
+      MemoryRegionPtr pMemoryregion(deviceData->getMemoryRegion(memIndex));
       if (!pMemoryregion) {
          break;
       }
@@ -794,7 +794,7 @@ static inline std::string &ltrim(std::string &s) {
 bool GdbHandlerCommon::initRegisterDescription(void) {
    LOGGING_E;
 
-   RegisterDescriptionConstPtr registerDescriptionPtr = deviceData.getRegisterDescription();
+   RegisterDescriptionConstPtr registerDescriptionPtr = deviceData->getRegisterDescription();
    if (registerDescriptionPtr == NULL) {
       return false;
    }

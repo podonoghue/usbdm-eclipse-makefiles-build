@@ -122,30 +122,17 @@ bool            programmingSupported = false;
 bool            forceMassErase       = false;
 BdmInterfacePtr bdmInterface;
 
-//USBDMStatus_t USBDMStatus;
-
-//! BDM Options to be used with the target in general use
-//!
-USBDM_ExtendedOptions_t bdmOptions;
-
 //============================================================================
 #ifdef FLASH_PROGRAMMING
 
 //! Description of currently selected device
-static DeviceData deviceOptions;
+static DeviceDataPtr deviceData;
 
 //! Flash image for programming
 static FlashImagePtr flashImage;
 
 //! Flash programmer instance
 static FlashProgrammerPtr flashProgrammer;
-
-//! BDM Options to be used with the target when Flash programming
-//!
-USBDM_ExtendedOptions_t bdmProgrammingOptions = {
-   sizeof(USBDM_ExtendedOptions_t),
-   targetType
-};
 
 #endif
 
@@ -261,13 +248,14 @@ static DiStringT getGDIErrorMessage(void) {
 //!
 static DiReturnT closeBDM(void) {
    LOGGING_E;
+   DiReturnT rc = DI_OK;
 
-   USBDM_ErrorCode rc = bdmInterface->closeBdm();
+   USBDM_ErrorCode bdmRc = bdmInterface->closeBdm();
 
-   if (rc != BDM_RC_OK) {
-      return setErrorState(DI_ERR_FATAL, rc);
+   if (bdmRc != BDM_RC_OK) {
+      return setErrorState(DI_ERR_FATAL, bdmRc);
    }
-   return setErrorState(DI_OK);
+   return setErrorState(rc);
 }
 
 //===================================================================
@@ -335,8 +323,6 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
 
    initialConnectOptions = bdmInterface->getInitialConnectRetryMode();
    softConnectOptions    = bdmInterface->getSoftConnectRetryMode();
-   bdmOptions            = bdmInterface->getBdmOptions();
-
    if (rc != BDM_RC_OK) {
       bdmInterface->closeBdm();
       log.print("initBdm() failed, reason = %s\n", bdmInterface->getErrorString(rc));
@@ -347,32 +333,22 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
    // Set up flash programmer for target
 
    // Load description of device
-   rc = getDeviceData(targetType, deviceOptions);
+   rc = getDeviceData(targetType, deviceData);
    if (rc != BDM_RC_OK) {
-      deviceOptions.setTargetName("Unknown");
       return rc;
    }
    if (targetType == T_RS08) {
-      DeviceData::EraseOptions eraseOptions = deviceOptions.getEraseOption();
+      DeviceData::EraseOptions eraseOptions = deviceData->getEraseOption();
       if ((eraseOptions == DeviceData::eraseSelective) || (eraseOptions == DeviceData::eraseAll)) {
          // These targets only support mass erase
-         deviceOptions.setEraseOption(DeviceData::eraseMass);
+         deviceData->setEraseOption(DeviceData::eraseMass);
       }
    }
-   if (deviceOptions.getSecurity() == SEC_SECURED) {
-      deviceOptions.setSecurity(SEC_SMART);
+   if (deviceData->getSecurity() == SEC_SECURED) {
+      deviceData->setSecurity(SEC_SMART);
    }
-
-   // Copy required options for Flash programming.
-   // Other options are reset to default.
-   bdmProgrammingOptions.size                = sizeof(USBDM_ExtendedOptions_t);
-   bdmProgrammingOptions.targetType          = targetType;
-   //TODO - replace
-   USBDM_GetDefaultExtendedOptions(&bdmProgrammingOptions);
-   bdmProgrammingOptions.targetVdd           = bdmOptions.targetVdd;
-   bdmProgrammingOptions.interfaceFrequency  = bdmOptions.interfaceFrequency;
    flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
-   flashProgrammer->setDeviceData(deviceOptions);
+   flashProgrammer->setDeviceData(deviceData);
    programmingSupported = true;
 #endif
 
@@ -574,16 +550,12 @@ USBDM_ErrorCode initialConnect(void) {
                "Device appears to be secure and may \n"
                "only be programmed after a mass erase \n"
                "which completely erases the device.\n\n"
-               "Temporarily enable Mass erase?",
+               "Mass erase device?",
                "Device is secured",
                YES_NO|YES_DEFAULT|ICON_INFORMATION);
          log.print("Setting forceMassErase = %s\n", (getYesNo == YES)?"True":"False");
          if (getYesNo == YES) {
-         log.print("Setting forceMassErase\n");
-            forceMassErase = true; // Force mass erase & ignore ignore any error before done
-            flashProgrammer->getDeviceData()->setEraseOption(DeviceData::eraseMass);
-            // Ignore secured error
-            rc = BDM_RC_OK;
+            rc = flashProgrammer->massEraseTarget();
          }
       }
    }
@@ -906,10 +878,6 @@ DiReturnT programTargetFlash(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
-   // Set BDM options for programming
-   //TODO - replace
-   USBDM_SetExtendedOptions(&bdmProgrammingOptions);
-
 #if TARGET == MC56F80xx
    rc = bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
 #endif
@@ -920,9 +888,11 @@ DiReturnT programTargetFlash(void) {
    }
    // Program target
    rc = flashProgrammer->programFlash(flashImage, NULL, true);
+
    if (rc != PROGRAMMING_RC_OK) {
       return setErrorState(DI_ERR_FATAL, rc);
    }
+
    return DI_OK;
 }
 #endif
@@ -998,8 +968,6 @@ DiReturnT DiMemoryDownload ( DiBoolT            fUseAuxiliaryPath,
             return rc;
          }
          // Restore original options
-         //TODO - replace
-         USBDM_SetExtendedOptions(&bdmOptions);
          mtwksDisplayLine("DiMemoryDownload() - DI_DNLD_TERMINATE - Resetting target\n");
          log.print("-  Resetting target\n");
          bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
@@ -1245,7 +1213,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
 #ifdef FLASH_PROGRAMMING
       if (flashImage != NULL) {
 #if TARGET == RS08
-         MemType_t memoryType = deviceOptions.getMemoryType(writeAddress);
+         MemType_t memoryType = deviceData->getMemoryType(writeAddress);
          if ((memoryType != MemEEPROM) && (memoryType != MemFLASH) && (memoryType != MemPROM)) {
             log.print("Warning: unsupported memory write during Flash programming (ty=%s, sp=%s, 0x%06X...0x%06X)\n",
                   MemoryRegion::getMemoryTypeName(memoryType), getMemSpaceName(memorySpace), (uint32_t)writeAddress, (uint32_t)writeAddress+sub-1);
@@ -1887,16 +1855,20 @@ DiReturnT DiCommGetAcceptableSettings ( DiCommChannelT   dccType,
 //   log.print("szAttr = \'%s\'\n", szAttr);
 
    if (dccType == DI_COMM_PARALLEL) {
-      unsigned int deviceCount;
-      unsigned int index=0;
-      //TODO - remove
-      USBDM_ErrorCode BDMrc = USBDM_FindDevices(&deviceCount);
-      if (BDMrc != BDM_RC_OK)
-         return setErrorState(DI_ERR_COMMUNICATION, ("No USBDM Devices found"));
-      if (deviceCount>maxUSBDMDevices)
+      unsigned deviceCount = 1; // Default to a single BDM
+      if (bdmInterface != 0) {
+         std::vector<BdmInformation> bdms;
+         USBDM_ErrorCode BDMrc = bdmInterface->findBDMs(bdms);
+         if (BDMrc != BDM_RC_OK) {
+            return setErrorState(DI_ERR_COMMUNICATION, ("No USBDM Devices found"));
+         }
+         deviceCount = bdms.size();
+      }
+      if (deviceCount>maxUSBDMDevices) {
          deviceCount = maxUSBDMDevices;
-      for (index=0; index<deviceCount; index++) {
-         options[index] = possibleOptions[index];
+      }
+      for (unsigned bdmNum=0; bdmNum < deviceCount; bdmNum++) {
+         options[bdmNum] = possibleOptions[bdmNum];
       }
       options[deviceCount] = NULL;
       log.print("(DI_COMM_PARALLEL) => DI_OK\n");

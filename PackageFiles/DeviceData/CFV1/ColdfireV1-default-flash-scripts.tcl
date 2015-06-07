@@ -20,7 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.240 - Added return error codes
+;#  V4.10.4.240 - Added return error codes
 ;#  V4.10.4     - Changed return code handling
 ;# 
 
@@ -68,10 +68,22 @@ proc initTarget { args } {
 
 ;######################################################################################
 ;#
-;#  busFrequency - Target bus frequency in kHz
+;#  busSpeedkHz - Target bus frequency in kHz
 ;#
-proc initFlash { busFrequency } {
-;# Not used
+proc initFlash { {busSpeedkHz 0} } {
+   puts "initFlash {}"
+   
+   if { [expr $busSpeedkHz == 0] } {
+      puts "initFlash() - Measuring bus frequency"
+      ;# Get target speed from BDM connection speed
+      set busSpeedkHz [expr [speed]/1000]
+   }
+   puts "initFlash {} busSpeedkHz = $busSpeedkHz"
+   set cfmclkd [calculateFlashDivider  $busSpeedkHz]
+
+   ;# Set Flash clock divider via BDM reg
+   wdreg $::CFV1_DRegCSR3byte $cfmclkd
+   rdreg $::CFV1_DRegCSR3byte
    
    return
 }
@@ -82,7 +94,7 @@ proc initFlash { busFrequency } {
 ;#
 proc calculateFlashDivider { busFrequency } {
 
-   ;# puts "calculateFlashDivider {}"
+   puts "calculateFlashDivider {}"
    if { [expr $busFrequency < 300] } {
       puts "Clock too low for flash programming"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
@@ -94,7 +106,7 @@ proc calculateFlashDivider { busFrequency } {
    }
    set cfmclkd [expr $cfmclkd | (($busFrequency-1)/200)]
    set flashClk [expr $busFrequency / (($cfmclkd&0x3F)+1)]
-   ;# puts "cfmclkd = $cfmclkd, flashClk = $flashClk"
+   puts "cfmclkd = $cfmclkd, flashClk = $flashClk"
    if { [expr ($flashClk<150)||($flashClk>200)] } {
       puts "Not possible to find suitable flash clock divider"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
@@ -107,6 +119,8 @@ proc calculateFlashDivider { busFrequency } {
 ;#
 proc massEraseTarget { } {
 
+   puts "massEraseTarget{}"
+
    ;# reset target to be sure
    reset s s
    
@@ -115,12 +129,7 @@ proc massEraseTarget { } {
    ;#  Re-connect
    connect
    
-   ;# Get target speed from BDM connection speed
-   set busSpeedkHz [expr [speed]/1000]
-   set cfmclkd [calculateFlashDivider  $busSpeedkHz]
-
-   ;# Set Flash clock divider via BDM reg
-   wdreg $::CFV1_DRegCSR3byte $cfmclkd
+   initFlash
 
    ;# Mass erase via BDM registers 
    ;#   puts "Mass erasing device"
@@ -152,7 +161,10 @@ proc massEraseTarget { } {
 
 ;######################################################################################
 ;#
-proc isUnsecure { } {
+proc isUnsecure { } {  
+   puts "isUnsecure{} - Checking XCSR.byte security"
+
+   ;# Check security bits in XCSR.byte
    set securityValue [ rdreg $::CFV1_DRegXCSRbyte ]
    if [ expr ( $securityValue & $::CFV1_XCSR_SEC ) != 0 ] {
       puts "isUnsecure{} - Target is secured!"

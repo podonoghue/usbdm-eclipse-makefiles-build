@@ -24,7 +24,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Change History
-   +========================================================================================
+   +===========================================================================================
+   |   1 Jun 2015 | Added check for phantom device (for Windows 8)                   V4.11.1.50
    |  31 May 2015 | Removed clear halts as breaks USB3 under linux                   V4.11.1.50
    |  27 Dec 2012 | Changed bdm_usb_recv_epIn() to use geometric backoffs            V4.10.4
    |  30 Nov 2012 | Changed bdmJMxx_usb_transaction() retry method etc               V4.10.4
@@ -37,7 +38,7 @@
    |   1 Aug 2009 | Modified extensively for new format USB comms
    |   1 Aug 2009 | Fixed input range validation in bdm_usb_open()
    |   1 Jan 2009 | Extensive changes to fold USBDM & OSBDM together
-   +========================================================================================
+   +===========================================================================================
     \endverbatim
 */
 
@@ -62,8 +63,6 @@
 #ifndef LIBUSB_SUCCESS
 #define LIBUSB_SUCCESS (0)
 #endif
-
-//#define RETRY_TEST
 
 #ifdef __unix__
 DLL_LOCAL
@@ -217,7 +216,7 @@ USBDM_ErrorCode bdm_usb_exit( void ) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_releaseDevices(void) {
-   LOGGING;
+   LOGGING_Q;
 
    if (!initialised) {
       return BDM_RC_NOT_INITIALISED;
@@ -247,8 +246,13 @@ USBDM_ErrorCode bdm_usb_releaseDevices(void) {
 //!       BDM_RC_USB_ERROR - no device found or various errors
 //!
 DLL_LOCAL
-USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount) {
+USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
    LOGGING;
+   log.print("Looking for device(s): ");
+   for(const UsbId *p=usbIds; p->vid!=0; p++) {
+      log.printq("[v:%4.4X,p:%4.4X] ", p->vid, p->pid);
+   }
+   log.printq("\n");
    *devCount = 0; // Assume failure
 
    // Release any currently referenced devices
@@ -274,18 +278,31 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount) {
       if (rc != LIBUSB_SUCCESS) {
          continue; // Skip device
       }
-//      log.print("bdm_usb_find_devices() ==> Checking device VID=%4.4X, PID=%4.4X\n",
-//            deviceDescriptor.idVendor, deviceDescriptor.idProduct);
-      if (((deviceDescriptor.idVendor==USBDM_VID)&&(deviceDescriptor.idProduct==USBDM_PID)) ||
-          ((deviceDescriptor.idVendor==TBLCF_VID)&&(deviceDescriptor.idProduct==TBLCF_PID)) ||
-          ((deviceDescriptor.idVendor==OSBDM_VID)&&(deviceDescriptor.idProduct==OSBDM_PID)) ||
-          ((deviceDescriptor.idVendor==TBDML_VID)&&(deviceDescriptor.idProduct==TBDML_PID))) {
+      bool found = false;
+      for(const UsbId *p=usbIds; p->vid!=0; p++) {
+         if ((deviceDescriptor.idVendor==p->vid)&&(deviceDescriptor.idProduct==p->pid)) {
+            log.print("Found device VID=%4.4X, PID=%4.4X\n", deviceDescriptor.idVendor, deviceDescriptor.idProduct);
+            found = true;
+            break;
+         }
+      }
+      if (found) {
          // Found a device
-
          uint8_t busNumber = libusb_get_bus_number(currentDevice);
          uint8_t address   = libusb_get_device_address(currentDevice);
-         log.print("==> Found USBDM device, List[%d] = #%d, dev#=%d, addr=%d\n", deviceCount, deviceIndex, busNumber, address);
+//         log.print("==> Found USBDM device, List[%d] = #%d, dev#=%d, addr=%d\n", deviceCount, deviceIndex, busNumber, address);
 
+         // Check if real device
+         // A bug in LIBUSB with Windows 7 requires this check to discard phantom devices
+         libusb_device_handle *usbDeviceHandle = 0;
+         if (libusb_open(currentDevice, &usbDeviceHandle) == LIBUSB_ERROR_NOT_SUPPORTED) {
+            log.error("Discarding USBDM device as phantom, List[%d] = #%d, dev#=%d, addr=%d\n", deviceCount, deviceIndex, busNumber, address);
+            continue;
+         }
+         if (usbDeviceHandle != 0) {
+            // Ignore any error on close
+            libusb_close(usbDeviceHandle);
+         }
          bdmDevices[deviceCount++] = currentDevice; // Record found device
          libusb_ref_device(currentDevice);          // Reference so we don't lose it
          bdmDevices[deviceCount]=NULL;              // Terminate the list again
@@ -294,7 +311,7 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount) {
          }
       }
    }
-   // Free the original list (devices referenced above are still referenced)
+   // Free the original list (devices referenced above are still held)
    libusb_free_device_list(list, true);
 
    *devCount = deviceCount;
@@ -350,13 +367,13 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
       }
    }
 //   log.print("libusb_open() done\n");
-   int configuration = 0;
-   rc = libusb_get_configuration(usbDeviceHandle, &configuration);
-   if (rc != LIBUSB_SUCCESS) {
-      log.error("libusb_get_configuration() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
-   }
+//   int configuration = 0;
+//   rc = libusb_get_configuration(usbDeviceHandle, &configuration);
+//   if (rc != LIBUSB_SUCCESS) {
+//      log.error("libusb_get_configuration() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
+//   }
 //   log.print("libusb_get_configuration() done\n");
-   if (configuration != 1) {
+//   if (configuration != 1) {
       rc = libusb_set_configuration(usbDeviceHandle, 1);
       if (rc != LIBUSB_SUCCESS) {
          log.error("libusb_set_configuration(1) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
@@ -365,8 +382,8 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          usbDeviceHandle = NULL;
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
-//      log.print("libusb_set_configuration() done\n");
-   }
+      log.print("libusb_set_configuration() done\n");
+//   }
    rc = libusb_claim_interface(usbDeviceHandle, 0);
    if (rc != LIBUSB_SUCCESS) {
       log.error("libusb_claim_interface(0) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
@@ -529,7 +546,7 @@ USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
    log.print("USB EP0 send (%s, size=%d):\n", getCommandName(data[1]), size);
    if (data[1] == CMD_USBDM_DEBUG)
       log.print("Debug cmd = %s\n", getDebugCommandName(data[2]));
-   printDump(data, size+1);
+   log.printDump(data, size+1);
 #endif // LOG_LOW_LEVEL
 
    // Copy data in case <5 bytes to avoid possible illegal de-referencing
@@ -557,15 +574,17 @@ USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
 //!
 //!  An immediate response is expected
 //!
-//! @param data - Entry \n
+//! @param data
+//! - Entry \n
 //!    data[0]    = N, the number of bytes to receive from the device \n
 //!    data[1]    = Command byte \n
 //!    data[2..5] = parameter(s) for OSBDM command \n
-//! @note data must be an array of at least 5 bytes even if there are no parameters!
-//!
-//! @param data - Exit \n
+//! - Exit \n
 //!    data[0]      = cmd response from OSBDM\n
 //!    data[1..N-1] = data response from the device (cleared on error)\n
+//! @note data must be an array of at least 5 bytes even if there are no parameters!
+//!
+//! @param actualRxSize - Size of received data (may be NULL if not needed)
 //!
 //! @return \n
 //!    == BDM_RC_OK (0)     => Success, OK response from device\n
@@ -579,7 +598,11 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
    int rc;
    int retry = 5;
    LOGGING;
+   unsigned dummy;
 
+   if (actualRxSize == 0) {
+      actualRxSize = &dummy;
+   }
    *actualRxSize = 0;
 
    if (usbDeviceHandle == NULL) {
@@ -593,18 +616,18 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
    log.print("bdm_usb_recv_ep0(%s, size=%d) - \n", getCommandName(cmd), size);
    if (data[1] == CMD_USBDM_DEBUG)
       log.print("Debug cmd = %s\n", getDebugCommandName(data[2]));
-   printDump(data, 6);
+   log.printDump(data, 6);
 #endif // LOG_LOW_LEVEL
 
    do {
       rc = libusb_control_transfer(usbDeviceHandle,
-               LIBUSB_REQUEST_TYPE_VENDOR|EP_CONTROL_IN,      // bmRequestType
-               cmd,                                           // bRequest
-               data[2]+(data[3]<<8),                          // wValue
-               data[4]+(data[5]<<8),                          // wIndex
-               (unsigned char*)data,                          // ptr to data buffer (for Rx)
-               size,                                          // wLength = size of transfer
-               timeoutValue                                   // timeout
+               LIBUSB_REQUEST_TYPE_VENDOR|EP_CONTROL_IN, // bmRequestType
+               cmd,                                      // bRequest
+               data[2]+(data[3]<<8),                     // wValue
+               data[4]+(data[5]<<8),                     // wIndex
+               (unsigned char*)data,                     // ptr to data buffer (for Rx)
+               size,                                     // wLength = size of transfer
+               timeoutValue                              // timeout
                );
       if (rc < 0) {
          log.error("libusb_control_transfer(sz=%d) failed - Transfer error (USB error = %s) - retry %d \n", size, libusb_error_name((libusb_error)rc), retry);
@@ -621,14 +644,14 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
       *actualRxSize = (unsigned) rc;
    }
    if ((data[0] != BDM_RC_OK) && (data[0] != cmd)){ // Error at BDM?
-      log.error("Cmd Failed (%s):\n", getErrorName(data[0]));
+      log.error("Cmd Failed (%s):\n", UsbdmSystem::getErrorString(data[0]));
       log.printDump(data,*actualRxSize);
       memset(&data[1], 0x00, size-1);
       return (USBDM_ErrorCode)data[0];
    }
 #ifdef LOG_LOW_LEVEL
    log.print("bdm_usb_recv_ep0(size = %d, recvd = %d):\n", size, rc);
-   printDump(data,rc);
+   log.printDump(data,rc);
 #endif // LOG_LOW_LEVEL
 
    return(BDM_RC_OK);
@@ -639,18 +662,21 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
 //*****************************************************************************
 //*****************************************************************************
 
-/*! \brief Sends a message+data to the Device in ICP mode
+/*! \brief Sends a message+data to the Device over EP0
  *
  *  No response is expected from device.
  *
  *  Since the EP0 transfer is unidirectional in this case, data returned by the
  *  device must be read in a separate transfer - this includes any status.
  *
- * @param request
- * @param wValue
- * @param wIndex
- * @param size
- * @param data
+ *  Sent [bmRequestType|bRequest|wValue|wIndex|wLength] [data...]
+ *
+ * @param bmRequest - the request field for the setup packet
+ * @param wValue    - the value field for the setup packet
+ * @param wIndex    - the index field for the setup packet
+ * @param data	     - buffer for transmit data
+ * @param wLength	  - the length field for the setup packet. The data buffer should be at least this size.
+ * @param timeout	  - timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
  *
  * @return
  *   == 0 => USB transfer OK \n
@@ -658,87 +684,93 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
  *
 */
 DLL_LOCAL
-USBDM_ErrorCode bdm_usb_raw_send_ep0(unsigned int  request,
-                                     unsigned int  wValue,
-                                     unsigned int  wIndex,
-                                     unsigned int  size,
-                                     const unsigned char *data) {
+USBDM_ErrorCode bdm_usb_raw_send_ep0(unsigned int         bmRequest,
+                                     unsigned int         wValue,
+                                     unsigned int         wIndex,
+                                     unsigned int         wLength,
+                                     const unsigned char *data,
+                                     unsigned int         timeout) {
    int rc;
    LOGGING;
 
-if (usbDeviceHandle == NULL) {
+   if (usbDeviceHandle == NULL) {
       log.error("Device not open\n");
       return BDM_RC_DEVICE_NOT_OPEN;
    }
 #ifdef LOG_LOW_LEVEL
-   log.print("req=%2.2X, val=%2.2X, ind=%d, size=%d\n", request, wValue, wIndex, size);
+   log.print("rtype=%2.2X, req=%2.2X, val=%4.4X, index=%4.4X, size=%d\n",
+         LIBUSB_REQUEST_TYPE_VENDOR|EP_CONTROL_OUT, bmRequest, wValue, wIndex, wLength);
+   log.printDump(data, wLength);
 #endif
    rc = libusb_control_transfer(usbDeviceHandle,
-            LIBUSB_REQUEST_TYPE_VENDOR|EP_CONTROL_OUT,      // bmRequestType
-            request,                                        // bRequest
-            wValue,                                         // value
-            wIndex,                                         // index
+            LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT, // bmRequestType
+            bmRequest,                                      // bRequest
+            wValue,                                         // wValue
+            wIndex,                                         // wIndex
             (unsigned char*)data,                           // data
-            size,                                           // size (# of data bytes)
-            timeoutValue);                                  // how long to wait for reply
-   if (rc < 0) {
+            wLength,                                        // wLength (# of data bytes)
+			timeout);                                       // how long to wait for reply
+
+   if ((rc < 0) || ((unsigned)rc != wLength)) {
       log.error("Send failed (USB error = %s)\n", libusb_error_name((libusb_error)rc));
       return(BDM_RC_USB_ERROR);
    }
    return(BDM_RC_OK);
 }
 
-//! \brief Sends a message+data to the Device in ICP mode
-//!
-//!  An immediate response is expected from device.
-//!
-//!  Since the EP0 transfer is unidirectional in this case, data returned by the
-//!  device must be read in a separate transfer - this includes any status.
-//!
-//!  @param request
-//!  @param wValue
-//!  @param wIndex
-//!  @param size
-//!  @param data
-//!
-//!  @return \n
-//!     == BDM_RC_OK (0)     => Success, OK response from device\n
-//!     == BDM_RC_USB_ERROR  => USB failure \n
-//!     == else              => Error code from Device
-//!
+/* \brief Receive data from the Device over EP0 in
+ *
+ *  An immediate response is expected from device.
+ *
+ *  Sent     [bmRequestType|bRequest|wValue|wIndex|wLength]
+ *  Received [data...]
+ *
+ * @param bmRequest - the request field for the setup packet
+ * @param wValue    - the value field for the setup packet
+ * @param wIndex    - the index field for the setup packet
+ * @param data      - a suitably-sized data buffer for received data
+ * @param wLength   - the length field for the setup packet. The data buffer should be at least this size.
+ * @param timeout   - timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
+ *
+ *  @return \n
+ *     == BDM_RC_OK (0)     => Success, OK response from device\n
+ *     == BDM_RC_USB_ERROR  => USB failure \n
+ */
 DLL_LOCAL
-USBDM_ErrorCode bdm_usb_raw_recv_ep0(unsigned int  request,
-                                     unsigned int  wValue,
-                                     unsigned int  wIndex,
-                                     unsigned int  size,
-                                     unsigned char *data) {
+USBDM_ErrorCode bdm_usb_raw_recv_ep0(unsigned int   bmRequest,
+                                     unsigned int   wValue,
+                                     unsigned int   wIndex,
+                                     unsigned int   wLength,
+                                     unsigned char *data,
+                                     unsigned int   timeout) {
    int rc;
-   LOGGING;
+   LOGGING_E;
    if (usbDeviceHandle == NULL) {
       log.error("Device not open\n");
-      data[0] = BDM_RC_DEVICE_NOT_OPEN;
       return BDM_RC_DEVICE_NOT_OPEN;
    }
 #ifdef LOG_LOW_LEVEL
-   log.print("============================\n");
-   log.print("bdm_usb_raw_recv_ep0(req=%2.2X, val=%2.2X, ind=%d, size=%d)\n",
-         request, wValue, wIndex, size);
-#endif // LOG_LOW_LEVEL
-
+   log.print("rtype=%2.2X, req=%2.2X, val=%4.4X, ind=%4.4X, size=%d\n",
+         LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN, bmRequest, wValue, wIndex, wLength);
+#endif
    rc = libusb_control_transfer(usbDeviceHandle,
             LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,  // bmRequestType
-            request,                                        // bRequest
-            wValue,                                         // value
-            wIndex,                                         // index
+            bmRequest,                                      // bRequest
+            wValue,                                         // wValue
+            wIndex,                                         // wIndex
             (unsigned char*)data,                           // data
-            size,                                           // size (# of data bytes)
-            timeoutValue);                                  // how long to wait for reply
+            wLength,                                        // wLength (# of data bytes)
+			timeout);                                  // how long to wait for reply
 
    if (rc < 0) {
       log.error("Transaction failed (USB error = %s)\n", libusb_error_name((libusb_error)rc));
-      data[0] = BDM_RC_USB_ERROR;
+      return BDM_RC_USB_ERROR;
    }
-   return (USBDM_ErrorCode)data[0];
+#ifdef LOG_LOW_LEVEL
+   log.printDump(data, rc);
+#endif
+
+   return BDM_RC_OK;
 }
 
 //*****************************************************************************
@@ -790,7 +822,7 @@ USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data
       if (data[1] == CMD_USBDM_DEBUG)
          log.print("bdm_usb_send_epOut() - Debug cmd = %s\n", getDebugCommandName(data[2]));
    }
-   printDump(data, count);
+   log.printDump(data, count);
 #endif // LOG_LOW_LEVEL
 
    rc = libusb_bulk_transfer(usbDeviceHandle,
@@ -873,13 +905,13 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
    rc = data[0]&0x7F;
 
    if (rc != BDM_RC_OK) {
-      log.error("Error Return %d (%s):\n", rc, getErrorName(rc));
+      log.error("Error Return %d (%s):\n", rc, UsbdmSystem::getErrorString(rc));
       log.error("size = %d, recvd = %d\n", count, transferCount);
       log.printDump(data, transferCount);
       memset(&data[1], 0x00, count-1);
    }
 #ifdef LOG_LOW_LEVEL
-   printDump(data, transferCount);
+   log.printDump(data, transferCount);
 #endif // LOG_LOW_LEVEL
 
    *actualCount = transferCount;
@@ -892,7 +924,6 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_reset_connection(void) {
-   USBDM_Version_t version;
    int rc;
    LOGGING;
 
@@ -908,15 +939,32 @@ USBDM_ErrorCode bdm_usb_reset_connection(void) {
 //   if (rc != LIBUSB_SUCCESS) {
 //      log.error("libusb_clear_halt(...,EP_OUT(0x%02X)) failed, rc = %s\n", EP_OUT, libusb_error_name((libusb_error)rc));
 //   }
-   if ((USBDM_GetVersion(&version)  != BDM_RC_OK) &&
-       (USBDM_GetVersion(&version)  != BDM_RC_OK)) { // Get BDM version - reset USB command handler
-      log.error("USBDM_GetVersion() failed\n");
+   uint8_t dummy[20];
+   if ((bdm_usb_getversion(dummy) != BDM_RC_OK) &&
+       (bdm_usb_getversion(dummy) != BDM_RC_OK)) { // Get BDM version - resets USB command handler
+      log.error("bdm_usb_getversion() failed\n");
       return BDM_RC_FAIL;
    }
    log.print("Success\n");
    return BDM_RC_OK;
 }
 
+/*
+ * @param usb_data - response from BDM
+ * @param rxSize - size of response (may be NULL)
+ *
+ * @return error code
+ */
+USBDM_ErrorCode bdm_usb_getversion(uint8_t usb_data[10], unsigned *rxSize) {
+   usb_data[0] = 10;                // receive up to 10 bytes
+   usb_data[1] = CMD_USBDM_GET_VER; // command
+   usb_data[3] = 1;
+   usb_data[4] = 0;
+   usb_data[5] = 0;
+   return bdm_usb_recv_ep0(usb_data, rxSize); // USB EP0
+}
+
+#ifdef USBDM_DLL_EXPORTS
 //! \brief Executes an USB transaction.
 //! This consists of a transmission of a command and reception of the response
 //! JB16 Version - see \ref bdm_usb_transaction()
@@ -1030,7 +1078,7 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
    // Mask toggle bit out of data
    inData[0] &= ~0x80;
    if (rc != BDM_RC_OK) {
-      log.error("Non-USB error, rc = %s\n", USBDM_GetErrorString(rc));
+      log.error("Non-USB error, rc = %s\n", UsbdmSystem::getErrorString(rc));
    }
    return rc;
 }
@@ -1130,8 +1178,8 @@ USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, cmd = %s, rc = %s\n",
-            getCommandName(command), getErrorName(rc));
+            getCommandName(command), UsbdmSystem::getErrorString(rc));
    }
    return rc;
 }
-
+#endif

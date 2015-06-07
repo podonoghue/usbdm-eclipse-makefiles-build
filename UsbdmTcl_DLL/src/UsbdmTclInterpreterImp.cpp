@@ -2536,30 +2536,29 @@ static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Set Target to re-boot into ICP mode
-static int cmd_setBoot(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// setBoot
-   if (argc != 1) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
-      return TCL_ERROR;
-   }
-   USBDM_RebootToICP();
-
-   PRINT("cmd_setBoot Complete\n");
-   return TCL_OK;
-}
+////! Set Target to re-boot into ICP mode
+//static int cmd_setBoot(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+//// setBoot
+//   if (argc != 1) {
+//      Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
+//      return TCL_ERROR;
+//   }
+//   USBDM_RebootToICP();
+//
+//   PRINT("cmd_setBoot Complete\n");
+//   return TCL_OK;
+//}
 
 #include <USBDM_API.h>
 #include <USBDM_API_Private.h>
 
 //! Send low-level sync command to BDM
 static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// debug <control_value>
+// sync <control_value>
    static const char *connectionStates[] = {
          "Not Connected", "Sync Speed", "Guess Speed", "Manual Speed"
    };
    USBDMStatus_t  bdm_status;
-   unsigned char usb_data[20] = {0};
    unsigned char BDMStatus;
    float speed;
    unsigned int ticks;
@@ -2568,8 +2567,11 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
       Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
       return TCL_ERROR;
    }
-   usb_data[2]=BDM_DBG_SYNC;
-   USBDM_Debug(usb_data);
+   unsigned char usb_data[20] = {0};
+   usb_data[0] = 0;
+   usb_data[1] = CMD_USBDM_DEBUG;
+   usb_data[2] = BDM_DBG_SYNC;
+   bdmInterface->bdmCommand(3, sizeof(usb_data), usb_data);
 
    if (usb_data[0] != BDM_RC_OK) {
       PRINT("sync: Failed\n");
@@ -3160,13 +3162,12 @@ const char *name;
       { cmd_readStatus,           "rs"},
       { cmd_readDReg,             "rdreg"},
       { cmd_readCReg,             "rcreg"},
-      { cmd_setBoot,              "setboot" },
+//      { cmd_setBoot,              "setboot" },
       { cmd_setSpeed,             "speed" },
       { cmd_sync,                 "sync" },
       { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_setByteSex,           "setbytesex" },
       { cmd_step,                 "step"},
-//      { syncCommand,            "sync"},
       { cmd_registers,            "regs"},
       { cmd_testStatus,           "testStatus"},
       { cmd_writeBlock,           "wblock"},

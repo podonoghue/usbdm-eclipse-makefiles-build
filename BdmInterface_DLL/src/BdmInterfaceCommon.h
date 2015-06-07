@@ -10,6 +10,7 @@
 
 #include "BdmInterface.h"
 #include "WxPluginFactory.h"
+#include "USBDM_ErrorMessages.h"
 
 class BdmInterfaceCommon: public BdmInterface {
 
@@ -47,6 +48,7 @@ public:
    virtual USBDM_ErrorCode            initBdm(void);
    virtual USBDM_ErrorCode            closeBdm(void);
    virtual USBDM_ExtendedOptions_t   &getBdmOptions();
+   virtual USBDM_ErrorCode            getDefaultBdmOptions(USBDM_ExtendedOptions_t *options);
 
    virtual USBDM_ErrorCode            getBDMStatus(USBDMStatus_t *usbdmStatus);
    virtual RetryMode                  getInitialConnectRetryMode();
@@ -92,6 +94,8 @@ public:
 
    virtual USBDM_ErrorCode            getIdcode(unsigned int *regValue);
    virtual USBDM_ErrorCode            getStatus(unsigned int *status);
+
+   virtual USBDM_ErrorCode            setProgrammingMode(bool);
 
 protected:
    USBDM_ExtendedOptions_t    bdmOptions;              //!< Current BDM options

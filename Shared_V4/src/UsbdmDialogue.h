@@ -175,7 +175,7 @@ protected:
    DeviceInterfacePtr            deviceInterface;                    //!< Device interface
    std::vector<BdmInformation>   connectedBDMs;                      //!< Table of connected BDMs
    wxString                      bdmIdentification;                  //!< ID of current BDM
-   int                           bdmDeviceNum;                       //!< Index of current BDM
+   int                           bdmDeviceNum;                       //!< Index of current BDM in BDM table and drop-down
    uint32_t                      targetProperties;                   //!< Properties describing target devices type
 
    bool                          deviceChanged;                      //!< Indicates an update is required due to a device change
@@ -209,7 +209,7 @@ protected:
    SecurityDescriptionConstPtr   securityDescriptionPtr;             //!< How to parse security value
    SecurityOptions_t             lastSecurityOption;                 //!< Last security option before selecting custom
 
-   wxString                      currentDirectory;
+   wxString                      currentDirectory;                   //!< Current directory for file
 
 public:
    UsbdmDialogue(wxWindow* parent, const wxString& title, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);

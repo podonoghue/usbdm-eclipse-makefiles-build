@@ -71,12 +71,12 @@ const DiFeaturesT diFeatures = {
   /* .pszConfig                        = */ NULL,
   /* .dnConfigArrayItems               = */ 0,
   /* .dccIOChannel                     = */ DI_COMM_NONE,
-  /* .fMemorySetMapAvailable           = */ FALSE,
-  /* .fMemorySetCpuMapAvailable        = */ FALSE,
+  /* .fMemorySetMapAvailable           = */ false,
+  /* .fMemorySetCpuMapAvailable        = */ false,
   /* .pszMemoryType                    = */ NULL,
   /* .dnMemTypeArrayItems              = */ 0,
-  /* .fEnableReadaheadCache            = */ FALSE,
-  /* .fTimerInCycles                   = */ FALSE,
+  /* .fEnableReadaheadCache            = */ false,
+  /* .fTimerInCycles                   = */ false,
   /* .dnTimerResolutionMantissa        = */ 128,
   /* .dnTimerResolutionExponent        = */ 0,
   /* .ddfDownloadFormat = */    {
@@ -89,39 +89,39 @@ const DiFeaturesT diFeatures = {
                   /* .dnBufferSize     = */ 0,
                   /* .daAddress        = */ {0,{{{0}}}},
                  },
-  /* .fAuxiliaryDownloadPathAvailable  = */ FALSE,
+  /* .fAuxiliaryDownloadPathAvailable  = */ false,
   /* .dcCallback                       = */ DI_CB_MTWKS_EXTENSION|DI_CB_DEBUG|DI_CB_LOG,
-  /* .fRegisterClassSupport            = */ FALSE,
-  /* .fSingleStepSupport               = */ TRUE,
-  /* .fContinueUntilSupport            = */ FALSE,
-  /* .fContinueBackgroundSupport       = */ FALSE,
+  /* .fRegisterClassSupport            = */ false,
+  /* .fSingleStepSupport               = */ true,
+  /* .fContinueUntilSupport            = */ false,
+  /* .fContinueBackgroundSupport       = */ false,
   /* .dnNrCodeBpAvailable              = */ 1, // Code breakpoints
   /* .dnNrDataBpAvailable              = */ 1, // Data read/write breakpoints
-  /* .fExecFromCodeBp                  = */ TRUE,
-  /* .fExecFromDataBp                  = */ TRUE,
-  /* .fUnifiedBpLogic                  = */ TRUE,
-  /* .fExecCycleCounterAvailable       = */ FALSE,
-  /* .fExecTimeAvailable               = */ FALSE,
-  /* .fInstrTraceAvailable             = */ FALSE,
-  /* .fRawTraceAvailable               = */ FALSE,
-  /* .fCoverageAvailable               = */ FALSE,
-  /* .fProfilingAvailable              = */ FALSE,
-  /* .fStateSaveRestoreAvailable       = */ FALSE,
+  /* .fExecFromCodeBp                  = */ true,
+  /* .fExecFromDataBp                  = */ true,
+  /* .fUnifiedBpLogic                  = */ true,
+  /* .fExecCycleCounterAvailable       = */ false,
+  /* .fExecTimeAvailable               = */ false,
+  /* .fInstrTraceAvailable             = */ false,
+  /* .fRawTraceAvailable               = */ false,
+  /* .fCoverageAvailable               = */ false,
+  /* .fProfilingAvailable              = */ false,
+  /* .fStateSaveRestoreAvailable       = */ false,
   /* .dnStateStoreMaxIndex             = */ 0,
   /* .pdbgBackground                   = */ NULL,
   /* .dnBackgroundArrayItems           = */ 0,
-  /* .fDirectDiAccessAvailable         = */ TRUE,  // Some direct commands available
-  /* .fApplicationIOAvailable          = */ FALSE,
-  /* .fKernelAware                     = */ FALSE,
+  /* .fDirectDiAccessAvailable         = */ true,  // Some direct commands available
+  /* .fApplicationIOAvailable          = */ false,
+  /* .fKernelAware                     = */ false,
 #ifdef USE_MEE
-  /* .fMeeAvailable                    = */ TRUE,
+  /* .fMeeAvailable                    = */ true,
 #else
-  /* .fMeeAvailable                    = */ FALSE,
+  /* .fMeeAvailable                    = */ false,
 #endif
   /* .dnNrCpusAvailable                = */ 1,
   /* .deWordEndianness                 = */ DI_BIG_ENDIAN,
   /* .dnNrHardWareCodeBpAvailable      = */ 1,
-  /* .fCodeHardWareBpSkids             = */ FALSE,
+  /* .fCodeHardWareBpSkids             = */ false,
   /* .pReserved                        = */ NULL,
 };
 
@@ -144,8 +144,7 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
 
    if (strcmp(pszCommand, "rs08_vpp_powersupply_on") == 0) {
       // Set BDM options for programming
-      //TODO - update
-      USBDM_SetExtendedOptions(&bdmProgrammingOptions);
+      bdmInterface->setProgrammingMode(true);
       bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
 
       rc = bdmInterface->setTargetVpp(BDM_TARGET_VPP_STANDBY);
@@ -168,6 +167,7 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
       return setErrorState(DI_OK);
    }
    else if (strcmp(pszCommand, "rs08_vpp_off") == 0) {
+      bdmInterface->setProgrammingMode(false);
       rc = bdmInterface->setTargetVpp(BDM_TARGET_VPP_OFF);
       if (rc != BDM_RC_OK)
          rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE));
@@ -414,7 +414,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    pdesExitStatus->dwBpId   = 0x1000400; // bkpt ID?
    pdesExitStatus->szReason = (DiStringT)"unknown state";
 
-   if (bdmOptions.autoReconnect) {
+   if (bdmInterface->getBdmOptions().autoReconnect) {
       USBDM_ErrorCode bdmRc = bdmInterface->targetConnectWithRetry(softConnectOptions);
       if (bdmRc != BDM_RC_OK) {
          log.print("=> DI_ERR_COMMUNICATION\n");

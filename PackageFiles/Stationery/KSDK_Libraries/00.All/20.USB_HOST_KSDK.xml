@@ -62,7 +62,7 @@
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/audio/usb_host_audio.h"        target="usb_core/host/sources/class_driver/audio/usb_host_audio.h" type="link" sourcePathType="absolute" />
 
       <createFolder type="" target="usb_core/host/sources/class_driver/cdc" />
-      <copy source="usbdm_kds_path/usb\usb_core\host\sources\classes\cdc\usb_host_cdc_intf.c"  target="usb_core/host/sources/class_driver/cdc/usb_host_cdc_intf.c"      type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc_intf.c"  target="usb_core/host/sources/class_driver/cdc/usb_host_cdc_intf.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc.c"       target="usb_core/host/sources/class_driver/cdc/usb_host_cdc.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc.h"       target="usb_core/host/sources/class_driver/cdc/usb_host_cdc.h"      type="link" sourcePathType="absolute" />
       

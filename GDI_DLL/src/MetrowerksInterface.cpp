@@ -51,7 +51,7 @@ using namespace std;
 #include "WxPlugin.h"
 
 const string emptyString("");
-DiReturnT setErrorState(DiReturnT errorCode, const char *errorString = NULL);
+DiReturnT setErrorState(DiReturnT errorCode, const char *errorString = 0);
 
 static CallbackF metrowerksCallbackFunction;
 static CallbackF metrowerksFeedbackFunction;
@@ -125,8 +125,7 @@ struct ProjectAccess_t {
    int          bufLength;
 };
 
-void setCallback( DiCallbackT dcCallbackType,
-					   CallbackF   Callback ) {
+void setCallback( DiCallbackT dcCallbackType, CallbackF   Callback ) {
    LOGGING_Q;
 	switch (dcCallbackType) {
 		case DI_CB_MTWKS_EXTENSION :
@@ -360,55 +359,57 @@ static USBDM_ErrorCode getAttribute(const string &key, string &value, const stri
 //!
 //!  @return error code, see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode getDeviceData(const TargetType_t targetType, DeviceData &deviceData) {
+USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData) {
    LOGGING;
-   DiReturnT       diRC = DI_OK;
-   string          deviceName;
-   int value;
+   DeviceDataBase deviceDataBase(targetType);
 
-   // Device name
-   diRC = mtwksGetStringValue(processorKey, deviceName);
+   // Get device name from Codewarrior
+   string deviceName;
+   DiReturnT diRC = mtwksGetStringValue(processorKey, deviceName);
    if ((diRC != DI_OK) || (deviceName == emptyString)) {
       log.print("Device name not set\n");
       log.print("key = %s\n", processorKey.c_str());
+      deviceData = deviceDataBase.getDefaultDevice()->shallowCopy();
       return  BDM_RC_UNKNOWN_DEVICE;
    }
    log.print("Device name = \'%s\'\n", (const char *)deviceName.c_str());
 
-   DeviceDataBase deviceDataBase(targetType);
    DeviceDataConstPtr dev = deviceDataBase.findDeviceFromName(deviceName);
    if (dev == NULL) {
       log.print("Unknown device\n");
       mtwksDisplayLine("Unrecognised device - using default settings");
-      dev = deviceDataBase.getDefaultDevice();
+      deviceData = deviceDataBase.getDefaultDevice()->shallowCopy();
+      return  BDM_RC_UNKNOWN_DEVICE;
    }
    else {
       log.print("Found device \'%s\' in database\n", (const char *)dev->getTargetName().c_str());
    }
-   deviceData = *dev;
+   deviceData = dev->shallowCopy();
+
+   int value;
    getAttribute(KeyTrimTargetClock, value, 0);
    if (value != 0) {
-      getAttribute(KeyClockTrimFrequency, value, deviceData.getClockTrimFreq());
+      getAttribute(KeyClockTrimFrequency, value, deviceData->getClockTrimFreq());
       if (value == 0) {
-         value = deviceData.getClockTrimFreq();
+         value = deviceData->getClockTrimFreq();
       }
-      deviceData.setClockTrimFreq(value);
-      getAttribute(KeyClockTrimNVAddress, value, deviceData.getClockTrimNVAddress());
+      deviceData->setClockTrimFreq(value);
+      getAttribute(KeyClockTrimNVAddress, value, deviceData->getClockTrimNVAddress());
       if (value == 0) {
-         value = deviceData.getClockTrimNVAddress();
+         value = deviceData->getClockTrimNVAddress();
       }
-      deviceData.setClockTrimNVAddress(value);
+      deviceData->setClockTrimNVAddress(value);
    }
    else {
-      deviceData.setClockTrimFreq(0);
+      deviceData->setClockTrimFreq(0);
    }
    int eraseOptions;
    getAttribute(KeyEraseMethod, eraseOptions, (int)DeviceData::eraseAll);
-   deviceData.setEraseOption((DeviceData::EraseOptions)eraseOptions);
+   deviceData->setEraseOption((DeviceData::EraseOptions)eraseOptions);
 
    int securityOption;
    getAttribute(KeySecurity, securityOption, (int)SEC_SMART);
-   deviceData.setSecurity((SecurityOptions_t)securityOption);
+   deviceData->setSecurity((SecurityOptions_t)securityOption);
 
    return BDM_RC_OK;
 }
@@ -425,7 +426,7 @@ USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface) {
 
    bdmOptions.size       = sizeof(USBDM_ExtendedOptions_t);
    bdmOptions.targetType = bdmInterface->getBdmOptions().targetType;
-   USBDM_ErrorCode bdmRC = USBDM_GetDefaultExtendedOptions(&bdmOptions);
+   USBDM_ErrorCode bdmRC = bdmInterface->getDefaultBdmOptions(&bdmOptions);
    if (bdmRC != BDM_RC_OK) {
       return bdmRC;
    }

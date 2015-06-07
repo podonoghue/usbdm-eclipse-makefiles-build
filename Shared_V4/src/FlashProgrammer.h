@@ -44,18 +44,17 @@ public:
 
    virtual ~FlashProgrammer() {}
 
-   virtual USBDM_ErrorCode setDeviceData(const DeviceData &device) = 0;
-   virtual DeviceData*     getDeviceData() = 0;
-   virtual USBDM_ErrorCode setTargetInterface(BdmInterfacePtr bdmInterface) = 0;
-
-   virtual USBDM_ErrorCode checkTargetUnSecured() = 0;
-   virtual USBDM_ErrorCode massEraseTarget() = 0;
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL, bool doRamWrites=false) = 0;
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL) = 0;
-   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID) = 0;
-   virtual USBDM_ErrorCode confirmSDID(void) = 0;
-   virtual USBDM_ErrorCode getCalculatedTrimValue(uint16_t &value) = 0;
-   virtual USBDM_ErrorCode resetAndConnectTarget(void) = 0;
+   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device) = 0;
+   virtual DeviceDataConstPtr getDeviceData() = 0;
+   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface) = 0;
+   virtual USBDM_ErrorCode    checkTargetUnSecured() = 0;
+   virtual USBDM_ErrorCode    massEraseTarget() = 0;
+   virtual USBDM_ErrorCode    programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL, bool doRamWrites=false) = 0;
+   virtual USBDM_ErrorCode    verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL) = 0;
+   virtual USBDM_ErrorCode    readTargetChipId(uint32_t *targetSDID, bool doinit=false) = 0;
+   virtual USBDM_ErrorCode    confirmSDID(void) = 0;
+   virtual USBDM_ErrorCode    resetAndConnectTarget(void) = 0;
+   virtual uint16_t           getCalculatedTrimValue() = 0;
 
 protected:
    FlashProgrammer() {};

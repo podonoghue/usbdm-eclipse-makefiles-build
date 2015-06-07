@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -=========================================================================================
+   |  1 Jun 2015 | Changed how device choice is handled (bdmDeviceNum)     - pgo V4.11.1.10
    | 15 Mar 2015 | Complete redesign using wxFormBuilder                   - pgo V4.11.1.10
    +=========================================================================================
    \endverbatim
@@ -624,7 +625,6 @@ void UsbdmDialogue::hideUnusedControls() {
       wxStaticBoxSizer *sz = (wxStaticBoxSizer*)interfaceSpeedControl->GetContainingSizer();
       sz->Show(false);
    }
-
    // Target
    if ((targetProperties & HAS_TRIM) == 0) {
       trimAddressStaticControl->Enable(false);
@@ -703,7 +703,6 @@ void UsbdmDialogue::hideUnusedControls() {
       discardChangesButton->Enable(false);
       discardChangesButton->Show(false);
    }
-
    StatusText->Show(false);
 
    // Temporarily hide so dialogue is smaller
@@ -954,9 +953,10 @@ void UsbdmDialogue::populateBDMChoices(void) {
    }
    // Add device names to choice box, client data is device number from usb scan
    vector<BdmInformation>::iterator it;
-   for ( it=connectedBDMs.begin(); it < connectedBDMs.end(); it++ ) {
+   for ( it=connectedBDMs.begin(); it<connectedBDMs.end(); it++ ) {
       int index = bdmSelectChoiceControl->Append(wxString::FromUTF8(it->getSerialNumber().c_str()));
-      bdmSelectChoiceControl->SetClientData(index, (void*)(intptr_t)it->getDeviceNumber());
+//      bdmSelectChoiceControl->SetClientData(index, (void*)(intptr_t)it->getDeviceNumber());
+      bdmSelectChoiceControl->SetClientData(index, (void*)(it-connectedBDMs.begin()));
    }
    // Try to select previous device
    if (bdmIdentification.empty() || !bdmSelectChoiceControl->SetStringSelection(bdmIdentification)) {
@@ -1040,7 +1040,7 @@ USBDM_ErrorCode UsbdmDialogue::hcs12Check(void) {
    deviceInterface->getCurrentDevice()->setConnectionFreq(0);
    busFrequencyTextControl->Enable(false);
 
-   flashprogrammer->setDeviceData(*deviceInterface->getCurrentDevice());
+   flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
    rc_flash = flashprogrammer->resetAndConnectTarget();
    if ((rc_flash != PROGRAMMING_RC_OK) && (rc_flash != PROGRAMMING_RC_ERROR_SECURED)) {
       return BDM_RC_FAIL;
@@ -1178,7 +1178,7 @@ LOGGING;
       // Check if secured and prompt user to mass erase
 
       // Set default device
-      flashRc = flashprogrammer->setDeviceData(*deviceInterface->getDeviceDatabase()->getDefaultDevice());
+      flashRc = flashprogrammer->setDeviceData(deviceInterface->getDeviceDatabase()->getDefaultDevice());
       if (flashRc != PROGRAMMING_RC_OK) {
          bdmInterface->closeBdm();
          log.print("setDeviceData() failed\n");
@@ -1232,7 +1232,7 @@ LOGGING;
 
    set<uint32_t> probedLocations;
    bool successfullyProbedALocation = false;
-
+   bool doFirstInit = true;
    for ( deviceIterator = deviceInterface->getDeviceDatabase()->begin();
          deviceIterator < deviceInterface->getDeviceDatabase()->end();
          deviceIterator++, deviceCount++ ) {
@@ -1259,9 +1259,10 @@ LOGGING;
          // Record probe
          probedLocations.insert(sdidAddress);
 
-         USBDM_ErrorCode probeRc = flashprogrammer->setDeviceData(*probedDevice);
+         USBDM_ErrorCode probeRc = flashprogrammer->setDeviceData(probedDevice);
          if (probeRc == PROGRAMMING_RC_OK) {
-            probeRc = flashprogrammer->readTargetChipId(&targetChipId);
+            probeRc = flashprogrammer->readTargetChipId(&targetChipId, doFirstInit);
+            doFirstInit = false;
          }
          if (probeRc != PROGRAMMING_RC_OK) {
             // Failed probe - ignore errors as may be accessing illegal memory
@@ -1457,7 +1458,7 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
             continue;
          }
       }
-      rc = flashprogrammer->setDeviceData(*deviceInterface->getCurrentDevice());
+      rc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
       if (rc != BDM_RC_OK) {
          continue;
       }
@@ -1472,7 +1473,7 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
          bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
       }
       uint16_t trimValue;
-      rc = flashprogrammer->getCalculatedTrimValue(trimValue);
+      trimValue = flashprogrammer->getCalculatedTrimValue();
       if (trimValue != 0) {
          wxString tmp;
          tmp.Printf(_("Trim Value: 0x%2.2X.%1X"), trimValue>>1, trimValue&0x01);
@@ -1585,7 +1586,7 @@ USBDM_ErrorCode UsbdmDialogue::verifyFlash(void) {
             continue;
          }
       }
-      rc = flashprogrammer->setDeviceData(*deviceInterface->getCurrentDevice());
+      rc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
       if (rc != BDM_RC_OK) {
          continue;
       }
@@ -2258,7 +2259,7 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
       log.print("Connected...\n");
    }
    // Set default device
-   flashRc = flashprogrammer->setDeviceData(*deviceInterface->getCurrentDevice());
+   flashRc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
    if (flashRc != PROGRAMMING_RC_OK) {
       bdmInterface->closeBdm();
       log.print("setDeviceData() failed\n");
@@ -2320,20 +2321,20 @@ void UsbdmDialogue::OnVddSelectBoxSelected( wxCommandEvent& event ) {
    update();
 }
 
+/*! Handler for cycleVddOnConnect
+ *
+ *  @param event The event to handle
+ */
+void UsbdmDialogue::OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent& event ) {
+   bdmInterface->getBdmOptions().cycleVddOnConnect = event.IsChecked();
+}
+
 /*! Handler for OnCycleVddOnResetCheckbox
  *
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnCycleVddOnResetCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().cycleVddOnReset = event.IsChecked();
-}
-
-/*! Handler for OnBDMSelectCombo
- *
- *  @param event The event OnCycleTargetVddOnConnectionCheckbox handle
- */
-void UsbdmDialogue::OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent& event ) {
-   bdmInterface->getBdmOptions().cycleVddOnConnect = event.IsChecked();
 }
 
 /*! Handler for OnLeaveTargetOnCheckbox
@@ -2657,7 +2658,7 @@ void UsbdmDialogue::OnUnlockButtonClick( wxCommandEvent& event ) {
       bdmInterface->initBdm();
 
       // Set default device
-      USBDM_ErrorCode flashRc = flashprogrammer->setDeviceData(*deviceInterface->getCurrentDevice());
+      USBDM_ErrorCode flashRc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
       if (flashRc != PROGRAMMING_RC_OK) {
          log.print("setDeviceData() failed, flashRc = %s\n", bdmInterface->getErrorString(flashRc));
          reportError(flashRc);

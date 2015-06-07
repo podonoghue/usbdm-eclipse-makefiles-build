@@ -10,26 +10,18 @@
 
 #define  ICP_MAX_DATA_SIZE  (32)   // Flash memory program block size
 
-enum ICP_ErrorType {
-   RC_OK               ,
-   ICP_RC_USB_ERROR        ,
-   ICP_RC_NO_JS16_DEVICE  ,
-   ICP_RC_ILLEGAL_PARAMS   ,
-   ICP_RC_DEVICE_NOT_OPEN  ,
-   ICP_RC_FILE_NOT_FOUND,
-   ICP_RC_COMMAND_FAILED,
-};
+#include "ProgressDialogueFactory.h"
 
-void          ICP_Reboot(void);
-ICP_ErrorType ICP_MassErase(void);
-ICP_ErrorType ICP_Program(unsigned int  addr,
+USBDM_ErrorCode ICP_MassErase(ProgressDialoguePtr progressCallback);
+USBDM_ErrorCode ICP_Program(unsigned int  addr,
                           unsigned int  count,
-                          unsigned char *data);
-ICP_ErrorType ICP_Init(void);
-ICP_ErrorType ICP_FindDevices(unsigned int *deviceCount);
-ICP_ErrorType ICP_ReleaseDevices(void);
-ICP_ErrorType ICP_Open(unsigned char deviceNo);
-ICP_ErrorType ICP_Close(void);
-ICP_ErrorType ICP_Exit(void);
+                          unsigned char *data,
+                          ProgressDialoguePtr progressCallback);
+USBDM_ErrorCode ICP_Init(void);
+USBDM_ErrorCode ICP_FindDevices(unsigned int *deviceCount);
+USBDM_ErrorCode ICP_ReleaseDevices(void);
+USBDM_ErrorCode ICP_Open(unsigned char deviceNo);
+USBDM_ErrorCode ICP_Close(void);
+USBDM_ErrorCode ICP_Exit(void);
 
 #endif // _ICP_H_

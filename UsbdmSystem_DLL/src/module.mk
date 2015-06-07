@@ -7,6 +7,7 @@ SRC += Version.rc
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
 SRC += UsbdmSystem.cpp
+SRC += ErrorMessages.cpp
 ifeq ($(UNAME_S),Windows)
 SRC += UsbdmSystemWin.cpp
 else

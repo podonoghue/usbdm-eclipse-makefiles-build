@@ -39,6 +39,7 @@ LIBDIRS += $(WXWIDGETS_LIBDIRS)
 LIBS += $(USBDM_LIBS) 
 LIBS += $(WXWIDGETS_LIBS)
 LIBS += $(USBDM_SYSTEM_LIBS)
+LIBS += $(USBDM_DYNAMIC_LIBS)
 
 # Each module will add to this
 SRC :=
@@ -85,8 +86,8 @@ $(BUILDDIR)/%.o : %.cpp
 #==============================================
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
-	@echo -- Linking Target $@
-	$(CC) -o $@ $(GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
+	@echo -- Linking Executable $@
+	$(CC) -o $@ $(GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
 
 # How to copy EXE to target directory
 #==============================================
@@ -100,8 +101,8 @@ $(TARGET_BINDIR)/$(TARGET_EXE): $(BUILDDIR)/$(TARGET_EXE)
 #==============================================
 $(BUILDDIR)/$(TARGET_DLL): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
-	@echo -- Linking Target $@
-	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
+	@echo -- Linking Library $@
+	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS)
 
 # How to copy LIBRARY to target directory
 #==============================================
@@ -147,5 +148,5 @@ dll: $(TARGET_LIBDIR)/$(TARGET_DLL)
 
 exe: $(TARGET_BINDIR)/$(TARGET_EXE)
    
-.PHONY: clean dll exe 
+.PHONY: clean dll exe
 

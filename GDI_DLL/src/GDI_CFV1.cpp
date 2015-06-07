@@ -72,12 +72,12 @@ const DiFeaturesT diFeatures = {
   /* .pszConfig                        = */ NULL,
   /* .dnConfigArrayItems               = */ 0,
   /* .dccIOChannel                     = */ DI_COMM_NONE,
-  /* .fMemorySetMapAvailable           = */ FALSE,
-  /* .fMemorySetCpuMapAvailable        = */ FALSE,
+  /* .fMemorySetMapAvailable           = */ false,
+  /* .fMemorySetCpuMapAvailable        = */ false,
   /* .pszMemoryType                    = */ NULL,
   /* .dnMemTypeArrayItems              = */ 0,
-  /* .fEnableReadaheadCache            = */ FALSE,
-  /* .fTimerInCycles                   = */ FALSE,
+  /* .fEnableReadaheadCache            = */ false,
+  /* .fTimerInCycles                   = */ false,
   /* .dnTimerResolutionMantissa        = */ 128,
   /* .dnTimerResolutionExponent        = */ 0,
   /* .ddfDownloadFormat = */    {
@@ -90,39 +90,39 @@ const DiFeaturesT diFeatures = {
                   /* .dnBufferSize     = */ 0,
                   /* .daAddress        = */ {0,{{{0}}}},
                  },
-  /* .fAuxiliaryDownloadPathAvailable  = */ FALSE,
+  /* .fAuxiliaryDownloadPathAvailable  = */ false,
   /* .dcCallback                       = */ DI_CB_MTWKS_EXTENSION|DI_CB_DEBUG|DI_CB_LOG,
-  /* .fRegisterClassSupport            = */ FALSE,
-  /* .fSingleStepSupport               = */ TRUE,
-  /* .fContinueUntilSupport            = */ FALSE,
-  /* .fContinueBackgroundSupport       = */ FALSE,
+  /* .fRegisterClassSupport            = */ false,
+  /* .fSingleStepSupport               = */ true,
+  /* .fContinueUntilSupport            = */ false,
+  /* .fContinueBackgroundSupport       = */ false,
   /* .dnNrCodeBpAvailable              = */ 0, // Code breakpoints
   /* .dnNrDataBpAvailable              = */ 0, // Data read/write breakpoints
-  /* .fExecFromCodeBp                  = */ FALSE,
-  /* .fExecFromDataBp                  = */ FALSE,
-  /* .fUnifiedBpLogic                  = */ TRUE,
-  /* .fExecCycleCounterAvailable       = */ FALSE,
-  /* .fExecTimeAvailable               = */ FALSE,
-  /* .fInstrTraceAvailable             = */ FALSE,
-  /* .fRawTraceAvailable               = */ FALSE,
-  /* .fCoverageAvailable               = */ FALSE,
-  /* .fProfilingAvailable              = */ FALSE,
-  /* .fStateSaveRestoreAvailable       = */ FALSE,
+  /* .fExecFromCodeBp                  = */ false,
+  /* .fExecFromDataBp                  = */ false,
+  /* .fUnifiedBpLogic                  = */ true,
+  /* .fExecCycleCounterAvailable       = */ false,
+  /* .fExecTimeAvailable               = */ false,
+  /* .fInstrTraceAvailable             = */ false,
+  /* .fRawTraceAvailable               = */ false,
+  /* .fCoverageAvailable               = */ false,
+  /* .fProfilingAvailable              = */ false,
+  /* .fStateSaveRestoreAvailable       = */ false,
   /* .dnStateStoreMaxIndex             = */ 0,
   /* .pdbgBackground                   = */ NULL,
   /* .dnBackgroundArrayItems           = */ 0,
-  /* .fDirectDiAccessAvailable         = */ FALSE,  // Direct commands not available
-  /* .fApplicationIOAvailable          = */ FALSE,
-  /* .fKernelAware                     = */ FALSE,
+  /* .fDirectDiAccessAvailable         = */ false,  // Direct commands not available
+  /* .fApplicationIOAvailable          = */ false,
+  /* .fKernelAware                     = */ false,
 #ifdef USE_MEE
-  /* .fMeeAvailable                    = */ TRUE,
+  /* .fMeeAvailable                    = */ true,
 #else
-  /* .fMeeAvailable                    = */ FALSE,
+  /* .fMeeAvailable                    = */ false,
 #endif
   /* .dnNrCpusAvailable                = */ 1,
   /* .deWordEndianness                 = */ DI_BIG_ENDIAN,
   /* .dnNrHardWareCodeBpAvailable      = */ 1,
-  /* .fCodeHardWareBpSkids             = */ FALSE,
+  /* .fCodeHardWareBpSkids             = */ false,
   /* .pReserved                        = */ NULL,
 };
 
@@ -396,7 +396,7 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    pdesExitStatus->dscCause = DI_WAIT_UNKNOWN;
    pdesExitStatus->dwBpId   = 0; // bkpt ID?
    pdesExitStatus->szReason = (DiStringT)"unknown state";
-   if (bdmOptions.autoReconnect) {
+   if (bdmInterface->getBdmOptions().autoReconnect) {
       USBDM_ErrorCode bdmRc = bdmInterface->targetConnectWithRetry(softConnectOptions);
       if (bdmRc != BDM_RC_OK) {
          log.print("=> DI_ERR_COMMUNICATION\n");

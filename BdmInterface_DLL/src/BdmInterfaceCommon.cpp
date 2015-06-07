@@ -95,6 +95,12 @@ USBDM_ExtendedOptions_t& BdmInterfaceCommon::getBdmOptions() {
    return bdmOptions;
 }
 
+USBDM_ErrorCode BdmInterfaceCommon::getDefaultBdmOptions(USBDM_ExtendedOptions_t *options) {
+   options->size       = sizeof(USBDM_ExtendedOptions_t);
+   options->targetType = bdmOptions.targetType;
+   return USBDM_GetDefaultExtendedOptions(options);
+}
+
 bool BdmInterfaceCommon::isExitOnClose() const {
    return exitOnClose;
 }
@@ -904,14 +910,14 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
       do {
          USBDM_ErrorCode bdmRc = USBDM_Open(index);
          if (bdmRc != BDM_RC_OK) {
-            log.error("USBDM_Open(BDM #%d) failed\n", index);
+            log.error("USBDM_Open(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
             bdmInfo.setSuitable(bdmRc);
             break;
          }
          USBDM_bdmInformation_t theBdmInfo = {sizeof(theBdmInfo)};
          bdmRc = USBDM_GetBdmInformation(&theBdmInfo);
          if (bdmRc != BDM_RC_OK) {
-            log.error("USBDM_GetBdmInformation(BDM #%d) failed \n", index);
+            log.error("USBDM_GetBdmInformation(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
             bdmInfo.setSuitable(bdmRc);
             break;
          }
@@ -919,7 +925,7 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
          string tempString;
          bdmRc = readBDMDescription(tempString);
          if (bdmRc != BDM_RC_OK) {
-            log.error("USBDM_GetBDMDescription(BDM #%d) failed \n", index);
+            log.error("USBDM_GetBDMDescription(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
             bdmInfo.setSuitable(bdmRc);
             break;
          }
@@ -939,7 +945,7 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
          HardwareCapabilities_t bdmCapabilities;
          bdmRc = USBDM_GetCapabilities(&bdmCapabilities);
          if (bdmRc != BDM_RC_OK) {
-            log.error("USBDM_GetCapabilities(BDM #%d) failed \n", index);
+            log.error("USBDM_GetCapabilities(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
             if (bdmRc == BDM_RC_WRONG_BDM_REVISION) {
                bdmInfo.setSerialNumber("Wrong Firmware Version");
             }
@@ -949,16 +955,23 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
          bdmInfo.setSuitable(BDM_RC_OK);
          // At least one suitable device
          rc = BDM_RC_OK;
-         if (readBDMSerialNumber(tempString) != BDM_RC_OK) {
-            log.error("USBDM_GetBDMSerialNumber(BDM #%d) failed \n", index);
+         // Get serial number
+         bdmRc = readBDMSerialNumber(tempString);
+         if (bdmRc != BDM_RC_OK) {
+            // Log error but ignore
+            log.error("USBDM_GetBDMSerialNumber(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
             break;
          }
          bdmInfo.setSerialNumber(tempString);
       } while (false);
       USBDM_Close();
+      if (bdmInfo.getSuitable() == BDM_RC_DEVICE_OPEN_FAILED) {
+         //Todo - This is a hack to handle LIBUSB returning phantom devices in Windows 8.1
+         log.error("Discarding BDM #%d\n", index);
+         continue;
+      }
       bdmInformation.push_back(bdmInfo);
    }
-
    return rc;
 }
 
@@ -1228,6 +1241,33 @@ USBDM_ErrorCode  BdmInterfaceCommon::getStatus(unsigned int *status) {
 }
 USBDM_ErrorCode BdmInterfaceCommon::readMultipleRegs(unsigned char regValueBuffer[], unsigned int startRegIndex, unsigned int endRegIndex) {
    return USBDM_ReadMultipleRegs(regValueBuffer, startRegIndex, endRegIndex);
+}
+
+USBDM_ErrorCode BdmInterfaceCommon::setProgrammingMode(bool programmingMode) {
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   if (programmingMode) {
+      // BDM Options to be used with the target when Flash programming
+      USBDM_ExtendedOptions_t bdmProgrammingOptions = {
+         sizeof(USBDM_ExtendedOptions_t),
+         bdmOptions.targetType,
+      };
+
+      // Get copy of current BDM options
+      USBDM_ExtendedOptions_t bdmOptions = getBdmOptions();
+
+      // Use default options for Flash programming.
+      USBDM_GetDefaultExtendedOptions(&bdmProgrammingOptions);
+
+      // Copy some settings
+      bdmProgrammingOptions.targetVdd           = bdmOptions.targetVdd;
+      bdmProgrammingOptions.interfaceFrequency  = bdmOptions.interfaceFrequency;
+      rc = USBDM_SetExtendedOptions(&bdmProgrammingOptions);
+   }
+   else {
+      rc = USBDM_SetExtendedOptions(&bdmOptions);
+   }
+   return rc;
 }
 
 /*

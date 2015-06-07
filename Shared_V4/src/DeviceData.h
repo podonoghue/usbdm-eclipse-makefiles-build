@@ -586,6 +586,11 @@ public:
    TargetSDID(uint32_t mask, uint32_t value) : mask(mask), value(value) {}
 };
 
+class DeviceData;
+
+typedef std::tr1::shared_ptr<DeviceData> DeviceDataPtr;
+typedef std::tr1::shared_ptr<const DeviceData> DeviceDataConstPtr;
+
 //! Information about a target device
 //!
 class DEVICE_DATA_DESCSPEC DeviceData {
@@ -628,7 +633,6 @@ private:
    uint32_t                      SDIDAddress;            //!< Address of SDID register
    SecurityOptions_t             security;               //!< Determines security options of programmed target (modifies NVFOPT value)
    EraseOptions                  eraseOption;            //!< How to handle erasing of flash before programming
-   uint16_t                      clockTrimValue;         //!< Clock trim value calculated for a particular device
    std::vector<MemoryRegionPtr>  memoryRegions;          //!< Different memory regions e.g. EEPROM, RAM etc.
    mutable MemoryRegionConstPtr  lastMemoryRegionUsed;   //!< To improve memory searches
    TclScriptConstPtr             flashScripts;           //!< Flash script
@@ -652,7 +656,6 @@ public:
    ClockTypes_t                   getClockType() const;
    uint32_t                       getClockAddress() const;
    uint32_t                       getClockTrimNVAddress() const;
-   uint16_t                       getClockTrimValue() const;
    unsigned long                  getClockTrimFreq() const;  /*Hz*/
    unsigned long                  getConnectionFreq() const; /*Hz*/
    SecurityOptions_t              getSecurity() const;
@@ -698,7 +701,6 @@ public:
    void                           setClockType(ClockTypes_t type);
    void                           setClockAddress(uint32_t addr);
    void                           setClockTrimNVAddress(uint32_t addr);
-   void                           setClockTrimValue(uint16_t value);
    void                           setClockTrimFreq(unsigned long hertz /*Hz*/);
    void                           setConnectionFreq(unsigned long hertz /*Hz*/);
    void                           setSecurity(SecurityOptions_t option);
@@ -718,11 +720,8 @@ public:
    DeviceData(TargetType_t targetType=T_ILLEGAL, const std::string &targetName="" );
 
    virtual ~DeviceData() {}
-   DeviceData *shallowCopy(const DeviceData&);
+   DeviceDataPtr shallowCopy() const;
 };
-
-typedef std::tr1::shared_ptr<DeviceData> DeviceDataPtr;
-typedef std::tr1::shared_ptr<const DeviceData> DeviceDataConstPtr;
 
 /*
  * ============================================================================================

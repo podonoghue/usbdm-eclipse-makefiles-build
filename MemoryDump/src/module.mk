@@ -12,3 +12,4 @@ SRC += AppSettings.cpp
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
 SRC  += Names.cpp
+SRC  += ProgressDialogue.cpp

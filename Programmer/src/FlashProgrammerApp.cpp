@@ -159,7 +159,7 @@ void FlashProgrammerApp::doCommandLineProgram() {
       if (deviceData->getSecurity() == SEC_CUSTOM) {
          deviceData->setCustomSecurity(customSecurityValue);
       }
-      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(*deviceData);
+      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
       if (rc != BDM_RC_OK) {
          continue;
       }

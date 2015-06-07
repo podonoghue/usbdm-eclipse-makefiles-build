@@ -9,8 +9,10 @@
 #define JB16_BOOTLOADER_H_
 #include <string.h>
 
+#include "USBDM_API.h"
 #include "ICP.h"
-ICP_ErrorType ProgramFlash(std::string hexFileName);
-ICP_ErrorType RebootDevice();
+
+USBDM_ErrorCode ProgramDevice(std::string hexFileName);
+USBDM_ErrorCode RebootDevice();
 
 #endif /* JB16_BOOTLOADER_H_ */

@@ -262,11 +262,24 @@ public:
    virtual USBDM_ErrorCode            closeBdm(void) = 0;
 
    /*!
-    * Get current BDM options
+    * Get a reference to the internal BDM options
     *
+    * @return Reference to BDM options
     */
    virtual USBDM_ExtendedOptions_t   &getBdmOptions() = 0;
 
+   /*!
+    * Get a default set of BDM options
+    *
+    * @param options - structure to hold options
+    *
+    *  @return Error code indicating outcome.
+    */
+   virtual USBDM_ErrorCode getDefaultBdmOptions(USBDM_ExtendedOptions_t *options) = 0;
+
+   /*
+    * Get BDMStatus (HCS/CF interface only)
+    */
    virtual USBDM_ErrorCode            getBDMStatus(USBDMStatus_t *usbdmStatus) = 0;
 
    /*! Get retry mode to use for initial target connection
@@ -794,14 +807,27 @@ public:
 
    /*!
     *  Get JTAG IDCODE
+    *
+    *  @param idCode - Where to return IDCODE
     */
-   virtual USBDM_ErrorCode            getIdcode(unsigned int *regValue) = 0;
+   virtual USBDM_ErrorCode            getIdcode(unsigned int *idCode) = 0;
 
    /*!
     *  Get DSC status
+    *
+    *  @param status - Where to return status
     */
    virtual USBDM_ErrorCode            getStatus(unsigned int *status) = 0;
 
+   /*!
+    *  Set interface to 'programming mode'
+    *  This changes the interface settings as needed for programming.
+    *  This is needed because some settings are incompatible with programming
+    *  Don't need to use this unless you have changed the settings from the default
+    *
+    *  @param mode  true sets programming mode
+    */
+   virtual USBDM_ErrorCode            setProgrammingMode(bool mode) = 0;
 };
 
 typedef std::tr1::shared_ptr<BdmInterface> BdmInterfacePtr;

@@ -21,11 +21,28 @@ public:
    FlashProgrammerCommon();
    virtual ~FlashProgrammerCommon();
 
-   virtual USBDM_ErrorCode setDeviceData(const DeviceData &theParameters);
-   virtual DeviceData*     getDeviceData();
-   virtual USBDM_ErrorCode setTargetInterface(BdmInterfacePtr bdmInterface);
+   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device);
+   virtual DeviceDataConstPtr getDeviceData();
+   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface);
+   virtual USBDM_ErrorCode    massEraseTarget() { return massEraseTarget(true); };
+   virtual uint16_t           getCalculatedTrimValue() { return calculatedClockTrimValue; };
 
 protected:
+
+   class SetProgrammingMode {
+   private:
+      BdmInterfacePtr bdmInterface;
+   public:
+      SetProgrammingMode(BdmInterfacePtr bdmInterface) :
+      bdmInterface(bdmInterface) {
+         LOGGING_E;
+         bdmInterface->setProgrammingMode(true);
+      }
+      ~SetProgrammingMode() {
+         LOGGING_E;
+         bdmInterface->setProgrammingMode(false);
+      }
+   };
 
    //! Structure for MCGCG parameters
    struct MCG_ClockParameters_t {
@@ -70,15 +87,17 @@ protected:
    USBDM_ErrorCode trimMCG_Clock(MCG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimICG_Clock(ICG_ClockParameters_t *clockParameters);
    
-   bool                    flashReady;             //!< Safety check - only TRUE when flash is ready for programming
-   DeviceData              parameters;             //!< Parameters describing the current device
-   UsbdmTclInterperPtr     tclInterpreter;         //!< TCL interpreter
-   BdmInterfacePtr         bdmInterface;           //!< Target specific BDM interface
-   FlashProgramConstPtr    currentFlashProgram;    //!< Current program for flash operation
-   ProgressTimerPtr        progressTimer;          //!< Progress timer
+   bool                    flashReady;               //!< Safety check - only TRUE when flash is ready for programming
+   DeviceDataConstPtr      device;                   //!< Parameters describing the current device
+   UsbdmTclInterperPtr     tclInterpreter;           //!< TCL interpreter
+   BdmInterfacePtr         bdmInterface;             //!< Target specific BDM interface
+   FlashProgramConstPtr    currentFlashProgram;      //!< Current program for flash operation
+   ProgressTimerPtr        progressTimer;            //!< Progress timer
+   uint16_t                calculatedClockTrimValue; //!< Clock trim value determined from programmed device
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
 
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) = 0;
    USBDM_ErrorCode initTCL(void);
    USBDM_ErrorCode releaseTCL(void);
    USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
