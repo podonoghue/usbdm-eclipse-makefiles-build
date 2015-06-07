@@ -4,7 +4,6 @@ SRC += ICP.cpp
 SRC += JTAGSequence.cpp
 SRC += low_level_usb.cpp
 SRC += USBDM_API.cpp
-SRC += USBDM_ErrorMessages.cpp
 SRC += Version.rc
 
 VPATH := src/OSBDM-JM60 $(VPATH)
@@ -19,5 +18,6 @@ SRC += UsbdmSystemWin.cpp
 else
 SRC += UsbdmSystemLinux.cpp
 endif
+SRC += ErrorMessages.cpp
 
 SRC += Names.cpp
