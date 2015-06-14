@@ -54,7 +54,7 @@ protected:
    void               activateBreakpoints()                { gdbBreakpoints->activateBreakpoints(); };
    void               deactivateBreakpoints()              { gdbBreakpoints->deactivateBreakpoints(); };
    bool               atBreakpoint(uint32_t address)       { return gdbBreakpoints->atBreakpoint(address); };
-   USBDM_ErrorCode    initBreakpoints()                    { return gdbBreakpoints->initBreakpoints(); };
+   USBDM_ErrorCode    initBreakpoints();
    int                insertBreakpoint(GdbBreakpoints::BreakType type, uint32_t address, unsigned size) {
       return gdbBreakpoints->insertBreakpoint(type, address, size);
    }

@@ -44,6 +44,7 @@ protected:
    virtual void OnDisableLog( wxCommandEvent& event );
    virtual void OnModerateLog( wxCommandEvent& event );
    virtual void OnVerboseLog( wxCommandEvent& event );
+   virtual void OnHaltTarget( wxCommandEvent& event );
    virtual void OnResetTarget( wxCommandEvent& event );
    virtual void OnToggleMaskISR( wxCommandEvent& event );
    virtual void OnSetTimeout( wxCommandEvent& event );

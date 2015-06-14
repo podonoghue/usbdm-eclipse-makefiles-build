@@ -148,3 +148,8 @@ USBDM_ErrorCode GdbBreakpoints_CFV1::initBreakpoints() {
    log.print("- Number of Hardware breakpoints = %d\n", maxNumHardwareBreakPoints);
    return BDM_RC_OK;
 };
+
+
+int  GdbBreakpoints_CFV1::getNumberOfHardwareBreakpoints() {
+   return maxNumHardwareBreakPoints;
+}

@@ -33,6 +33,7 @@ public:
    virtual bool            atBreakpoint(uint32_t address);
 
    static  const char     *getBreakpointName(BreakType type);
+   virtual int             getNumberOfHardwareBreakpoints() = 0;
 
 protected:
    static const unsigned MAX_MEMORY_BREAKPOINTS   = 10;

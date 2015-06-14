@@ -40,12 +40,13 @@
    <version>1.6</version>
    <description>MKV10Z7 Freescale Microcontroller</description>
    <cpu>
-      <name>CM3</name>
+      <name>CM0PLUS</name>
       <revision>r1p0</revision>
       <endian>little</endian>
       <mpuPresent>false</mpuPresent>
       <fpuPresent>false</fpuPresent>
-      <nvicPrioBits>0</nvicPrioBits>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>
    <addressUnitBits>8</addressUnitBits>

@@ -59,6 +59,7 @@
       <endian>little</endian>
       <mpuPresent>false</mpuPresent>
       <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
       <nvicPrioBits>4</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>

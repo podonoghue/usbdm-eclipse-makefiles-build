@@ -1311,8 +1311,19 @@ USBDM_ErrorCode GdbHandlerCommon::usbdmResetTarget(bool retry) {
    bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
    USBDM_ErrorCode rc = bdmInterface->connect();
    if ((rc != BDM_RC_OK) && retry) {
+      reportGdbPrintf("USBDM_Connect() failed, rc = \n", bdmInterface->getErrorString(rc));
       log.print("USBDM_Connect() failed - retry\n");
       rc = usbdmResetTarget(false);
    }
    return rc;
 }
+
+USBDM_ErrorCode GdbHandlerCommon::initBreakpoints() {
+   USBDM_ErrorCode rc = gdbBreakpoints->initBreakpoints();
+   if (rc != BDM_RC_OK) {
+      reportGdbPrintf(M_INFO, "initBreakpoints() failed, rc = \n", bdmInterface->getErrorString(rc));
+      rc = usbdmResetTarget(false);
+   }
+   reportGdbPrintf("Number of hardware breakpoints = %d\n", gdbBreakpoints->getNumberOfHardwareBreakpoints());
+   return rc;
+};

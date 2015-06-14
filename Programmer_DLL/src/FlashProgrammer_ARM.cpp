@@ -1558,6 +1558,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
    if (rc != BDM_RC_OK) {
       log.error("Raw error code - %d\n", errorCode);
       log.error("Error - %s\n", bdmInterface->getErrorString(rc));
+      uint8_t rcm_srs0, rcm_srs1;
+      bdmInterface->readMemory(MS_Byte, 1, 0x4007F000, &rcm_srs0);
+      bdmInterface->readMemory(MS_Byte, 1, 0x4007F001, &rcm_srs1);
+      log.error("Error - SRS0=0x%2.2X, SRS1=0x%2.2X\n", rcm_srs0, rcm_srs1);
 #if (TARGET == MC56F80xx) && 0
       executionResult.data = targetToNative16(executionResult.data);
       executionResult.dataSize = targetToNative16(executionResult.dataSize);

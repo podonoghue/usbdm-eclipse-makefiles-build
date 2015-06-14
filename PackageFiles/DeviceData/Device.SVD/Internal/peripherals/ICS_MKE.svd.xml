@@ -90,7 +90,7 @@ Selects the reference clock source for the FLL</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>FRDIV</name>
+                     <name>RDIV</name>
                      <description>FLL External Reference Divider\n
 Selects the amount to divide down the external reference clock for the FLL\n
 If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>

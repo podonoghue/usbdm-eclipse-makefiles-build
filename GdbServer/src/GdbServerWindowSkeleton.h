@@ -54,6 +54,7 @@ class GdbServerWindowSkeleton : public wxFrame
 		virtual void OnDisableLog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnModerateLog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVerboseLog( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnHaltTarget( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetTarget( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetTimeout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToggleMaskISR( wxCommandEvent& event ) { event.Skip(); }

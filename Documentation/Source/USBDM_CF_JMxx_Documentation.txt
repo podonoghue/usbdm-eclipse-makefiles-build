@@ -1,11 +1,20 @@
 /*!
-  \mainpage USBDM/CF (combined RS08/HCS08/HCS12/Coldfire V1,2,3,4/DSC/Kinetis code) for JM32/60
+  \mainpage USBDM RS08/HCS08/HCS12/Coldfire V1,2,3,4/DSC/Kinetis Debugger and Programmer
 
  \section introSection Introduction
    The attached files provide a port of a combined TBDML/OSBDM/TBLCF code to a MC9S08JM16/32/60 processor.  
    The primary motivation for this was to produce a single BDM that could be used with a range of Freescale microcontrollers.
    Other features have also been added.
 
+   <hr>
+ \subsection QuickLinks Quick Links
+
+   - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
+   - @htmlonly <a href="USBDM_V4.11/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
+     
+   <hr>
  \subsection featureSection Features
    This version of the code & BDM hardware provides the following features:
    -	A single BDM interface for programming and debugging of the following targets:

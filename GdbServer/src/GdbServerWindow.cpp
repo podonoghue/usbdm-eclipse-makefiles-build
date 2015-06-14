@@ -276,6 +276,14 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     setLoggingLevel(GdbHandler::M_BORINGINFO);
  }
 
+ /*!  Handler for Halt Target menu item
+  *
+  */
+ void GdbServerWindow::OnHaltTarget(wxCommandEvent& event) {
+    bdmInterface->halt();
+    statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
+ }
+
  /*!  Handler for Reset Target menu item
   *
   */

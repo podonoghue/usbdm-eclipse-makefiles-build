@@ -3,6 +3,25 @@
 
 \section sectionHistory Revision History
 
+V4.11.1.50 (Jun 2015) 
+======================================================================================= 
+- Updates and fixes to UsbdmMemoryDump
+- Improvements to JS16_Bootloader & JB16_Bootloader (Linux & USB3 mostly)
+- Fixes to KSDK for Linux
+- General bug fixes for Linux port
+Known bugs
+- KDS traps on exit on Windows??
+- MQX options in KDS new project wizard are not operational
+- USB3 issues on Windows (JS16 Bootloader)
+
+V4.11.1.40 (May 2015) 
+======================================================================================= 
+- Added UsbdmMemoryDump
+Linux i386 release - only had minimal testing (command line + eclipse, not KDS)  
+Windows - minor bug fixes
+- Peripheral view now disconnects cleanly on target connect crash etc
+- Cleanup of debug messages in plugin
+
 V4.11.1.30 (May 2015) 
 ======================================================================================= 
 Linux versions added

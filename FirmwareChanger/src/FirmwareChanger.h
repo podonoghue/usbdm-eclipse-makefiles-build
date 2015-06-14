@@ -92,7 +92,11 @@ protected:
     int    readSerialNumber(void);
     USBDM_ErrorCode reOpenBDM(void);
 
+#ifdef _WIN32
     typedef USBDM_ErrorCode (__attribute__((__stdcall__))Operation)(unsigned int, unsigned int, unsigned char*);
+#else
+    typedef USBDM_ErrorCode (Operation)(unsigned int, unsigned int, unsigned char*);
+#endif
 
     USBDM_ErrorCode doBlockOperation(FlashImagePtr, uint32_t, uint32_t, Operation);
     USBDM_ErrorCode doFlashOperation(Operation);

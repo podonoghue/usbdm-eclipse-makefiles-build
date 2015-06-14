@@ -195,3 +195,7 @@ USBDM_ErrorCode GdbBreakpoints_ARM::initBreakpoints() {
    log.print("- DWT_CTRL = 0x%08X, Number of Data watchpoints = %d\n", dwt_ctrl_value, maxNumDataWatches);
    return BDM_RC_OK;
 }
+
+int  GdbBreakpoints_ARM::getNumberOfHardwareBreakpoints() {
+   return maxNumHardwareBreakPoints;
+}

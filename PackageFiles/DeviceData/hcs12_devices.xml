@@ -16,11 +16,12 @@
 <!ENTITY Custom-Devices                   SYSTEM "Custom/custom-hcs12.xml">
 ]>
 <!-- 
+      V4.11.2.70  - Modified MC9S12T64 - untested
       V4.10.6.230 - Added MC9S12XF512 - untested
       V4.10.6.210 - Added MC9S12Gxxx - untested
-      V4.10.5 		- Added MC9S12HZ256 - untested
-      V4.10.4 		- Fixed XEP100 EEPROM
-      V4.10.4 		- Changed how security information is expressed
+      V4.10.5     - Added MC9S12HZ256 - untested
+      V4.10.4     - Fixed XEP100 EEPROM
+      V4.10.4     - Changed how security information is expressed
  -->
 <root version="4.10.6.210">
    <description>HCS12 Device characteristics v4.10.6.210 25/10/2014</description>
@@ -1540,6 +1541,7 @@
          </memory>
          <memory pageAddress="0x0030" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" >
             <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange start="0x1800" end="0x3FFF" /> <!-- Page 0x3D shadowed by register & RAM -->
             <memoryRange start="0x4000" end="0x7FFF" /> <!-- Page 0x3E -->
             <memoryRange start="0x8000" end="0xBFFF" pageReset="0x3C" pages="64K"  pageEnd="0x3F" />
             <memoryRange start="0xC000" end="0xFFFF" /> <!-- Page 0x3F -->

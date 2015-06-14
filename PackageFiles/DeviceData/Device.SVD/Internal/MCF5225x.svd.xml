@@ -40,6 +40,7 @@
       <endian>big</endian>
       <mpuPresent>false</mpuPresent>
       <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
       <nvicPrioBits>0</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>

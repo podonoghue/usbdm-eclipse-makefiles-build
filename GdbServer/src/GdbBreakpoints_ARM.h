@@ -19,6 +19,7 @@ public:
    void deactivateBreakpoints(void);
    void checkAndAdjustBreakpointHalt(void);
    USBDM_ErrorCode initBreakpoints();
+   int  getNumberOfHardwareBreakpoints();
 };
 
 #endif /* SRC_GDBBREAKPOINTS_ARM_H_ */

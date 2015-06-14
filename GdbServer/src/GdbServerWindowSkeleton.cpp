@@ -53,6 +53,10 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	menuBar->Append( logMenu, wxT("Log") ); 
 	
 	targetMenu = new wxMenu();
+	wxMenuItem* m_menuItem121;
+	m_menuItem121 = new wxMenuItem( targetMenu, wxID_ANY, wxString( wxT("&Halt Target") ) , wxEmptyString, wxITEM_NORMAL );
+	targetMenu->Append( m_menuItem121 );
+	
 	wxMenuItem* m_menuItem10;
 	m_menuItem10 = new wxMenuItem( targetMenu, wxID_ANY, wxString( wxT("&Reset Target") ) , wxT("Reset target"), wxITEM_NORMAL );
 	targetMenu->Append( m_menuItem10 );
@@ -107,6 +111,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	this->Connect( m_menuItem7->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnDisableLog ) );
 	this->Connect( m_menuItem8->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnModerateLog ) );
 	this->Connect( m_menuItem9->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnVerboseLog ) );
+	this->Connect( m_menuItem121->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnHaltTarget ) );
 	this->Connect( m_menuItem10->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnResetTarget ) );
 	this->Connect( m_menuItem12->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnSetTimeout ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleMaskISR ) );
@@ -124,6 +129,7 @@ GdbServerWindowSkeleton::~GdbServerWindowSkeleton()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnDisableLog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnModerateLog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnVerboseLog ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnHaltTarget ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnResetTarget ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnSetTimeout ) );
 	this->Disconnect( wxID_DISABLE_INTERRUPTS, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleMaskISR ) );

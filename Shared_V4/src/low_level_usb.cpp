@@ -367,13 +367,14 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
       }
    }
 //   log.print("libusb_open() done\n");
-//   int configuration = 0;
-//   rc = libusb_get_configuration(usbDeviceHandle, &configuration);
-//   if (rc != LIBUSB_SUCCESS) {
-//      log.error("libusb_get_configuration() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
-//   }
-//   log.print("libusb_get_configuration() done\n");
-//   if (configuration != 1) {
+   int configuration = 0;
+   rc = libusb_get_configuration(usbDeviceHandle, &configuration);
+   if (rc != LIBUSB_SUCCESS) {
+      log.error("libusb_get_configuration() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
+   }
+//   log.print("libusb_get_configuration() done, configuration = %d\n", configuration);
+   if (configuration != 1) {
+      // It should be possible to set the same configuration but this fails with LIBUSB_ERROR_BUSY
       rc = libusb_set_configuration(usbDeviceHandle, 1);
       if (rc != LIBUSB_SUCCESS) {
          log.error("libusb_set_configuration(1) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
@@ -383,7 +384,7 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
       log.print("libusb_set_configuration() done\n");
-//   }
+   }
    rc = libusb_claim_interface(usbDeviceHandle, 0);
    if (rc != LIBUSB_SUCCESS) {
       log.error("libusb_claim_interface(0) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));

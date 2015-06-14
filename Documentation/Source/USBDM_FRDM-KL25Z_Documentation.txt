@@ -1,5 +1,5 @@
 /*!
-  \mainpage USBDM-FRDM - USBDM Debugger based on Freescale FRDM-xxxx board
+  \mainpage USBDM Kinetis Debugger and Programmer
 
  \section introSection Introduction
    The FRM-xxxx boards from Freescale includes a minimal SWD based debugging interface for ARM Kinetis targets.  The interface
@@ -18,6 +18,16 @@
    versions of the other boards have various hardware errors that make connection to an external device difficult.  Another attractive choice is the FRDM-K64F.
    The advantage of this board is that it contains a controlled power supply and already has the required 10-pin connector present. 
    
+    <hr>
+ \subsection QuickLinks Quick Links
+
+   - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
+   - @htmlonly <a href="../../USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
+     
+   <hr>
+    
  \subsection featureSection Features
    This version of the USBDM code combined with the FRDM-xxxx board provides the following features:
    -	A SWD interface for programming and debugging of <b>Kinetis ARM-Cortex</b> microcontrollers.
