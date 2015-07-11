@@ -1513,7 +1513,7 @@ USBDM_ErrorCode USBDM_SetSpeed( unsigned long frequency) {
 USBDM_API
 USBDM_ErrorCode USBDM_GetSpeed(unsigned long *frequency /* kHz */) {
    USBDM_ErrorCode rc = USBDM_GetSpeedHz(frequency);
-   *frequency /= 1000;
+   *frequency = round(*frequency/1000.0);
    return rc;
 }
 
@@ -1547,7 +1547,7 @@ USBDM_ErrorCode USBDM_GetSpeedHz(unsigned long *frequency /* Hz */) {
       case T_CFV1 :
          // BDM return value is length of SYNC pulse in 60MHz ticks
          // The SYNC pulse is 128 BDM clock cycles
-         *frequency = (60000000UL * 128) / value;
+         *frequency = round((60.0E6 * 128) / value);
          log.print("Ticks = %d, BDM Clk = %lu Hz\n", value, *frequency);
          break;
       case T_CFVx :

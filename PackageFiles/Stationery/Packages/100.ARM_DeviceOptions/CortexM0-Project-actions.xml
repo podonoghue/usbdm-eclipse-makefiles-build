@@ -71,6 +71,15 @@ Cortex-M0
          <copy source="Startup_Code/system-mkm.c"                             target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-mkm.c"                            target="Startup_Code/vectors.c" />
       </projectActionList>
+
+      <!-- Base MKV10 files -->
+      <projectActionList id="Kinetis-MKV10-files" >
+         <applyWhen>
+            <deviceSubfamilyMatches>^MKV10Z7</deviceSubfamilyMatches>
+         </applyWhen>
+         <copy source="Startup_Code/system-mkv10.c"                             target="Startup_Code/system.c" />
+         <copy source="Startup_Code/vectors-mkv10.c"                            target="Startup_Code/vectors.c" />
+      </projectActionList>
    </projectActionList>
 
 </root>

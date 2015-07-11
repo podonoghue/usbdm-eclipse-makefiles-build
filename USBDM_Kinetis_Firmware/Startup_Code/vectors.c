@@ -1,7 +1,7 @@
 /*
  *  Vectors-mk.c
  *
- *  Generic vectors and security for Kinetis
+ *  Generic vectors and security for Kinetis MKxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -10,7 +10,7 @@
 #include <string.h>
 #include "derivative.h"
 
-#define DEVICE_SUBFAMILY_CortexM4
+#define MK20D5
 
 #if !defined(OPEN_SDA_V1)
 /*
@@ -28,12 +28,73 @@ typedef struct {
     uint8_t  fdprot;
 } SecurityInfo;
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+/*
+<h> Flash security value (NV_FTFA_FSEC)
+   <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
+      <i> Controls use of Backdoor Key access to unsecure device
+      <0=> 0: Access disabled
+      <1=> 1: Access disabled (preferred disabled value)
+      <2=> 2: Access enabled
+      <3=> 3: Access disabled
+   <o1> Mass Erase Enable Bits (FSEC.MEEN)
+      <i> Controls mass erase capability of the flash memory module.
+      <i> Only relevant when FSEC.SEC is set to secure.
+      <0=> 0: Mass erase enabled
+      <1=> 1: Mass erase enabled
+      <2=> 2: Mass erase disabled
+      <3=> 3: Mass erase enabled
+   <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
+      <i> Controls access to the flash memory contents during returned part failure analysis
+      <0=> 0: Factory access granted
+      <1=> 1: Factory access denied
+      <2=> 2: Factory access denied
+      <3=> 3: Factory access granted
+   <o3> Flash Security (FSEC.SEC)
+      <i> Defines the security state of the MCU. 
+      <i> In the secure state, the MCU limits access to flash memory module resources. 
+      <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
+      <0=> 0: Secured
+      <1=> 1: Secured
+      <2=> 2: Unsecured
+      <3=> 3: Secured
+</h>
+*/
+#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(3<<NV_FSEC_MEEN_SHIFT)|(3<<NV_FSEC_FSLACC_SHIFT)|(2<<NV_FSEC_SEC_SHIFT))
+#if ((FSEC_VALUE&NV_FSEC_MEEN_MASK) == (2<<NV_FSEC_MEEN_SHIFT)) && ((FSEC_VALUE&NV_FSEC_SEC_MASK) != (2<<NV_FSEC_SEC_SHIFT))
+// Change to warning if your really, really want to do this!
+#error "The security values selected will prevent the device from being unsecured using external methods"
+#endif
+
+/*
+Control extended Boot features on these devices
+<h> Flash boot options (NV_FTFA_FOPT)
+   <q0.2> NMI pin control (FOPT.NMI_DIS)
+      <i> Enables or disables the NMI function
+      <0=> NMI interrupts are always blocked.
+      <1=> NMI_b interrupts default to enabled
+   <q0.1> EZPORT pin control (FOPT.EZPORT_DIS)
+      <i> Enables or disables EzPort function
+      <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
+      <i> if the EZP_CS/NMI pin is used for its NMI function 
+      <0=> EZP_CSn pin is disabled on reset
+      <1=> EZP_CSn pin is enabled on reset
+   <q0.0> Low power boot control (FOPT.LPBOOT)
+      <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
+      <i> Allows power consumption during reset to be reduced
+      <0=> CLKDIV1,2 = /8, CLKDIV3,4 = /16
+      <1=> CLKDIV1,2 = /1, CLKDIV3,4 = /2
+</h>
+ */
+#define FOPT_VALUE (0x7|0xF8)
+
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
     /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
     /* fprot    */ 0xFFFFFFFF,
-    /* fsec     */ FTFL_FSEC_KEYEN(3)|FTFL_FSEC_MEEN(3)|FTFL_FSEC_FSLACC(3)|FTFL_FSEC_SEC(2),
-    /* fopt     */ 0xFF,
+    /* fsec     */ FSEC_VALUE,
+    /* fopt     */ FOPT_VALUE,
     /* feprot   */ 0xFF,
     /* fdprot   */ 0xFF,
 };
@@ -152,38 +213,38 @@ void DMA3_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void DMA_Error_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void FTFL_Command_IRQHandler(void)            WEAK_DEFAULT_HANDLER;
 void FTFL_Collision_IRQHandler(void)          WEAK_DEFAULT_HANDLER;
-void PMC_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
-void LLWU_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
-void WDOG_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void LVD_LVW_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
+void LLW_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
+void Watchdog_IRQHandler(void)                WEAK_DEFAULT_HANDLER;
 void I2C0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void SPI0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void I2S0_Tx_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
 void I2S0_Rx_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
 void UART0_LON_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
-void UART0_RxTx_IRQHandler(void)              WEAK_DEFAULT_HANDLER;
-void UART0_Error_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
-void UART1_RxTx_IRQHandler(void)              WEAK_DEFAULT_HANDLER;
-void UART1_Error_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
-void UART2_RxTx_IRQHandler(void)              WEAK_DEFAULT_HANDLER;
-void UART2_Error_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
+void UART0_RX_TX_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
+void UART0_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
+void UART1_RX_TX_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
+void UART1_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
+void UART2_RX_TX_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
+void UART2_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void ADC0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void FTM0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void FTM1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMT_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
-void RTC_Alarm_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
+void RTC_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
 void RTC_Seconds_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
-void PIT_Ch0_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
-void PIT_Ch1_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
-void PIT_Ch2_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
-void PIT_Ch3_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
+void PIT0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void PIT1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void PIT2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void PIT3_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PDB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
-void USBOTG_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
+void USB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USBDCD_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void TSI0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void MCG_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
-void LPTMR0_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
+void LPTimer_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
 void PORTA_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
 void PORTB_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
 void PORTC_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
@@ -207,13 +268,13 @@ VectorTable const __vector_table = {
       MemManage_Handler,             /*    4,  -12  Memory Management, MPU mismatch, including Access Violation and No Match         */
       BusFault_Handler,              /*    5,  -11  Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
       UsageFault_Handler,            /*    6,  -10  Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-      0,                             /*    7,   -9  Reserved                                                                         */
-      0,                             /*    8,   -8  Reserved                                                                         */
-      0,                             /*    9,   -7  Reserved                                                                         */
-      0,                             /*   10,   -6  Reserved                                                                         */
+      0,                             /*    7,   -9                                                                                   */
+      0,                             /*    8,   -8                                                                                   */
+      0,                             /*    9,   -7                                                                                   */
+      0,                             /*   10,   -6                                                                                   */
       SVC_Handler,                   /*   11,   -5  System Service Call via SVC instruction                                          */
       DebugMon_Handler,              /*   12,   -4  Debug Monitor                                                                    */
-      0,                             /*   13,   -3  Reserved                                                                         */
+      0,                             /*   13,   -3                                                                                   */
       PendSV_Handler,                /*   14,   -2  Pendable request for system service                                              */
       SysTick_Handler,               /*   15,   -1  System Tick Timer                                                                */
 
@@ -223,241 +284,47 @@ VectorTable const __vector_table = {
       DMA2_IRQHandler,               /*   18,    2  DMA channel 2 transfer complete interrupt                                        */
       DMA3_IRQHandler,               /*   19,    3  DMA channel 3 transfer complete interrupt                                        */
       DMA_Error_IRQHandler,          /*   20,    4  DMA error interrupt                                                              */
-      Default_Handler,               /*   21,    5  Reserved                                                                         */
+      Default_Handler,               /*   21,    5                                                                                   */
       FTFL_Command_IRQHandler,       /*   22,    6  FTFL interrupt                                                                   */
       FTFL_Collision_IRQHandler,     /*   23,    7  FTFL Read collision interrupt                                                    */
-      PMC_IRQHandler,                /*   24,    8  PMC Low Voltage Detect, Low Voltage Warning                                      */
-      LLWU_IRQHandler,               /*   25,    9  LLWU Low Leakage Wakeup                                                          */
-      WDOG_IRQHandler,               /*   26,   10  WDOG interrupt                                                                   */
+      LVD_LVW_IRQHandler,            /*   24,    8  PMC Low Voltage Detect, Low Voltage Warning                                      */
+      LLW_IRQHandler,                /*   25,    9  LLW Low Leakage Wakeup                                                           */
+      Watchdog_IRQHandler,           /*   26,   10  WDOG interrupt                                                                   */
       I2C0_IRQHandler,               /*   27,   11  I2C0 interrupt                                                                   */
       SPI0_IRQHandler,               /*   28,   12  SPI0 interrupt                                                                   */
       I2S0_Tx_IRQHandler,            /*   29,   13  I2S0 transmit interrupt                                                          */
       I2S0_Rx_IRQHandler,            /*   30,   14  I2S0 receive interrupt                                                           */
       UART0_LON_IRQHandler,          /*   31,   15  UART0 LON interrupt                                                              */
-      UART0_RxTx_IRQHandler,         /*   32,   16  UART0 receive/transmit interrupt                                                 */
-      UART0_Error_IRQHandler,        /*   33,   17  UART0 error interrupt                                                            */
-      UART1_RxTx_IRQHandler,         /*   34,   18  UART1 receive/transmit interrupt                                                 */
-      UART1_Error_IRQHandler,        /*   35,   19  UART1 error interrupt                                                            */
-      UART2_RxTx_IRQHandler,         /*   36,   20  UART2 receive/transmit interrupt                                                 */
-      UART2_Error_IRQHandler,        /*   37,   21  UART0 error interrupt                                                            */
+      UART0_RX_TX_IRQHandler,        /*   32,   16  UART0 receive/transmit interrupt                                                 */
+      UART0_ERR_IRQHandler,          /*   33,   17  UART0 error interrupt                                                            */
+      UART1_RX_TX_IRQHandler,        /*   34,   18  UART1 receive/transmit interrupt                                                 */
+      UART1_ERR_IRQHandler,          /*   35,   19  UART1 error interrupt                                                            */
+      UART2_RX_TX_IRQHandler,        /*   36,   20  UART2 receive/transmit interrupt                                                 */
+      UART2_ERR_IRQHandler,          /*   37,   21  UART0 error interrupt                                                            */
       ADC0_IRQHandler,               /*   38,   22  ADC0 interrupt                                                                   */
       CMP0_IRQHandler,               /*   39,   23  CMP0 interrupt                                                                   */
       CMP1_IRQHandler,               /*   40,   24  CMP1 interrupt                                                                   */
       FTM0_IRQHandler,               /*   41,   25  FTM0 fault, overflow and channels interrupt                                      */
       FTM1_IRQHandler,               /*   42,   26  FTM1 fault, overflow and channels interrupt                                      */
       CMT_IRQHandler,                /*   43,   27  CMT interrupt                                                                    */
-      RTC_Alarm_IRQHandler,          /*   44,   28  RTC interrupt                                                                    */
+      RTC_IRQHandler,                /*   44,   28  RTC interrupt                                                                    */
       RTC_Seconds_IRQHandler,        /*   45,   29  RTC seconds interrupt                                                            */
-      PIT_Ch0_IRQHandler,            /*   46,   30  PIT timer channel 0 interrupt                                                    */
-      PIT_Ch1_IRQHandler,            /*   47,   31  PIT timer channel 1 interrupt                                                    */
-      PIT_Ch2_IRQHandler,            /*   48,   32  PIT timer channel 2 interrupt                                                    */
-      PIT_Ch3_IRQHandler,            /*   49,   33  PIT timer channel 3 interrupt                                                    */
+      PIT0_IRQHandler,               /*   46,   30  PIT timer channel 0 interrupt                                                    */
+      PIT1_IRQHandler,               /*   47,   31  PIT timer channel 1 interrupt                                                    */
+      PIT2_IRQHandler,               /*   48,   32  PIT timer channel 2 interrupt                                                    */
+      PIT3_IRQHandler,               /*   49,   33  PIT timer channel 3 interrupt                                                    */
       PDB0_IRQHandler,               /*   50,   34  PDB0 Programmable Delay Block interrupt                                          */
-      USBOTG_IRQHandler,             /*   51,   35  USB0 OTG interrupt                                                               */
+      USB0_IRQHandler,               /*   51,   35  USB0 OTG interrupt                                                               */
       USBDCD_IRQHandler,             /*   52,   36  USBDCD interrupt                                                                 */
       TSI0_IRQHandler,               /*   53,   37  TSI0 interrupt                                                                   */
       MCG_IRQHandler,                /*   54,   38  MCG interrupt                                                                    */
-      LPTMR0_IRQHandler,             /*   55,   39  LPTMR Low Power Timer interrupt                                                  */
+      LPTimer_IRQHandler,            /*   55,   39  LPTMR Low Power Timer interrupt                                                  */
       PORTA_IRQHandler,              /*   56,   40  Port A interrupt                                                                 */
       PORTB_IRQHandler,              /*   57,   41  Port B interrupt                                                                 */
       PORTC_IRQHandler,              /*   58,   42  Port C interrupt                                                                 */
       PORTD_IRQHandler,              /*   59,   43  Port D interrupt                                                                 */
       PORTE_IRQHandler,              /*   60,   44  Port E interrupt                                                                 */
       SWI_IRQHandler,                /*   61,   45  Software interrupt                                                               */
-      Default_Handler,               /*   62,   46  Reserved                                                                         */
-      Default_Handler,               /*   63,   47  Reserved                                                                         */
-      Default_Handler,               /*   64,   48  Reserved                                                                         */
-      Default_Handler,               /*   65,   49  Reserved                                                                         */
-      Default_Handler,               /*   66,   50  Reserved                                                                         */
-      Default_Handler,               /*   67,   51  Reserved                                                                         */
-      Default_Handler,               /*   68,   52  Reserved                                                                         */
-      Default_Handler,               /*   69,   53  Reserved                                                                         */
-      Default_Handler,               /*   70,   54  Reserved                                                                         */
-      Default_Handler,               /*   71,   55  Reserved                                                                         */
-      Default_Handler,               /*   72,   56  Reserved                                                                         */
-      Default_Handler,               /*   73,   57  Reserved                                                                         */
-      Default_Handler,               /*   74,   58  Reserved                                                                         */
-      Default_Handler,               /*   75,   59  Reserved                                                                         */
-      Default_Handler,               /*   76,   60  Reserved                                                                         */
-      Default_Handler,               /*   77,   61  Reserved                                                                         */
-      Default_Handler,               /*   78,   62  Reserved                                                                         */
-      Default_Handler,               /*   79,   63  Reserved                                                                         */
-      Default_Handler,               /*   80,   64  Reserved                                                                         */
-      Default_Handler,               /*   81,   65  Reserved                                                                         */
-      Default_Handler,               /*   82,   66  Reserved                                                                         */
-      Default_Handler,               /*   83,   67  Reserved                                                                         */
-      Default_Handler,               /*   84,   68  Reserved                                                                         */
-      Default_Handler,               /*   85,   69  Reserved                                                                         */
-      Default_Handler,               /*   86,   70  Reserved                                                                         */
-      Default_Handler,               /*   87,   71  Reserved                                                                         */
-      Default_Handler,               /*   88,   72  Reserved                                                                         */
-      Default_Handler,               /*   89,   73  Reserved                                                                         */
-      Default_Handler,               /*   90,   74  Reserved                                                                         */
-      Default_Handler,               /*   91,   75  Reserved                                                                         */
-      Default_Handler,               /*   92,   76  Reserved                                                                         */
-      Default_Handler,               /*   93,   77  Reserved                                                                         */
-      Default_Handler,               /*   94,   78  Reserved                                                                         */
-      Default_Handler,               /*   95,   79  Reserved                                                                         */
-      Default_Handler,               /*   96,   80  Reserved                                                                         */
-      Default_Handler,               /*   97,   81  Reserved                                                                         */
-      Default_Handler,               /*   98,   82  Reserved                                                                         */
-      Default_Handler,               /*   99,   83  Reserved                                                                         */
-      Default_Handler,               /*  100,   84  Reserved                                                                         */
-      Default_Handler,               /*  101,   85  Reserved                                                                         */
-      Default_Handler,               /*  102,   86  Reserved                                                                         */
-      Default_Handler,               /*  103,   87  Reserved                                                                         */
-      Default_Handler,               /*  104,   88  Reserved                                                                         */
-      Default_Handler,               /*  105,   89  Reserved                                                                         */
-      Default_Handler,               /*  106,   90  Reserved                                                                         */
-      Default_Handler,               /*  107,   91  Reserved                                                                         */
-      Default_Handler,               /*  108,   92  Reserved                                                                         */
-      Default_Handler,               /*  109,   93  Reserved                                                                         */
-      Default_Handler,               /*  110,   94  Reserved                                                                         */
-      Default_Handler,               /*  111,   95  Reserved                                                                         */
-      Default_Handler,               /*  112,   96  Reserved                                                                         */
-      Default_Handler,               /*  113,   97  Reserved                                                                         */
-      Default_Handler,               /*  114,   98  Reserved                                                                         */
-      Default_Handler,               /*  115,   99  Reserved                                                                         */
-      Default_Handler,               /*  116,  100  Reserved                                                                         */
-      Default_Handler,               /*  117,  101  Reserved                                                                         */
-      Default_Handler,               /*  118,  102  Reserved                                                                         */
-      Default_Handler,               /*  119,  103  Reserved                                                                         */
-      Default_Handler,               /*  120,  104  Reserved                                                                         */
-      Default_Handler,               /*  121,  105  Reserved                                                                         */
-      Default_Handler,               /*  122,  106  Reserved                                                                         */
-      Default_Handler,               /*  123,  107  Reserved                                                                         */
-      Default_Handler,               /*  124,  108  Reserved                                                                         */
-      Default_Handler,               /*  125,  109  Reserved                                                                         */
-      Default_Handler,               /*  126,  110  Reserved                                                                         */
-      Default_Handler,               /*  127,  111  Reserved                                                                         */
-      Default_Handler,               /*  128,  112  Reserved                                                                         */
-      Default_Handler,               /*  129,  113  Reserved                                                                         */
-      Default_Handler,               /*  130,  114  Reserved                                                                         */
-      Default_Handler,               /*  131,  115  Reserved                                                                         */
-      Default_Handler,               /*  132,  116  Reserved                                                                         */
-      Default_Handler,               /*  133,  117  Reserved                                                                         */
-      Default_Handler,               /*  134,  118  Reserved                                                                         */
-      Default_Handler,               /*  135,  119  Reserved                                                                         */
-      Default_Handler,               /*  136,  120  Reserved                                                                         */
-      Default_Handler,               /*  137,  121  Reserved                                                                         */
-      Default_Handler,               /*  138,  122  Reserved                                                                         */
-      Default_Handler,               /*  139,  123  Reserved                                                                         */
-      Default_Handler,               /*  140,  124  Reserved                                                                         */
-      Default_Handler,               /*  141,  125  Reserved                                                                         */
-      Default_Handler,               /*  142,  126  Reserved                                                                         */
-      Default_Handler,               /*  143,  127  Reserved                                                                         */
-      Default_Handler,               /*  144,  128  Reserved                                                                         */
-      Default_Handler,               /*  145,  129  Reserved                                                                         */
-      Default_Handler,               /*  146,  130  Reserved                                                                         */
-      Default_Handler,               /*  147,  131  Reserved                                                                         */
-      Default_Handler,               /*  148,  132  Reserved                                                                         */
-      Default_Handler,               /*  149,  133  Reserved                                                                         */
-      Default_Handler,               /*  150,  134  Reserved                                                                         */
-      Default_Handler,               /*  151,  135  Reserved                                                                         */
-      Default_Handler,               /*  152,  136  Reserved                                                                         */
-      Default_Handler,               /*  153,  137  Reserved                                                                         */
-      Default_Handler,               /*  154,  138  Reserved                                                                         */
-      Default_Handler,               /*  155,  139  Reserved                                                                         */
-      Default_Handler,               /*  156,  140  Reserved                                                                         */
-      Default_Handler,               /*  157,  141  Reserved                                                                         */
-      Default_Handler,               /*  158,  142  Reserved                                                                         */
-      Default_Handler,               /*  159,  143  Reserved                                                                         */
-      Default_Handler,               /*  160,  144  Reserved                                                                         */
-      Default_Handler,               /*  161,  145  Reserved                                                                         */
-      Default_Handler,               /*  162,  146  Reserved                                                                         */
-      Default_Handler,               /*  163,  147  Reserved                                                                         */
-      Default_Handler,               /*  164,  148  Reserved                                                                         */
-      Default_Handler,               /*  165,  149  Reserved                                                                         */
-      Default_Handler,               /*  166,  150  Reserved                                                                         */
-      Default_Handler,               /*  167,  151  Reserved                                                                         */
-      Default_Handler,               /*  168,  152  Reserved                                                                         */
-      Default_Handler,               /*  169,  153  Reserved                                                                         */
-      Default_Handler,               /*  170,  154  Reserved                                                                         */
-      Default_Handler,               /*  171,  155  Reserved                                                                         */
-      Default_Handler,               /*  172,  156  Reserved                                                                         */
-      Default_Handler,               /*  173,  157  Reserved                                                                         */
-      Default_Handler,               /*  174,  158  Reserved                                                                         */
-      Default_Handler,               /*  175,  159  Reserved                                                                         */
-      Default_Handler,               /*  176,  160  Reserved                                                                         */
-      Default_Handler,               /*  177,  161  Reserved                                                                         */
-      Default_Handler,               /*  178,  162  Reserved                                                                         */
-      Default_Handler,               /*  179,  163  Reserved                                                                         */
-      Default_Handler,               /*  180,  164  Reserved                                                                         */
-      Default_Handler,               /*  181,  165  Reserved                                                                         */
-      Default_Handler,               /*  182,  166  Reserved                                                                         */
-      Default_Handler,               /*  183,  167  Reserved                                                                         */
-      Default_Handler,               /*  184,  168  Reserved                                                                         */
-      Default_Handler,               /*  185,  169  Reserved                                                                         */
-      Default_Handler,               /*  186,  170  Reserved                                                                         */
-      Default_Handler,               /*  187,  171  Reserved                                                                         */
-      Default_Handler,               /*  188,  172  Reserved                                                                         */
-      Default_Handler,               /*  189,  173  Reserved                                                                         */
-      Default_Handler,               /*  190,  174  Reserved                                                                         */
-      Default_Handler,               /*  191,  175  Reserved                                                                         */
-      Default_Handler,               /*  192,  176  Reserved                                                                         */
-      Default_Handler,               /*  193,  177  Reserved                                                                         */
-      Default_Handler,               /*  194,  178  Reserved                                                                         */
-      Default_Handler,               /*  195,  179  Reserved                                                                         */
-      Default_Handler,               /*  196,  180  Reserved                                                                         */
-      Default_Handler,               /*  197,  181  Reserved                                                                         */
-      Default_Handler,               /*  198,  182  Reserved                                                                         */
-      Default_Handler,               /*  199,  183  Reserved                                                                         */
-      Default_Handler,               /*  200,  184  Reserved                                                                         */
-      Default_Handler,               /*  201,  185  Reserved                                                                         */
-      Default_Handler,               /*  202,  186  Reserved                                                                         */
-      Default_Handler,               /*  203,  187  Reserved                                                                         */
-      Default_Handler,               /*  204,  188  Reserved                                                                         */
-      Default_Handler,               /*  205,  189  Reserved                                                                         */
-      Default_Handler,               /*  206,  190  Reserved                                                                         */
-      Default_Handler,               /*  207,  191  Reserved                                                                         */
-      Default_Handler,               /*  208,  192  Reserved                                                                         */
-      Default_Handler,               /*  209,  193  Reserved                                                                         */
-      Default_Handler,               /*  210,  194  Reserved                                                                         */
-      Default_Handler,               /*  211,  195  Reserved                                                                         */
-      Default_Handler,               /*  212,  196  Reserved                                                                         */
-      Default_Handler,               /*  213,  197  Reserved                                                                         */
-      Default_Handler,               /*  214,  198  Reserved                                                                         */
-      Default_Handler,               /*  215,  199  Reserved                                                                         */
-      Default_Handler,               /*  216,  200  Reserved                                                                         */
-      Default_Handler,               /*  217,  201  Reserved                                                                         */
-      Default_Handler,               /*  218,  202  Reserved                                                                         */
-      Default_Handler,               /*  219,  203  Reserved                                                                         */
-      Default_Handler,               /*  220,  204  Reserved                                                                         */
-      Default_Handler,               /*  221,  205  Reserved                                                                         */
-      Default_Handler,               /*  222,  206  Reserved                                                                         */
-      Default_Handler,               /*  223,  207  Reserved                                                                         */
-      Default_Handler,               /*  224,  208  Reserved                                                                         */
-      Default_Handler,               /*  225,  209  Reserved                                                                         */
-      Default_Handler,               /*  226,  210  Reserved                                                                         */
-      Default_Handler,               /*  227,  211  Reserved                                                                         */
-      Default_Handler,               /*  228,  212  Reserved                                                                         */
-      Default_Handler,               /*  229,  213  Reserved                                                                         */
-      Default_Handler,               /*  230,  214  Reserved                                                                         */
-      Default_Handler,               /*  231,  215  Reserved                                                                         */
-      Default_Handler,               /*  232,  216  Reserved                                                                         */
-      Default_Handler,               /*  233,  217  Reserved                                                                         */
-      Default_Handler,               /*  234,  218  Reserved                                                                         */
-      Default_Handler,               /*  235,  219  Reserved                                                                         */
-      Default_Handler,               /*  236,  220  Reserved                                                                         */
-      Default_Handler,               /*  237,  221  Reserved                                                                         */
-      Default_Handler,               /*  238,  222  Reserved                                                                         */
-      Default_Handler,               /*  239,  223  Reserved                                                                         */
-      Default_Handler,               /*  240,  224  Reserved                                                                         */
-      Default_Handler,               /*  241,  225  Reserved                                                                         */
-      Default_Handler,               /*  242,  226  Reserved                                                                         */
-      Default_Handler,               /*  243,  227  Reserved                                                                         */
-      Default_Handler,               /*  244,  228  Reserved                                                                         */
-      Default_Handler,               /*  245,  229  Reserved                                                                         */
-      Default_Handler,               /*  246,  230  Reserved                                                                         */
-      Default_Handler,               /*  247,  231  Reserved                                                                         */
-      Default_Handler,               /*  248,  232  Reserved                                                                         */
-      Default_Handler,               /*  249,  233  Reserved                                                                         */
-      Default_Handler,               /*  250,  234  Reserved                                                                         */
-      Default_Handler,               /*  251,  235  Reserved                                                                         */
-      Default_Handler,               /*  252,  236  Reserved                                                                         */
-      Default_Handler,               /*  253,  237  Reserved                                                                         */
-      Default_Handler,               /*  254,  238  Reserved                                                                         */
-      Default_Handler,               /*  255,  239  Reserved                                                                         */
    }
 };
 

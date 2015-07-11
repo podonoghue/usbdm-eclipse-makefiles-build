@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+
+   <!-- Base CortexM0 files -->
+   <projectActionList id="Documentation-Project-actions" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM3</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM3F</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <copy source="Documentation.doxyfile"        target="Documentation.doxyfile" />
+      <copy source="PROJECT_LOC/Documentation/html/index.html" target="Documentation.html" type="link" sourcePathType="absolute"/>
+
+   </projectActionList>
+
+</root>

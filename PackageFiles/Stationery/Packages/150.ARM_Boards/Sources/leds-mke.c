@@ -1,6 +1,9 @@
-/*
- * leds_mke.c
- *
+/**
+ * @file    leds.c
+ * @brief   Basic LED control for demo boards
+ * @date    13 June 2015
+ * 
+ * Generated from leds-mke.c
  */
 #include "derivative.h"
 #include "utilities.h"

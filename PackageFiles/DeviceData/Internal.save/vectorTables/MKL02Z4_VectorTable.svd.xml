@@ -1,0 +1,79 @@
+<!--
+Devices using this vector table: 
+   MKL02Z4
+-->
+      <interrupts>
+         <name>MKL02Z4_VectorTable</name>
+         <description>MKL02Z4 VectorTable</description>
+         <interrupt>
+            <name>FTFA</name>
+            <description>FTFA Command complete or error</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>I2C Interface 0</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C1</name>
+            <description>I2C Interface 1</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface 0</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0</name>
+            <description>UART0 Status and error</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analogue to Digital Converter 0</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>ACMP0</name>
+            <description>Analogue comparator 0</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>TPM0</name>
+            <description>Timer/PWM Module 0</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>TPM1</name>
+            <description>Timer/PWM Module 1</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Clock interrupt</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>Low Power Timer</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>Port A</description>
+            <value>30</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>Port B</description>
+            <value>31</value>
+         </interrupt>
+      </interrupts>
+

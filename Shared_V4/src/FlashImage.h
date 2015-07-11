@@ -1,5 +1,5 @@
-/*! \file
-    \brief Header file for FlashImage.cpp
+/** \file
+    \brief Header file for FlashImage
 
     \verbatim
     Copyright (C) 2015  Peter O'Donoghue
@@ -49,7 +49,7 @@
 #if defined(COMPILE_FLASH_IMAGE_DLL)
 // Buiding Library
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_EXPORT
-// Incorprating library directly
+// Incorporating library directly
 #elif defined(LINK_USBDM_FLASH_DLL)
 //! Link to routines directly
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_LOCAL
@@ -64,18 +64,23 @@
 
 #include "USBDM_API.h"
 
-/*! Represents a memory image containing loaded file(s)
+/**
+ * Represents a memory image containing loaded file(s)
  */
 class USBDM_FLASHIMAGE_DECLSPEC FlashImage {
 
 public:
    static const uint32_t DataOffset    =  (0x02000000UL);  // Offset used for DSC Data region
 
+   /**
+    *  Class to enumerate the occupied locations within the memory image
+    *
+    *  @note may be invalidated by changes to the referenced image
+    */
    class Enumerator {
-   //! Class to enumerate the occupied locations within the memory image
-   //! @note may be invalidated by changes to the referenced image
    protected:
-      /*! Construct an enumerator positioned at a given starting address
+      /**
+       *  Construct an enumerator positioned at a given starting address
        *  Note: if address is unallocated then the Enumerator is advanced to next allocated address
        */
       Enumerator() {};
@@ -83,17 +88,19 @@ public:
    public:
       virtual ~Enumerator() {};
 
-      /*! Get the current location as a flat address
+      /**
+       * Get the current location as a flat address
        */
       virtual uint32_t   getAddress() const = 0;
-      /*! Indicates if the current memory location is valid (occupied)
+      /**
+       * Indicates if the current memory location is valid (occupied)
        *
        * @return \n
        *         true  => current location is occupied
        *        false => current location is unoccupied/unallocated
        */
       virtual bool       isValid() const = 0;
-      /*!
+      /**
        * Sets the iterator to the given address
        *
        *  @return \n
@@ -101,7 +108,7 @@ public:
        *         false => current location is unoccupied/unallocated
        */
       virtual bool       setAddress(uint32_t addr) = 0;
-      /*!
+      /**
        * Advance to next occupied flash location
        *
        * @return \n
@@ -109,7 +116,7 @@ public:
        *        false => no occupied locations remain, enumerator is left at last \e unoccupied location
        */
       virtual bool       nextValid() = 0;
-      /*!
+      /**
        *  Advance location to just before the next unoccupied flash location or page boundary
        *  Assumes current location is occupied.
        */
@@ -118,7 +125,7 @@ public:
    typedef std::tr1::shared_ptr<FlashImage::Enumerator> EnumeratorPtr;
 
 protected:
-   /*!
+   /**
     *   Constructor - creates an empty Flash image
     */
    FlashImage() {};
@@ -126,13 +133,13 @@ protected:
 public:
    virtual ~FlashImage() {};
 
-   /*!
+   /**
     *   Set target type of image
     *
     *   @param targetType - Target type to set
     */
    virtual void                 setTargetType(TargetType_t targetType) = 0;
-   /*!
+   /**
     * Get string describing the error code
     *
     * @param rc - Error code
@@ -140,8 +147,8 @@ public:
     * @return String describing the error
     */
    virtual char const          *getErrorString(USBDM_ErrorCode rc) = 0;
-   /*!
-    *    Load a S19 or ELF file into the buffer. \n
+   /**
+    *  Load a S19 or ELF file into the buffer. \n
     *
     *  @param filePath      : Path of file to load
     *  @param clearBuffer   : Clear buffer before loading
@@ -149,8 +156,8 @@ public:
     *  @return error code see \ref USBDM_ErrorCode
     */
    virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer=true) = 0;
-   /*!
-    *    Save image buffer as a S19 file. \n
+   /**
+    *  Save image buffer as a S19 file. \n
     *
     *  @param filePath      : Path of file to load
     *  @param discardFF     : Discard sizable blocks of consecutive 0xFF values (assumed blank)
@@ -158,18 +165,18 @@ public:
     *  @return error code see \ref USBDM_ErrorCode
     */
    virtual USBDM_ErrorCode      saveFile(const std::string &filePath, bool discardFF=true) = 0;
-   /*!
+   /**
     *  Initialises the memory to empty
     */
    virtual void clear() = 0;
-   /*!
+   /**
     * Check if image is entirely empty (never written to)
     *
     * @return true=>image is entirely empty,\n
     *               image is not empty
     */
    virtual bool isEmpty() const = 0;
-   /*!
+   /**
     *  Checks if the memory location is valid (has been written to)
     *
     *  @param address - 32-bit memory address
@@ -179,11 +186,11 @@ public:
     *          false  => location is invalid
     */
    virtual bool isValid(uint32_t address) = 0;
-   /*!
+   /**
     *  Returns an approximate count of occupied bytes
     */
    virtual unsigned getByteCount() const = 0;
-   /*!
+   /**
     *  Obtain the value of a Flash memory location
     *
     *  @param address - 32-bit memory address
@@ -192,7 +199,7 @@ public:
     */
    virtual uint8_t  getValue(uint32_t address) = 0;
 
-   /*!
+   /**
     *   Set a Flash memory location
     *
     *   @param address - 32-bit memory address
@@ -201,27 +208,27 @@ public:
     *   @note Allocates a memory location if necessary
     */
    virtual void setValue(uint32_t address, uint8_t value) = 0;
-   /*
+   /**
     * Remove a Flash memory location (set to unprogrammed)
     *
     * @param address - 32-bit memory address
     */
    virtual void                 remove(uint32_t address) = 0;
-   /*!
+   /**
     *   Gets an enumerator for the memory
     *   The enumerator is positioned at the 1st valid location after the given address
     */
    virtual EnumeratorPtr       getEnumerator(uint32_t address = 0) = 0;
 
-   /*!
+   /**
     *  Prints a summary of the Flash memory allocated/used.
     */
    virtual void                 printMemoryMap() = 0;
-   /*
+   /**
     *  Get pathname of last file loaded
     */
    virtual const std::string   &getSourcePathname() const = 0;
-   /*!
+   /**
     *  Dump the contents of a range of memory to log file
     *
     * @param startAddress - start of range
@@ -229,7 +236,7 @@ public:
     *
     */
    virtual void                 dumpRange(uint32_t startAddress, uint32_t endAddress) = 0;
-   /*!
+   /**
     * Load data into Flash image
     *
     * @param bufferSize    - size of data to load (in uint8_t)
@@ -238,7 +245,7 @@ public:
     * @param dontOverwrite - produce error if overwriting existing data
     */
    virtual USBDM_ErrorCode      loadData(uint32_t bufferSize, uint32_t address, const uint8_t  data[], bool dontOverwrite = false) = 0;
-   /*!
+   /**
     * Load data into Flash image from byte array
     *
     * @param bufferSize    - size of data to load (in bytes)
@@ -264,7 +271,7 @@ public:
     */
    virtual unsigned getLastAllocatedAddress() = 0;
 
-   /*!
+   /**
     *  Fills a range of memory with a value
     *
     *  @param fillValue - value to use for fill
@@ -272,7 +279,7 @@ public:
     *  @param address   -  start address of range
     */
    virtual void fill(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF) = 0;
-   /*!
+   /**
     *  Fills unused bytes within a range of memory with a value
     *
     *  @param fillValue - value to use for fill

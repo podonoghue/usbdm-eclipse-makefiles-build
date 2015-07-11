@@ -2,7 +2,7 @@
 <!DOCTYPE device
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MK50DZ10_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKDZ10.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MK_PGA.svd.xml">
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_6CH.svd.xml">
 <!ENTITY AXBS         SYSTEM "peripherals/AXBS_6M_5S.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKDZ10.svd.xml">
@@ -35,7 +35,7 @@
 <!ENTITY MPU          SYSTEM "peripherals/MPU_0.svd.xml">
 <!ENTITY NV           SYSTEM "peripherals/NV_FTFE.svd.xml">
 <!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKDZ.svd.xml">
-<!ENTITY OPAMP0       SYSTEM "peripherals/OPAMP0.svd.xml">
+<!ENTITY OPAMP0       SYSTEM "peripherals/OPAMP0_MKD10.svd.xml">
 <!ENTITY OSC0         SYSTEM "peripherals/OSC_0.svd.xml">
 <!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_2TRIG_1PO.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH.svd.xml">

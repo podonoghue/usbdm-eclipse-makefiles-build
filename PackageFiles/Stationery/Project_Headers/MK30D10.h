@@ -1,11 +1,11 @@
 /****************************************************************************************************//**
- * @file     MK30D10.h
+ * @file     $(targetDevice).h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK30D10.
  *           Equivalent: MK30DN512M10, MK30DX128M10, MK30DX256M10
  *
  * @version  V0.0
- * @date     2015/04
+ * @date     2015/07
  *
  *******************************************************************************************************/
 
@@ -17,209 +17,236 @@
 extern "C" {
 #endif
 
+/**
+* @addtogroup Interrupt_vector_numbers_GROUP Interrupt vector numbers
+* @brief Vector numbers required for NVIC functions
+* @{
+*/
 /* -------------------------  Interrupt Number Definition  ------------------------ */
 
+/**
+ * Interrupt vector numbers
+ */
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
-  Reset_IRQn                    = -15,   /*!<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /*!<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
-  HardFault_IRQn                = -13,   /*!<   3 Hard Fault, all classes of Fault                                                 */
-  MemoryManagement_IRQn         = -12,   /*!<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
-  BusFault_IRQn                 = -11,   /*!<   5 Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
-  UsageFault_IRQn               = -10,   /*!<   6 Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-  SVCall_IRQn                   =  -5,   /*!<  11 System Service Call via SVC instruction                                          */
-  DebugMonitor_IRQn             =  -4,   /*!<  12 Debug Monitor                                                                    */
-  PendSV_IRQn                   =  -2,   /*!<  14 Pendable request for system service                                              */
-  SysTick_IRQn                  =  -1,   /*!<  15 System Tick Timer                                                                */
+  Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
+  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
+  MemoryManagement_IRQn         = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
+  BusFault_IRQn                 = -11,   /**<   5 Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+  UsageFault_IRQn               = -10,   /**<   6 Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
+  PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
+  SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK30D10 VectorTable                      ---------------------- */
-  DMA0_IRQn                     =   0,   /*!<  16 DMA channel 0 transfer complete interrupt                                        */
-  DMA1_IRQn                     =   1,   /*!<  17 DMA channel 1 transfer complete interrupt                                        */
-  DMA2_IRQn                     =   2,   /*!<  18 DMA channel 2 transfer complete interrupt                                        */
-  DMA3_IRQn                     =   3,   /*!<  19 DMA channel 3 transfer complete interrupt                                        */
-  DMA4_IRQn                     =   4,   /*!<  20 DMA channel 4 transfer complete interrupt                                        */
-  DMA5_IRQn                     =   5,   /*!<  21 DMA channel 5 transfer complete interrupt                                        */
-  DMA6_IRQn                     =   6,   /*!<  22 DMA channel 6 transfer complete interrupt                                        */
-  DMA7_IRQn                     =   7,   /*!<  23 DMA channel 7 transfer complete interrupt                                        */
-  DMA8_IRQn                     =   8,   /*!<  24 DMA channel 8 transfer complete interrupt                                        */
-  DMA9_IRQn                     =   9,   /*!<  25 DMA channel 9 transfer complete interrupt                                        */
-  DMA10_IRQn                    =  10,   /*!<  26 DMA channel 10 transfer complete interrupt                                       */
-  DMA11_IRQn                    =  11,   /*!<  27 DMA channel 11 transfer complete interrupt                                       */
-  DMA12_IRQn                    =  12,   /*!<  28 DMA channel 12 transfer complete interrupt                                       */
-  DMA13_IRQn                    =  13,   /*!<  29 DMA channel 13 transfer complete interrupt                                       */
-  DMA14_IRQn                    =  14,   /*!<  30 DMA channel 14 transfer complete interrupt                                       */
-  DMA15_IRQn                    =  15,   /*!<  31 DMA channel 15 transfer complete interrupt                                       */
-  DMA_Error_IRQn                =  16,   /*!<  32 DMA error interrupt all channels                                                 */
-  MCM_IRQn                      =  17,   /*!<  33 MCM interrupt                                                                    */
-  FTFL_Command_IRQn             =  18,   /*!<  34 FTFL interrupt                                                                   */
-  FTFL_Collision_IRQn           =  19,   /*!<  35 FTFL Read collision interrupt                                                    */
-  PMC_IRQn                      =  20,   /*!<  36 PMC Low Voltage Detect, Low Voltage Warning                                      */
-  LLWU_IRQn                     =  21,   /*!<  37 LLWU Low Leakage Wakeup                                                          */
-  WDOG_IRQn                     =  22,   /*!<  38 WDOG interrupt                                                                   */
-  I2C0_IRQn                     =  24,   /*!<  40 I2C0 interrupt                                                                   */
-  I2C1_IRQn                     =  25,   /*!<  41 I2C1 interrupt                                                                   */
-  SPI0_IRQn                     =  26,   /*!<  42 SPI0 interrupt                                                                   */
-  SPI1_IRQn                     =  27,   /*!<  43 SPI1 interrupt                                                                   */
-  SPI2_IRQn                     =  28,   /*!<  44 SPI2 interrupt                                                                   */
-  CAN0_Message_IRQn             =  29,   /*!<  45 CAN0 ORed Message Buffer (0-15)                                                  */
-  CAN0_BusOff_IRQn              =  30,   /*!<  46 CAN0 Bus Off                                                                     */
-  CAN0_Error_IRQn               =  31,   /*!<  47 CAN0 Error                                                                       */
-  CAN0_Tx_IRQn                  =  32,   /*!<  48 CAN0 Transmit Warning                                                            */
-  CAN0_Rx_IRQn                  =  33,   /*!<  49 CAN0 Receive Warning                                                             */
-  CAN0_WakeUp_IRQn              =  34,   /*!<  50 CAN0 Wake Up                                                                     */
-  I2S0_Tx_IRQn                  =  35,   /*!<  51 Inter-IC Sound / Synchronous Audio Interface                                     */
-  I2S0_Rx_IRQn                  =  36,   /*!<  52 Inter-IC Sound / Synchronous Audio Interface                                     */
-  CAN1_Message_IRQn             =  37,   /*!<  53 CAN1 ORed Message Bufer (0-15)                                                   */
-  CAN1_BusOff_IRQn              =  38,   /*!<  54 CAN1 Bus Off                                                                     */
-  CAN1_Error_IRQn               =  39,   /*!<  55 CAN1 Error                                                                       */
-  CAN1_Tx_IRQn                  =  40,   /*!<  56 CAN1 Transmit Warning                                                            */
-  CAN1_Rx_IRQn                  =  41,   /*!<  57 CAN1 Receive Warning                                                             */
-  CAN1_WakeUp_IRQn              =  42,   /*!<  58 CAN1 Wake Up                                                                     */
-  UART0_LON_IRQn                =  44,   /*!<  60                                                                                  */
-  UART0_RxTx_IRQn               =  45,   /*!<  61 UART0 receive/transmit interrupt                                                 */
-  UART0_Error_IRQn              =  46,   /*!<  62 UART0 error interrupt                                                            */
-  UART1_RxTx_IRQn               =  47,   /*!<  63 UART1 receive/transmit interrupt                                                 */
-  UART1_Error_IRQn              =  48,   /*!<  64 UART1 error interrupt                                                            */
-  UART2_RxTx_IRQn               =  49,   /*!<  65 UART2 receive/transmit interrupt                                                 */
-  UART2_Error_IRQn              =  50,   /*!<  66 UART0 error interrupt                                                            */
-  UART3_RxTx_IRQn               =  51,   /*!<  67 UART2 receive/transmit interrupt                                                 */
-  UART3_Error_IRQn              =  52,   /*!<  68 UART0 error interrupt                                                            */
-  UART4_RxTx_IRQn               =  53,   /*!<  69 UART2 receive/transmit interrupt                                                 */
-  UART4_Error_IRQn              =  54,   /*!<  70 UART0 error interrupt                                                            */
-  ADC0_IRQn                     =  57,   /*!<  73 ADC0 interrupt                                                                   */
-  ADC1_IRQn                     =  58,   /*!<  74 ADC1 interrupt                                                                   */
-  CMP0_IRQn                     =  59,   /*!<  75 CMP0 interrupt                                                                   */
-  CMP1_IRQn                     =  60,   /*!<  76 CMP1 interrupt                                                                   */
-  CMP2_IRQn                     =  61,   /*!<  77 CMP2 interrupt                                                                   */
-  FTM0_IRQn                     =  62,   /*!<  78 FTM0 fault, overflow and channels interrupt                                      */
-  FTM1_IRQn                     =  63,   /*!<  79 FTM1 fault, overflow and channels interrupt                                      */
-  FTM2_IRQn                     =  64,   /*!<  80 FTM2 fault, overflow and channels interrupt                                      */
-  CMT_IRQn                      =  65,   /*!<  81 Carrier Modulator Transmitter interrupt                                          */
-  RTC_Alarm_IRQn                =  66,   /*!<  82 Real Time Clock interrupt                                                        */
-  RTC_Seconds_IRQn              =  67,   /*!<  83 RTC Seconds interrupt                                                            */
-  PIT_Ch0_IRQn                  =  68,   /*!<  84 PIT timer channel 0 interrupt                                                    */
-  PIT_Ch1_IRQn                  =  69,   /*!<  85 PIT timer channel 1 interrupt                                                    */
-  PIT_Ch2_IRQn                  =  70,   /*!<  86 PIT timer channel 2 interrupt                                                    */
-  PIT_Ch3_IRQn                  =  71,   /*!<  87 PIT timer channel 3 interrupt                                                    */
-  PDB0_IRQn                     =  72,   /*!<  88 PDB0 Programmable Delay Block interrupt                                          */
-  SDHC_IRQn                     =  80,   /*!<  96 Secured Digital Host Controller Interrupt                                        */
-  DAC0_IRQn                     =  81,   /*!<  97 Digital to Analogue Converter                                                    */
-  TSI0_IRQn                     =  83,   /*!<  99 Touch Sense Interface                                                            */
-  MCG_IRQn                      =  84,   /*!< 100 Multipurpose Clock Generator                                                     */
-  LPTMR0_IRQn                   =  85,   /*!< 101 LPTMR Low Power Timer interrupt                                                  */
-  SLCD_IRQn                     =  86,   /*!< 102 Segment LCD controller                                                           */
-  PORTA_IRQn                    =  87,   /*!< 103 Port A interrupt                                                                 */
-  PORTB_IRQn                    =  88,   /*!< 104 Port B interrupt                                                                 */
-  PORTC_IRQn                    =  89,   /*!< 105 Port C interrupt                                                                 */
-  PORTD_IRQn                    =  90,   /*!< 106 Port D interrupt                                                                 */
-  PORTE_IRQn                    =  91,   /*!< 107 Port E interrupt                                                                 */
-  SWI_IRQn                      =  94,   /*!< 110 Software interrupt                                                               */
+  DMA0_IRQn                     =   0,   /**<  16 DMA channel 0 transfer complete interrupt                                        */
+  DMA1_IRQn                     =   1,   /**<  17 DMA channel 1 transfer complete interrupt                                        */
+  DMA2_IRQn                     =   2,   /**<  18 DMA channel 2 transfer complete interrupt                                        */
+  DMA3_IRQn                     =   3,   /**<  19 DMA channel 3 transfer complete interrupt                                        */
+  DMA4_IRQn                     =   4,   /**<  20 DMA channel 4 transfer complete interrupt                                        */
+  DMA5_IRQn                     =   5,   /**<  21 DMA channel 5 transfer complete interrupt                                        */
+  DMA6_IRQn                     =   6,   /**<  22 DMA channel 6 transfer complete interrupt                                        */
+  DMA7_IRQn                     =   7,   /**<  23 DMA channel 7 transfer complete interrupt                                        */
+  DMA8_IRQn                     =   8,   /**<  24 DMA channel 8 transfer complete interrupt                                        */
+  DMA9_IRQn                     =   9,   /**<  25 DMA channel 9 transfer complete interrupt                                        */
+  DMA10_IRQn                    =  10,   /**<  26 DMA channel 10 transfer complete interrupt                                       */
+  DMA11_IRQn                    =  11,   /**<  27 DMA channel 11 transfer complete interrupt                                       */
+  DMA12_IRQn                    =  12,   /**<  28 DMA channel 12 transfer complete interrupt                                       */
+  DMA13_IRQn                    =  13,   /**<  29 DMA channel 13 transfer complete interrupt                                       */
+  DMA14_IRQn                    =  14,   /**<  30 DMA channel 14 transfer complete interrupt                                       */
+  DMA15_IRQn                    =  15,   /**<  31 DMA channel 15 transfer complete interrupt                                       */
+  DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
+  MCM_IRQn                      =  17,   /**<  33 MCM interrupt                                                                    */
+  FTFL_Command_IRQn             =  18,   /**<  34 FTFL interrupt                                                                   */
+  FTFL_Collision_IRQn           =  19,   /**<  35 FTFL Read collision interrupt                                                    */
+  PMC_IRQn                      =  20,   /**<  36 PMC Low Voltage Detect, Low Voltage Warning                                      */
+  LLWU_IRQn                     =  21,   /**<  37 LLWU Low Leakage Wakeup                                                          */
+  WDOG_IRQn                     =  22,   /**<  38 WDOG interrupt                                                                   */
+  I2C0_IRQn                     =  24,   /**<  40 I2C0 interrupt                                                                   */
+  I2C1_IRQn                     =  25,   /**<  41 I2C1 interrupt                                                                   */
+  SPI0_IRQn                     =  26,   /**<  42 SPI0 interrupt                                                                   */
+  SPI1_IRQn                     =  27,   /**<  43 SPI1 interrupt                                                                   */
+  SPI2_IRQn                     =  28,   /**<  44 SPI2 interrupt                                                                   */
+  CAN0_Message_IRQn             =  29,   /**<  45 CAN0 ORed Message Buffer (0-15)                                                  */
+  CAN0_BusOff_IRQn              =  30,   /**<  46 CAN0 Bus Off                                                                     */
+  CAN0_Error_IRQn               =  31,   /**<  47 CAN0 Error                                                                       */
+  CAN0_Tx_IRQn                  =  32,   /**<  48 CAN0 Transmit Warning                                                            */
+  CAN0_Rx_IRQn                  =  33,   /**<  49 CAN0 Receive Warning                                                             */
+  CAN0_WakeUp_IRQn              =  34,   /**<  50 CAN0 Wake Up                                                                     */
+  I2S0_Tx_IRQn                  =  35,   /**<  51 Inter-IC Sound / Synchronous Audio Interface                                     */
+  I2S0_Rx_IRQn                  =  36,   /**<  52 Inter-IC Sound / Synchronous Audio Interface                                     */
+  CAN1_Message_IRQn             =  37,   /**<  53 CAN1 ORed Message Bufer (0-15)                                                   */
+  CAN1_BusOff_IRQn              =  38,   /**<  54 CAN1 Bus Off                                                                     */
+  CAN1_Error_IRQn               =  39,   /**<  55 CAN1 Error                                                                       */
+  CAN1_Tx_IRQn                  =  40,   /**<  56 CAN1 Transmit Warning                                                            */
+  CAN1_Rx_IRQn                  =  41,   /**<  57 CAN1 Receive Warning                                                             */
+  CAN1_WakeUp_IRQn              =  42,   /**<  58 CAN1 Wake Up                                                                     */
+  UART0_LON_IRQn                =  44,   /**<  60                                                                                  */
+  UART0_RxTx_IRQn               =  45,   /**<  61 UART0 receive/transmit interrupt                                                 */
+  UART0_Error_IRQn              =  46,   /**<  62 UART0 error interrupt                                                            */
+  UART1_RxTx_IRQn               =  47,   /**<  63 UART1 receive/transmit interrupt                                                 */
+  UART1_Error_IRQn              =  48,   /**<  64 UART1 error interrupt                                                            */
+  UART2_RxTx_IRQn               =  49,   /**<  65 UART2 receive/transmit interrupt                                                 */
+  UART2_Error_IRQn              =  50,   /**<  66 UART0 error interrupt                                                            */
+  UART3_RxTx_IRQn               =  51,   /**<  67 UART2 receive/transmit interrupt                                                 */
+  UART3_Error_IRQn              =  52,   /**<  68 UART0 error interrupt                                                            */
+  UART4_RxTx_IRQn               =  53,   /**<  69 UART2 receive/transmit interrupt                                                 */
+  UART4_Error_IRQn              =  54,   /**<  70 UART0 error interrupt                                                            */
+  ADC0_IRQn                     =  57,   /**<  73 ADC0 interrupt                                                                   */
+  ADC1_IRQn                     =  58,   /**<  74 ADC1 interrupt                                                                   */
+  CMP0_IRQn                     =  59,   /**<  75 CMP0 interrupt                                                                   */
+  CMP1_IRQn                     =  60,   /**<  76 CMP1 interrupt                                                                   */
+  CMP2_IRQn                     =  61,   /**<  77 CMP2 interrupt                                                                   */
+  FTM0_IRQn                     =  62,   /**<  78 FTM0 fault, overflow and channels interrupt                                      */
+  FTM1_IRQn                     =  63,   /**<  79 FTM1 fault, overflow and channels interrupt                                      */
+  FTM2_IRQn                     =  64,   /**<  80 FTM2 fault, overflow and channels interrupt                                      */
+  CMT_IRQn                      =  65,   /**<  81 Carrier Modulator Transmitter interrupt                                          */
+  RTC_Alarm_IRQn                =  66,   /**<  82 Real Time Clock interrupt                                                        */
+  RTC_Seconds_IRQn              =  67,   /**<  83 RTC Seconds interrupt                                                            */
+  PIT_Ch0_IRQn                  =  68,   /**<  84 PIT timer channel 0 interrupt                                                    */
+  PIT_Ch1_IRQn                  =  69,   /**<  85 PIT timer channel 1 interrupt                                                    */
+  PIT_Ch2_IRQn                  =  70,   /**<  86 PIT timer channel 2 interrupt                                                    */
+  PIT_Ch3_IRQn                  =  71,   /**<  87 PIT timer channel 3 interrupt                                                    */
+  PDB0_IRQn                     =  72,   /**<  88 PDB0 Programmable Delay Block interrupt                                          */
+  SDHC_IRQn                     =  80,   /**<  96 Secured Digital Host Controller Interrupt                                        */
+  DAC0_IRQn                     =  81,   /**<  97 Digital to Analogue Converter                                                    */
+  TSI0_IRQn                     =  83,   /**<  99 Touch Sense Interface                                                            */
+  MCG_IRQn                      =  84,   /**< 100 Multipurpose Clock Generator                                                     */
+  LPTMR0_IRQn                   =  85,   /**< 101 LPTMR Low Power Timer interrupt                                                  */
+  SLCD_IRQn                     =  86,   /**< 102 Segment LCD controller                                                           */
+  PORTA_IRQn                    =  87,   /**< 103 Port A interrupt                                                                 */
+  PORTB_IRQn                    =  88,   /**< 104 Port B interrupt                                                                 */
+  PORTC_IRQn                    =  89,   /**< 105 Port C interrupt                                                                 */
+  PORTD_IRQn                    =  90,   /**< 106 Port D interrupt                                                                 */
+  PORTE_IRQn                    =  91,   /**< 107 Port E interrupt                                                                 */
+  SWI_IRQn                      =  94,   /**< 110 Software interrupt                                                               */
 } IRQn_Type;
 
+/**
+ * @} */ /* End group Interrupt_vector_numbers_GROUP 
+ */
+/**
+* @addtogroup Interrupt_handler_prototypes_GROUP Interrupt handler prototypes
+* @brief Prototypes for interrupt handlers
+* @{
+*/
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);
-extern void HardFault_Handler(void);
-extern void MemManage_Handler(void);
-extern void BusFault_Handler(void);
-extern void UsageFault_Handler(void);
-extern void SVC_Handler(void);
-extern void DebugMon_Handler(void);
-extern void PendSV_Handler(void);
-extern void SysTick_Handler(void);
-extern void DMA0_IRQHandler(void);
-extern void DMA1_IRQHandler(void);
-extern void DMA2_IRQHandler(void);
-extern void DMA3_IRQHandler(void);
-extern void DMA4_IRQHandler(void);
-extern void DMA5_IRQHandler(void);
-extern void DMA6_IRQHandler(void);
-extern void DMA7_IRQHandler(void);
-extern void DMA8_IRQHandler(void);
-extern void DMA9_IRQHandler(void);
-extern void DMA10_IRQHandler(void);
-extern void DMA11_IRQHandler(void);
-extern void DMA12_IRQHandler(void);
-extern void DMA13_IRQHandler(void);
-extern void DMA14_IRQHandler(void);
-extern void DMA15_IRQHandler(void);
-extern void DMA_Error_IRQHandler(void);
-extern void MCM_IRQHandler(void);
-extern void FTFL_Command_IRQHandler(void);
-extern void FTFL_Collision_IRQHandler(void);
-extern void PMC_IRQHandler(void);
-extern void LLWU_IRQHandler(void);
-extern void WDOG_IRQHandler(void);
-extern void I2C0_IRQHandler(void);
-extern void I2C1_IRQHandler(void);
-extern void SPI0_IRQHandler(void);
-extern void SPI1_IRQHandler(void);
-extern void SPI2_IRQHandler(void);
-extern void CAN0_Message_IRQHandler(void);
-extern void CAN0_BusOff_IRQHandler(void);
-extern void CAN0_Error_IRQHandler(void);
-extern void CAN0_Tx_IRQHandler(void);
-extern void CAN0_Rx_IRQHandler(void);
-extern void CAN0_WakeUp_IRQHandler(void);
-extern void I2S0_Tx_IRQHandler(void);
-extern void I2S0_Rx_IRQHandler(void);
-extern void CAN1_Message_IRQHandler(void);
-extern void CAN1_BusOff_IRQHandler(void);
-extern void CAN1_Error_IRQHandler(void);
-extern void CAN1_Tx_IRQHandler(void);
-extern void CAN1_Rx_IRQHandler(void);
-extern void CAN1_WakeUp_IRQHandler(void);
-extern void UART0_LON_IRQHandler(void);
-extern void UART0_RxTx_IRQHandler(void);
-extern void UART0_Error_IRQHandler(void);
-extern void UART1_RxTx_IRQHandler(void);
-extern void UART1_Error_IRQHandler(void);
-extern void UART2_RxTx_IRQHandler(void);
-extern void UART2_Error_IRQHandler(void);
-extern void UART3_RxTx_IRQHandler(void);
-extern void UART3_Error_IRQHandler(void);
-extern void UART4_RxTx_IRQHandler(void);
-extern void UART4_Error_IRQHandler(void);
-extern void ADC0_IRQHandler(void);
-extern void ADC1_IRQHandler(void);
-extern void CMP0_IRQHandler(void);
-extern void CMP1_IRQHandler(void);
-extern void CMP2_IRQHandler(void);
-extern void FTM0_IRQHandler(void);
-extern void FTM1_IRQHandler(void);
-extern void FTM2_IRQHandler(void);
-extern void CMT_IRQHandler(void);
-extern void RTC_Alarm_IRQHandler(void);
-extern void RTC_Seconds_IRQHandler(void);
-extern void PIT_Ch0_IRQHandler(void);
-extern void PIT_Ch1_IRQHandler(void);
-extern void PIT_Ch2_IRQHandler(void);
-extern void PIT_Ch3_IRQHandler(void);
-extern void PDB0_IRQHandler(void);
-extern void SDHC_IRQHandler(void);
-extern void DAC0_IRQHandler(void);
-extern void TSI0_IRQHandler(void);
-extern void MCG_IRQHandler(void);
-extern void LPTMR0_IRQHandler(void);
-extern void SLCD_IRQHandler(void);
-extern void PORTA_IRQHandler(void);
-extern void PORTB_IRQHandler(void);
-extern void PORTC_IRQHandler(void);
-extern void PORTD_IRQHandler(void);
-extern void PORTE_IRQHandler(void);
-extern void SWI_IRQHandler(void);
+extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
+extern void MemManage_Handler(void);           /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
+extern void BusFault_Handler(void);            /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+extern void UsageFault_Handler(void);          /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
+extern void DebugMon_Handler(void);            /**< Debug Monitor                                                                    */
+extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
+extern void DMA0_IRQHandler(void);             /**< DMA channel 0 transfer complete interrupt                                        */
+extern void DMA1_IRQHandler(void);             /**< DMA channel 1 transfer complete interrupt                                        */
+extern void DMA2_IRQHandler(void);             /**< DMA channel 2 transfer complete interrupt                                        */
+extern void DMA3_IRQHandler(void);             /**< DMA channel 3 transfer complete interrupt                                        */
+extern void DMA4_IRQHandler(void);             /**< DMA channel 4 transfer complete interrupt                                        */
+extern void DMA5_IRQHandler(void);             /**< DMA channel 5 transfer complete interrupt                                        */
+extern void DMA6_IRQHandler(void);             /**< DMA channel 6 transfer complete interrupt                                        */
+extern void DMA7_IRQHandler(void);             /**< DMA channel 7 transfer complete interrupt                                        */
+extern void DMA8_IRQHandler(void);             /**< DMA channel 8 transfer complete interrupt                                        */
+extern void DMA9_IRQHandler(void);             /**< DMA channel 9 transfer complete interrupt                                        */
+extern void DMA10_IRQHandler(void);            /**< DMA channel 10 transfer complete interrupt                                       */
+extern void DMA11_IRQHandler(void);            /**< DMA channel 11 transfer complete interrupt                                       */
+extern void DMA12_IRQHandler(void);            /**< DMA channel 12 transfer complete interrupt                                       */
+extern void DMA13_IRQHandler(void);            /**< DMA channel 13 transfer complete interrupt                                       */
+extern void DMA14_IRQHandler(void);            /**< DMA channel 14 transfer complete interrupt                                       */
+extern void DMA15_IRQHandler(void);            /**< DMA channel 15 transfer complete interrupt                                       */
+extern void DMA_Error_IRQHandler(void);        /**< DMA error interrupt all channels                                                 */
+extern void MCM_IRQHandler(void);              /**< MCM interrupt                                                                    */
+extern void FTFL_Command_IRQHandler(void);     /**< FTFL interrupt                                                                   */
+extern void FTFL_Collision_IRQHandler(void);   /**< FTFL Read collision interrupt                                                    */
+extern void PMC_IRQHandler(void);              /**< PMC Low Voltage Detect, Low Voltage Warning                                      */
+extern void LLWU_IRQHandler(void);             /**< LLWU Low Leakage Wakeup                                                          */
+extern void WDOG_IRQHandler(void);             /**< WDOG interrupt                                                                   */
+extern void I2C0_IRQHandler(void);             /**< I2C0 interrupt                                                                   */
+extern void I2C1_IRQHandler(void);             /**< I2C1 interrupt                                                                   */
+extern void SPI0_IRQHandler(void);             /**< SPI0 interrupt                                                                   */
+extern void SPI1_IRQHandler(void);             /**< SPI1 interrupt                                                                   */
+extern void SPI2_IRQHandler(void);             /**< SPI2 interrupt                                                                   */
+extern void CAN0_Message_IRQHandler(void);     /**< CAN0 ORed Message Buffer (0-15)                                                  */
+extern void CAN0_BusOff_IRQHandler(void);      /**< CAN0 Bus Off                                                                     */
+extern void CAN0_Error_IRQHandler(void);       /**< CAN0 Error                                                                       */
+extern void CAN0_Tx_IRQHandler(void);          /**< CAN0 Transmit Warning                                                            */
+extern void CAN0_Rx_IRQHandler(void);          /**< CAN0 Receive Warning                                                             */
+extern void CAN0_WakeUp_IRQHandler(void);      /**< CAN0 Wake Up                                                                     */
+extern void I2S0_Tx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous Audio Interface                                     */
+extern void I2S0_Rx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous Audio Interface                                     */
+extern void CAN1_Message_IRQHandler(void);     /**< CAN1 ORed Message Bufer (0-15)                                                   */
+extern void CAN1_BusOff_IRQHandler(void);      /**< CAN1 Bus Off                                                                     */
+extern void CAN1_Error_IRQHandler(void);       /**< CAN1 Error                                                                       */
+extern void CAN1_Tx_IRQHandler(void);          /**< CAN1 Transmit Warning                                                            */
+extern void CAN1_Rx_IRQHandler(void);          /**< CAN1 Receive Warning                                                             */
+extern void CAN1_WakeUp_IRQHandler(void);      /**< CAN1 Wake Up                                                                     */
+extern void UART0_LON_IRQHandler(void);        /**<                                                                                  */
+extern void UART0_RxTx_IRQHandler(void);       /**< UART0 receive/transmit interrupt                                                 */
+extern void UART0_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART1_RxTx_IRQHandler(void);       /**< UART1 receive/transmit interrupt                                                 */
+extern void UART1_Error_IRQHandler(void);      /**< UART1 error interrupt                                                            */
+extern void UART2_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
+extern void UART2_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART3_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
+extern void UART3_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART4_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
+extern void UART4_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void ADC0_IRQHandler(void);             /**< ADC0 interrupt                                                                   */
+extern void ADC1_IRQHandler(void);             /**< ADC1 interrupt                                                                   */
+extern void CMP0_IRQHandler(void);             /**< CMP0 interrupt                                                                   */
+extern void CMP1_IRQHandler(void);             /**< CMP1 interrupt                                                                   */
+extern void CMP2_IRQHandler(void);             /**< CMP2 interrupt                                                                   */
+extern void FTM0_IRQHandler(void);             /**< FTM0 fault, overflow and channels interrupt                                      */
+extern void FTM1_IRQHandler(void);             /**< FTM1 fault, overflow and channels interrupt                                      */
+extern void FTM2_IRQHandler(void);             /**< FTM2 fault, overflow and channels interrupt                                      */
+extern void CMT_IRQHandler(void);              /**< Carrier Modulator Transmitter interrupt                                          */
+extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock interrupt                                                        */
+extern void RTC_Seconds_IRQHandler(void);      /**< RTC Seconds interrupt                                                            */
+extern void PIT_Ch0_IRQHandler(void);          /**< PIT timer channel 0 interrupt                                                    */
+extern void PIT_Ch1_IRQHandler(void);          /**< PIT timer channel 1 interrupt                                                    */
+extern void PIT_Ch2_IRQHandler(void);          /**< PIT timer channel 2 interrupt                                                    */
+extern void PIT_Ch3_IRQHandler(void);          /**< PIT timer channel 3 interrupt                                                    */
+extern void PDB0_IRQHandler(void);             /**< PDB0 Programmable Delay Block interrupt                                          */
+extern void SDHC_IRQHandler(void);             /**< Secured Digital Host Controller Interrupt                                        */
+extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
+extern void TSI0_IRQHandler(void);             /**< Touch Sense Interface                                                            */
+extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */
+extern void LPTMR0_IRQHandler(void);           /**< LPTMR Low Power Timer interrupt                                                  */
+extern void SLCD_IRQHandler(void);             /**< Segment LCD controller                                                           */
+extern void PORTA_IRQHandler(void);            /**< Port A interrupt                                                                 */
+extern void PORTB_IRQHandler(void);            /**< Port B interrupt                                                                 */
+extern void PORTC_IRQHandler(void);            /**< Port C interrupt                                                                 */
+extern void PORTD_IRQHandler(void);            /**< Port D interrupt                                                                 */
+extern void PORTE_IRQHandler(void);            /**< Port E interrupt                                                                 */
+extern void SWI_IRQHandler(void);              /**< Software interrupt                                                               */
 
+/**
+ * @} */ /* End group Interrupt_handler_prototypes_GROUP 
+ */
 /* ================================================================================ */
 /* ================      Processor and Core Peripheral Section     ================ */
 /* ================================================================================ */
 
-/* ----------------Configuration of the cm4 Processor and Core Peripherals---------------- */
-#define __CM4_REV                0x0100
-#define __MPU_PRESENT            0
-#define __NVIC_PRIO_BITS         4
-#define __Vendor_SysTickConfig   0
-#define __FPU_PRESENT            0
+/**
+* @addtogroup Cortex_Core_Configuration_GROUP Cortex Core Configuration
+* @brief Configuration of the cm4 Processor and Core Peripherals
+* @{
+*/
+#define __CM4_REV                 0x0100     /**< CPU Revision                                        */
+#define __MPU_PRESENT             0          /**< Whether MPU is present                              */
+#define __NVIC_PRIO_BITS          4          /**< Number of implemented bits in NVIC PRIO register    */
+#define __Vendor_SysTickConfig    0          /**< Whether Vendor implemented SYSTICK timer is present */
+#define __FPU_PRESENT             0          /**< Whether FPU is present                              */
+#define __VTOR_PRESENT            1          /**< Whether VTOR register is present                    */
 
-#include "core_cm4.h"           /*!< Processor and core peripherals */
-#include "system.h"             /*!< Device specific configuration file */
+/**
+ * @} */ /* End group Cortex_Core_Configuration_GROUP 
+ */
+#include "core_cm4.h"           /* Processor and core peripherals     */
+#include "system.h"             /* Device specific configuration file */
 
 #ifndef __IO
 #define __IO volatile 
@@ -255,50 +282,71 @@ extern void SWI_IRQHandler(void);
 #else
   #warning Not supported compiler type
 #endif
+/**
+* @addtogroup Peripheral_access_layer_GROUP Device Peripheral Access Layer
+* @brief C structs allowing access to peripheral registers
+* @{
+*/
+/**
+* @addtogroup ADC_Peripheral_access_layer_GROUP ADC Peripheral Access Layer
+* @brief C Struct for ADC
+* @{
+*/
 
 /* ================================================================================ */
-/* ================           ADC0 (file:ADC0_MKD7_D10)            ================ */
+/* ================           ADC0 (file:ADC0_MK_PGA)              ================ */
 /* ================================================================================ */
 
 /**
  * @brief Analog-to-Digital Converter
  */
-typedef struct {                                /*!<       ADC0 Structure                                               */
-   __IO uint32_t  SC1A;                         /*!< 0000: Status and Control Register 1                                */
-   __IO uint32_t  SC1B;                         /*!< 0004: Status and Control Register 1                                */
-   __IO uint32_t  CFG1;                         /*!< 0008: Configuration Register 1                                     */
-   __IO uint32_t  CFG2;                         /*!< 000C: Configuration Register 2                                     */
-   __I  uint32_t  RA;                           /*!< 0010: Data Result Register                                         */
-   __I  uint32_t  RB;                           /*!< 0014: Data Result Register                                         */
-   __IO uint32_t  CV1;                          /*!< 0018: Compare Value                                                */
-   __IO uint32_t  CV2;                          /*!< 001C: Compare Value                                                */
-   __IO uint32_t  SC2;                          /*!< 0020: Status and Control Register 2                                */
-   __IO uint32_t  SC3;                          /*!< 0024: Status and Control Register 3                                */
-   __IO uint32_t  OFS;                          /*!< 0028: Offset Correction Register                                   */
-   __IO uint32_t  PG;                           /*!< 002C: Plus-Side Gain Register                                      */
-   __IO uint32_t  MG;                           /*!< 0030: Minus-Side Gain Register                                     */
-   __IO uint32_t  CLPD;                         /*!< 0034: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLPS;                         /*!< 0038: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLP4;                         /*!< 003C: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLP3;                         /*!< 0040: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLP2;                         /*!< 0044: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLP1;                         /*!< 0048: Plus-Side General Calibration Value                          */
-   __IO uint32_t  CLP0;                         /*!< 004C: Plus-Side General Calibration Value                          */
-   __IO uint32_t  PGA;                          /*!< 0050: PGA Register                                                 */
-   __IO uint32_t  CLMD;                         /*!< 0054: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLMS;                         /*!< 0058: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLM4;                         /*!< 005C: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLM3;                         /*!< 0060: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLM2;                         /*!< 0064: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLM1;                         /*!< 0068: Minus-Side General Calibration Value                         */
-   __IO uint32_t  CLM0;                         /*!< 006C: Minus-Side General Calibration Value                         */
+/**
+* @addtogroup ADC_structs_GROUP ADC struct
+* @brief Struct for ADC
+* @{
+*/
+typedef struct {                                /*       ADC0 Structure                                               */
+   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
+   __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
+   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
+   __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
+   __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
+   __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
+   __IO uint32_t  SC3;                          /**< 0024: Status and Control Register 3                                */
+   __IO uint32_t  OFS;                          /**< 0028: Offset Correction Register                                   */
+   __IO uint32_t  PG;                           /**< 002C: Plus-Side Gain Register                                      */
+   __IO uint32_t  MG;                           /**< 0030: Minus-Side Gain Register                                     */
+   __IO uint32_t  CLPD;                         /**< 0034: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLPS;                         /**< 0038: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP4;                         /**< 003C: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP3;                         /**< 0040: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP2;                         /**< 0044: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP1;                         /**< 0048: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP0;                         /**< 004C: Plus-Side General Calibration Value                          */
+   __IO uint32_t  PGA;                          /**< 0050: PGA Register                                                 */
+   __IO uint32_t  CLMD;                         /**< 0054: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLMS;                         /**< 0058: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM4;                         /**< 005C: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM3;                         /**< 0060: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM2;                         /**< 0064: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM1;                         /**< 0068: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM0;                         /**< 006C: Minus-Side General Calibration Value                         */
 } ADC_Type;
 
+/**
+ * @} */ /* End group ADC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'ADC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup ADC_Register_Masks_GROUP ADC Register Masks
+* @brief Register Masks for ADC
+* @{
+*/
 /* ------- SC1 Bit Fields                           ------ */
 #define ADC_SC1_ADCH_MASK                        (0x1FUL << ADC_SC1_ADCH_SHIFT)                      /*!< ADC0_SC1: ADCH Mask                     */
 #define ADC_SC1_ADCH_SHIFT                       0                                                   /*!< ADC0_SC1: ADCH Position                 */
@@ -445,11 +493,22 @@ typedef struct {                                /*!<       ADC0 Structure       
 #define ADC_CLM0_CLM0_MASK                       (0x3FUL << ADC_CLM0_CLM0_SHIFT)                     /*!< ADC0_CLM0: CLM0 Mask                    */
 #define ADC_CLM0_CLM0_SHIFT                      0                                                   /*!< ADC0_CLM0: CLM0 Position                */
 #define ADC_CLM0_CLM0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM0_CLM0_SHIFT))&ADC_CLM0_CLM0_MASK) /*!< ADC0_CLM0                               */
+/**
+ * @} */ /* End group ADC_Register_Masks_GROUP 
+ */
 
 /* ADC0 - Peripheral instance base addresses */
-#define ADC0_BasePtr                   0x4003B000UL
-#define ADC0                           ((ADC_Type *) ADC0_BasePtr)
-#define ADC0_BASE_PTR                  (ADC0)
+#define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
+#define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
+#define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup ADC_Peripheral_access_layer_GROUP ADC Peripheral Access Layer
+* @brief C Struct for ADC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           ADC1 (derived from ADC0)             ================ */
@@ -460,9 +519,17 @@ typedef struct {                                /*!<       ADC0 Structure       
  */
 
 /* ADC1 - Peripheral instance base addresses */
-#define ADC1_BasePtr                   0x400BB000UL
-#define ADC1                           ((ADC_Type *) ADC1_BasePtr)
-#define ADC1_BASE_PTR                  (ADC1)
+#define ADC1_BasePtr                   0x400BB000UL //!< Peripheral base address
+#define ADC1                           ((ADC_Type *) ADC1_BasePtr) //!< Freescale base pointer
+#define ADC1_BASE_PTR                  (ADC1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CAN_Peripheral_access_layer_GROUP CAN Peripheral Access Layer
+* @brief C Struct for CAN
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CAN0 (file:CAN0_MKD10)               ================ */
@@ -471,42 +538,55 @@ typedef struct {                                /*!<       ADC0 Structure       
 /**
  * @brief Flex Controller Area Network module
  */
-typedef struct {                                /*!<       CAN0 Structure                                               */
-   __IO uint32_t  MCR;                          /*!< 0000: Module Configuration Register                                */
-   __IO uint32_t  CTRL1;                        /*!< 0004: Control 1 Register                                           */
-   __IO uint32_t  TIMER;                        /*!< 0008: Free Running Timer                                           */
-   __I  uint32_t  RESERVED0;                    /*!< 000C:                                                              */
-   __IO uint32_t  RXMGMASK;                     /*!< 0010: Rx Mailboxes Global Mask Register                            */
-   __IO uint32_t  RX14MASK;                     /*!< 0014: Rx 14 Mask Register                                          */
-   __IO uint32_t  RX15MASK;                     /*!< 0018: Rx 15 Mask Register                                          */
-   __IO uint32_t  ECR;                          /*!< 001C: Error Counter                                                */
-   __IO uint32_t  ESR1;                         /*!< 0020: Error and Status 1 Register                                  */
-   __I  uint32_t  RESERVED1;                    /*!< 0024:                                                              */
-   __IO uint32_t  IMASK1;                       /*!< 0028: Interrupt Masks 1 Register                                   */
-   __I  uint32_t  RESERVED2;                    /*!< 002C:                                                              */
-   __IO uint32_t  IFLAG1;                       /*!< 0030: Interrupt Flags 1 Register                                   */
-   __IO uint32_t  CTRL2;                        /*!< 0034: Control 2 Register                                           */
-   __I  uint32_t  ESR2;                         /*!< 0038: Error and Status 2 Register                                  */
-   __I  uint32_t  RESERVED3[2];                 /*!< 003C:                                                              */
-   __I  uint32_t  CRCR;                         /*!< 0044: CRC Register                                                 */
-   __IO uint32_t  RXFGMASK;                     /*!< 0048: Rx FIFO Global Mask Register                                 */
-   __I  uint32_t  RXFIR;                        /*!< 004C: Rx FIFO Information Register                                 */
-   __I  uint32_t  RESERVED4[12];                /*!< 0050:                                                              */
-   struct { /* (cluster) */                     /*!< 0080: (size=0x0100, 256)                                           */
-      __IO uint32_t  CS;                        /*!< 0080: Message Buffer 0 CS Register                                 */
-      __IO uint32_t  ID;                        /*!< 0084: Message Buffer 0 ID Register                                 */
-      __IO uint32_t  WORD0;                     /*!< 0088: Message Buffer 0 WORD0 Register                              */
-      __IO uint32_t  WORD1;                     /*!< 008C: Message Buffer 0 WORD1 Register                              */
-   } MB[16];
-   __I  uint32_t  RESERVED5[448];               /*!< 0180:                                                              */
-   __IO uint32_t  RXIMR[16];                    /*!< 0880: Rx Individual Mask                                           */
+/**
+* @addtogroup CAN_structs_GROUP CAN struct
+* @brief Struct for CAN
+* @{
+*/
+typedef struct {                                /*       CAN0 Structure                                               */
+   __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
+   __IO uint32_t  CTRL1;                        /**< 0004: Control 1 Register                                           */
+   __IO uint32_t  TIMER;                        /**< 0008: Free Running Timer                                           */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  RXMGMASK;                     /**< 0010: Rx Mailboxes Global Mask Register                            */
+   __IO uint32_t  RX14MASK;                     /**< 0014: Rx 14 Mask Register                                          */
+   __IO uint32_t  RX15MASK;                     /**< 0018: Rx 15 Mask Register                                          */
+   __IO uint32_t  ECR;                          /**< 001C: Error Counter                                                */
+   __IO uint32_t  ESR1;                         /**< 0020: Error and Status 1 Register                                  */
+   __I  uint32_t  RESERVED1;                   
+   __IO uint32_t  IMASK1;                       /**< 0028: Interrupt Masks 1 Register                                   */
+   __I  uint32_t  RESERVED2;                   
+   __IO uint32_t  IFLAG1;                       /**< 0030: Interrupt Flags 1 Register                                   */
+   __IO uint32_t  CTRL2;                        /**< 0034: Control 2 Register                                           */
+   __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 Register                                  */
+   __I  uint32_t  RESERVED3[2];                
+   __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
+   __IO uint32_t  RXFGMASK;                     /**< 0048: Rx FIFO Global Mask Register                                 */
+   __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
+   __I  uint32_t  RESERVED4[12];               
+   struct {
+      __IO uint32_t  CS;                        /**< 0080: Message Buffer 0 CS Register                                 */
+      __IO uint32_t  ID;                        /**< 0084: Message Buffer 0 ID Register                                 */
+      __IO uint32_t  WORD0;                     /**< 0088: Message Buffer 0 WORD0 Register                              */
+      __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
+   } MB[16];                                    /**< 0080: (cluster: size=0x0100, 256)                                  */
+   __I  uint32_t  RESERVED5[448];              
+   __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
 
+/**
+ * @} */ /* End group CAN_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'CAN0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup CAN_Register_Masks_GROUP CAN Register Masks
+* @brief Register Masks for CAN
+* @{
+*/
 /* ------- MCR Bit Fields                           ------ */
 #define CAN_MCR_MAXMB_MASK                       (0x7FUL << CAN_MCR_MAXMB_SHIFT)                     /*!< CAN0_MCR: MAXMB Mask                    */
 #define CAN_MCR_MAXMB_SHIFT                      0                                                   /*!< CAN0_MCR: MAXMB Position                */
@@ -758,11 +838,22 @@ typedef struct {                                /*!<       CAN0 Structure       
 #define CAN_RXIMR_MI_MASK                        (0xFFFFFFFFUL << CAN_RXIMR_MI_SHIFT)                /*!< CAN0_RXIMR: MI Mask                     */
 #define CAN_RXIMR_MI_SHIFT                       0                                                   /*!< CAN0_RXIMR: MI Position                 */
 #define CAN_RXIMR_MI(x)                          (((uint32_t)(((uint32_t)(x))<<CAN_RXIMR_MI_SHIFT))&CAN_RXIMR_MI_MASK) /*!< CAN0_RXIMR                              */
+/**
+ * @} */ /* End group CAN_Register_Masks_GROUP 
+ */
 
 /* CAN0 - Peripheral instance base addresses */
-#define CAN0_BasePtr                   0x40024000UL
-#define CAN0                           ((CAN_Type *) CAN0_BasePtr)
-#define CAN0_BASE_PTR                  (CAN0)
+#define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
+#define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
+#define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CAN_Peripheral_access_layer_GROUP CAN Peripheral Access Layer
+* @brief C Struct for CAN
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CAN1 (derived from CAN0)             ================ */
@@ -773,9 +864,17 @@ typedef struct {                                /*!<       CAN0 Structure       
  */
 
 /* CAN1 - Peripheral instance base addresses */
-#define CAN1_BasePtr                   0x400A4000UL
-#define CAN1                           ((CAN_Type *) CAN1_BasePtr)
-#define CAN1_BASE_PTR                  (CAN1)
+#define CAN1_BasePtr                   0x400A4000UL //!< Peripheral base address
+#define CAN1                           ((CAN_Type *) CAN1_BasePtr) //!< Freescale base pointer
+#define CAN1_BASE_PTR                  (CAN1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CMP_Peripheral_access_layer_GROUP CMP Peripheral Access Layer
+* @brief C Struct for CMP
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CMP0 (file:CMP0_MKD10)               ================ */
@@ -784,20 +883,33 @@ typedef struct {                                /*!<       CAN0 Structure       
 /**
  * @brief Comparator, Voltage Ref, D-to-A Converter and Analog Mux
  */
-typedef struct {                                /*!<       CMP0 Structure                                               */
-   __IO uint8_t   CR0;                          /*!< 0000: CMP Control Register 0                                       */
-   __IO uint8_t   CR1;                          /*!< 0001: CMP Control Register 1                                       */
-   __IO uint8_t   FPR;                          /*!< 0002: CMP Filter Period Register                                   */
-   __IO uint8_t   SCR;                          /*!< 0003: CMP Status and Control Register                              */
-   __IO uint8_t   DACCR;                        /*!< 0004: DAC Control Register                                         */
-   __IO uint8_t   MUXCR;                        /*!< 0005: MUX Control Register                                         */
+/**
+* @addtogroup CMP_structs_GROUP CMP struct
+* @brief Struct for CMP
+* @{
+*/
+typedef struct {                                /*       CMP0 Structure                                               */
+   __IO uint8_t   CR0;                          /**< 0000: CMP Control Register 0                                       */
+   __IO uint8_t   CR1;                          /**< 0001: CMP Control Register 1                                       */
+   __IO uint8_t   FPR;                          /**< 0002: CMP Filter Period Register                                   */
+   __IO uint8_t   SCR;                          /**< 0003: CMP Status and Control Register                              */
+   __IO uint8_t   DACCR;                        /**< 0004: DAC Control Register                                         */
+   __IO uint8_t   MUXCR;                        /**< 0005: MUX Control Register                                         */
 } CMP_Type;
 
+/**
+ * @} */ /* End group CMP_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'CMP0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup CMP_Register_Masks_GROUP CMP Register Masks
+* @brief Register Masks for CMP
+* @{
+*/
 /* ------- CR0 Bit Fields                           ------ */
 #define CMP_CR0_HYSTCTR_MASK                     (0x03UL << CMP_CR0_HYSTCTR_SHIFT)                   /*!< CMP0_CR0: HYSTCTR Mask                  */
 #define CMP_CR0_HYSTCTR_SHIFT                    0                                                   /*!< CMP0_CR0: HYSTCTR Position              */
@@ -854,11 +966,22 @@ typedef struct {                                /*!<       CMP0 Structure       
 #define CMP_MUXCR_PSEL(x)                        (((uint8_t)(((uint8_t)(x))<<CMP_MUXCR_PSEL_SHIFT))&CMP_MUXCR_PSEL_MASK) /*!< CMP0_MUXCR                              */
 #define CMP_MUXCR_PSTM_MASK                      (0x01UL << CMP_MUXCR_PSTM_SHIFT)                    /*!< CMP0_MUXCR: PSTM Mask                   */
 #define CMP_MUXCR_PSTM_SHIFT                     6                                                   /*!< CMP0_MUXCR: PSTM Position               */
+/**
+ * @} */ /* End group CMP_Register_Masks_GROUP 
+ */
 
 /* CMP0 - Peripheral instance base addresses */
-#define CMP0_BasePtr                   0x40073000UL
-#define CMP0                           ((CMP_Type *) CMP0_BasePtr)
-#define CMP0_BASE_PTR                  (CMP0)
+#define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
+#define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
+#define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CMP_Peripheral_access_layer_GROUP CMP Peripheral Access Layer
+* @brief C Struct for CMP
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CMP1 (derived from CMP0)             ================ */
@@ -869,9 +992,17 @@ typedef struct {                                /*!<       CMP0 Structure       
  */
 
 /* CMP1 - Peripheral instance base addresses */
-#define CMP1_BasePtr                   0x40073008UL
-#define CMP1                           ((CMP_Type *) CMP1_BasePtr)
-#define CMP1_BASE_PTR                  (CMP1)
+#define CMP1_BasePtr                   0x40073008UL //!< Peripheral base address
+#define CMP1                           ((CMP_Type *) CMP1_BasePtr) //!< Freescale base pointer
+#define CMP1_BASE_PTR                  (CMP1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CMP_Peripheral_access_layer_GROUP CMP Peripheral Access Layer
+* @brief C Struct for CMP
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CMP2 (derived from CMP0)             ================ */
@@ -882,9 +1013,17 @@ typedef struct {                                /*!<       CMP0 Structure       
  */
 
 /* CMP2 - Peripheral instance base addresses */
-#define CMP2_BasePtr                   0x40073010UL
-#define CMP2                           ((CMP_Type *) CMP2_BasePtr)
-#define CMP2_BASE_PTR                  (CMP2)
+#define CMP2_BasePtr                   0x40073010UL //!< Peripheral base address
+#define CMP2                           ((CMP_Type *) CMP2_BasePtr) //!< Freescale base pointer
+#define CMP2_BASE_PTR                  (CMP2) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CMT_Peripheral_access_layer_GROUP CMT Peripheral Access Layer
+* @brief C Struct for CMT
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CMT (file:CMT_0)                     ================ */
@@ -893,26 +1032,39 @@ typedef struct {                                /*!<       CMP0 Structure       
 /**
  * @brief Carrier Modulator Transmitter
  */
-typedef struct {                                /*!<       CMT Structure                                                */
-   __IO uint8_t   CGH1;                         /*!< 0000: Carrier Generator High Data Register 1                       */
-   __IO uint8_t   CGL1;                         /*!< 0001: Carrier Generator Low Data Register 1                        */
-   __IO uint8_t   CGH2;                         /*!< 0002: Carrier Generator High Data Register 2                       */
-   __IO uint8_t   CGL2;                         /*!< 0003: Carrier Generator Low Data Register 2                        */
-   __IO uint8_t   OC;                           /*!< 0004: Output Control Register                                      */
-   __IO uint8_t   MSC;                          /*!< 0005: Modulator Status and Control Register                        */
-   __IO uint8_t   CMD1;                         /*!< 0006: Modulator Data Register Mark High                            */
-   __IO uint8_t   CMD2;                         /*!< 0007: Modulator Data Register Mark Low                             */
-   __IO uint8_t   CMD3;                         /*!< 0008: Modulator Data Register Space High                           */
-   __IO uint8_t   CMD4;                         /*!< 0009: Modulator Data Register Space Low                            */
-   __IO uint8_t   PPS;                          /*!< 000A: Primary Prescaler Register                                   */
-   __IO uint8_t   DMA;                          /*!< 000B: Direct Memory Access Register                                */
+/**
+* @addtogroup CMT_structs_GROUP CMT struct
+* @brief Struct for CMT
+* @{
+*/
+typedef struct {                                /*       CMT Structure                                                */
+   __IO uint8_t   CGH1;                         /**< 0000: Carrier Generator High Data Register 1                       */
+   __IO uint8_t   CGL1;                         /**< 0001: Carrier Generator Low Data Register 1                        */
+   __IO uint8_t   CGH2;                         /**< 0002: Carrier Generator High Data Register 2                       */
+   __IO uint8_t   CGL2;                         /**< 0003: Carrier Generator Low Data Register 2                        */
+   __IO uint8_t   OC;                           /**< 0004: Output Control Register                                      */
+   __IO uint8_t   MSC;                          /**< 0005: Modulator Status and Control Register                        */
+   __IO uint8_t   CMD1;                         /**< 0006: Modulator Data Register Mark High                            */
+   __IO uint8_t   CMD2;                         /**< 0007: Modulator Data Register Mark Low                             */
+   __IO uint8_t   CMD3;                         /**< 0008: Modulator Data Register Space High                           */
+   __IO uint8_t   CMD4;                         /**< 0009: Modulator Data Register Space Low                            */
+   __IO uint8_t   PPS;                          /**< 000A: Primary Prescaler Register                                   */
+   __IO uint8_t   DMA;                          /**< 000B: Direct Memory Access Register                                */
 } CMT_Type;
 
+/**
+ * @} */ /* End group CMT_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'CMT' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup CMT_Register_Masks_GROUP CMT Register Masks
+* @brief Register Masks for CMT
+* @{
+*/
 /* ------- CGH1 Bit Fields                          ------ */
 #define CMT_CGH1_PH_MASK                         (0xFFUL << CMT_CGH1_PH_SHIFT)                       /*!< CMT_CGH1: PH Mask                       */
 #define CMT_CGH1_PH_SHIFT                        0                                                   /*!< CMT_CGH1: PH Position                   */
@@ -975,11 +1127,22 @@ typedef struct {                                /*!<       CMT Structure        
 /* ------- DMA Bit Fields                           ------ */
 #define CMT_DMA_DMA_MASK                         (0x01UL << CMT_DMA_DMA_SHIFT)                       /*!< CMT_DMA: DMA Mask                       */
 #define CMT_DMA_DMA_SHIFT                        0                                                   /*!< CMT_DMA: DMA Position                   */
+/**
+ * @} */ /* End group CMT_Register_Masks_GROUP 
+ */
 
 /* CMT - Peripheral instance base addresses */
-#define CMT_BasePtr                    0x40062000UL
-#define CMT                            ((CMT_Type *) CMT_BasePtr)
-#define CMT_BASE_PTR                   (CMT)
+#define CMT_BasePtr                    0x40062000UL //!< Peripheral base address
+#define CMT                            ((CMT_Type *) CMT_BasePtr) //!< Freescale base pointer
+#define CMT_BASE_PTR                   (CMT) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CMT_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CRC_Peripheral_access_layer_GROUP CRC Peripheral Access Layer
+* @brief C Struct for CRC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           CRC (file:CRC)                       ================ */
@@ -988,96 +1151,109 @@ typedef struct {                                /*!<       CMT Structure        
 /**
  * @brief Cyclic Redundancy Check
  */
-typedef struct {                                /*!<       CRC Structure                                                */
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  DATA;                      /*!< 0000: Data register                                                */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         union {                                /*!< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAL;               /*!< 0000: DATAL register                                               */
-            struct {                            /*!< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATALL;           /*!< 0000: DATALL register                                              */
-               __IO uint8_t   DATALU;           /*!< 0001: DATALU register                                              */
+/**
+* @addtogroup CRC_structs_GROUP CRC struct
+* @brief Struct for CRC
+* @{
+*/
+typedef struct {                                /*       CRC Structure                                                */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  CRC;                       /**< 0000: Data register                                                */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         union {                                /**< 0000: (size=0002)                                                  */
+            __IO uint16_t  CRCL;                /**< 0000: CRCL register                                                */
+            struct {                            /**< 0000: (size=0002)                                                  */
+               __IO uint8_t   CRCLL;            /**< 0000: CRCLL register                                               */
+               __IO uint8_t   CRCLU;            /**< 0001: CRCLU register                                               */
             };
          };
-         union {                                /*!< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAH;               /*!< 0002: DATAH register                                               */
-            struct {                            /*!< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATAHL;           /*!< 0002: DATAHL register                                              */
-               __IO uint8_t   DATAHU;           /*!< 0003: DATAHU register                                              */
-            };
-         };
-      };
-   };
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  GPOLY;                     /*!< 0004: Polynomial register                                          */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         union {                                /*!< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /*!< 0004: GPOLYL register                                              */
-            struct {                            /*!< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /*!< 0004: GPOLYLL register                                             */
-               __IO uint8_t   GPOLYLU;          /*!< 0005: GPOLYLU register                                             */
-            };
-         };
-         union {                                /*!< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /*!< 0006: GPOLYH register                                              */
-            struct {                            /*!< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /*!< 0006: GPOLYHL register                                             */
-               __IO uint8_t   GPOLYHU;          /*!< 0007: GPOLYHU register                                             */
+         union {                                /**< 0000: (size=0002)                                                  */
+            __IO uint16_t  CRCH;                /**< 0002: CRCH register                                                */
+            struct {                            /**< 0000: (size=0002)                                                  */
+               __IO uint8_t   CRCHL;            /**< 0002: CRCHL register                                               */
+               __IO uint8_t   CRCHU;            /**< 0003: CRCHU register                                               */
             };
          };
       };
    };
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  CTRL;                      /*!< 0008: Control register                                             */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         __I  uint8_t   RESERVED0[3];           /*!< 0008:                                                              */
-         __IO uint8_t   CTRLHU;                 /*!< 000B: Control register (byte access)                               */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         union {                                /**< 0000: (size=0002)                                                  */
+            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
+            struct {                            /**< 0000: (size=0002)                                                  */
+               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
+               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
+            };
+         };
+         union {                                /**< 0000: (size=0002)                                                  */
+            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
+            struct {                            /**< 0000: (size=0002)                                                  */
+               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
+               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
+            };
+         };
+      };
+   };
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __I  uint8_t   RESERVED0[3];          
+         __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
 } CRC_Type;
 
+/**
+ * @} */ /* End group CRC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'CRC' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
-/* ------- DATA Bit Fields                          ------ */
-#define CRC_DATA_LL_MASK                         (0xFFUL << CRC_DATA_LL_SHIFT)                       /*!< CRC_DATA: LL Mask                       */
-#define CRC_DATA_LL_SHIFT                        0                                                   /*!< CRC_DATA: LL Position                   */
-#define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_LL_SHIFT))&CRC_DATA_LL_MASK) /*!< CRC_DATA                                */
-#define CRC_DATA_LU_MASK                         (0xFFUL << CRC_DATA_LU_SHIFT)                       /*!< CRC_DATA: LU Mask                       */
-#define CRC_DATA_LU_SHIFT                        8                                                   /*!< CRC_DATA: LU Position                   */
-#define CRC_DATA_LU(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_LU_SHIFT))&CRC_DATA_LU_MASK) /*!< CRC_DATA                                */
-#define CRC_DATA_HL_MASK                         (0xFFUL << CRC_DATA_HL_SHIFT)                       /*!< CRC_DATA: HL Mask                       */
-#define CRC_DATA_HL_SHIFT                        16                                                  /*!< CRC_DATA: HL Position                   */
-#define CRC_DATA_HL(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_HL_SHIFT))&CRC_DATA_HL_MASK) /*!< CRC_DATA                                */
-#define CRC_DATA_HU_MASK                         (0xFFUL << CRC_DATA_HU_SHIFT)                       /*!< CRC_DATA: HU Mask                       */
-#define CRC_DATA_HU_SHIFT                        24                                                  /*!< CRC_DATA: HU Position                   */
-#define CRC_DATA_HU(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_HU_SHIFT))&CRC_DATA_HU_MASK) /*!< CRC_DATA                                */
-/* ------- DATAL Bit Fields                         ------ */
-#define CRC_DATAL_DATAL_MASK                     (0xFFFFUL << CRC_DATAL_DATAL_SHIFT)                 /*!< CRC_DATAL: DATAL Mask                   */
-#define CRC_DATAL_DATAL_SHIFT                    0                                                   /*!< CRC_DATAL: DATAL Position               */
-#define CRC_DATAL_DATAL(x)                       (((uint16_t)(((uint16_t)(x))<<CRC_DATAL_DATAL_SHIFT))&CRC_DATAL_DATAL_MASK) /*!< CRC_DATAL                               */
-/* ------- DATALL Bit Fields                        ------ */
-#define CRC_DATALL_DATALL_MASK                   (0xFFUL << CRC_DATALL_DATALL_SHIFT)                 /*!< CRC_DATALL: DATALL Mask                 */
-#define CRC_DATALL_DATALL_SHIFT                  0                                                   /*!< CRC_DATALL: DATALL Position             */
-#define CRC_DATALL_DATALL(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATALL_DATALL_SHIFT))&CRC_DATALL_DATALL_MASK) /*!< CRC_DATALL                              */
-/* ------- DATALU Bit Fields                        ------ */
-#define CRC_DATALU_DATALU_MASK                   (0xFFUL << CRC_DATALU_DATALU_SHIFT)                 /*!< CRC_DATALU: DATALU Mask                 */
-#define CRC_DATALU_DATALU_SHIFT                  0                                                   /*!< CRC_DATALU: DATALU Position             */
-#define CRC_DATALU_DATALU(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATALU_DATALU_SHIFT))&CRC_DATALU_DATALU_MASK) /*!< CRC_DATALU                              */
-/* ------- DATAH Bit Fields                         ------ */
-#define CRC_DATAH_DATAH_MASK                     (0xFFFFUL << CRC_DATAH_DATAH_SHIFT)                 /*!< CRC_DATAH: DATAH Mask                   */
-#define CRC_DATAH_DATAH_SHIFT                    0                                                   /*!< CRC_DATAH: DATAH Position               */
-#define CRC_DATAH_DATAH(x)                       (((uint16_t)(((uint16_t)(x))<<CRC_DATAH_DATAH_SHIFT))&CRC_DATAH_DATAH_MASK) /*!< CRC_DATAH                               */
-/* ------- DATAHL Bit Fields                        ------ */
-#define CRC_DATAHL_DATAHL_MASK                   (0xFFUL << CRC_DATAHL_DATAHL_SHIFT)                 /*!< CRC_DATAHL: DATAHL Mask                 */
-#define CRC_DATAHL_DATAHL_SHIFT                  0                                                   /*!< CRC_DATAHL: DATAHL Position             */
-#define CRC_DATAHL_DATAHL(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATAHL_DATAHL_SHIFT))&CRC_DATAHL_DATAHL_MASK) /*!< CRC_DATAHL                              */
-/* ------- DATAHU Bit Fields                        ------ */
-#define CRC_DATAHU_DATAHU_MASK                   (0xFFUL << CRC_DATAHU_DATAHU_SHIFT)                 /*!< CRC_DATAHU: DATAHU Mask                 */
-#define CRC_DATAHU_DATAHU_SHIFT                  0                                                   /*!< CRC_DATAHU: DATAHU Position             */
-#define CRC_DATAHU_DATAHU(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATAHU_DATAHU_SHIFT))&CRC_DATAHU_DATAHU_MASK) /*!< CRC_DATAHU                              */
+/**
+* @addtogroup CRC_Register_Masks_GROUP CRC Register Masks
+* @brief Register Masks for CRC
+* @{
+*/
+/* ------- CRC Bit Fields                           ------ */
+#define CRC_CRC_LL_MASK                          (0xFFUL << CRC_CRC_LL_SHIFT)                        /*!< CRC_CRC: LL Mask                        */
+#define CRC_CRC_LL_SHIFT                         0                                                   /*!< CRC_CRC: LL Position                    */
+#define CRC_CRC_LL(x)                            (((uint32_t)(((uint32_t)(x))<<CRC_CRC_LL_SHIFT))&CRC_CRC_LL_MASK) /*!< CRC_CRC                                 */
+#define CRC_CRC_LU_MASK                          (0xFFUL << CRC_CRC_LU_SHIFT)                        /*!< CRC_CRC: LU Mask                        */
+#define CRC_CRC_LU_SHIFT                         8                                                   /*!< CRC_CRC: LU Position                    */
+#define CRC_CRC_LU(x)                            (((uint32_t)(((uint32_t)(x))<<CRC_CRC_LU_SHIFT))&CRC_CRC_LU_MASK) /*!< CRC_CRC                                 */
+#define CRC_CRC_HL_MASK                          (0xFFUL << CRC_CRC_HL_SHIFT)                        /*!< CRC_CRC: HL Mask                        */
+#define CRC_CRC_HL_SHIFT                         16                                                  /*!< CRC_CRC: HL Position                    */
+#define CRC_CRC_HL(x)                            (((uint32_t)(((uint32_t)(x))<<CRC_CRC_HL_SHIFT))&CRC_CRC_HL_MASK) /*!< CRC_CRC                                 */
+#define CRC_CRC_HU_MASK                          (0xFFUL << CRC_CRC_HU_SHIFT)                        /*!< CRC_CRC: HU Mask                        */
+#define CRC_CRC_HU_SHIFT                         24                                                  /*!< CRC_CRC: HU Position                    */
+#define CRC_CRC_HU(x)                            (((uint32_t)(((uint32_t)(x))<<CRC_CRC_HU_SHIFT))&CRC_CRC_HU_MASK) /*!< CRC_CRC                                 */
+/* ------- CRCL Bit Fields                          ------ */
+#define CRC_CRCL_CRCL_MASK                       (0xFFFFUL << CRC_CRCL_CRCL_SHIFT)                   /*!< CRC_CRCL: CRCL Mask                     */
+#define CRC_CRCL_CRCL_SHIFT                      0                                                   /*!< CRC_CRCL: CRCL Position                 */
+#define CRC_CRCL_CRCL(x)                         (((uint16_t)(((uint16_t)(x))<<CRC_CRCL_CRCL_SHIFT))&CRC_CRCL_CRCL_MASK) /*!< CRC_CRCL                                */
+/* ------- CRCLL Bit Fields                         ------ */
+#define CRC_CRCLL_CRCLL_MASK                     (0xFFUL << CRC_CRCLL_CRCLL_SHIFT)                   /*!< CRC_CRCLL: CRCLL Mask                   */
+#define CRC_CRCLL_CRCLL_SHIFT                    0                                                   /*!< CRC_CRCLL: CRCLL Position               */
+#define CRC_CRCLL_CRCLL(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCLL_CRCLL_SHIFT))&CRC_CRCLL_CRCLL_MASK) /*!< CRC_CRCLL                               */
+/* ------- CRCLU Bit Fields                         ------ */
+#define CRC_CRCLU_CRCLU_MASK                     (0xFFUL << CRC_CRCLU_CRCLU_SHIFT)                   /*!< CRC_CRCLU: CRCLU Mask                   */
+#define CRC_CRCLU_CRCLU_SHIFT                    0                                                   /*!< CRC_CRCLU: CRCLU Position               */
+#define CRC_CRCLU_CRCLU(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCLU_CRCLU_SHIFT))&CRC_CRCLU_CRCLU_MASK) /*!< CRC_CRCLU                               */
+/* ------- CRCH Bit Fields                          ------ */
+#define CRC_CRCH_CRCH_MASK                       (0xFFFFUL << CRC_CRCH_CRCH_SHIFT)                   /*!< CRC_CRCH: CRCH Mask                     */
+#define CRC_CRCH_CRCH_SHIFT                      0                                                   /*!< CRC_CRCH: CRCH Position                 */
+#define CRC_CRCH_CRCH(x)                         (((uint16_t)(((uint16_t)(x))<<CRC_CRCH_CRCH_SHIFT))&CRC_CRCH_CRCH_MASK) /*!< CRC_CRCH                                */
+/* ------- CRCHL Bit Fields                         ------ */
+#define CRC_CRCHL_CRCHL_MASK                     (0xFFUL << CRC_CRCHL_CRCHL_SHIFT)                   /*!< CRC_CRCHL: CRCHL Mask                   */
+#define CRC_CRCHL_CRCHL_SHIFT                    0                                                   /*!< CRC_CRCHL: CRCHL Position               */
+#define CRC_CRCHL_CRCHL(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCHL_CRCHL_SHIFT))&CRC_CRCHL_CRCHL_MASK) /*!< CRC_CRCHL                               */
+/* ------- CRCHU Bit Fields                         ------ */
+#define CRC_CRCHU_CRCHU_MASK                     (0xFFUL << CRC_CRCHU_CRCHU_SHIFT)                   /*!< CRC_CRCHU: CRCHU Mask                   */
+#define CRC_CRCHU_CRCHU_SHIFT                    0                                                   /*!< CRC_CRCHU: CRCHU Position               */
+#define CRC_CRCHU_CRCHU(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCHU_CRCHU_SHIFT))&CRC_CRCHU_CRCHU_MASK) /*!< CRC_CRCHU                               */
 /* ------- GPOLY Bit Fields                         ------ */
 #define CRC_GPOLY_LOW_MASK                       (0xFFFFUL << CRC_GPOLY_LOW_SHIFT)                   /*!< CRC_GPOLY: LOW Mask                     */
 #define CRC_GPOLY_LOW_SHIFT                      0                                                   /*!< CRC_GPOLY: LOW Position                 */
@@ -1135,11 +1311,22 @@ typedef struct {                                /*!<       CRC Structure        
 #define CRC_CTRLHU_TOT_MASK                      (0x03UL << CRC_CTRLHU_TOT_SHIFT)                    /*!< CRC_CTRLHU: TOT Mask                    */
 #define CRC_CTRLHU_TOT_SHIFT                     6                                                   /*!< CRC_CTRLHU: TOT Position                */
 #define CRC_CTRLHU_TOT(x)                        (((uint8_t)(((uint8_t)(x))<<CRC_CTRLHU_TOT_SHIFT))&CRC_CTRLHU_TOT_MASK) /*!< CRC_CTRLHU                              */
+/**
+ * @} */ /* End group CRC_Register_Masks_GROUP 
+ */
 
 /* CRC - Peripheral instance base addresses */
-#define CRC_BasePtr                    0x40032000UL
-#define CRC                            ((CRC_Type *) CRC_BasePtr)
-#define CRC_BASE_PTR                   (CRC)
+#define CRC_BasePtr                    0x40032000UL //!< Peripheral base address
+#define CRC                            ((CRC_Type *) CRC_BasePtr) //!< Freescale base pointer
+#define CRC_BASE_PTR                   (CRC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CRC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DAC_Peripheral_access_layer_GROUP DAC Peripheral Access Layer
+* @brief C Struct for DAC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           DAC0 (file:DAC0_MK_0x400CC000)       ================ */
@@ -1148,25 +1335,38 @@ typedef struct {                                /*!<       CRC Structure        
 /**
  * @brief 12-Bit Digital-to-Analog Converter
  */
-typedef struct {                                /*!<       DAC0 Structure                                               */
-   union {                                      /*!< 0000: (size=0020)                                                  */
-      __IO uint16_t  DATA[16];                  /*!< 0000: Data Register                                                */
-      struct { /* (cluster) */                  /*!< 0000: (size=0x0020, 32)                                            */
-         __IO uint8_t   DATL;                   /*!< 0000: Data Low Register                                            */
-         __IO uint8_t   DATH;                   /*!< 0001: Data High Register                                           */
-      } DAT[16];
+/**
+* @addtogroup DAC_structs_GROUP DAC struct
+* @brief Struct for DAC
+* @{
+*/
+typedef struct {                                /*       DAC0 Structure                                               */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      __IO uint16_t  DATA[16];                  /**< 0000: Data Register                                                */
+      struct {
+         __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
+         __IO uint8_t   DATH;                   /**< 0001: Data High Register                                           */
+      } DAT[16];                                /**< 0000: (cluster: size=0x0020, 32)                                   */
    };
-   __IO uint8_t   SR;                           /*!< 0020: Status Register                                              */
-   __IO uint8_t   C0;                           /*!< 0021: Control Register 0                                           */
-   __IO uint8_t   C1;                           /*!< 0022: Control Register 1                                           */
-   __IO uint8_t   C2;                           /*!< 0023: Control Register 2                                           */
+   __IO uint8_t   SR;                           /**< 0020: Status Register                                              */
+   __IO uint8_t   C0;                           /**< 0021: Control Register 0                                           */
+   __IO uint8_t   C1;                           /**< 0022: Control Register 1                                           */
+   __IO uint8_t   C2;                           /**< 0023: Control Register 2                                           */
 } DAC_Type;
 
+/**
+ * @} */ /* End group DAC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'DAC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup DAC_Register_Masks_GROUP DAC Register Masks
+* @brief Register Masks for DAC
+* @{
+*/
 /* ------- DATA Bit Fields                          ------ */
 #define DAC_DATA_DATA_MASK                       (0xFFFUL << DAC_DATA_DATA_SHIFT)                    /*!< DAC0_DATA: DATA Mask                    */
 #define DAC_DATA_DATA_SHIFT                      0                                                   /*!< DAC0_DATA: DATA Position                */
@@ -1221,11 +1421,22 @@ typedef struct {                                /*!<       DAC0 Structure       
 #define DAC_C2_DACBFRP_MASK                      (0x0FUL << DAC_C2_DACBFRP_SHIFT)                    /*!< DAC0_C2: DACBFRP Mask                   */
 #define DAC_C2_DACBFRP_SHIFT                     4                                                   /*!< DAC0_C2: DACBFRP Position               */
 #define DAC_C2_DACBFRP(x)                        (((uint8_t)(((uint8_t)(x))<<DAC_C2_DACBFRP_SHIFT))&DAC_C2_DACBFRP_MASK) /*!< DAC0_C2                                 */
+/**
+ * @} */ /* End group DAC_Register_Masks_GROUP 
+ */
 
 /* DAC0 - Peripheral instance base addresses */
-#define DAC0_BasePtr                   0x400CC000UL
-#define DAC0                           ((DAC_Type *) DAC0_BasePtr)
-#define DAC0_BASE_PTR                  (DAC0)
+#define DAC0_BasePtr                   0x400CC000UL //!< Peripheral base address
+#define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
+#define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DAC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DAC_Peripheral_access_layer_GROUP DAC Peripheral Access Layer
+* @brief C Struct for DAC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           DAC1 (derived from DAC0)             ================ */
@@ -1236,9 +1447,17 @@ typedef struct {                                /*!<       DAC0 Structure       
  */
 
 /* DAC1 - Peripheral instance base addresses */
-#define DAC1_BasePtr                   0x400CD000UL
-#define DAC1                           ((DAC_Type *) DAC1_BasePtr)
-#define DAC1_BASE_PTR                  (DAC1)
+#define DAC1_BasePtr                   0x400CD000UL //!< Peripheral base address
+#define DAC1                           ((DAC_Type *) DAC1_BasePtr) //!< Freescale base pointer
+#define DAC1_BASE_PTR                  (DAC1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DAC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMA_Peripheral_access_layer_GROUP DMA Peripheral Access Layer
+* @brief C Struct for DMA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           DMA0 (file:DMA0_MK_16CH)             ================ */
@@ -1247,473 +1466,497 @@ typedef struct {                                /*!<       DAC0 Structure       
 /**
  * @brief Enhanced direct memory access controller
  */
-typedef struct {                                /*!<       DMA0 Structure                                               */
-   __IO uint32_t  CR;                           /*!< 0000: Control Register                                             */
-   __I  uint32_t  ES;                           /*!< 0004: Error Status Register                                        */
-   __I  uint32_t  RESERVED0;                    /*!< 0008:                                                              */
-   __IO uint32_t  ERQ;                          /*!< 000C: Enable Request Register                                      */
-   __I  uint32_t  RESERVED1;                    /*!< 0010:                                                              */
-   __IO uint32_t  EEI;                          /*!< 0014: Enable Error Interrupt Register                              */
-   __O  uint8_t   CEEI;                         /*!< 0018: Clear Enable Error Interrupt Register                        */
-   __O  uint8_t   SEEI;                         /*!< 0019: Set Enable Error Interrupt Register                          */
-   __O  uint8_t   CERQ;                         /*!< 001A: Clear Enable Request Register                                */
-   __O  uint8_t   SERQ;                         /*!< 001B: Set Enable Request Register                                  */
-   __O  uint8_t   CDNE;                         /*!< 001C: Clear DONE Status Bit Register                               */
-   __O  uint8_t   SSRT;                         /*!< 001D: Set START Bit Register                                       */
-   __O  uint8_t   CERR;                         /*!< 001E: Clear Error Register                                         */
-   __O  uint8_t   CINT;                         /*!< 001F: Clear Interrupt Request Register                             */
-   __I  uint32_t  RESERVED2;                    /*!< 0020:                                                              */
-   __IO uint32_t  INT;                          /*!< 0024: Interrupt Request Register                                   */
-   __I  uint32_t  RESERVED3;                    /*!< 0028:                                                              */
-   __IO uint32_t  ERR;                          /*!< 002C: Error Register                                               */
-   __I  uint32_t  RESERVED4;                    /*!< 0030:                                                              */
-   __IO uint32_t  HRS;                          /*!< 0034: Hardware Request Status Register                             */
-   __I  uint32_t  RESERVED5[50];                /*!< 0038:                                                              */
-   __IO uint8_t   DCHPRI3;                      /*!< 0100: Channel 3 Priority Register                                  */
-   __IO uint8_t   DCHPRI2;                      /*!< 0101: Channel 2 Priority Register                                  */
-   __IO uint8_t   DCHPRI1;                      /*!< 0102: Channel 1 Priority Register                                  */
-   __IO uint8_t   DCHPRI0;                      /*!< 0103: Channel 0 Priority Register                                  */
-   __IO uint8_t   DCHPRI7;                      /*!< 0104: Channel 7 Priority Register                                  */
-   __IO uint8_t   DCHPRI6;                      /*!< 0105: Channel 6 Priority Register                                  */
-   __IO uint8_t   DCHPRI5;                      /*!< 0106: Channel 5 Priority Register                                  */
-   __IO uint8_t   DCHPRI4;                      /*!< 0107: Channel 4 Priority Register                                  */
-   __IO uint8_t   DCHPRI11;                     /*!< 0108: Channel 11 Priority Register                                 */
-   __IO uint8_t   DCHPRI10;                     /*!< 0109: Channel 10 Priority Register                                 */
-   __IO uint8_t   DCHPRI9;                      /*!< 010A: Channel 9 Priority Register                                  */
-   __IO uint8_t   DCHPRI8;                      /*!< 010B: Channel 8 Priority Register                                  */
-   __IO uint8_t   DCHPRI15;                     /*!< 010C: Channel 15 Priority Register                                 */
-   __IO uint8_t   DCHPRI14;                     /*!< 010D: Channel 14 Priority Register                                 */
-   __IO uint8_t   DCHPRI13;                     /*!< 010E: Channel 13 Priority Register                                 */
-   __IO uint8_t   DCHPRI12;                     /*!< 010F: Channel 12 Priority Register                                 */
-   __I  uint32_t  RESERVED6[956];               /*!< 0110:                                                              */
-   struct { /* (cluster) */                     /*!< 1000: (size=0x0200, 512)                                           */
-      __IO uint32_t  SADDR;                     /*!< 1000: Source Address                                               */
-      __IO uint16_t  SOFF;                      /*!< 1004: Signed Source Address Offset                                 */
-      __IO uint16_t  ATTR;                      /*!< 1006: Transfer Attributes                                          */
-      union {                                   /*!< 1000: (size=0004)                                                  */
-         __IO uint32_t  NBYTES_MLNO;            /*!< 1008: Minor Byte Count (Minor Loop Disabled)                       */
-         __IO uint32_t  NBYTES_MLOFFNO;         /*!< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
-         __IO uint32_t  NBYTES_MLOFFYES;        /*!< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
+/**
+* @addtogroup DMA_structs_GROUP DMA struct
+* @brief Struct for DMA
+* @{
+*/
+typedef struct {                                /*       DMA0 Structure                                               */
+   __IO uint32_t  CR;                           /**< 0000: Control Register                                             */
+   __I  uint32_t  ES;                           /**< 0004: Error Status Register                                        */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  ERQ;                          /**< 000C: Enable Request Register                                      */
+   __I  uint32_t  RESERVED1;                   
+   __IO uint32_t  EEI;                          /**< 0014: Enable Error Interrupt Register                              */
+   __O  uint8_t   CEEI;                         /**< 0018: Clear Enable Error Interrupt Register                        */
+   __O  uint8_t   SEEI;                         /**< 0019: Set Enable Error Interrupt Register                          */
+   __O  uint8_t   CERQ;                         /**< 001A: Clear Enable Request Register                                */
+   __O  uint8_t   SERQ;                         /**< 001B: Set Enable Request Register                                  */
+   __O  uint8_t   CDNE;                         /**< 001C: Clear DONE Status Bit Register                               */
+   __O  uint8_t   SSRT;                         /**< 001D: Set START Bit Register                                       */
+   __O  uint8_t   CERR;                         /**< 001E: Clear Error Register                                         */
+   __O  uint8_t   CINT;                         /**< 001F: Clear Interrupt Request Register                             */
+   __I  uint32_t  RESERVED2;                   
+   __IO uint32_t  INT;                          /**< 0024: Interrupt Request Register                                   */
+   __I  uint32_t  RESERVED3;                   
+   __IO uint32_t  ERR;                          /**< 002C: Error Register                                               */
+   __I  uint32_t  RESERVED4;                   
+   __IO uint32_t  HRS;                          /**< 0034: Hardware Request Status Register                             */
+   __I  uint32_t  RESERVED5[50];               
+   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel 3 Priority Register                                  */
+   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel 2 Priority Register                                  */
+   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel 1 Priority Register                                  */
+   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel 0 Priority Register                                  */
+   __IO uint8_t   DCHPRI7;                      /**< 0104: Channel 7 Priority Register                                  */
+   __IO uint8_t   DCHPRI6;                      /**< 0105: Channel 6 Priority Register                                  */
+   __IO uint8_t   DCHPRI5;                      /**< 0106: Channel 5 Priority Register                                  */
+   __IO uint8_t   DCHPRI4;                      /**< 0107: Channel 4 Priority Register                                  */
+   __IO uint8_t   DCHPRI11;                     /**< 0108: Channel 11 Priority Register                                 */
+   __IO uint8_t   DCHPRI10;                     /**< 0109: Channel 10 Priority Register                                 */
+   __IO uint8_t   DCHPRI9;                      /**< 010A: Channel 9 Priority Register                                  */
+   __IO uint8_t   DCHPRI8;                      /**< 010B: Channel 8 Priority Register                                  */
+   __IO uint8_t   DCHPRI15;                     /**< 010C: Channel 15 Priority Register                                 */
+   __IO uint8_t   DCHPRI14;                     /**< 010D: Channel 14 Priority Register                                 */
+   __IO uint8_t   DCHPRI13;                     /**< 010E: Channel 13 Priority Register                                 */
+   __IO uint8_t   DCHPRI12;                     /**< 010F: Channel 12 Priority Register                                 */
+   __I  uint32_t  RESERVED6[956];              
+   struct {
+      __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
+      __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
+      __IO uint16_t  ATTR;                      /**< 1006: Transfer Attributes                                          */
+      union {                                   /**< 1000: (size=0004)                                                  */
+         __IO uint32_t  NBYTES_MLNO;            /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
+         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
+         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
       };
-      __IO uint32_t  SLAST;                     /*!< 100C: Last Source Address Adjustment                               */
-      __IO uint32_t  DADDR;                     /*!< 1010: Destination Address                                          */
-      __IO uint16_t  DOFF;                      /*!< 1014: Signed Destination Address Offset                            */
-      union {                                   /*!< 1000: (size=0002)                                                  */
-         __IO uint16_t  CITER_ELINKNO;          /*!< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  CITER_ELINKYES;         /*!< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+      __IO uint32_t  SLAST;                     /**< 100C: Last Source Address Adjustment                               */
+      __IO uint32_t  DADDR;                     /**< 1010: Destination Address                                          */
+      __IO uint16_t  DOFF;                      /**< 1014: Signed Destination Address Offset                            */
+      union {                                   /**< 1000: (size=0002)                                                  */
+         __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
-      __IO uint32_t  DLAST_SGA;                 /*!< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
-      __IO uint16_t  CSR;                       /*!< 101C: Control and Status                                           */
-      union {                                   /*!< 1000: (size=0002)                                                  */
-         __IO uint16_t  BITER_ELINKNO;          /*!< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  BITER_ELINKYES;         /*!< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+      __IO uint32_t  DLAST_SGA;                 /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+      __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
+      union {                                   /**< 1000: (size=0002)                                                  */
+         __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  BITER_ELINKYES;         /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
-   } TCD[16];
+   } TCD[16];                                   /**< 1000: (cluster: size=0x0200, 512)                                  */
 } DMA_Type;
 
+/**
+ * @} */ /* End group DMA_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'DMA0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup DMA_Register_Masks_GROUP DMA Register Masks
+* @brief Register Masks for DMA
+* @{
+*/
 /* ------- CR Bit Fields                            ------ */
-#define DMA0_CR_EDBG_MASK                        (0x01UL << DMA0_CR_EDBG_SHIFT)                      /*!< DMA0_CR: EDBG Mask                      */
-#define DMA0_CR_EDBG_SHIFT                       1                                                   /*!< DMA0_CR: EDBG Position                  */
-#define DMA0_CR_ERCA_MASK                        (0x01UL << DMA0_CR_ERCA_SHIFT)                      /*!< DMA0_CR: ERCA Mask                      */
-#define DMA0_CR_ERCA_SHIFT                       2                                                   /*!< DMA0_CR: ERCA Position                  */
-#define DMA0_CR_HOE_MASK                         (0x01UL << DMA0_CR_HOE_SHIFT)                       /*!< DMA0_CR: HOE Mask                       */
-#define DMA0_CR_HOE_SHIFT                        4                                                   /*!< DMA0_CR: HOE Position                   */
-#define DMA0_CR_HALT_MASK                        (0x01UL << DMA0_CR_HALT_SHIFT)                      /*!< DMA0_CR: HALT Mask                      */
-#define DMA0_CR_HALT_SHIFT                       5                                                   /*!< DMA0_CR: HALT Position                  */
-#define DMA0_CR_CLM_MASK                         (0x01UL << DMA0_CR_CLM_SHIFT)                       /*!< DMA0_CR: CLM Mask                       */
-#define DMA0_CR_CLM_SHIFT                        6                                                   /*!< DMA0_CR: CLM Position                   */
-#define DMA0_CR_EMLM_MASK                        (0x01UL << DMA0_CR_EMLM_SHIFT)                      /*!< DMA0_CR: EMLM Mask                      */
-#define DMA0_CR_EMLM_SHIFT                       7                                                   /*!< DMA0_CR: EMLM Position                  */
-#define DMA0_CR_ECX_MASK                         (0x01UL << DMA0_CR_ECX_SHIFT)                       /*!< DMA0_CR: ECX Mask                       */
-#define DMA0_CR_ECX_SHIFT                        16                                                  /*!< DMA0_CR: ECX Position                   */
-#define DMA0_CR_CX_MASK                          (0x01UL << DMA0_CR_CX_SHIFT)                        /*!< DMA0_CR: CX Mask                        */
-#define DMA0_CR_CX_SHIFT                         17                                                  /*!< DMA0_CR: CX Position                    */
+#define DMA_CR_EDBG_MASK                         (0x01UL << DMA_CR_EDBG_SHIFT)                       /*!< DMA0_CR: EDBG Mask                      */
+#define DMA_CR_EDBG_SHIFT                        1                                                   /*!< DMA0_CR: EDBG Position                  */
+#define DMA_CR_ERCA_MASK                         (0x01UL << DMA_CR_ERCA_SHIFT)                       /*!< DMA0_CR: ERCA Mask                      */
+#define DMA_CR_ERCA_SHIFT                        2                                                   /*!< DMA0_CR: ERCA Position                  */
+#define DMA_CR_HOE_MASK                          (0x01UL << DMA_CR_HOE_SHIFT)                        /*!< DMA0_CR: HOE Mask                       */
+#define DMA_CR_HOE_SHIFT                         4                                                   /*!< DMA0_CR: HOE Position                   */
+#define DMA_CR_HALT_MASK                         (0x01UL << DMA_CR_HALT_SHIFT)                       /*!< DMA0_CR: HALT Mask                      */
+#define DMA_CR_HALT_SHIFT                        5                                                   /*!< DMA0_CR: HALT Position                  */
+#define DMA_CR_CLM_MASK                          (0x01UL << DMA_CR_CLM_SHIFT)                        /*!< DMA0_CR: CLM Mask                       */
+#define DMA_CR_CLM_SHIFT                         6                                                   /*!< DMA0_CR: CLM Position                   */
+#define DMA_CR_EMLM_MASK                         (0x01UL << DMA_CR_EMLM_SHIFT)                       /*!< DMA0_CR: EMLM Mask                      */
+#define DMA_CR_EMLM_SHIFT                        7                                                   /*!< DMA0_CR: EMLM Position                  */
+#define DMA_CR_ECX_MASK                          (0x01UL << DMA_CR_ECX_SHIFT)                        /*!< DMA0_CR: ECX Mask                       */
+#define DMA_CR_ECX_SHIFT                         16                                                  /*!< DMA0_CR: ECX Position                   */
+#define DMA_CR_CX_MASK                           (0x01UL << DMA_CR_CX_SHIFT)                         /*!< DMA0_CR: CX Mask                        */
+#define DMA_CR_CX_SHIFT                          17                                                  /*!< DMA0_CR: CX Position                    */
 /* ------- ES Bit Fields                            ------ */
-#define DMA0_ES_DBE_MASK                         (0x01UL << DMA0_ES_DBE_SHIFT)                       /*!< DMA0_ES: DBE Mask                       */
-#define DMA0_ES_DBE_SHIFT                        0                                                   /*!< DMA0_ES: DBE Position                   */
-#define DMA0_ES_SBE_MASK                         (0x01UL << DMA0_ES_SBE_SHIFT)                       /*!< DMA0_ES: SBE Mask                       */
-#define DMA0_ES_SBE_SHIFT                        1                                                   /*!< DMA0_ES: SBE Position                   */
-#define DMA0_ES_SGE_MASK                         (0x01UL << DMA0_ES_SGE_SHIFT)                       /*!< DMA0_ES: SGE Mask                       */
-#define DMA0_ES_SGE_SHIFT                        2                                                   /*!< DMA0_ES: SGE Position                   */
-#define DMA0_ES_NCE_MASK                         (0x01UL << DMA0_ES_NCE_SHIFT)                       /*!< DMA0_ES: NCE Mask                       */
-#define DMA0_ES_NCE_SHIFT                        3                                                   /*!< DMA0_ES: NCE Position                   */
-#define DMA0_ES_DOE_MASK                         (0x01UL << DMA0_ES_DOE_SHIFT)                       /*!< DMA0_ES: DOE Mask                       */
-#define DMA0_ES_DOE_SHIFT                        4                                                   /*!< DMA0_ES: DOE Position                   */
-#define DMA0_ES_DAE_MASK                         (0x01UL << DMA0_ES_DAE_SHIFT)                       /*!< DMA0_ES: DAE Mask                       */
-#define DMA0_ES_DAE_SHIFT                        5                                                   /*!< DMA0_ES: DAE Position                   */
-#define DMA0_ES_SOE_MASK                         (0x01UL << DMA0_ES_SOE_SHIFT)                       /*!< DMA0_ES: SOE Mask                       */
-#define DMA0_ES_SOE_SHIFT                        6                                                   /*!< DMA0_ES: SOE Position                   */
-#define DMA0_ES_SAE_MASK                         (0x01UL << DMA0_ES_SAE_SHIFT)                       /*!< DMA0_ES: SAE Mask                       */
-#define DMA0_ES_SAE_SHIFT                        7                                                   /*!< DMA0_ES: SAE Position                   */
-#define DMA0_ES_ERRCHN_MASK                      (0x0FUL << DMA0_ES_ERRCHN_SHIFT)                    /*!< DMA0_ES: ERRCHN Mask                    */
-#define DMA0_ES_ERRCHN_SHIFT                     8                                                   /*!< DMA0_ES: ERRCHN Position                */
-#define DMA0_ES_ERRCHN(x)                        (((uint32_t)(((uint32_t)(x))<<DMA0_ES_ERRCHN_SHIFT))&DMA0_ES_ERRCHN_MASK) /*!< DMA0_ES                                 */
-#define DMA0_ES_CPE_MASK                         (0x01UL << DMA0_ES_CPE_SHIFT)                       /*!< DMA0_ES: CPE Mask                       */
-#define DMA0_ES_CPE_SHIFT                        14                                                  /*!< DMA0_ES: CPE Position                   */
-#define DMA0_ES_ECX_MASK                         (0x01UL << DMA0_ES_ECX_SHIFT)                       /*!< DMA0_ES: ECX Mask                       */
-#define DMA0_ES_ECX_SHIFT                        16                                                  /*!< DMA0_ES: ECX Position                   */
-#define DMA0_ES_VLD_MASK                         (0x01UL << DMA0_ES_VLD_SHIFT)                       /*!< DMA0_ES: VLD Mask                       */
-#define DMA0_ES_VLD_SHIFT                        31                                                  /*!< DMA0_ES: VLD Position                   */
+#define DMA_ES_DBE_MASK                          (0x01UL << DMA_ES_DBE_SHIFT)                        /*!< DMA0_ES: DBE Mask                       */
+#define DMA_ES_DBE_SHIFT                         0                                                   /*!< DMA0_ES: DBE Position                   */
+#define DMA_ES_SBE_MASK                          (0x01UL << DMA_ES_SBE_SHIFT)                        /*!< DMA0_ES: SBE Mask                       */
+#define DMA_ES_SBE_SHIFT                         1                                                   /*!< DMA0_ES: SBE Position                   */
+#define DMA_ES_SGE_MASK                          (0x01UL << DMA_ES_SGE_SHIFT)                        /*!< DMA0_ES: SGE Mask                       */
+#define DMA_ES_SGE_SHIFT                         2                                                   /*!< DMA0_ES: SGE Position                   */
+#define DMA_ES_NCE_MASK                          (0x01UL << DMA_ES_NCE_SHIFT)                        /*!< DMA0_ES: NCE Mask                       */
+#define DMA_ES_NCE_SHIFT                         3                                                   /*!< DMA0_ES: NCE Position                   */
+#define DMA_ES_DOE_MASK                          (0x01UL << DMA_ES_DOE_SHIFT)                        /*!< DMA0_ES: DOE Mask                       */
+#define DMA_ES_DOE_SHIFT                         4                                                   /*!< DMA0_ES: DOE Position                   */
+#define DMA_ES_DAE_MASK                          (0x01UL << DMA_ES_DAE_SHIFT)                        /*!< DMA0_ES: DAE Mask                       */
+#define DMA_ES_DAE_SHIFT                         5                                                   /*!< DMA0_ES: DAE Position                   */
+#define DMA_ES_SOE_MASK                          (0x01UL << DMA_ES_SOE_SHIFT)                        /*!< DMA0_ES: SOE Mask                       */
+#define DMA_ES_SOE_SHIFT                         6                                                   /*!< DMA0_ES: SOE Position                   */
+#define DMA_ES_SAE_MASK                          (0x01UL << DMA_ES_SAE_SHIFT)                        /*!< DMA0_ES: SAE Mask                       */
+#define DMA_ES_SAE_SHIFT                         7                                                   /*!< DMA0_ES: SAE Position                   */
+#define DMA_ES_ERRCHN_MASK                       (0x0FUL << DMA_ES_ERRCHN_SHIFT)                     /*!< DMA0_ES: ERRCHN Mask                    */
+#define DMA_ES_ERRCHN_SHIFT                      8                                                   /*!< DMA0_ES: ERRCHN Position                */
+#define DMA_ES_ERRCHN(x)                         (((uint32_t)(((uint32_t)(x))<<DMA_ES_ERRCHN_SHIFT))&DMA_ES_ERRCHN_MASK) /*!< DMA0_ES                                 */
+#define DMA_ES_CPE_MASK                          (0x01UL << DMA_ES_CPE_SHIFT)                        /*!< DMA0_ES: CPE Mask                       */
+#define DMA_ES_CPE_SHIFT                         14                                                  /*!< DMA0_ES: CPE Position                   */
+#define DMA_ES_ECX_MASK                          (0x01UL << DMA_ES_ECX_SHIFT)                        /*!< DMA0_ES: ECX Mask                       */
+#define DMA_ES_ECX_SHIFT                         16                                                  /*!< DMA0_ES: ECX Position                   */
+#define DMA_ES_VLD_MASK                          (0x01UL << DMA_ES_VLD_SHIFT)                        /*!< DMA0_ES: VLD Mask                       */
+#define DMA_ES_VLD_SHIFT                         31                                                  /*!< DMA0_ES: VLD Position                   */
 /* ------- ERQ Bit Fields                           ------ */
-#define DMA0_ERQ_ERQ0_MASK                       (0x01UL << DMA0_ERQ_ERQ0_SHIFT)                     /*!< DMA0_ERQ: ERQ0 Mask                     */
-#define DMA0_ERQ_ERQ0_SHIFT                      0                                                   /*!< DMA0_ERQ: ERQ0 Position                 */
-#define DMA0_ERQ_ERQ1_MASK                       (0x01UL << DMA0_ERQ_ERQ1_SHIFT)                     /*!< DMA0_ERQ: ERQ1 Mask                     */
-#define DMA0_ERQ_ERQ1_SHIFT                      1                                                   /*!< DMA0_ERQ: ERQ1 Position                 */
-#define DMA0_ERQ_ERQ2_MASK                       (0x01UL << DMA0_ERQ_ERQ2_SHIFT)                     /*!< DMA0_ERQ: ERQ2 Mask                     */
-#define DMA0_ERQ_ERQ2_SHIFT                      2                                                   /*!< DMA0_ERQ: ERQ2 Position                 */
-#define DMA0_ERQ_ERQ3_MASK                       (0x01UL << DMA0_ERQ_ERQ3_SHIFT)                     /*!< DMA0_ERQ: ERQ3 Mask                     */
-#define DMA0_ERQ_ERQ3_SHIFT                      3                                                   /*!< DMA0_ERQ: ERQ3 Position                 */
-#define DMA0_ERQ_ERQ4_MASK                       (0x01UL << DMA0_ERQ_ERQ4_SHIFT)                     /*!< DMA0_ERQ: ERQ4 Mask                     */
-#define DMA0_ERQ_ERQ4_SHIFT                      4                                                   /*!< DMA0_ERQ: ERQ4 Position                 */
-#define DMA0_ERQ_ERQ5_MASK                       (0x01UL << DMA0_ERQ_ERQ5_SHIFT)                     /*!< DMA0_ERQ: ERQ5 Mask                     */
-#define DMA0_ERQ_ERQ5_SHIFT                      5                                                   /*!< DMA0_ERQ: ERQ5 Position                 */
-#define DMA0_ERQ_ERQ6_MASK                       (0x01UL << DMA0_ERQ_ERQ6_SHIFT)                     /*!< DMA0_ERQ: ERQ6 Mask                     */
-#define DMA0_ERQ_ERQ6_SHIFT                      6                                                   /*!< DMA0_ERQ: ERQ6 Position                 */
-#define DMA0_ERQ_ERQ7_MASK                       (0x01UL << DMA0_ERQ_ERQ7_SHIFT)                     /*!< DMA0_ERQ: ERQ7 Mask                     */
-#define DMA0_ERQ_ERQ7_SHIFT                      7                                                   /*!< DMA0_ERQ: ERQ7 Position                 */
-#define DMA0_ERQ_ERQ8_MASK                       (0x01UL << DMA0_ERQ_ERQ8_SHIFT)                     /*!< DMA0_ERQ: ERQ8 Mask                     */
-#define DMA0_ERQ_ERQ8_SHIFT                      8                                                   /*!< DMA0_ERQ: ERQ8 Position                 */
-#define DMA0_ERQ_ERQ9_MASK                       (0x01UL << DMA0_ERQ_ERQ9_SHIFT)                     /*!< DMA0_ERQ: ERQ9 Mask                     */
-#define DMA0_ERQ_ERQ9_SHIFT                      9                                                   /*!< DMA0_ERQ: ERQ9 Position                 */
-#define DMA0_ERQ_ERQ10_MASK                      (0x01UL << DMA0_ERQ_ERQ10_SHIFT)                    /*!< DMA0_ERQ: ERQ10 Mask                    */
-#define DMA0_ERQ_ERQ10_SHIFT                     10                                                  /*!< DMA0_ERQ: ERQ10 Position                */
-#define DMA0_ERQ_ERQ11_MASK                      (0x01UL << DMA0_ERQ_ERQ11_SHIFT)                    /*!< DMA0_ERQ: ERQ11 Mask                    */
-#define DMA0_ERQ_ERQ11_SHIFT                     11                                                  /*!< DMA0_ERQ: ERQ11 Position                */
-#define DMA0_ERQ_ERQ12_MASK                      (0x01UL << DMA0_ERQ_ERQ12_SHIFT)                    /*!< DMA0_ERQ: ERQ12 Mask                    */
-#define DMA0_ERQ_ERQ12_SHIFT                     12                                                  /*!< DMA0_ERQ: ERQ12 Position                */
-#define DMA0_ERQ_ERQ13_MASK                      (0x01UL << DMA0_ERQ_ERQ13_SHIFT)                    /*!< DMA0_ERQ: ERQ13 Mask                    */
-#define DMA0_ERQ_ERQ13_SHIFT                     13                                                  /*!< DMA0_ERQ: ERQ13 Position                */
-#define DMA0_ERQ_ERQ14_MASK                      (0x01UL << DMA0_ERQ_ERQ14_SHIFT)                    /*!< DMA0_ERQ: ERQ14 Mask                    */
-#define DMA0_ERQ_ERQ14_SHIFT                     14                                                  /*!< DMA0_ERQ: ERQ14 Position                */
-#define DMA0_ERQ_ERQ15_MASK                      (0x01UL << DMA0_ERQ_ERQ15_SHIFT)                    /*!< DMA0_ERQ: ERQ15 Mask                    */
-#define DMA0_ERQ_ERQ15_SHIFT                     15                                                  /*!< DMA0_ERQ: ERQ15 Position                */
+#define DMA_ERQ_ERQ0_MASK                        (0x01UL << DMA_ERQ_ERQ0_SHIFT)                      /*!< DMA0_ERQ: ERQ0 Mask                     */
+#define DMA_ERQ_ERQ0_SHIFT                       0                                                   /*!< DMA0_ERQ: ERQ0 Position                 */
+#define DMA_ERQ_ERQ1_MASK                        (0x01UL << DMA_ERQ_ERQ1_SHIFT)                      /*!< DMA0_ERQ: ERQ1 Mask                     */
+#define DMA_ERQ_ERQ1_SHIFT                       1                                                   /*!< DMA0_ERQ: ERQ1 Position                 */
+#define DMA_ERQ_ERQ2_MASK                        (0x01UL << DMA_ERQ_ERQ2_SHIFT)                      /*!< DMA0_ERQ: ERQ2 Mask                     */
+#define DMA_ERQ_ERQ2_SHIFT                       2                                                   /*!< DMA0_ERQ: ERQ2 Position                 */
+#define DMA_ERQ_ERQ3_MASK                        (0x01UL << DMA_ERQ_ERQ3_SHIFT)                      /*!< DMA0_ERQ: ERQ3 Mask                     */
+#define DMA_ERQ_ERQ3_SHIFT                       3                                                   /*!< DMA0_ERQ: ERQ3 Position                 */
+#define DMA_ERQ_ERQ4_MASK                        (0x01UL << DMA_ERQ_ERQ4_SHIFT)                      /*!< DMA0_ERQ: ERQ4 Mask                     */
+#define DMA_ERQ_ERQ4_SHIFT                       4                                                   /*!< DMA0_ERQ: ERQ4 Position                 */
+#define DMA_ERQ_ERQ5_MASK                        (0x01UL << DMA_ERQ_ERQ5_SHIFT)                      /*!< DMA0_ERQ: ERQ5 Mask                     */
+#define DMA_ERQ_ERQ5_SHIFT                       5                                                   /*!< DMA0_ERQ: ERQ5 Position                 */
+#define DMA_ERQ_ERQ6_MASK                        (0x01UL << DMA_ERQ_ERQ6_SHIFT)                      /*!< DMA0_ERQ: ERQ6 Mask                     */
+#define DMA_ERQ_ERQ6_SHIFT                       6                                                   /*!< DMA0_ERQ: ERQ6 Position                 */
+#define DMA_ERQ_ERQ7_MASK                        (0x01UL << DMA_ERQ_ERQ7_SHIFT)                      /*!< DMA0_ERQ: ERQ7 Mask                     */
+#define DMA_ERQ_ERQ7_SHIFT                       7                                                   /*!< DMA0_ERQ: ERQ7 Position                 */
+#define DMA_ERQ_ERQ8_MASK                        (0x01UL << DMA_ERQ_ERQ8_SHIFT)                      /*!< DMA0_ERQ: ERQ8 Mask                     */
+#define DMA_ERQ_ERQ8_SHIFT                       8                                                   /*!< DMA0_ERQ: ERQ8 Position                 */
+#define DMA_ERQ_ERQ9_MASK                        (0x01UL << DMA_ERQ_ERQ9_SHIFT)                      /*!< DMA0_ERQ: ERQ9 Mask                     */
+#define DMA_ERQ_ERQ9_SHIFT                       9                                                   /*!< DMA0_ERQ: ERQ9 Position                 */
+#define DMA_ERQ_ERQ10_MASK                       (0x01UL << DMA_ERQ_ERQ10_SHIFT)                     /*!< DMA0_ERQ: ERQ10 Mask                    */
+#define DMA_ERQ_ERQ10_SHIFT                      10                                                  /*!< DMA0_ERQ: ERQ10 Position                */
+#define DMA_ERQ_ERQ11_MASK                       (0x01UL << DMA_ERQ_ERQ11_SHIFT)                     /*!< DMA0_ERQ: ERQ11 Mask                    */
+#define DMA_ERQ_ERQ11_SHIFT                      11                                                  /*!< DMA0_ERQ: ERQ11 Position                */
+#define DMA_ERQ_ERQ12_MASK                       (0x01UL << DMA_ERQ_ERQ12_SHIFT)                     /*!< DMA0_ERQ: ERQ12 Mask                    */
+#define DMA_ERQ_ERQ12_SHIFT                      12                                                  /*!< DMA0_ERQ: ERQ12 Position                */
+#define DMA_ERQ_ERQ13_MASK                       (0x01UL << DMA_ERQ_ERQ13_SHIFT)                     /*!< DMA0_ERQ: ERQ13 Mask                    */
+#define DMA_ERQ_ERQ13_SHIFT                      13                                                  /*!< DMA0_ERQ: ERQ13 Position                */
+#define DMA_ERQ_ERQ14_MASK                       (0x01UL << DMA_ERQ_ERQ14_SHIFT)                     /*!< DMA0_ERQ: ERQ14 Mask                    */
+#define DMA_ERQ_ERQ14_SHIFT                      14                                                  /*!< DMA0_ERQ: ERQ14 Position                */
+#define DMA_ERQ_ERQ15_MASK                       (0x01UL << DMA_ERQ_ERQ15_SHIFT)                     /*!< DMA0_ERQ: ERQ15 Mask                    */
+#define DMA_ERQ_ERQ15_SHIFT                      15                                                  /*!< DMA0_ERQ: ERQ15 Position                */
 /* ------- EEI Bit Fields                           ------ */
-#define DMA0_EEI_EEI0_MASK                       (0x01UL << DMA0_EEI_EEI0_SHIFT)                     /*!< DMA0_EEI: EEI0 Mask                     */
-#define DMA0_EEI_EEI0_SHIFT                      0                                                   /*!< DMA0_EEI: EEI0 Position                 */
-#define DMA0_EEI_EEI1_MASK                       (0x01UL << DMA0_EEI_EEI1_SHIFT)                     /*!< DMA0_EEI: EEI1 Mask                     */
-#define DMA0_EEI_EEI1_SHIFT                      1                                                   /*!< DMA0_EEI: EEI1 Position                 */
-#define DMA0_EEI_EEI2_MASK                       (0x01UL << DMA0_EEI_EEI2_SHIFT)                     /*!< DMA0_EEI: EEI2 Mask                     */
-#define DMA0_EEI_EEI2_SHIFT                      2                                                   /*!< DMA0_EEI: EEI2 Position                 */
-#define DMA0_EEI_EEI3_MASK                       (0x01UL << DMA0_EEI_EEI3_SHIFT)                     /*!< DMA0_EEI: EEI3 Mask                     */
-#define DMA0_EEI_EEI3_SHIFT                      3                                                   /*!< DMA0_EEI: EEI3 Position                 */
-#define DMA0_EEI_EEI4_MASK                       (0x01UL << DMA0_EEI_EEI4_SHIFT)                     /*!< DMA0_EEI: EEI4 Mask                     */
-#define DMA0_EEI_EEI4_SHIFT                      4                                                   /*!< DMA0_EEI: EEI4 Position                 */
-#define DMA0_EEI_EEI5_MASK                       (0x01UL << DMA0_EEI_EEI5_SHIFT)                     /*!< DMA0_EEI: EEI5 Mask                     */
-#define DMA0_EEI_EEI5_SHIFT                      5                                                   /*!< DMA0_EEI: EEI5 Position                 */
-#define DMA0_EEI_EEI6_MASK                       (0x01UL << DMA0_EEI_EEI6_SHIFT)                     /*!< DMA0_EEI: EEI6 Mask                     */
-#define DMA0_EEI_EEI6_SHIFT                      6                                                   /*!< DMA0_EEI: EEI6 Position                 */
-#define DMA0_EEI_EEI7_MASK                       (0x01UL << DMA0_EEI_EEI7_SHIFT)                     /*!< DMA0_EEI: EEI7 Mask                     */
-#define DMA0_EEI_EEI7_SHIFT                      7                                                   /*!< DMA0_EEI: EEI7 Position                 */
-#define DMA0_EEI_EEI8_MASK                       (0x01UL << DMA0_EEI_EEI8_SHIFT)                     /*!< DMA0_EEI: EEI8 Mask                     */
-#define DMA0_EEI_EEI8_SHIFT                      8                                                   /*!< DMA0_EEI: EEI8 Position                 */
-#define DMA0_EEI_EEI9_MASK                       (0x01UL << DMA0_EEI_EEI9_SHIFT)                     /*!< DMA0_EEI: EEI9 Mask                     */
-#define DMA0_EEI_EEI9_SHIFT                      9                                                   /*!< DMA0_EEI: EEI9 Position                 */
-#define DMA0_EEI_EEI10_MASK                      (0x01UL << DMA0_EEI_EEI10_SHIFT)                    /*!< DMA0_EEI: EEI10 Mask                    */
-#define DMA0_EEI_EEI10_SHIFT                     10                                                  /*!< DMA0_EEI: EEI10 Position                */
-#define DMA0_EEI_EEI11_MASK                      (0x01UL << DMA0_EEI_EEI11_SHIFT)                    /*!< DMA0_EEI: EEI11 Mask                    */
-#define DMA0_EEI_EEI11_SHIFT                     11                                                  /*!< DMA0_EEI: EEI11 Position                */
-#define DMA0_EEI_EEI12_MASK                      (0x01UL << DMA0_EEI_EEI12_SHIFT)                    /*!< DMA0_EEI: EEI12 Mask                    */
-#define DMA0_EEI_EEI12_SHIFT                     12                                                  /*!< DMA0_EEI: EEI12 Position                */
-#define DMA0_EEI_EEI13_MASK                      (0x01UL << DMA0_EEI_EEI13_SHIFT)                    /*!< DMA0_EEI: EEI13 Mask                    */
-#define DMA0_EEI_EEI13_SHIFT                     13                                                  /*!< DMA0_EEI: EEI13 Position                */
-#define DMA0_EEI_EEI14_MASK                      (0x01UL << DMA0_EEI_EEI14_SHIFT)                    /*!< DMA0_EEI: EEI14 Mask                    */
-#define DMA0_EEI_EEI14_SHIFT                     14                                                  /*!< DMA0_EEI: EEI14 Position                */
-#define DMA0_EEI_EEI15_MASK                      (0x01UL << DMA0_EEI_EEI15_SHIFT)                    /*!< DMA0_EEI: EEI15 Mask                    */
-#define DMA0_EEI_EEI15_SHIFT                     15                                                  /*!< DMA0_EEI: EEI15 Position                */
+#define DMA_EEI_EEI0_MASK                        (0x01UL << DMA_EEI_EEI0_SHIFT)                      /*!< DMA0_EEI: EEI0 Mask                     */
+#define DMA_EEI_EEI0_SHIFT                       0                                                   /*!< DMA0_EEI: EEI0 Position                 */
+#define DMA_EEI_EEI1_MASK                        (0x01UL << DMA_EEI_EEI1_SHIFT)                      /*!< DMA0_EEI: EEI1 Mask                     */
+#define DMA_EEI_EEI1_SHIFT                       1                                                   /*!< DMA0_EEI: EEI1 Position                 */
+#define DMA_EEI_EEI2_MASK                        (0x01UL << DMA_EEI_EEI2_SHIFT)                      /*!< DMA0_EEI: EEI2 Mask                     */
+#define DMA_EEI_EEI2_SHIFT                       2                                                   /*!< DMA0_EEI: EEI2 Position                 */
+#define DMA_EEI_EEI3_MASK                        (0x01UL << DMA_EEI_EEI3_SHIFT)                      /*!< DMA0_EEI: EEI3 Mask                     */
+#define DMA_EEI_EEI3_SHIFT                       3                                                   /*!< DMA0_EEI: EEI3 Position                 */
+#define DMA_EEI_EEI4_MASK                        (0x01UL << DMA_EEI_EEI4_SHIFT)                      /*!< DMA0_EEI: EEI4 Mask                     */
+#define DMA_EEI_EEI4_SHIFT                       4                                                   /*!< DMA0_EEI: EEI4 Position                 */
+#define DMA_EEI_EEI5_MASK                        (0x01UL << DMA_EEI_EEI5_SHIFT)                      /*!< DMA0_EEI: EEI5 Mask                     */
+#define DMA_EEI_EEI5_SHIFT                       5                                                   /*!< DMA0_EEI: EEI5 Position                 */
+#define DMA_EEI_EEI6_MASK                        (0x01UL << DMA_EEI_EEI6_SHIFT)                      /*!< DMA0_EEI: EEI6 Mask                     */
+#define DMA_EEI_EEI6_SHIFT                       6                                                   /*!< DMA0_EEI: EEI6 Position                 */
+#define DMA_EEI_EEI7_MASK                        (0x01UL << DMA_EEI_EEI7_SHIFT)                      /*!< DMA0_EEI: EEI7 Mask                     */
+#define DMA_EEI_EEI7_SHIFT                       7                                                   /*!< DMA0_EEI: EEI7 Position                 */
+#define DMA_EEI_EEI8_MASK                        (0x01UL << DMA_EEI_EEI8_SHIFT)                      /*!< DMA0_EEI: EEI8 Mask                     */
+#define DMA_EEI_EEI8_SHIFT                       8                                                   /*!< DMA0_EEI: EEI8 Position                 */
+#define DMA_EEI_EEI9_MASK                        (0x01UL << DMA_EEI_EEI9_SHIFT)                      /*!< DMA0_EEI: EEI9 Mask                     */
+#define DMA_EEI_EEI9_SHIFT                       9                                                   /*!< DMA0_EEI: EEI9 Position                 */
+#define DMA_EEI_EEI10_MASK                       (0x01UL << DMA_EEI_EEI10_SHIFT)                     /*!< DMA0_EEI: EEI10 Mask                    */
+#define DMA_EEI_EEI10_SHIFT                      10                                                  /*!< DMA0_EEI: EEI10 Position                */
+#define DMA_EEI_EEI11_MASK                       (0x01UL << DMA_EEI_EEI11_SHIFT)                     /*!< DMA0_EEI: EEI11 Mask                    */
+#define DMA_EEI_EEI11_SHIFT                      11                                                  /*!< DMA0_EEI: EEI11 Position                */
+#define DMA_EEI_EEI12_MASK                       (0x01UL << DMA_EEI_EEI12_SHIFT)                     /*!< DMA0_EEI: EEI12 Mask                    */
+#define DMA_EEI_EEI12_SHIFT                      12                                                  /*!< DMA0_EEI: EEI12 Position                */
+#define DMA_EEI_EEI13_MASK                       (0x01UL << DMA_EEI_EEI13_SHIFT)                     /*!< DMA0_EEI: EEI13 Mask                    */
+#define DMA_EEI_EEI13_SHIFT                      13                                                  /*!< DMA0_EEI: EEI13 Position                */
+#define DMA_EEI_EEI14_MASK                       (0x01UL << DMA_EEI_EEI14_SHIFT)                     /*!< DMA0_EEI: EEI14 Mask                    */
+#define DMA_EEI_EEI14_SHIFT                      14                                                  /*!< DMA0_EEI: EEI14 Position                */
+#define DMA_EEI_EEI15_MASK                       (0x01UL << DMA_EEI_EEI15_SHIFT)                     /*!< DMA0_EEI: EEI15 Mask                    */
+#define DMA_EEI_EEI15_SHIFT                      15                                                  /*!< DMA0_EEI: EEI15 Position                */
 /* ------- CEEI Bit Fields                          ------ */
-#define DMA0_CEEI_CEEI_MASK                      (0x0FUL << DMA0_CEEI_CEEI_SHIFT)                    /*!< DMA0_CEEI: CEEI Mask                    */
-#define DMA0_CEEI_CEEI_SHIFT                     0                                                   /*!< DMA0_CEEI: CEEI Position                */
-#define DMA0_CEEI_CEEI(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_CEEI_CEEI_SHIFT))&DMA0_CEEI_CEEI_MASK) /*!< DMA0_CEEI                               */
-#define DMA0_CEEI_CAEE_MASK                      (0x01UL << DMA0_CEEI_CAEE_SHIFT)                    /*!< DMA0_CEEI: CAEE Mask                    */
-#define DMA0_CEEI_CAEE_SHIFT                     6                                                   /*!< DMA0_CEEI: CAEE Position                */
-#define DMA0_CEEI_NOP_MASK                       (0x01UL << DMA0_CEEI_NOP_SHIFT)                     /*!< DMA0_CEEI: NOP Mask                     */
-#define DMA0_CEEI_NOP_SHIFT                      7                                                   /*!< DMA0_CEEI: NOP Position                 */
+#define DMA_CEEI_CEEI_MASK                       (0x0FUL << DMA_CEEI_CEEI_SHIFT)                     /*!< DMA0_CEEI: CEEI Mask                    */
+#define DMA_CEEI_CEEI_SHIFT                      0                                                   /*!< DMA0_CEEI: CEEI Position                */
+#define DMA_CEEI_CEEI(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_CEEI_CEEI_SHIFT))&DMA_CEEI_CEEI_MASK) /*!< DMA0_CEEI                               */
+#define DMA_CEEI_CAEE_MASK                       (0x01UL << DMA_CEEI_CAEE_SHIFT)                     /*!< DMA0_CEEI: CAEE Mask                    */
+#define DMA_CEEI_CAEE_SHIFT                      6                                                   /*!< DMA0_CEEI: CAEE Position                */
+#define DMA_CEEI_NOP_MASK                        (0x01UL << DMA_CEEI_NOP_SHIFT)                      /*!< DMA0_CEEI: NOP Mask                     */
+#define DMA_CEEI_NOP_SHIFT                       7                                                   /*!< DMA0_CEEI: NOP Position                 */
 /* ------- SEEI Bit Fields                          ------ */
-#define DMA0_SEEI_SEEI_MASK                      (0x0FUL << DMA0_SEEI_SEEI_SHIFT)                    /*!< DMA0_SEEI: SEEI Mask                    */
-#define DMA0_SEEI_SEEI_SHIFT                     0                                                   /*!< DMA0_SEEI: SEEI Position                */
-#define DMA0_SEEI_SEEI(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_SEEI_SEEI_SHIFT))&DMA0_SEEI_SEEI_MASK) /*!< DMA0_SEEI                               */
-#define DMA0_SEEI_SAEE_MASK                      (0x01UL << DMA0_SEEI_SAEE_SHIFT)                    /*!< DMA0_SEEI: SAEE Mask                    */
-#define DMA0_SEEI_SAEE_SHIFT                     6                                                   /*!< DMA0_SEEI: SAEE Position                */
-#define DMA0_SEEI_NOP_MASK                       (0x01UL << DMA0_SEEI_NOP_SHIFT)                     /*!< DMA0_SEEI: NOP Mask                     */
-#define DMA0_SEEI_NOP_SHIFT                      7                                                   /*!< DMA0_SEEI: NOP Position                 */
+#define DMA_SEEI_SEEI_MASK                       (0x0FUL << DMA_SEEI_SEEI_SHIFT)                     /*!< DMA0_SEEI: SEEI Mask                    */
+#define DMA_SEEI_SEEI_SHIFT                      0                                                   /*!< DMA0_SEEI: SEEI Position                */
+#define DMA_SEEI_SEEI(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_SEEI_SEEI_SHIFT))&DMA_SEEI_SEEI_MASK) /*!< DMA0_SEEI                               */
+#define DMA_SEEI_SAEE_MASK                       (0x01UL << DMA_SEEI_SAEE_SHIFT)                     /*!< DMA0_SEEI: SAEE Mask                    */
+#define DMA_SEEI_SAEE_SHIFT                      6                                                   /*!< DMA0_SEEI: SAEE Position                */
+#define DMA_SEEI_NOP_MASK                        (0x01UL << DMA_SEEI_NOP_SHIFT)                      /*!< DMA0_SEEI: NOP Mask                     */
+#define DMA_SEEI_NOP_SHIFT                       7                                                   /*!< DMA0_SEEI: NOP Position                 */
 /* ------- CERQ Bit Fields                          ------ */
-#define DMA0_CERQ_CERQ_MASK                      (0x0FUL << DMA0_CERQ_CERQ_SHIFT)                    /*!< DMA0_CERQ: CERQ Mask                    */
-#define DMA0_CERQ_CERQ_SHIFT                     0                                                   /*!< DMA0_CERQ: CERQ Position                */
-#define DMA0_CERQ_CERQ(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_CERQ_CERQ_SHIFT))&DMA0_CERQ_CERQ_MASK) /*!< DMA0_CERQ                               */
-#define DMA0_CERQ_CAER_MASK                      (0x01UL << DMA0_CERQ_CAER_SHIFT)                    /*!< DMA0_CERQ: CAER Mask                    */
-#define DMA0_CERQ_CAER_SHIFT                     6                                                   /*!< DMA0_CERQ: CAER Position                */
-#define DMA0_CERQ_NOP_MASK                       (0x01UL << DMA0_CERQ_NOP_SHIFT)                     /*!< DMA0_CERQ: NOP Mask                     */
-#define DMA0_CERQ_NOP_SHIFT                      7                                                   /*!< DMA0_CERQ: NOP Position                 */
+#define DMA_CERQ_CERQ_MASK                       (0x0FUL << DMA_CERQ_CERQ_SHIFT)                     /*!< DMA0_CERQ: CERQ Mask                    */
+#define DMA_CERQ_CERQ_SHIFT                      0                                                   /*!< DMA0_CERQ: CERQ Position                */
+#define DMA_CERQ_CERQ(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_CERQ_CERQ_SHIFT))&DMA_CERQ_CERQ_MASK) /*!< DMA0_CERQ                               */
+#define DMA_CERQ_CAER_MASK                       (0x01UL << DMA_CERQ_CAER_SHIFT)                     /*!< DMA0_CERQ: CAER Mask                    */
+#define DMA_CERQ_CAER_SHIFT                      6                                                   /*!< DMA0_CERQ: CAER Position                */
+#define DMA_CERQ_NOP_MASK                        (0x01UL << DMA_CERQ_NOP_SHIFT)                      /*!< DMA0_CERQ: NOP Mask                     */
+#define DMA_CERQ_NOP_SHIFT                       7                                                   /*!< DMA0_CERQ: NOP Position                 */
 /* ------- SERQ Bit Fields                          ------ */
-#define DMA0_SERQ_SERQ_MASK                      (0x0FUL << DMA0_SERQ_SERQ_SHIFT)                    /*!< DMA0_SERQ: SERQ Mask                    */
-#define DMA0_SERQ_SERQ_SHIFT                     0                                                   /*!< DMA0_SERQ: SERQ Position                */
-#define DMA0_SERQ_SERQ(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_SERQ_SERQ_SHIFT))&DMA0_SERQ_SERQ_MASK) /*!< DMA0_SERQ                               */
-#define DMA0_SERQ_SAER_MASK                      (0x01UL << DMA0_SERQ_SAER_SHIFT)                    /*!< DMA0_SERQ: SAER Mask                    */
-#define DMA0_SERQ_SAER_SHIFT                     6                                                   /*!< DMA0_SERQ: SAER Position                */
-#define DMA0_SERQ_NOP_MASK                       (0x01UL << DMA0_SERQ_NOP_SHIFT)                     /*!< DMA0_SERQ: NOP Mask                     */
-#define DMA0_SERQ_NOP_SHIFT                      7                                                   /*!< DMA0_SERQ: NOP Position                 */
+#define DMA_SERQ_SERQ_MASK                       (0x0FUL << DMA_SERQ_SERQ_SHIFT)                     /*!< DMA0_SERQ: SERQ Mask                    */
+#define DMA_SERQ_SERQ_SHIFT                      0                                                   /*!< DMA0_SERQ: SERQ Position                */
+#define DMA_SERQ_SERQ(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_SERQ_SERQ_SHIFT))&DMA_SERQ_SERQ_MASK) /*!< DMA0_SERQ                               */
+#define DMA_SERQ_SAER_MASK                       (0x01UL << DMA_SERQ_SAER_SHIFT)                     /*!< DMA0_SERQ: SAER Mask                    */
+#define DMA_SERQ_SAER_SHIFT                      6                                                   /*!< DMA0_SERQ: SAER Position                */
+#define DMA_SERQ_NOP_MASK                        (0x01UL << DMA_SERQ_NOP_SHIFT)                      /*!< DMA0_SERQ: NOP Mask                     */
+#define DMA_SERQ_NOP_SHIFT                       7                                                   /*!< DMA0_SERQ: NOP Position                 */
 /* ------- CDNE Bit Fields                          ------ */
-#define DMA0_CDNE_CDNE_MASK                      (0x0FUL << DMA0_CDNE_CDNE_SHIFT)                    /*!< DMA0_CDNE: CDNE Mask                    */
-#define DMA0_CDNE_CDNE_SHIFT                     0                                                   /*!< DMA0_CDNE: CDNE Position                */
-#define DMA0_CDNE_CDNE(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_CDNE_CDNE_SHIFT))&DMA0_CDNE_CDNE_MASK) /*!< DMA0_CDNE                               */
-#define DMA0_CDNE_CADN_MASK                      (0x01UL << DMA0_CDNE_CADN_SHIFT)                    /*!< DMA0_CDNE: CADN Mask                    */
-#define DMA0_CDNE_CADN_SHIFT                     6                                                   /*!< DMA0_CDNE: CADN Position                */
-#define DMA0_CDNE_NOP_MASK                       (0x01UL << DMA0_CDNE_NOP_SHIFT)                     /*!< DMA0_CDNE: NOP Mask                     */
-#define DMA0_CDNE_NOP_SHIFT                      7                                                   /*!< DMA0_CDNE: NOP Position                 */
+#define DMA_CDNE_CDNE_MASK                       (0x0FUL << DMA_CDNE_CDNE_SHIFT)                     /*!< DMA0_CDNE: CDNE Mask                    */
+#define DMA_CDNE_CDNE_SHIFT                      0                                                   /*!< DMA0_CDNE: CDNE Position                */
+#define DMA_CDNE_CDNE(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_CDNE_CDNE_SHIFT))&DMA_CDNE_CDNE_MASK) /*!< DMA0_CDNE                               */
+#define DMA_CDNE_CADN_MASK                       (0x01UL << DMA_CDNE_CADN_SHIFT)                     /*!< DMA0_CDNE: CADN Mask                    */
+#define DMA_CDNE_CADN_SHIFT                      6                                                   /*!< DMA0_CDNE: CADN Position                */
+#define DMA_CDNE_NOP_MASK                        (0x01UL << DMA_CDNE_NOP_SHIFT)                      /*!< DMA0_CDNE: NOP Mask                     */
+#define DMA_CDNE_NOP_SHIFT                       7                                                   /*!< DMA0_CDNE: NOP Position                 */
 /* ------- SSRT Bit Fields                          ------ */
-#define DMA0_SSRT_SSRT_MASK                      (0x0FUL << DMA0_SSRT_SSRT_SHIFT)                    /*!< DMA0_SSRT: SSRT Mask                    */
-#define DMA0_SSRT_SSRT_SHIFT                     0                                                   /*!< DMA0_SSRT: SSRT Position                */
-#define DMA0_SSRT_SSRT(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_SSRT_SSRT_SHIFT))&DMA0_SSRT_SSRT_MASK) /*!< DMA0_SSRT                               */
-#define DMA0_SSRT_SAST_MASK                      (0x01UL << DMA0_SSRT_SAST_SHIFT)                    /*!< DMA0_SSRT: SAST Mask                    */
-#define DMA0_SSRT_SAST_SHIFT                     6                                                   /*!< DMA0_SSRT: SAST Position                */
-#define DMA0_SSRT_NOP_MASK                       (0x01UL << DMA0_SSRT_NOP_SHIFT)                     /*!< DMA0_SSRT: NOP Mask                     */
-#define DMA0_SSRT_NOP_SHIFT                      7                                                   /*!< DMA0_SSRT: NOP Position                 */
+#define DMA_SSRT_SSRT_MASK                       (0x0FUL << DMA_SSRT_SSRT_SHIFT)                     /*!< DMA0_SSRT: SSRT Mask                    */
+#define DMA_SSRT_SSRT_SHIFT                      0                                                   /*!< DMA0_SSRT: SSRT Position                */
+#define DMA_SSRT_SSRT(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_SSRT_SSRT_SHIFT))&DMA_SSRT_SSRT_MASK) /*!< DMA0_SSRT                               */
+#define DMA_SSRT_SAST_MASK                       (0x01UL << DMA_SSRT_SAST_SHIFT)                     /*!< DMA0_SSRT: SAST Mask                    */
+#define DMA_SSRT_SAST_SHIFT                      6                                                   /*!< DMA0_SSRT: SAST Position                */
+#define DMA_SSRT_NOP_MASK                        (0x01UL << DMA_SSRT_NOP_SHIFT)                      /*!< DMA0_SSRT: NOP Mask                     */
+#define DMA_SSRT_NOP_SHIFT                       7                                                   /*!< DMA0_SSRT: NOP Position                 */
 /* ------- CERR Bit Fields                          ------ */
-#define DMA0_CERR_CERR_MASK                      (0x0FUL << DMA0_CERR_CERR_SHIFT)                    /*!< DMA0_CERR: CERR Mask                    */
-#define DMA0_CERR_CERR_SHIFT                     0                                                   /*!< DMA0_CERR: CERR Position                */
-#define DMA0_CERR_CERR(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_CERR_CERR_SHIFT))&DMA0_CERR_CERR_MASK) /*!< DMA0_CERR                               */
-#define DMA0_CERR_CAEI_MASK                      (0x01UL << DMA0_CERR_CAEI_SHIFT)                    /*!< DMA0_CERR: CAEI Mask                    */
-#define DMA0_CERR_CAEI_SHIFT                     6                                                   /*!< DMA0_CERR: CAEI Position                */
-#define DMA0_CERR_NOP_MASK                       (0x01UL << DMA0_CERR_NOP_SHIFT)                     /*!< DMA0_CERR: NOP Mask                     */
-#define DMA0_CERR_NOP_SHIFT                      7                                                   /*!< DMA0_CERR: NOP Position                 */
+#define DMA_CERR_CERR_MASK                       (0x0FUL << DMA_CERR_CERR_SHIFT)                     /*!< DMA0_CERR: CERR Mask                    */
+#define DMA_CERR_CERR_SHIFT                      0                                                   /*!< DMA0_CERR: CERR Position                */
+#define DMA_CERR_CERR(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_CERR_CERR_SHIFT))&DMA_CERR_CERR_MASK) /*!< DMA0_CERR                               */
+#define DMA_CERR_CAEI_MASK                       (0x01UL << DMA_CERR_CAEI_SHIFT)                     /*!< DMA0_CERR: CAEI Mask                    */
+#define DMA_CERR_CAEI_SHIFT                      6                                                   /*!< DMA0_CERR: CAEI Position                */
+#define DMA_CERR_NOP_MASK                        (0x01UL << DMA_CERR_NOP_SHIFT)                      /*!< DMA0_CERR: NOP Mask                     */
+#define DMA_CERR_NOP_SHIFT                       7                                                   /*!< DMA0_CERR: NOP Position                 */
 /* ------- CINT Bit Fields                          ------ */
-#define DMA0_CINT_CINT_MASK                      (0x0FUL << DMA0_CINT_CINT_SHIFT)                    /*!< DMA0_CINT: CINT Mask                    */
-#define DMA0_CINT_CINT_SHIFT                     0                                                   /*!< DMA0_CINT: CINT Position                */
-#define DMA0_CINT_CINT(x)                        (((uint8_t)(((uint8_t)(x))<<DMA0_CINT_CINT_SHIFT))&DMA0_CINT_CINT_MASK) /*!< DMA0_CINT                               */
-#define DMA0_CINT_CAIR_MASK                      (0x01UL << DMA0_CINT_CAIR_SHIFT)                    /*!< DMA0_CINT: CAIR Mask                    */
-#define DMA0_CINT_CAIR_SHIFT                     6                                                   /*!< DMA0_CINT: CAIR Position                */
-#define DMA0_CINT_NOP_MASK                       (0x01UL << DMA0_CINT_NOP_SHIFT)                     /*!< DMA0_CINT: NOP Mask                     */
-#define DMA0_CINT_NOP_SHIFT                      7                                                   /*!< DMA0_CINT: NOP Position                 */
+#define DMA_CINT_CINT_MASK                       (0x0FUL << DMA_CINT_CINT_SHIFT)                     /*!< DMA0_CINT: CINT Mask                    */
+#define DMA_CINT_CINT_SHIFT                      0                                                   /*!< DMA0_CINT: CINT Position                */
+#define DMA_CINT_CINT(x)                         (((uint8_t)(((uint8_t)(x))<<DMA_CINT_CINT_SHIFT))&DMA_CINT_CINT_MASK) /*!< DMA0_CINT                               */
+#define DMA_CINT_CAIR_MASK                       (0x01UL << DMA_CINT_CAIR_SHIFT)                     /*!< DMA0_CINT: CAIR Mask                    */
+#define DMA_CINT_CAIR_SHIFT                      6                                                   /*!< DMA0_CINT: CAIR Position                */
+#define DMA_CINT_NOP_MASK                        (0x01UL << DMA_CINT_NOP_SHIFT)                      /*!< DMA0_CINT: NOP Mask                     */
+#define DMA_CINT_NOP_SHIFT                       7                                                   /*!< DMA0_CINT: NOP Position                 */
 /* ------- INT Bit Fields                           ------ */
-#define DMA0_INT_INT0_MASK                       (0x01UL << DMA0_INT_INT0_SHIFT)                     /*!< DMA0_INT: INT0 Mask                     */
-#define DMA0_INT_INT0_SHIFT                      0                                                   /*!< DMA0_INT: INT0 Position                 */
-#define DMA0_INT_INT1_MASK                       (0x01UL << DMA0_INT_INT1_SHIFT)                     /*!< DMA0_INT: INT1 Mask                     */
-#define DMA0_INT_INT1_SHIFT                      1                                                   /*!< DMA0_INT: INT1 Position                 */
-#define DMA0_INT_INT2_MASK                       (0x01UL << DMA0_INT_INT2_SHIFT)                     /*!< DMA0_INT: INT2 Mask                     */
-#define DMA0_INT_INT2_SHIFT                      2                                                   /*!< DMA0_INT: INT2 Position                 */
-#define DMA0_INT_INT3_MASK                       (0x01UL << DMA0_INT_INT3_SHIFT)                     /*!< DMA0_INT: INT3 Mask                     */
-#define DMA0_INT_INT3_SHIFT                      3                                                   /*!< DMA0_INT: INT3 Position                 */
-#define DMA0_INT_INT4_MASK                       (0x01UL << DMA0_INT_INT4_SHIFT)                     /*!< DMA0_INT: INT4 Mask                     */
-#define DMA0_INT_INT4_SHIFT                      4                                                   /*!< DMA0_INT: INT4 Position                 */
-#define DMA0_INT_INT5_MASK                       (0x01UL << DMA0_INT_INT5_SHIFT)                     /*!< DMA0_INT: INT5 Mask                     */
-#define DMA0_INT_INT5_SHIFT                      5                                                   /*!< DMA0_INT: INT5 Position                 */
-#define DMA0_INT_INT6_MASK                       (0x01UL << DMA0_INT_INT6_SHIFT)                     /*!< DMA0_INT: INT6 Mask                     */
-#define DMA0_INT_INT6_SHIFT                      6                                                   /*!< DMA0_INT: INT6 Position                 */
-#define DMA0_INT_INT7_MASK                       (0x01UL << DMA0_INT_INT7_SHIFT)                     /*!< DMA0_INT: INT7 Mask                     */
-#define DMA0_INT_INT7_SHIFT                      7                                                   /*!< DMA0_INT: INT7 Position                 */
-#define DMA0_INT_INT8_MASK                       (0x01UL << DMA0_INT_INT8_SHIFT)                     /*!< DMA0_INT: INT8 Mask                     */
-#define DMA0_INT_INT8_SHIFT                      8                                                   /*!< DMA0_INT: INT8 Position                 */
-#define DMA0_INT_INT9_MASK                       (0x01UL << DMA0_INT_INT9_SHIFT)                     /*!< DMA0_INT: INT9 Mask                     */
-#define DMA0_INT_INT9_SHIFT                      9                                                   /*!< DMA0_INT: INT9 Position                 */
-#define DMA0_INT_INT10_MASK                      (0x01UL << DMA0_INT_INT10_SHIFT)                    /*!< DMA0_INT: INT10 Mask                    */
-#define DMA0_INT_INT10_SHIFT                     10                                                  /*!< DMA0_INT: INT10 Position                */
-#define DMA0_INT_INT11_MASK                      (0x01UL << DMA0_INT_INT11_SHIFT)                    /*!< DMA0_INT: INT11 Mask                    */
-#define DMA0_INT_INT11_SHIFT                     11                                                  /*!< DMA0_INT: INT11 Position                */
-#define DMA0_INT_INT12_MASK                      (0x01UL << DMA0_INT_INT12_SHIFT)                    /*!< DMA0_INT: INT12 Mask                    */
-#define DMA0_INT_INT12_SHIFT                     12                                                  /*!< DMA0_INT: INT12 Position                */
-#define DMA0_INT_INT13_MASK                      (0x01UL << DMA0_INT_INT13_SHIFT)                    /*!< DMA0_INT: INT13 Mask                    */
-#define DMA0_INT_INT13_SHIFT                     13                                                  /*!< DMA0_INT: INT13 Position                */
-#define DMA0_INT_INT14_MASK                      (0x01UL << DMA0_INT_INT14_SHIFT)                    /*!< DMA0_INT: INT14 Mask                    */
-#define DMA0_INT_INT14_SHIFT                     14                                                  /*!< DMA0_INT: INT14 Position                */
-#define DMA0_INT_INT15_MASK                      (0x01UL << DMA0_INT_INT15_SHIFT)                    /*!< DMA0_INT: INT15 Mask                    */
-#define DMA0_INT_INT15_SHIFT                     15                                                  /*!< DMA0_INT: INT15 Position                */
+#define DMA_INT_INT0_MASK                        (0x01UL << DMA_INT_INT0_SHIFT)                      /*!< DMA0_INT: INT0 Mask                     */
+#define DMA_INT_INT0_SHIFT                       0                                                   /*!< DMA0_INT: INT0 Position                 */
+#define DMA_INT_INT1_MASK                        (0x01UL << DMA_INT_INT1_SHIFT)                      /*!< DMA0_INT: INT1 Mask                     */
+#define DMA_INT_INT1_SHIFT                       1                                                   /*!< DMA0_INT: INT1 Position                 */
+#define DMA_INT_INT2_MASK                        (0x01UL << DMA_INT_INT2_SHIFT)                      /*!< DMA0_INT: INT2 Mask                     */
+#define DMA_INT_INT2_SHIFT                       2                                                   /*!< DMA0_INT: INT2 Position                 */
+#define DMA_INT_INT3_MASK                        (0x01UL << DMA_INT_INT3_SHIFT)                      /*!< DMA0_INT: INT3 Mask                     */
+#define DMA_INT_INT3_SHIFT                       3                                                   /*!< DMA0_INT: INT3 Position                 */
+#define DMA_INT_INT4_MASK                        (0x01UL << DMA_INT_INT4_SHIFT)                      /*!< DMA0_INT: INT4 Mask                     */
+#define DMA_INT_INT4_SHIFT                       4                                                   /*!< DMA0_INT: INT4 Position                 */
+#define DMA_INT_INT5_MASK                        (0x01UL << DMA_INT_INT5_SHIFT)                      /*!< DMA0_INT: INT5 Mask                     */
+#define DMA_INT_INT5_SHIFT                       5                                                   /*!< DMA0_INT: INT5 Position                 */
+#define DMA_INT_INT6_MASK                        (0x01UL << DMA_INT_INT6_SHIFT)                      /*!< DMA0_INT: INT6 Mask                     */
+#define DMA_INT_INT6_SHIFT                       6                                                   /*!< DMA0_INT: INT6 Position                 */
+#define DMA_INT_INT7_MASK                        (0x01UL << DMA_INT_INT7_SHIFT)                      /*!< DMA0_INT: INT7 Mask                     */
+#define DMA_INT_INT7_SHIFT                       7                                                   /*!< DMA0_INT: INT7 Position                 */
+#define DMA_INT_INT8_MASK                        (0x01UL << DMA_INT_INT8_SHIFT)                      /*!< DMA0_INT: INT8 Mask                     */
+#define DMA_INT_INT8_SHIFT                       8                                                   /*!< DMA0_INT: INT8 Position                 */
+#define DMA_INT_INT9_MASK                        (0x01UL << DMA_INT_INT9_SHIFT)                      /*!< DMA0_INT: INT9 Mask                     */
+#define DMA_INT_INT9_SHIFT                       9                                                   /*!< DMA0_INT: INT9 Position                 */
+#define DMA_INT_INT10_MASK                       (0x01UL << DMA_INT_INT10_SHIFT)                     /*!< DMA0_INT: INT10 Mask                    */
+#define DMA_INT_INT10_SHIFT                      10                                                  /*!< DMA0_INT: INT10 Position                */
+#define DMA_INT_INT11_MASK                       (0x01UL << DMA_INT_INT11_SHIFT)                     /*!< DMA0_INT: INT11 Mask                    */
+#define DMA_INT_INT11_SHIFT                      11                                                  /*!< DMA0_INT: INT11 Position                */
+#define DMA_INT_INT12_MASK                       (0x01UL << DMA_INT_INT12_SHIFT)                     /*!< DMA0_INT: INT12 Mask                    */
+#define DMA_INT_INT12_SHIFT                      12                                                  /*!< DMA0_INT: INT12 Position                */
+#define DMA_INT_INT13_MASK                       (0x01UL << DMA_INT_INT13_SHIFT)                     /*!< DMA0_INT: INT13 Mask                    */
+#define DMA_INT_INT13_SHIFT                      13                                                  /*!< DMA0_INT: INT13 Position                */
+#define DMA_INT_INT14_MASK                       (0x01UL << DMA_INT_INT14_SHIFT)                     /*!< DMA0_INT: INT14 Mask                    */
+#define DMA_INT_INT14_SHIFT                      14                                                  /*!< DMA0_INT: INT14 Position                */
+#define DMA_INT_INT15_MASK                       (0x01UL << DMA_INT_INT15_SHIFT)                     /*!< DMA0_INT: INT15 Mask                    */
+#define DMA_INT_INT15_SHIFT                      15                                                  /*!< DMA0_INT: INT15 Position                */
 /* ------- ERR Bit Fields                           ------ */
-#define DMA0_ERR_ERR0_MASK                       (0x01UL << DMA0_ERR_ERR0_SHIFT)                     /*!< DMA0_ERR: ERR0 Mask                     */
-#define DMA0_ERR_ERR0_SHIFT                      0                                                   /*!< DMA0_ERR: ERR0 Position                 */
-#define DMA0_ERR_ERR1_MASK                       (0x01UL << DMA0_ERR_ERR1_SHIFT)                     /*!< DMA0_ERR: ERR1 Mask                     */
-#define DMA0_ERR_ERR1_SHIFT                      1                                                   /*!< DMA0_ERR: ERR1 Position                 */
-#define DMA0_ERR_ERR2_MASK                       (0x01UL << DMA0_ERR_ERR2_SHIFT)                     /*!< DMA0_ERR: ERR2 Mask                     */
-#define DMA0_ERR_ERR2_SHIFT                      2                                                   /*!< DMA0_ERR: ERR2 Position                 */
-#define DMA0_ERR_ERR3_MASK                       (0x01UL << DMA0_ERR_ERR3_SHIFT)                     /*!< DMA0_ERR: ERR3 Mask                     */
-#define DMA0_ERR_ERR3_SHIFT                      3                                                   /*!< DMA0_ERR: ERR3 Position                 */
-#define DMA0_ERR_ERR4_MASK                       (0x01UL << DMA0_ERR_ERR4_SHIFT)                     /*!< DMA0_ERR: ERR4 Mask                     */
-#define DMA0_ERR_ERR4_SHIFT                      4                                                   /*!< DMA0_ERR: ERR4 Position                 */
-#define DMA0_ERR_ERR5_MASK                       (0x01UL << DMA0_ERR_ERR5_SHIFT)                     /*!< DMA0_ERR: ERR5 Mask                     */
-#define DMA0_ERR_ERR5_SHIFT                      5                                                   /*!< DMA0_ERR: ERR5 Position                 */
-#define DMA0_ERR_ERR6_MASK                       (0x01UL << DMA0_ERR_ERR6_SHIFT)                     /*!< DMA0_ERR: ERR6 Mask                     */
-#define DMA0_ERR_ERR6_SHIFT                      6                                                   /*!< DMA0_ERR: ERR6 Position                 */
-#define DMA0_ERR_ERR7_MASK                       (0x01UL << DMA0_ERR_ERR7_SHIFT)                     /*!< DMA0_ERR: ERR7 Mask                     */
-#define DMA0_ERR_ERR7_SHIFT                      7                                                   /*!< DMA0_ERR: ERR7 Position                 */
-#define DMA0_ERR_ERR8_MASK                       (0x01UL << DMA0_ERR_ERR8_SHIFT)                     /*!< DMA0_ERR: ERR8 Mask                     */
-#define DMA0_ERR_ERR8_SHIFT                      8                                                   /*!< DMA0_ERR: ERR8 Position                 */
-#define DMA0_ERR_ERR9_MASK                       (0x01UL << DMA0_ERR_ERR9_SHIFT)                     /*!< DMA0_ERR: ERR9 Mask                     */
-#define DMA0_ERR_ERR9_SHIFT                      9                                                   /*!< DMA0_ERR: ERR9 Position                 */
-#define DMA0_ERR_ERR10_MASK                      (0x01UL << DMA0_ERR_ERR10_SHIFT)                    /*!< DMA0_ERR: ERR10 Mask                    */
-#define DMA0_ERR_ERR10_SHIFT                     10                                                  /*!< DMA0_ERR: ERR10 Position                */
-#define DMA0_ERR_ERR11_MASK                      (0x01UL << DMA0_ERR_ERR11_SHIFT)                    /*!< DMA0_ERR: ERR11 Mask                    */
-#define DMA0_ERR_ERR11_SHIFT                     11                                                  /*!< DMA0_ERR: ERR11 Position                */
-#define DMA0_ERR_ERR12_MASK                      (0x01UL << DMA0_ERR_ERR12_SHIFT)                    /*!< DMA0_ERR: ERR12 Mask                    */
-#define DMA0_ERR_ERR12_SHIFT                     12                                                  /*!< DMA0_ERR: ERR12 Position                */
-#define DMA0_ERR_ERR13_MASK                      (0x01UL << DMA0_ERR_ERR13_SHIFT)                    /*!< DMA0_ERR: ERR13 Mask                    */
-#define DMA0_ERR_ERR13_SHIFT                     13                                                  /*!< DMA0_ERR: ERR13 Position                */
-#define DMA0_ERR_ERR14_MASK                      (0x01UL << DMA0_ERR_ERR14_SHIFT)                    /*!< DMA0_ERR: ERR14 Mask                    */
-#define DMA0_ERR_ERR14_SHIFT                     14                                                  /*!< DMA0_ERR: ERR14 Position                */
-#define DMA0_ERR_ERR15_MASK                      (0x01UL << DMA0_ERR_ERR15_SHIFT)                    /*!< DMA0_ERR: ERR15 Mask                    */
-#define DMA0_ERR_ERR15_SHIFT                     15                                                  /*!< DMA0_ERR: ERR15 Position                */
+#define DMA_ERR_ERR0_MASK                        (0x01UL << DMA_ERR_ERR0_SHIFT)                      /*!< DMA0_ERR: ERR0 Mask                     */
+#define DMA_ERR_ERR0_SHIFT                       0                                                   /*!< DMA0_ERR: ERR0 Position                 */
+#define DMA_ERR_ERR1_MASK                        (0x01UL << DMA_ERR_ERR1_SHIFT)                      /*!< DMA0_ERR: ERR1 Mask                     */
+#define DMA_ERR_ERR1_SHIFT                       1                                                   /*!< DMA0_ERR: ERR1 Position                 */
+#define DMA_ERR_ERR2_MASK                        (0x01UL << DMA_ERR_ERR2_SHIFT)                      /*!< DMA0_ERR: ERR2 Mask                     */
+#define DMA_ERR_ERR2_SHIFT                       2                                                   /*!< DMA0_ERR: ERR2 Position                 */
+#define DMA_ERR_ERR3_MASK                        (0x01UL << DMA_ERR_ERR3_SHIFT)                      /*!< DMA0_ERR: ERR3 Mask                     */
+#define DMA_ERR_ERR3_SHIFT                       3                                                   /*!< DMA0_ERR: ERR3 Position                 */
+#define DMA_ERR_ERR4_MASK                        (0x01UL << DMA_ERR_ERR4_SHIFT)                      /*!< DMA0_ERR: ERR4 Mask                     */
+#define DMA_ERR_ERR4_SHIFT                       4                                                   /*!< DMA0_ERR: ERR4 Position                 */
+#define DMA_ERR_ERR5_MASK                        (0x01UL << DMA_ERR_ERR5_SHIFT)                      /*!< DMA0_ERR: ERR5 Mask                     */
+#define DMA_ERR_ERR5_SHIFT                       5                                                   /*!< DMA0_ERR: ERR5 Position                 */
+#define DMA_ERR_ERR6_MASK                        (0x01UL << DMA_ERR_ERR6_SHIFT)                      /*!< DMA0_ERR: ERR6 Mask                     */
+#define DMA_ERR_ERR6_SHIFT                       6                                                   /*!< DMA0_ERR: ERR6 Position                 */
+#define DMA_ERR_ERR7_MASK                        (0x01UL << DMA_ERR_ERR7_SHIFT)                      /*!< DMA0_ERR: ERR7 Mask                     */
+#define DMA_ERR_ERR7_SHIFT                       7                                                   /*!< DMA0_ERR: ERR7 Position                 */
+#define DMA_ERR_ERR8_MASK                        (0x01UL << DMA_ERR_ERR8_SHIFT)                      /*!< DMA0_ERR: ERR8 Mask                     */
+#define DMA_ERR_ERR8_SHIFT                       8                                                   /*!< DMA0_ERR: ERR8 Position                 */
+#define DMA_ERR_ERR9_MASK                        (0x01UL << DMA_ERR_ERR9_SHIFT)                      /*!< DMA0_ERR: ERR9 Mask                     */
+#define DMA_ERR_ERR9_SHIFT                       9                                                   /*!< DMA0_ERR: ERR9 Position                 */
+#define DMA_ERR_ERR10_MASK                       (0x01UL << DMA_ERR_ERR10_SHIFT)                     /*!< DMA0_ERR: ERR10 Mask                    */
+#define DMA_ERR_ERR10_SHIFT                      10                                                  /*!< DMA0_ERR: ERR10 Position                */
+#define DMA_ERR_ERR11_MASK                       (0x01UL << DMA_ERR_ERR11_SHIFT)                     /*!< DMA0_ERR: ERR11 Mask                    */
+#define DMA_ERR_ERR11_SHIFT                      11                                                  /*!< DMA0_ERR: ERR11 Position                */
+#define DMA_ERR_ERR12_MASK                       (0x01UL << DMA_ERR_ERR12_SHIFT)                     /*!< DMA0_ERR: ERR12 Mask                    */
+#define DMA_ERR_ERR12_SHIFT                      12                                                  /*!< DMA0_ERR: ERR12 Position                */
+#define DMA_ERR_ERR13_MASK                       (0x01UL << DMA_ERR_ERR13_SHIFT)                     /*!< DMA0_ERR: ERR13 Mask                    */
+#define DMA_ERR_ERR13_SHIFT                      13                                                  /*!< DMA0_ERR: ERR13 Position                */
+#define DMA_ERR_ERR14_MASK                       (0x01UL << DMA_ERR_ERR14_SHIFT)                     /*!< DMA0_ERR: ERR14 Mask                    */
+#define DMA_ERR_ERR14_SHIFT                      14                                                  /*!< DMA0_ERR: ERR14 Position                */
+#define DMA_ERR_ERR15_MASK                       (0x01UL << DMA_ERR_ERR15_SHIFT)                     /*!< DMA0_ERR: ERR15 Mask                    */
+#define DMA_ERR_ERR15_SHIFT                      15                                                  /*!< DMA0_ERR: ERR15 Position                */
 /* ------- HRS Bit Fields                           ------ */
-#define DMA0_HRS_HRS0_MASK                       (0x01UL << DMA0_HRS_HRS0_SHIFT)                     /*!< DMA0_HRS: HRS0 Mask                     */
-#define DMA0_HRS_HRS0_SHIFT                      0                                                   /*!< DMA0_HRS: HRS0 Position                 */
-#define DMA0_HRS_HRS1_MASK                       (0x01UL << DMA0_HRS_HRS1_SHIFT)                     /*!< DMA0_HRS: HRS1 Mask                     */
-#define DMA0_HRS_HRS1_SHIFT                      1                                                   /*!< DMA0_HRS: HRS1 Position                 */
-#define DMA0_HRS_HRS2_MASK                       (0x01UL << DMA0_HRS_HRS2_SHIFT)                     /*!< DMA0_HRS: HRS2 Mask                     */
-#define DMA0_HRS_HRS2_SHIFT                      2                                                   /*!< DMA0_HRS: HRS2 Position                 */
-#define DMA0_HRS_HRS3_MASK                       (0x01UL << DMA0_HRS_HRS3_SHIFT)                     /*!< DMA0_HRS: HRS3 Mask                     */
-#define DMA0_HRS_HRS3_SHIFT                      3                                                   /*!< DMA0_HRS: HRS3 Position                 */
-#define DMA0_HRS_HRS4_MASK                       (0x01UL << DMA0_HRS_HRS4_SHIFT)                     /*!< DMA0_HRS: HRS4 Mask                     */
-#define DMA0_HRS_HRS4_SHIFT                      4                                                   /*!< DMA0_HRS: HRS4 Position                 */
-#define DMA0_HRS_HRS5_MASK                       (0x01UL << DMA0_HRS_HRS5_SHIFT)                     /*!< DMA0_HRS: HRS5 Mask                     */
-#define DMA0_HRS_HRS5_SHIFT                      5                                                   /*!< DMA0_HRS: HRS5 Position                 */
-#define DMA0_HRS_HRS6_MASK                       (0x01UL << DMA0_HRS_HRS6_SHIFT)                     /*!< DMA0_HRS: HRS6 Mask                     */
-#define DMA0_HRS_HRS6_SHIFT                      6                                                   /*!< DMA0_HRS: HRS6 Position                 */
-#define DMA0_HRS_HRS7_MASK                       (0x01UL << DMA0_HRS_HRS7_SHIFT)                     /*!< DMA0_HRS: HRS7 Mask                     */
-#define DMA0_HRS_HRS7_SHIFT                      7                                                   /*!< DMA0_HRS: HRS7 Position                 */
-#define DMA0_HRS_HRS8_MASK                       (0x01UL << DMA0_HRS_HRS8_SHIFT)                     /*!< DMA0_HRS: HRS8 Mask                     */
-#define DMA0_HRS_HRS8_SHIFT                      8                                                   /*!< DMA0_HRS: HRS8 Position                 */
-#define DMA0_HRS_HRS9_MASK                       (0x01UL << DMA0_HRS_HRS9_SHIFT)                     /*!< DMA0_HRS: HRS9 Mask                     */
-#define DMA0_HRS_HRS9_SHIFT                      9                                                   /*!< DMA0_HRS: HRS9 Position                 */
-#define DMA0_HRS_HRS10_MASK                      (0x01UL << DMA0_HRS_HRS10_SHIFT)                    /*!< DMA0_HRS: HRS10 Mask                    */
-#define DMA0_HRS_HRS10_SHIFT                     10                                                  /*!< DMA0_HRS: HRS10 Position                */
-#define DMA0_HRS_HRS11_MASK                      (0x01UL << DMA0_HRS_HRS11_SHIFT)                    /*!< DMA0_HRS: HRS11 Mask                    */
-#define DMA0_HRS_HRS11_SHIFT                     11                                                  /*!< DMA0_HRS: HRS11 Position                */
-#define DMA0_HRS_HRS12_MASK                      (0x01UL << DMA0_HRS_HRS12_SHIFT)                    /*!< DMA0_HRS: HRS12 Mask                    */
-#define DMA0_HRS_HRS12_SHIFT                     12                                                  /*!< DMA0_HRS: HRS12 Position                */
-#define DMA0_HRS_HRS13_MASK                      (0x01UL << DMA0_HRS_HRS13_SHIFT)                    /*!< DMA0_HRS: HRS13 Mask                    */
-#define DMA0_HRS_HRS13_SHIFT                     13                                                  /*!< DMA0_HRS: HRS13 Position                */
-#define DMA0_HRS_HRS14_MASK                      (0x01UL << DMA0_HRS_HRS14_SHIFT)                    /*!< DMA0_HRS: HRS14 Mask                    */
-#define DMA0_HRS_HRS14_SHIFT                     14                                                  /*!< DMA0_HRS: HRS14 Position                */
-#define DMA0_HRS_HRS15_MASK                      (0x01UL << DMA0_HRS_HRS15_SHIFT)                    /*!< DMA0_HRS: HRS15 Mask                    */
-#define DMA0_HRS_HRS15_SHIFT                     15                                                  /*!< DMA0_HRS: HRS15 Position                */
+#define DMA_HRS_HRS0_MASK                        (0x01UL << DMA_HRS_HRS0_SHIFT)                      /*!< DMA0_HRS: HRS0 Mask                     */
+#define DMA_HRS_HRS0_SHIFT                       0                                                   /*!< DMA0_HRS: HRS0 Position                 */
+#define DMA_HRS_HRS1_MASK                        (0x01UL << DMA_HRS_HRS1_SHIFT)                      /*!< DMA0_HRS: HRS1 Mask                     */
+#define DMA_HRS_HRS1_SHIFT                       1                                                   /*!< DMA0_HRS: HRS1 Position                 */
+#define DMA_HRS_HRS2_MASK                        (0x01UL << DMA_HRS_HRS2_SHIFT)                      /*!< DMA0_HRS: HRS2 Mask                     */
+#define DMA_HRS_HRS2_SHIFT                       2                                                   /*!< DMA0_HRS: HRS2 Position                 */
+#define DMA_HRS_HRS3_MASK                        (0x01UL << DMA_HRS_HRS3_SHIFT)                      /*!< DMA0_HRS: HRS3 Mask                     */
+#define DMA_HRS_HRS3_SHIFT                       3                                                   /*!< DMA0_HRS: HRS3 Position                 */
+#define DMA_HRS_HRS4_MASK                        (0x01UL << DMA_HRS_HRS4_SHIFT)                      /*!< DMA0_HRS: HRS4 Mask                     */
+#define DMA_HRS_HRS4_SHIFT                       4                                                   /*!< DMA0_HRS: HRS4 Position                 */
+#define DMA_HRS_HRS5_MASK                        (0x01UL << DMA_HRS_HRS5_SHIFT)                      /*!< DMA0_HRS: HRS5 Mask                     */
+#define DMA_HRS_HRS5_SHIFT                       5                                                   /*!< DMA0_HRS: HRS5 Position                 */
+#define DMA_HRS_HRS6_MASK                        (0x01UL << DMA_HRS_HRS6_SHIFT)                      /*!< DMA0_HRS: HRS6 Mask                     */
+#define DMA_HRS_HRS6_SHIFT                       6                                                   /*!< DMA0_HRS: HRS6 Position                 */
+#define DMA_HRS_HRS7_MASK                        (0x01UL << DMA_HRS_HRS7_SHIFT)                      /*!< DMA0_HRS: HRS7 Mask                     */
+#define DMA_HRS_HRS7_SHIFT                       7                                                   /*!< DMA0_HRS: HRS7 Position                 */
+#define DMA_HRS_HRS8_MASK                        (0x01UL << DMA_HRS_HRS8_SHIFT)                      /*!< DMA0_HRS: HRS8 Mask                     */
+#define DMA_HRS_HRS8_SHIFT                       8                                                   /*!< DMA0_HRS: HRS8 Position                 */
+#define DMA_HRS_HRS9_MASK                        (0x01UL << DMA_HRS_HRS9_SHIFT)                      /*!< DMA0_HRS: HRS9 Mask                     */
+#define DMA_HRS_HRS9_SHIFT                       9                                                   /*!< DMA0_HRS: HRS9 Position                 */
+#define DMA_HRS_HRS10_MASK                       (0x01UL << DMA_HRS_HRS10_SHIFT)                     /*!< DMA0_HRS: HRS10 Mask                    */
+#define DMA_HRS_HRS10_SHIFT                      10                                                  /*!< DMA0_HRS: HRS10 Position                */
+#define DMA_HRS_HRS11_MASK                       (0x01UL << DMA_HRS_HRS11_SHIFT)                     /*!< DMA0_HRS: HRS11 Mask                    */
+#define DMA_HRS_HRS11_SHIFT                      11                                                  /*!< DMA0_HRS: HRS11 Position                */
+#define DMA_HRS_HRS12_MASK                       (0x01UL << DMA_HRS_HRS12_SHIFT)                     /*!< DMA0_HRS: HRS12 Mask                    */
+#define DMA_HRS_HRS12_SHIFT                      12                                                  /*!< DMA0_HRS: HRS12 Position                */
+#define DMA_HRS_HRS13_MASK                       (0x01UL << DMA_HRS_HRS13_SHIFT)                     /*!< DMA0_HRS: HRS13 Mask                    */
+#define DMA_HRS_HRS13_SHIFT                      13                                                  /*!< DMA0_HRS: HRS13 Position                */
+#define DMA_HRS_HRS14_MASK                       (0x01UL << DMA_HRS_HRS14_SHIFT)                     /*!< DMA0_HRS: HRS14 Mask                    */
+#define DMA_HRS_HRS14_SHIFT                      14                                                  /*!< DMA0_HRS: HRS14 Position                */
+#define DMA_HRS_HRS15_MASK                       (0x01UL << DMA_HRS_HRS15_SHIFT)                     /*!< DMA0_HRS: HRS15 Mask                    */
+#define DMA_HRS_HRS15_SHIFT                      15                                                  /*!< DMA0_HRS: HRS15 Position                */
 /* ------- DCHPRI Bit Fields                        ------ */
-#define DMA0_DCHPRI_CHPRI_MASK                   (0x0FUL << DMA0_DCHPRI_CHPRI_SHIFT)                 /*!< DMA0_DCHPRI: CHPRI Mask                 */
-#define DMA0_DCHPRI_CHPRI_SHIFT                  0                                                   /*!< DMA0_DCHPRI: CHPRI Position             */
-#define DMA0_DCHPRI_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<DMA0_DCHPRI_CHPRI_SHIFT))&DMA0_DCHPRI_CHPRI_MASK) /*!< DMA0_DCHPRI                             */
-#define DMA0_DCHPRI_DPA_MASK                     (0x01UL << DMA0_DCHPRI_DPA_SHIFT)                   /*!< DMA0_DCHPRI: DPA Mask                   */
-#define DMA0_DCHPRI_DPA_SHIFT                    6                                                   /*!< DMA0_DCHPRI: DPA Position               */
-#define DMA0_DCHPRI_ECP_MASK                     (0x01UL << DMA0_DCHPRI_ECP_SHIFT)                   /*!< DMA0_DCHPRI: ECP Mask                   */
-#define DMA0_DCHPRI_ECP_SHIFT                    7                                                   /*!< DMA0_DCHPRI: ECP Position               */
+#define DMA_DCHPRI_CHPRI_MASK                    (0x0FUL << DMA_DCHPRI_CHPRI_SHIFT)                  /*!< DMA0_DCHPRI: CHPRI Mask                 */
+#define DMA_DCHPRI_CHPRI_SHIFT                   0                                                   /*!< DMA0_DCHPRI: CHPRI Position             */
+#define DMA_DCHPRI_CHPRI(x)                      (((uint8_t)(((uint8_t)(x))<<DMA_DCHPRI_CHPRI_SHIFT))&DMA_DCHPRI_CHPRI_MASK) /*!< DMA0_DCHPRI                             */
+#define DMA_DCHPRI_DPA_MASK                      (0x01UL << DMA_DCHPRI_DPA_SHIFT)                    /*!< DMA0_DCHPRI: DPA Mask                   */
+#define DMA_DCHPRI_DPA_SHIFT                     6                                                   /*!< DMA0_DCHPRI: DPA Position               */
+#define DMA_DCHPRI_ECP_MASK                      (0x01UL << DMA_DCHPRI_ECP_SHIFT)                    /*!< DMA0_DCHPRI: ECP Mask                   */
+#define DMA_DCHPRI_ECP_SHIFT                     7                                                   /*!< DMA0_DCHPRI: ECP Position               */
 /* ------- SADDR Bit Fields                         ------ */
-#define DMA0_SADDR_SADDR_MASK                    (0xFFFFFFFFUL << DMA0_SADDR_SADDR_SHIFT)            /*!< DMA0_SADDR: SADDR Mask                  */
-#define DMA0_SADDR_SADDR_SHIFT                   0                                                   /*!< DMA0_SADDR: SADDR Position              */
-#define DMA0_SADDR_SADDR(x)                      (((uint32_t)(((uint32_t)(x))<<DMA0_SADDR_SADDR_SHIFT))&DMA0_SADDR_SADDR_MASK) /*!< DMA0_SADDR                              */
+#define DMA_SADDR_SADDR_MASK                     (0xFFFFFFFFUL << DMA_SADDR_SADDR_SHIFT)             /*!< DMA0_SADDR: SADDR Mask                  */
+#define DMA_SADDR_SADDR_SHIFT                    0                                                   /*!< DMA0_SADDR: SADDR Position              */
+#define DMA_SADDR_SADDR(x)                       (((uint32_t)(((uint32_t)(x))<<DMA_SADDR_SADDR_SHIFT))&DMA_SADDR_SADDR_MASK) /*!< DMA0_SADDR                              */
 /* ------- SOFF Bit Fields                          ------ */
-#define DMA0_SOFF_SOFF_MASK                      (0xFFFFUL << DMA0_SOFF_SOFF_SHIFT)                  /*!< DMA0_SOFF: SOFF Mask                    */
-#define DMA0_SOFF_SOFF_SHIFT                     0                                                   /*!< DMA0_SOFF: SOFF Position                */
-#define DMA0_SOFF_SOFF(x)                        (((uint16_t)(((uint16_t)(x))<<DMA0_SOFF_SOFF_SHIFT))&DMA0_SOFF_SOFF_MASK) /*!< DMA0_SOFF                               */
+#define DMA_SOFF_SOFF_MASK                       (0xFFFFUL << DMA_SOFF_SOFF_SHIFT)                   /*!< DMA0_SOFF: SOFF Mask                    */
+#define DMA_SOFF_SOFF_SHIFT                      0                                                   /*!< DMA0_SOFF: SOFF Position                */
+#define DMA_SOFF_SOFF(x)                         (((uint16_t)(((uint16_t)(x))<<DMA_SOFF_SOFF_SHIFT))&DMA_SOFF_SOFF_MASK) /*!< DMA0_SOFF                               */
 /* ------- ATTR Bit Fields                          ------ */
-#define DMA0_ATTR_DSIZE_MASK                     (0x07UL << DMA0_ATTR_DSIZE_SHIFT)                   /*!< DMA0_ATTR: DSIZE Mask                   */
-#define DMA0_ATTR_DSIZE_SHIFT                    0                                                   /*!< DMA0_ATTR: DSIZE Position               */
-#define DMA0_ATTR_DSIZE(x)                       (((uint16_t)(((uint16_t)(x))<<DMA0_ATTR_DSIZE_SHIFT))&DMA0_ATTR_DSIZE_MASK) /*!< DMA0_ATTR                               */
-#define DMA0_ATTR_DMOD_MASK                      (0x1FUL << DMA0_ATTR_DMOD_SHIFT)                    /*!< DMA0_ATTR: DMOD Mask                    */
-#define DMA0_ATTR_DMOD_SHIFT                     3                                                   /*!< DMA0_ATTR: DMOD Position                */
-#define DMA0_ATTR_DMOD(x)                        (((uint16_t)(((uint16_t)(x))<<DMA0_ATTR_DMOD_SHIFT))&DMA0_ATTR_DMOD_MASK) /*!< DMA0_ATTR                               */
-#define DMA0_ATTR_SSIZE_MASK                     (0x07UL << DMA0_ATTR_SSIZE_SHIFT)                   /*!< DMA0_ATTR: SSIZE Mask                   */
-#define DMA0_ATTR_SSIZE_SHIFT                    8                                                   /*!< DMA0_ATTR: SSIZE Position               */
-#define DMA0_ATTR_SSIZE(x)                       (((uint16_t)(((uint16_t)(x))<<DMA0_ATTR_SSIZE_SHIFT))&DMA0_ATTR_SSIZE_MASK) /*!< DMA0_ATTR                               */
-#define DMA0_ATTR_SMOD_MASK                      (0x1FUL << DMA0_ATTR_SMOD_SHIFT)                    /*!< DMA0_ATTR: SMOD Mask                    */
-#define DMA0_ATTR_SMOD_SHIFT                     11                                                  /*!< DMA0_ATTR: SMOD Position                */
-#define DMA0_ATTR_SMOD(x)                        (((uint16_t)(((uint16_t)(x))<<DMA0_ATTR_SMOD_SHIFT))&DMA0_ATTR_SMOD_MASK) /*!< DMA0_ATTR                               */
+#define DMA_ATTR_DSIZE_MASK                      (0x07UL << DMA_ATTR_DSIZE_SHIFT)                    /*!< DMA0_ATTR: DSIZE Mask                   */
+#define DMA_ATTR_DSIZE_SHIFT                     0                                                   /*!< DMA0_ATTR: DSIZE Position               */
+#define DMA_ATTR_DSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<DMA_ATTR_DSIZE_SHIFT))&DMA_ATTR_DSIZE_MASK) /*!< DMA0_ATTR                               */
+#define DMA_ATTR_DMOD_MASK                       (0x1FUL << DMA_ATTR_DMOD_SHIFT)                     /*!< DMA0_ATTR: DMOD Mask                    */
+#define DMA_ATTR_DMOD_SHIFT                      3                                                   /*!< DMA0_ATTR: DMOD Position                */
+#define DMA_ATTR_DMOD(x)                         (((uint16_t)(((uint16_t)(x))<<DMA_ATTR_DMOD_SHIFT))&DMA_ATTR_DMOD_MASK) /*!< DMA0_ATTR                               */
+#define DMA_ATTR_SSIZE_MASK                      (0x07UL << DMA_ATTR_SSIZE_SHIFT)                    /*!< DMA0_ATTR: SSIZE Mask                   */
+#define DMA_ATTR_SSIZE_SHIFT                     8                                                   /*!< DMA0_ATTR: SSIZE Position               */
+#define DMA_ATTR_SSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<DMA_ATTR_SSIZE_SHIFT))&DMA_ATTR_SSIZE_MASK) /*!< DMA0_ATTR                               */
+#define DMA_ATTR_SMOD_MASK                       (0x1FUL << DMA_ATTR_SMOD_SHIFT)                     /*!< DMA0_ATTR: SMOD Mask                    */
+#define DMA_ATTR_SMOD_SHIFT                      11                                                  /*!< DMA0_ATTR: SMOD Position                */
+#define DMA_ATTR_SMOD(x)                         (((uint16_t)(((uint16_t)(x))<<DMA_ATTR_SMOD_SHIFT))&DMA_ATTR_SMOD_MASK) /*!< DMA0_ATTR                               */
 /* ------- NBYTES_MLNO Bit Fields                   ------ */
-#define DMA0_NBYTES_MLNO_NBYTES_MASK             (0xFFFFFFFFUL << DMA0_NBYTES_MLNO_NBYTES_SHIFT)     /*!< DMA0_NBYTES_MLNO: NBYTES Mask           */
-#define DMA0_NBYTES_MLNO_NBYTES_SHIFT            0                                                   /*!< DMA0_NBYTES_MLNO: NBYTES Position       */
-#define DMA0_NBYTES_MLNO_NBYTES(x)               (((uint32_t)(((uint32_t)(x))<<DMA0_NBYTES_MLNO_NBYTES_SHIFT))&DMA0_NBYTES_MLNO_NBYTES_MASK) /*!< DMA0_NBYTES_MLNO                        */
+#define DMA_NBYTES_MLNO_NBYTES_MASK              (0xFFFFFFFFUL << DMA_NBYTES_MLNO_NBYTES_SHIFT)      /*!< DMA0_NBYTES_MLNO: NBYTES Mask           */
+#define DMA_NBYTES_MLNO_NBYTES_SHIFT             0                                                   /*!< DMA0_NBYTES_MLNO: NBYTES Position       */
+#define DMA_NBYTES_MLNO_NBYTES(x)                (((uint32_t)(((uint32_t)(x))<<DMA_NBYTES_MLNO_NBYTES_SHIFT))&DMA_NBYTES_MLNO_NBYTES_MASK) /*!< DMA0_NBYTES_MLNO                        */
 /* ------- NBYTES_MLOFFNO Bit Fields                ------ */
-#define DMA0_NBYTES_MLOFFNO_NBYTES_MASK          (0x3FFFFFFFUL << DMA0_NBYTES_MLOFFNO_NBYTES_SHIFT)  /*!< DMA0_NBYTES_MLOFFNO: NBYTES Mask        */
-#define DMA0_NBYTES_MLOFFNO_NBYTES_SHIFT         0                                                   /*!< DMA0_NBYTES_MLOFFNO: NBYTES Position    */
-#define DMA0_NBYTES_MLOFFNO_NBYTES(x)            (((uint32_t)(((uint32_t)(x))<<DMA0_NBYTES_MLOFFNO_NBYTES_SHIFT))&DMA0_NBYTES_MLOFFNO_NBYTES_MASK) /*!< DMA0_NBYTES_MLOFFNO                     */
-#define DMA0_NBYTES_MLOFFNO_DMLOE_MASK           (0x01UL << DMA0_NBYTES_MLOFFNO_DMLOE_SHIFT)         /*!< DMA0_NBYTES_MLOFFNO: DMLOE Mask         */
-#define DMA0_NBYTES_MLOFFNO_DMLOE_SHIFT          30                                                  /*!< DMA0_NBYTES_MLOFFNO: DMLOE Position     */
-#define DMA0_NBYTES_MLOFFNO_SMLOE_MASK           (0x01UL << DMA0_NBYTES_MLOFFNO_SMLOE_SHIFT)         /*!< DMA0_NBYTES_MLOFFNO: SMLOE Mask         */
-#define DMA0_NBYTES_MLOFFNO_SMLOE_SHIFT          31                                                  /*!< DMA0_NBYTES_MLOFFNO: SMLOE Position     */
+#define DMA_NBYTES_MLOFFNO_NBYTES_MASK           (0x3FFFFFFFUL << DMA_NBYTES_MLOFFNO_NBYTES_SHIFT)   /*!< DMA0_NBYTES_MLOFFNO: NBYTES Mask        */
+#define DMA_NBYTES_MLOFFNO_NBYTES_SHIFT          0                                                   /*!< DMA0_NBYTES_MLOFFNO: NBYTES Position    */
+#define DMA_NBYTES_MLOFFNO_NBYTES(x)             (((uint32_t)(((uint32_t)(x))<<DMA_NBYTES_MLOFFNO_NBYTES_SHIFT))&DMA_NBYTES_MLOFFNO_NBYTES_MASK) /*!< DMA0_NBYTES_MLOFFNO                     */
+#define DMA_NBYTES_MLOFFNO_DMLOE_MASK            (0x01UL << DMA_NBYTES_MLOFFNO_DMLOE_SHIFT)          /*!< DMA0_NBYTES_MLOFFNO: DMLOE Mask         */
+#define DMA_NBYTES_MLOFFNO_DMLOE_SHIFT           30                                                  /*!< DMA0_NBYTES_MLOFFNO: DMLOE Position     */
+#define DMA_NBYTES_MLOFFNO_SMLOE_MASK            (0x01UL << DMA_NBYTES_MLOFFNO_SMLOE_SHIFT)          /*!< DMA0_NBYTES_MLOFFNO: SMLOE Mask         */
+#define DMA_NBYTES_MLOFFNO_SMLOE_SHIFT           31                                                  /*!< DMA0_NBYTES_MLOFFNO: SMLOE Position     */
 /* ------- NBYTES_MLOFFYES Bit Fields               ------ */
-#define DMA0_NBYTES_MLOFFYES_NBYTES_MASK         (0x3FFUL << DMA0_NBYTES_MLOFFYES_NBYTES_SHIFT)      /*!< DMA0_NBYTES_MLOFFYES: NBYTES Mask       */
-#define DMA0_NBYTES_MLOFFYES_NBYTES_SHIFT        0                                                   /*!< DMA0_NBYTES_MLOFFYES: NBYTES Position   */
-#define DMA0_NBYTES_MLOFFYES_NBYTES(x)           (((uint32_t)(((uint32_t)(x))<<DMA0_NBYTES_MLOFFYES_NBYTES_SHIFT))&DMA0_NBYTES_MLOFFYES_NBYTES_MASK) /*!< DMA0_NBYTES_MLOFFYES                    */
-#define DMA0_NBYTES_MLOFFYES_MLOFF_MASK          (0xFFFFFUL << DMA0_NBYTES_MLOFFYES_MLOFF_SHIFT)     /*!< DMA0_NBYTES_MLOFFYES: MLOFF Mask        */
-#define DMA0_NBYTES_MLOFFYES_MLOFF_SHIFT         10                                                  /*!< DMA0_NBYTES_MLOFFYES: MLOFF Position    */
-#define DMA0_NBYTES_MLOFFYES_MLOFF(x)            (((uint32_t)(((uint32_t)(x))<<DMA0_NBYTES_MLOFFYES_MLOFF_SHIFT))&DMA0_NBYTES_MLOFFYES_MLOFF_MASK) /*!< DMA0_NBYTES_MLOFFYES                    */
-#define DMA0_NBYTES_MLOFFYES_DMLOE_MASK          (0x01UL << DMA0_NBYTES_MLOFFYES_DMLOE_SHIFT)        /*!< DMA0_NBYTES_MLOFFYES: DMLOE Mask        */
-#define DMA0_NBYTES_MLOFFYES_DMLOE_SHIFT         30                                                  /*!< DMA0_NBYTES_MLOFFYES: DMLOE Position    */
-#define DMA0_NBYTES_MLOFFYES_SMLOE_MASK          (0x01UL << DMA0_NBYTES_MLOFFYES_SMLOE_SHIFT)        /*!< DMA0_NBYTES_MLOFFYES: SMLOE Mask        */
-#define DMA0_NBYTES_MLOFFYES_SMLOE_SHIFT         31                                                  /*!< DMA0_NBYTES_MLOFFYES: SMLOE Position    */
+#define DMA_NBYTES_MLOFFYES_NBYTES_MASK          (0x3FFUL << DMA_NBYTES_MLOFFYES_NBYTES_SHIFT)       /*!< DMA0_NBYTES_MLOFFYES: NBYTES Mask       */
+#define DMA_NBYTES_MLOFFYES_NBYTES_SHIFT         0                                                   /*!< DMA0_NBYTES_MLOFFYES: NBYTES Position   */
+#define DMA_NBYTES_MLOFFYES_NBYTES(x)            (((uint32_t)(((uint32_t)(x))<<DMA_NBYTES_MLOFFYES_NBYTES_SHIFT))&DMA_NBYTES_MLOFFYES_NBYTES_MASK) /*!< DMA0_NBYTES_MLOFFYES                    */
+#define DMA_NBYTES_MLOFFYES_MLOFF_MASK           (0xFFFFFUL << DMA_NBYTES_MLOFFYES_MLOFF_SHIFT)      /*!< DMA0_NBYTES_MLOFFYES: MLOFF Mask        */
+#define DMA_NBYTES_MLOFFYES_MLOFF_SHIFT          10                                                  /*!< DMA0_NBYTES_MLOFFYES: MLOFF Position    */
+#define DMA_NBYTES_MLOFFYES_MLOFF(x)             (((uint32_t)(((uint32_t)(x))<<DMA_NBYTES_MLOFFYES_MLOFF_SHIFT))&DMA_NBYTES_MLOFFYES_MLOFF_MASK) /*!< DMA0_NBYTES_MLOFFYES                    */
+#define DMA_NBYTES_MLOFFYES_DMLOE_MASK           (0x01UL << DMA_NBYTES_MLOFFYES_DMLOE_SHIFT)         /*!< DMA0_NBYTES_MLOFFYES: DMLOE Mask        */
+#define DMA_NBYTES_MLOFFYES_DMLOE_SHIFT          30                                                  /*!< DMA0_NBYTES_MLOFFYES: DMLOE Position    */
+#define DMA_NBYTES_MLOFFYES_SMLOE_MASK           (0x01UL << DMA_NBYTES_MLOFFYES_SMLOE_SHIFT)         /*!< DMA0_NBYTES_MLOFFYES: SMLOE Mask        */
+#define DMA_NBYTES_MLOFFYES_SMLOE_SHIFT          31                                                  /*!< DMA0_NBYTES_MLOFFYES: SMLOE Position    */
 /* ------- SLAST Bit Fields                         ------ */
-#define DMA0_SLAST_SLAST_MASK                    (0xFFFFFFFFUL << DMA0_SLAST_SLAST_SHIFT)            /*!< DMA0_SLAST: SLAST Mask                  */
-#define DMA0_SLAST_SLAST_SHIFT                   0                                                   /*!< DMA0_SLAST: SLAST Position              */
-#define DMA0_SLAST_SLAST(x)                      (((uint32_t)(((uint32_t)(x))<<DMA0_SLAST_SLAST_SHIFT))&DMA0_SLAST_SLAST_MASK) /*!< DMA0_SLAST                              */
+#define DMA_SLAST_SLAST_MASK                     (0xFFFFFFFFUL << DMA_SLAST_SLAST_SHIFT)             /*!< DMA0_SLAST: SLAST Mask                  */
+#define DMA_SLAST_SLAST_SHIFT                    0                                                   /*!< DMA0_SLAST: SLAST Position              */
+#define DMA_SLAST_SLAST(x)                       (((uint32_t)(((uint32_t)(x))<<DMA_SLAST_SLAST_SHIFT))&DMA_SLAST_SLAST_MASK) /*!< DMA0_SLAST                              */
 /* ------- DADDR Bit Fields                         ------ */
-#define DMA0_DADDR_DADDR_MASK                    (0xFFFFFFFFUL << DMA0_DADDR_DADDR_SHIFT)            /*!< DMA0_DADDR: DADDR Mask                  */
-#define DMA0_DADDR_DADDR_SHIFT                   0                                                   /*!< DMA0_DADDR: DADDR Position              */
-#define DMA0_DADDR_DADDR(x)                      (((uint32_t)(((uint32_t)(x))<<DMA0_DADDR_DADDR_SHIFT))&DMA0_DADDR_DADDR_MASK) /*!< DMA0_DADDR                              */
+#define DMA_DADDR_DADDR_MASK                     (0xFFFFFFFFUL << DMA_DADDR_DADDR_SHIFT)             /*!< DMA0_DADDR: DADDR Mask                  */
+#define DMA_DADDR_DADDR_SHIFT                    0                                                   /*!< DMA0_DADDR: DADDR Position              */
+#define DMA_DADDR_DADDR(x)                       (((uint32_t)(((uint32_t)(x))<<DMA_DADDR_DADDR_SHIFT))&DMA_DADDR_DADDR_MASK) /*!< DMA0_DADDR                              */
 /* ------- DOFF Bit Fields                          ------ */
-#define DMA0_DOFF_DOFF_MASK                      (0xFFFFUL << DMA0_DOFF_DOFF_SHIFT)                  /*!< DMA0_DOFF: DOFF Mask                    */
-#define DMA0_DOFF_DOFF_SHIFT                     0                                                   /*!< DMA0_DOFF: DOFF Position                */
-#define DMA0_DOFF_DOFF(x)                        (((uint16_t)(((uint16_t)(x))<<DMA0_DOFF_DOFF_SHIFT))&DMA0_DOFF_DOFF_MASK) /*!< DMA0_DOFF                               */
+#define DMA_DOFF_DOFF_MASK                       (0xFFFFUL << DMA_DOFF_DOFF_SHIFT)                   /*!< DMA0_DOFF: DOFF Mask                    */
+#define DMA_DOFF_DOFF_SHIFT                      0                                                   /*!< DMA0_DOFF: DOFF Position                */
+#define DMA_DOFF_DOFF(x)                         (((uint16_t)(((uint16_t)(x))<<DMA_DOFF_DOFF_SHIFT))&DMA_DOFF_DOFF_MASK) /*!< DMA0_DOFF                               */
 /* ------- CITER_ELINKNO Bit Fields                 ------ */
-#define DMA0_CITER_ELINKNO_CITER_MASK            (0x7FFFUL << DMA0_CITER_ELINKNO_CITER_SHIFT)        /*!< DMA0_CITER_ELINKNO: CITER Mask          */
-#define DMA0_CITER_ELINKNO_CITER_SHIFT           0                                                   /*!< DMA0_CITER_ELINKNO: CITER Position      */
-#define DMA0_CITER_ELINKNO_CITER(x)              (((uint16_t)(((uint16_t)(x))<<DMA0_CITER_ELINKNO_CITER_SHIFT))&DMA0_CITER_ELINKNO_CITER_MASK) /*!< DMA0_CITER_ELINKNO                      */
-#define DMA0_CITER_ELINKNO_ELINK_MASK            (0x01UL << DMA0_CITER_ELINKNO_ELINK_SHIFT)          /*!< DMA0_CITER_ELINKNO: ELINK Mask          */
-#define DMA0_CITER_ELINKNO_ELINK_SHIFT           15                                                  /*!< DMA0_CITER_ELINKNO: ELINK Position      */
+#define DMA_CITER_ELINKNO_CITER_MASK             (0x7FFFUL << DMA_CITER_ELINKNO_CITER_SHIFT)         /*!< DMA0_CITER_ELINKNO: CITER Mask          */
+#define DMA_CITER_ELINKNO_CITER_SHIFT            0                                                   /*!< DMA0_CITER_ELINKNO: CITER Position      */
+#define DMA_CITER_ELINKNO_CITER(x)               (((uint16_t)(((uint16_t)(x))<<DMA_CITER_ELINKNO_CITER_SHIFT))&DMA_CITER_ELINKNO_CITER_MASK) /*!< DMA0_CITER_ELINKNO                      */
+#define DMA_CITER_ELINKNO_ELINK_MASK             (0x01UL << DMA_CITER_ELINKNO_ELINK_SHIFT)           /*!< DMA0_CITER_ELINKNO: ELINK Mask          */
+#define DMA_CITER_ELINKNO_ELINK_SHIFT            15                                                  /*!< DMA0_CITER_ELINKNO: ELINK Position      */
 /* ------- CITER_ELINKYES Bit Fields                ------ */
-#define DMA0_CITER_ELINKYES_CITER_MASK           (0x1FFUL << DMA0_CITER_ELINKYES_CITER_SHIFT)        /*!< DMA0_CITER_ELINKYES: CITER Mask         */
-#define DMA0_CITER_ELINKYES_CITER_SHIFT          0                                                   /*!< DMA0_CITER_ELINKYES: CITER Position     */
-#define DMA0_CITER_ELINKYES_CITER(x)             (((uint16_t)(((uint16_t)(x))<<DMA0_CITER_ELINKYES_CITER_SHIFT))&DMA0_CITER_ELINKYES_CITER_MASK) /*!< DMA0_CITER_ELINKYES                     */
-#define DMA0_CITER_ELINKYES_LINKCH_MASK          (0x0FUL << DMA0_CITER_ELINKYES_LINKCH_SHIFT)        /*!< DMA0_CITER_ELINKYES: LINKCH Mask        */
-#define DMA0_CITER_ELINKYES_LINKCH_SHIFT         9                                                   /*!< DMA0_CITER_ELINKYES: LINKCH Position    */
-#define DMA0_CITER_ELINKYES_LINKCH(x)            (((uint16_t)(((uint16_t)(x))<<DMA0_CITER_ELINKYES_LINKCH_SHIFT))&DMA0_CITER_ELINKYES_LINKCH_MASK) /*!< DMA0_CITER_ELINKYES                     */
-#define DMA0_CITER_ELINKYES_ELINK_MASK           (0x01UL << DMA0_CITER_ELINKYES_ELINK_SHIFT)         /*!< DMA0_CITER_ELINKYES: ELINK Mask         */
-#define DMA0_CITER_ELINKYES_ELINK_SHIFT          15                                                  /*!< DMA0_CITER_ELINKYES: ELINK Position     */
+#define DMA_CITER_ELINKYES_CITER_MASK            (0x1FFUL << DMA_CITER_ELINKYES_CITER_SHIFT)         /*!< DMA0_CITER_ELINKYES: CITER Mask         */
+#define DMA_CITER_ELINKYES_CITER_SHIFT           0                                                   /*!< DMA0_CITER_ELINKYES: CITER Position     */
+#define DMA_CITER_ELINKYES_CITER(x)              (((uint16_t)(((uint16_t)(x))<<DMA_CITER_ELINKYES_CITER_SHIFT))&DMA_CITER_ELINKYES_CITER_MASK) /*!< DMA0_CITER_ELINKYES                     */
+#define DMA_CITER_ELINKYES_LINKCH_MASK           (0x0FUL << DMA_CITER_ELINKYES_LINKCH_SHIFT)         /*!< DMA0_CITER_ELINKYES: LINKCH Mask        */
+#define DMA_CITER_ELINKYES_LINKCH_SHIFT          9                                                   /*!< DMA0_CITER_ELINKYES: LINKCH Position    */
+#define DMA_CITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<DMA_CITER_ELINKYES_LINKCH_SHIFT))&DMA_CITER_ELINKYES_LINKCH_MASK) /*!< DMA0_CITER_ELINKYES                     */
+#define DMA_CITER_ELINKYES_ELINK_MASK            (0x01UL << DMA_CITER_ELINKYES_ELINK_SHIFT)          /*!< DMA0_CITER_ELINKYES: ELINK Mask         */
+#define DMA_CITER_ELINKYES_ELINK_SHIFT           15                                                  /*!< DMA0_CITER_ELINKYES: ELINK Position     */
 /* ------- DLAST_SGA Bit Fields                     ------ */
-#define DMA0_DLAST_SGA_DLASTSGA_MASK             (0xFFFFFFFFUL << DMA0_DLAST_SGA_DLASTSGA_SHIFT)     /*!< DMA0_DLAST_SGA: DLASTSGA Mask           */
-#define DMA0_DLAST_SGA_DLASTSGA_SHIFT            0                                                   /*!< DMA0_DLAST_SGA: DLASTSGA Position       */
-#define DMA0_DLAST_SGA_DLASTSGA(x)               (((uint32_t)(((uint32_t)(x))<<DMA0_DLAST_SGA_DLASTSGA_SHIFT))&DMA0_DLAST_SGA_DLASTSGA_MASK) /*!< DMA0_DLAST_SGA                          */
+#define DMA_DLAST_SGA_DLASTSGA_MASK              (0xFFFFFFFFUL << DMA_DLAST_SGA_DLASTSGA_SHIFT)      /*!< DMA0_DLAST_SGA: DLASTSGA Mask           */
+#define DMA_DLAST_SGA_DLASTSGA_SHIFT             0                                                   /*!< DMA0_DLAST_SGA: DLASTSGA Position       */
+#define DMA_DLAST_SGA_DLASTSGA(x)                (((uint32_t)(((uint32_t)(x))<<DMA_DLAST_SGA_DLASTSGA_SHIFT))&DMA_DLAST_SGA_DLASTSGA_MASK) /*!< DMA0_DLAST_SGA                          */
 /* ------- CSR Bit Fields                           ------ */
-#define DMA0_CSR_START_MASK                      (0x01UL << DMA0_CSR_START_SHIFT)                    /*!< DMA0_CSR: START Mask                    */
-#define DMA0_CSR_START_SHIFT                     0                                                   /*!< DMA0_CSR: START Position                */
-#define DMA0_CSR_INTMAJOR_MASK                   (0x01UL << DMA0_CSR_INTMAJOR_SHIFT)                 /*!< DMA0_CSR: INTMAJOR Mask                 */
-#define DMA0_CSR_INTMAJOR_SHIFT                  1                                                   /*!< DMA0_CSR: INTMAJOR Position             */
-#define DMA0_CSR_INTHALF_MASK                    (0x01UL << DMA0_CSR_INTHALF_SHIFT)                  /*!< DMA0_CSR: INTHALF Mask                  */
-#define DMA0_CSR_INTHALF_SHIFT                   2                                                   /*!< DMA0_CSR: INTHALF Position              */
-#define DMA0_CSR_DREQ_MASK                       (0x01UL << DMA0_CSR_DREQ_SHIFT)                     /*!< DMA0_CSR: DREQ Mask                     */
-#define DMA0_CSR_DREQ_SHIFT                      3                                                   /*!< DMA0_CSR: DREQ Position                 */
-#define DMA0_CSR_ESG_MASK                        (0x01UL << DMA0_CSR_ESG_SHIFT)                      /*!< DMA0_CSR: ESG Mask                      */
-#define DMA0_CSR_ESG_SHIFT                       4                                                   /*!< DMA0_CSR: ESG Position                  */
-#define DMA0_CSR_MAJORELINK_MASK                 (0x01UL << DMA0_CSR_MAJORELINK_SHIFT)               /*!< DMA0_CSR: MAJORELINK Mask               */
-#define DMA0_CSR_MAJORELINK_SHIFT                5                                                   /*!< DMA0_CSR: MAJORELINK Position           */
-#define DMA0_CSR_ACTIVE_MASK                     (0x01UL << DMA0_CSR_ACTIVE_SHIFT)                   /*!< DMA0_CSR: ACTIVE Mask                   */
-#define DMA0_CSR_ACTIVE_SHIFT                    6                                                   /*!< DMA0_CSR: ACTIVE Position               */
-#define DMA0_CSR_DONE_MASK                       (0x01UL << DMA0_CSR_DONE_SHIFT)                     /*!< DMA0_CSR: DONE Mask                     */
-#define DMA0_CSR_DONE_SHIFT                      7                                                   /*!< DMA0_CSR: DONE Position                 */
-#define DMA0_CSR_MAJORLINKCH_MASK                (0x0FUL << DMA0_CSR_MAJORLINKCH_SHIFT)              /*!< DMA0_CSR: MAJORLINKCH Mask              */
-#define DMA0_CSR_MAJORLINKCH_SHIFT               8                                                   /*!< DMA0_CSR: MAJORLINKCH Position          */
-#define DMA0_CSR_MAJORLINKCH(x)                  (((uint16_t)(((uint16_t)(x))<<DMA0_CSR_MAJORLINKCH_SHIFT))&DMA0_CSR_MAJORLINKCH_MASK) /*!< DMA0_CSR                                */
-#define DMA0_CSR_BWC_MASK                        (0x03UL << DMA0_CSR_BWC_SHIFT)                      /*!< DMA0_CSR: BWC Mask                      */
-#define DMA0_CSR_BWC_SHIFT                       14                                                  /*!< DMA0_CSR: BWC Position                  */
-#define DMA0_CSR_BWC(x)                          (((uint16_t)(((uint16_t)(x))<<DMA0_CSR_BWC_SHIFT))&DMA0_CSR_BWC_MASK) /*!< DMA0_CSR                                */
+#define DMA_CSR_START_MASK                       (0x01UL << DMA_CSR_START_SHIFT)                     /*!< DMA0_CSR: START Mask                    */
+#define DMA_CSR_START_SHIFT                      0                                                   /*!< DMA0_CSR: START Position                */
+#define DMA_CSR_INTMAJOR_MASK                    (0x01UL << DMA_CSR_INTMAJOR_SHIFT)                  /*!< DMA0_CSR: INTMAJOR Mask                 */
+#define DMA_CSR_INTMAJOR_SHIFT                   1                                                   /*!< DMA0_CSR: INTMAJOR Position             */
+#define DMA_CSR_INTHALF_MASK                     (0x01UL << DMA_CSR_INTHALF_SHIFT)                   /*!< DMA0_CSR: INTHALF Mask                  */
+#define DMA_CSR_INTHALF_SHIFT                    2                                                   /*!< DMA0_CSR: INTHALF Position              */
+#define DMA_CSR_DREQ_MASK                        (0x01UL << DMA_CSR_DREQ_SHIFT)                      /*!< DMA0_CSR: DREQ Mask                     */
+#define DMA_CSR_DREQ_SHIFT                       3                                                   /*!< DMA0_CSR: DREQ Position                 */
+#define DMA_CSR_ESG_MASK                         (0x01UL << DMA_CSR_ESG_SHIFT)                       /*!< DMA0_CSR: ESG Mask                      */
+#define DMA_CSR_ESG_SHIFT                        4                                                   /*!< DMA0_CSR: ESG Position                  */
+#define DMA_CSR_MAJORELINK_MASK                  (0x01UL << DMA_CSR_MAJORELINK_SHIFT)                /*!< DMA0_CSR: MAJORELINK Mask               */
+#define DMA_CSR_MAJORELINK_SHIFT                 5                                                   /*!< DMA0_CSR: MAJORELINK Position           */
+#define DMA_CSR_ACTIVE_MASK                      (0x01UL << DMA_CSR_ACTIVE_SHIFT)                    /*!< DMA0_CSR: ACTIVE Mask                   */
+#define DMA_CSR_ACTIVE_SHIFT                     6                                                   /*!< DMA0_CSR: ACTIVE Position               */
+#define DMA_CSR_DONE_MASK                        (0x01UL << DMA_CSR_DONE_SHIFT)                      /*!< DMA0_CSR: DONE Mask                     */
+#define DMA_CSR_DONE_SHIFT                       7                                                   /*!< DMA0_CSR: DONE Position                 */
+#define DMA_CSR_MAJORLINKCH_MASK                 (0x0FUL << DMA_CSR_MAJORLINKCH_SHIFT)               /*!< DMA0_CSR: MAJORLINKCH Mask              */
+#define DMA_CSR_MAJORLINKCH_SHIFT                8                                                   /*!< DMA0_CSR: MAJORLINKCH Position          */
+#define DMA_CSR_MAJORLINKCH(x)                   (((uint16_t)(((uint16_t)(x))<<DMA_CSR_MAJORLINKCH_SHIFT))&DMA_CSR_MAJORLINKCH_MASK) /*!< DMA0_CSR                                */
+#define DMA_CSR_BWC_MASK                         (0x03UL << DMA_CSR_BWC_SHIFT)                       /*!< DMA0_CSR: BWC Mask                      */
+#define DMA_CSR_BWC_SHIFT                        14                                                  /*!< DMA0_CSR: BWC Position                  */
+#define DMA_CSR_BWC(x)                           (((uint16_t)(((uint16_t)(x))<<DMA_CSR_BWC_SHIFT))&DMA_CSR_BWC_MASK) /*!< DMA0_CSR                                */
 /* ------- BITER_ELINKNO Bit Fields                 ------ */
-#define DMA0_BITER_ELINKNO_BITER_MASK            (0x7FFFUL << DMA0_BITER_ELINKNO_BITER_SHIFT)        /*!< DMA0_BITER_ELINKNO: BITER Mask          */
-#define DMA0_BITER_ELINKNO_BITER_SHIFT           0                                                   /*!< DMA0_BITER_ELINKNO: BITER Position      */
-#define DMA0_BITER_ELINKNO_BITER(x)              (((uint16_t)(((uint16_t)(x))<<DMA0_BITER_ELINKNO_BITER_SHIFT))&DMA0_BITER_ELINKNO_BITER_MASK) /*!< DMA0_BITER_ELINKNO                      */
-#define DMA0_BITER_ELINKNO_ELINK_MASK            (0x01UL << DMA0_BITER_ELINKNO_ELINK_SHIFT)          /*!< DMA0_BITER_ELINKNO: ELINK Mask          */
-#define DMA0_BITER_ELINKNO_ELINK_SHIFT           15                                                  /*!< DMA0_BITER_ELINKNO: ELINK Position      */
+#define DMA_BITER_ELINKNO_BITER_MASK             (0x7FFFUL << DMA_BITER_ELINKNO_BITER_SHIFT)         /*!< DMA0_BITER_ELINKNO: BITER Mask          */
+#define DMA_BITER_ELINKNO_BITER_SHIFT            0                                                   /*!< DMA0_BITER_ELINKNO: BITER Position      */
+#define DMA_BITER_ELINKNO_BITER(x)               (((uint16_t)(((uint16_t)(x))<<DMA_BITER_ELINKNO_BITER_SHIFT))&DMA_BITER_ELINKNO_BITER_MASK) /*!< DMA0_BITER_ELINKNO                      */
+#define DMA_BITER_ELINKNO_ELINK_MASK             (0x01UL << DMA_BITER_ELINKNO_ELINK_SHIFT)           /*!< DMA0_BITER_ELINKNO: ELINK Mask          */
+#define DMA_BITER_ELINKNO_ELINK_SHIFT            15                                                  /*!< DMA0_BITER_ELINKNO: ELINK Position      */
 /* ------- BITER_ELINKYES Bit Fields                ------ */
-#define DMA0_BITER_ELINKYES_BITER_MASK           (0x1FFUL << DMA0_BITER_ELINKYES_BITER_SHIFT)        /*!< DMA0_BITER_ELINKYES: BITER Mask         */
-#define DMA0_BITER_ELINKYES_BITER_SHIFT          0                                                   /*!< DMA0_BITER_ELINKYES: BITER Position     */
-#define DMA0_BITER_ELINKYES_BITER(x)             (((uint16_t)(((uint16_t)(x))<<DMA0_BITER_ELINKYES_BITER_SHIFT))&DMA0_BITER_ELINKYES_BITER_MASK) /*!< DMA0_BITER_ELINKYES                     */
-#define DMA0_BITER_ELINKYES_LINKCH_MASK          (0x0FUL << DMA0_BITER_ELINKYES_LINKCH_SHIFT)        /*!< DMA0_BITER_ELINKYES: LINKCH Mask        */
-#define DMA0_BITER_ELINKYES_LINKCH_SHIFT         9                                                   /*!< DMA0_BITER_ELINKYES: LINKCH Position    */
-#define DMA0_BITER_ELINKYES_LINKCH(x)            (((uint16_t)(((uint16_t)(x))<<DMA0_BITER_ELINKYES_LINKCH_SHIFT))&DMA0_BITER_ELINKYES_LINKCH_MASK) /*!< DMA0_BITER_ELINKYES                     */
-#define DMA0_BITER_ELINKYES_ELINK_MASK           (0x01UL << DMA0_BITER_ELINKYES_ELINK_SHIFT)         /*!< DMA0_BITER_ELINKYES: ELINK Mask         */
-#define DMA0_BITER_ELINKYES_ELINK_SHIFT          15                                                  /*!< DMA0_BITER_ELINKYES: ELINK Position     */
+#define DMA_BITER_ELINKYES_BITER_MASK            (0x1FFUL << DMA_BITER_ELINKYES_BITER_SHIFT)         /*!< DMA0_BITER_ELINKYES: BITER Mask         */
+#define DMA_BITER_ELINKYES_BITER_SHIFT           0                                                   /*!< DMA0_BITER_ELINKYES: BITER Position     */
+#define DMA_BITER_ELINKYES_BITER(x)              (((uint16_t)(((uint16_t)(x))<<DMA_BITER_ELINKYES_BITER_SHIFT))&DMA_BITER_ELINKYES_BITER_MASK) /*!< DMA0_BITER_ELINKYES                     */
+#define DMA_BITER_ELINKYES_LINKCH_MASK           (0x0FUL << DMA_BITER_ELINKYES_LINKCH_SHIFT)         /*!< DMA0_BITER_ELINKYES: LINKCH Mask        */
+#define DMA_BITER_ELINKYES_LINKCH_SHIFT          9                                                   /*!< DMA0_BITER_ELINKYES: LINKCH Position    */
+#define DMA_BITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<DMA_BITER_ELINKYES_LINKCH_SHIFT))&DMA_BITER_ELINKYES_LINKCH_MASK) /*!< DMA0_BITER_ELINKYES                     */
+#define DMA_BITER_ELINKYES_ELINK_MASK            (0x01UL << DMA_BITER_ELINKYES_ELINK_SHIFT)          /*!< DMA0_BITER_ELINKYES: ELINK Mask         */
+#define DMA_BITER_ELINKYES_ELINK_SHIFT           15                                                  /*!< DMA0_BITER_ELINKYES: ELINK Position     */
+/**
+ * @} */ /* End group DMA_Register_Masks_GROUP 
+ */
 
 /* DMA0 - Peripheral instance base addresses */
-#define DMA0_BasePtr                   0x40008000UL
-#define DMA0                           ((DMA_Type *) DMA0_BasePtr)
-#define DMA0_BASE_PTR                  (DMA0)
+#define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
+#define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
+#define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
+* @brief C Struct for DMAMUX
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           DMAMUX (file:DMAMUX_16CH)            ================ */
@@ -1722,15 +1965,28 @@ typedef struct {                                /*!<       DMA0 Structure       
 /**
  * @brief DMA channel multiplexor
  */
-typedef struct {                                /*!<       DMAMUX Structure                                             */
-   __IO uint8_t   CHCFG[16];                    /*!< 0000: Channel Configuration Register                               */
+/**
+* @addtogroup DMAMUX_structs_GROUP DMAMUX struct
+* @brief Struct for DMAMUX
+* @{
+*/
+typedef struct {                                /*       DMAMUX Structure                                             */
+   __IO uint8_t   CHCFG[16];                    /**< 0000: Channel Configuration Register                               */
 } DMAMUX_Type;
 
+/**
+ * @} */ /* End group DMAMUX_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'DMAMUX' Position & Mask macros                      ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup DMAMUX_Register_Masks_GROUP DMAMUX Register Masks
+* @brief Register Masks for DMAMUX
+* @{
+*/
 /* ------- CHCFG Bit Fields                         ------ */
 #define DMAMUX_CHCFG_SOURCE_MASK                 (0x3FUL << DMAMUX_CHCFG_SOURCE_SHIFT)               /*!< DMAMUX_CHCFG: SOURCE Mask               */
 #define DMAMUX_CHCFG_SOURCE_SHIFT                0                                                   /*!< DMAMUX_CHCFG: SOURCE Position           */
@@ -1739,11 +1995,22 @@ typedef struct {                                /*!<       DMAMUX Structure     
 #define DMAMUX_CHCFG_TRIG_SHIFT                  6                                                   /*!< DMAMUX_CHCFG: TRIG Position             */
 #define DMAMUX_CHCFG_ENBL_MASK                   (0x01UL << DMAMUX_CHCFG_ENBL_SHIFT)                 /*!< DMAMUX_CHCFG: ENBL Mask                 */
 #define DMAMUX_CHCFG_ENBL_SHIFT                  7                                                   /*!< DMAMUX_CHCFG: ENBL Position             */
+/**
+ * @} */ /* End group DMAMUX_Register_Masks_GROUP 
+ */
 
 /* DMAMUX - Peripheral instance base addresses */
-#define DMAMUX_BasePtr                 0x40021000UL
-#define DMAMUX                         ((DMAMUX_Type *) DMAMUX_BasePtr)
-#define DMAMUX_BASE_PTR                (DMAMUX)
+#define DMAMUX_BasePtr                 0x40021000UL //!< Peripheral base address
+#define DMAMUX                         ((DMAMUX_Type *) DMAMUX_BasePtr) //!< Freescale base pointer
+#define DMAMUX_BASE_PTR                (DMAMUX) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup ETB_Peripheral_access_layer_GROUP ETB Peripheral Access Layer
+* @brief C Struct for ETB
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           ETB (file:ETB_0)                     ================ */
@@ -1752,59 +2019,72 @@ typedef struct {                                /*!<       DMAMUX Structure     
 /**
  * @brief Embedded Trace Buffer
  */
-typedef struct {                                /*!<       ETB Structure                                                */
-   __I  uint32_t  RESERVED0;                    /*!< 0000:                                                              */
-   __I  uint32_t  RDP;                          /*!< 0004: RAM Depth Register                                           */
-   __I  uint32_t  RESERVED1;                    /*!< 0008:                                                              */
-   __I  uint32_t  STS;                          /*!< 000C: Status Register                                              */
-   __I  uint32_t  RRD;                          /*!< 0010: RAM Read Data Register                                       */
-   __IO uint32_t  RRP;                          /*!< 0014: RAM Read Pointer Register                                    */
-   __IO uint32_t  RWP;                          /*!< 0018: RAM Write Pointer Register                                   */
-   __IO uint32_t  TRG;                          /*!< 001C: Trigger Counter Register                                     */
-   __IO uint32_t  CTL;                          /*!< 0020: Control Register                                             */
-   __IO uint32_t  RWD;                          /*!< 0024: RAM Write Data Register                                      */
-   __I  uint32_t  RESERVED2[182];               /*!< 0028:                                                              */
-   __I  uint32_t  FFSR;                         /*!< 0300: Formatter and Flush Status Register                          */
-   __IO uint32_t  FFCR;                         /*!< 0304: Formatter and Flush Control Register                         */
-   __I  uint32_t  RESERVED3[758];               /*!< 0308:                                                              */
-   __O  uint32_t  ITMISCOP0;                    /*!< 0EE0: Integration Register, ITMISCOP0                              */
-   __O  uint32_t  ITTRFLINACK;                  /*!< 0EE4: Integration Register, ITTRFLINACK                            */
-   __I  uint32_t  ITTRFLIN;                     /*!< 0EE8: Integration Register, ITTRFLIN                               */
-   __I  uint32_t  ITATBDATA0;                   /*!< 0EEC: Integration Register, ITATBDATA0                             */
-   __O  uint32_t  ITATBCTR2;                    /*!< 0EF0: Integration Register, ITATBCTR2                              */
-   __I  uint32_t  ITATBCTR1;                    /*!< 0EF4: Integration Register, ITATBCTR1                              */
-   __I  uint32_t  ITATBCTR0;                    /*!< 0EF8: Integration Register, ITATBCTR0                              */
-   __I  uint32_t  RESERVED4;                    /*!< 0EFC:                                                              */
-   __IO uint32_t  ITCTRL;                       /*!< 0F00: Integration Mode Control Register                            */
-   __I  uint32_t  RESERVED5[39];                /*!< 0F04:                                                              */
-   __IO uint32_t  CLAIMSET;                     /*!< 0FA0: Claim Tag Set Register                                       */
-   __IO uint32_t  CLAIMCLR;                     /*!< 0FA4: Claim Tag Clear Register                                     */
-   __I  uint32_t  RESERVED6[2];                 /*!< 0FA8:                                                              */
-   __O  uint32_t  LAR;                          /*!< 0FB0: Lock Access Register                                         */
-   __I  uint32_t  LSR;                          /*!< 0FB4: Lock Status Register                                         */
-   __I  uint32_t  AUTHSTATUS;                   /*!< 0FB8: Authentication Status Register                               */
-   __I  uint32_t  RESERVED7[3];                 /*!< 0FBC:                                                              */
-   __I  uint32_t  DEVID;                        /*!< 0FC8: Device ID Register                                           */
-   __I  uint32_t  DEVTYPE;                      /*!< 0FCC: Device Type Identifier Register                              */
-   __I  uint32_t  PIDR4;                        /*!< 0FD0: Peripheral Identification Register 4                         */
-   __I  uint32_t  PIDR5;                        /*!< 0FD4: Peripheral Identification Register 5                         */
-   __I  uint32_t  PIDR6;                        /*!< 0FD8: Peripheral Identification Register 6                         */
-   __I  uint32_t  PIDR7;                        /*!< 0FDC: Peripheral Identification Register 7                         */
-   __I  uint32_t  PIDR0;                        /*!< 0FE0: Peripheral Identification Register 0                         */
-   __I  uint32_t  PIDR1;                        /*!< 0FE4: Peripheral Identification Register 1                         */
-   __I  uint32_t  PIDR2;                        /*!< 0FE8: Peripheral Identification Register 2                         */
-   __I  uint32_t  PIDR3;                        /*!< 0FEC: Peripheral Identification Register 3                         */
-   __I  uint32_t  CIDR0;                        /*!< 0FF0: Component Identification Register 0                          */
-   __I  uint32_t  CIDR1;                        /*!< 0FF4: Component Identification Register 1                          */
-   __I  uint32_t  CIDR2;                        /*!< 0FF8: Component Identification Register 2                          */
-   __I  uint32_t  CIDR3;                        /*!< 0FFC: Component Identification Register 3                          */
+/**
+* @addtogroup ETB_structs_GROUP ETB struct
+* @brief Struct for ETB
+* @{
+*/
+typedef struct {                                /*       ETB Structure                                                */
+   __I  uint32_t  RESERVED0;                   
+   __I  uint32_t  RDP;                          /**< 0004: RAM Depth Register                                           */
+   __I  uint32_t  RESERVED1;                   
+   __I  uint32_t  STS;                          /**< 000C: Status Register                                              */
+   __I  uint32_t  RRD;                          /**< 0010: RAM Read Data Register                                       */
+   __IO uint32_t  RRP;                          /**< 0014: RAM Read Pointer Register                                    */
+   __IO uint32_t  RWP;                          /**< 0018: RAM Write Pointer Register                                   */
+   __IO uint32_t  TRG;                          /**< 001C: Trigger Counter Register                                     */
+   __IO uint32_t  CTL;                          /**< 0020: Control Register                                             */
+   __IO uint32_t  RWD;                          /**< 0024: RAM Write Data Register                                      */
+   __I  uint32_t  RESERVED2[182];              
+   __I  uint32_t  FFSR;                         /**< 0300: Formatter and Flush Status Register                          */
+   __IO uint32_t  FFCR;                         /**< 0304: Formatter and Flush Control Register                         */
+   __I  uint32_t  RESERVED3[758];              
+   __O  uint32_t  ITMISCOP0;                    /**< 0EE0: Integration Register, ITMISCOP0                              */
+   __O  uint32_t  ITTRFLINACK;                  /**< 0EE4: Integration Register, ITTRFLINACK                            */
+   __I  uint32_t  ITTRFLIN;                     /**< 0EE8: Integration Register, ITTRFLIN                               */
+   __I  uint32_t  ITATBDATA0;                   /**< 0EEC: Integration Register, ITATBDATA0                             */
+   __O  uint32_t  ITATBCTR2;                    /**< 0EF0: Integration Register, ITATBCTR2                              */
+   __I  uint32_t  ITATBCTR1;                    /**< 0EF4: Integration Register, ITATBCTR1                              */
+   __I  uint32_t  ITATBCTR0;                    /**< 0EF8: Integration Register, ITATBCTR0                              */
+   __I  uint32_t  RESERVED4;                   
+   __IO uint32_t  ITCTRL;                       /**< 0F00: Integration Mode Control Register                            */
+   __I  uint32_t  RESERVED5[39];               
+   __IO uint32_t  CLAIMSET;                     /**< 0FA0: Claim Tag Set Register                                       */
+   __IO uint32_t  CLAIMCLR;                     /**< 0FA4: Claim Tag Clear Register                                     */
+   __I  uint32_t  RESERVED6[2];                
+   __O  uint32_t  LAR;                          /**< 0FB0: Lock Access Register                                         */
+   __I  uint32_t  LSR;                          /**< 0FB4: Lock Status Register                                         */
+   __I  uint32_t  AUTHSTATUS;                   /**< 0FB8: Authentication Status Register                               */
+   __I  uint32_t  RESERVED7[3];                
+   __I  uint32_t  DEVID;                        /**< 0FC8: Device ID Register                                           */
+   __I  uint32_t  DEVTYPE;                      /**< 0FCC: Device Type Identifier Register                              */
+   __I  uint32_t  PIDR4;                        /**< 0FD0: Peripheral Identification Register 4                         */
+   __I  uint32_t  PIDR5;                        /**< 0FD4: Peripheral Identification Register 5                         */
+   __I  uint32_t  PIDR6;                        /**< 0FD8: Peripheral Identification Register 6                         */
+   __I  uint32_t  PIDR7;                        /**< 0FDC: Peripheral Identification Register 7                         */
+   __I  uint32_t  PIDR0;                        /**< 0FE0: Peripheral Identification Register 0                         */
+   __I  uint32_t  PIDR1;                        /**< 0FE4: Peripheral Identification Register 1                         */
+   __I  uint32_t  PIDR2;                        /**< 0FE8: Peripheral Identification Register 2                         */
+   __I  uint32_t  PIDR3;                        /**< 0FEC: Peripheral Identification Register 3                         */
+   __I  uint32_t  CIDR0;                        /**< 0FF0: Component Identification Register 0                          */
+   __I  uint32_t  CIDR1;                        /**< 0FF4: Component Identification Register 1                          */
+   __I  uint32_t  CIDR2;                        /**< 0FF8: Component Identification Register 2                          */
+   __I  uint32_t  CIDR3;                        /**< 0FFC: Component Identification Register 3                          */
 } ETB_Type;
 
+/**
+ * @} */ /* End group ETB_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'ETB' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup ETB_Register_Masks_GROUP ETB Register Masks
+* @brief Register Masks for ETB
+* @{
+*/
 /* ------- RDP Bit Fields                           ------ */
 #define ETB_RDP_RDP_MASK                         (0xFFFFFFFFUL << ETB_RDP_RDP_SHIFT)                 /*!< ETB_RDP: RDP Mask                       */
 #define ETB_RDP_RDP_SHIFT                        0                                                   /*!< ETB_RDP: RDP Position                   */
@@ -2000,11 +2280,22 @@ typedef struct {                                /*!<       ETB Structure        
 #define ETB_CIDR3_Preamble_MASK                  (0xFFUL << ETB_CIDR3_Preamble_SHIFT)                /*!< ETB_CIDR3: Preamble Mask                */
 #define ETB_CIDR3_Preamble_SHIFT                 0                                                   /*!< ETB_CIDR3: Preamble Position            */
 #define ETB_CIDR3_Preamble(x)                    (((uint32_t)(((uint32_t)(x))<<ETB_CIDR3_Preamble_SHIFT))&ETB_CIDR3_Preamble_MASK) /*!< ETB_CIDR3                               */
+/**
+ * @} */ /* End group ETB_Register_Masks_GROUP 
+ */
 
 /* ETB - Peripheral instance base addresses */
-#define ETB_BasePtr                    0xE0042000UL
-#define ETB                            ((ETB_Type *) ETB_BasePtr)
-#define ETB_BASE_PTR                   (ETB)
+#define ETB_BasePtr                    0xE0042000UL //!< Peripheral base address
+#define ETB                            ((ETB_Type *) ETB_BasePtr) //!< Freescale base pointer
+#define ETB_BASE_PTR                   (ETB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ETB_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup ETF_Peripheral_access_layer_GROUP ETF Peripheral Access Layer
+* @brief C Struct for ETF
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           ETF (file:ETF_0)                     ================ */
@@ -2013,45 +2304,58 @@ typedef struct {                                /*!<       ETB Structure        
 /**
  * @brief Embedded Trace Funnel
  */
-typedef struct {                                /*!<       ETF Structure                                                */
-   __IO uint32_t  FCR;                          /*!< 0000: Funnel Control Register                                      */
-   __IO uint32_t  PCR;                          /*!< 0004: Priority Control Register                                    */
-   __I  uint32_t  RESERVED0[953];               /*!< 0008:                                                              */
-   __IO uint32_t  ITATBDATA0;                   /*!< 0EEC: Integration Register, ITATBDATA0                             */
-   __IO uint32_t  ITATBCTR2;                    /*!< 0EF0: Integration Register, ITATBCTR2                              */
-   __IO uint32_t  ITATBCTR1;                    /*!< 0EF4: Integration Register, ITATBCTR1                              */
-   __IO uint32_t  ITATBCTR0;                    /*!< 0EF8: Integration Register, ITATBCTR0                              */
-   __I  uint32_t  RESERVED1;                    /*!< 0EFC:                                                              */
-   __IO uint32_t  ITCTRL;                       /*!< 0F00: Integration Mode Control Register                            */
-   __I  uint32_t  RESERVED2[39];                /*!< 0F04:                                                              */
-   __IO uint32_t  CLAIMSET;                     /*!< 0FA0: Claim Tag Set Register                                       */
-   __IO uint32_t  CLAIMCLR;                     /*!< 0FA4: Claim Tag Clear Register                                     */
-   __I  uint32_t  RESERVED3[2];                 /*!< 0FA8:                                                              */
-   __O  uint32_t  LAR;                          /*!< 0FB0: Lock Access Register                                         */
-   __I  uint32_t  LSR;                          /*!< 0FB4: Lock Status Register                                         */
-   __I  uint32_t  AUTHSTATUS;                   /*!< 0FB8: Authentication Status Register                               */
-   __I  uint32_t  RESERVED4[3];                 /*!< 0FBC:                                                              */
-   __I  uint32_t  DEVID;                        /*!< 0FC8: Device ID Register                                           */
-   __I  uint32_t  DEVTYPE;                      /*!< 0FCC: Device Type Identifier Register                              */
-   __I  uint32_t  PIDR4;                        /*!< 0FD0: Peripheral Identification Register 4                         */
-   __I  uint32_t  PIDR5;                        /*!< 0FD4: Peripheral Identification Register 5                         */
-   __I  uint32_t  PIDR6;                        /*!< 0FD8: Peripheral Identification Register 6                         */
-   __I  uint32_t  PIDR7;                        /*!< 0FDC: Peripheral Identification Register 7                         */
-   __I  uint32_t  PIDR0;                        /*!< 0FE0: Peripheral Identification Register 0                         */
-   __I  uint32_t  PIDR1;                        /*!< 0FE4: Peripheral Identification Register 1                         */
-   __I  uint32_t  PIDR2;                        /*!< 0FE8: Peripheral Identification Register 2                         */
-   __I  uint32_t  PIDR3;                        /*!< 0FEC: Peripheral Identification Register 3                         */
-   __I  uint32_t  CIDR0;                        /*!< 0FF0: Component Identification Register 0                          */
-   __I  uint32_t  CIDR1;                        /*!< 0FF4: Component Identification Register 1                          */
-   __I  uint32_t  CIDR2;                        /*!< 0FF8: Component Identification Register 2                          */
-   __I  uint32_t  CIDR3;                        /*!< 0FFC: Component Identification Register 3                          */
+/**
+* @addtogroup ETF_structs_GROUP ETF struct
+* @brief Struct for ETF
+* @{
+*/
+typedef struct {                                /*       ETF Structure                                                */
+   __IO uint32_t  FCR;                          /**< 0000: Funnel Control Register                                      */
+   __IO uint32_t  PCR;                          /**< 0004: Priority Control Register                                    */
+   __I  uint32_t  RESERVED0[953];              
+   __IO uint32_t  ITATBDATA0;                   /**< 0EEC: Integration Register, ITATBDATA0                             */
+   __IO uint32_t  ITATBCTR2;                    /**< 0EF0: Integration Register, ITATBCTR2                              */
+   __IO uint32_t  ITATBCTR1;                    /**< 0EF4: Integration Register, ITATBCTR1                              */
+   __IO uint32_t  ITATBCTR0;                    /**< 0EF8: Integration Register, ITATBCTR0                              */
+   __I  uint32_t  RESERVED1;                   
+   __IO uint32_t  ITCTRL;                       /**< 0F00: Integration Mode Control Register                            */
+   __I  uint32_t  RESERVED2[39];               
+   __IO uint32_t  CLAIMSET;                     /**< 0FA0: Claim Tag Set Register                                       */
+   __IO uint32_t  CLAIMCLR;                     /**< 0FA4: Claim Tag Clear Register                                     */
+   __I  uint32_t  RESERVED3[2];                
+   __O  uint32_t  LAR;                          /**< 0FB0: Lock Access Register                                         */
+   __I  uint32_t  LSR;                          /**< 0FB4: Lock Status Register                                         */
+   __I  uint32_t  AUTHSTATUS;                   /**< 0FB8: Authentication Status Register                               */
+   __I  uint32_t  RESERVED4[3];                
+   __I  uint32_t  DEVID;                        /**< 0FC8: Device ID Register                                           */
+   __I  uint32_t  DEVTYPE;                      /**< 0FCC: Device Type Identifier Register                              */
+   __I  uint32_t  PIDR4;                        /**< 0FD0: Peripheral Identification Register 4                         */
+   __I  uint32_t  PIDR5;                        /**< 0FD4: Peripheral Identification Register 5                         */
+   __I  uint32_t  PIDR6;                        /**< 0FD8: Peripheral Identification Register 6                         */
+   __I  uint32_t  PIDR7;                        /**< 0FDC: Peripheral Identification Register 7                         */
+   __I  uint32_t  PIDR0;                        /**< 0FE0: Peripheral Identification Register 0                         */
+   __I  uint32_t  PIDR1;                        /**< 0FE4: Peripheral Identification Register 1                         */
+   __I  uint32_t  PIDR2;                        /**< 0FE8: Peripheral Identification Register 2                         */
+   __I  uint32_t  PIDR3;                        /**< 0FEC: Peripheral Identification Register 3                         */
+   __I  uint32_t  CIDR0;                        /**< 0FF0: Component Identification Register 0                          */
+   __I  uint32_t  CIDR1;                        /**< 0FF4: Component Identification Register 1                          */
+   __I  uint32_t  CIDR2;                        /**< 0FF8: Component Identification Register 2                          */
+   __I  uint32_t  CIDR3;                        /**< 0FFC: Component Identification Register 3                          */
 } ETF_Type;
 
+/**
+ * @} */ /* End group ETF_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'ETF' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup ETF_Register_Masks_GROUP ETF Register Masks
+* @brief Register Masks for ETF
+* @{
+*/
 /* ------- FCR Bit Fields                           ------ */
 #define ETF_FCR_EnS0_MASK                        (0x01UL << ETF_FCR_EnS0_SHIFT)                      /*!< ETF_FCR: EnS0 Mask                      */
 #define ETF_FCR_EnS0_SHIFT                       0                                                   /*!< ETF_FCR: EnS0 Position                  */
@@ -2219,11 +2523,22 @@ typedef struct {                                /*!<       ETF Structure        
 #define ETF_CIDR3_Preamble_MASK                  (0xFFUL << ETF_CIDR3_Preamble_SHIFT)                /*!< ETF_CIDR3: Preamble Mask                */
 #define ETF_CIDR3_Preamble_SHIFT                 0                                                   /*!< ETF_CIDR3: Preamble Position            */
 #define ETF_CIDR3_Preamble(x)                    (((uint32_t)(((uint32_t)(x))<<ETF_CIDR3_Preamble_SHIFT))&ETF_CIDR3_Preamble_MASK) /*!< ETF_CIDR3                               */
+/**
+ * @} */ /* End group ETF_Register_Masks_GROUP 
+ */
 
 /* ETF - Peripheral instance base addresses */
-#define ETF_BasePtr                    0xE0043000UL
-#define ETF                            ((ETF_Type *) ETF_BasePtr)
-#define ETF_BASE_PTR                   (ETF)
+#define ETF_BasePtr                    0xE0043000UL //!< Peripheral base address
+#define ETF                            ((ETF_Type *) ETF_BasePtr) //!< Freescale base pointer
+#define ETF_BASE_PTR                   (ETF) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ETF_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup ETM_Peripheral_access_layer_GROUP ETM Peripheral Access Layer
+* @brief C Struct for ETM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           ETM (file:ETM_0)                     ================ */
@@ -2232,71 +2547,84 @@ typedef struct {                                /*!<       ETF Structure        
 /**
  * @brief Embedded Trace Macrocell
  */
-typedef struct {                                /*!<       ETM Structure                                                */
-   __IO uint32_t  CR;                           /*!< 0000: Main Control Register                                        */
-   __I  uint32_t  CCR;                          /*!< 0004: Configuration Code Register                                  */
-   __IO uint32_t  TRIGGER;                      /*!< 0008: Trigger Event Register                                       */
-   __I  uint32_t  RESERVED0;                    /*!< 000C:                                                              */
-   __IO uint32_t  SR;                           /*!< 0010: ETM Status Register                                          */
-   __I  uint32_t  SCR;                          /*!< 0014: System Configuration Register                                */
-   __I  uint32_t  RESERVED1[2];                 /*!< 0018:                                                              */
-   __IO uint32_t  EEVR;                         /*!< 0020: Trace Enable Event Register                                  */
-   __IO uint32_t  TECR1;                        /*!< 0024: Trace Enable Control 1 Register                              */
-   __IO uint32_t  FFLR;                         /*!< 0028: FIFOFULL Level Register                                      */
-   __I  uint32_t  RESERVED2[69];                /*!< 002C:                                                              */
-   __IO uint32_t  CNTRLDVR1;                    /*!< 0140: Free-running counter reload value                            */
-   __I  uint32_t  RESERVED3[39];                /*!< 0144:                                                              */
-   __I  uint32_t  SYNCFR;                       /*!< 01E0: Synchronization Frequency Register                           */
-   __I  uint32_t  IDR;                          /*!< 01E4: ID Register                                                  */
-   __I  uint32_t  CCER;                         /*!< 01E8: Configuration Code Extension Register                        */
-   __I  uint32_t  RESERVED4;                    /*!< 01EC:                                                              */
-   __IO uint32_t  TESSEICR;                     /*!< 01F0: TraceEnable Start/Stop EmbeddedICE Control Register          */
-   __I  uint32_t  RESERVED5;                    /*!< 01F4:                                                              */
-   __IO uint32_t  TSEVR;                        /*!< 01F8: Timestamp Event Register                                     */
-   __I  uint32_t  RESERVED6;                    /*!< 01FC:                                                              */
-   __IO uint32_t  TRACEIDR;                     /*!< 0200: CoreSight Trace ID Register                                  */
-   __I  uint32_t  RESERVED7;                    /*!< 0204:                                                              */
-   __I  uint32_t  IDR2;                         /*!< 0208: ETM ID Register 2                                            */
-   __I  uint32_t  RESERVED8[66];                /*!< 020C:                                                              */
-   __I  uint32_t  PDSR;                         /*!< 0314: Device Power-Down Status Register                            */
-   __I  uint32_t  RESERVED9[754];               /*!< 0318:                                                              */
-   __I  uint32_t  _ITMISCIN;                    /*!< 0EE0: Integration Test Miscelaneous Inputs Register                */
-   __I  uint32_t  RESERVED10;                   /*!< 0EE4:                                                              */
-   __O  uint32_t  _ITTRIGOUT;                   /*!< 0EE8: Integration Test Trigger Out Register                        */
-   __I  uint32_t  RESERVED11;                   /*!< 0EEC:                                                              */
-   __I  uint32_t  _ITATBCTR2;                   /*!< 0EF0: ETM Integration Test ATB Control 2 Register                  */
-   __I  uint32_t  RESERVED12;                   /*!< 0EF4:                                                              */
-   __O  uint32_t  _ITATBCTR0;                   /*!< 0EF8: ETM Integration Test ATB Control 0 Register                  */
-   __I  uint32_t  RESERVED13;                   /*!< 0EFC:                                                              */
-   __IO uint32_t  ITCTRL;                       /*!< 0F00: Integration Mode Control Register                            */
-   __I  uint32_t  RESERVED14[39];               /*!< 0F04:                                                              */
-   __IO uint32_t  CLAIMSET;                     /*!< 0FA0: Claim Tag Set Register                                       */
-   __IO uint32_t  CLAIMCLR;                     /*!< 0FA4: Claim Tag Clear Register                                     */
-   __I  uint32_t  RESERVED15[2];                /*!< 0FA8:                                                              */
-   __IO uint32_t  LAR;                          /*!< 0FB0: Lock Access Register                                         */
-   __I  uint32_t  LSR;                          /*!< 0FB4: Lock Status Register                                         */
-   __I  uint32_t  AUTHSTATUS;                   /*!< 0FB8: Authentication Status Register                               */
-   __I  uint32_t  RESERVED16[4];                /*!< 0FBC:                                                              */
-   __I  uint32_t  DEVTYPE;                      /*!< 0FCC: CoreSight Device Type Register                               */
-   __I  uint32_t  PIDR4;                        /*!< 0FD0: Peripheral Identification Register 4                         */
-   __I  uint32_t  PIDR5;                        /*!< 0FD4: Peripheral Identification Register 5                         */
-   __I  uint32_t  PIDR6;                        /*!< 0FD8: Peripheral Identification Register 6                         */
-   __I  uint32_t  PIDR7;                        /*!< 0FDC: Peripheral Identification Register 7                         */
-   __I  uint32_t  PIDR0;                        /*!< 0FE0: Peripheral Identification Register 0                         */
-   __I  uint32_t  PIDR1;                        /*!< 0FE4: Peripheral Identification Register 1                         */
-   __I  uint32_t  PIDR2;                        /*!< 0FE8: Peripheral Identification Register 2                         */
-   __I  uint32_t  PIDR3;                        /*!< 0FEC: Peripheral Identification Register 3                         */
-   __I  uint32_t  CIDR0;                        /*!< 0FF0: Component Identification Register 0                          */
-   __I  uint32_t  CIDR1;                        /*!< 0FF4: Component Identification Register 1                          */
-   __I  uint32_t  CIDR2;                        /*!< 0FF8: Component Identification Register 2                          */
-   __I  uint32_t  CIDR3;                        /*!< 0FFC: Component Identification Register 3                          */
+/**
+* @addtogroup ETM_structs_GROUP ETM struct
+* @brief Struct for ETM
+* @{
+*/
+typedef struct {                                /*       ETM Structure                                                */
+   __IO uint32_t  CR;                           /**< 0000: Main Control Register                                        */
+   __I  uint32_t  CCR;                          /**< 0004: Configuration Code Register                                  */
+   __IO uint32_t  TRIGGER;                      /**< 0008: Trigger Event Register                                       */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  SR;                           /**< 0010: ETM Status Register                                          */
+   __I  uint32_t  SCR;                          /**< 0014: System Configuration Register                                */
+   __I  uint32_t  RESERVED1[2];                
+   __IO uint32_t  EEVR;                         /**< 0020: Trace Enable Event Register                                  */
+   __IO uint32_t  TECR1;                        /**< 0024: Trace Enable Control 1 Register                              */
+   __IO uint32_t  FFLR;                         /**< 0028: FIFOFULL Level Register                                      */
+   __I  uint32_t  RESERVED2[69];               
+   __IO uint32_t  CNTRLDVR1;                    /**< 0140: Free-running counter reload value                            */
+   __I  uint32_t  RESERVED3[39];               
+   __I  uint32_t  SYNCFR;                       /**< 01E0: Synchronization Frequency Register                           */
+   __I  uint32_t  IDR;                          /**< 01E4: ID Register                                                  */
+   __I  uint32_t  CCER;                         /**< 01E8: Configuration Code Extension Register                        */
+   __I  uint32_t  RESERVED4;                   
+   __IO uint32_t  TESSEICR;                     /**< 01F0: TraceEnable Start/Stop EmbeddedICE Control Register          */
+   __I  uint32_t  RESERVED5;                   
+   __IO uint32_t  TSEVR;                        /**< 01F8: Timestamp Event Register                                     */
+   __I  uint32_t  RESERVED6;                   
+   __IO uint32_t  TRACEIDR;                     /**< 0200: CoreSight Trace ID Register                                  */
+   __I  uint32_t  RESERVED7;                   
+   __I  uint32_t  IDR2;                         /**< 0208: ETM ID Register 2                                            */
+   __I  uint32_t  RESERVED8[66];               
+   __I  uint32_t  PDSR;                         /**< 0314: Device Power-Down Status Register                            */
+   __I  uint32_t  RESERVED9[754];              
+   __I  uint32_t  _ITMISCIN;                    /**< 0EE0: Integration Test Miscelaneous Inputs Register                */
+   __I  uint32_t  RESERVED10;                  
+   __O  uint32_t  _ITTRIGOUT;                   /**< 0EE8: Integration Test Trigger Out Register                        */
+   __I  uint32_t  RESERVED11;                  
+   __I  uint32_t  _ITATBCTR2;                   /**< 0EF0: ETM Integration Test ATB Control 2 Register                  */
+   __I  uint32_t  RESERVED12;                  
+   __O  uint32_t  _ITATBCTR0;                   /**< 0EF8: ETM Integration Test ATB Control 0 Register                  */
+   __I  uint32_t  RESERVED13;                  
+   __IO uint32_t  ITCTRL;                       /**< 0F00: Integration Mode Control Register                            */
+   __I  uint32_t  RESERVED14[39];              
+   __IO uint32_t  CLAIMSET;                     /**< 0FA0: Claim Tag Set Register                                       */
+   __IO uint32_t  CLAIMCLR;                     /**< 0FA4: Claim Tag Clear Register                                     */
+   __I  uint32_t  RESERVED15[2];               
+   __IO uint32_t  LAR;                          /**< 0FB0: Lock Access Register                                         */
+   __I  uint32_t  LSR;                          /**< 0FB4: Lock Status Register                                         */
+   __I  uint32_t  AUTHSTATUS;                   /**< 0FB8: Authentication Status Register                               */
+   __I  uint32_t  RESERVED16[4];               
+   __I  uint32_t  DEVTYPE;                      /**< 0FCC: CoreSight Device Type Register                               */
+   __I  uint32_t  PIDR4;                        /**< 0FD0: Peripheral Identification Register 4                         */
+   __I  uint32_t  PIDR5;                        /**< 0FD4: Peripheral Identification Register 5                         */
+   __I  uint32_t  PIDR6;                        /**< 0FD8: Peripheral Identification Register 6                         */
+   __I  uint32_t  PIDR7;                        /**< 0FDC: Peripheral Identification Register 7                         */
+   __I  uint32_t  PIDR0;                        /**< 0FE0: Peripheral Identification Register 0                         */
+   __I  uint32_t  PIDR1;                        /**< 0FE4: Peripheral Identification Register 1                         */
+   __I  uint32_t  PIDR2;                        /**< 0FE8: Peripheral Identification Register 2                         */
+   __I  uint32_t  PIDR3;                        /**< 0FEC: Peripheral Identification Register 3                         */
+   __I  uint32_t  CIDR0;                        /**< 0FF0: Component Identification Register 0                          */
+   __I  uint32_t  CIDR1;                        /**< 0FF4: Component Identification Register 1                          */
+   __I  uint32_t  CIDR2;                        /**< 0FF8: Component Identification Register 2                          */
+   __I  uint32_t  CIDR3;                        /**< 0FFC: Component Identification Register 3                          */
 } ETM_Type;
 
+/**
+ * @} */ /* End group ETM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'ETM' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup ETM_Register_Masks_GROUP ETM Register Masks
+* @brief Register Masks for ETM
+* @{
+*/
 /* ------- CR Bit Fields                            ------ */
 #define ETM_CR_ETMPD_MASK                        (0x01UL << ETM_CR_ETMPD_SHIFT)                      /*!< ETM_CR: ETMPD Mask                      */
 #define ETM_CR_ETMPD_SHIFT                       0                                                   /*!< ETM_CR: ETMPD Position                  */
@@ -2586,11 +2914,22 @@ typedef struct {                                /*!<       ETM Structure        
 #define ETM_CIDR3_Preamble_MASK                  (0xFFUL << ETM_CIDR3_Preamble_SHIFT)                /*!< ETM_CIDR3: Preamble Mask                */
 #define ETM_CIDR3_Preamble_SHIFT                 0                                                   /*!< ETM_CIDR3: Preamble Position            */
 #define ETM_CIDR3_Preamble(x)                    (((uint32_t)(((uint32_t)(x))<<ETM_CIDR3_Preamble_SHIFT))&ETM_CIDR3_Preamble_MASK) /*!< ETM_CIDR3                               */
+/**
+ * @} */ /* End group ETM_Register_Masks_GROUP 
+ */
 
 /* ETM - Peripheral instance base addresses */
-#define ETM_BasePtr                    0xE0041000UL
-#define ETM                            ((ETM_Type *) ETM_BasePtr)
-#define ETM_BASE_PTR                   (ETM)
+#define ETM_BasePtr                    0xE0041000UL //!< Peripheral base address
+#define ETM                            ((ETM_Type *) ETM_BasePtr) //!< Freescale base pointer
+#define ETM_BASE_PTR                   (ETM) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ETM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup EWM_Peripheral_access_layer_GROUP EWM Peripheral Access Layer
+* @brief C Struct for EWM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           EWM (file:EWM_MK_1)                  ================ */
@@ -2599,20 +2938,33 @@ typedef struct {                                /*!<       ETM Structure        
 /**
  * @brief External Watchdog Monitor
  */
-typedef struct {                                /*!<       EWM Structure                                                */
-   __IO uint8_t   CTRL;                         /*!< 0000: Control Register                                             */
-   __O  uint8_t   SERV;                         /*!< 0001: Service Register                                             */
-   __IO uint8_t   CMPL;                         /*!< 0002: Compare Low Register                                         */
-   __IO uint8_t   CMPH;                         /*!< 0003: Compare High Register                                        */
-   __I  uint8_t   RESERVED0;                    /*!< 0004:                                                              */
-   __IO uint8_t   CLKPRESCALER;                 /*!< 0005: Clock Prescaler Register                                     */
+/**
+* @addtogroup EWM_structs_GROUP EWM struct
+* @brief Struct for EWM
+* @{
+*/
+typedef struct {                                /*       EWM Structure                                                */
+   __IO uint8_t   CTRL;                         /**< 0000: Control Register                                             */
+   __O  uint8_t   SERV;                         /**< 0001: Service Register                                             */
+   __IO uint8_t   CMPL;                         /**< 0002: Compare Low Register                                         */
+   __IO uint8_t   CMPH;                         /**< 0003: Compare High Register                                        */
+   __I  uint8_t   RESERVED0;                   
+   __IO uint8_t   CLKPRESCALER;                 /**< 0005: Clock Prescaler Register                                     */
 } EWM_Type;
 
+/**
+ * @} */ /* End group EWM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'EWM' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup EWM_Register_Masks_GROUP EWM Register Masks
+* @brief Register Masks for EWM
+* @{
+*/
 /* ------- CTRL Bit Fields                          ------ */
 #define EWM_CTRL_EWMEN_MASK                      (0x01UL << EWM_CTRL_EWMEN_SHIFT)                    /*!< EWM_CTRL: EWMEN Mask                    */
 #define EWM_CTRL_EWMEN_SHIFT                     0                                                   /*!< EWM_CTRL: EWMEN Position                */
@@ -2638,11 +2990,22 @@ typedef struct {                                /*!<       EWM Structure        
 #define EWM_CLKPRESCALER_CLK_DIV_MASK            (0xFFUL << EWM_CLKPRESCALER_CLK_DIV_SHIFT)          /*!< EWM_CLKPRESCALER: CLK_DIV Mask          */
 #define EWM_CLKPRESCALER_CLK_DIV_SHIFT           0                                                   /*!< EWM_CLKPRESCALER: CLK_DIV Position      */
 #define EWM_CLKPRESCALER_CLK_DIV(x)              (((uint8_t)(((uint8_t)(x))<<EWM_CLKPRESCALER_CLK_DIV_SHIFT))&EWM_CLKPRESCALER_CLK_DIV_MASK) /*!< EWM_CLKPRESCALER                        */
+/**
+ * @} */ /* End group EWM_Register_Masks_GROUP 
+ */
 
 /* EWM - Peripheral instance base addresses */
-#define EWM_BasePtr                    0x40061000UL
-#define EWM                            ((EWM_Type *) EWM_BasePtr)
-#define EWM_BASE_PTR                   (EWM)
+#define EWM_BasePtr                    0x40061000UL //!< Peripheral base address
+#define EWM                            ((EWM_Type *) EWM_BasePtr) //!< Freescale base pointer
+#define EWM_BASE_PTR                   (EWM) //!< Freescale style base pointer
+/**
+ * @} */ /* End group EWM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FB_Peripheral_access_layer_GROUP FB Peripheral Access Layer
+* @brief C Struct for FB
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FB (file:FB_0)                       ================ */
@@ -2651,21 +3014,34 @@ typedef struct {                                /*!<       EWM Structure        
 /**
  * @brief FlexBus external bus interface
  */
-typedef struct {                                /*!<       FB Structure                                                 */
-   struct { /* (cluster) */                     /*!< 0000: (size=0x0048, 72)                                            */
-      __IO uint32_t  CSAR;                      /*!< 0000: Chip Select Address Register                                 */
-      __IO uint32_t  CSMR;                      /*!< 0004: Chip Select Mask Register                                    */
-      __IO uint32_t  CSCR;                      /*!< 0008: Chip Select Control Register                                 */
-   } CS[6];
-   __I  uint32_t  RESERVED0[6];                 /*!< 0048:                                                              */
-   __IO uint32_t  CSPMCR;                       /*!< 0060: Chip Select port Multiplexing Control Register               */
+/**
+* @addtogroup FB_structs_GROUP FB struct
+* @brief Struct for FB
+* @{
+*/
+typedef struct {                                /*       FB Structure                                                 */
+   struct {
+      __IO uint32_t  CSAR;                      /**< 0000: Chip Select Address Register                                 */
+      __IO uint32_t  CSMR;                      /**< 0004: Chip Select Mask Register                                    */
+      __IO uint32_t  CSCR;                      /**< 0008: Chip Select Control Register                                 */
+   } CS[6];                                     /**< 0000: (cluster: size=0x0048, 72)                                   */
+   __I  uint32_t  RESERVED0[6];                
+   __IO uint32_t  CSPMCR;                       /**< 0060: Chip Select port Multiplexing Control Register               */
 } FB_Type;
 
+/**
+ * @} */ /* End group FB_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FB' Position & Mask macros                          ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FB_Register_Masks_GROUP FB Register Masks
+* @brief Register Masks for FB
+* @{
+*/
 /* ------- CSAR Bit Fields                          ------ */
 #define FB_CSAR_BA_MASK                          (0xFFFFUL << FB_CSAR_BA_SHIFT)                      /*!< FB_CSAR: BA Mask                        */
 #define FB_CSAR_BA_SHIFT                         16                                                  /*!< FB_CSAR: BA Position                    */
@@ -2727,11 +3103,22 @@ typedef struct {                                /*!<       FB Structure         
 #define FB_CSPMCR_GROUP1_MASK                    (0x0FUL << FB_CSPMCR_GROUP1_SHIFT)                  /*!< FB_CSPMCR: GROUP1 Mask                  */
 #define FB_CSPMCR_GROUP1_SHIFT                   28                                                  /*!< FB_CSPMCR: GROUP1 Position              */
 #define FB_CSPMCR_GROUP1(x)                      (((uint32_t)(((uint32_t)(x))<<FB_CSPMCR_GROUP1_SHIFT))&FB_CSPMCR_GROUP1_MASK) /*!< FB_CSPMCR                               */
+/**
+ * @} */ /* End group FB_Register_Masks_GROUP 
+ */
 
 /* FB - Peripheral instance base addresses */
-#define FB_BasePtr                     0x4000C000UL
-#define FB                             ((FB_Type *) FB_BasePtr)
-#define FB_BASE_PTR                    (FB)
+#define FB_BasePtr                     0x4000C000UL //!< Peripheral base address
+#define FB                             ((FB_Type *) FB_BasePtr) //!< Freescale base pointer
+#define FB_BASE_PTR                    (FB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FB_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FMC_Peripheral_access_layer_GROUP FMC Peripheral Access Layer
+* @brief C Struct for FMC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FMC (file:FMC_0)                     ================ */
@@ -2740,47 +3127,60 @@ typedef struct {                                /*!<       FB Structure         
 /**
  * @brief Flash Memory Controller
  */
-typedef struct {                                /*!<       FMC Structure                                                */
-   __IO uint32_t  PFAPR;                        /*!< 0000: Flash Access Protection Register                             */
-   __IO uint32_t  PFB0CR;                       /*!< 0004: Flash Bank 0 Control Register                                */
-   __IO uint32_t  PFB1CR;                       /*!< 0008: Flash Bank 1 Control Register                                */
-   __I  uint32_t  RESERVED0[61];                /*!< 000C:                                                              */
-   struct { /* (cluster) */                     /*!< 0100: (size=0x0080, 128)                                           */
-      __IO uint32_t  S0;                        /*!< 0100: Cache Tag Storage                                            */
-      __IO uint32_t  S1;                        /*!< 0104: Cache Tag Storage                                            */
-      __IO uint32_t  S2;                        /*!< 0108: Cache Tag Storage                                            */
-      __IO uint32_t  S3;                        /*!< 010C: Cache Tag Storage                                            */
-      __IO uint32_t  S4;                        /*!< 0110: Cache Tag Storage                                            */
-      __IO uint32_t  S5;                        /*!< 0114: Cache Tag Storage                                            */
-      __IO uint32_t  S6;                        /*!< 0118: Cache Tag Storage                                            */
-      __IO uint32_t  S7;                        /*!< 011C: Cache Tag Storage                                            */
-   } TAGVDW[4];
-   __I  uint32_t  RESERVED1[32];                /*!< 0180:                                                              */
-   struct { /* (cluster) */                     /*!< 0200: (size=0x0100, 256)                                           */
-      __IO uint32_t  S0U;                       /*!< 0200: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S0L;                       /*!< 0204: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S1U;                       /*!< 0208: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S1L;                       /*!< 020C: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S2U;                       /*!< 0210: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S2L;                       /*!< 0214: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S3U;                       /*!< 0218: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S3L;                       /*!< 021C: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S4U;                       /*!< 0220: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S4L;                       /*!< 0224: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S5U;                       /*!< 0228: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S5L;                       /*!< 022C: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S6U;                       /*!< 0230: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S6L;                       /*!< 0234: Cache Data Storage (lower word)                              */
-      __IO uint32_t  S7U;                       /*!< 0238: Cache Data Storage (upper word)                              */
-      __IO uint32_t  S7L;                       /*!< 023C: Cache Data Storage (lower word)                              */
-   } DATAW[4];
+/**
+* @addtogroup FMC_structs_GROUP FMC struct
+* @brief Struct for FMC
+* @{
+*/
+typedef struct {                                /*       FMC Structure                                                */
+   __IO uint32_t  PFAPR;                        /**< 0000: Flash Access Protection Register                             */
+   __IO uint32_t  PFB0CR;                       /**< 0004: Flash Bank 0 Control Register                                */
+   __IO uint32_t  PFB1CR;                       /**< 0008: Flash Bank 1 Control Register                                */
+   __I  uint32_t  RESERVED0[61];               
+   struct {
+      __IO uint32_t  S0;                        /**< 0100: Cache Tag Storage                                            */
+      __IO uint32_t  S1;                        /**< 0104: Cache Tag Storage                                            */
+      __IO uint32_t  S2;                        /**< 0108: Cache Tag Storage                                            */
+      __IO uint32_t  S3;                        /**< 010C: Cache Tag Storage                                            */
+      __IO uint32_t  S4;                        /**< 0110: Cache Tag Storage                                            */
+      __IO uint32_t  S5;                        /**< 0114: Cache Tag Storage                                            */
+      __IO uint32_t  S6;                        /**< 0118: Cache Tag Storage                                            */
+      __IO uint32_t  S7;                        /**< 011C: Cache Tag Storage                                            */
+   } TAGVDW[4];                                 /**< 0100: (cluster: size=0x0080, 128)                                  */
+   __I  uint32_t  RESERVED1[32];               
+   struct {
+      __IO uint32_t  S0U;                       /**< 0200: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S0L;                       /**< 0204: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S1U;                       /**< 0208: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S1L;                       /**< 020C: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S2U;                       /**< 0210: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S2L;                       /**< 0214: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S3U;                       /**< 0218: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S3L;                       /**< 021C: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S4U;                       /**< 0220: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S4L;                       /**< 0224: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S5U;                       /**< 0228: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S5L;                       /**< 022C: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S6U;                       /**< 0230: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S6L;                       /**< 0234: Cache Data Storage (lower word)                              */
+      __IO uint32_t  S7U;                       /**< 0238: Cache Data Storage (upper word)                              */
+      __IO uint32_t  S7L;                       /**< 023C: Cache Data Storage (lower word)                              */
+   } DATAW[4];                                  /**< 0200: (cluster: size=0x0100, 256)                                  */
 } FMC_Type;
 
+/**
+ * @} */ /* End group FMC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FMC' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FMC_Register_Masks_GROUP FMC Register Masks
+* @brief Register Masks for FMC
+* @{
+*/
 /* ------- PFAPR Bit Fields                         ------ */
 #define FMC_PFAPR_M0AP_MASK                      (0x03UL << FMC_PFAPR_M0AP_SHIFT)                    /*!< FMC_PFAPR: M0AP Mask                    */
 #define FMC_PFAPR_M0AP_SHIFT                     0                                                   /*!< FMC_PFAPR: M0AP Position                */
@@ -2881,11 +3281,22 @@ typedef struct {                                /*!<       FMC Structure        
 #define FMC_DATAWL_data_MASK                     (0xFFFFFFFFUL << FMC_DATAWL_data_SHIFT)             /*!< FMC_DATAWL: data Mask                   */
 #define FMC_DATAWL_data_SHIFT                    0                                                   /*!< FMC_DATAWL: data Position               */
 #define FMC_DATAWL_data(x)                       (((uint32_t)(((uint32_t)(x))<<FMC_DATAWL_data_SHIFT))&FMC_DATAWL_data_MASK) /*!< FMC_DATAWL                              */
+/**
+ * @} */ /* End group FMC_Register_Masks_GROUP 
+ */
 
 /* FMC - Peripheral instance base addresses */
-#define FMC_BasePtr                    0x4001F000UL
-#define FMC                            ((FMC_Type *) FMC_BasePtr)
-#define FMC_BASE_PTR                   (FMC)
+#define FMC_BasePtr                    0x4001F000UL //!< Peripheral base address
+#define FMC                            ((FMC_Type *) FMC_BasePtr) //!< Freescale base pointer
+#define FMC_BASE_PTR                   (FMC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FMC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FPB_Peripheral_access_layer_GROUP FPB Peripheral Access Layer
+* @brief C Struct for FPB
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FPB (file:FPB)                       ================ */
@@ -2894,30 +3305,43 @@ typedef struct {                                /*!<       FMC Structure        
 /**
  * @brief Flash Patch and Breakpoint Unit
  */
-typedef struct {                                /*!<       FPB Structure                                                */
-   __IO uint32_t  CTRL;                         /*!< 0000: FlashPatch Control Register                                  */
-   __IO uint32_t  REMAP;                        /*!< 0004: FlashPatch Remap Register                                    */
-   __IO uint32_t  COMP[8];                      /*!< 0008: FlashPatch Comparator Register                               */
-   __I  uint32_t  RESERVED0[1002];              /*!< 0028:                                                              */
-   __I  uint32_t  PID4;                         /*!< 0FD0: Peripheral Identification Register 4                         */
-   __I  uint32_t  PID5;                         /*!< 0FD4: Peripheral Identification Register 5                         */
-   __I  uint32_t  PID6;                         /*!< 0FD8: Peripheral Identification Register 6                         */
-   __I  uint32_t  PID7;                         /*!< 0FDC: Peripheral Identification Register 7                         */
-   __I  uint32_t  PID0;                         /*!< 0FE0: Peripheral Identification Register 0                         */
-   __I  uint32_t  PID1;                         /*!< 0FE4: Peripheral Identification Register 1                         */
-   __I  uint32_t  PID2;                         /*!< 0FE8: Peripheral Identification Register 2                         */
-   __I  uint32_t  PID3;                         /*!< 0FEC: Peripheral Identification Register 3                         */
-   __I  uint32_t  CID0;                         /*!< 0FF0: Component Identification Register 0                          */
-   __I  uint32_t  CID1;                         /*!< 0FF4: Component Identification Register 1                          */
-   __I  uint32_t  CID2;                         /*!< 0FF8: Component Identification Register 2                          */
-   __I  uint32_t  CID3;                         /*!< 0FFC: Component Identification Register 3                          */
+/**
+* @addtogroup FPB_structs_GROUP FPB struct
+* @brief Struct for FPB
+* @{
+*/
+typedef struct {                                /*       FPB Structure                                                */
+   __IO uint32_t  CTRL;                         /**< 0000: FlashPatch Control Register                                  */
+   __IO uint32_t  REMAP;                        /**< 0004: FlashPatch Remap Register                                    */
+   __IO uint32_t  COMP[8];                      /**< 0008: FlashPatch Comparator Register                               */
+   __I  uint32_t  RESERVED0[1002];             
+   __I  uint32_t  PID4;                         /**< 0FD0: Peripheral Identification Register 4                         */
+   __I  uint32_t  PID5;                         /**< 0FD4: Peripheral Identification Register 5                         */
+   __I  uint32_t  PID6;                         /**< 0FD8: Peripheral Identification Register 6                         */
+   __I  uint32_t  PID7;                         /**< 0FDC: Peripheral Identification Register 7                         */
+   __I  uint32_t  PID0;                         /**< 0FE0: Peripheral Identification Register 0                         */
+   __I  uint32_t  PID1;                         /**< 0FE4: Peripheral Identification Register 1                         */
+   __I  uint32_t  PID2;                         /**< 0FE8: Peripheral Identification Register 2                         */
+   __I  uint32_t  PID3;                         /**< 0FEC: Peripheral Identification Register 3                         */
+   __I  uint32_t  CID0;                         /**< 0FF0: Component Identification Register 0                          */
+   __I  uint32_t  CID1;                         /**< 0FF4: Component Identification Register 1                          */
+   __I  uint32_t  CID2;                         /**< 0FF8: Component Identification Register 2                          */
+   __I  uint32_t  CID3;                         /**< 0FFC: Component Identification Register 3                          */
 } FPB_Type;
 
+/**
+ * @} */ /* End group FPB_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FPB' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FPB_Register_Masks_GROUP FPB Register Masks
+* @brief Register Masks for FPB
+* @{
+*/
 /* ------- CTRL Bit Fields                          ------ */
 #define FPB_CTRL_ENABLE_MASK                     (0x01UL << FPB_CTRL_ENABLE_SHIFT)                   /*!< FPB_CTRL: ENABLE Mask                   */
 #define FPB_CTRL_ENABLE_SHIFT                    0                                                   /*!< FPB_CTRL: ENABLE Position               */
@@ -3001,11 +3425,22 @@ typedef struct {                                /*!<       FPB Structure        
 #define FPB_CID3_Preamble_MASK                   (0xFFUL << FPB_CID3_Preamble_SHIFT)                 /*!< FPB_CID3: Preamble Mask                 */
 #define FPB_CID3_Preamble_SHIFT                  0                                                   /*!< FPB_CID3: Preamble Position             */
 #define FPB_CID3_Preamble(x)                     (((uint32_t)(((uint32_t)(x))<<FPB_CID3_Preamble_SHIFT))&FPB_CID3_Preamble_MASK) /*!< FPB_CID3                                */
+/**
+ * @} */ /* End group FPB_Register_Masks_GROUP 
+ */
 
 /* FPB - Peripheral instance base addresses */
-#define FPB_BasePtr                    0xE0002000UL
-#define FPB                            ((FPB_Type *) FPB_BasePtr)
-#define FPB_BASE_PTR                   (FPB)
+#define FPB_BasePtr                    0xE0002000UL //!< Peripheral base address
+#define FPB                            ((FPB_Type *) FPB_BasePtr) //!< Freescale base pointer
+#define FPB_BASE_PTR                   (FPB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FPB_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FTFL_Peripheral_access_layer_GROUP FTFL Peripheral Access Layer
+* @brief C Struct for FTFL
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FTFL (file:FTFL)                     ================ */
@@ -3014,37 +3449,50 @@ typedef struct {                                /*!<       FPB Structure        
 /**
  * @brief Flash Memory Interface
  */
-typedef struct {                                /*!<       FTFL Structure                                               */
-   __IO uint8_t   FSTAT;                        /*!< 0000: Flash Status Register                                        */
-   __IO uint8_t   FCNFG;                        /*!< 0001: Flash Configuration Register                                 */
-   __I  uint8_t   FSEC;                         /*!< 0002: Flash Security Register                                      */
-   __I  uint8_t   FOPT;                         /*!< 0003: Flash Option Register                                        */
-   __IO uint8_t   FCCOB3;                       /*!< 0004: FCCOB 3 - Usually Flash address [7..0]                       */
-   __IO uint8_t   FCCOB2;                       /*!< 0005: FCCOB 2 - Usually Flash address [15..8]                      */
-   __IO uint8_t   FCCOB1;                       /*!< 0006: FCCOB 1 - Usually Flash address [23..16]                     */
-   __IO uint8_t   FCCOB0;                       /*!< 0007: FCCOB 0 - Usually FCMD (Flash command)                       */
-   __IO uint8_t   FCCOB7;                       /*!< 0008: FCCOB 7 - Usually Data Byte 3                                */
-   __IO uint8_t   FCCOB6;                       /*!< 0009: FCCOB 6 - Usually Data Byte 2                                */
-   __IO uint8_t   FCCOB5;                       /*!< 000A: FCCOB 5 - Usually Data Byte 1                                */
-   __IO uint8_t   FCCOB4;                       /*!< 000B: FCCOB 4 - Usually Data Byte 0                                */
-   __IO uint8_t   FCCOBB;                       /*!< 000C: FCCOB B - Usually Data Byte 7                                */
-   __IO uint8_t   FCCOBA;                       /*!< 000D: FCCOB A - Usually Data Byte 6                                */
-   __IO uint8_t   FCCOB9;                       /*!< 000E: FCCOB 9 - Usually Data Byte 5                                */
-   __IO uint8_t   FCCOB8;                       /*!< 000F: FCCOB 8 - Usually Data Byte 4                                */
-   __IO uint8_t   FPROT3;                       /*!< 0010: Program Flash Protection                                     */
-   __IO uint8_t   FPROT2;                       /*!< 0011: Program Flash Protection                                     */
-   __IO uint8_t   FPROT1;                       /*!< 0012: Program Flash Protection                                     */
-   __IO uint8_t   FPROT0;                       /*!< 0013: Program Flash Protection                                     */
-   __I  uint16_t  RESERVED0;                    /*!< 0014:                                                              */
-   __IO uint8_t   FEPROT;                       /*!< 0016: EEPROM Protection Register                                   */
-   __IO uint8_t   FDPROT;                       /*!< 0017: Data Flash Protection Register                               */
+/**
+* @addtogroup FTFL_structs_GROUP FTFL struct
+* @brief Struct for FTFL
+* @{
+*/
+typedef struct {                                /*       FTFL Structure                                               */
+   __IO uint8_t   FSTAT;                        /**< 0000: Flash Status Register                                        */
+   __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
+   __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
+   __I  uint8_t   FOPT;                         /**< 0003: Flash Option Register                                        */
+   __IO uint8_t   FCCOB3;                       /**< 0004: FCCOB 3 - Usually Flash address [7..0]                       */
+   __IO uint8_t   FCCOB2;                       /**< 0005: FCCOB 2 - Usually Flash address [15..8]                      */
+   __IO uint8_t   FCCOB1;                       /**< 0006: FCCOB 1 - Usually Flash address [23..16]                     */
+   __IO uint8_t   FCCOB0;                       /**< 0007: FCCOB 0 - Usually FCMD (Flash command)                       */
+   __IO uint8_t   FCCOB7;                       /**< 0008: FCCOB 7 - Usually Data Byte 3                                */
+   __IO uint8_t   FCCOB6;                       /**< 0009: FCCOB 6 - Usually Data Byte 2                                */
+   __IO uint8_t   FCCOB5;                       /**< 000A: FCCOB 5 - Usually Data Byte 1                                */
+   __IO uint8_t   FCCOB4;                       /**< 000B: FCCOB 4 - Usually Data Byte 0                                */
+   __IO uint8_t   FCCOBB;                       /**< 000C: FCCOB B - Usually Data Byte 7                                */
+   __IO uint8_t   FCCOBA;                       /**< 000D: FCCOB A - Usually Data Byte 6                                */
+   __IO uint8_t   FCCOB9;                       /**< 000E: FCCOB 9 - Usually Data Byte 5                                */
+   __IO uint8_t   FCCOB8;                       /**< 000F: FCCOB 8 - Usually Data Byte 4                                */
+   __IO uint8_t   FPROT3;                       /**< 0010: Program Flash Protection                                     */
+   __IO uint8_t   FPROT2;                       /**< 0011: Program Flash Protection                                     */
+   __IO uint8_t   FPROT1;                       /**< 0012: Program Flash Protection                                     */
+   __IO uint8_t   FPROT0;                       /**< 0013: Program Flash Protection                                     */
+   __I  uint16_t  RESERVED0;                   
+   __IO uint8_t   FEPROT;                       /**< 0016: EEPROM Protection Register                                   */
+   __IO uint8_t   FDPROT;                       /**< 0017: Data Flash Protection Register                               */
 } FTFL_Type;
 
+/**
+ * @} */ /* End group FTFL_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FTFL' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FTFL_Register_Masks_GROUP FTFL Register Masks
+* @brief Register Masks for FTFL
+* @{
+*/
 /* ------- FSTAT Bit Fields                         ------ */
 #define FTFL_FSTAT_MGSTAT0_MASK                  (0x01UL << FTFL_FSTAT_MGSTAT0_SHIFT)                /*!< FTFL_FSTAT: MGSTAT0 Mask                */
 #define FTFL_FSTAT_MGSTAT0_SHIFT                 0                                                   /*!< FTFL_FSTAT: MGSTAT0 Position            */
@@ -3106,11 +3554,22 @@ typedef struct {                                /*!<       FTFL Structure       
 #define FTFL_FDPROT_DPROT_MASK                   (0xFFUL << FTFL_FDPROT_DPROT_SHIFT)                 /*!< FTFL_FDPROT: DPROT Mask                 */
 #define FTFL_FDPROT_DPROT_SHIFT                  0                                                   /*!< FTFL_FDPROT: DPROT Position             */
 #define FTFL_FDPROT_DPROT(x)                     (((uint8_t)(((uint8_t)(x))<<FTFL_FDPROT_DPROT_SHIFT))&FTFL_FDPROT_DPROT_MASK) /*!< FTFL_FDPROT                             */
+/**
+ * @} */ /* End group FTFL_Register_Masks_GROUP 
+ */
 
 /* FTFL - Peripheral instance base addresses */
-#define FTFL_BasePtr                   0x40020000UL
-#define FTFL                           ((FTFL_Type *) FTFL_BasePtr)
-#define FTFL_BASE_PTR                  (FTFL)
+#define FTFL_BasePtr                   0x40020000UL //!< Peripheral base address
+#define FTFL                           ((FTFL_Type *) FTFL_BasePtr) //!< Freescale base pointer
+#define FTFL_BASE_PTR                  (FTFL) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FTFL_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FTM_Peripheral_access_layer_GROUP FTM Peripheral Access Layer
+* @brief C Struct for FTM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FTM0 (file:FTM0_8CH)                 ================ */
@@ -3119,41 +3578,54 @@ typedef struct {                                /*!<       FTFL Structure       
 /**
  * @brief FlexTimer Module (8 channels)
  */
-typedef struct {                                /*!<       FTM0 Structure                                               */
-   __IO uint32_t  SC;                           /*!< 0000: Status and Control                                           */
-   __IO uint32_t  CNT;                          /*!< 0004: Counter                                                      */
-   __IO uint32_t  MOD;                          /*!< 0008: Modulo                                                       */
-   struct { /* (cluster) */                     /*!< 000C: (size=0x0040, 64)                                            */
-      __IO uint32_t  CnSC;                      /*!< 000C: Channel  Status and Control                                  */
-      __IO uint32_t  CnV;                       /*!< 0010: Channel  Value                                               */
-   } CONTROLS[8];
-   __IO uint32_t  CNTIN;                        /*!< 004C: Counter Initial Value                                        */
-   __IO uint32_t  STATUS;                       /*!< 0050: Capture and Compare Status                                   */
-   __IO uint32_t  MODE;                         /*!< 0054: Features Mode Selection                                      */
-   __IO uint32_t  SYNC;                         /*!< 0058: Synchronization                                              */
-   __IO uint32_t  OUTINIT;                      /*!< 005C: Initial State for Channels Output                            */
-   __IO uint32_t  OUTMASK;                      /*!< 0060: Output Mask                                                  */
-   __IO uint32_t  COMBINE;                      /*!< 0064: Function for Linked Channels                                 */
-   __IO uint32_t  DEADTIME;                     /*!< 0068: Deadtime Insertion Control                                   */
-   __IO uint32_t  EXTTRIG;                      /*!< 006C: FTM External Trigger                                         */
-   __IO uint32_t  POL;                          /*!< 0070: Channels Polarity                                            */
-   __IO uint32_t  FMS;                          /*!< 0074: Fault Mode Status                                            */
-   __IO uint32_t  FILTER;                       /*!< 0078: Input Capture Filter Control                                 */
-   __IO uint32_t  FLTCTRL;                      /*!< 007C: Fault Control                                                */
-   __IO uint32_t  QDCTRL;                       /*!< 0080: Quadrature Decoder Control and Status                        */
-   __IO uint32_t  CONF;                         /*!< 0084: Configuration                                                */
-   __IO uint32_t  FLTPOL;                       /*!< 0088: FTM Fault Input Polarity                                     */
-   __IO uint32_t  SYNCONF;                      /*!< 008C: Synchronization Configuration                                */
-   __IO uint32_t  INVCTRL;                      /*!< 0090: FTM Inverting Control                                        */
-   __IO uint32_t  SWOCTRL;                      /*!< 0094: FTM Software Output Control                                  */
-   __IO uint32_t  PWMLOAD;                      /*!< 0098: FTM PWM Load                                                 */
-} FTM0_Type;
+/**
+* @addtogroup FTM_structs_GROUP FTM struct
+* @brief Struct for FTM
+* @{
+*/
+typedef struct {                                /*       FTM0 Structure                                               */
+   __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
+   __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
+   __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
+   struct {
+      __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
+      __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
+   } CONTROLS[8];                               /**< 000C: (cluster: size=0x0040, 64)                                   */
+   __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
+   __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
+   __IO uint32_t  MODE;                         /**< 0054: Features Mode Selection                                      */
+   __IO uint32_t  SYNC;                         /**< 0058: Synchronization                                              */
+   __IO uint32_t  OUTINIT;                      /**< 005C: Initial State for Channels Output                            */
+   __IO uint32_t  OUTMASK;                      /**< 0060: Output Mask                                                  */
+   __IO uint32_t  COMBINE;                      /**< 0064: Function for Linked Channels                                 */
+   __IO uint32_t  DEADTIME;                     /**< 0068: Deadtime Insertion Control                                   */
+   __IO uint32_t  EXTTRIG;                      /**< 006C: FTM External Trigger                                         */
+   __IO uint32_t  POL;                          /**< 0070: Channels Polarity                                            */
+   __IO uint32_t  FMS;                          /**< 0074: Fault Mode Status                                            */
+   __IO uint32_t  FILTER;                       /**< 0078: Input Capture Filter Control                                 */
+   __IO uint32_t  FLTCTRL;                      /**< 007C: Fault Control                                                */
+   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
+   __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
+   __IO uint32_t  FLTPOL;                       /**< 0088: FTM Fault Input Polarity                                     */
+   __IO uint32_t  SYNCONF;                      /**< 008C: Synchronization Configuration                                */
+   __IO uint32_t  INVCTRL;                      /**< 0090: FTM Inverting Control                                        */
+   __IO uint32_t  SWOCTRL;                      /**< 0094: FTM Software Output Control                                  */
+   __IO uint32_t  PWMLOAD;                      /**< 0098: FTM PWM Load                                                 */
+} FTM_Type;
 
+/**
+ * @} */ /* End group FTM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FTM0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FTM_Register_Masks_GROUP FTM Register Masks
+* @brief Register Masks for FTM
+* @{
+*/
 /* ------- SC Bit Fields                            ------ */
 #define FTM_SC_PS_MASK                           (0x07UL << FTM_SC_PS_SHIFT)                         /*!< FTM0_SC: PS Mask                        */
 #define FTM_SC_PS_SHIFT                          0                                                   /*!< FTM0_SC: PS Position                    */
@@ -3563,11 +4035,22 @@ typedef struct {                                /*!<       FTM0 Structure       
 #define FTM_PWMLOAD_CH7SEL_SHIFT                 7                                                   /*!< FTM0_PWMLOAD: CH7SEL Position           */
 #define FTM_PWMLOAD_LDOK_MASK                    (0x01UL << FTM_PWMLOAD_LDOK_SHIFT)                  /*!< FTM0_PWMLOAD: LDOK Mask                 */
 #define FTM_PWMLOAD_LDOK_SHIFT                   9                                                   /*!< FTM0_PWMLOAD: LDOK Position             */
+/**
+ * @} */ /* End group FTM_Register_Masks_GROUP 
+ */
 
 /* FTM0 - Peripheral instance base addresses */
-#define FTM0_BasePtr                   0x40038000UL
-#define FTM0                           ((FTM0_Type *) FTM0_BasePtr)
-#define FTM0_BASE_PTR                  (FTM0)
+#define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
+#define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
+#define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FTM_Peripheral_access_layer_GROUP FTM Peripheral Access Layer
+* @brief C Struct for FTM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FTM1 (file:FTM1_2CH)                 ================ */
@@ -3576,42 +4059,55 @@ typedef struct {                                /*!<       FTM0 Structure       
 /**
  * @brief FlexTimer Module (2 channels)
  */
-typedef struct {                                /*!<       FTM1 Structure                                               */
-   __IO uint32_t  SC;                           /*!< 0000: Status and Control                                           */
-   __IO uint32_t  CNT;                          /*!< 0004: Counter                                                      */
-   __IO uint32_t  MOD;                          /*!< 0008: Modulo                                                       */
-   struct { /* (cluster) */                     /*!< 000C: (size=0x0010, 16)                                            */
-      __IO uint32_t  CnSC;                      /*!< 000C: Channel  Status and Control                                  */
-      __IO uint32_t  CnV;                       /*!< 0010: Channel  Value                                               */
-   } CONTROLS[2];
-   __I  uint32_t  RESERVED0[12];                /*!< 001C:                                                              */
-   __IO uint32_t  CNTIN;                        /*!< 004C: Counter Initial Value                                        */
-   __IO uint32_t  STATUS;                       /*!< 0050: Capture and Compare Status                                   */
-   __IO uint32_t  MODE;                         /*!< 0054: Features Mode Selection                                      */
-   __IO uint32_t  SYNC;                         /*!< 0058: Synchronization                                              */
-   __IO uint32_t  OUTINIT;                      /*!< 005C: Initial State for Channels Output                            */
-   __IO uint32_t  OUTMASK;                      /*!< 0060: Output Mask                                                  */
-   __IO uint32_t  COMBINE;                      /*!< 0064: Function for Linked Channels                                 */
-   __IO uint32_t  DEADTIME;                     /*!< 0068: Deadtime Insertion Control                                   */
-   __IO uint32_t  EXTTRIG;                      /*!< 006C: FTM External Trigger                                         */
-   __IO uint32_t  POL;                          /*!< 0070: Channels Polarity                                            */
-   __IO uint32_t  FMS;                          /*!< 0074: Fault Mode Status                                            */
-   __IO uint32_t  FILTER;                       /*!< 0078: Input Capture Filter Control                                 */
-   __IO uint32_t  FLTCTRL;                      /*!< 007C: Fault Control                                                */
-   __IO uint32_t  QDCTRL;                       /*!< 0080: Quadrature Decoder Control and Status                        */
-   __IO uint32_t  CONF;                         /*!< 0084: Configuration                                                */
-   __IO uint32_t  FLTPOL;                       /*!< 0088: FTM Fault Input Polarity                                     */
-   __IO uint32_t  SYNCONF;                      /*!< 008C: Synchronization Configuration                                */
-   __IO uint32_t  INVCTRL;                      /*!< 0090: FTM Inverting Control                                        */
-   __IO uint32_t  SWOCTRL;                      /*!< 0094: FTM Software Output Control                                  */
-   __IO uint32_t  PWMLOAD;                      /*!< 0098: FTM PWM Load                                                 */
+/**
+* @addtogroup FTM_structs_GROUP FTM struct
+* @brief Struct for FTM
+* @{
+*/
+typedef struct {                                /*       FTM1 Structure                                               */
+   __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
+   __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
+   __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
+   struct {
+      __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
+      __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
+   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   __I  uint32_t  RESERVED0[12];               
+   __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
+   __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
+   __IO uint32_t  MODE;                         /**< 0054: Features Mode Selection                                      */
+   __IO uint32_t  SYNC;                         /**< 0058: Synchronization                                              */
+   __IO uint32_t  OUTINIT;                      /**< 005C: Initial State for Channels Output                            */
+   __IO uint32_t  OUTMASK;                      /**< 0060: Output Mask                                                  */
+   __IO uint32_t  COMBINE;                      /**< 0064: Function for Linked Channels                                 */
+   __IO uint32_t  DEADTIME;                     /**< 0068: Deadtime Insertion Control                                   */
+   __IO uint32_t  EXTTRIG;                      /**< 006C: FTM External Trigger                                         */
+   __IO uint32_t  POL;                          /**< 0070: Channels Polarity                                            */
+   __IO uint32_t  FMS;                          /**< 0074: Fault Mode Status                                            */
+   __IO uint32_t  FILTER;                       /**< 0078: Input Capture Filter Control                                 */
+   __IO uint32_t  FLTCTRL;                      /**< 007C: Fault Control                                                */
+   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
+   __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
+   __IO uint32_t  FLTPOL;                       /**< 0088: FTM Fault Input Polarity                                     */
+   __IO uint32_t  SYNCONF;                      /**< 008C: Synchronization Configuration                                */
+   __IO uint32_t  INVCTRL;                      /**< 0090: FTM Inverting Control                                        */
+   __IO uint32_t  SWOCTRL;                      /**< 0094: FTM Software Output Control                                  */
+   __IO uint32_t  PWMLOAD;                      /**< 0098: FTM PWM Load                                                 */
 } FTM1_Type;
 
+/**
+ * @} */ /* End group FTM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'FTM1' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup FTM_Register_Masks_GROUP FTM Register Masks
+* @brief Register Masks for FTM
+* @{
+*/
 /* ------- SC Bit Fields                            ------ */
 /* ------- CNT Bit Fields                           ------ */
 /* ------- MOD Bit Fields                           ------ */
@@ -3637,11 +4133,22 @@ typedef struct {                                /*!<       FTM1 Structure       
 /* ------- INVCTRL Bit Fields                       ------ */
 /* ------- SWOCTRL Bit Fields                       ------ */
 /* ------- PWMLOAD Bit Fields                       ------ */
+/**
+ * @} */ /* End group FTM_Register_Masks_GROUP 
+ */
 
 /* FTM1 - Peripheral instance base addresses */
-#define FTM1_BasePtr                   0x40039000UL
-#define FTM1                           ((FTM1_Type *) FTM1_BasePtr)
-#define FTM1_BASE_PTR                  (FTM1)
+#define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
+#define FTM1                           ((FTM1_Type *) FTM1_BasePtr) //!< Freescale base pointer
+#define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup FTM_Peripheral_access_layer_GROUP FTM Peripheral Access Layer
+* @brief C Struct for FTM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           FTM2 (derived from FTM1)             ================ */
@@ -3652,9 +4159,17 @@ typedef struct {                                /*!<       FTM1 Structure       
  */
 
 /* FTM2 - Peripheral instance base addresses */
-#define FTM2_BasePtr                   0x400B8000UL
-#define FTM2                           ((FTM1_Type *) FTM2_BasePtr)
-#define FTM2_BASE_PTR                  (FTM2)
+#define FTM2_BasePtr                   0x400B8000UL //!< Peripheral base address
+#define FTM2                           ((FTM1_Type *) FTM2_BasePtr) //!< Freescale base pointer
+#define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
+/**
+ * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
+* @brief C Struct for GPIOA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           GPIOA (file:GPIOA_0)                 ================ */
@@ -3663,31 +4178,55 @@ typedef struct {                                /*!<       FTM1 Structure       
 /**
  * @brief General Purpose Input/Output
  */
-typedef struct {                                /*!<       GPIOA Structure                                              */
-   __IO uint32_t  PDOR;                         /*!< 0000: Port Data Output Register                                    */
-   __O  uint32_t  PSOR;                         /*!< 0004: Port Set Output Register                                     */
-   __O  uint32_t  PCOR;                         /*!< 0008: Port Clear Output Register                                   */
-   __O  uint32_t  PTOR;                         /*!< 000C: Port Toggle Output Register                                  */
-   __I  uint32_t  PDIR;                         /*!< 0010: Port Data Input Register                                     */
-   __IO uint32_t  PDDR;                         /*!< 0014: Port Data Direction Register                                 */
+/**
+* @addtogroup GPIOA_structs_GROUP GPIOA struct
+* @brief Struct for GPIOA
+* @{
+*/
+typedef struct {                                /*       GPIOA Structure                                              */
+   __IO uint32_t  PDOR;                         /**< 0000: Port Data Output Register                                    */
+   __O  uint32_t  PSOR;                         /**< 0004: Port Set Output Register                                     */
+   __O  uint32_t  PCOR;                         /**< 0008: Port Clear Output Register                                   */
+   __O  uint32_t  PTOR;                         /**< 000C: Port Toggle Output Register                                  */
+   __I  uint32_t  PDIR;                         /**< 0010: Port Data Input Register                                     */
+   __IO uint32_t  PDDR;                         /**< 0014: Port Data Direction Register                                 */
 } GPIO_Type;
 
+/**
+ * @} */ /* End group GPIOA_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'GPIOA' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup GPIOA_Register_Masks_GROUP GPIOA Register Masks
+* @brief Register Masks for GPIOA
+* @{
+*/
 /* ------- PDOR Bit Fields                          ------ */
 /* ------- PSOR Bit Fields                          ------ */
 /* ------- PCOR Bit Fields                          ------ */
 /* ------- PTOR Bit Fields                          ------ */
 /* ------- PDIR Bit Fields                          ------ */
 /* ------- PDDR Bit Fields                          ------ */
+/**
+ * @} */ /* End group GPIOA_Register_Masks_GROUP 
+ */
 
 /* GPIOA - Peripheral instance base addresses */
-#define GPIOA_BasePtr                  0x400FF000UL
-#define GPIOA                          ((GPIO_Type *) GPIOA_BasePtr)
-#define GPIOA_BASE_PTR                 (GPIOA)
+#define GPIOA_BasePtr                  0x400FF000UL //!< Peripheral base address
+#define GPIOA                          ((GPIO_Type *) GPIOA_BasePtr) //!< Freescale base pointer
+#define GPIOA_BASE_PTR                 (GPIOA) //!< Freescale style base pointer
+/**
+ * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
+* @brief C Struct for GPIOA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           GPIOB (derived from GPIOA)           ================ */
@@ -3698,9 +4237,17 @@ typedef struct {                                /*!<       GPIOA Structure      
  */
 
 /* GPIOB - Peripheral instance base addresses */
-#define GPIOB_BasePtr                  0x400FF040UL
-#define GPIOB                          ((GPIO_Type *) GPIOB_BasePtr)
-#define GPIOB_BASE_PTR                 (GPIOB)
+#define GPIOB_BasePtr                  0x400FF040UL //!< Peripheral base address
+#define GPIOB                          ((GPIO_Type *) GPIOB_BasePtr) //!< Freescale base pointer
+#define GPIOB_BASE_PTR                 (GPIOB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
+* @brief C Struct for GPIOA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           GPIOC (derived from GPIOA)           ================ */
@@ -3711,9 +4258,17 @@ typedef struct {                                /*!<       GPIOA Structure      
  */
 
 /* GPIOC - Peripheral instance base addresses */
-#define GPIOC_BasePtr                  0x400FF080UL
-#define GPIOC                          ((GPIO_Type *) GPIOC_BasePtr)
-#define GPIOC_BASE_PTR                 (GPIOC)
+#define GPIOC_BasePtr                  0x400FF080UL //!< Peripheral base address
+#define GPIOC                          ((GPIO_Type *) GPIOC_BasePtr) //!< Freescale base pointer
+#define GPIOC_BASE_PTR                 (GPIOC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
+* @brief C Struct for GPIOA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           GPIOD (derived from GPIOA)           ================ */
@@ -3724,9 +4279,17 @@ typedef struct {                                /*!<       GPIOA Structure      
  */
 
 /* GPIOD - Peripheral instance base addresses */
-#define GPIOD_BasePtr                  0x400FF0C0UL
-#define GPIOD                          ((GPIO_Type *) GPIOD_BasePtr)
-#define GPIOD_BASE_PTR                 (GPIOD)
+#define GPIOD_BasePtr                  0x400FF0C0UL //!< Peripheral base address
+#define GPIOD                          ((GPIO_Type *) GPIOD_BasePtr) //!< Freescale base pointer
+#define GPIOD_BASE_PTR                 (GPIOD) //!< Freescale style base pointer
+/**
+ * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
+* @brief C Struct for GPIOA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           GPIOE (derived from GPIOA)           ================ */
@@ -3737,9 +4300,17 @@ typedef struct {                                /*!<       GPIOA Structure      
  */
 
 /* GPIOE - Peripheral instance base addresses */
-#define GPIOE_BasePtr                  0x400FF100UL
-#define GPIOE                          ((GPIO_Type *) GPIOE_BasePtr)
-#define GPIOE_BASE_PTR                 (GPIOE)
+#define GPIOE_BasePtr                  0x400FF100UL //!< Peripheral base address
+#define GPIOE                          ((GPIO_Type *) GPIOE_BasePtr) //!< Freescale base pointer
+#define GPIOE_BASE_PTR                 (GPIOE) //!< Freescale style base pointer
+/**
+ * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup I2C_Peripheral_access_layer_GROUP I2C Peripheral Access Layer
+* @brief C Struct for I2C
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           I2C0 (file:I2C0_MK)                  ================ */
@@ -3748,26 +4319,39 @@ typedef struct {                                /*!<       GPIOA Structure      
 /**
  * @brief Inter-Integrated Circuit
  */
-typedef struct {                                /*!<       I2C0 Structure                                               */
-   __IO uint8_t   A1;                           /*!< 0000: Address Register 1                                           */
-   __IO uint8_t   F;                            /*!< 0001: Frequency Divider register                                   */
-   __IO uint8_t   C1;                           /*!< 0002: Control Register 1                                           */
-   __IO uint8_t   S;                            /*!< 0003: Status Register                                              */
-   __IO uint8_t   D;                            /*!< 0004: Data I/O register                                            */
-   __IO uint8_t   C2;                           /*!< 0005: Control Register 2                                           */
-   __IO uint8_t   FLT;                          /*!< 0006: Programmable Input Glitch Filter register                    */
-   __IO uint8_t   RA;                           /*!< 0007: Range Address register                                       */
-   __IO uint8_t   SMB;                          /*!< 0008: SMBus Control and Status register                            */
-   __IO uint8_t   A2;                           /*!< 0009: Address Register 2                                           */
-   __IO uint8_t   SLTH;                         /*!< 000A: SCL Low Timeout Register High                                */
-   __IO uint8_t   SLTL;                         /*!< 000B: SCL Low Timeout Register Low                                 */
+/**
+* @addtogroup I2C_structs_GROUP I2C struct
+* @brief Struct for I2C
+* @{
+*/
+typedef struct {                                /*       I2C0 Structure                                               */
+   __IO uint8_t   A1;                           /**< 0000: Address Register 1                                           */
+   __IO uint8_t   F;                            /**< 0001: Frequency Divider register                                   */
+   __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
+   __IO uint8_t   S;                            /**< 0003: Status Register                                              */
+   __IO uint8_t   D;                            /**< 0004: Data I/O register                                            */
+   __IO uint8_t   C2;                           /**< 0005: Control Register 2                                           */
+   __IO uint8_t   FLT;                          /**< 0006: Programmable Input Glitch Filter register                    */
+   __IO uint8_t   RA;                           /**< 0007: Range Address register                                       */
+   __IO uint8_t   SMB;                          /**< 0008: SMBus Control and Status register                            */
+   __IO uint8_t   A2;                           /**< 0009: Address Register 2                                           */
+   __IO uint8_t   SLTH;                         /**< 000A: SCL Low Timeout Register High                                */
+   __IO uint8_t   SLTL;                         /**< 000B: SCL Low Timeout Register Low                                 */
 } I2C_Type;
 
+/**
+ * @} */ /* End group I2C_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'I2C0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup I2C_Register_Masks_GROUP I2C Register Masks
+* @brief Register Masks for I2C
+* @{
+*/
 /* ------- A1 Bit Fields                            ------ */
 #define I2C_A1_AD_MASK                           (0x7FUL << I2C_A1_AD_SHIFT)                         /*!< I2C0_A1: AD Mask                        */
 #define I2C_A1_AD_SHIFT                          1                                                   /*!< I2C0_A1: AD Position                    */
@@ -3868,11 +4452,22 @@ typedef struct {                                /*!<       I2C0 Structure       
 #define I2C_SLTL_SSLT_MASK                       (0xFFUL << I2C_SLTL_SSLT_SHIFT)                     /*!< I2C0_SLTL: SSLT Mask                    */
 #define I2C_SLTL_SSLT_SHIFT                      0                                                   /*!< I2C0_SLTL: SSLT Position                */
 #define I2C_SLTL_SSLT(x)                         (((uint8_t)(((uint8_t)(x))<<I2C_SLTL_SSLT_SHIFT))&I2C_SLTL_SSLT_MASK) /*!< I2C0_SLTL                               */
+/**
+ * @} */ /* End group I2C_Register_Masks_GROUP 
+ */
 
 /* I2C0 - Peripheral instance base addresses */
-#define I2C0_BasePtr                   0x40066000UL
-#define I2C0                           ((I2C_Type *) I2C0_BasePtr)
-#define I2C0_BASE_PTR                  (I2C0)
+#define I2C0_BasePtr                   0x40066000UL //!< Peripheral base address
+#define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
+#define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup I2C_Peripheral_access_layer_GROUP I2C Peripheral Access Layer
+* @brief C Struct for I2C
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           I2C1 (derived from I2C0)             ================ */
@@ -3883,9 +4478,17 @@ typedef struct {                                /*!<       I2C0 Structure       
  */
 
 /* I2C1 - Peripheral instance base addresses */
-#define I2C1_BasePtr                   0x40067000UL
-#define I2C1                           ((I2C_Type *) I2C1_BasePtr)
-#define I2C1_BASE_PTR                  (I2C1)
+#define I2C1_BasePtr                   0x40067000UL //!< Peripheral base address
+#define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
+#define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup I2S_Peripheral_access_layer_GROUP I2S Peripheral Access Layer
+* @brief C Struct for I2S
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           I2S0 (file:I2S0_MK)                  ================ */
@@ -3894,42 +4497,55 @@ typedef struct {                                /*!<       I2C0 Structure       
 /**
  * @brief Inter-IC Sound / Synchronous Audio Interface
  */
-typedef struct {                                /*!<       I2S0 Structure                                               */
-   __IO uint32_t  TCSR;                         /*!< 0000: SAI Transmit Control Register                                */
-   __IO uint32_t  TCR1;                         /*!< 0004: SAI Transmit Configuration 1 Register                        */
-   __IO uint32_t  TCR2;                         /*!< 0008: SAI Transmit Configuration 2 Register                        */
-   __IO uint32_t  TCR3;                         /*!< 000C: SAI Transmit Configuration 3 Register                        */
-   __IO uint32_t  TCR4;                         /*!< 0010: SAI Transmit Configuration 4 Register                        */
-   __IO uint32_t  TCR5;                         /*!< 0014: SAI Transmit Configuration 5 Register                        */
-   __I  uint32_t  RESERVED0[2];                 /*!< 0018:                                                              */
-   __O  uint32_t  TDR[2];                       /*!< 0020: Transmit Data Register                                       */
-   __I  uint32_t  RESERVED1[6];                 /*!< 0028:                                                              */
-   __I  uint32_t  TFR[2];                       /*!< 0040: SAI Transmit FIFO Register                                   */
-   __I  uint32_t  RESERVED2[6];                 /*!< 0048:                                                              */
-   __IO uint32_t  TMR;                          /*!< 0060: SAI Transmit Mask Register                                   */
-   __I  uint32_t  RESERVED3[7];                 /*!< 0064:                                                              */
-   __IO uint32_t  RCSR;                         /*!< 0080: SAI Receive Control Register                                 */
-   __IO uint32_t  RCR1;                         /*!< 0084: SAI Receive Configuration 1 Register                         */
-   __IO uint32_t  RCR2;                         /*!< 0088: SAI Receive Configuration 2 Register                         */
-   __IO uint32_t  RCR3;                         /*!< 008C: SAI Receive Configuration 3 Register                         */
-   __IO uint32_t  RCR4;                         /*!< 0090: SAI Receive Configuration 4 Register                         */
-   __IO uint32_t  RCR5;                         /*!< 0094: SAI Receive Configuration 5 Register                         */
-   __I  uint32_t  RESERVED4[2];                 /*!< 0098:                                                              */
-   __I  uint32_t  RDR[2];                       /*!< 00A0: SAI Receive Data Register                                    */
-   __I  uint32_t  RESERVED5[6];                 /*!< 00A8:                                                              */
-   __I  uint32_t  RFR[2];                       /*!< 00C0: SAI Receive FIFO Register                                    */
-   __I  uint32_t  RESERVED6[6];                 /*!< 00C8:                                                              */
-   __IO uint32_t  RMR;                          /*!< 00E0: SAI Receive Mask Register                                    */
-   __I  uint32_t  RESERVED7[7];                 /*!< 00E4:                                                              */
-   __IO uint32_t  MCR;                          /*!< 0100: SAI MCLK Control Register                                    */
-   __IO uint32_t  MDR;                          /*!< 0104: SAI MCLK Divide Register                                     */
+/**
+* @addtogroup I2S_structs_GROUP I2S struct
+* @brief Struct for I2S
+* @{
+*/
+typedef struct {                                /*       I2S0 Structure                                               */
+   __IO uint32_t  TCSR;                         /**< 0000: SAI Transmit Control Register                                */
+   __IO uint32_t  TCR1;                         /**< 0004: SAI Transmit Configuration 1 Register                        */
+   __IO uint32_t  TCR2;                         /**< 0008: SAI Transmit Configuration 2 Register                        */
+   __IO uint32_t  TCR3;                         /**< 000C: SAI Transmit Configuration 3 Register                        */
+   __IO uint32_t  TCR4;                         /**< 0010: SAI Transmit Configuration 4 Register                        */
+   __IO uint32_t  TCR5;                         /**< 0014: SAI Transmit Configuration 5 Register                        */
+   __I  uint32_t  RESERVED0[2];                
+   __O  uint32_t  TDR[2];                       /**< 0020: Transmit Data Register                                       */
+   __I  uint32_t  RESERVED1[6];                
+   __I  uint32_t  TFR[2];                       /**< 0040: SAI Transmit FIFO Register                                   */
+   __I  uint32_t  RESERVED2[6];                
+   __IO uint32_t  TMR;                          /**< 0060: SAI Transmit Mask Register                                   */
+   __I  uint32_t  RESERVED3[7];                
+   __IO uint32_t  RCSR;                         /**< 0080: SAI Receive Control Register                                 */
+   __IO uint32_t  RCR1;                         /**< 0084: SAI Receive Configuration 1 Register                         */
+   __IO uint32_t  RCR2;                         /**< 0088: SAI Receive Configuration 2 Register                         */
+   __IO uint32_t  RCR3;                         /**< 008C: SAI Receive Configuration 3 Register                         */
+   __IO uint32_t  RCR4;                         /**< 0090: SAI Receive Configuration 4 Register                         */
+   __IO uint32_t  RCR5;                         /**< 0094: SAI Receive Configuration 5 Register                         */
+   __I  uint32_t  RESERVED4[2];                
+   __I  uint32_t  RDR[2];                       /**< 00A0: SAI Receive Data Register                                    */
+   __I  uint32_t  RESERVED5[6];                
+   __I  uint32_t  RFR[2];                       /**< 00C0: SAI Receive FIFO Register                                    */
+   __I  uint32_t  RESERVED6[6];                
+   __IO uint32_t  RMR;                          /**< 00E0: SAI Receive Mask Register                                    */
+   __I  uint32_t  RESERVED7[7];                
+   __IO uint32_t  MCR;                          /**< 0100: SAI MCLK Control Register                                    */
+   __IO uint32_t  MDR;                          /**< 0104: SAI MCLK Divide Register                                     */
 } I2S_Type;
 
+/**
+ * @} */ /* End group I2S_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'I2S0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup I2S_Register_Masks_GROUP I2S Register Masks
+* @brief Register Masks for I2S
+* @{
+*/
 /* ------- TCSR Bit Fields                          ------ */
 #define I2S_TCSR_FRDE_MASK                       (0x01UL << I2S_TCSR_FRDE_SHIFT)                     /*!< I2S0_TCSR: FRDE Mask                    */
 #define I2S_TCSR_FRDE_SHIFT                      0                                                   /*!< I2S0_TCSR: FRDE Position                */
@@ -4157,11 +4773,22 @@ typedef struct {                                /*!<       I2S0 Structure       
 #define I2S_MDR_FRACT_MASK                       (0xFFUL << I2S_MDR_FRACT_SHIFT)                     /*!< I2S0_MDR: FRACT Mask                    */
 #define I2S_MDR_FRACT_SHIFT                      12                                                  /*!< I2S0_MDR: FRACT Position                */
 #define I2S_MDR_FRACT(x)                         (((uint32_t)(((uint32_t)(x))<<I2S_MDR_FRACT_SHIFT))&I2S_MDR_FRACT_MASK) /*!< I2S0_MDR                                */
+/**
+ * @} */ /* End group I2S_Register_Masks_GROUP 
+ */
 
 /* I2S0 - Peripheral instance base addresses */
-#define I2S0_BasePtr                   0x4002F000UL
-#define I2S0                           ((I2S_Type *) I2S0_BasePtr)
-#define I2S0_BASE_PTR                  (I2S0)
+#define I2S0_BasePtr                   0x4002F000UL //!< Peripheral base address
+#define I2S0                           ((I2S_Type *) I2S0_BasePtr) //!< Freescale base pointer
+#define I2S0_BASE_PTR                  (I2S0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group I2S_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup LCD_Peripheral_access_layer_GROUP LCD Peripheral Access Layer
+* @brief C Struct for LCD
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           LCD (file:LCD_0)                     ================ */
@@ -4170,38 +4797,51 @@ typedef struct {                                /*!<       I2S0 Structure       
 /**
  * @brief Segment Liquid Crystal Display
  */
-typedef struct {                                /*!<       LCD Structure                                                */
-   __IO uint32_t  GCR;                          /*!< 0000: LCD General Control Register                                 */
-   __IO uint32_t  AR;                           /*!< 0004: LCD Auxiliary Register                                       */
-   __IO uint32_t  FDCR;                         /*!< 0008: LCD Fault Detect Control Register                            */
-   __IO uint32_t  FDSR;                         /*!< 000C: LCD Fault Detect Status Register                             */
-   __IO uint32_t  PENL;                         /*!< 0010: LCD Pin Enable register                                      */
-   __IO uint32_t  PENH;                         /*!< 0014: LCD Pin Enable register                                      */
-   __IO uint32_t  BPENL;                        /*!< 0018: LCD Back Plane Enable register                               */
-   __IO uint32_t  BPENH;                        /*!< 001C: LCD Back Plane Enable register                               */
-   __IO uint32_t  WF3TO0;                       /*!< 0020: LCD Waveform register                                        */
-   __IO uint32_t  WF7TO4;                       /*!< 0024: LCD Waveform register                                        */
-   __IO uint32_t  WF11TO8;                      /*!< 0028: LCD Waveform register                                        */
-   __IO uint32_t  WF15TO12;                     /*!< 002C: LCD Waveform register                                        */
-   __IO uint32_t  WF19TO16;                     /*!< 0030: LCD Waveform register                                        */
-   __IO uint32_t  WF23TO20;                     /*!< 0034: LCD Waveform register                                        */
-   __IO uint32_t  WF27TO24;                     /*!< 0038: LCD Waveform register                                        */
-   __IO uint32_t  WF31TO28;                     /*!< 003C: LCD Waveform register                                        */
-   __IO uint32_t  WF35TO32;                     /*!< 0040: LCD Waveform register                                        */
-   __IO uint32_t  WF39TO36;                     /*!< 0044: LCD Waveform register                                        */
-   __IO uint32_t  WF43TO40;                     /*!< 0048: LCD Waveform register                                        */
-   __IO uint32_t  WF47TO44;                     /*!< 004C: LCD Waveform register                                        */
-   __IO uint32_t  WF51TO48;                     /*!< 0050: LCD Waveform register                                        */
-   __IO uint32_t  WF55TO52;                     /*!< 0054: LCD Waveform register                                        */
-   __IO uint32_t  WF59TO56;                     /*!< 0058: LCD Waveform register                                        */
-   __IO uint32_t  WF63TO60;                     /*!< 005C: LCD Waveform register                                        */
+/**
+* @addtogroup LCD_structs_GROUP LCD struct
+* @brief Struct for LCD
+* @{
+*/
+typedef struct {                                /*       LCD Structure                                                */
+   __IO uint32_t  GCR;                          /**< 0000: LCD General Control Register                                 */
+   __IO uint32_t  AR;                           /**< 0004: LCD Auxiliary Register                                       */
+   __IO uint32_t  FDCR;                         /**< 0008: LCD Fault Detect Control Register                            */
+   __IO uint32_t  FDSR;                         /**< 000C: LCD Fault Detect Status Register                             */
+   __IO uint32_t  PENL;                         /**< 0010: LCD Pin Enable register                                      */
+   __IO uint32_t  PENH;                         /**< 0014: LCD Pin Enable register                                      */
+   __IO uint32_t  BPENL;                        /**< 0018: LCD Back Plane Enable register                               */
+   __IO uint32_t  BPENH;                        /**< 001C: LCD Back Plane Enable register                               */
+   __IO uint32_t  WF3TO0;                       /**< 0020: LCD Waveform register                                        */
+   __IO uint32_t  WF7TO4;                       /**< 0024: LCD Waveform register                                        */
+   __IO uint32_t  WF11TO8;                      /**< 0028: LCD Waveform register                                        */
+   __IO uint32_t  WF15TO12;                     /**< 002C: LCD Waveform register                                        */
+   __IO uint32_t  WF19TO16;                     /**< 0030: LCD Waveform register                                        */
+   __IO uint32_t  WF23TO20;                     /**< 0034: LCD Waveform register                                        */
+   __IO uint32_t  WF27TO24;                     /**< 0038: LCD Waveform register                                        */
+   __IO uint32_t  WF31TO28;                     /**< 003C: LCD Waveform register                                        */
+   __IO uint32_t  WF35TO32;                     /**< 0040: LCD Waveform register                                        */
+   __IO uint32_t  WF39TO36;                     /**< 0044: LCD Waveform register                                        */
+   __IO uint32_t  WF43TO40;                     /**< 0048: LCD Waveform register                                        */
+   __IO uint32_t  WF47TO44;                     /**< 004C: LCD Waveform register                                        */
+   __IO uint32_t  WF51TO48;                     /**< 0050: LCD Waveform register                                        */
+   __IO uint32_t  WF55TO52;                     /**< 0054: LCD Waveform register                                        */
+   __IO uint32_t  WF59TO56;                     /**< 0058: LCD Waveform register                                        */
+   __IO uint32_t  WF63TO60;                     /**< 005C: LCD Waveform register                                        */
 } LCD_Type;
 
+/**
+ * @} */ /* End group LCD_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'LCD' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup LCD_Register_Masks_GROUP LCD Register Masks
+* @brief Register Masks for LCD
+* @{
+*/
 /* ------- GCR Bit Fields                           ------ */
 #define LCD_GCR_DUTY_MASK                        (0x07UL << LCD_GCR_DUTY_SHIFT)                      /*!< LCD_GCR: DUTY Mask                      */
 #define LCD_GCR_DUTY_SHIFT                       0                                                   /*!< LCD_GCR: DUTY Position                  */
@@ -4497,11 +5137,22 @@ typedef struct {                                /*!<       LCD Structure        
 #define LCD_WF63TO60_WF63_MASK                   (0xFFUL << LCD_WF63TO60_WF63_SHIFT)                 /*!< LCD_WF63TO60: WF63 Mask                 */
 #define LCD_WF63TO60_WF63_SHIFT                  24                                                  /*!< LCD_WF63TO60: WF63 Position             */
 #define LCD_WF63TO60_WF63(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF63TO60_WF63_SHIFT))&LCD_WF63TO60_WF63_MASK) /*!< LCD_WF63TO60                            */
+/**
+ * @} */ /* End group LCD_Register_Masks_GROUP 
+ */
 
 /* LCD - Peripheral instance base addresses */
-#define LCD_BasePtr                    0x400BE000UL
-#define LCD                            ((LCD_Type *) LCD_BasePtr)
-#define LCD_BASE_PTR                   (LCD)
+#define LCD_BasePtr                    0x400BE000UL //!< Peripheral base address
+#define LCD                            ((LCD_Type *) LCD_BasePtr) //!< Freescale base pointer
+#define LCD_BASE_PTR                   (LCD) //!< Freescale style base pointer
+/**
+ * @} */ /* End group LCD_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup LLWU_Peripheral_access_layer_GROUP LLWU Peripheral Access Layer
+* @brief C Struct for LLWU
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           LLWU (file:LLWU_PE3_FILT2_RST)       ================ */
@@ -4510,25 +5161,38 @@ typedef struct {                                /*!<       LCD Structure        
 /**
  * @brief Low leakage wakeup unit
  */
-typedef struct {                                /*!<       LLWU Structure                                               */
-   __IO uint8_t   PE1;                          /*!< 0000: Pin Enable 1 Register                                        */
-   __IO uint8_t   PE2;                          /*!< 0001: Pin Enable 2 Register                                        */
-   __IO uint8_t   PE3;                          /*!< 0002: Pin Enable 3 Register                                        */
-   __IO uint8_t   PE4;                          /*!< 0003: Pin Enable 4 Register                                        */
-   __IO uint8_t   ME;                           /*!< 0004: Module Enable Register                                       */
-   __IO uint8_t   F1;                           /*!< 0005: Flag 1 Register                                              */
-   __IO uint8_t   F2;                           /*!< 0006: Flag 2 Register                                              */
-   __I  uint8_t   F3;                           /*!< 0007: Flag 3 Register                                              */
-   __IO uint8_t   FILT1;                        /*!< 0008: Pin Filter 1 register                                        */
-   __IO uint8_t   FILT2;                        /*!< 0009: Pin Filter 2 register                                        */
-   __IO uint8_t   RST;                          /*!< 000A: Reset Enable Register                                        */
+/**
+* @addtogroup LLWU_structs_GROUP LLWU struct
+* @brief Struct for LLWU
+* @{
+*/
+typedef struct {                                /*       LLWU Structure                                               */
+   __IO uint8_t   PE1;                          /**< 0000: Pin Enable 1 Register                                        */
+   __IO uint8_t   PE2;                          /**< 0001: Pin Enable 2 Register                                        */
+   __IO uint8_t   PE3;                          /**< 0002: Pin Enable 3 Register                                        */
+   __IO uint8_t   PE4;                          /**< 0003: Pin Enable 4 Register                                        */
+   __IO uint8_t   ME;                           /**< 0004: Module Enable Register                                       */
+   __IO uint8_t   F1;                           /**< 0005: Flag 1 Register                                              */
+   __IO uint8_t   F2;                           /**< 0006: Flag 2 Register                                              */
+   __IO uint8_t   F3;                           /**< 0007: Flag 3 Register                                              */
+   __IO uint8_t   FILT1;                        /**< 0008: Pin Filter 1 register                                        */
+   __IO uint8_t   FILT2;                        /**< 0009: Pin Filter 2 register                                        */
+   __IO uint8_t   RST;                          /**< 000A: Reset Enable Register                                        */
 } LLWU_Type;
 
+/**
+ * @} */ /* End group LLWU_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'LLWU' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup LLWU_Register_Masks_GROUP LLWU Register Masks
+* @brief Register Masks for LLWU
+* @{
+*/
 /* ------- PE1 Bit Fields                           ------ */
 #define LLWU_PE1_WUPE0_MASK                      (0x03UL << LLWU_PE1_WUPE0_SHIFT)                    /*!< LLWU_PE1: WUPE0 Mask                    */
 #define LLWU_PE1_WUPE0_SHIFT                     0                                                   /*!< LLWU_PE1: WUPE0 Position                */
@@ -4663,11 +5327,22 @@ typedef struct {                                /*!<       LLWU Structure       
 #define LLWU_RST_RSTFILT_SHIFT                   0                                                   /*!< LLWU_RST: RSTFILT Position              */
 #define LLWU_RST_LLRSTE_MASK                     (0x01UL << LLWU_RST_LLRSTE_SHIFT)                   /*!< LLWU_RST: LLRSTE Mask                   */
 #define LLWU_RST_LLRSTE_SHIFT                    1                                                   /*!< LLWU_RST: LLRSTE Position               */
+/**
+ * @} */ /* End group LLWU_Register_Masks_GROUP 
+ */
 
 /* LLWU - Peripheral instance base addresses */
-#define LLWU_BasePtr                   0x4007C000UL
-#define LLWU                           ((LLWU_Type *) LLWU_BasePtr)
-#define LLWU_BASE_PTR                  (LLWU)
+#define LLWU_BasePtr                   0x4007C000UL //!< Peripheral base address
+#define LLWU                           ((LLWU_Type *) LLWU_BasePtr) //!< Freescale base pointer
+#define LLWU_BASE_PTR                  (LLWU) //!< Freescale style base pointer
+/**
+ * @} */ /* End group LLWU_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup LPTMR_Peripheral_access_layer_GROUP LPTMR Peripheral Access Layer
+* @brief C Struct for LPTMR
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           LPTMR0 (file:LPTMR0_0)               ================ */
@@ -4676,18 +5351,31 @@ typedef struct {                                /*!<       LLWU Structure       
 /**
  * @brief Low Power Timer
  */
-typedef struct {                                /*!<       LPTMR0 Structure                                             */
-   __IO uint32_t  CSR;                          /*!< 0000: Control Status Register                                      */
-   __IO uint32_t  PSR;                          /*!< 0004: Prescale Register                                            */
-   __IO uint32_t  CMR;                          /*!< 0008: Compare Register                                             */
-   __I  uint32_t  CNR;                          /*!< 000C: Counter Register                                             */
-} LPTMR0_Type;
+/**
+* @addtogroup LPTMR_structs_GROUP LPTMR struct
+* @brief Struct for LPTMR
+* @{
+*/
+typedef struct {                                /*       LPTMR0 Structure                                             */
+   __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
+   __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
+   __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
+   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+} LPTMR_Type;
 
+/**
+ * @} */ /* End group LPTMR_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'LPTMR0' Position & Mask macros                      ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup LPTMR_Register_Masks_GROUP LPTMR Register Masks
+* @brief Register Masks for LPTMR
+* @{
+*/
 /* ------- CSR Bit Fields                           ------ */
 #define LPTMR_CSR_TEN_MASK                       (0x01UL << LPTMR_CSR_TEN_SHIFT)                     /*!< LPTMR0_CSR: TEN Mask                    */
 #define LPTMR_CSR_TEN_SHIFT                      0                                                   /*!< LPTMR0_CSR: TEN Position                */
@@ -4721,11 +5409,22 @@ typedef struct {                                /*!<       LPTMR0 Structure     
 #define LPTMR_CNR_COUNTER_MASK                   (0xFFFFUL << LPTMR_CNR_COUNTER_SHIFT)               /*!< LPTMR0_CNR: COUNTER Mask                */
 #define LPTMR_CNR_COUNTER_SHIFT                  0                                                   /*!< LPTMR0_CNR: COUNTER Position            */
 #define LPTMR_CNR_COUNTER(x)                     (((uint32_t)(((uint32_t)(x))<<LPTMR_CNR_COUNTER_SHIFT))&LPTMR_CNR_COUNTER_MASK) /*!< LPTMR0_CNR                              */
+/**
+ * @} */ /* End group LPTMR_Register_Masks_GROUP 
+ */
 
 /* LPTMR0 - Peripheral instance base addresses */
-#define LPTMR0_BasePtr                 0x40040000UL
-#define LPTMR0                         ((LPTMR0_Type *) LPTMR0_BasePtr)
-#define LPTMR0_BASE_PTR                (LPTMR0)
+#define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
+#define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
+#define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group LPTMR_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup MCG_Peripheral_access_layer_GROUP MCG Peripheral Access Layer
+* @brief C Struct for MCG
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           MCG (file:MCG_MK_0)                  ================ */
@@ -4734,28 +5433,41 @@ typedef struct {                                /*!<       LPTMR0 Structure     
 /**
  * @brief Multipurpose Clock Generator module
  */
-typedef struct {                                /*!<       MCG Structure                                                */
-   __IO uint8_t   C1;                           /*!< 0000: Control 1 Register                                           */
-   __IO uint8_t   C2;                           /*!< 0001: Control 2 Register                                           */
-   __IO uint8_t   C3;                           /*!< 0002: Control 3 Register                                           */
-   __IO uint8_t   C4;                           /*!< 0003: Control 4 Register                                           */
-   __IO uint8_t   C5;                           /*!< 0004: Control 5 Register                                           */
-   __IO uint8_t   C6;                           /*!< 0005: Control 6 Register                                           */
-   __IO uint8_t   S;                            /*!< 0006: Status Register                                              */
-   __I  uint8_t   RESERVED0;                    /*!< 0007:                                                              */
-   __IO uint8_t   SC;                           /*!< 0008: Status and Control Register                                  */
-   __I  uint8_t   RESERVED1;                    /*!< 0009:                                                              */
-   __IO uint8_t   ATCVH;                        /*!< 000A: ATM Compare Value High                                       */
-   __IO uint8_t   ATCVL;                        /*!< 000B: ATM Compare Value Low                                        */
-   __IO uint8_t   C7;                           /*!< 000C: Control 7 Register                                           */
-   __IO uint8_t   C8;                           /*!< 000D: Control 8 Register                                           */
+/**
+* @addtogroup MCG_structs_GROUP MCG struct
+* @brief Struct for MCG
+* @{
+*/
+typedef struct {                                /*       MCG Structure                                                */
+   __IO uint8_t   C1;                           /**< 0000: Control 1 Register                                           */
+   __IO uint8_t   C2;                           /**< 0001: Control 2 Register                                           */
+   __IO uint8_t   C3;                           /**< 0002: Control 3 Register                                           */
+   __IO uint8_t   C4;                           /**< 0003: Control 4 Register                                           */
+   __IO uint8_t   C5;                           /**< 0004: Control 5 Register                                           */
+   __IO uint8_t   C6;                           /**< 0005: Control 6 Register                                           */
+   __IO uint8_t   S;                            /**< 0006: Status Register                                              */
+   __I  uint8_t   RESERVED0;                   
+   __IO uint8_t   SC;                           /**< 0008: Status and Control Register                                  */
+   __I  uint8_t   RESERVED1;                   
+   __IO uint8_t   ATCVH;                        /**< 000A: ATM Compare Value High                                       */
+   __IO uint8_t   ATCVL;                        /**< 000B: ATM Compare Value Low                                        */
+   __IO uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
+   __IO uint8_t   C8;                           /**< 000D: Control 8 Register                                           */
 } MCG_Type;
 
+/**
+ * @} */ /* End group MCG_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'MCG' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup MCG_Register_Masks_GROUP MCG Register Masks
+* @brief Register Masks for MCG
+* @{
+*/
 /* ------- C1 Bit Fields                            ------ */
 #define MCG_C1_IREFSTEN_MASK                     (0x01UL << MCG_C1_IREFSTEN_SHIFT)                   /*!< MCG_C1: IREFSTEN Mask                   */
 #define MCG_C1_IREFSTEN_SHIFT                    0                                                   /*!< MCG_C1: IREFSTEN Position               */
@@ -4866,11 +5578,22 @@ typedef struct {                                /*!<       MCG Structure        
 #define MCG_C8_LOLRE_SHIFT                       6                                                   /*!< MCG_C8: LOLRE Position                  */
 #define MCG_C8_LOCRE1_MASK                       (0x01UL << MCG_C8_LOCRE1_SHIFT)                     /*!< MCG_C8: LOCRE1 Mask                     */
 #define MCG_C8_LOCRE1_SHIFT                      7                                                   /*!< MCG_C8: LOCRE1 Position                 */
+/**
+ * @} */ /* End group MCG_Register_Masks_GROUP 
+ */
 
 /* MCG - Peripheral instance base addresses */
-#define MCG_BasePtr                    0x40064000UL
-#define MCG                            ((MCG_Type *) MCG_BasePtr)
-#define MCG_BASE_PTR                   (MCG)
+#define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
+#define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
+#define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+/**
+ * @} */ /* End group MCG_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup MCM_Peripheral_access_layer_GROUP MCM Peripheral Access Layer
+* @brief C Struct for MCM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           MCM (file:MCM_D10)                   ================ */
@@ -4879,24 +5602,37 @@ typedef struct {                                /*!<       MCG Structure        
 /**
  * @brief Core Platform Miscellaneous Control Module
  */
-typedef struct {                                /*!<       MCM Structure                                                */
-   __I  uint32_t  RESERVED0[2];                 /*!< 0000:                                                              */
-   __I  uint16_t  PLASC;                        /*!< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
-   __I  uint16_t  PLAMC;                        /*!< 000A: Crossbar Switch (AXBS) Master Configuration                  */
-   __IO uint32_t  CR;                           /*!< 000C: Control Register                                             */
-   __IO uint32_t  ISR;                          /*!< 0010: Interrupt Status Register                                    */
-   __IO uint32_t  ETBCC;                        /*!< 0014: ETB Counter Control register                                 */
-   __IO uint32_t  ETBRL;                        /*!< 0018: ETB Reload register                                          */
-   __I  uint32_t  ETBCNT;                       /*!< 001C: ETB Counter Value register                                   */
-   __I  uint32_t  RESERVED1[4];                 /*!< 0020:                                                              */
-   __IO uint32_t  PID;                          /*!< 0030: Process ID register                                          */
+/**
+* @addtogroup MCM_structs_GROUP MCM struct
+* @brief Struct for MCM
+* @{
+*/
+typedef struct {                                /*       MCM Structure                                                */
+   __I  uint32_t  RESERVED0[2];                
+   __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
+   __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
+   __IO uint32_t  CR;                           /**< 000C: Control Register                                             */
+   __IO uint32_t  ISR;                          /**< 0010: Interrupt Status Register                                    */
+   __IO uint32_t  ETBCC;                        /**< 0014: ETB Counter Control register                                 */
+   __IO uint32_t  ETBRL;                        /**< 0018: ETB Reload register                                          */
+   __I  uint32_t  ETBCNT;                       /**< 001C: ETB Counter Value register                                   */
+   __I  uint32_t  RESERVED1[4];                
+   __IO uint32_t  PID;                          /**< 0030: Process ID register                                          */
 } MCM_Type;
 
+/**
+ * @} */ /* End group MCM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'MCM' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup MCM_Register_Masks_GROUP MCM Register Masks
+* @brief Register Masks for MCM
+* @{
+*/
 /* ------- PLASC Bit Fields                         ------ */
 #define MCM_PLASC_ASC_MASK                       (0xFFUL << MCM_PLASC_ASC_SHIFT)                     /*!< MCM_PLASC: ASC Mask                     */
 #define MCM_PLASC_ASC_SHIFT                      0                                                   /*!< MCM_PLASC: ASC Position                 */
@@ -4947,11 +5683,22 @@ typedef struct {                                /*!<       MCM Structure        
 #define MCM_PID_PID_MASK                         (0xFFUL << MCM_PID_PID_SHIFT)                       /*!< MCM_PID: PID Mask                       */
 #define MCM_PID_PID_SHIFT                        0                                                   /*!< MCM_PID: PID Position                   */
 #define MCM_PID_PID(x)                           (((uint32_t)(((uint32_t)(x))<<MCM_PID_PID_SHIFT))&MCM_PID_PID_MASK) /*!< MCM_PID                                 */
+/**
+ * @} */ /* End group MCM_Register_Masks_GROUP 
+ */
 
 /* MCM - Peripheral instance base addresses */
-#define MCM_BasePtr                    0xE0080000UL
-#define MCM                            ((MCM_Type *) MCM_BasePtr)
-#define MCM_BASE_PTR                   (MCM)
+#define MCM_BasePtr                    0xE0080000UL //!< Peripheral base address
+#define MCM                            ((MCM_Type *) MCM_BasePtr) //!< Freescale base pointer
+#define MCM_BASE_PTR                   (MCM) //!< Freescale style base pointer
+/**
+ * @} */ /* End group MCM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup MPU_Peripheral_access_layer_GROUP MPU Peripheral Access Layer
+* @brief C Struct for MPU
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           MPU (file:MPU_0)                     ================ */
@@ -4960,40 +5707,53 @@ typedef struct {                                /*!<       MCM Structure        
 /**
  * @brief Memory protection unit
  */
-typedef struct {                                /*!<       MPU Structure                                                */
-   __IO uint32_t  CESR;                         /*!< 0000: Control/Error Status Register                                */
-   __I  uint32_t  RESERVED0[3];                 /*!< 0004:                                                              */
-   struct { /* (cluster) */                     /*!< 0010: (size=0x0028, 40)                                            */
-      __I  uint32_t  EAR;                       /*!< 0010: Error Address Register, Slave Port n                         */
-      __I  uint32_t  EDR;                       /*!< 0014: Error Detail Register, Slave Port n                          */
-   } SP[5];
-   __I  uint32_t  RESERVED1[242];               /*!< 0038:                                                              */
-   struct { /* (cluster) */                     /*!< 0400: (size=0x00C0, 192)                                           */
-      __IO uint32_t  WORD0;                     /*!< 0400: Region Descriptor n, Word 0                                  */
-      __IO uint32_t  WORD1;                     /*!< 0404: Region Descriptor n, Word 1                                  */
-      __IO uint32_t  WORD2;                     /*!< 0408: Region Descriptor n, Word 2                                  */
-      __IO uint32_t  WORD3;                     /*!< 040C: Region Descriptor n, Word 3                                  */
-   } RGD[12];
-   __I  uint32_t  RESERVED2[208];               /*!< 04C0:                                                              */
-   __IO uint32_t  RGDAAC0;                      /*!< 0800: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC1;                      /*!< 0804: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC2;                      /*!< 0808: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC3;                      /*!< 080C: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC4;                      /*!< 0810: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC5;                      /*!< 0814: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC6;                      /*!< 0818: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC7;                      /*!< 081C: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC8;                      /*!< 0820: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC9;                      /*!< 0824: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC10;                     /*!< 0828: Region Descriptor Alternate Access Control n                 */
-   __IO uint32_t  RGDAAC11;                     /*!< 082C: Region Descriptor Alternate Access Control n                 */
+/**
+* @addtogroup MPU_structs_GROUP MPU struct
+* @brief Struct for MPU
+* @{
+*/
+typedef struct {                                /*       MPU Structure                                                */
+   __IO uint32_t  CESR;                         /**< 0000: Control/Error Status Register                                */
+   __I  uint32_t  RESERVED0[3];                
+   struct {
+      __I  uint32_t  EAR;                       /**< 0010: Error Address Register, Slave Port n                         */
+      __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, Slave Port n                          */
+   } SP[5];                                     /**< 0010: (cluster: size=0x0028, 40)                                   */
+   __I  uint32_t  RESERVED1[242];              
+   struct {
+      __IO uint32_t  WORD0;                     /**< 0400: Region Descriptor n, Word 0                                  */
+      __IO uint32_t  WORD1;                     /**< 0404: Region Descriptor n, Word 1                                  */
+      __IO uint32_t  WORD2;                     /**< 0408: Region Descriptor n, Word 2                                  */
+      __IO uint32_t  WORD3;                     /**< 040C: Region Descriptor n, Word 3                                  */
+   } RGD[12];                                   /**< 0400: (cluster: size=0x00C0, 192)                                  */
+   __I  uint32_t  RESERVED2[208];              
+   __IO uint32_t  RGDAAC0;                      /**< 0800: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC1;                      /**< 0804: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC2;                      /**< 0808: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC3;                      /**< 080C: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC4;                      /**< 0810: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC5;                      /**< 0814: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC6;                      /**< 0818: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC7;                      /**< 081C: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC8;                      /**< 0820: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC9;                      /**< 0824: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC10;                     /**< 0828: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC11;                     /**< 082C: Region Descriptor Alternate Access Control n                 */
 } MPU_Type;
 
+/**
+ * @} */ /* End group MPU_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'MPU' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup MPU_Register_Masks_GROUP MPU Register Masks
+* @brief Register Masks for MPU
+* @{
+*/
 /* ------- CESR Bit Fields                          ------ */
 #define MPU_CESR_VLD_MASK                        (0x01UL << MPU_CESR_VLD_SHIFT)                      /*!< MPU_CESR: VLD Mask                      */
 #define MPU_CESR_VLD_SHIFT                       0                                                   /*!< MPU_CESR: VLD Position                  */
@@ -5159,11 +5919,22 @@ typedef struct {                                /*!<       MPU Structure        
 #define MPU_RGDAAC_M7WE_SHIFT                    30                                                  /*!< MPU_RGDAAC: M7WE Position               */
 #define MPU_RGDAAC_M7RE_MASK                     (0x01UL << MPU_RGDAAC_M7RE_SHIFT)                   /*!< MPU_RGDAAC: M7RE Mask                   */
 #define MPU_RGDAAC_M7RE_SHIFT                    31                                                  /*!< MPU_RGDAAC: M7RE Position               */
+/**
+ * @} */ /* End group MPU_Register_Masks_GROUP 
+ */
 
 /* MPU - Peripheral instance base addresses */
-#define MPU_BasePtr                    0x4000D000UL
-#define MPU                            ((MPU_Type *) MPU_BasePtr)
-#define MPU_BASE_PTR                   (MPU)
+#define MPU_BasePtr                    0x4000D000UL //!< Peripheral base address
+#define MPU                            ((MPU_Type *) MPU_BasePtr) //!< Freescale base pointer
+#define MPU_BASE_PTR                   (MPU) //!< Freescale style base pointer
+/**
+ * @} */ /* End group MPU_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup NV_Peripheral_access_layer_GROUP NV Peripheral Access Layer
+* @brief C Struct for NV
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           NV (file:NV_FTFE)                    ================ */
@@ -5172,30 +5943,43 @@ typedef struct {                                /*!<       MPU Structure        
 /**
  * @brief Flash configuration field
  */
-typedef struct {                                /*!<       NV Structure                                                 */
-   __I  uint8_t   BACKKEY3;                     /*!< 0000: Backdoor Comparison Key 3                                    */
-   __I  uint8_t   BACKKEY2;                     /*!< 0001: Backdoor Comparison Key 2                                    */
-   __I  uint8_t   BACKKEY1;                     /*!< 0002: Backdoor Comparison Key 1                                    */
-   __I  uint8_t   BACKKEY0;                     /*!< 0003: Backdoor Comparison Key 0                                    */
-   __I  uint8_t   BACKKEY7;                     /*!< 0004: Backdoor Comparison Key 7                                    */
-   __I  uint8_t   BACKKEY6;                     /*!< 0005: Backdoor Comparison Key 6                                    */
-   __I  uint8_t   BACKKEY5;                     /*!< 0006: Backdoor Comparison Key 5                                    */
-   __I  uint8_t   BACKKEY4;                     /*!< 0007: Backdoor Comparison Key 4                                    */
-   __I  uint8_t   FPROT3;                       /*!< 0008: Non-volatile P-Flash Protection Register                     */
-   __I  uint8_t   FPROT2;                       /*!< 0009: Non-volatile P-Flash Protection Register                     */
-   __I  uint8_t   FPROT1;                       /*!< 000A: Non-volatile P-Flash Protection Register                     */
-   __I  uint8_t   FPROT0;                       /*!< 000B: Non-volatile P-Flash Protection Register                     */
-   __I  uint8_t   FSEC;                         /*!< 000C: Non-volatile Flash Security Register                         */
-   __I  uint8_t   FOPT;                         /*!< 000D: Non-volatile Flash Option Register                           */
-   __I  uint8_t   FEPROT;                       /*!< 000E: Non-volatile EERAM Protection Register                       */
-   __I  uint8_t   FDPROT;                       /*!< 000F: Non-volatile D-Flash Protection Register                     */
+/**
+* @addtogroup NV_structs_GROUP NV struct
+* @brief Struct for NV
+* @{
+*/
+typedef struct {                                /*       NV Structure                                                 */
+   __I  uint8_t   BACKKEY3;                     /**< 0000: Backdoor Comparison Key 3                                    */
+   __I  uint8_t   BACKKEY2;                     /**< 0001: Backdoor Comparison Key 2                                    */
+   __I  uint8_t   BACKKEY1;                     /**< 0002: Backdoor Comparison Key 1                                    */
+   __I  uint8_t   BACKKEY0;                     /**< 0003: Backdoor Comparison Key 0                                    */
+   __I  uint8_t   BACKKEY7;                     /**< 0004: Backdoor Comparison Key 7                                    */
+   __I  uint8_t   BACKKEY6;                     /**< 0005: Backdoor Comparison Key 6                                    */
+   __I  uint8_t   BACKKEY5;                     /**< 0006: Backdoor Comparison Key 5                                    */
+   __I  uint8_t   BACKKEY4;                     /**< 0007: Backdoor Comparison Key 4                                    */
+   __I  uint8_t   FPROT3;                       /**< 0008: Non-volatile P-Flash Protection Register                     */
+   __I  uint8_t   FPROT2;                       /**< 0009: Non-volatile P-Flash Protection Register                     */
+   __I  uint8_t   FPROT1;                       /**< 000A: Non-volatile P-Flash Protection Register                     */
+   __I  uint8_t   FPROT0;                       /**< 000B: Non-volatile P-Flash Protection Register                     */
+   __I  uint8_t   FSEC;                         /**< 000C: Non-volatile Flash Security Register                         */
+   __I  uint8_t   FOPT;                         /**< 000D: Non-volatile Flash Option Register                           */
+   __I  uint8_t   FEPROT;                       /**< 000E: Non-volatile EERAM Protection Register                       */
+   __I  uint8_t   FDPROT;                       /**< 000F: Non-volatile D-Flash Protection Register                     */
 } NV_Type;
 
+/**
+ * @} */ /* End group NV_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'NV' Position & Mask macros                          ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup NV_Register_Masks_GROUP NV Register Masks
+* @brief Register Masks for NV
+* @{
+*/
 /* ------- BACKKEY Bit Fields                       ------ */
 #define NV_BACKKEY_KEY_MASK                      (0xFFUL << NV_BACKKEY_KEY_SHIFT)                    /*!< NV_BACKKEY: KEY Mask                    */
 #define NV_BACKKEY_KEY_SHIFT                     0                                                   /*!< NV_BACKKEY: KEY Position                */
@@ -5232,11 +6016,22 @@ typedef struct {                                /*!<       NV Structure         
 #define NV_FDPROT_DPROT_MASK                     (0xFFUL << NV_FDPROT_DPROT_SHIFT)                   /*!< NV_FDPROT: DPROT Mask                   */
 #define NV_FDPROT_DPROT_SHIFT                    0                                                   /*!< NV_FDPROT: DPROT Position               */
 #define NV_FDPROT_DPROT(x)                       (((uint8_t)(((uint8_t)(x))<<NV_FDPROT_DPROT_SHIFT))&NV_FDPROT_DPROT_MASK) /*!< NV_FDPROT                               */
+/**
+ * @} */ /* End group NV_Register_Masks_GROUP 
+ */
 
 /* NV - Peripheral instance base addresses */
-#define NV_BasePtr                     0x00000400UL
-#define NV                             ((NV_Type *) NV_BasePtr)
-#define NV_BASE_PTR                    (NV)
+#define NV_BasePtr                     0x00000400UL //!< Peripheral base address
+#define NV                             ((NV_Type *) NV_BasePtr) //!< Freescale base pointer
+#define NV_BASE_PTR                    (NV) //!< Freescale style base pointer
+/**
+ * @} */ /* End group NV_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup OSC_Peripheral_access_layer_GROUP OSC Peripheral Access Layer
+* @brief C Struct for OSC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           OSC0 (file:OSC_0)                    ================ */
@@ -5245,15 +6040,28 @@ typedef struct {                                /*!<       NV Structure         
 /**
  * @brief System Oscillator
  */
-typedef struct {                                /*!<       OSC0 Structure                                               */
-   __IO uint8_t   CR;                           /*!< 0000: Control Register                                             */
-} OSC0_Type;
+/**
+* @addtogroup OSC_structs_GROUP OSC struct
+* @brief Struct for OSC
+* @{
+*/
+typedef struct {                                /*       OSC0 Structure                                               */
+   __IO uint8_t   CR;                           /**< 0000: Control Register                                             */
+} OSC_Type;
 
+/**
+ * @} */ /* End group OSC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'OSC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup OSC_Register_Masks_GROUP OSC Register Masks
+* @brief Register Masks for OSC
+* @{
+*/
 /* ------- CR Bit Fields                            ------ */
 #define OSC_CR_SC16P_MASK                        (0x01UL << OSC_CR_SC16P_SHIFT)                      /*!< OSC0_CR: SC16P Mask                     */
 #define OSC_CR_SC16P_SHIFT                       0                                                   /*!< OSC0_CR: SC16P Position                 */
@@ -5267,11 +6075,22 @@ typedef struct {                                /*!<       OSC0 Structure       
 #define OSC_CR_EREFSTEN_SHIFT                    5                                                   /*!< OSC0_CR: EREFSTEN Position              */
 #define OSC_CR_ERCLKEN_MASK                      (0x01UL << OSC_CR_ERCLKEN_SHIFT)                    /*!< OSC0_CR: ERCLKEN Mask                   */
 #define OSC_CR_ERCLKEN_SHIFT                     7                                                   /*!< OSC0_CR: ERCLKEN Position               */
+/**
+ * @} */ /* End group OSC_Register_Masks_GROUP 
+ */
 
 /* OSC0 - Peripheral instance base addresses */
-#define OSC0_BasePtr                   0x40065000UL
-#define OSC0                           ((OSC0_Type *) OSC0_BasePtr)
-#define OSC0_BASE_PTR                  (OSC0)
+#define OSC0_BasePtr                   0x40065000UL //!< Peripheral base address
+#define OSC0                           ((OSC_Type *) OSC0_BasePtr) //!< Freescale base pointer
+#define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PDB_Peripheral_access_layer_GROUP PDB Peripheral Access Layer
+* @brief C Struct for PDB
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PDB0 (file:PDB0_2CH_2TRIG_3PO)       ================ */
@@ -5280,32 +6099,45 @@ typedef struct {                                /*!<       OSC0 Structure       
 /**
  * @brief Programmable Delay Block (2 channels, 2 triggers, 3 pulse outputs)
  */
-typedef struct {                                /*!<       PDB0 Structure                                               */
-   __IO uint32_t  SC;                           /*!< 0000: Status and Control Register                                  */
-   __IO uint32_t  MOD;                          /*!< 0004: Modulus Register                                             */
-   __I  uint32_t  CNT;                          /*!< 0008: Counter Register                                             */
-   __IO uint32_t  IDLY;                         /*!< 000C: Interrupt Delay Register                                     */
-   struct { /* (cluster) */                     /*!< 0010: (size=0x0050, 80)                                            */
-      __IO uint32_t  C1;                        /*!< 0010: Channel  Control Register 1                                  */
-      __IO uint32_t  S;                         /*!< 0014: Channel  Status Register                                     */
-      __IO uint32_t  DLY[2];                    /*!< 0018: Channel n Delay  Register                                    */
-      __I  uint32_t  RESERVED0[6];              /*!< 0020:                                                              */
-   } CH[2];
-   __I  uint32_t  RESERVED0[60];                /*!< 0060:                                                              */
-   struct { /* (cluster) */                     /*!< 0150: (size=0x0010, 16)                                            */
-      __IO uint32_t  INTC;                      /*!< 0150: DAC Interval Trigger n Control Register                      */
-      __IO uint32_t  INT;                       /*!< 0154: DAC Interval n Register                                      */
-   } DAC[2];
-   __I  uint32_t  RESERVED1[12];                /*!< 0160:                                                              */
-   __IO uint32_t  POEN;                         /*!< 0190: Pulse-Out Enable Register                                    */
-   __IO uint32_t  PODLY[3];                     /*!< 0194: Pulse-Out  Delay Register                                    */
-} PDB0_Type;
+/**
+* @addtogroup PDB_structs_GROUP PDB struct
+* @brief Struct for PDB
+* @{
+*/
+typedef struct {                                /*       PDB0 Structure                                               */
+   __IO uint32_t  SC;                           /**< 0000: Status and Control Register                                  */
+   __IO uint32_t  MOD;                          /**< 0004: Modulus Register                                             */
+   __I  uint32_t  CNT;                          /**< 0008: Counter Register                                             */
+   __IO uint32_t  IDLY;                         /**< 000C: Interrupt Delay Register                                     */
+   struct {
+      __IO uint32_t  C1;                        /**< 0010: Channel  Control Register 1                                  */
+      __IO uint32_t  S;                         /**< 0014: Channel  Status Register                                     */
+      __IO uint32_t  DLY[2];                    /**< 0018: Channel n Delay  Register                                    */
+      __I  uint32_t  RESERVED0[6];             
+   } CH[2];                                     /**< 0010: (cluster: size=0x0050, 80)                                   */
+   __I  uint32_t  RESERVED0[60];               
+   struct {
+      __IO uint32_t  INTC;                      /**< 0150: DAC Interval Trigger n Control Register                      */
+      __IO uint32_t  INT;                       /**< 0154: DAC Interval n Register                                      */
+   } DAC[2];                                    /**< 0150: (cluster: size=0x0010, 16)                                   */
+   __I  uint32_t  RESERVED1[12];               
+   __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
+   __IO uint32_t  PODLY[3];                     /**< 0194: Pulse-Out  Delay Register                                    */
+} PDB_Type;
 
+/**
+ * @} */ /* End group PDB_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'PDB0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup PDB_Register_Masks_GROUP PDB Register Masks
+* @brief Register Masks for PDB
+* @{
+*/
 /* ------- SC Bit Fields                            ------ */
 #define PDB_SC_LDOK_MASK                         (0x01UL << PDB_SC_LDOK_SHIFT)                       /*!< PDB0_SC: LDOK Mask                      */
 #define PDB_SC_LDOK_SHIFT                        0                                                   /*!< PDB0_SC: LDOK Position                  */
@@ -5388,11 +6220,22 @@ typedef struct {                                /*!<       PDB0 Structure       
 #define PDB_PODLY_DLY1_MASK                      (0xFFFFUL << PDB_PODLY_DLY1_SHIFT)                  /*!< PDB0_PODLY: DLY1 Mask                   */
 #define PDB_PODLY_DLY1_SHIFT                     16                                                  /*!< PDB0_PODLY: DLY1 Position               */
 #define PDB_PODLY_DLY1(x)                        (((uint32_t)(((uint32_t)(x))<<PDB_PODLY_DLY1_SHIFT))&PDB_PODLY_DLY1_MASK) /*!< PDB0_PODLY                              */
+/**
+ * @} */ /* End group PDB_Register_Masks_GROUP 
+ */
 
 /* PDB0 - Peripheral instance base addresses */
-#define PDB0_BasePtr                   0x40036000UL
-#define PDB0                           ((PDB0_Type *) PDB0_BasePtr)
-#define PDB0_BASE_PTR                  (PDB0)
+#define PDB0_BasePtr                   0x40036000UL //!< Peripheral base address
+#define PDB0                           ((PDB_Type *) PDB0_BasePtr) //!< Freescale base pointer
+#define PDB0_BASE_PTR                  (PDB0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PDB_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PIT_Peripheral_access_layer_GROUP PIT Peripheral Access Layer
+* @brief C Struct for PIT
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PIT (file:PIT_4CH_CHAIN)             ================ */
@@ -5401,22 +6244,35 @@ typedef struct {                                /*!<       PDB0 Structure       
 /**
  * @brief Periodic Interrupt Timer (4 channels)
  */
-typedef struct {                                /*!<       PIT Structure                                                */
-   __IO uint32_t  MCR;                          /*!< 0000: Module Control Register                                      */
-   __I  uint32_t  RESERVED0[63];                /*!< 0004:                                                              */
-   struct { /* (cluster) */                     /*!< 0100: (size=0x0040, 64)                                            */
-      __IO uint32_t  LDVAL;                     /*!< 0100: Timer Load Value Register                                    */
-      __I  uint32_t  CVAL;                      /*!< 0104: Current Timer Value Register                                 */
-      __IO uint32_t  TCTRL;                     /*!< 0108: Timer Control Register                                       */
-      __IO uint32_t  TFLG;                      /*!< 010C: Timer Flag Register                                          */
-   } CHANNEL[4];
+/**
+* @addtogroup PIT_structs_GROUP PIT struct
+* @brief Struct for PIT
+* @{
+*/
+typedef struct {                                /*       PIT Structure                                                */
+   __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
+   __I  uint32_t  RESERVED0[63];               
+   struct {
+      __IO uint32_t  LDVAL;                     /**< 0100: Timer Load Value Register                                    */
+      __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
+      __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
+      __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
+   } CHANNEL[4];                                /**< 0100: (cluster: size=0x0040, 64)                                   */
 } PIT_Type;
 
+/**
+ * @} */ /* End group PIT_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'PIT' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup PIT_Register_Masks_GROUP PIT Register Masks
+* @brief Register Masks for PIT
+* @{
+*/
 /* ------- MCR Bit Fields                           ------ */
 #define PIT_MCR_FRZ_MASK                         (0x01UL << PIT_MCR_FRZ_SHIFT)                       /*!< PIT_MCR: FRZ Mask                       */
 #define PIT_MCR_FRZ_SHIFT                        0                                                   /*!< PIT_MCR: FRZ Position                   */
@@ -5440,11 +6296,22 @@ typedef struct {                                /*!<       PIT Structure        
 /* ------- TFLG Bit Fields                          ------ */
 #define PIT_TFLG_TIF_MASK                        (0x01UL << PIT_TFLG_TIF_SHIFT)                      /*!< PIT_TFLG: TIF Mask                      */
 #define PIT_TFLG_TIF_SHIFT                       0                                                   /*!< PIT_TFLG: TIF Position                  */
+/**
+ * @} */ /* End group PIT_Register_Masks_GROUP 
+ */
 
 /* PIT - Peripheral instance base addresses */
-#define PIT_BasePtr                    0x40037000UL
-#define PIT                            ((PIT_Type *) PIT_BasePtr)
-#define PIT_BASE_PTR                   (PIT)
+#define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
+#define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
+#define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PIT_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PMC_Peripheral_access_layer_GROUP PMC Peripheral Access Layer
+* @brief C Struct for PMC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PMC (file:PMC_0)                     ================ */
@@ -5453,17 +6320,30 @@ typedef struct {                                /*!<       PIT Structure        
 /**
  * @brief Power Management Controller
  */
-typedef struct {                                /*!<       PMC Structure                                                */
-   __IO uint8_t   LVDSC1;                       /*!< 0000: Low Voltage Status and Control 1                             */
-   __IO uint8_t   LVDSC2;                       /*!< 0001: Low Voltage Status and Control 2                             */
-   __IO uint8_t   REGSC;                        /*!< 0002: Regulator Status and Control                                 */
+/**
+* @addtogroup PMC_structs_GROUP PMC struct
+* @brief Struct for PMC
+* @{
+*/
+typedef struct {                                /*       PMC Structure                                                */
+   __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Status and Control 1                             */
+   __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
+   __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
 } PMC_Type;
 
+/**
+ * @} */ /* End group PMC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'PMC' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup PMC_Register_Masks_GROUP PMC Register Masks
+* @brief Register Masks for PMC
+* @{
+*/
 /* ------- LVDSC1 Bit Fields                        ------ */
 #define PMC_LVDSC1_LVDV_MASK                     (0x03UL << PMC_LVDSC1_LVDV_SHIFT)                   /*!< PMC_LVDSC1: LVDV Mask                   */
 #define PMC_LVDSC1_LVDV_SHIFT                    0                                                   /*!< PMC_LVDSC1: LVDV Position               */
@@ -5495,11 +6375,22 @@ typedef struct {                                /*!<       PMC Structure        
 #define PMC_REGSC_ACKISO_SHIFT                   3                                                   /*!< PMC_REGSC: ACKISO Position              */
 #define PMC_REGSC_BGEN_MASK                      (0x01UL << PMC_REGSC_BGEN_SHIFT)                    /*!< PMC_REGSC: BGEN Mask                    */
 #define PMC_REGSC_BGEN_SHIFT                     4                                                   /*!< PMC_REGSC: BGEN Position                */
+/**
+ * @} */ /* End group PMC_Register_Masks_GROUP 
+ */
 
 /* PMC - Peripheral instance base addresses */
-#define PMC_BasePtr                    0x4007D000UL
-#define PMC                            ((PMC_Type *) PMC_BasePtr)
-#define PMC_BASE_PTR                   (PMC)
+#define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
+#define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
+#define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PMC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer
+* @brief C Struct for PORTA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PORTA (file:PORTA_FILT)              ================ */
@@ -5508,23 +6399,36 @@ typedef struct {                                /*!<       PMC Structure        
 /**
  * @brief Pin Control and Interrupts
  */
-typedef struct {                                /*!<       PORTA Structure                                              */
-   __IO uint32_t  PCR[32];                      /*!< 0000: Pin Control Register                                         */
-   __O  uint32_t  GPCLR;                        /*!< 0080: Global Pin Control Low Register                              */
-   __O  uint32_t  GPCHR;                        /*!< 0084: Global Pin Control High Register                             */
-   __I  uint32_t  RESERVED0[6];                 /*!< 0088:                                                              */
-   __IO uint32_t  ISFR;                         /*!< 00A0: Interrupt Status Flag Register                               */
-   __I  uint32_t  RESERVED1[7];                 /*!< 00A4:                                                              */
-   __IO uint32_t  DFER;                         /*!< 00C0: Digital Filter Enable Register                               */
-   __IO uint32_t  DFCR;                         /*!< 00C4: Digital Filter Clock Register                                */
-   __IO uint32_t  DFWR;                         /*!< 00C8: Digital Filter Width Register                                */
+/**
+* @addtogroup PORTA_structs_GROUP PORTA struct
+* @brief Struct for PORTA
+* @{
+*/
+typedef struct {                                /*       PORTA Structure                                              */
+   __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
+   __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
+   __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
+   __I  uint32_t  RESERVED0[6];                
+   __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
+   __I  uint32_t  RESERVED1[7];                
+   __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
+   __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
+   __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
 } PORT_Type;
 
+/**
+ * @} */ /* End group PORTA_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'PORTA' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup PORTA_Register_Masks_GROUP PORTA Register Masks
+* @brief Register Masks for PORTA
+* @{
+*/
 /* ------- PCR Bit Fields                           ------ */
 #define PORT_PCR_PS_MASK                         (0x01UL << PORT_PCR_PS_SHIFT)                       /*!< PORTA_PCR: PS Mask                      */
 #define PORT_PCR_PS_SHIFT                        0                                                   /*!< PORTA_PCR: PS Position                  */
@@ -5571,11 +6475,22 @@ typedef struct {                                /*!<       PORTA Structure      
 #define PORT_DFWR_FILT_MASK                      (0x1FUL << PORT_DFWR_FILT_SHIFT)                    /*!< PORTA_DFWR: FILT Mask                   */
 #define PORT_DFWR_FILT_SHIFT                     0                                                   /*!< PORTA_DFWR: FILT Position               */
 #define PORT_DFWR_FILT(x)                        (((uint32_t)(((uint32_t)(x))<<PORT_DFWR_FILT_SHIFT))&PORT_DFWR_FILT_MASK) /*!< PORTA_DFWR                              */
+/**
+ * @} */ /* End group PORTA_Register_Masks_GROUP 
+ */
 
 /* PORTA - Peripheral instance base addresses */
-#define PORTA_BasePtr                  0x40049000UL
-#define PORTA                          ((PORT_Type *) PORTA_BasePtr)
-#define PORTA_BASE_PTR                 (PORTA)
+#define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
+#define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
+#define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PORTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer
+* @brief C Struct for PORTA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PORTB (derived from PORTA)           ================ */
@@ -5586,9 +6501,17 @@ typedef struct {                                /*!<       PORTA Structure      
  */
 
 /* PORTB - Peripheral instance base addresses */
-#define PORTB_BasePtr                  0x4004A000UL
-#define PORTB                          ((PORT_Type *) PORTB_BasePtr)
-#define PORTB_BASE_PTR                 (PORTB)
+#define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
+#define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
+#define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PORTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer
+* @brief C Struct for PORTA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PORTC (derived from PORTA)           ================ */
@@ -5599,9 +6522,17 @@ typedef struct {                                /*!<       PORTA Structure      
  */
 
 /* PORTC - Peripheral instance base addresses */
-#define PORTC_BasePtr                  0x4004B000UL
-#define PORTC                          ((PORT_Type *) PORTC_BasePtr)
-#define PORTC_BASE_PTR                 (PORTC)
+#define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
+#define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
+#define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PORTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer
+* @brief C Struct for PORTA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PORTD (derived from PORTA)           ================ */
@@ -5612,9 +6543,17 @@ typedef struct {                                /*!<       PORTA Structure      
  */
 
 /* PORTD - Peripheral instance base addresses */
-#define PORTD_BasePtr                  0x4004C000UL
-#define PORTD                          ((PORT_Type *) PORTD_BasePtr)
-#define PORTD_BASE_PTR                 (PORTD)
+#define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
+#define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PORTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer
+* @brief C Struct for PORTA
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           PORTE (derived from PORTA)           ================ */
@@ -5625,9 +6564,17 @@ typedef struct {                                /*!<       PORTA Structure      
  */
 
 /* PORTE - Peripheral instance base addresses */
-#define PORTE_BasePtr                  0x4004D000UL
-#define PORTE                          ((PORT_Type *) PORTE_BasePtr)
-#define PORTE_BASE_PTR                 (PORTE)
+#define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
+#define PORTE                          ((PORT_Type *) PORTE_BasePtr) //!< Freescale base pointer
+#define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PORTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup RCM_Peripheral_access_layer_GROUP RCM Peripheral Access Layer
+* @brief C Struct for RCM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           RCM (file:RCM_MK_TAMPER_LOL)         ================ */
@@ -5636,21 +6583,34 @@ typedef struct {                                /*!<       PORTA Structure      
 /**
  * @brief Reset Control Module
  */
-typedef struct {                                /*!<       RCM Structure                                                */
-   __I  uint8_t   SRS0;                         /*!< 0000: System Reset Status Register 0                               */
-   __I  uint8_t   SRS1;                         /*!< 0001: System Reset Status Register 1                               */
-   __I  uint16_t  RESERVED0;                    /*!< 0002:                                                              */
-   __IO uint8_t   RPFC;                         /*!< 0004: Reset Pin Filter Control Register                            */
-   __IO uint8_t   RPFW;                         /*!< 0005: Reset Pin Filter Width Register                              */
-   __I  uint8_t   RESERVED1;                    /*!< 0006:                                                              */
-   __I  uint8_t   MR;                           /*!< 0007: Mode Register                                                */
+/**
+* @addtogroup RCM_structs_GROUP RCM struct
+* @brief Struct for RCM
+* @{
+*/
+typedef struct {                                /*       RCM Structure                                                */
+   __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
+   __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
+   __I  uint16_t  RESERVED0;                   
+   __IO uint8_t   RPFC;                         /**< 0004: Reset Pin Filter Control Register                            */
+   __IO uint8_t   RPFW;                         /**< 0005: Reset Pin Filter Width Register                              */
+   __I  uint8_t   RESERVED1;                   
+   __I  uint8_t   MR;                           /**< 0007: Mode Register                                                */
 } RCM_Type;
 
+/**
+ * @} */ /* End group RCM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'RCM' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup RCM_Register_Masks_GROUP RCM Register Masks
+* @brief Register Masks for RCM
+* @{
+*/
 /* ------- SRS0 Bit Fields                          ------ */
 #define RCM_SRS0_WAKEUP_MASK                     (0x01UL << RCM_SRS0_WAKEUP_SHIFT)                   /*!< RCM_SRS0: WAKEUP Mask                   */
 #define RCM_SRS0_WAKEUP_SHIFT                    0                                                   /*!< RCM_SRS0: WAKEUP Position               */
@@ -5694,11 +6654,22 @@ typedef struct {                                /*!<       RCM Structure        
 /* ------- MR Bit Fields                            ------ */
 #define RCM_MR_EZP_MS_MASK                       (0x01UL << RCM_MR_EZP_MS_SHIFT)                     /*!< RCM_MR: EZP_MS Mask                     */
 #define RCM_MR_EZP_MS_SHIFT                      1                                                   /*!< RCM_MR: EZP_MS Position                 */
+/**
+ * @} */ /* End group RCM_Register_Masks_GROUP 
+ */
 
 /* RCM - Peripheral instance base addresses */
-#define RCM_BasePtr                    0x4007F000UL
-#define RCM                            ((RCM_Type *) RCM_BasePtr)
-#define RCM_BASE_PTR                   (RCM)
+#define RCM_BasePtr                    0x4007F000UL //!< Peripheral base address
+#define RCM                            ((RCM_Type *) RCM_BasePtr) //!< Freescale base pointer
+#define RCM_BASE_PTR                   (RCM) //!< Freescale style base pointer
+/**
+ * @} */ /* End group RCM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup RFSYS_Peripheral_access_layer_GROUP RFSYS Peripheral Access Layer
+* @brief C Struct for RFSYS
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           RFSYS (file:RFSYS_0)                 ================ */
@@ -5707,15 +6678,28 @@ typedef struct {                                /*!<       RCM Structure        
 /**
  * @brief System register file
  */
-typedef struct {                                /*!<       RFSYS Structure                                              */
-   __IO uint32_t  REG[8];                       /*!< 0000: Register file register                                       */
+/**
+* @addtogroup RFSYS_structs_GROUP RFSYS struct
+* @brief Struct for RFSYS
+* @{
+*/
+typedef struct {                                /*       RFSYS Structure                                              */
+   __IO uint32_t  REG[8];                       /**< 0000: Register file register                                       */
 } RFSYS_Type;
 
+/**
+ * @} */ /* End group RFSYS_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'RFSYS' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup RFSYS_Register_Masks_GROUP RFSYS Register Masks
+* @brief Register Masks for RFSYS
+* @{
+*/
 /* ------- REG Bit Fields                           ------ */
 #define RFSYS_REG_LL_MASK                        (0xFFUL << RFSYS_REG_LL_SHIFT)                      /*!< RFSYS_REG: LL Mask                      */
 #define RFSYS_REG_LL_SHIFT                       0                                                   /*!< RFSYS_REG: LL Position                  */
@@ -5729,11 +6713,22 @@ typedef struct {                                /*!<       RFSYS Structure      
 #define RFSYS_REG_HH_MASK                        (0xFFUL << RFSYS_REG_HH_SHIFT)                      /*!< RFSYS_REG: HH Mask                      */
 #define RFSYS_REG_HH_SHIFT                       24                                                  /*!< RFSYS_REG: HH Position                  */
 #define RFSYS_REG_HH(x)                          (((uint32_t)(((uint32_t)(x))<<RFSYS_REG_HH_SHIFT))&RFSYS_REG_HH_MASK) /*!< RFSYS_REG                               */
+/**
+ * @} */ /* End group RFSYS_Register_Masks_GROUP 
+ */
 
 /* RFSYS - Peripheral instance base addresses */
-#define RFSYS_BasePtr                  0x40041000UL
-#define RFSYS                          ((RFSYS_Type *) RFSYS_BasePtr)
-#define RFSYS_BASE_PTR                 (RFSYS)
+#define RFSYS_BasePtr                  0x40041000UL //!< Peripheral base address
+#define RFSYS                          ((RFSYS_Type *) RFSYS_BasePtr) //!< Freescale base pointer
+#define RFSYS_BASE_PTR                 (RFSYS) //!< Freescale style base pointer
+/**
+ * @} */ /* End group RFSYS_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup RFVBAT_Peripheral_access_layer_GROUP RFVBAT Peripheral Access Layer
+* @brief C Struct for RFVBAT
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           RFVBAT (file:RFVBAT_0)               ================ */
@@ -5742,15 +6737,28 @@ typedef struct {                                /*!<       RFSYS Structure      
 /**
  * @brief VBAT register file
  */
-typedef struct {                                /*!<       RFVBAT Structure                                             */
-   __IO uint32_t  REG[8];                       /*!< 0000: VBAT register file register                                  */
+/**
+* @addtogroup RFVBAT_structs_GROUP RFVBAT struct
+* @brief Struct for RFVBAT
+* @{
+*/
+typedef struct {                                /*       RFVBAT Structure                                             */
+   __IO uint32_t  REG[8];                       /**< 0000: VBAT register file register                                  */
 } RFVBAT_Type;
 
+/**
+ * @} */ /* End group RFVBAT_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'RFVBAT' Position & Mask macros                      ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup RFVBAT_Register_Masks_GROUP RFVBAT Register Masks
+* @brief Register Masks for RFVBAT
+* @{
+*/
 /* ------- REG Bit Fields                           ------ */
 #define RFVBAT_REG_LL_MASK                       (0xFFUL << RFVBAT_REG_LL_SHIFT)                     /*!< RFVBAT_REG: LL Mask                     */
 #define RFVBAT_REG_LL_SHIFT                      0                                                   /*!< RFVBAT_REG: LL Position                 */
@@ -5764,11 +6772,22 @@ typedef struct {                                /*!<       RFVBAT Structure     
 #define RFVBAT_REG_HH_MASK                       (0xFFUL << RFVBAT_REG_HH_SHIFT)                     /*!< RFVBAT_REG: HH Mask                     */
 #define RFVBAT_REG_HH_SHIFT                      24                                                  /*!< RFVBAT_REG: HH Position                 */
 #define RFVBAT_REG_HH(x)                         (((uint32_t)(((uint32_t)(x))<<RFVBAT_REG_HH_SHIFT))&RFVBAT_REG_HH_MASK) /*!< RFVBAT_REG                              */
+/**
+ * @} */ /* End group RFVBAT_Register_Masks_GROUP 
+ */
 
 /* RFVBAT - Peripheral instance base addresses */
-#define RFVBAT_BasePtr                 0x4003E000UL
-#define RFVBAT                         ((RFVBAT_Type *) RFVBAT_BasePtr)
-#define RFVBAT_BASE_PTR                (RFVBAT)
+#define RFVBAT_BasePtr                 0x4003E000UL //!< Peripheral base address
+#define RFVBAT                         ((RFVBAT_Type *) RFVBAT_BasePtr) //!< Freescale base pointer
+#define RFVBAT_BASE_PTR                (RFVBAT) //!< Freescale style base pointer
+/**
+ * @} */ /* End group RFVBAT_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup RTC_Peripheral_access_layer_GROUP RTC Peripheral Access Layer
+* @brief C Struct for RTC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           RTC (file:RTC_WAR_RAR_TSIE_WPON)       ================ */
@@ -5777,25 +6796,38 @@ typedef struct {                                /*!<       RFVBAT Structure     
 /**
  * @brief Secure Real Time Clock
  */
-typedef struct {                                /*!<       RTC Structure                                                */
-   __IO uint32_t  TSR;                          /*!< 0000: Time Seconds Register                                        */
-   __IO uint32_t  TPR;                          /*!< 0004: Time Prescaler Register                                      */
-   __IO uint32_t  TAR;                          /*!< 0008: Time Alarm Register                                          */
-   __IO uint32_t  TCR;                          /*!< 000C: Time Compensation Register                                   */
-   __IO uint32_t  CR;                           /*!< 0010: Control Register                                             */
-   __IO uint32_t  SR;                           /*!< 0014: Status Register                                              */
-   __IO uint32_t  LR;                           /*!< 0018: Lock Register                                                */
-   __IO uint32_t  IER;                          /*!< 001C: Interrupt Enable Register                                    */
-   __I  uint32_t  RESERVED0[504];               /*!< 0020:                                                              */
-   __IO uint32_t  WAR;                          /*!< 0800: Write Access Register                                        */
-   __IO uint32_t  RAR;                          /*!< 0804: Read Access Register                                         */
+/**
+* @addtogroup RTC_structs_GROUP RTC struct
+* @brief Struct for RTC
+* @{
+*/
+typedef struct {                                /*       RTC Structure                                                */
+   __IO uint32_t  TSR;                          /**< 0000: Time Seconds Register                                        */
+   __IO uint32_t  TPR;                          /**< 0004: Time Prescaler Register                                      */
+   __IO uint32_t  TAR;                          /**< 0008: Time Alarm Register                                          */
+   __IO uint32_t  TCR;                          /**< 000C: Time Compensation Register                                   */
+   __IO uint32_t  CR;                           /**< 0010: Control Register                                             */
+   __IO uint32_t  SR;                           /**< 0014: Status Register                                              */
+   __IO uint32_t  LR;                           /**< 0018: Lock Register                                                */
+   __IO uint32_t  IER;                          /**< 001C: Interrupt Enable Register                                    */
+   __I  uint32_t  RESERVED0[504];              
+   __IO uint32_t  WAR;                          /**< 0800: Write Access Register                                        */
+   __IO uint32_t  RAR;                          /**< 0804: Read Access Register                                         */
 } RTC_Type;
 
+/**
+ * @} */ /* End group RTC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'RTC' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup RTC_Register_Masks_GROUP RTC Register Masks
+* @brief Register Masks for RTC
+* @{
+*/
 /* ------- TSR Bit Fields                           ------ */
 #define RTC_TSR_TSR_MASK                         (0xFFFFFFFFUL << RTC_TSR_TSR_SHIFT)                 /*!< RTC_TSR: TSR Mask                       */
 #define RTC_TSR_TSR_SHIFT                        0                                                   /*!< RTC_TSR: TSR Position                   */
@@ -5907,11 +6939,22 @@ typedef struct {                                /*!<       RTC Structure        
 #define RTC_RAR_LRR_SHIFT                        6                                                   /*!< RTC_RAR: LRR Position                   */
 #define RTC_RAR_IERR_MASK                        (0x01UL << RTC_RAR_IERR_SHIFT)                      /*!< RTC_RAR: IERR Mask                      */
 #define RTC_RAR_IERR_SHIFT                       7                                                   /*!< RTC_RAR: IERR Position                  */
+/**
+ * @} */ /* End group RTC_Register_Masks_GROUP 
+ */
 
 /* RTC - Peripheral instance base addresses */
-#define RTC_BasePtr                    0x4003D000UL
-#define RTC                            ((RTC_Type *) RTC_BasePtr)
-#define RTC_BASE_PTR                   (RTC)
+#define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
+#define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
+#define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group RTC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SDHC_Peripheral_access_layer_GROUP SDHC Peripheral Access Layer
+* @brief C Struct for SDHC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SDHC (file:SDHC_0)                   ================ */
@@ -5920,38 +6963,51 @@ typedef struct {                                /*!<       RTC Structure        
 /**
  * @brief Secured Digital Host Controller
  */
-typedef struct {                                /*!<       SDHC Structure                                               */
-   __IO uint32_t  DSADDR;                       /*!< 0000: DMA System Address Register                                  */
-   __IO uint32_t  BLKATTR;                      /*!< 0004: Block Attributes Register                                    */
-   __IO uint32_t  CMDARG;                       /*!< 0008: Command Argument Register                                    */
-   __IO uint32_t  XFERTYP;                      /*!< 000C: Transfer Type Register                                       */
-   __I  uint32_t  CMDRSP[4];                    /*!< 0010: Command Response                                             */
-   __IO uint32_t  DATPORT;                      /*!< 0020: Buffer Data Port Register                                    */
-   __I  uint32_t  PRSSTAT;                      /*!< 0024: Present State Register                                       */
-   __IO uint32_t  PROCTL;                       /*!< 0028: Protocol Control Register                                    */
-   __IO uint32_t  SYSCTL;                       /*!< 002C: System Control Register                                      */
-   __IO uint32_t  IRQSTAT;                      /*!< 0030: Interrupt Status Register                                    */
-   __IO uint32_t  IRQSTATEN;                    /*!< 0034: Interrupt Status Enable Register                             */
-   __IO uint32_t  IRQSIGEN;                     /*!< 0038: Interrupt Signal Enable Register                             */
-   __I  uint32_t  AC12ERR;                      /*!< 003C: Auto CMD12 Error Status Register                             */
-   __I  uint32_t  HTCAPBLT;                     /*!< 0040: Host Controller Capabilities                                 */
-   __IO uint32_t  WML;                          /*!< 0044: Watermark Level Register                                     */
-   __I  uint32_t  RESERVED0[2];                 /*!< 0048:                                                              */
-   __O  uint32_t  FEVT;                         /*!< 0050: Force Event Register                                         */
-   __I  uint32_t  ADMAES;                       /*!< 0054: ADMA Error Status Register                                   */
-   __IO uint32_t  ADSADDR;                      /*!< 0058: ADMA System Address Register                                 */
-   __I  uint32_t  RESERVED1[25];                /*!< 005C:                                                              */
-   __IO uint32_t  VENDOR;                       /*!< 00C0: Vendor Specific Register                                     */
-   __IO uint32_t  MMCBOOT;                      /*!< 00C4: MMC Boot Register                                            */
-   __I  uint32_t  RESERVED2[13];                /*!< 00C8:                                                              */
-   __I  uint32_t  HOSTVER;                      /*!< 00FC: Host Controller Version                                      */
+/**
+* @addtogroup SDHC_structs_GROUP SDHC struct
+* @brief Struct for SDHC
+* @{
+*/
+typedef struct {                                /*       SDHC Structure                                               */
+   __IO uint32_t  DSADDR;                       /**< 0000: DMA System Address Register                                  */
+   __IO uint32_t  BLKATTR;                      /**< 0004: Block Attributes Register                                    */
+   __IO uint32_t  CMDARG;                       /**< 0008: Command Argument Register                                    */
+   __IO uint32_t  XFERTYP;                      /**< 000C: Transfer Type Register                                       */
+   __I  uint32_t  CMDRSP[4];                    /**< 0010: Command Response                                             */
+   __IO uint32_t  DATPORT;                      /**< 0020: Buffer Data Port Register                                    */
+   __I  uint32_t  PRSSTAT;                      /**< 0024: Present State Register                                       */
+   __IO uint32_t  PROCTL;                       /**< 0028: Protocol Control Register                                    */
+   __IO uint32_t  SYSCTL;                       /**< 002C: System Control Register                                      */
+   __IO uint32_t  IRQSTAT;                      /**< 0030: Interrupt Status Register                                    */
+   __IO uint32_t  IRQSTATEN;                    /**< 0034: Interrupt Status Enable Register                             */
+   __IO uint32_t  IRQSIGEN;                     /**< 0038: Interrupt Signal Enable Register                             */
+   __I  uint32_t  AC12ERR;                      /**< 003C: Auto CMD12 Error Status Register                             */
+   __I  uint32_t  HTCAPBLT;                     /**< 0040: Host Controller Capabilities                                 */
+   __IO uint32_t  WML;                          /**< 0044: Watermark Level Register                                     */
+   __I  uint32_t  RESERVED0[2];                
+   __O  uint32_t  FEVT;                         /**< 0050: Force Event Register                                         */
+   __I  uint32_t  ADMAES;                       /**< 0054: ADMA Error Status Register                                   */
+   __IO uint32_t  ADSADDR;                      /**< 0058: ADMA System Address Register                                 */
+   __I  uint32_t  RESERVED1[25];               
+   __IO uint32_t  VENDOR;                       /**< 00C0: Vendor Specific Register                                     */
+   __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot Register                                            */
+   __I  uint32_t  RESERVED2[13];               
+   __I  uint32_t  HOSTVER;                      /**< 00FC: Host Controller Version                                      */
 } SDHC_Type;
 
+/**
+ * @} */ /* End group SDHC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'SDHC' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup SDHC_Register_Masks_GROUP SDHC Register Masks
+* @brief Register Masks for SDHC
+* @{
+*/
 /* ------- DSADDR Bit Fields                        ------ */
 #define SDHC_DSADDR_DSADDR_MASK                  (0x3FFFFFFFUL << SDHC_DSADDR_DSADDR_SHIFT)          /*!< SDHC_DSADDR: DSADDR Mask                */
 #define SDHC_DSADDR_DSADDR_SHIFT                 2                                                   /*!< SDHC_DSADDR: DSADDR Position            */
@@ -6315,11 +7371,22 @@ typedef struct {                                /*!<       SDHC Structure       
 #define SDHC_HOSTVER_VVN_MASK                    (0xFFUL << SDHC_HOSTVER_VVN_SHIFT)                  /*!< SDHC_HOSTVER: VVN Mask                  */
 #define SDHC_HOSTVER_VVN_SHIFT                   8                                                   /*!< SDHC_HOSTVER: VVN Position              */
 #define SDHC_HOSTVER_VVN(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_HOSTVER_VVN_SHIFT))&SDHC_HOSTVER_VVN_MASK) /*!< SDHC_HOSTVER                            */
+/**
+ * @} */ /* End group SDHC_Register_Masks_GROUP 
+ */
 
 /* SDHC - Peripheral instance base addresses */
-#define SDHC_BasePtr                   0x400B1000UL
-#define SDHC                           ((SDHC_Type *) SDHC_BasePtr)
-#define SDHC_BASE_PTR                  (SDHC)
+#define SDHC_BasePtr                   0x400B1000UL //!< Peripheral base address
+#define SDHC                           ((SDHC_Type *) SDHC_BasePtr) //!< Freescale base pointer
+#define SDHC_BASE_PTR                  (SDHC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SIM_Peripheral_access_layer_GROUP SIM Peripheral Access Layer
+* @brief C Struct for SIM
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SIM (file:SIM_MK30D10)               ================ */
@@ -6328,39 +7395,52 @@ typedef struct {                                /*!<       SDHC Structure       
 /**
  * @brief System Integration Module
  */
-typedef struct {                                /*!<       SIM Structure                                                */
-   __IO uint32_t  SOPT1;                        /*!< 0000: System Options Register 1                                    */
-   __I  uint32_t  RESERVED0[1024];              /*!< 0004:                                                              */
-   __IO uint32_t  SOPT2;                        /*!< 1004: System Options Register 2                                    */
-   __I  uint32_t  RESERVED1;                    /*!< 1008:                                                              */
-   __IO uint32_t  SOPT4;                        /*!< 100C: System Options Register 4                                    */
-   __IO uint32_t  SOPT5;                        /*!< 1010: System Options Register 5                                    */
-   __I  uint32_t  RESERVED2;                    /*!< 1014:                                                              */
-   __IO uint32_t  SOPT7;                        /*!< 1018: System Options Register 7                                    */
-   __I  uint32_t  RESERVED3[2];                 /*!< 101C:                                                              */
-   __I  uint32_t  SDID;                         /*!< 1024: System Device Identification Register                        */
-   __IO uint32_t  SCGC1;                        /*!< 1028: System Clock Gating Control Register 1                       */
-   __IO uint32_t  SCGC2;                        /*!< 102C: System Clock Gating Control Register 2                       */
-   __IO uint32_t  SCGC3;                        /*!< 1030: System Clock Gating Control Register 3                       */
-   __IO uint32_t  SCGC4;                        /*!< 1034: System Clock Gating Control Register 4                       */
-   __IO uint32_t  SCGC5;                        /*!< 1038: System Clock Gating Control Register 5                       */
-   __IO uint32_t  SCGC6;                        /*!< 103C: System Clock Gating Control Register 6                       */
-   __IO uint32_t  SCGC7;                        /*!< 1040: System Clock Gating Control Register 7                       */
-   __IO uint32_t  CLKDIV1;                      /*!< 1044: System Clock Divider Register 1                              */
-   __I  uint32_t  CLKDIV2;                      /*!< 1048: System Clock Divider Register 2                              */
-   __IO uint32_t  FCFG1;                        /*!< 104C: Flash Configuration Register 1                               */
-   __I  uint32_t  FCFG2;                        /*!< 1050: Flash Configuration Register 2                               */
-   __I  uint32_t  UIDH;                         /*!< 1054: Unique Identification Register High                          */
-   __I  uint32_t  UIDMH;                        /*!< 1058: Unique Identification Register Mid-High                      */
-   __I  uint32_t  UIDML;                        /*!< 105C: Unique Identification Register Mid Low                       */
-   __I  uint32_t  UIDL;                         /*!< 1060: Unique Identification Register Low                           */
+/**
+* @addtogroup SIM_structs_GROUP SIM struct
+* @brief Struct for SIM
+* @{
+*/
+typedef struct {                                /*       SIM Structure                                                */
+   __IO uint32_t  SOPT1;                        /**< 0000: System Options Register 1                                    */
+   __I  uint32_t  RESERVED0[1024];             
+   __IO uint32_t  SOPT2;                        /**< 1004: System Options Register 2                                    */
+   __I  uint32_t  RESERVED1;                   
+   __IO uint32_t  SOPT4;                        /**< 100C: System Options Register 4                                    */
+   __IO uint32_t  SOPT5;                        /**< 1010: System Options Register 5                                    */
+   __I  uint32_t  RESERVED2;                   
+   __IO uint32_t  SOPT7;                        /**< 1018: System Options Register 7                                    */
+   __I  uint32_t  RESERVED3[2];                
+   __I  uint32_t  SDID;                         /**< 1024: System Device Identification Register                        */
+   __IO uint32_t  SCGC1;                        /**< 1028: System Clock Gating Control Register 1                       */
+   __IO uint32_t  SCGC2;                        /**< 102C: System Clock Gating Control Register 2                       */
+   __IO uint32_t  SCGC3;                        /**< 1030: System Clock Gating Control Register 3                       */
+   __IO uint32_t  SCGC4;                        /**< 1034: System Clock Gating Control Register 4                       */
+   __IO uint32_t  SCGC5;                        /**< 1038: System Clock Gating Control Register 5                       */
+   __IO uint32_t  SCGC6;                        /**< 103C: System Clock Gating Control Register 6                       */
+   __IO uint32_t  SCGC7;                        /**< 1040: System Clock Gating Control Register 7                       */
+   __IO uint32_t  CLKDIV1;                      /**< 1044: System Clock Divider Register 1                              */
+   __I  uint32_t  CLKDIV2;                      /**< 1048: System Clock Divider Register 2                              */
+   __IO uint32_t  FCFG1;                        /**< 104C: Flash Configuration Register 1                               */
+   __I  uint32_t  FCFG2;                        /**< 1050: Flash Configuration Register 2                               */
+   __I  uint32_t  UIDH;                         /**< 1054: Unique Identification Register High                          */
+   __I  uint32_t  UIDMH;                        /**< 1058: Unique Identification Register Mid-High                      */
+   __I  uint32_t  UIDML;                        /**< 105C: Unique Identification Register Mid Low                       */
+   __I  uint32_t  UIDL;                         /**< 1060: Unique Identification Register Low                           */
 } SIM_Type;
 
+/**
+ * @} */ /* End group SIM_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'SIM' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup SIM_Register_Masks_GROUP SIM Register Masks
+* @brief Register Masks for SIM
+* @{
+*/
 /* ------- SOPT1 Bit Fields                         ------ */
 #define SIM_SOPT1_RAMSIZE_MASK                   (0x0FUL << SIM_SOPT1_RAMSIZE_SHIFT)                 /*!< SIM_SOPT1: RAMSIZE Mask                 */
 #define SIM_SOPT1_RAMSIZE_SHIFT                  12                                                  /*!< SIM_SOPT1: RAMSIZE Position             */
@@ -6604,11 +7684,22 @@ typedef struct {                                /*!<       SIM Structure        
 #define SIM_UIDL_UID_MASK                        (0xFFFFFFFFUL << SIM_UIDL_UID_SHIFT)                /*!< SIM_UIDL: UID Mask                      */
 #define SIM_UIDL_UID_SHIFT                       0                                                   /*!< SIM_UIDL: UID Position                  */
 #define SIM_UIDL_UID(x)                          (((uint32_t)(((uint32_t)(x))<<SIM_UIDL_UID_SHIFT))&SIM_UIDL_UID_MASK) /*!< SIM_UIDL                                */
+/**
+ * @} */ /* End group SIM_Register_Masks_GROUP 
+ */
 
 /* SIM - Peripheral instance base addresses */
-#define SIM_BasePtr                    0x40047000UL
-#define SIM                            ((SIM_Type *) SIM_BasePtr)
-#define SIM_BASE_PTR                   (SIM)
+#define SIM_BasePtr                    0x40047000UL //!< Peripheral base address
+#define SIM                            ((SIM_Type *) SIM_BasePtr) //!< Freescale base pointer
+#define SIM_BASE_PTR                   (SIM) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SIM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SMC_Peripheral_access_layer_GROUP SMC Peripheral Access Layer
+* @brief C Struct for SMC
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SMC (file:SMC_0)                     ================ */
@@ -6617,18 +7708,31 @@ typedef struct {                                /*!<       SIM Structure        
 /**
  * @brief System Mode Controller
  */
-typedef struct {                                /*!<       SMC Structure                                                */
-   __IO uint8_t   PMPROT;                       /*!< 0000: Power Mode Protection Register                               */
-   __IO uint8_t   PMCTRL;                       /*!< 0001: Power Mode Control Register                                  */
-   __IO uint8_t   VLLSCTRL;                     /*!< 0002: VLLS Control Register                                        */
-   __I  uint8_t   PMSTAT;                       /*!< 0003: Power Mode Status Register                                   */
+/**
+* @addtogroup SMC_structs_GROUP SMC struct
+* @brief Struct for SMC
+* @{
+*/
+typedef struct {                                /*       SMC Structure                                                */
+   __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
+   __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
+   __IO uint8_t   VLLSCTRL;                     /**< 0002: VLLS Control Register                                        */
+   __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
 
+/**
+ * @} */ /* End group SMC_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'SMC' Position & Mask macros                         ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup SMC_Register_Masks_GROUP SMC Register Masks
+* @brief Register Masks for SMC
+* @{
+*/
 /* ------- PMPROT Bit Fields                        ------ */
 #define SMC_PMPROT_AVLLS_MASK                    (0x01UL << SMC_PMPROT_AVLLS_SHIFT)                  /*!< SMC_PMPROT: AVLLS Mask                  */
 #define SMC_PMPROT_AVLLS_SHIFT                   1                                                   /*!< SMC_PMPROT: AVLLS Position              */
@@ -6657,11 +7761,22 @@ typedef struct {                                /*!<       SMC Structure        
 #define SMC_PMSTAT_PMSTAT_MASK                   (0x7FUL << SMC_PMSTAT_PMSTAT_SHIFT)                 /*!< SMC_PMSTAT: PMSTAT Mask                 */
 #define SMC_PMSTAT_PMSTAT_SHIFT                  0                                                   /*!< SMC_PMSTAT: PMSTAT Position             */
 #define SMC_PMSTAT_PMSTAT(x)                     (((uint8_t)(((uint8_t)(x))<<SMC_PMSTAT_PMSTAT_SHIFT))&SMC_PMSTAT_PMSTAT_MASK) /*!< SMC_PMSTAT                              */
+/**
+ * @} */ /* End group SMC_Register_Masks_GROUP 
+ */
 
 /* SMC - Peripheral instance base addresses */
-#define SMC_BasePtr                    0x4007E000UL
-#define SMC                            ((SMC_Type *) SMC_BasePtr)
-#define SMC_BASE_PTR                   (SMC)
+#define SMC_BasePtr                    0x4007E000UL //!< Peripheral base address
+#define SMC                            ((SMC_Type *) SMC_BasePtr) //!< Freescale base pointer
+#define SMC_BASE_PTR                   (SMC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SMC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SPI_Peripheral_access_layer_GROUP SPI Peripheral Access Layer
+* @brief C Struct for SPI
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SPI0 (file:SPI0_MK)                  ================ */
@@ -6670,32 +7785,45 @@ typedef struct {                                /*!<       SMC Structure        
 /**
  * @brief Serial Peripheral Interface
  */
-typedef struct {                                /*!<       SPI0 Structure                                               */
-   __IO uint32_t  MCR;                          /*!< 0000: Module Configuration Register                                */
-   __I  uint32_t  RESERVED0;                    /*!< 0004:                                                              */
-   __IO uint32_t  TCR;                          /*!< 0008: Transfer Count Register                                      */
-   union {                                      /*!< 0000: (size=0008)                                                  */
-      __IO uint32_t  CTAR[2];                   /*!< 000C: Clock and Transfer Attributes Register (In Master Mode)      */
-      __IO uint32_t  CTAR0_SLAVE;               /*!< 000C: Clock and Transfer Attributes Register (In Slave Mode)       */
+/**
+* @addtogroup SPI_structs_GROUP SPI struct
+* @brief Struct for SPI
+* @{
+*/
+typedef struct {                                /*       SPI0 Structure                                               */
+   __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
+   union {                                      /**< 0000: (size=0008)                                                  */
+      __IO uint32_t  CTAR[2];                   /**< 000C: Clock and Transfer Attributes Register (In Master Mode)      */
+      __IO uint32_t  CTAR0_SLAVE;               /**< 000C: Clock and Transfer Attributes Register (In Slave Mode)       */
    };
-   __I  uint32_t  RESERVED1[6];                 /*!< 0014:                                                              */
-   __IO uint32_t  SR;                           /*!< 002C: Status Register                                              */
-   __IO uint32_t  RSER;                         /*!< 0030: DMA/Interrupt Request Select and Enable Register             */
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  PUSHR;                     /*!< 0034: PUSH TX FIFO Register In Master Mode                         */
-      __IO uint32_t  PUSHR_SLAVE;               /*!< 0034: PUSH TX FIFO Register In Slave Mode                          */
+   __I  uint32_t  RESERVED1[6];                
+   __IO uint32_t  SR;                           /**< 002C: Status Register                                              */
+   __IO uint32_t  RSER;                         /**< 0030: DMA/Interrupt Request Select and Enable Register             */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  PUSHR;                     /**< 0034: PUSH TX FIFO Register In Master Mode                         */
+      __IO uint32_t  PUSHR_SLAVE;               /**< 0034: PUSH TX FIFO Register In Slave Mode                          */
    };
-   __I  uint32_t  POPR;                         /*!< 0038: POP RX FIFO Register                                         */
-   __I  uint32_t  TXFR[4];                      /*!< 003C: Transmit FIFO                                                */
-   __I  uint32_t  RESERVED2[12];                /*!< 004C:                                                              */
-   __I  uint32_t  RXFR[4];                      /*!< 007C: Receive FIFO                                                 */
+   __I  uint32_t  POPR;                         /**< 0038: POP RX FIFO Register                                         */
+   __I  uint32_t  TXFR[4];                      /**< 003C: Transmit FIFO                                                */
+   __I  uint32_t  RESERVED2[12];               
+   __I  uint32_t  RXFR[4];                      /**< 007C: Receive FIFO                                                 */
 } SPI_Type;
 
+/**
+ * @} */ /* End group SPI_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'SPI0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup SPI_Register_Masks_GROUP SPI Register Masks
+* @brief Register Masks for SPI
+* @{
+*/
 /* ------- MCR Bit Fields                           ------ */
 #define SPI_MCR_HALT_MASK                        (0x01UL << SPI_MCR_HALT_SHIFT)                      /*!< SPI0_MCR: HALT Mask                     */
 #define SPI_MCR_HALT_SHIFT                       0                                                   /*!< SPI0_MCR: HALT Position                 */
@@ -6859,11 +7987,22 @@ typedef struct {                                /*!<       SPI0 Structure       
 #define SPI_RXFR_RXDATA_MASK                     (0xFFFFFFFFUL << SPI_RXFR_RXDATA_SHIFT)             /*!< SPI0_RXFR: RXDATA Mask                  */
 #define SPI_RXFR_RXDATA_SHIFT                    0                                                   /*!< SPI0_RXFR: RXDATA Position              */
 #define SPI_RXFR_RXDATA(x)                       (((uint32_t)(((uint32_t)(x))<<SPI_RXFR_RXDATA_SHIFT))&SPI_RXFR_RXDATA_MASK) /*!< SPI0_RXFR                               */
+/**
+ * @} */ /* End group SPI_Register_Masks_GROUP 
+ */
 
 /* SPI0 - Peripheral instance base addresses */
-#define SPI0_BasePtr                   0x4002C000UL
-#define SPI0                           ((SPI_Type *) SPI0_BasePtr)
-#define SPI0_BASE_PTR                  (SPI0)
+#define SPI0_BasePtr                   0x4002C000UL //!< Peripheral base address
+#define SPI0                           ((SPI_Type *) SPI0_BasePtr) //!< Freescale base pointer
+#define SPI0_BASE_PTR                  (SPI0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SPI_Peripheral_access_layer_GROUP SPI Peripheral Access Layer
+* @brief C Struct for SPI
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SPI1 (derived from SPI0)             ================ */
@@ -6874,9 +8013,17 @@ typedef struct {                                /*!<       SPI0 Structure       
  */
 
 /* SPI1 - Peripheral instance base addresses */
-#define SPI1_BasePtr                   0x4002D000UL
-#define SPI1                           ((SPI_Type *) SPI1_BasePtr)
-#define SPI1_BASE_PTR                  (SPI1)
+#define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
+#define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
+#define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SPI_Peripheral_access_layer_GROUP SPI Peripheral Access Layer
+* @brief C Struct for SPI
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SPI2 (derived from SPI0)             ================ */
@@ -6887,9 +8034,17 @@ typedef struct {                                /*!<       SPI0 Structure       
  */
 
 /* SPI2 - Peripheral instance base addresses */
-#define SPI2_BasePtr                   0x400AC000UL
-#define SPI2                           ((SPI_Type *) SPI2_BasePtr)
-#define SPI2_BASE_PTR                  (SPI2)
+#define SPI2_BasePtr                   0x400AC000UL //!< Peripheral base address
+#define SPI2                           ((SPI_Type *) SPI2_BasePtr) //!< Freescale base pointer
+#define SPI2_BASE_PTR                  (SPI2) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup SYST_Peripheral_access_layer_GROUP SYST Peripheral Access Layer
+* @brief C Struct for SYST
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           SYST (file:SysTick_0)                ================ */
@@ -6898,18 +8053,31 @@ typedef struct {                                /*!<       SPI0 Structure       
 /**
  * @brief System timer SysTick
  */
-typedef struct {                                /*!<       SYST Structure                                               */
-   __IO uint32_t  CSR;                          /*!< 0000: Control and Status Register                                  */
-   __IO uint32_t  RVR;                          /*!< 0004: Reload Value Register                                        */
-   __IO uint32_t  CVR;                          /*!< 0008: Current Value Register                                       */
-   __I  uint32_t  CALIB;                        /*!< 000C: Calibration Value Register                                   */
+/**
+* @addtogroup SYST_structs_GROUP SYST struct
+* @brief Struct for SYST
+* @{
+*/
+typedef struct {                                /*       SYST Structure                                               */
+   __IO uint32_t  CSR;                          /**< 0000: Control and Status Register                                  */
+   __IO uint32_t  RVR;                          /**< 0004: Reload Value Register                                        */
+   __IO uint32_t  CVR;                          /**< 0008: Current Value Register                                       */
+   __I  uint32_t  CALIB;                        /**< 000C: Calibration Value Register                                   */
 } SYST_Type;
 
+/**
+ * @} */ /* End group SYST_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'SYST' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup SYST_Register_Masks_GROUP SYST Register Masks
+* @brief Register Masks for SYST
+* @{
+*/
 /* ------- CSR Bit Fields                           ------ */
 #define SYST_CSR_ENABLE_MASK                     (0x01UL << SYST_CSR_ENABLE_SHIFT)                   /*!< SYST_CSR: ENABLE Mask                   */
 #define SYST_CSR_ENABLE_SHIFT                    0                                                   /*!< SYST_CSR: ENABLE Position               */
@@ -6935,11 +8103,22 @@ typedef struct {                                /*!<       SYST Structure       
 #define SYST_CALIB_SKEW_SHIFT                    30                                                  /*!< SYST_CALIB: SKEW Position               */
 #define SYST_CALIB_NOREF_MASK                    (0x01UL << SYST_CALIB_NOREF_SHIFT)                  /*!< SYST_CALIB: NOREF Mask                  */
 #define SYST_CALIB_NOREF_SHIFT                   31                                                  /*!< SYST_CALIB: NOREF Position              */
+/**
+ * @} */ /* End group SYST_Register_Masks_GROUP 
+ */
 
 /* SYST - Peripheral instance base addresses */
-#define SYST_BasePtr                   0xE000E010UL
-#define SYST                           ((SYST_Type *) SYST_BasePtr)
-#define SYST_BASE_PTR                  (SYST)
+#define SYST_BasePtr                   0xE000E010UL //!< Peripheral base address
+#define SYST                           ((SYST_Type *) SYST_BasePtr) //!< Freescale base pointer
+#define SYST_BASE_PTR                  (SYST) //!< Freescale style base pointer
+/**
+ * @} */ /* End group SYST_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup TPIU_Peripheral_access_layer_GROUP TPIU Peripheral Access Layer
+* @brief C Struct for TPIU
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           TPIU (file:TPIU_0)                   ================ */
@@ -6948,50 +8127,63 @@ typedef struct {                                /*!<       SYST Structure       
 /**
  * @brief Trace Port Interface Unit
  */
-typedef struct {                                /*!<       TPIU Structure                                               */
-   __I  uint32_t  SSPSR;                        /*!< 0000: Supported Parallel Port Size Register                        */
-   __IO uint32_t  CSPSR;                        /*!< 0004: Current Parallel Port Size Register                          */
-   __I  uint32_t  RESERVED0[2];                 /*!< 0008:                                                              */
-   __IO uint32_t  ACPR;                         /*!< 0010: Asynchronous Clock Prescaler Register                        */
-   __I  uint32_t  RESERVED1[55];                /*!< 0014:                                                              */
-   __IO uint32_t  SPPR;                         /*!< 00F0: Selected Pin Protocol Register                               */
-   __I  uint32_t  RESERVED2[131];               /*!< 00F4:                                                              */
-   __I  uint32_t  FFSR;                         /*!< 0300: Formatter and Flush Status Register                          */
-   __IO uint32_t  FFCR;                         /*!< 0304: Formatter and Flush Control Register                         */
-   __IO uint32_t  FSCR;                         /*!< 0308: Formatter Synchronization Counter Register                   */
-   __I  uint32_t  RESERVED3[759];               /*!< 030C:                                                              */
-   __I  uint32_t  TRIGGER;                      /*!< 0EE8: Trigger Register                                             */
-   __I  uint32_t  FIFODATA0;                    /*!< 0EEC: FIFODATA0 Register                                           */
-   __I  uint32_t  ITATBCTR2;                    /*!< 0EF0: Integration Test ATB Control 2 Register                      */
-   __I  uint32_t  RESERVED4;                    /*!< 0EF4:                                                              */
-   __I  uint32_t  ITATBCTR0;                    /*!< 0EF8: Integration Test ATB Control 0 Register                      */
-   __I  uint32_t  FIFODATA1;                    /*!< 0EFC: FIFODATA1 Register                                           */
-   __IO uint32_t  ITCTRL;                       /*!< 0F00: Integration Mode Control Register                            */
-   __I  uint32_t  RESERVED5[39];                /*!< 0F04:                                                              */
-   __IO uint32_t  CLAIMSET;                     /*!< 0FA0: Claim Tag Set Register                                       */
-   __IO uint32_t  CLAIMCLR;                     /*!< 0FA4: Claim Tag Clear Register                                     */
-   __I  uint32_t  RESERVED6[8];                 /*!< 0FA8:                                                              */
-   __I  uint32_t  DEVID;                        /*!< 0FC8: TPIU_DEVID Register                                          */
-   __I  uint32_t  RESERVED7;                    /*!< 0FCC:                                                              */
-   __I  uint32_t  PID4;                         /*!< 0FD0: Peripheral Identification Register 4                         */
-   __I  uint32_t  PID5;                         /*!< 0FD4: Peripheral Identification Register 5                         */
-   __I  uint32_t  PID6;                         /*!< 0FD8: Peripheral Identification Register 6                         */
-   __I  uint32_t  PID7;                         /*!< 0FDC: Peripheral Identification Register 7                         */
-   __I  uint32_t  PID0;                         /*!< 0FE0: Peripheral Identification Register 0                         */
-   __I  uint32_t  PID1;                         /*!< 0FE4: Peripheral Identification Register 1                         */
-   __I  uint32_t  PID2;                         /*!< 0FE8: Peripheral Identification Register 2                         */
-   __I  uint32_t  PID3;                         /*!< 0FEC: Peripheral Identification Register 3                         */
-   __I  uint32_t  CID0;                         /*!< 0FF0: Component Identification Register 0                          */
-   __I  uint32_t  CID1;                         /*!< 0FF4: Component Identification Register 1                          */
-   __I  uint32_t  CID2;                         /*!< 0FF8: Component Identification Register 2                          */
-   __I  uint32_t  CID3;                         /*!< 0FFC: Component Identification Register 3                          */
+/**
+* @addtogroup TPIU_structs_GROUP TPIU struct
+* @brief Struct for TPIU
+* @{
+*/
+typedef struct {                                /*       TPIU Structure                                               */
+   __I  uint32_t  SSPSR;                        /**< 0000: Supported Parallel Port Size Register                        */
+   __IO uint32_t  CSPSR;                        /**< 0004: Current Parallel Port Size Register                          */
+   __I  uint32_t  RESERVED0[2];                
+   __IO uint32_t  ACPR;                         /**< 0010: Asynchronous Clock Prescaler Register                        */
+   __I  uint32_t  RESERVED1[55];               
+   __IO uint32_t  SPPR;                         /**< 00F0: Selected Pin Protocol Register                               */
+   __I  uint32_t  RESERVED2[131];              
+   __I  uint32_t  FFSR;                         /**< 0300: Formatter and Flush Status Register                          */
+   __IO uint32_t  FFCR;                         /**< 0304: Formatter and Flush Control Register                         */
+   __IO uint32_t  FSCR;                         /**< 0308: Formatter Synchronization Counter Register                   */
+   __I  uint32_t  RESERVED3[759];              
+   __I  uint32_t  TRIGGER;                      /**< 0EE8: Trigger Register                                             */
+   __I  uint32_t  FIFODATA0;                    /**< 0EEC: FIFODATA0 Register                                           */
+   __I  uint32_t  ITATBCTR2;                    /**< 0EF0: Integration Test ATB Control 2 Register                      */
+   __I  uint32_t  RESERVED4;                   
+   __I  uint32_t  ITATBCTR0;                    /**< 0EF8: Integration Test ATB Control 0 Register                      */
+   __I  uint32_t  FIFODATA1;                    /**< 0EFC: FIFODATA1 Register                                           */
+   __IO uint32_t  ITCTRL;                       /**< 0F00: Integration Mode Control Register                            */
+   __I  uint32_t  RESERVED5[39];               
+   __IO uint32_t  CLAIMSET;                     /**< 0FA0: Claim Tag Set Register                                       */
+   __IO uint32_t  CLAIMCLR;                     /**< 0FA4: Claim Tag Clear Register                                     */
+   __I  uint32_t  RESERVED6[8];                
+   __I  uint32_t  DEVID;                        /**< 0FC8: TPIU_DEVID Register                                          */
+   __I  uint32_t  RESERVED7;                   
+   __I  uint32_t  PID4;                         /**< 0FD0: Peripheral Identification Register 4                         */
+   __I  uint32_t  PID5;                         /**< 0FD4: Peripheral Identification Register 5                         */
+   __I  uint32_t  PID6;                         /**< 0FD8: Peripheral Identification Register 6                         */
+   __I  uint32_t  PID7;                         /**< 0FDC: Peripheral Identification Register 7                         */
+   __I  uint32_t  PID0;                         /**< 0FE0: Peripheral Identification Register 0                         */
+   __I  uint32_t  PID1;                         /**< 0FE4: Peripheral Identification Register 1                         */
+   __I  uint32_t  PID2;                         /**< 0FE8: Peripheral Identification Register 2                         */
+   __I  uint32_t  PID3;                         /**< 0FEC: Peripheral Identification Register 3                         */
+   __I  uint32_t  CID0;                         /**< 0FF0: Component Identification Register 0                          */
+   __I  uint32_t  CID1;                         /**< 0FF4: Component Identification Register 1                          */
+   __I  uint32_t  CID2;                         /**< 0FF8: Component Identification Register 2                          */
+   __I  uint32_t  CID3;                         /**< 0FFC: Component Identification Register 3                          */
 } TPIU_Type;
 
+/**
+ * @} */ /* End group TPIU_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'TPIU' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup TPIU_Register_Masks_GROUP TPIU Register Masks
+* @brief Register Masks for TPIU
+* @{
+*/
 /* ------- SSPSR Bit Fields                         ------ */
 #define TPIU_SSPSR_SWIDTH_MASK                   (0xFFFFFFFFUL << TPIU_SSPSR_SWIDTH_SHIFT)           /*!< TPIU_SSPSR: SWIDTH Mask                 */
 #define TPIU_SSPSR_SWIDTH_SHIFT                  0                                                   /*!< TPIU_SSPSR: SWIDTH Position             */
@@ -7156,11 +8348,22 @@ typedef struct {                                /*!<       TPIU Structure       
 #define TPIU_CID3_Preamble_MASK                  (0xFFUL << TPIU_CID3_Preamble_SHIFT)                /*!< TPIU_CID3: Preamble Mask                */
 #define TPIU_CID3_Preamble_SHIFT                 0                                                   /*!< TPIU_CID3: Preamble Position            */
 #define TPIU_CID3_Preamble(x)                    (((uint32_t)(((uint32_t)(x))<<TPIU_CID3_Preamble_SHIFT))&TPIU_CID3_Preamble_MASK) /*!< TPIU_CID3                               */
+/**
+ * @} */ /* End group TPIU_Register_Masks_GROUP 
+ */
 
 /* TPIU - Peripheral instance base addresses */
-#define TPIU_BasePtr                   0xE0040000UL
-#define TPIU                           ((TPIU_Type *) TPIU_BasePtr)
-#define TPIU_BASE_PTR                  (TPIU)
+#define TPIU_BasePtr                   0xE0040000UL //!< Peripheral base address
+#define TPIU                           ((TPIU_Type *) TPIU_BasePtr) //!< Freescale base pointer
+#define TPIU_BASE_PTR                  (TPIU) //!< Freescale style base pointer
+/**
+ * @} */ /* End group TPIU_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup TSI_Peripheral_access_layer_GROUP TSI Peripheral Access Layer
+* @brief C Struct for TSI
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           TSI0 (file:TSI0_MK)                  ================ */
@@ -7169,28 +8372,41 @@ typedef struct {                                /*!<       TPIU Structure       
 /**
  * @brief Touch Sensing Input
  */
-typedef struct {                                /*!<       TSI0 Structure                                               */
-   __IO uint32_t  GENCS;                        /*!< 0000: General Control and Status Register                          */
-   __IO uint32_t  SCANC;                        /*!< 0004: SCAN Control Register                                        */
-   __IO uint32_t  PEN;                          /*!< 0008: Pin Enable Register                                          */
-   __I  uint32_t  WUCNTR;                       /*!< 000C: Wake-Up Channel Counter Register                             */
-   __I  uint32_t  RESERVED0[60];                /*!< 0010:                                                              */
-   __I  uint32_t  CNTR1;                        /*!< 0100: Counter Register 1                                           */
-   __I  uint32_t  CNTR3;                        /*!< 0104: Counter Register 3                                           */
-   __I  uint32_t  CNTR5;                        /*!< 0108: Counter Register 5                                           */
-   __I  uint32_t  CNTR7;                        /*!< 010C: Counter Register 7                                           */
-   __I  uint32_t  CNTR9;                        /*!< 0110: Counter Register 9                                           */
-   __I  uint32_t  CNTR11;                       /*!< 0114: Counter Register 11                                          */
-   __I  uint32_t  CNTR13;                       /*!< 0118: Counter Register 13                                          */
-   __I  uint32_t  CNTR15;                       /*!< 011C: Counter Register 15                                          */
-   __IO uint32_t  THRESHOLD;                    /*!< 0120: Low Power Channel Threshold Register                         */
-} TSI0_Type;
+/**
+* @addtogroup TSI_structs_GROUP TSI struct
+* @brief Struct for TSI
+* @{
+*/
+typedef struct {                                /*       TSI0 Structure                                               */
+   __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
+   __IO uint32_t  SCANC;                        /**< 0004: SCAN Control Register                                        */
+   __IO uint32_t  PEN;                          /**< 0008: Pin Enable Register                                          */
+   __I  uint32_t  WUCNTR;                       /**< 000C: Wake-Up Channel Counter Register                             */
+   __I  uint32_t  RESERVED0[60];               
+   __I  uint32_t  CNTR1;                        /**< 0100: Counter Register 1                                           */
+   __I  uint32_t  CNTR3;                        /**< 0104: Counter Register 3                                           */
+   __I  uint32_t  CNTR5;                        /**< 0108: Counter Register 5                                           */
+   __I  uint32_t  CNTR7;                        /**< 010C: Counter Register 7                                           */
+   __I  uint32_t  CNTR9;                        /**< 0110: Counter Register 9                                           */
+   __I  uint32_t  CNTR11;                       /**< 0114: Counter Register 11                                          */
+   __I  uint32_t  CNTR13;                       /**< 0118: Counter Register 13                                          */
+   __I  uint32_t  CNTR15;                       /**< 011C: Counter Register 15                                          */
+   __IO uint32_t  THRESHOLD;                    /**< 0120: Low Power Channel Threshold Register                         */
+} TSI_Type;
 
+/**
+ * @} */ /* End group TSI_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'TSI0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup TSI_Register_Masks_GROUP TSI Register Masks
+* @brief Register Masks for TSI
+* @{
+*/
 /* ------- GENCS Bit Fields                         ------ */
 #define TSI_GENCS_STPE_MASK                      (0x01UL << TSI_GENCS_STPE_SHIFT)                    /*!< TSI0_GENCS: STPE Mask                   */
 #define TSI_GENCS_STPE_SHIFT                     0                                                   /*!< TSI0_GENCS: STPE Position               */
@@ -7297,11 +8513,22 @@ typedef struct {                                /*!<       TSI0 Structure       
 #define TSI_THRESHOLD_LTHH_MASK                  (0xFFFFUL << TSI_THRESHOLD_LTHH_SHIFT)              /*!< TSI0_THRESHOLD: LTHH Mask               */
 #define TSI_THRESHOLD_LTHH_SHIFT                 16                                                  /*!< TSI0_THRESHOLD: LTHH Position           */
 #define TSI_THRESHOLD_LTHH(x)                    (((uint32_t)(((uint32_t)(x))<<TSI_THRESHOLD_LTHH_SHIFT))&TSI_THRESHOLD_LTHH_MASK) /*!< TSI0_THRESHOLD                          */
+/**
+ * @} */ /* End group TSI_Register_Masks_GROUP 
+ */
 
 /* TSI0 - Peripheral instance base addresses */
-#define TSI0_BasePtr                   0x40045000UL
-#define TSI0                           ((TSI0_Type *) TSI0_BasePtr)
-#define TSI0_BASE_PTR                  (TSI0)
+#define TSI0_BasePtr                   0x40045000UL //!< Peripheral base address
+#define TSI0                           ((TSI_Type *) TSI0_BasePtr) //!< Freescale base pointer
+#define TSI0_BASE_PTR                  (TSI0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group TSI_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART0 (file:UART0_MK_C7816_CEA709)       ================ */
@@ -7310,67 +8537,80 @@ typedef struct {                                /*!<       TSI0 Structure       
 /**
  * @brief Universal Asynchronous Receiver/Transmitter (C7816, CEA709)
  */
-typedef struct {                                /*!<       UART0 Structure                                              */
-   __IO uint8_t   BDH;                          /*!< 0000: Baud Rate Register: High                                     */
-   __IO uint8_t   BDL;                          /*!< 0001: Baud Rate Register: Low                                      */
-   __IO uint8_t   C1;                           /*!< 0002: Control Register 1                                           */
-   __IO uint8_t   C2;                           /*!< 0003: Control Register 2                                           */
-   __I  uint8_t   S1;                           /*!< 0004: Status Register 1                                            */
-   __IO uint8_t   S2;                           /*!< 0005: Status Register 2                                            */
-   __IO uint8_t   C3;                           /*!< 0006: Control Register 3                                           */
-   __IO uint8_t   D;                            /*!< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /*!< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /*!< 0009: Match Address Registers 2                                    */
-   __IO uint8_t   C4;                           /*!< 000A: Control Register 4                                           */
-   __IO uint8_t   C5;                           /*!< 000B: Control Register 5                                           */
-   __I  uint8_t   ED;                           /*!< 000C: Extended Data Register                                       */
-   __IO uint8_t   MODEM;                        /*!< 000D: Modem Register                                               */
-   __IO uint8_t   IR;                           /*!< 000E: Infrared Register                                            */
-   __I  uint8_t   RESERVED0;                    /*!< 000F:                                                              */
-   __IO uint8_t   PFIFO;                        /*!< 0010: FIFO Parameters                                              */
-   __IO uint8_t   CFIFO;                        /*!< 0011: FIFO Control Register                                        */
-   __IO uint8_t   SFIFO;                        /*!< 0012: FIFO Status Register                                         */
-   __IO uint8_t   TWFIFO;                       /*!< 0013: FIFO Transmit Watermark                                      */
-   __I  uint8_t   TCFIFO;                       /*!< 0014: FIFO Transmit Count                                          */
-   __IO uint8_t   RWFIFO;                       /*!< 0015: FIFO Receive Watermark                                       */
-   __I  uint8_t   RCFIFO;                       /*!< 0016: FIFO Receive Count                                           */
-   __I  uint8_t   RESERVED1;                    /*!< 0017:                                                              */
-   __IO uint8_t   C7816;                        /*!< 0018: 7816 Control Register                                        */
-   __IO uint8_t   IE7816;                       /*!< 0019: 7816 Interrupt Enable Register                               */
-   __IO uint8_t   IS7816;                       /*!< 001A: 7816 Interrupt Status Register                               */
-   union {                                      /*!< 0000: (size=0001)                                                  */
-      __IO uint8_t   WP7816T0;                  /*!< 001B: 7816 Wait Parameter Register                                 */
-      __IO uint8_t   WP7816T1;                  /*!< 001B: 7816 Wait Parameter Register                                 */
+/**
+* @addtogroup UART_structs_GROUP UART struct
+* @brief Struct for UART
+* @{
+*/
+typedef struct {                                /*       UART0 Structure                                              */
+   __IO uint8_t   BDH;                          /**< 0000: Baud Rate Register: High                                     */
+   __IO uint8_t   BDL;                          /**< 0001: Baud Rate Register: Low                                      */
+   __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
+   __IO uint8_t   C2;                           /**< 0003: Control Register 2                                           */
+   __I  uint8_t   S1;                           /**< 0004: Status Register 1                                            */
+   __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
+   __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
+   __IO uint8_t   D;                            /**< 0007: Data Register                                                */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
+   __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
+   __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
+   __IO uint8_t   MODEM;                        /**< 000D: Modem Register                                               */
+   __IO uint8_t   IR;                           /**< 000E: Infrared Register                                            */
+   __I  uint8_t   RESERVED0;                   
+   __IO uint8_t   PFIFO;                        /**< 0010: FIFO Parameters                                              */
+   __IO uint8_t   CFIFO;                        /**< 0011: FIFO Control Register                                        */
+   __IO uint8_t   SFIFO;                        /**< 0012: FIFO Status Register                                         */
+   __IO uint8_t   TWFIFO;                       /**< 0013: FIFO Transmit Watermark                                      */
+   __I  uint8_t   TCFIFO;                       /**< 0014: FIFO Transmit Count                                          */
+   __IO uint8_t   RWFIFO;                       /**< 0015: FIFO Receive Watermark                                       */
+   __I  uint8_t   RCFIFO;                       /**< 0016: FIFO Receive Count                                           */
+   __I  uint8_t   RESERVED1;                   
+   __IO uint8_t   C7816;                        /**< 0018: 7816 Control Register                                        */
+   __IO uint8_t   IE7816;                       /**< 0019: 7816 Interrupt Enable Register                               */
+   __IO uint8_t   IS7816;                       /**< 001A: 7816 Interrupt Status Register                               */
+   union {                                      /**< 0000: (size=0001)                                                  */
+      __IO uint8_t   WP7816T0;                  /**< 001B: 7816 Wait Parameter Register                                 */
+      __IO uint8_t   WP7816T1;                  /**< 001B: 7816 Wait Parameter Register                                 */
    };
-   __IO uint8_t   WN7816;                       /*!< 001C: 7816 Wait N Register                                         */
-   __IO uint8_t   WF7816;                       /*!< 001D: 7816 Wait FD Register                                        */
-   __IO uint8_t   ET7816;                       /*!< 001E: 7816 Error Threshold Register                                */
-   __IO uint8_t   TL7816;                       /*!< 001F: 7816 Transmit Length Register                                */
-   __I  uint8_t   RESERVED2;                    /*!< 0020:                                                              */
-   __IO uint8_t   C6;                           /*!< 0021: CEA709.1-B Control Register 6                                */
-   __IO uint8_t   PCTH;                         /*!< 0022: CEA709.1-B Packet Cycle Time Counter High                    */
-   __IO uint8_t   PCTL;                         /*!< 0023: CEA709.1-B Packet Cycle Time Counter Low                     */
-   __IO uint8_t   B1T;                          /*!< 0024: CEA709.1-B Beta1 Timer                                       */
-   __IO uint8_t   SDTH;                         /*!< 0025: CEA709.1-B Secondary Delay Timer High                        */
-   __IO uint8_t   SDTL;                         /*!< 0026: CEA709.1-B Secondary Delay Timer Low                         */
-   __IO uint8_t   PRE;                          /*!< 0027: CEA709.1-B Preamble                                          */
-   __IO uint8_t   TPL;                          /*!< 0028: CEA709.1-B Transmit Packet Length                            */
-   __IO uint8_t   IE;                           /*!< 0029: CEA709.1-B Interrupt Enable Register                         */
-   __IO uint8_t   WB;                           /*!< 002A: CEA709.1-B WBASE                                             */
-   __IO uint8_t   S3;                           /*!< 002B: CEA709.1-B Status Register                                   */
-   __IO uint8_t   S4;                           /*!< 002C: CEA709.1-B Status Register                                   */
-   __I  uint8_t   RPL;                          /*!< 002D: CEA709.1-B Received Packet Length                            */
-   __I  uint8_t   RPREL;                        /*!< 002E: CEA709.1-B Received Preamble Length                          */
-   __IO uint8_t   CPW;                          /*!< 002F: CEA709.1-B Collision Pulse Width                             */
-   __IO uint8_t   RIDT;                         /*!< 0030: CEA709.1-B Receive Indeterminate Time                        */
-   __IO uint8_t   TIDT;                         /*!< 0031: CEA709.1-B Transmit Indeterminate Time                       */
+   __IO uint8_t   WN7816;                       /**< 001C: 7816 Wait N Register                                         */
+   __IO uint8_t   WF7816;                       /**< 001D: 7816 Wait FD Register                                        */
+   __IO uint8_t   ET7816;                       /**< 001E: 7816 Error Threshold Register                                */
+   __IO uint8_t   TL7816;                       /**< 001F: 7816 Transmit Length Register                                */
+   __I  uint8_t   RESERVED2;                   
+   __IO uint8_t   C6;                           /**< 0021: CEA709.1-B Control Register 6                                */
+   __IO uint8_t   PCTH;                         /**< 0022: CEA709.1-B Packet Cycle Time Counter High                    */
+   __IO uint8_t   PCTL;                         /**< 0023: CEA709.1-B Packet Cycle Time Counter Low                     */
+   __IO uint8_t   B1T;                          /**< 0024: CEA709.1-B Beta1 Timer                                       */
+   __IO uint8_t   SDTH;                         /**< 0025: CEA709.1-B Secondary Delay Timer High                        */
+   __IO uint8_t   SDTL;                         /**< 0026: CEA709.1-B Secondary Delay Timer Low                         */
+   __IO uint8_t   PRE;                          /**< 0027: CEA709.1-B Preamble                                          */
+   __IO uint8_t   TPL;                          /**< 0028: CEA709.1-B Transmit Packet Length                            */
+   __IO uint8_t   IE;                           /**< 0029: CEA709.1-B Interrupt Enable Register                         */
+   __IO uint8_t   WB;                           /**< 002A: CEA709.1-B WBASE                                             */
+   __IO uint8_t   S3;                           /**< 002B: CEA709.1-B Status Register                                   */
+   __IO uint8_t   S4;                           /**< 002C: CEA709.1-B Status Register                                   */
+   __I  uint8_t   RPL;                          /**< 002D: CEA709.1-B Received Packet Length                            */
+   __I  uint8_t   RPREL;                        /**< 002E: CEA709.1-B Received Preamble Length                          */
+   __IO uint8_t   CPW;                          /**< 002F: CEA709.1-B Collision Pulse Width                             */
+   __IO uint8_t   RIDT;                         /**< 0030: CEA709.1-B Receive Indeterminate Time                        */
+   __IO uint8_t   TIDT;                         /**< 0031: CEA709.1-B Transmit Indeterminate Time                       */
 } UART_Type;
 
+/**
+ * @} */ /* End group UART_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'UART0' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup UART_Register_Masks_GROUP UART Register Masks
+* @brief Register Masks for UART
+* @{
+*/
 /* ------- BDH Bit Fields                           ------ */
 #define UART_BDH_SBR_MASK                        (0x1FUL << UART_BDH_SBR_SHIFT)                      /*!< UART0_BDH: SBR Mask                     */
 #define UART_BDH_SBR_SHIFT                       0                                                   /*!< UART0_BDH: SBR Position                 */
@@ -7734,11 +8974,22 @@ typedef struct {                                /*!<       UART0 Structure      
 #define UART_TIDT_TIDT_MASK                      (0xFFUL << UART_TIDT_TIDT_SHIFT)                    /*!< UART0_TIDT: TIDT Mask                   */
 #define UART_TIDT_TIDT_SHIFT                     0                                                   /*!< UART0_TIDT: TIDT Position               */
 #define UART_TIDT_TIDT(x)                        (((uint8_t)(((uint8_t)(x))<<UART_TIDT_TIDT_SHIFT))&UART_TIDT_TIDT_MASK) /*!< UART0_TIDT                              */
+/**
+ * @} */ /* End group UART_Register_Masks_GROUP 
+ */
 
 /* UART0 - Peripheral instance base addresses */
-#define UART0_BasePtr                  0x4006A000UL
-#define UART0                          ((UART_Type *) UART0_BasePtr)
-#define UART0_BASE_PTR                 (UART0)
+#define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
+#define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
+#define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART1 (file:UART1_RXOF)              ================ */
@@ -7747,37 +8998,50 @@ typedef struct {                                /*!<       UART0 Structure      
 /**
  * @brief Universal Asynchronous Receiver/Transmitter
  */
-typedef struct {                                /*!<       UART1 Structure                                              */
-   __IO uint8_t   BDH;                          /*!< 0000: Baud Rate Register: High                                     */
-   __IO uint8_t   BDL;                          /*!< 0001: Baud Rate Register: Low                                      */
-   __IO uint8_t   C1;                           /*!< 0002: Control Register 1                                           */
-   __IO uint8_t   C2;                           /*!< 0003: Control Register 2                                           */
-   __I  uint8_t   S1;                           /*!< 0004: Status Register 1                                            */
-   __IO uint8_t   S2;                           /*!< 0005: Status Register 2                                            */
-   __IO uint8_t   C3;                           /*!< 0006: Control Register 3                                           */
-   __IO uint8_t   D;                            /*!< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /*!< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /*!< 0009: Match Address Registers 2                                    */
-   __IO uint8_t   C4;                           /*!< 000A: Control Register 4                                           */
-   __IO uint8_t   C5;                           /*!< 000B: Control Register 5                                           */
-   __I  uint8_t   ED;                           /*!< 000C: Extended Data Register                                       */
-   __IO uint8_t   MODEM;                        /*!< 000D: Modem Register                                               */
-   __IO uint8_t   IR;                           /*!< 000E: Infrared Register                                            */
-   __I  uint8_t   RESERVED0;                    /*!< 000F:                                                              */
-   __IO uint8_t   PFIFO;                        /*!< 0010: FIFO Parameters                                              */
-   __IO uint8_t   CFIFO;                        /*!< 0011: FIFO Control Register                                        */
-   __IO uint8_t   SFIFO;                        /*!< 0012: FIFO Status Register                                         */
-   __IO uint8_t   TWFIFO;                       /*!< 0013: FIFO Transmit Watermark                                      */
-   __I  uint8_t   TCFIFO;                       /*!< 0014: FIFO Transmit Count                                          */
-   __IO uint8_t   RWFIFO;                       /*!< 0015: FIFO Receive Watermark                                       */
-   __I  uint8_t   RCFIFO;                       /*!< 0016: FIFO Receive Count                                           */
+/**
+* @addtogroup UART_structs_GROUP UART struct
+* @brief Struct for UART
+* @{
+*/
+typedef struct {                                /*       UART1 Structure                                              */
+   __IO uint8_t   BDH;                          /**< 0000: Baud Rate Register: High                                     */
+   __IO uint8_t   BDL;                          /**< 0001: Baud Rate Register: Low                                      */
+   __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
+   __IO uint8_t   C2;                           /**< 0003: Control Register 2                                           */
+   __I  uint8_t   S1;                           /**< 0004: Status Register 1                                            */
+   __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
+   __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
+   __IO uint8_t   D;                            /**< 0007: Data Register                                                */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
+   __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
+   __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
+   __IO uint8_t   MODEM;                        /**< 000D: Modem Register                                               */
+   __IO uint8_t   IR;                           /**< 000E: Infrared Register                                            */
+   __I  uint8_t   RESERVED0;                   
+   __IO uint8_t   PFIFO;                        /**< 0010: FIFO Parameters                                              */
+   __IO uint8_t   CFIFO;                        /**< 0011: FIFO Control Register                                        */
+   __IO uint8_t   SFIFO;                        /**< 0012: FIFO Status Register                                         */
+   __IO uint8_t   TWFIFO;                       /**< 0013: FIFO Transmit Watermark                                      */
+   __I  uint8_t   TCFIFO;                       /**< 0014: FIFO Transmit Count                                          */
+   __IO uint8_t   RWFIFO;                       /**< 0015: FIFO Receive Watermark                                       */
+   __I  uint8_t   RCFIFO;                       /**< 0016: FIFO Receive Count                                           */
 } UART1_Type;
 
+/**
+ * @} */ /* End group UART_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'UART1' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup UART_Register_Masks_GROUP UART Register Masks
+* @brief Register Masks for UART
+* @{
+*/
 /* ------- BDH Bit Fields                           ------ */
 /* ------- BDL Bit Fields                           ------ */
 /* ------- C1 Bit Fields                            ------ */
@@ -7799,11 +9063,22 @@ typedef struct {                                /*!<       UART1 Structure      
 /* ------- TCFIFO Bit Fields                        ------ */
 /* ------- RWFIFO Bit Fields                        ------ */
 /* ------- RCFIFO Bit Fields                        ------ */
+/**
+ * @} */ /* End group UART_Register_Masks_GROUP 
+ */
 
 /* UART1 - Peripheral instance base addresses */
-#define UART1_BasePtr                  0x4006B000UL
-#define UART1                          ((UART1_Type *) UART1_BasePtr)
-#define UART1_BASE_PTR                 (UART1)
+#define UART1_BasePtr                  0x4006B000UL //!< Peripheral base address
+#define UART1                          ((UART1_Type *) UART1_BasePtr) //!< Freescale base pointer
+#define UART1_BASE_PTR                 (UART1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART2 (derived from UART1)           ================ */
@@ -7814,9 +9089,17 @@ typedef struct {                                /*!<       UART1 Structure      
  */
 
 /* UART2 - Peripheral instance base addresses */
-#define UART2_BasePtr                  0x4006C000UL
-#define UART2                          ((UART1_Type *) UART2_BasePtr)
-#define UART2_BASE_PTR                 (UART2)
+#define UART2_BasePtr                  0x4006C000UL //!< Peripheral base address
+#define UART2                          ((UART1_Type *) UART2_BasePtr) //!< Freescale base pointer
+#define UART2_BASE_PTR                 (UART2) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART3 (derived from UART1)           ================ */
@@ -7827,9 +9110,17 @@ typedef struct {                                /*!<       UART1 Structure      
  */
 
 /* UART3 - Peripheral instance base addresses */
-#define UART3_BasePtr                  0x4006D000UL
-#define UART3                          ((UART1_Type *) UART3_BasePtr)
-#define UART3_BASE_PTR                 (UART3)
+#define UART3_BasePtr                  0x4006D000UL //!< Peripheral base address
+#define UART3                          ((UART1_Type *) UART3_BasePtr) //!< Freescale base pointer
+#define UART3_BASE_PTR                 (UART3) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART4 (derived from UART1)           ================ */
@@ -7840,9 +9131,17 @@ typedef struct {                                /*!<       UART1 Structure      
  */
 
 /* UART4 - Peripheral instance base addresses */
-#define UART4_BasePtr                  0x400EA000UL
-#define UART4                          ((UART1_Type *) UART4_BasePtr)
-#define UART4_BASE_PTR                 (UART4)
+#define UART4_BasePtr                  0x400EA000UL //!< Peripheral base address
+#define UART4                          ((UART1_Type *) UART4_BasePtr) //!< Freescale base pointer
+#define UART4_BASE_PTR                 (UART4) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup UART_Peripheral_access_layer_GROUP UART Peripheral Access Layer
+* @brief C Struct for UART
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           UART5 (derived from UART1)           ================ */
@@ -7853,9 +9152,17 @@ typedef struct {                                /*!<       UART1 Structure      
  */
 
 /* UART5 - Peripheral instance base addresses */
-#define UART5_BasePtr                  0x400EB000UL
-#define UART5                          ((UART1_Type *) UART5_BasePtr)
-#define UART5_BASE_PTR                 (UART5)
+#define UART5_BasePtr                  0x400EB000UL //!< Peripheral base address
+#define UART5                          ((UART1_Type *) UART5_BasePtr) //!< Freescale base pointer
+#define UART5_BASE_PTR                 (UART5) //!< Freescale style base pointer
+/**
+ * @} */ /* End group UART_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup VREF_Peripheral_access_layer_GROUP VREF Peripheral Access Layer
+* @brief C Struct for VREF
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           VREF (file:VREF_MK_0)                ================ */
@@ -7864,16 +9171,29 @@ typedef struct {                                /*!<       UART1 Structure      
 /**
  * @brief Voltage Reference
  */
-typedef struct {                                /*!<       VREF Structure                                               */
-   __IO uint8_t   TRM;                          /*!< 0000: Trim Register                                                */
-   __IO uint8_t   SC;                           /*!< 0001: Status and Control Register                                  */
+/**
+* @addtogroup VREF_structs_GROUP VREF struct
+* @brief Struct for VREF
+* @{
+*/
+typedef struct {                                /*       VREF Structure                                               */
+   __IO uint8_t   TRM;                          /**< 0000: Trim Register                                                */
+   __IO uint8_t   SC;                           /**< 0001: Status and Control Register                                  */
 } VREF_Type;
 
+/**
+ * @} */ /* End group VREF_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'VREF' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup VREF_Register_Masks_GROUP VREF Register Masks
+* @brief Register Masks for VREF
+* @{
+*/
 /* ------- TRM Bit Fields                           ------ */
 #define VREF_TRM_TRIM_MASK                       (0x3FUL << VREF_TRM_TRIM_SHIFT)                     /*!< VREF_TRM: TRIM Mask                     */
 #define VREF_TRM_TRIM_SHIFT                      0                                                   /*!< VREF_TRM: TRIM Position                 */
@@ -7892,11 +9212,22 @@ typedef struct {                                /*!<       VREF Structure       
 #define VREF_SC_REGEN_SHIFT                      6                                                   /*!< VREF_SC: REGEN Position                 */
 #define VREF_SC_VREFEN_MASK                      (0x01UL << VREF_SC_VREFEN_SHIFT)                    /*!< VREF_SC: VREFEN Mask                    */
 #define VREF_SC_VREFEN_SHIFT                     7                                                   /*!< VREF_SC: VREFEN Position                */
+/**
+ * @} */ /* End group VREF_Register_Masks_GROUP 
+ */
 
 /* VREF - Peripheral instance base addresses */
-#define VREF_BasePtr                   0x40074000UL
-#define VREF                           ((VREF_Type *) VREF_BasePtr)
-#define VREF_BASE_PTR                  (VREF)
+#define VREF_BasePtr                   0x40074000UL //!< Peripheral base address
+#define VREF                           ((VREF_Type *) VREF_BasePtr) //!< Freescale base pointer
+#define VREF_BASE_PTR                  (VREF) //!< Freescale style base pointer
+/**
+ * @} */ /* End group VREF_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup WDOG_Peripheral_access_layer_GROUP WDOG Peripheral Access Layer
+* @brief C Struct for WDOG
+* @{
+*/
 
 /* ================================================================================ */
 /* ================           WDOG (file:WDOG_MK)                  ================ */
@@ -7905,41 +9236,54 @@ typedef struct {                                /*!<       VREF Structure       
 /**
  * @brief Watchdog Timer
  */
-typedef struct {                                /*!<       WDOG Structure                                               */
-   __IO uint16_t  STCTRLH;                      /*!< 0000: Status and Control Register High                             */
-   __IO uint16_t  STCTRLL;                      /*!< 0002: Status and Control Register Low                              */
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  TOVAL;                     /*!< 0004: Time-out Value Register High TOVALL:TOVALH                   */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         __IO uint16_t  TOVALH;                 /*!< 0004: Time-out Value Register High                                 */
-         __IO uint16_t  TOVALL;                 /*!< 0006: Time-out Value Register Low                                  */
+/**
+* @addtogroup WDOG_structs_GROUP WDOG struct
+* @brief Struct for WDOG
+* @{
+*/
+typedef struct {                                /*       WDOG Structure                                               */
+   __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
+   __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  TOVAL;                     /**< 0004: Time-out Value Register High TOVALL:TOVALH                   */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint16_t  TOVALH;                 /**< 0004: Time-out Value Register High                                 */
+         __IO uint16_t  TOVALL;                 /**< 0006: Time-out Value Register Low                                  */
       };
    };
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  WIN;                       /*!< 0008: Window Register (WINL:WINH)                                  */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         __IO uint16_t  WINH;                   /*!< 0008: Window Register High                                         */
-         __IO uint16_t  WINL;                   /*!< 000A: Window Register Low                                          */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  WIN;                       /**< 0008: Window Register (WINL:WINH)                                  */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint16_t  WINH;                   /**< 0008: Window Register High                                         */
+         __IO uint16_t  WINL;                   /**< 000A: Window Register Low                                          */
       };
    };
-   __IO uint16_t  REFRESH;                      /*!< 000C: Refresh Register                                             */
-   __IO uint16_t  UNLOCK;                       /*!< 000E: Unlock Register                                              */
-   union {                                      /*!< 0000: (size=0004)                                                  */
-      __IO uint32_t  TMROUT;                    /*!< 0010: Timer Output Register (TMROUTL:TMROUTH)                      */
-      struct {                                  /*!< 0000: (size=0004)                                                  */
-         __IO uint16_t  TMROUTH;                /*!< 0010: Timer Output Register High                                   */
-         __IO uint16_t  TMROUTL;                /*!< 0012: Timer Output Register Low                                    */
+   __IO uint16_t  REFRESH;                      /**< 000C: Refresh Register                                             */
+   __IO uint16_t  UNLOCK;                       /**< 000E: Unlock Register                                              */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  TMROUT;                    /**< 0010: Timer Output Register (TMROUTL:TMROUTH)                      */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint16_t  TMROUTH;                /**< 0010: Timer Output Register High                                   */
+         __IO uint16_t  TMROUTL;                /**< 0012: Timer Output Register Low                                    */
       };
    };
-   __IO uint16_t  RSTCNT;                       /*!< 0014: Reset Count Register                                         */
-   __IO uint16_t  PRESC;                        /*!< 0016: Prescaler Register                                           */
+   __IO uint16_t  RSTCNT;                       /**< 0014: Reset Count Register                                         */
+   __IO uint16_t  PRESC;                        /**< 0016: Prescaler Register                                           */
 } WDOG_Type;
 
+/**
+ * @} */ /* End group WDOG_structs_GROUP 
+ */
 
 /* -------------------------------------------------------------------------------- */
 /* -----------     'WDOG' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
+/**
+* @addtogroup WDOG_Register_Masks_GROUP WDOG Register Masks
+* @brief Register Masks for WDOG
+* @{
+*/
 /* ------- STCTRLH Bit Fields                       ------ */
 #define WDOG_STCTRLH_WDOGEN_MASK                 (0x01UL << WDOG_STCTRLH_WDOGEN_SHIFT)               /*!< WDOG_STCTRLH: WDOGEN Mask               */
 #define WDOG_STCTRLH_WDOGEN_SHIFT                0                                                   /*!< WDOG_STCTRLH: WDOGEN Position           */
@@ -8021,11 +9365,17 @@ typedef struct {                                /*!<       WDOG Structure       
 #define WDOG_PRESC_PRESCVAL_MASK                 (0x07UL << WDOG_PRESC_PRESCVAL_SHIFT)               /*!< WDOG_PRESC: PRESCVAL Mask               */
 #define WDOG_PRESC_PRESCVAL_SHIFT                8                                                   /*!< WDOG_PRESC: PRESCVAL Position           */
 #define WDOG_PRESC_PRESCVAL(x)                   (((uint16_t)(((uint16_t)(x))<<WDOG_PRESC_PRESCVAL_SHIFT))&WDOG_PRESC_PRESCVAL_MASK) /*!< WDOG_PRESC                              */
+/**
+ * @} */ /* End group WDOG_Register_Masks_GROUP 
+ */
 
 /* WDOG - Peripheral instance base addresses */
-#define WDOG_BasePtr                   0x40052000UL
-#define WDOG                           ((WDOG_Type *) WDOG_BasePtr)
-#define WDOG_BASE_PTR                  (WDOG)
+#define WDOG_BasePtr                   0x40052000UL //!< Peripheral base address
+#define WDOG                           ((WDOG_Type *) WDOG_BasePtr) //!< Freescale base pointer
+#define WDOG_BASE_PTR                  (WDOG) //!< Freescale style base pointer
+/**
+ * @} */ /* End group WDOG_Peripheral_access_layer_GROUP 
+ */
 /* --------------------  End of section using anonymous unions  ------------------- */
 #if defined(__CC_ARM)
   #pragma pop
@@ -8040,6 +9390,9 @@ typedef struct {                                /*!<       WDOG Structure       
 #else
   #warning Not supported compiler type
 #endif
+/**
+ * @} */ /* End group Peripheral_access_layer_GROUP 
+ */
 
 #ifdef __cplusplus
 }

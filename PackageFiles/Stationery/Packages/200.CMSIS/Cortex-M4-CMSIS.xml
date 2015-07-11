@@ -25,15 +25,31 @@
                </not>
             </and>
          </applyWhen>
+         <deleteResource target="Sources/main.cpp" />
          <copy source="Sources/main-RTX.c" target="Sources/main.c" replace="true" />
       </projectActionList>
       <projectActionList>
          <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
-               <variableRef idRef="projectOptionValue.FRDM-Blinky"  defaultValue="false" />
+               <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
+               <variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
             </and>
          </applyWhen>
+         <deleteResource target="Sources/main.c" />
+         <copy source="Sources/main-RTX-CPP.cpp" target="Sources/main.cpp" replace="true" />
+      </projectActionList>
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
+               <variableRef idRef="projectOptionValue.FRDM-Blinky"  defaultValue="false" />
+               <not>
+                  <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
+               </not>
+            </and>
+         </applyWhen>
+         <deleteResource target="Sources/main.cpp" />
          <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" replace="true" />
       </projectActionList>
       <projectActionList>

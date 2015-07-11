@@ -38,6 +38,11 @@ void SystemInit(void);
  */
 void SystemCoreClockUpdate(void);
 
+// Baud rate for UART used for stdio
+#ifndef DEFAULT_BAUD_RATE
+#define DEFAULT_BAUD_RATE 115200
+#endif
+
 #ifdef __cplusplus
 }
 #endif

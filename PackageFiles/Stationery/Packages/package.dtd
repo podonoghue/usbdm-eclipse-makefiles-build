@@ -1,17 +1,22 @@
 <!-- Root fileElement -->
 <!ELEMENT root (projectActionList*) >
    <!ATTLIST root version CDATA #REQUIRED >
- 
+
+ <!ELEMENT page (group)* >
+   <!ATTLIST page id          CDATA #REQUIRED>
+   <!ATTLIST page name        CDATA #REQUIRED>
+   <!ATTLIST page description CDATA #REQUIRED>
+
  <!ELEMENT group EMPTY >
-   <!ATTLIST group id    CDATA #IMPLIED>
-   <!ATTLIST group name  CDATA #IMPLIED>
+   <!ATTLIST group id    CDATA #REQUIRED>
+   <!ATTLIST group name  CDATA #REQUIRED>
    <!ATTLIST group row   CDATA #IMPLIED>
    <!ATTLIST group col   CDATA #IMPLIED>
    <!ATTLIST group width CDATA "1">
    <!ATTLIST group span  CDATA "1">
  
 <!-- List of actions to be applied to a project -->
-<!ELEMENT projectActionList (applyWhen?, (group|projectActionList|variable|constant|excludeSourceFile|excludeSourceFolder|createFolder|deleteResource|copy|projectOption|customAction)*)>
+<!ELEMENT projectActionList (applyWhen?, (page|projectActionList|variable|constant|excludeSourceFile|excludeSourceFolder|createFolder|deleteResource|copy|projectOption|customAction)*)>
    <!ATTLIST projectActionList id    ID     #IMPLIED>
    <!ATTLIST projectActionList root  CDATA  #IMPLIED>
 
@@ -67,6 +72,7 @@
    <!ATTLIST constant id           CDATA #REQUIRED>
    <!ATTLIST constant value        CDATA #REQUIRED>
    <!ATTLIST constant type         (boolean|int|string) 	"string" >
+   <!ATTLIST constant weak         (true|false)          "false">
    <!ATTLIST constant replace      (true|false)          "false">
    
 <!-- Exclude/include source file in Eclipse project -->

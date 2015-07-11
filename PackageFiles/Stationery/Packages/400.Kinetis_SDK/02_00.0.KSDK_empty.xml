@@ -10,40 +10,30 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-empty" 
-            name="Minimal Project" 
-            description="Empty Project"
-            radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <or>
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
-               </or>
-            </and>
-         </enableWhen>
-      </variable>
       <projectActionList>
          <applyWhen>
-            <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <variableRef idRef="projectOptionValue.KSDK-empty" />
-            </and>
          </applyWhen>
-         <!-- Basic 'empty' project -->
-         <copy source="Sources/main-empty.c"          target="Sources/main.c"        replace="true"/>
-         <copy source="Sources/hardware_init-empty.c" target="board/hardware_init.c" replace="true"/>
+         <variable id="projectOptionValue.KSDK-empty" 
+               name="Minimal Project" 
+               description="Empty Project"
+               radioGroup="group-ksdk-demo" >
+         </variable>
          <projectActionList>
             <applyWhen>
-               <variableRef idRef="demo.KDS.useblinky" />
+               <variableRef idRef="projectOptionValue.KSDK-empty" />
             </applyWhen>
-            <!-- KDS Blinky example -->
-            <copy source="Sources/main-blinky.c"          target="Sources/main.c"        replace="true"/>
-            <copy source="Sources/hardware_init-blinky.c" target="board/hardware_init.c" replace="true"/>
+            <!-- Basic 'empty' project -->
+            <copy source="Sources/main-empty.c"          target="Sources/main.c"        replace="true"/>
+            <copy source="Sources/hardware_init-empty.c" target="board/hardware_init.c" replace="true"/>
+            <projectActionList>
+               <applyWhen>
+                  <variableRef idRef="demo.KDS.useblinky" />
+               </applyWhen>
+               <!-- KDS Blinky example -->
+               <copy source="Sources/main-blinky.c"          target="Sources/main.c"        replace="true"/>
+               <copy source="Sources/hardware_init-blinky.c" target="board/hardware_init.c" replace="true"/>
+            </projectActionList>
          </projectActionList>
       </projectActionList>
    </projectActionList>

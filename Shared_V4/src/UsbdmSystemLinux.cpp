@@ -1,5 +1,5 @@
 /*! \file
-    \brief Header file for UsbdmSystemLinux.cpp
+    \brief Implementation of UsbdmSystem for Linux
 
     \verbatim
     Copyright (C) 2015  Peter O'Donoghue
@@ -46,7 +46,7 @@ std::string getEnvVar(const std::string & key)
 }
 
 /* Obtain the path of a file within the same directory as the module
- * NOTE IMPLEMENTED ON LINUX
+ * NOT IMPLEMENTED ON LINUX
  * @param path to append to directory
  *
  * @return directory or NULL if failed

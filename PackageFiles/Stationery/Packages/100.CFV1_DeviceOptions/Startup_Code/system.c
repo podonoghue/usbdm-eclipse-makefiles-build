@@ -51,18 +51,22 @@ $(cDeviceParameters)
 
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
-void clock_initialise(void) {
+void clock_initialise() {
 }
 
 /* This definition is overridden if UART initialisation is provided */
 __attribute__((__weak__))
-void uart_initialise(int baudRate) {
-   (void)baudRate;
+void uart_initialise(int baudRate __attribute__((__unused__))) {
 }
 
+/**
+ * @brief Initialize the system
+ *
+ * Setup the microcontroller system.
+ */
 void SystemInit(void) {
-   // This is generic initialization code
-   // It may not be correct for a specific target
+   /* This is generic initialization code */
+   /* It may not be correct for a specific target */
 
 #ifdef SIM_COPC
    // Disable watch-dog
@@ -81,7 +85,7 @@ void SystemInit(void) {
    clock_initialise();
 
    /* Use UART initialisation - if present */
-   uart_initialise(19200);
+   uart_initialise(DEFAULT_BAUD_RATE);
 }
 
 void hardware_init_hook() {

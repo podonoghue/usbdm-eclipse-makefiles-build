@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <!-- Freescale group-ksdk-demoes -->
+   <!-- Freescale group-ksdk-demos -->
    <projectActionList id="KSDK-rtc-function-demo" root="">
       <applyWhen>
          <and>
@@ -10,7 +10,14 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-rtc-function-demo" 
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </applyWhen>
+         <variable id="projectOptionValue.KSDK-rtc-function-demo" 
             name="Real Time Clock Demo" 
             description=
 "This RTC demo application demonstrates the important features of the RTC Module by using the RTC\n
@@ -20,23 +27,15 @@ Periperhal Driver. It supports these features:\n
 - Seconds interrupt\n
 - Compensation"
             radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
-            </and>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <applyWhen>
-            <and>
-               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </variable>
+         <projectActionList>
+            <applyWhen>
                <variableRef idRef="projectOptionValue.KSDK-rtc-function-demo" />
-            </and>
-         </applyWhen>
-         <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/hardware_init.c"  target="board/hardware_init.c"             sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/main.c"           target="Sources/main.c"                    sourcePathType="absolute" />
+            </applyWhen>
+            <deleteResource target="Sources/main.c" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/hardware_init.c"  target="board/hardware_init.c"             sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/rtc_func/main.c"           target="Sources/main.c"                    sourcePathType="absolute" />
+         </projectActionList>
       </projectActionList>
    </projectActionList>
 </root>

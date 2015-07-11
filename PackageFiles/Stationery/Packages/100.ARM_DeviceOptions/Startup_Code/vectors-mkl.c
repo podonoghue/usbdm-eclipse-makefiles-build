@@ -24,15 +24,97 @@ typedef struct {
     uint8_t  fdprot;
 } SecurityInfo;
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 
-// Control extended Boot features on these devices
-#if defined(MCU_MKL03Z4) || defined (MCU_MKL43Z4)
-#define FSEC_VALUE (NV_FSEC_KEYEN(3)|NV_FSEC_MEEN(3)|NV_FSEC_FSLACC(3)|NV_FSEC_SEC(2))
-#define NV_FOPT_LPBOOT(x) ((((x)<<(NV_FOPT_LPBOOT1_SHIFT-1))|((x)<<NV_FOPT_LPBOOT_SHIFT)) & (NV_FOPT_LPBOOT1_MASK|NV_FOPT_LPBOOT_MASK))
-#define FOPT_VALUE (NV_FOPT_BOOTSRC_SEL(0)|NV_FOPT_FAST_INIT_MASK|NV_FOPT_RESET_PIN_CFG_MASK|NV_FOPT_NMI_DIS_MASK|NV_FOPT_BOOTPIN_OPT_MASK|NV_FOPT_LPBOOT(3))
+/*
+<h> Flash security value (NV_FTFA_FSEC)
+   <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
+      <i> Controls use of Backdoor Key access to unsecure device
+      <0=> 0: Access disabled
+      <1=> 1: Access disabled (preferred disabled value)
+      <2=> 2: Access enabled
+      <3=> 3: Access disabled
+   <o1> Mass Erase Enable Bits (FSEC.MEEN)
+      <i> Controls mass erase capability of the flash memory module.
+      <i> Only relevant when FSEC.SEC is set to secure.
+      <0=> 0: Mass erase enabled
+      <1=> 1: Mass erase enabled
+      <2=> 2: Mass erase disabled
+      <3=> 3: Mass erase enabled
+   <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
+      <i> Controls access to the flash memory contents during returned part failure analysis
+      <0=> 0: Factory access granted
+      <1=> 1: Factory access denied
+      <2=> 2: Factory access denied
+      <3=> 3: Factory access granted
+   <o3> Flash Security (FSEC.SEC)
+      <i> Defines the security state of the MCU. 
+      <i> In the secure state, the MCU limits access to flash memory module resources. 
+      <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
+      <0=> 0: Secured
+      <1=> 1: Secured
+      <2=> 2: Unsecured
+      <3=> 3: Secured
+</h>
+*/
+#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(3<<NV_FSEC_MEEN_SHIFT)|(3<<NV_FSEC_FSLACC_SHIFT)|(2<<NV_FSEC_SEC_SHIFT))
+#if ((FSEC_VALUE&NV_FSEC_MEEN_MASK) == (2<<NV_FSEC_MEEN_SHIFT)) && ((FSEC_VALUE&NV_FSEC_SEC_MASK) != (2<<NV_FSEC_SEC_SHIFT))
+// Change to warning if your really, really want to do this!
+#error "The security values selected will prevent the device from being unsecured using external methods"
+#endif
+
+/*
+Control extended Boot features on these devices
+<h> Flash boot options (NV_FTFA_FOPT)
+   <e0> Boot ROM Options
+      <i> Only available on devices with internal ROM
+      <i> Currently: KL03,KL17,KL27,KL43
+      <0=> Disabled
+      <1=> Enabled
+   <o1> Boot Source Selection (FOPT.BOOTSRC_SEL)
+      <i> These bits select the boot sources if FOPT.BOOTPIN_OPT = 1
+      <0=> 0: Boot from Flash
+      <64=> 1: Reserved
+      <128=> 2: Boot from ROM
+      <192=> 3: Boot from ROM
+   <q2.1> External pin selects boot options (FOPT.BOOTPIN_OPT)
+      <i> Enables or disables the RESET pin dedicated operation
+      <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
+      <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted. 
+      <1=> Boot source controlled by BOOTSRC_SEL
+   </e>
+
+   <q2.5> Flash initialisation speed (FOPT.FAST_INIT)
+      <i> Selects initialization speed on POR, VLLSx, and system reset.
+      <0=> Slower (reduced average power)
+      <1=> Faster (higher average power)
+   <q2.3> RESET pin control (FOPT.RESET_PIN_CFG)
+      <i> Enables or disables the RESET pin dedicated operation
+      <0=> Disabled (available as port pin)
+      <1=> Enabled (PUP, open-drain, filtered)
+   <q2.2> NMI pin control (FOPT.NMI_DIS)
+      <i> Enables or disables control for the NMI function
+      <0=> NMI interrupts are always blocked.
+      <1=> NMI_b interrupts default to enabled
+   <o3> Low power boot control (FOPT.LPBOOT)
+      <i> Controls the reset value of SIM_CLKDIV1.OUTDIV1 (clock divider) and
+      <i> SMC_PMCTRL.RUNM (processor run mode)
+      <i> Note: VLPR is only used on KL03,KL17,KL27,KL43
+      <0=> OUTDIV1 = /8, RUNM = VLPR
+      <1=> OUTDIV1 = /4, RUNM = VLPR
+      <16=> OUTDIV1 = /2, RUNM = RUN
+      <17=> OUTDIV1 = /1, RUNM = RUN
+</h>
+ */
+#define BOOT_ENABLE  (0)
+#define FOPT_BOOTSRC (0xC0)
+#define FOPT_MISC    (0x2E)
+#define FOPT_LPBOOT  (0x11)
+
+#if defined(NV_FOPT_BOOTSRC_SEL) && BOOT_ENABLE
+#define FOPT_VALUE (FOPT_BOOTSRC|FOPT_MISC|FOPT_LPBOOT)
 #else
-#define FSEC_VALUE (0xFE)
-#define FOPT_VALUE (0xFF)
+#define FOPT_VALUE (0xC2|FOPT_MISC|FOPT_LPBOOT)
 #endif
 
 __attribute__ ((section(".security_information")))
@@ -45,8 +127,7 @@ const SecurityInfo securityInfo = {
     /* fdprot   */ 0xFF,
 };
 
-
-#ifdef NV_FOPT_BOOTPIN_OPT_MASK
+#if defined(NV_FOPT_BOOTPIN_OPT_MASK)
 /*
  * Security information
  */

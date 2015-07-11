@@ -24,14 +24,43 @@ typedef struct {
    uint8_t  fopt;
 } SecurityInfo;
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+/*
+<h> Flash security value (NV_FTFA_FSEC)
+   <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
+      <i> Controls use of Backdoor Key access to unsecure device
+      <0=> 0: Access disabled
+      <1=> 1: Access disabled (preferred disabled value)
+      <2=> 2: Access enabled
+      <3=> 3: Access disabled
+   <o1> Flash Security (FSEC.SEC)
+      <i> Defines the security state of the MCU. 
+      <i> In the secure state, the MCU limits access to flash memory module resources. 
+      <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
+      <0=> 0: Secured
+      <1=> 1: Secured
+      <2=> 2: Unsecured
+      <3=> 3: Secured
+</h>
+*/
+#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(2<<NV_FSEC_SEC_SHIFT)|0x3C)
+
+/*
+<h> Flash option Value (NV_FTFA_FOPT)
+   <o> The FOPT value is copied from Flash to FTMRH_FOPT on reset  <0-255>
+</h>
+*/
+#define FOPT_VALUE (0xFF)
+
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
     /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
     /* reseved  */ 0xFFFFFFFF,
     /* eeprot   */ 0xFF,
     /* fprot    */ 0xFF,
-    /* fsec     */ 0xFE,
-    /* fopt     */ 0xFF,
+    /* fsec     */ FSEC_VALUE,
+    /* fopt     */ FOPT_VALUE,
 };
 
 /*

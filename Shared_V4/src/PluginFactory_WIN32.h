@@ -1,9 +1,29 @@
-/*
- * FlashProgrammerFactory_WIN32.h
- *
- *  Created on: 24 Mar 2015
- *      Author: podonoghue
- */
+/*! \file
+    \brief Base PluginFactory for Windows
+
+    \verbatim
+    Copyright (C) 2015  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Change History
+   +====================================================================
+   |   6 Apr 2015 | Created
+   +====================================================================
+    \endverbatim
+*/
 
 #ifndef SRC_PLUGINFACTORY_WIN32_H_
 #define SRC_PLUGINFACTORY_WIN32_H_
@@ -18,6 +38,9 @@
 #include "UsbdmSystem.h"
 #include "MyException.h"
 
+/**
+ * Factory base class
+ */
 template <class T>
 class PluginFactory {
 
@@ -31,6 +54,14 @@ protected:
    ~PluginFactory() {};
 
 protected:
+   /**
+    * Create plug-in from library
+    *
+    * @param dllName    String identifying the library to load
+    * @param entryPoint String describing the entry point of the loaded library
+    *
+    * @return Smart pointer to object implementing the plug-in interface
+    */
    static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
       LOGGING;
       if (newInstance == 0) {
@@ -49,6 +80,11 @@ protected:
    }
 
 protected:
+   /**
+    * Destructor to delete plug-in interface object
+    *
+    * @param p object to delete
+    */
    static void deleter(T *p) {
       LOGGING;
       log.print("Calling destructor\n");
@@ -59,7 +95,13 @@ protected:
          unloadClass();
       }
    }
+   /**
+    * Load plugin class
+    */
    static void loadClass(const char *moduleName, const char *createInstanceFunctioName);
+   /**
+    * Unload plug-in class
+    */
    static void unloadClass();
 };
 

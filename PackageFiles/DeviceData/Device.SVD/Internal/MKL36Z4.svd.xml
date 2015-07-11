@@ -2,7 +2,7 @@
 <!DOCTYPE device
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKL36Z4_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKD5_MKLZ4.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MK.svd.xml">
 <!ENTITY BP           SYSTEM "peripherals/BP_0.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKL_DMA.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">

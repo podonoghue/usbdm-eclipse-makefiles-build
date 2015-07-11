@@ -1,7 +1,7 @@
 /*
  *  Vectors-mk.c
  *
- *  Generic vectors and security for Kinetis
+ *  Generic vectors and security for Kinetis MKxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -24,48 +24,76 @@ typedef struct {
     uint8_t  fdprot;
 } SecurityInfo;
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+/*
+<h> Flash security value (NV_FTFA_FSEC)
+   <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
+      <i> Controls use of Backdoor Key access to unsecure device
+      <0=> 0: Access disabled
+      <1=> 1: Access disabled (preferred disabled value)
+      <2=> 2: Access enabled
+      <3=> 3: Access disabled
+   <o1> Mass Erase Enable Bits (FSEC.MEEN)
+      <i> Controls mass erase capability of the flash memory module.
+      <i> Only relevant when FSEC.SEC is set to secure.
+      <0=> 0: Mass erase enabled
+      <1=> 1: Mass erase enabled
+      <2=> 2: Mass erase disabled
+      <3=> 3: Mass erase enabled
+   <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
+      <i> Controls access to the flash memory contents during returned part failure analysis
+      <0=> 0: Factory access granted
+      <1=> 1: Factory access denied
+      <2=> 2: Factory access denied
+      <3=> 3: Factory access granted
+   <o3> Flash Security (FSEC.SEC)
+      <i> Defines the security state of the MCU. 
+      <i> In the secure state, the MCU limits access to flash memory module resources. 
+      <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
+      <0=> 0: Secured
+      <1=> 1: Secured
+      <2=> 2: Unsecured
+      <3=> 3: Secured
+</h>
+*/
+#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(3<<NV_FSEC_MEEN_SHIFT)|(3<<NV_FSEC_FSLACC_SHIFT)|(2<<NV_FSEC_SEC_SHIFT))
+#if ((FSEC_VALUE&NV_FSEC_MEEN_MASK) == (2<<NV_FSEC_MEEN_SHIFT)) && ((FSEC_VALUE&NV_FSEC_SEC_MASK) != (2<<NV_FSEC_SEC_SHIFT))
+// Change to warning if your really, really want to do this!
+#error "The security values selected will prevent the device from being unsecured using external methods"
+#endif
+
+/*
+Control extended Boot features on these devices
+<h> Flash boot options (NV_FTFA_FOPT)
+   <q0.2> NMI pin control (FOPT.NMI_DIS)
+      <i> Enables or disables the NMI function
+      <0=> NMI interrupts are always blocked.
+      <1=> NMI_b interrupts default to enabled
+   <q0.1> EZPORT pin control (FOPT.EZPORT_DIS)
+      <i> Enables or disables EzPort function
+      <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
+      <i> if the EZP_CS/NMI pin is used for its NMI function 
+      <0=> EZP_CSn pin is disabled on reset
+      <1=> EZP_CSn pin is enabled on reset
+   <q0.0> Low power boot control (FOPT.LPBOOT)
+      <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
+      <i> Allows power consumption during reset to be reduced
+      <0=> CLKDIV1,2 = /8, CLKDIV3,4 = /16
+      <1=> CLKDIV1,2 = /1, CLKDIV3,4 = /2
+</h>
+ */
+#define FOPT_VALUE (0x7|0xF8)
+
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
     /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
     /* fprot    */ 0xFFFFFFFF,
-    /* fsec     */ 0xFE,
-    /* fopt     */ 0xFF,
+    /* fsec     */ FSEC_VALUE,
+    /* fopt     */ FOPT_VALUE,
     /* feprot   */ 0xFF,
     /* fdprot   */ 0xFF,
 };
-
-
-#ifdef NV_FOPT_BOOTPIN_OPT_MASK
-/*
- * Security information
- */
-typedef struct {
-    char     magic[4];           // Magic number indicating valid configuration - 'kcfg'
-    uint8_t  reserved[12];       // Reserved
-    uint8_t  enabledPeripherals; // 0:LPUART, 1:I2C, 2:SPI, 4:USB
-    uint8_t  i2cAddress;         // If not 0xFF, used as the 7-bit I2C slave address.
-    uint16_t peripheralTimeout;  // Timeout in milliseconds for active peripheral detection
-    uint16_t usbVid;             // Sets the USB Vendor ID reported by the device during enumeration.
-    uint16_t usbPid;             // Sets the USB Product ID reported by the device during enumeration.
-    uint32_t usbStringsPointer;  // Sets the USB Strings reported by the device during enumeration.
-    uint8_t  clockFlags;         // See Table 13-4, clockFlags Configuration Field
-    uint8_t  clockDivider;       // Divider to use for core and bus clocks when in high speed mode
-} BootloaderConfiguration;
-
-__attribute__ ((section(".bootloader_configuration")))
-const BootloaderConfiguration bootloaderConfiguration = {
-    /* magic               */ "kcfg",
-    /* reserved            */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
-    /* enabledPeripherals  */ 0xFF, /* all peripherals */
-    /* i2cAddress          */ 0x11,
-    /* peripheralTimeout   */ 1000, /* ms */
-    /* usbVid              */ 0,
-    /* usbPid              */ 0,
-    /* usbStringsPointer   */ 0,
-    /* clockFlags          */ 0,
-    /* clockDivider        */ 0,    /* 0 => high-speed 48MHz */
-};
-#endif
 
 /*
  * Vector table related

@@ -155,11 +155,11 @@ static const int ctas_Xbit  = 1;
 __forceinline
 static inline void spi_tx8(uint8_t data) {
    SWD_ENABLE();
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SPI_PUSHR_EOQ_MASK|SWD_PUSHR_TX|SPI_PUSHR_TXDATA(data);
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SPI_PUSHR_EOQ_MASK|SWD_PUSHR_TX|SPI_PUSHR_TXDATA(data);
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   (void)SPI0_POPR;              // Discard read data
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   (void)SPI0->POPR;              // Discard read data
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
    SWD_3STATE();
 }
 
@@ -173,11 +173,11 @@ __forceinline
 static inline void spi_mark_tx8(uint8_t data) {
    SWD_ENABLE();
    spi_setCTAR1(SPI_CTAR_MASK|SPI_CTAR_FMSZ(9-1));
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SPI_PUSHR_EOQ_MASK|SWD_PUSHR_TX|SPI_PUSHR_TXDATA((data<<1)|1);
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SPI_PUSHR_EOQ_MASK|SWD_PUSHR_TX|SPI_PUSHR_TXDATA((data<<1)|1);
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   (void)SPI0_POPR;              // Discard read data
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   (void)SPI0->POPR;              // Discard read data
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
    SWD_3STATE();
 }
 
@@ -193,17 +193,17 @@ static inline void spi_mark_tx32_parity(const uint8_t *data) {
    uint8_t parity = calcParity(data);
    spi_setCTAR1(SPI_CTAR_MASK|SPI_CTAR_FMSZ(9-1));
 
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA((data[3]<<1)|1);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[2]);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[1]);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_TX|                    SPI_PUSHR_TXDATA(data[0]|(parity<<8))|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA((data[3]<<1)|1);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[2]);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[1]);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_TX|                    SPI_PUSHR_TXDATA(data[0]|(parity<<8))|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   (void)SPI0_POPR;              // Discard read data
-   (void)SPI0_POPR;
-   (void)SPI0_POPR;
-   (void)SPI0_POPR;
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   (void)SPI0->POPR;              // Discard read data
+   (void)SPI0->POPR;
+   (void)SPI0->POPR;
+   (void)SPI0->POPR;
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
    SWD_3STATE();
 }
 
@@ -216,18 +216,18 @@ static inline void spi_mark_tx32_parity(const uint8_t *data) {
 __forceinline
 static inline void spi_tx32(const uint8_t *data) {
    SWD_ENABLE();
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[3]);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[2]);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[1]);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|                    SPI_PUSHR_TXDATA(data[0])|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[3]);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[2]);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(data[1]);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|                    SPI_PUSHR_TXDATA(data[0])|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
    SWD_3STATE();
-   (void)SPI0_POPR;              // Discard read data
-   (void)SPI0_POPR;
-   (void)SPI0_POPR;
-   (void)SPI0_POPR;
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   (void)SPI0->POPR;              // Discard read data
+   (void)SPI0->POPR;
+   (void)SPI0->POPR;
+   (void)SPI0->POPR;
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
 }
 
 //! Receive a 32-bit word + parity from the target
@@ -240,17 +240,17 @@ __forceinline
 static inline uint8_t spi_rx32_parity(uint8_t *receive) {
    uint16_t dummy;
    spi_setCTAR1(SPI_CTAR_MASK|SPI_CTAR_FMSZ(9-1));
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|                    SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|                    SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   SPI0_SR = SPI_SR_EOQF_MASK;
-   receive[3]  = SPI0_POPR;
-   receive[2]  = SPI0_POPR;
-   receive[1]  = SPI0_POPR;
-   dummy       = SPI0_POPR;
+   SPI0->SR = SPI_SR_EOQF_MASK;
+   receive[3]  = SPI0->POPR;
+   receive[2]  = SPI0->POPR;
+   receive[1]  = SPI0->POPR;
+   dummy       = SPI0->POPR;
    receive[0]  = dummy;
    return ((dummy>>8)!=calcParity(receive))?BDM_RC_ARM_PARITY_ERROR:BDM_RC_OK;
 }
@@ -264,17 +264,17 @@ static inline uint8_t spi_rx32_parity(uint8_t *receive) {
 //!
 __forceinline
 static inline void spi_rx32(uint8_t *receive) {
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|                    SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|SPI_PUSHR_CONT_MASK|SPI_PUSHR_TXDATA(0);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_RX|                    SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   SPI0_SR = SPI_SR_EOQF_MASK;
-   receive[3]  = SPI0_POPR;
-   receive[2]  = SPI0_POPR;
-   receive[1]  = SPI0_POPR;
-   receive[0]  = SPI0_POPR;
+   SPI0->SR = SPI_SR_EOQF_MASK;
+   receive[3]  = SPI0->POPR;
+   receive[2]  = SPI0->POPR;
+   receive[1]  = SPI0->POPR;
+   receive[0]  = SPI0->POPR;
 }
 #endif
 
@@ -285,11 +285,11 @@ static inline void spi_rx32(uint8_t *receive) {
 __forceinline
 static inline uint8_t spi_rx4(void) {
    spi_setCTAR1(SPI_CTAR_MASK|SPI_CTAR_FMSZ(4-1));
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   SPI0_SR = SPI_SR_EOQF_MASK;
-   return SPI0_POPR;
+   SPI0->SR = SPI_SR_EOQF_MASK;
+   return SPI0->POPR;
 }
 
 #if 1
@@ -309,15 +309,15 @@ static inline uint8_t spi_tx8_rx4(uint8_t command) {
 //!
 __forceinline
 static inline uint8_t spi_tx8_rx4(uint8_t command) {
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_TXDATA(command);
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_8bit)|SWD_PUSHR_TX|SPI_PUSHR_TXDATA(command);
    spi_setCTAR1(SPI_CTAR_MASK|SPI_CTAR_FMSZ(4-1));
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
-   SPI0_PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
-   while ((SPI0_SR & SPI_SR_EOQF_MASK) == 0) {
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   SPI0->PUSHR = SPI_PUSHR_CTAS(ctas_Xbit)|SWD_PUSHR_RX|SPI_PUSHR_TXDATA(0)|SPI_PUSHR_EOQ_MASK;
+   while ((SPI0->SR & SPI_SR_EOQF_MASK) == 0) {
    }
-   (void)SPI0_POPR;              // Discard byte read data
-   SPI0_SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
-   return SPI0_POPR;             // Save 4-bit data
+   (void)SPI0->POPR;              // Discard byte read data
+   SPI0->SR = SPI_SR_RFDF_MASK|SPI_SR_EOQF_MASK;
+   return SPI0->POPR;             // Save 4-bit data
 }
 #endif
 
@@ -451,6 +451,7 @@ uint8_t swd_connect(void) {
 
    swd_JTAGtoSWD();
 
+     
    // Target must respond to read IDCODE immediately
    return swd_readReg(SWD_READ_IDCODE, buff);
 }
@@ -668,7 +669,7 @@ uint8_t swd_readAPReg(const uint8_t *address, uint8_t *buff) {
    // Initiate read from AP register (dummy data)
    rc = swd_readReg(regNo, buff);
    if (rc != BDM_RC_OK) {
-     return rc;
+      return rc;
    }
    // Read from READBUFF register
    return swd_readReg(SWD_RD_DP_RDBUFF, buff);

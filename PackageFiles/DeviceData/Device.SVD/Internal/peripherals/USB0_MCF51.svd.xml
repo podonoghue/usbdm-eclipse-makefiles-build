@@ -8,7 +8,9 @@ Devices using this peripheral:
          <?forcedBlockWidth "32" ?>
          <name>USB0</name>
          <description>Universal Serial Bus, OTG Capable Controller</description>
+         <groupName>USB</groupName>
          <prependToName>USB0</prependToName>
+         <headerStructName>USB</headerStructName>
          <baseAddress>0xFFFF9000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -385,12 +387,12 @@ It is not asserted again until the USB reset condition has been removed and then
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt inactive</description>
+                           <description>Inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt active</description>
+                           <description>Pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -432,12 +434,12 @@ Setting any of these bits enables the respective interrupt source in the INT_STA
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -468,12 +470,12 @@ Each of these bits are qualified with their respective error enable bits</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Error not detected</description>
+                           <description>Not detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Error detected</description>
+                           <description>Detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -512,12 +514,12 @@ This bit is set when a bit stuff error is detected. If set, the corresponding pa
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -890,14 +892,14 @@ Contains the token type executed by the USB module</description>
             <register>
                <name>BDTPAGE2</name>
                <description>BDT Page Register 2\n
-Address bits 7 through 0 of the BDT base address</description>
+Address bits 23 through 16 of the BDT base address</description>
                <addressOffset>0xB0</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>BDTBA</name>
-                     <description>BDT base address[7:0]</description>
+                     <description>BDT base address[23:16]</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

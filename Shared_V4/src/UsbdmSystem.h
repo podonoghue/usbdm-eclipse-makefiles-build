@@ -1,5 +1,5 @@
-/*! \file
-    \brief Header file for UsbdmSystem.cpp
+/** \file
+    \brief Header file for UsbdmSystem
 
     \verbatim
     Copyright (C) 2015  Peter O'Donoghue
@@ -62,16 +62,21 @@
 #include <string>
 
 
-/*! System routines: Logging, paths
+/**
+ * System routines: Logging, paths
  */
 class USBDM_SYSTEM_DECLSPEC UsbdmSystem {
 
 private:
+
+   /**
+    * Private constructor
+    */
    UsbdmSystem() {}
    virtual ~UsbdmSystem() = 0;
 
 public:
-   /*
+   /**
     * Obtain the path of a file within the application directory
     *
     * @param path to append to directory
@@ -79,7 +84,7 @@ public:
     * @return path or NULL if failed
     */
    static std::string getApplicationPath(const std::string &path);
-   /*
+   /**
     * Obtain the path of a file within the resource directory
     *
     * @param path to append to directory
@@ -87,7 +92,7 @@ public:
     * @return path or NULL if failed
     */
    static std::string getResourcePath(const std::string &path);
-   /*
+   /**
     * Obtain the path of a file within the configuration directory
     * This is a per-user read/write directory for configurations
     *
@@ -98,7 +103,7 @@ public:
     * @note The configuration directory will be created if it doesn't already exist.
     */
    static std::string getConfigurationPath(const std::string &path);
-   /*
+   /**
     * Open a file within the application directory - read-only
     *
     * @param path to append to directory
@@ -106,7 +111,7 @@ public:
     * @return directory or NULL if failed
     */
    static FILE *openApplicationFile(const std::string &path);
-   /*
+   /**
     * Open a file within the resource directory - read-only
     *
     * @param path to append to directory
@@ -114,16 +119,17 @@ public:
     * @return directory or NULL if failed
     */
    static FILE *openResourceFile(const std::string &path);
-   /*
+   /**
     * Open a file within the configuration directory - read-write
     * This is a per-user read/write directory for configurations
     *
-    * @param path to append to directory
+    * @param path  Path to append to configuration directory
+    * @param mode  Mode to open file in
     *
     * @return directory or NULL if failed
     */
    static FILE *openConfigurationFile(const std::string &path, const std::string &mode);
-   /*
+   /**
     * Check if a file exists
     *
     * @param path - Path to file
@@ -131,16 +137,24 @@ public:
     * @return true/false
     */
    static bool fileExists(const std::string &path);
-
+   /**
+    * Obtain the path of a file within the same directory as the module
+    * (Used on windows only)
+    *
+    * @param path to append to directory
+    *
+    * @return directory or NULL if failed
+    */
    static std::string getModulePath(const std::string &path);
-   /*
+   /**
     *  Sleep for given number of milliseconds (or longer!)
     *
     *  @param milliSeconds - number of milliseconds to sleep
     */
    static void milliSleep(int milliSeconds);
 
-   /* Gets string describing a USBDM error code
+   /**
+    * Gets string describing a USBDM error code
     *
     * @param errorCode - error code returned from USBDM API routine.
     *
@@ -148,14 +162,17 @@ public:
     */
    static const char *getErrorString(unsigned errorCode);
 
+   /**
+    * Options for UsbdmSystem::Log::printDump
+    */
    enum {
-        BYTE_ADDRESS    = (0<<0),  // Addresses identify a byte in memory
-        WORD_ADDRESS    = (1<<0),  // Addresses identify a word in memory
-        BYTE_DISPLAY    = (0<<2),  // Display as bytes (8-bits)
-        WORD_DISPLAY    = (1<<2),  // Display as words (16-bits)
-        LONG_DISPLAY    = (2<<2),  // Display as longs (32-bits)
-        DBIG_ENDIAN     = (0<<4),
-        DLITTLE_ENDIAN  = (1<<4),
+        BYTE_ADDRESS    = (0<<0),  //!< Addresses identify a byte in memory
+        WORD_ADDRESS    = (1<<0),  //!< Addresses identify a word in memory
+        BYTE_DISPLAY    = (0<<2),  //!< Display as bytes (8-bits)
+        WORD_DISPLAY    = (1<<2),  //!< Display as words (16-bits)
+        LONG_DISPLAY    = (2<<2),  //!< Display as longs (32-bits)
+        DBIG_ENDIAN     = (0<<4),  //!< Big-endian order
+        DLITTLE_ENDIAN  = (1<<4),  //!< Little-endian order
       };
 
 #ifdef LOG
@@ -205,33 +222,107 @@ public:
 #define LOGGING   UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::both)
 
 #else
+   /**
+    * Class providing logging features
+    */
+public:
    class USBDM_SYSTEM_DECLSPEC Log {
    public:
       enum When {neither, entry, exit, both};
+      /**  \brief Object to allow logging the execution of a function
+       *
+       *  @param name Name of the function to use in messages
+       *  @param when Whether to log entry/exit etc of this function
+       */
       Log(const char *name, When when=both) {};
       Log() {};
+      /**  \brief Record exit from a function
+       *
+       */
       ~Log() {};
+      /**  \brief Open log file
+       *
+       *  @param logFileName - Name of log file
+       *  @param description - Description written to log file
+       *
+       *  @note logging is enabled and timestamp disabled
+       */
       static void openLogFile(const char *logFileName, const char *description="") {}
+      /**  \brief Close the log file
+       *
+       */
       static void closeLogFile() {}
+      /** \brief Turns logging on or off
+       *
+       *  @param value - true/false => on/off logging
+       */
       static void enableLogging(bool value) {}
+      /**  \brief Set logging level relative to current level
+       *
+       *  @param level - level to log below \n
+       *         A 0 value suppresses logging below the current level.
+       */
       static void setLoggingLevel(int level) {}
+      /**  \brief Get logging level relative to current level
+       *
+       */
       static int  getLoggingLevel() { return 0; }
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
       static void error(const char *format, ...) {}
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
       static void print(const char *format, ...) {}
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
       static void warning(const char *format, ...) {}
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
       static void printq(const char *format, ...) {}
+      /** \brief Print a formatted dump of binary data in Hex
+       *
+       * @param data         Pointer to data to print
+       * @param size         Number of bytes to print
+       * @param startAddress Address to display against values
+       * @param organisation Size of data & address increment
+       */
       static void printDump(const uint8_t *data,
                             unsigned int size,
                             unsigned int startAddress=0x0000,
                             unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY) {}
+      /**
+       * Get logging handle
+       *
+       * @return file handle
+       */
       static FILE* getLogFileHandle() { return (FILE*)0; }
+      /**
+       * Set logging handle
+       *
+       * @param newLogFile file handle to set
+       */
       static void setLogFileHandle(FILE *logFile) {}
+      /** \brief Sets timestamping mode
+       *
+       *  @param mode - mode of timestamping
+       */
       static void enableTimestamping(bool enable=true) {}
    };
-
+   //! Enable loggin in function
    #define LOGGING_Q UsbdmSystem::Log log
+   //! Enable loggin in function & log entry
    #define LOGGING_E UsbdmSystem::Log log
+   //! Enable loggin in function & log exit
    #define LOGGING_X UsbdmSystem::Log log
+   //! Enable loggin in function & log entry and exit
    #define LOGGING   UsbdmSystem::Log log
 #endif
 

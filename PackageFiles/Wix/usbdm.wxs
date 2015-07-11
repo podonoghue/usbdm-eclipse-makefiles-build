@@ -5,7 +5,7 @@
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
    <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
-   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define ProductCode="*" ?> 
    <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
    <?define InfoURL="http://usbdm.sourceforge.net" ?>
    
@@ -34,8 +34,7 @@
       <Media Id='1' Cabinet="disk1.cab" EmbedCab='yes' DiskPrompt="$(var.ProductCode) Media" />
 
       <MajorUpgrade
-         AllowDowngrades="no"
-         MigrateFeatures="yes"
+         AllowSameVersionUpgrades="yes"
          DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
       <Property Id='ARPCOMMENTS'>Programmer for Freescale processors</Property>
@@ -454,6 +453,7 @@
                Level='1'>
             <FeatureRef Id='F.CW_FOR_MCU_V10.5'/>
             <FeatureRef Id='F.CW_FOR_MCU_V10.6'/>
+            <FeatureRef Id='F.CW_FOR_MCU_V10.6.4'/>
             <FeatureRef Id='F.CW_FOR_MICROCONTROLLERS_V6_3' />
             <FeatureRef Id='F.CWS12_X_V5_1' />
             <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />

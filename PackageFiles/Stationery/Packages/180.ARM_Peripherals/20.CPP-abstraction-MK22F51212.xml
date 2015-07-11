@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY DEVICE_NAME   "MK22F51212">
+<!ENTITY DEVICE_SUB_FAMILY "MK">
+]>
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-&DEVICE_NAME;">
+      <applyWhen>
+         <and>
+            <deviceSubfamilyIs>&DEVICE_NAME;</deviceSubfamilyIs>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.CPP-abstraction" 
+         name="CPP Hardware abstraction" 
+         description="Adds a CPP abstraction layer for hardware\n(GPIO, ADC, PWM)"
+         checkGroup="group-additional-options" />
+      <projectActionList>
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.CPP-abstraction" />
+         </applyWhen>
+         <deleteResource target="Project_Headers/Board_LEDs.h" />
+         <deleteResource target="Project_Headers/leds.h" />
+         <deleteResource target="Sources/leds.c" />
+         <deleteResource target="Sources/main.c" />
+         <copy source="Project_Headers/GPIO-&DEVICE_NAME;.h"             target="Project_Headers/GPIO.h" />
+         <copy source="Project_Headers/GPIO_defs-&DEVICE_SUB_FAMILY;.h"  target="Project_Headers/GPIO_defs.h" />
+         <copy source="Project_Headers/PinMapping-&DEVICE_NAME;.h"       target="Project_Headers/PinMapping.h" />
+         <copy source="Sources/GPIO-&DEVICE_NAME;.cpp"                   target="Sources/GPIO.cpp" />
+         <copy source="Sources/main.cpp"                                 target="Sources/main.cpp" replace="true" />
+      </projectActionList>
+   </projectActionList>
+</root>

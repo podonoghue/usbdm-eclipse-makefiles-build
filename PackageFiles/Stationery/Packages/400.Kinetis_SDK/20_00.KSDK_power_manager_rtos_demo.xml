@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <!-- Freescale group-ksdk-demoes -->
+   <!-- Freescale group-ksdk-demos -->
    <projectActionList id="KSDK-power-manager-demo" root="">
       <applyWhen>
          <and>
@@ -10,59 +10,58 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-power-manager-rtos-demo" 
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+               </or>
+            </and>
+         </applyWhen>
+         <variable id="projectOptionValue.KSDK-power-manager-rtos-demo" 
             name="Power Manager RTOS Demo" 
             description=
 "The Power Manager demo application demonstrates different Power Manager \n
 modes supported by the Kinetis SoCs."
             radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <or>
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
-               </or>
-            </and>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <applyWhen>
-            <and>
-               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <variableRef idRef="projectOptionValue.KSDK-power-manager-rtos-demo" />
-            </and>
-         </applyWhen>
-         <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/hardware_init.c"              target="board/hardware_init.c"                sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/main.c"                       target="Sources/main.c"                       sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_lpm_callback.c"         target="Sources/adc16_lpm_callback.c"         sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_temperature.c"          target="Sources/adc16_temperature.c"          sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_temperature.h"          target="Sources/adc16_temperature.h"          sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/debug_console_lpm_callback.c" target="Sources/debug_console_lpm_callback.c" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_adc_irq.c"                target="Sources/fsl_adc_irq.c"                sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_lptmr_irq.c"              target="Sources/fsl_lptmr_irq.c"              sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_rtc_irq.c"                target="Sources/fsl_rtc_irq.c"                sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_uart_irq.c"               target="Sources/fsl_uart_irq.c"               sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lpm_rtos.h"                   target="Sources/lpm_rtos.h"                   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lptmr_setup.c"                target="Sources/lptmr_setup.c"                sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lptmr_setup.h"                target="Sources/lptmr_setup.h"                sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/register_callback.c"          target="Sources/register_callback.c"          sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtc_setup.c"                  target="Sources/rtc_setup.c"                  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtc_setup.h"                  target="Sources/rtc_setup.h"                  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtos_lpm_callback.c"          target="Sources/rtos_lpm_callback.c"          sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_lpm.c"                   target="Sources/task_lpm.c"                   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_lpm.h"                   target="Sources/task_lpm.h"                   sourcePathType="absolute" />
+         </variable>
          <projectActionList>
             <applyWhen>
-               <not>
-                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
-               </not>
+               <variableRef idRef="projectOptionValue.KSDK-power-manager-rtos-demo" />
             </applyWhen>
-            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_led_toggle.c" target="Sources/task_led_toggle.c" sourcePathType="absolute" />
+            <deleteResource target="Sources/main.c" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/hardware_init.c"              target="board/hardware_init.c"                sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/main.c"                       target="Sources/main.c"                       sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_lpm_callback.c"         target="Sources/adc16_lpm_callback.c"         sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_temperature.c"          target="Sources/adc16_temperature.c"          sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/adc16_temperature.h"          target="Sources/adc16_temperature.h"          sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/debug_console_lpm_callback.c" target="Sources/debug_console_lpm_callback.c" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_adc_irq.c"                target="Sources/fsl_adc_irq.c"                sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_lptmr_irq.c"              target="Sources/fsl_lptmr_irq.c"              sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_rtc_irq.c"                target="Sources/fsl_rtc_irq.c"                sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/fsl_uart_irq.c"               target="Sources/fsl_uart_irq.c"               sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lpm_rtos.h"                   target="Sources/lpm_rtos.h"                   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lptmr_setup.c"                target="Sources/lptmr_setup.c"                sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/lptmr_setup.h"                target="Sources/lptmr_setup.h"                sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/register_callback.c"          target="Sources/register_callback.c"          sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtc_setup.c"                  target="Sources/rtc_setup.c"                  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtc_setup.h"                  target="Sources/rtc_setup.h"                  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/rtos_lpm_callback.c"          target="Sources/rtos_lpm_callback.c"          sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_lpm.c"                   target="Sources/task_lpm.c"                   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_lpm.h"                   target="Sources/task_lpm.h"                   sourcePathType="absolute" />
+            <projectActionList>
+               <applyWhen>
+                  <not>
+                     <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+                  </not>
+               </applyWhen>
+               <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/power_manager_rtos_demo/task_led_toggle.c" target="Sources/task_led_toggle.c" sourcePathType="absolute" />
+            </projectActionList>
          </projectActionList>
       </projectActionList>
    </projectActionList>

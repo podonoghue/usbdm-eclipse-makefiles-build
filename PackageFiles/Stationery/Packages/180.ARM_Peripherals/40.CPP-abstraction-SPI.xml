@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-SPI" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-SPI" 
+            name="SPI interface" 
+            description="Adds a CPP abstraction layer for SPI hardware" 
+            checkGroup="group-CPP-abstraction-options" >
+         </variable>
+   
+         <!-- MKL SPI CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+                     </or>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-SPI" />
+                  </and>
+               </applyWhen>
+               <copy source="Project_Headers/SPI-MK.h"        target="Project_Headers/SPI.h" />
+               <copy source="Sources/SPI-MK.cpp"              target="Sources/SPI.cpp" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MK SPI CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+                     </or>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-SPI" />
+                  </and>
+               </applyWhen>
+               <copy source="Project_Headers/SPI-MKL.h"        target="Project_Headers/SPI.h" />
+               <copy source="Project_Headers/DMA-MKL.h"        target="Project_Headers/DMA.h" />
+               <copy source="Sources/SPI-MKL.cpp"              target="Sources/SPI.cpp" />
+               <copy source="Sources/DMA-MKL.cpp"              target="Sources/DMA.cpp" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>

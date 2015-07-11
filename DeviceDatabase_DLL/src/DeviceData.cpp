@@ -151,10 +151,10 @@ void SecurityDescription::setSecurityDescription(std::string s) {
 /*
  * ============================================================================================
  */
-
-const std::string GnuInfoList::toString() const {
-   return std::string("GnuInfoList");
-}
+//
+//const std::string GnuInfoList::toString() const {
+//   return std::string("GnuInfoList");
+//}
 
 /*
  * ============================================================================================
@@ -962,8 +962,9 @@ void DeviceData::setRegisterDescription(RegisterDescriptionConstPtr desc)  {
 
 static string emptyString("");
 
-//! Allows meaningful printing of memory ranges
-//!
+/**
+ *  Allows meaningful printing of memory ranges
+ */
 std::ostream& operator<<(std::ostream& s, const MemoryRegion mr) {
    s << setiosflags (ios_base::showbase | ios_base::hex);
    s << mr.getMemoryTypeName(mr.type) <<  "[";
@@ -1009,12 +1010,13 @@ DeviceDataPtr DeviceData::shallowCopy() const {
    return DeviceDataPtr(copy);
 }
 
-//! Returns the default non-volatile flash location for the clock trim value
-//!
-//! @param  clockType - clock type being queried
-//!
-//! @return Address of clock trim location(s)
-//!
+/**
+ *  Returns the default non-volatile flash location for the clock trim value
+ *
+ * @param  clockType - clock type being queried
+ *
+ * @return Address of clock trim location(s)
+ */
 uint32_t DeviceData::getDefaultClockTrimNVAddress(ClockTypes_t clockType) const {
    if (targetType == T_RS08) {
     return 0x3FFA;
@@ -1053,18 +1055,20 @@ uint32_t DeviceData::getDefaultClockTrimNVAddress(ClockTypes_t clockType) const 
    return 0;
 }
 
-//! Returns the default non-volatile flash location for the clock trim value
-//!
-//! @return Address of clock trim location(s) for the current clock type
-//!
+/**
+ *  Returns the default non-volatile flash location for the clock trim value
+ *
+ * @return Address of clock trim location(s) for the current clock type
+ */
 uint32_t DeviceData::getDefaultClockTrimNVAddress()  const {
    return getDefaultClockTrimNVAddress(clockType);
 }
 
-//! Returns the default (nominal) trim frequency for the given clock
-//!
-//! @return clock trim frequency in Hz.
-//!
+/**
+ *  Returns the default (nominal) trim frequency for the given clock
+ *
+ * @return clock trim frequency in Hz.
+ */
 uint32_t DeviceData::getDefaultClockTrimFreq(ClockTypes_t clockType) const {
    switch (clockType) {
    case S08ICGV1 :
@@ -1093,10 +1097,11 @@ uint32_t DeviceData::getDefaultClockTrimFreq(ClockTypes_t clockType) const {
    }
 }
 
-//! Returns the default (nominal) trim frequency for the currently selected clock
-//!
-//! @return clock trim frequency in Hz.
-//!
+/**
+ *  Returns the default (nominal) trim frequency for the currently selected clock
+ *
+ * @return clock trim frequency in Hz.
+ */
 uint32_t DeviceData::getDefaultClockTrimFreq()  const {
    return getDefaultClockTrimFreq(clockType);
 }
@@ -1128,10 +1133,11 @@ FlashProgramConstPtr DeviceData::getFlashProgram() const {
    return flashProgram;
 }
 
-//! Returns the default clock register address
-//!
-//! @return clock register address
-//!
+/**
+ *  Returns the default clock register address
+ *
+ * @return clock register address
+ */
 uint32_t DeviceData::getDefaultClockAddress(ClockTypes_t clockType) const {
    if (targetType == T_CFV1) {
       return 0xFF8048; // There really isn't a sensible default
@@ -1176,16 +1182,18 @@ uint32_t DeviceData::getDefaultClockAddress(ClockTypes_t clockType) const {
    return 0U;
 }
 
-//! Returns the default (nominal) trim frequency for the currently selected clock
-//!
-//! @return clock trim frequency in Hz.
-//!
+/**
+ *  Returns the default (nominal) trim frequency for the currently selected clock
+ *
+ *  @return clock trim frequency in Hz.
+ */
 uint32_t DeviceData::getDefaultClockAddress()  const {
    return getDefaultClockAddress(clockType);
 }
 
-//! Determines the clock type from a string description
-//!
+ /**
+  *  Determines the clock type from a string description
+  */
 ClockTypes_t ClockTypes::getClockType(const std::string &typeName) {
    LOGGING_Q;
    int sub;
@@ -1199,8 +1207,9 @@ ClockTypes_t ClockTypes::getClockType(const std::string &typeName) {
    return CLKINVALID;
 }
 
-//! Determines the clock type from a string description
-//!
+/**
+ *  Determines the clock type from a string description
+ */
 ClockTypes_t ClockTypes::getClockType(const char *_typeName) {
    string typeName(_typeName);
    return getClockType(typeName);
@@ -1214,12 +1223,13 @@ int ClockTypes::getClockIndex(ClockTypes_t clockType) {
    return (int)clockType;
 }
 
-//! Determines the clock name from a clock type
-//!
-//! @param clockType Clocktype to map to name
-//!
-//! @return string describing the clock
-//!
+/**
+ *  Determines the clock name from a clock type
+ *
+ * @param clockType Clocktype to map to name
+ *
+ * @return string describing the clock
+ */
 const string ClockTypes::getClockName(ClockTypes_t clockType) {
    LOGGING_Q;
    int sub;
@@ -1232,13 +1242,14 @@ const string ClockTypes::getClockName(ClockTypes_t clockType) {
    return emptyString;
 }
 
-//! Checks if the SDID is used by the device
-//!
-//! @param desiredSDID  The SDID to check against
-//! @param acceptZero   Accept a zero SDID
-//!
-//! @return true/false result of check
-//!
+/**
+ *  Checks if the SDID is used by the device
+ *
+ * @param desiredSDID  The SDID to check against
+ * @param acceptZero   Accept a zero SDID
+ *
+ * @return true/false result of check
+ */
 bool DeviceData::isThisDevice(uint32_t  desiredSDID, bool acceptZero) const {
    LOGGING_Q;
    unsigned int index;
@@ -1271,13 +1282,14 @@ bool DeviceData::isThisDevice(uint32_t  desiredSDID, bool acceptZero) const {
    return false;
 }
 
-//! Checks if any of the SDIDs provided are used by the device
-//!
-//! @param desiredSDIDs map<SDIDaddress,SDID> to check against
-//! @param acceptZero   Accept a zero SDID
-//!
-//! @return true/false result of check
-//!
+/**
+ *  Checks if any of the SDIDs provided are used by the device
+ *
+ * @param desiredSDIDs map<SDIDaddress,SDID> to check against
+ * @param acceptZero   Accept a zero SDID
+ *
+ * @return true/false result of check
+ */
 bool DeviceData::isThisDevice(std::map<uint32_t,uint32_t> desiredSDIDs, bool acceptZero) const {
    LOGGING_Q;
    map<uint32_t,uint32_t>::iterator sdidEntry;
@@ -1299,13 +1311,14 @@ bool DeviceData::isThisDevice(std::map<uint32_t,uint32_t> desiredSDIDs, bool acc
    return false;
 }
 
-//! Determines the memory type for an address
-//!
-//! @param address     - The address to check
-//! @param memorySpace - Memory space to check (MS_None, MS_Program, MS_Data)
-//!
-//! @return Memory type of region (or MemInvalid if no information available)
-//!
+/**
+ *  Determines the memory type for an address
+ *
+ * @param address     - The address to check
+ * @param memorySpace - Memory space to check (MS_None, MS_Program, MS_Data)
+ *
+ * @return Memory type of region (or MemInvalid if no information available)
+ */
 MemType_t DeviceData::getMemoryType(uint32_t address, MemorySpace_t memorySpace) {
    MemoryRegionConstPtr memoryRegion = getMemoryRegionFor(address, memorySpace);
    if (memoryRegion != NULL) {
@@ -1314,10 +1327,11 @@ MemType_t DeviceData::getMemoryType(uint32_t address, MemorySpace_t memorySpace)
    return MemInvalid;
 }
 
-//! Sets the security of all memory regions to a custom value
-//!
-//! @param securityValue - custom value to use
-//!
+/**
+ *  Sets the security of all memory regions to a custom value
+ *
+ * @param securityValue - custom value to use
+ */
 void DeviceData::setCustomSecurity(const std::string &securityValue) {
    LOGGING_E;
    security = SEC_CUSTOM;
@@ -1339,12 +1353,13 @@ void DeviceData::setCustomSecurity(const std::string &securityValue) {
    }
 }
 
-//! Determines the page number for an address
-//!
-//! @param address - The address to check
-//!
-//! @return page number (PPAGE value) or  MemoryRegion::NoPageNo if not paged/found
-//!
+/**
+ *  Determines the page number for an address
+ *
+ * @param address - The address to check
+ *
+ * @return page number (PPAGE value) or  MemoryRegion::NoPageNo if not paged/found
+ */
 uint16_t DeviceData::getPageNo(uint32_t address) {
    // Check cached location to avoid searching in most cases
    if ((lastMemoryRegionUsed != NULL) && lastMemoryRegionUsed->contains(address))
@@ -1479,14 +1494,14 @@ FlexNVMInfoConstPtr DeviceDataBase::getFlexNVMInfo(std::string key) const {
    return ptr;
 }
 
-//! Searches the known devices for a device with given name
-//!
-//! @param targetName - Name of device
-//!
-//! @returns entry found or NULL if no suitable device found
-//!
-//! @note - If the device is an alias then it will return the true device
-//!
+/** Searches the known devices for a device with given name
+ *
+ * @param targetName - Name of device
+ *
+ * @returns entry found or NULL if no suitable device found
+ *
+ * @note - If the device is an alias then it will return the true device
+ */
 DeviceDataConstPtr DeviceDataBase::findDeviceFromName(const string &targetName) const {
    LOGGING_Q;
    static int recursionCheck = 0;
@@ -1521,12 +1536,12 @@ DeviceDataConstPtr DeviceDataBase::findDeviceFromName(const string &targetName) 
    return theDevice;
 }
 
-//! Searches the known devices for a device with given name
-//!
-//! @param targetName - Name of device
-//!
-//! @returns index or -1 if not found
-//!
+/** Searches the known devices for a device with given name
+ *
+ * @param targetName - Name of device
+ *
+ * @returns index or -1 if not found
+ */
 int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
    LOGGING_Q;
 
@@ -1540,8 +1555,9 @@ int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
    return -1;
 }
 
-//! \brief Loads the known devices list from the configuration file.
-//!
+/**
+ * \brief Loads the known devices list from the configuration file.
+ */
 void DeviceDataBase::loadDeviceData() {
    LOGGING;
    string deviceFile;

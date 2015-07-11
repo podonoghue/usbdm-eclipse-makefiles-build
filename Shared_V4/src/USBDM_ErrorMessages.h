@@ -1,5 +1,5 @@
 /*! \file
-     ErrorMessages.h
+    \brief USBDM error codes
 
     \verbatim
     Copyright (C) 2010  Peter O'Donoghue

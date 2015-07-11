@@ -8,7 +8,7 @@
 #ifndef SRC_USBDMTCLINTERPRETERIMP_H_
 #define SRC_USBDMTCLINTERPRETERIMP_H_
 
-#include "UsbdmTclInterper.h"
+#include "UsbdmTclInterpreter.h"
 
 #include <stdio.h>
 #include <tr1/memory>
@@ -17,7 +17,7 @@
 
 #include "tcl.h"
 
-class UsbdmTclInterpreterImp: public UsbdmTclInterper {
+class UsbdmTclInterpreterImp: public UsbdmTclInterpreter {
 
 public:
    virtual USBDM_ErrorCode  evalTclScript(const char *script);
@@ -39,6 +39,6 @@ protected:
    static void    deleteInterpreter(Tcl_Interp *interp);
 };
 
-typedef std::tr1::shared_ptr<UsbdmTclInterper> UsbdmTclInterperPtr;
+typedef std::tr1::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
 
 #endif /* SRC_USBDMTCLINTERPRETERIMP_H_ */

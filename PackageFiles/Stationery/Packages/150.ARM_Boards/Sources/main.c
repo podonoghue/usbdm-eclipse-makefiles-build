@@ -34,7 +34,8 @@ int main(void) {
 
    volatile int count = 0;
 
-   SysTick_Config(1000);
+   // 1 ms tick
+   SysTick_Config(SystemBusClock/1000);
 
    led_initialise();
 

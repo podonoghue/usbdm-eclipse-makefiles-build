@@ -58,6 +58,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
 								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile.1390779472" name="Linker File (-T option):" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" value="OpenSDA.ld" valueType="string"/>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.1465898508" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1685051287" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -129,6 +130,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
 								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile.1804212992" name="Linker File (-T option):" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" value="OpenSDAv2_0.ld" valueType="string"/>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.286548431" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.449057313" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -202,6 +204,7 @@
 								<option id="gnu.cpp.link.option.paths.1461956802" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.1859095584" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1741687163" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -275,6 +278,7 @@
 								<option id="gnu.cpp.link.option.paths.78791840" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.20683659" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.466834040" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -305,8 +309,8 @@
 				<configuration artifactName="${ConfigName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${usbdm_rm_command} -rf" description="Default load address for testing on bare hardware without bootloader" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="net.sourceforge.usbdm.cdt.arm.windows.debug.configuration.472898765.262006593" name="Debug" parent="net.sourceforge.usbdm.cdt.arm.windows.debug.configuration" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="" prebuildStep="">
 					<folderInfo id="net.sourceforge.usbdm.cdt.arm.windows.debug.configuration.472898765.262006593." name="/" resourcePath="">
 						<toolChain id="net.sourceforge.usbdm.cdt.arm.exe.debug.toolchain.951461042" name="ARM-USBDM ToolChain" superClass="net.sourceforge.usbdm.cdt.arm.exe.debug.toolchain">
-							<option defaultValue="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.max" id="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.432091979" name="Debug level" superClass="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel" valueType="enumerated"/>
-							<option defaultValue="net.sourceforge.usbdm.gnu.c.optimization.level.none" id="net.sourceforge.usbdm.cdt.toolchain.optimization.level.752494632" name="Optimization level" superClass="net.sourceforge.usbdm.cdt.toolchain.optimization.level" valueType="enumerated"/>
+							<option defaultValue="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.max" id="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.432091979" name="Debug level" superClass="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel" value="net.sourceforge.usbdm.cdt.toolchain.debug.debugLevel.max" valueType="enumerated"/>
+							<option defaultValue="net.sourceforge.usbdm.gnu.c.optimization.level.none" id="net.sourceforge.usbdm.cdt.toolchain.optimization.level.752494632" name="Optimization level" superClass="net.sourceforge.usbdm.cdt.toolchain.optimization.level" value="net.sourceforge.usbdm.gnu.c.optimization.level.none" valueType="enumerated"/>
 							<option id="net.sourceforge.usbdm.cdt.arm.toolchain.mcpu.1812954013" name="Cpu (-mcpu=)" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.mcpu" value="net.sourceforge.usbdm.cdt.arm.toolchain.mcpu.cortexM4" valueType="enumerated"/>
 							<option id="net.sourceforge.usbdm.cdt.arm.toolchain.mthumb.250191366" name="Thumb Instruction set (-mthumb)" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.mthumb" value="true" valueType="boolean"/>
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="net.sourceforge.usbdm.cdt.toolchain.targetPlatform.201875744" name="USBDM common base platform" superClass="net.sourceforge.usbdm.cdt.toolchain.targetPlatform"/>
@@ -346,13 +350,16 @@
 								<option id="gnu.cpp.link.option.paths.1332103200" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.1861793111" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1142798069" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
 							<tool id="net.sourceforge.usbdm.cdt.arm.toolchain.lister.226166328" name="ARM Disassembler" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.lister"/>
-							<tool id="net.sourceforge.usbdm.cdt.arm.toolchain.sizer.1798798566" name="ARM Sizer" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.sizer"/>
+							<tool id="net.sourceforge.usbdm.cdt.arm.toolchain.sizer.1798798566" name="ARM Sizer" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.sizer">
+								<option id="net.sourceforge.usbdm.cdt.toolchain.sizer.format.1567561228" name="Output format (--format=)" superClass="net.sourceforge.usbdm.cdt.toolchain.sizer.format" value="net.sourceforge.usbdm.cdt.toolchain.sizer.format.sysv" valueType="enumerated"/>
+							</tool>
 							<tool id="net.sourceforge.usbdm.cdt.arm.toolchain.sym.1674661297" name="ARM Symbol Table" superClass="net.sourceforge.usbdm.cdt.arm.toolchain.sym"/>
 						</toolChain>
 					</folderInfo>
@@ -417,6 +424,7 @@
 								<option id="gnu.cpp.link.option.paths.1112384914" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.741769806" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1862742791" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -490,6 +498,7 @@
 								<option id="gnu.cpp.link.option.paths.1959898195" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;"/>
 								</option>
+								<option id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable.1958891598" name="Generate map file:" superClass="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.mapFileEnable" value="${BuildArtifactFileBaseName}.map" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1870871734" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -510,7 +519,9 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="OpenSDAv2_0_Unique_ID"/>
+		<configuration configurationName="OpenSDAv2_0_Unique_ID">
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
+		</configuration>
 		<configuration configurationName="OpenSDA_Unique_ID">
 			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
 		</configuration>
@@ -518,7 +529,7 @@
 			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
 		</configuration>
 		<configuration configurationName="OpenSDAv2_1">
-			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
 		</configuration>
 		<configuration configurationName="OpenSDAv1_Unique_ID">
 			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
@@ -526,13 +537,17 @@
 		<configuration configurationName="OpenSDA">
 			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
 		</configuration>
-		<configuration configurationName="OpenSDAv1"/>
-		<configuration configurationName="OpenSDAv2_0"/>
+		<configuration configurationName="OpenSDAv1">
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
+		</configuration>
+		<configuration configurationName="OpenSDAv2_0">
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
+		</configuration>
 		<configuration configurationName="OpenSDAv2_1_Unique_ID">
-			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
 		</configuration>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>
+			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis_Firmware"/>
 		</configuration>
 		<configuration configurationName="OpenSDAv2">
 			<resource resourceType="PROJECT" workspacePath="/USBDM_Kinetis"/>

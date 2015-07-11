@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <!-- Freescale group-ksdk-demoes -->
+   <!-- Freescale group-ksdk-demos -->
    <projectActionList id="KSDK-I2C-comm-rtos" root="">
       <applyWhen>
          <and>
@@ -10,49 +10,48 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-I2C-comm-rtos" 
-         name="I2C Communication Demo (RTOS)" 
-         description=
-"The I2C communication application demonstrates I2C data communication between two boards or \n
-two interfaces on the same board.\n
-It also features low power wakeup of the slave board by using I2C address matching."
-            radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <or>
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
-               </or>
-            </and>
-         </enableWhen>
-      </variable>
       <projectActionList>
          <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <variableRef idRef="projectOptionValue.KSDK-I2C-comm-rtos" />
+               <or>
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+               </or>
             </and>
          </applyWhen>
-         <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/hardware_init.c"  target="board/hardware_init.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/main.c"           target="Sources/main.c"          sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_master.c"    target="Sources/task_master.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_sample.c"    target="Sources/task_sample.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_slave.c"     target="Sources/task_slave.c"    sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/fsl_i2c_irq.c"    target="Sources/fsl_i2c_irq.c"   sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/i2c_rtos.h"       target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
-         <!-- C Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
-         </projectOption>
-         <!-- C++ Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <!-- value>&quot;${usbdm_kds_path}/platform/drivers/i2c&quot;</value> -->
-            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
-         </projectOption>
+         <variable id="projectOptionValue.KSDK-I2C-comm-rtos" 
+            name="I2C Communication Demo (RTOS)" 
+            description=
+"The I2C communication application demonstrates I2C data communication between two boards or \n
+two interfaces on the same board.\n
+It also features low power wakeup of the slave board by using I2C address matching."
+            radioGroup="group-ksdk-demo" >
+         </variable>
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="projectOptionValue.KSDK-I2C-comm-rtos" />
+            </applyWhen>
+            <deleteResource target="Sources/main.c" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/hardware_init.c"  target="board/hardware_init.c"   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/main.c"           target="Sources/main.c"          sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_master.c"    target="Sources/task_master.c"   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_sample.c"    target="Sources/task_sample.c"   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/task_slave.c"     target="Sources/task_slave.c"    sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/fsl_i2c_irq.c"    target="Sources/fsl_i2c_irq.c"   sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/i2c_rtos/i2c_rtos.h"       target="Sources/i2c_rtos.h"      sourcePathType="absolute" />
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <!-- value>&quot;${usbdm_kds_path}/platform/drivers/i2c&quot;</value> -->
+               <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            </projectOption>
+         </projectActionList>
       </projectActionList>
    </projectActionList>
 </root>

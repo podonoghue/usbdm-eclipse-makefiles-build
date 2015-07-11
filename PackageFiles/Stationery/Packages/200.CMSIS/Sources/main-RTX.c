@@ -44,10 +44,9 @@ void threadFunction(void const *argument) {
    }
 }
 
-/*!
- * Main function - forms main thread
- *
- */
+/*----------------------------------------------------------------------------
+ *      Main: Initialise and start RTX Kernel
+ *---------------------------------------------------------------------------*/
 int main(void) {
 
    // Get main thread ID

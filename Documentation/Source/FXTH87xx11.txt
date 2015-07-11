@@ -1,16 +1,29 @@
 /*!
  \page FXTH87xx11 Programming devices while preserving data
 
-\section FXTH87xx11-1 Example issues with FXTH87xx11
+\section FXTH87xx11-0 Example issues with FXTH87xx11/FXCTH87xx02
  
 Some devices require programming ranges of the Flash memory while preserving other areas.  A good example of this is the FXTH87xx11. \n
-The FXTH87xx11 comes pre-programmed with utility code that user programs are meant to access so it is necessary to program part of the Flash.
+The FXTH87xx11 comes pre-programmed with utility code that user programs are meant to access so it is necessary to program only <b>part</b> of the Flash.
  
-Before playing around with this chip I created an image of the chip contents.  
+<hr>
+\section FXTH87xx11-1 Creating a reference image
+Before playing around with this chip I created an image of the chip contents. \n 
 This allows the chip to be returned to a "factory fresh" state if the firmware is accidentally erased.
 
-I have attached the image:
-	- @htmlonly Image from a FXTH870511, <a href="FXTH870511_Image.sx.zip">FXTH870511_Image.sx</a> @endhtmlonly 
+<table border="0">
+<tr>
+<td>
+    - Use UsbdmMemoryDump to obtain a reference copy of the flash from 0xC000 to 0xFFFF
+</td>
+<td>
+   \image html MemoryDump.png
+</td>
+</tr>
+</table>
+ 
+<hr>
+\section FXTH87xx11-2 Using the stand-alone programmer
 
 The USBDM HCS08 Programmmer provides two entries for use with this device:
 	- <b>FXTH87xx11-Full-Erase</b> \n
@@ -20,13 +33,12 @@ The USBDM HCS08 Programmmer provides two entries for use with this device:
 		Due to limitations in the USBDM programmer it is not possible to prevent you from mass-erasing the device  - You have to <b>manually select selective erase</b>.
 
  
-<hr>
-\section FXTH87xx11-2 To restore an accidentally erased device
+\section FXTH87xx11-2a To restore an accidentally erased device
 <table border="0">
 <tr>
 <td>
     - Load the above image FXTH870511_Image.sx\n
-	- Select <b>FXTH87xx11-Full-Erase</b> as the device\n
+	 - Select <b>FXTH87xx11-Full-Erase</b> as the device\n
     - Select <b>Image</b> for security\n
     - Select <b>EraseMass</b>\n
     - Program and verify to check it's OK
@@ -38,7 +50,7 @@ The USBDM HCS08 Programmmer provides two entries for use with this device:
 </table>
 
  <hr>
-\section FXTH87xx11-3 To program a user program (restricted to user flash area)
+\section FXTH87xx11-2b To program a user program (restricted to user flash area)
 <table border="0">
 <tr>
 <td>
@@ -73,4 +85,13 @@ The USBDM HCS08 Programmmer provides two entries for use with this device:
 </td>
 </tr>
 </table>
+
+<hr>
+\section FXTH87xx11-5 Reference images
+
+I have attached the images from the two chips I used for testing in case you accidentally erase yours <b>before</b> you have made an image.\n
+ This should be considered a last resort as the images contains calibration data that will not be correct for another chip:
+   - @htmlonly Images from a FXTH870511/FXTH8715026, <a href="Flash_Images.sx.zip">Flash_Images.sx.zip</a> @endhtmlonly 
+
+
 */

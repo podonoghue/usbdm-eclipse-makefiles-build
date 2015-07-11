@@ -1,6 +1,9 @@
-/*
- * leds.c
- *
+/**
+ * @file    leds.c
+ * @brief   Basic LED control for demo boards
+ * @date    13 June 2015
+ * 
+ * Generated from leds.c
  */
 #include "derivative.h"
 #include "utilities.h"
@@ -70,6 +73,7 @@ void orangeLedToggle(void) {
 #endif
 
 #ifndef PORT_PCR_DSE_MASK
+//! Dummy definition for devices without DSE feature
 #define PORT_PCR_DSE_MASK (0)
 #endif
 

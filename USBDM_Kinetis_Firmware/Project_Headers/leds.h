@@ -21,6 +21,8 @@ void redLedToggle(void);
 void blueLedOn(void);
 void blueLedOff(void);
 void blueLedToggle(void);
+void blueLedEnable(void);
+void blueLedDisable(void);
 void orangeLedOn(void);
 void orangeLedOff(void);
 void orangeLedToggle(void);

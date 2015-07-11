@@ -1,4 +1,4 @@
-/*! \file
+/** \file
     \brief Provides Debug logging facilities
 
     Log.cpp
@@ -105,7 +105,7 @@ FILE *UsbdmSystem::openConfigurationFile(const std::string &path, const std::str
    return fopen(fullPath.c_str(), mode.c_str());
 }
 
-/*!
+/**
  * Checks if a file exists
  */
 bool UsbdmSystem::fileExists(const std::string &path) {
@@ -146,7 +146,7 @@ int                          UsbdmSystem::Log::currentLogLevel = 100;       //!<
 bool                         UsbdmSystem::Log::loggingEnabled  = true;      //!< Log on/off
 UsbdmSystem::Log::Timestamp  UsbdmSystem::Log::timestampMode   = relative;  //!< Time-stamp messages
 
-/*! \brief Get current time in milliseconds
+/** \brief Get current time in milliseconds
  *
  *  @return time value
  */
@@ -184,7 +184,7 @@ double UsbdmSystem::Log::getTimeStamp(void) {
    return timestamp;
 }
 
-/*!  \brief Object to allow logging the execution of a function
+/**  \brief Object to allow logging the execution of a function
  *
  *  @param name Name of the function to use in messages
  *  @param when Whether to log entry/exit etc of this function
@@ -199,7 +199,7 @@ UsbdmSystem::Log::Log(const char *name, When when) : when(when) {
       print("Entry ===============\n");
    }
 }
-/*!  \brief Record exit from a function
+/**  \brief Record exit from a function
  *
  */
 UsbdmSystem::Log::~Log(){
@@ -211,7 +211,7 @@ UsbdmSystem::Log::~Log(){
    indent--;
 }
 
-/*!  \brief Open log file
+/**  \brief Open log file
  *
  *  @param logFileName - Name of log file
  *  @param description - Description written to log file
@@ -257,15 +257,25 @@ void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *descript
    fflush(logFile);
 }
 
+/**
+ * Set logging handle
+ *
+ * @param newLogFile file handle to set
+ */
 void  UsbdmSystem::Log::setLogFileHandle(FILE *newLogFile) {
    logFile = newLogFile;
 }
 
+/**
+ * Get logging handle
+ *
+ * @return file handle
+ */
 FILE* UsbdmSystem::Log::getLogFileHandle(void) {
    return logFile;
 }
 
-/*! \brief Turns logging on or off
+/** \brief Turns logging on or off
  *
  *  @param value - true/false => on/off logging
  */
@@ -273,7 +283,7 @@ void UsbdmSystem::Log::enableLogging(bool value) {
    loggingEnabled = value;
 }
 
-/*!  \brief Set logging level relative to current level
+/**  \brief Set logging level relative to current level
  *
  *  @param level - level to log below \n
  *         A 0 value suppresses logging below the current level.
@@ -281,20 +291,20 @@ void UsbdmSystem::Log::enableLogging(bool value) {
 void UsbdmSystem::Log::setLoggingLevel(int level) {
    currentLogLevel = indent + level;
 }
-/*!  \brief Get logging level relative to current level
+/**  \brief Get logging level relative to current level
  *
  */
 int UsbdmSystem::Log::getLoggingLevel() {
    return indent - currentLogLevel;
 }
-/*! \brief Sets timestamping mode
+/** \brief Sets timestamping mode
  *
  *  @param mode - mode of timestamping
  */
 void UsbdmSystem::Log::enableTimestamp(UsbdmSystem::Log::Timestamp mode) {
    timestampMode = mode;
 }
-/*!  \brief Close the log file
+/**  \brief Close the log file
  *
  */
 void UsbdmSystem::Log::closeLogFile() {
@@ -313,7 +323,7 @@ void UsbdmSystem::Log::closeLogFile() {
    fclose(logFile);
    logFile = NULL;
 }
-/*! \brief Provides a print function which prints data into a log file.
+/** \brief Provides a print function which prints data into a log file.
  *
  *  @param format Format and parameters as for printf()
  */
@@ -331,7 +341,7 @@ void UsbdmSystem::Log::printq(const char *format, ...) {
    fflush(logFile);
 }
 
-/*! \brief Provides a print function which prints data into a log file.
+/** \brief Provides a print function which prints data into a log file.
  *
  *  @param format Format and parameters as for printf()
  */
@@ -356,7 +366,7 @@ void UsbdmSystem::Log::print(const char *format, ...)  {
    fflush(logFile);
 }
 
-/*! \brief Provides a print function which prints data into a log file.
+/** \brief Provides a print function which prints data into a log file.
  *
  *  @param format Format and parameters as for printf()
  */
@@ -380,7 +390,7 @@ void UsbdmSystem::Log::error(const char *format, ...)  {
    va_end(list);
    fflush(logFile);
 }
-/*! \brief Provides a print function which prints data into a log file.
+/** \brief Provides a print function which prints data into a log file.
  *
  *  @param format Format and parameters as for printf()
  */
@@ -404,7 +414,7 @@ void UsbdmSystem::Log::warning(const char *format, ...) {
    va_end(list);
    fflush(logFile);
 }
-/*! \brief Print a formatted dump of binary data in Hex
+/** \brief Print a formatted dump of binary data in Hex
  *
  * @param data         Pointer to data to print
  * @param size         Number of bytes to print

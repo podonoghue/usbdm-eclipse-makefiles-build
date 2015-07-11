@@ -23,6 +23,7 @@ set PROJECTS=%PROJECTS% USBDM_API_Example
 set PROJECTS=%PROJECTS% USBDM_Kinetis_Firmware
 
 echo *** Cleaning %PROJECTS%
+for %%f in (%PROJECTS%) do if exist %%f\Documentation          rmdir /S /Q %%f\Documentation
 for %%f in (%PROJECTS%) do if exist %%f\OpenSDAv1              rmdir /S /Q %%f\OpenSDAv1
 for %%f in (%PROJECTS%) do if exist %%f\OpenSDAv1_Unique_ID    rmdir /S /Q %%f\OpenSDAv1_Unique_ID
 for %%f in (%PROJECTS%) do if exist %%f\OpenSDAv2_0            rmdir /S /Q %%f\OpenSDAv2_0

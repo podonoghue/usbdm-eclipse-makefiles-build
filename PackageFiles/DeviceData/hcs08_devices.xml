@@ -269,6 +269,7 @@
          </memory>
          <memory registerAddress="0x1820" type="flash" securityAddress="0xFFB0">
             <securityEntryRef ref="HCS08-default-security" />
+            <memoryRange start="0x000870" end="0x0017FF" />
             <memoryRange start="0x001860" end="0x00FFFF" />
          </memory>
          <sdid value="0x008" />

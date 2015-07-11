@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Root element -->
+<!ELEMENT root (description?,deviceList)>
+     <!ATTLIST root version CDATA #REQUIRED>
+
+<!-- General Description element. -->
+<!ELEMENT description (#PCDATA)>
+
+<!-- List of devices -->
+<!ELEMENT deviceList (device*)>
+
+<!-- A mapping from a device name to SVD description -->
+<!ELEMENT device (svdFileName)>
+     <!ATTLIST device name ID #REQUIRED>
+
+<!ELEMENT svdFileName (#PCDATA)>

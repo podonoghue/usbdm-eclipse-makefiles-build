@@ -11,7 +11,9 @@ Devices using this peripheral:
          <?forcedBlockWidth "32" ?>
          <name>USB0</name>
          <description>Universal Serial Bus, OTG Capable Controller</description>
+         <groupName>USB</groupName>
          <prependToName>USB0</prependToName>
+         <headerStructName>USB</headerStructName>
          <baseAddress>0x40072000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -115,9 +117,21 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>IEHOST</name>
-                     <description>When this bit is set, the USB peripheral is operating in host mode</description>
+                     <description>USB operating mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Device Mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Host mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>IRQNUM</name>
@@ -365,7 +379,7 @@ If enabled the values in this register control the pull-up/downs</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="DMLOW" > <name>DPLOW</name> <description>D+ Data Line pull-down enable</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="DMLOW" > <name>DPHIGH</name> <description>D+ Data Line pull-up enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="DMLOW" > <name>DPHIGH</name> <description>D+ Data Line pullup enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -388,12 +402,12 @@ It is not asserted again until the USB reset condition has been removed and then
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt inactive</description>
+                           <description>Inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt active</description>
+                           <description>Pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -435,12 +449,12 @@ Setting any of these bits enables the respective interrupt source in the INT_STA
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -471,12 +485,12 @@ Each of these bits are qualified with their respective error enable bits</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Error not detected</description>
+                           <description>Not detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Error detected</description>
+                           <description>Detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -515,12 +529,12 @@ This bit is set when a bit stuff error is detected. If set, the corresponding pa
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

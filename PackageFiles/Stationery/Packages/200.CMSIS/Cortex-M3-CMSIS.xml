@@ -36,11 +36,11 @@
             <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
             <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>
          </projectOption>
-         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M3</value>
             <value>__CMSIS_RTOS</value>
          </projectOption>
-         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M3</value>
             <value>__CMSIS_RTOS</value>
          </projectOption>

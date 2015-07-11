@@ -3,7 +3,7 @@
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKE04Z4_VectorTable.svd.xml">
 <!ENTITY ACMP0        SYSTEM "peripherals/ACMP0_MKE.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKE04.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKE_HWT.svd.xml">
 <!ENTITY BP           SYSTEM "peripherals/BP_1_MKE.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">

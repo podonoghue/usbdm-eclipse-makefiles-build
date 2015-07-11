@@ -23,9 +23,9 @@
             <not>
                <or>
                   <requirement idRef="projectOptionValue.Clock-setup" />
-                  <requirement idRef="projectOptionValue.CMSIS-RTOS" />
-                  <requirement idRef="projectOptionValue.UART-setup" />
                   <requirement idRef="projectOptionValue.FRDM-Blinky" />
+                  <requirement idRef="projectOptionValue.CPP-Interface" />
+                  <requirement idRef="projectOptionValue.CMSIS-RTOS" />
                </or>
             </not>
          </enableWhen>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKV10 -->
+   <projectActionList id="Options-file-list-MKV10M7">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyIs>MKV10Z7</deviceSubfamilyIs>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+   </projectActionList>
+</root>

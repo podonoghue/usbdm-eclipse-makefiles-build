@@ -10,32 +10,30 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-hello-world" 
-         name="Hello World Demo" 
-         description=
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
+            </and>
+         </applyWhen>
+         <variable id="projectOptionValue.KSDK-hello-world" 
+            name="Hello World Demo" 
+            description=
 "The Hello World project is a simple demonstration program that uses the KSDK software. It prints \n
 the 'Hello World' message to the terminal using the KSDK UART drivers. The purpose of this demo is to\n
 show how to use the UART and to provide a simple project for debugging and further development"
             radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <requirement idRef="projectOptionValue.Kinetis-SDK-os-bare-metal" />
-            </and>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <!--  Common files -->
-         <applyWhen>
-            <and>
-               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <variableRef idRef="projectOptionValue.KSDK-hello-world" />
-            </and>
-         </applyWhen>
-         <deleteResource target="Sources/main.c" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/hardware_init.c"  target="board/hardware_init.c"     sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/main.c"           target="Sources/main.c"            sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/fsl_lptmr_irq.c"  target="Sources/fsl_lptmr_irq.c"   sourcePathType="absolute" />
+         </variable>
+         <projectActionList>
+            <applyWhen>
+                  <variableRef idRef="projectOptionValue.KSDK-hello-world" />
+            </applyWhen>
+            <deleteResource target="Sources/main.c" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/hardware_init.c"  target="board/hardware_init.c"     sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/main.c"           target="Sources/main.c"            sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/hello_world/fsl_lptmr_irq.c"  target="Sources/fsl_lptmr_irq.c"   sourcePathType="absolute" />
+         </projectActionList>
       </projectActionList>
    </projectActionList>
 </root>

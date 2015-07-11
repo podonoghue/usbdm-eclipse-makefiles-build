@@ -10,25 +10,37 @@
 #include <stdint.h>
 #include "derivative.h"
 
-#define DEVICE_SUBFAMILY_CortexM4
+#define MK20D5
 
 
 
 /* This definition is overridden if Clock initialisation is provided */
-__attribute__((weak))
+__attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
 
 /* Actual Vector table */
 extern int const __vector_table[];
 
-#if !defined(WDOG_UNLOCK)
-   /* Defaults for MK devices */
+#ifndef SCB
+   #define SCB_VTOR                 (*(uint32_t *)0xE000ED08)
+   #define SCB_CCR                  (*(uint32_t *)0xE000ED14)
+   #define SCB_CCR_DIV_0_TRP_MASK   (1<<4)
+   #define SCB_CCR_UNALIGN_TRP_MASK (1<<3)
+#else
+   #define SCB_VTOR  (SCB->VTOR)
+   #define SCB_CCR   (SCB->CCR)
+#endif
+
+#if !defined(WDOG)
 
    /* Watchdog unlock register */
    #define WDOG_BASE_ADDR (0x40052000)
    #define WDOG_STCTRLH  (*(uint16_t *)(WDOG_BASE_ADDR+0x00))
    #define WDOG_UNLOCK   (*(uint16_t *)(WDOG_BASE_ADDR+0x0E))
+#else
+   #define WDOG_STCTRLH  (WDOG->STCTRLH)
+   #define WDOG_UNLOCK   (WDOG->UNLOCK)
 #endif
 
    /* Unlocking Watchdog sequence words*/
@@ -39,17 +51,17 @@ extern int const __vector_table[];
    #define KINETIS_WDOG_DISABLED_CTRL  (0xD2)
 
 /* This definition is overridden if Clock initialisation is provided */
-__attribute__((weak))
+__attribute__((__weak__))
 void clock_initialise() {
 }
 
 /* This definition is overridden if UART initialisation is provided */
-__attribute__((weak))
+__attribute__((__weak__))
 void uart_initialise(int baudRate __attribute__((__unused__))) {
 }
 
 /* This definition is overridden if RTC initialisation is provided */
-__attribute__((weak))
+__attribute__((__weak__))
 void rtc_initialise(void) {
 }
 
@@ -57,6 +69,10 @@ void rtc_initialise(void) {
 __attribute__((weak))
 void software_init_hook (void) {
 }
+
+#ifdef __NO_STARTFILES__
+#warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
+#endif
 
 /*!
  *  @brief Low-level initialize the system
@@ -94,14 +110,14 @@ void SystemInit(void) {
    clock_initialise();
 
    /* Use UART initialisation - if present */
-   uart_initialise(19200);
+   uart_initialise(DEFAULT_BAUD_RATE);
 
    /* Use RTC initialisation - if present */
    rtc_initialise();
 
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
    /* Initialise FPU if present & in use */
-   asm (
+   __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"
          "                             \n"
          "  LDR.W R0, =CPACR           \n"  // CPACR address

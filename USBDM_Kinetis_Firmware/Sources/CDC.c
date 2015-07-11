@@ -12,22 +12,23 @@
 
 #if (HW_CAPABILITY&CAP_CDC)
 
+#define CONCAT2_(x,y) x ## y
 #define CONCAT3_(x,y,z) x ## y ## z
 
 #ifndef UART_NUM
 #define UART_NUM               0
 #endif
 
-#define UART_C1(x)             CONCAT3_(UART,x,_C1)
-#define UART_C2(x)             CONCAT3_(UART,x,_C2)
-#define UART_C3(x)             CONCAT3_(UART,x,_C3)
-#define UART_C4(x)             CONCAT3_(UART,x,_C4)
-#define UART_BDH(x)            CONCAT3_(UART,x,_BDH)
-#define UART_BDL(x)            CONCAT3_(UART,x,_BDL)
-#define UART_S1(x)             CONCAT3_(UART,x,_S1)
-#define UART_D(x)              CONCAT3_(UART,x,_D)
-#define INT_UART_RX_TX(x)      CONCAT3_(INT_UART,x,_RX_TX)
-#define UART_IRQHandler(x)     CONCAT3_(UART,x,_RxTx_IRQHandler)
+#define UART_C1(x)             CONCAT2_(UART,x)->C1
+#define UART_C2(x)             CONCAT2_(UART,x)->C2
+#define UART_C3(x)             CONCAT2_(UART,x)->C3
+#define UART_C4(x)             CONCAT2_(UART,x)->C4
+#define UART_BDH(x)            CONCAT2_(UART,x)->BDH
+#define UART_BDL(x)            CONCAT2_(UART,x)->BDL
+#define UART_S1(x)             CONCAT2_(UART,x)->S1
+#define UART_D(x)              CONCAT2_(UART,x)->D
+#define INT_UART_RX_TX(x)      CONCAT3_(UART,x,_RX_TX_IRQn)
+#define UART_IRQHandler(x)     CONCAT3_(UART,x,_RX_TX_IRQHandler)
 #define SIM_SCGC4_UART_MASK(x) CONCAT3_(SIM_SCGC4_UART,x,_MASK)
 
 #define UARTx_C1               UART_C1(UART_NUM)
@@ -84,8 +85,8 @@ static uint8_t cdcStatus = SERIAL_STATE_CHANGE;
    #define enableUartIrq()   NVIC_EnableIRQ(UART0_RxTx_IRQn)
    #define disableUartIrq()  NVIC_DisableIRQ(UART0_RxTx_IRQn)
 #else
-   #define enableUartIrq()   NVIC_EnableIRQ(UART1_RxTx_IRQn)
-   #define disableUartIrq()  NVIC_DisableIRQ(UART1_RxTx_IRQn)
+   #define enableUartIrq()   NVIC_EnableIRQ(UART1_RX_TX_IRQn)
+   #define disableUartIrq()  NVIC_DisableIRQ(UART1_RX_TX_IRQn)
 #endif
 #else
    #error "CPU not set"
@@ -294,7 +295,7 @@ void cdc_setLineCoding(const LineCodingStructure *lineCodingStructure) {
    //  230400 & 460800 have a 8.5% error
 
    // Enable clock to PTA (for UART0 pin multiplexing)
-   SIM_SCGC5  |= SIM_SCGC5_PORTA_MASK;
+   SIM->SCGC5  |= SIM_SCGC5_PORTA_MASK;
 
    // Configure shared pins
 //   PORTB_PCR16  = PORT_PCR_MUX(3); // Rx (PFE?)
@@ -304,7 +305,7 @@ void cdc_setLineCoding(const LineCodingStructure *lineCodingStructure) {
    TX_OUT_EN_PCR = PORT_PCR_MUX(TX_ALT_FN)|PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK;
 
    // Enable clock to UART0
-   SIM_SCGC4  |= SIM_SCGC4_UARTx_MASK;
+   SIM->SCGC4  |= SIM_SCGC4_UARTx_MASK;
 
    // Disable the transmitter and receiver while changing settings.
    UARTx_C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
@@ -417,7 +418,7 @@ void cdc_setControlLineState(uint8_t value) {
 //! @note - only partially implemented
 //!       - breaks are sent after currently queued characters
 //!
-void cdc_sendBreak(U16 length) {
+void cdc_sendBreak(uint16_t length) {
    if (length == 0xFFFF) {
      // Send indefinite BREAKs
      breakCount = 0xFF;

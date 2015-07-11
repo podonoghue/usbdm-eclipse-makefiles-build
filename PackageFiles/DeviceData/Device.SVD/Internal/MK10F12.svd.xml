@@ -2,7 +2,7 @@
 <!DOCTYPE device
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MK10F12_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKD5_MKLZ4.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKF12.svd.xml">
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_7CH.svd.xml">
 <!ENTITY AXBS         SYSTEM "peripherals/AXBS_8M_8S.svd.xml">
 <!ENTITY CAN0         SYSTEM "peripherals/CAN0_MKD7_F12.svd.xml">
@@ -99,7 +99,7 @@
 <peripheral derivedFrom="DAC0"><name>DAC1</name><prependToName>DAC1</prependToName><baseAddress>0x400CD000</baseAddress></peripheral>
 &DMA0;
 &DMAMUX0;
-<peripheral derivedFrom="DMAMUX0"><name>DMAMUX1</name><groupName>DMAMUX</groupName><prependToName>DMAMUX1_</prependToName><baseAddress>0x40022000</baseAddress></peripheral>
+<peripheral derivedFrom="DMAMUX0"><name>DMAMUX1</name><prependToName>DMAMUX1_</prependToName><baseAddress>0x40022000</baseAddress></peripheral>
 &DWT;
 &ETB;
 &ETF;

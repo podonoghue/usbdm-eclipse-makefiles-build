@@ -1,0 +1,139 @@
+<!--
+Devices using this vector table: 
+   MKV10Z7
+-->
+      <interrupts>
+         <name>MKV10Z7_VectorTable</name>
+         <description>MKV10Z7 VectorTable</description>
+         <interrupt>
+            <name>DMA0</name>
+            <description>DMA0 Transfer complete</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>DMA1 Transfer complete</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>DMA2 Transfer complete</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>DMA3 Transfer complete</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>DMA3 error</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>FTFA</name>
+            <description>FTFA Command complete or error</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>I2C Interface 0</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface 0</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0</name>
+            <description>UART0 Status and error</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1</name>
+            <description>UART1 Status and error</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analogue to Digital Converter 0</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC1</name>
+            <description>Analogue to Digital Converter 1</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>Timer/PWM Module 0</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>Timer/PWM Module 1</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>Timer/PWM Module 2</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description></description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP1</name>
+            <description></description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG_EWM</name>
+            <description></description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC0</name>
+            <description>Digital to Analogue Converter</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Clock interrupt</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>Low Power Timer</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>Programmable Delay Block 0</description>
+            <value>29</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>Port A</description>
+            <value>30</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTBCDE</name>
+            <description>Port B,C,D &amp; Port E</description>
+            <value>31</value>
+         </interrupt>
+      </interrupts>
+

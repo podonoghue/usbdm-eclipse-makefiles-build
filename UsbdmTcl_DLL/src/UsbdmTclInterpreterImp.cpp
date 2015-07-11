@@ -276,7 +276,7 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
    registerUSBDMCommands(interp);
 
    // Set script to run on startup (if it exists)
-   Tcl_Eval(interp,"set tcl_rcFileName usbdm_rc.tcl");
+   Tcl_Eval(interp, "set tcl_rcFileName usbdm_rc.tcl");
    return TCL_OK;
 }
 

@@ -1,6 +1,8 @@
 #ifndef _USBDefs_H_
 #define _USBDefs_H_
 
+#include <stdint.h>
+
 #pragma pack(push)
 #pragma pack(1)
 //! Device Descriptor 
@@ -101,6 +103,13 @@ enum {EP_OUT=0x00, //!< Endpoint is OUT (host -> node)
 #define US_ADDRESSED            0x03
 #define US_CONFIGURED           0x04
 #define US_SUSPENDED            0x80
+
+/*----------------------------------------------------------------------------
+** USB Request Type (bmRequestType)
+*/
+#define REQ_DIRECTION         (1<<7)
+#define REQ_OUT               (0<<7)
+#define REQ_IN                (1<<7)
 
 /*----------------------------------------------------------------------------
 ** USB Request Type (bmRequestType)

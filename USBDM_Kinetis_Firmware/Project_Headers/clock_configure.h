@@ -28,10 +28,11 @@ extern "C" {
 
 //===================================
 // Validators
-// Common clock settings
-// <validate=net.sourceforge.usbdm.annotationEditor.validators.ClockValidate_MKxxM5>
-// PLL clock
-// <validate=net.sourceforge.usbdm.annotationEditor.validators.PllClockValidate>
+// Common clock settings                                                          Core      Bus       Flash     Flexbus
+// <validate=net.sourceforge.usbdm.annotationEditor.validators.ClockValidate_MKxx(50000000, 50000000, 25000000, 50000000)>
+//
+// PLL clock                                                                    pllOutMin pllOutMax
+// <validate=net.sourceforge.usbdm.annotationEditor.validators.PllClockValidate(48000000, 100000000)>
 // FLL clock
 // <validate=net.sourceforge.usbdm.annotationEditor.validators.FllClockValidate>
 
@@ -93,8 +94,8 @@ extern "C" {
 //   <o> Clock Mode <name=clock_mode>
 //   <i> Basic choice for final clock mode
 //<i> FLL Engaged Internal(FEI)
-//<i> In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC). 
-//<i> The FLL loop will lock the DCO frequency to the FLL factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the 
+//<i> In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC).
+//<i> The FLL loop will lock the DCO frequency to the FLL factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the
 //<i> internal reference frequency.
 //<i>
 //<i> FLL Engaged External(FEE)
@@ -103,7 +104,7 @@ extern "C" {
 //<i> frequency, as specified by the C1[FRDIV] and C2[RANGE].
 //<i>
 //<i> FLL Bypassed Internal(FBI)
-//<i> In FBI mode, the MCGOUT clock is derived either from the slow (32 kHz IRC) or fast (2 MHz IRC) internal reference clock, 
+//<i> In FBI mode, the MCGOUT clock is derived either from the slow (32 kHz IRC) or fast (2 MHz IRC) internal reference clock,
 //<i> as selected by the C2[IRCS] bit. The FLL is operational but its output is not used. This mode is useful to allow the FLL
 //<i> to acquire its target frequency while the MCGOUT clock is driven from the C2[IRCS] selected internal reference clock. The
 //<i> FLL clock (DCOCLK) is controlled by the slow internal reference clock, and the DCO clock frequency locks to a multiplication
@@ -111,27 +112,27 @@ extern "C" {
 //<i>
 //<i> FLL Bypassed External(FBE)
 //<i> In FBE mode, the MCGOUT clock is derived from the external reference clock. The FLL is operational but its output is not
-//<i> used. This mode is useful to allow the FLL to acquire its target frequency while the MCGOUT clock is driven from the 
+//<i> used. This mode is useful to allow the FLL to acquire its target frequency while the MCGOUT clock is driven from the
 //<i> external reference clock. The FLL clock (DCOCLK) is controlled by the external reference clock, and the DCO clock frequency
 //<i> locks to a multiplication factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the divided external reference
-//<i> frequency. 
+//<i> frequency.
 //<i>
 //<i> PLL Engaged External(PEE)
 //<i> In PEE mode, the MCGOUT is derived from the PLL clock, which is controlled by the external reference clock. The PLL clock
-//<i> frequency locks to a multiplication factor, as specified by C6[VDIV0], times the external reference frequency, as specified 
-//<i> by C5[PRDIV0]. 
+//<i> frequency locks to a multiplication factor, as specified by C6[VDIV0], times the external reference frequency, as specified
+//<i> by C5[PRDIV0].
 //<i>
 //<i> PLL Bypassed External(PBE)
-//<i> In PBE mode, MCGOUT is derived from the OSCSEL external reference clock; the PLL is operational, but its output clock is 
-//<i> not used. This mode is useful to allow the PLL to acquire its target frequency while MCGOUT is driven from the external 
+//<i> In PBE mode, MCGOUT is derived from the OSCSEL external reference clock; the PLL is operational, but its output clock is
+//<i> not used. This mode is useful to allow the PLL to acquire its target frequency while MCGOUT is driven from the external
 //<i> reference clock. The PLL clock frequency locks to a multiplication factor, as specified by its [VDIV0], times the external
 //<i> reference frequency, as specified by its [PRDIV0].
 //<i>
 //<i> Bypassed Low Power Internal (BLPI/FBILP)
-//<i> In BLPI mode, MCGOUT is derived from the internal reference clock. The FLL is disabled and PLL is disabled even if the 
-//<i> C5[PLLCLKEN] is set to 1. 
+//<i> In BLPI mode, MCGOUT is derived from the internal reference clock. The FLL is disabled and PLL is disabled even if the
+//<i> C5[PLLCLKEN] is set to 1.
 //<i>
-//<i> Bypassed Low Power External (BLPE/FBELP) 
+//<i> Bypassed Low Power External (BLPE/FBELP)
 //<i> In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled and PLL is disabled even if the
 //<i> C5[PLLCLKEN] is set to 1.
 //     <0=> No setup (Reset default)
@@ -189,7 +190,7 @@ extern "C" {
 //  <o> System Core Clock (Hz) <name=system_core_clock> <constant>
 //  <i> Clocks the ARM Cortex-M4 core and bus masters
 //  <i> Derived from MCGOUT Clock after division by OUTDIV1
-//  <i> Must be less than or equal to 50 MHz. 
+//  <i> Must be less than or equal to 50 MHz.
 #define SYSTEM_CORE_CLOCK 48000000UL
 
 // SYSTEM_BUS_CLOCK =======================================
@@ -197,8 +198,8 @@ extern "C" {
 //  <o> System Bus Clock (Hz) <name=system_bus_clock> <constant>
 //  <i> Clocks the bus slaves and peripheral
 //  <i> Derived from MCGOUT Clock after division by OUTDIV2
-//  <i> Must be less than or equal to 50 MHz and less than or equal to the Core Clock frequency. 
-//  <i> Must be an integer divisor of the Core Clock. 
+//  <i> Must be less than or equal to 50 MHz and less than or equal to the Core Clock frequency.
+//  <i> Must be an integer divisor of the Core Clock.
 #define SYSTEM_BUS_CLOCK 48000000UL
 
 // SYSTEM_FLASH_CLOCK =======================================
@@ -206,8 +207,8 @@ extern "C" {
 //  <o> System Flash Clock (Hz) <name=system_flash_clock> <constant>
 //  <i> Clocks the flash memory
 //  <i> Derived from MCGOUT clock after division by OUTDIV4.
-//  <i> Must be less than or equal to 25 MHz and less than or equal to the Bus Clock frequency. 
-//  <i> Must be an integer divisor of the Core Clock. 
+//  <i> Must be less than or equal to 25 MHz and less than or equal to the Bus Clock frequency.
+//  <i> Must be an integer divisor of the Core Clock.
 #define SYSTEM_FLASH_CLOCK 24000000UL
 
 // <h> System Clock dividers
@@ -247,11 +248,11 @@ extern "C" {
 
 //========================================================================================
 //========================================================================================
-// <h> OSC Control Register (OSC_CR) 
+// <h> OSC Control Register (OSC_CR)
 
 // OSC_CR_ERCLKEN ===============================
 //
-//   <q> External Reference Enable (ERCLKEN) 
+//   <q> External Reference Enable (ERCLKEN)
 //   <i> Enables external reference clock [OSC_CR_ERCLKEN]
 //     <0=> Disabled
 //     <1=> Enabled
@@ -452,7 +453,7 @@ extern "C" {
 //
 //   <q> Action on Loss of Clock (LOCRE0)
 //   <i> Determines if an Interrupt or Reset occurs on loss of OSC0 external reference [MCG_C2_LOCRE0]
-//   <i> This option only has effect if the clock monitor is first enabled CME0 = 1 
+//   <i> This option only has effect if the clock monitor is first enabled CME0 = 1
 //      <0=> Interrupt
 //      <1=> Reset
 #define MCG_C2_LOCRE0_V (0)
@@ -682,7 +683,7 @@ extern "C" {
 #define SIM_SOPT2_PLLFLLSEL_V  1
 #define SIM_SOPT2_PLLFLLSEL_M (SIM_SOPT2_PLLFLLSEL_V<<SIM_SOPT2_PLLFLLSEL_SHIFT)
 
-#if (SIM_SOPT2_PLLFLLSEL_V == 0) 
+#if (SIM_SOPT2_PLLFLLSEL_V == 0)
 #define SYSTEM_PERIPHERAL_CLOCK SYSTEM_MCGFLL_CLOCK
 #else
 #define SYSTEM_PERIPHERAL_CLOCK SYSTEM_MCGPLL_CLOCK
@@ -774,7 +775,7 @@ extern "C" {
 // SIM_CLKDIV2 ================================
 //
 //   <o> USB clock factor (USBFRAC, USBDIV)
-//   <i> This field sets the USBDIV && USBFRAC values for the fractional clock divider when 
+//   <i> This field sets the USBDIV && USBFRAC values for the fractional clock divider when
 //   <i> MCGFLLCLK/MCGPLLCLK is the USB clock source (SOPT2[USBSRC] = 1) [SIM_CLKDIV2_USBDIV]
 //     <1=> Multiply by 2 (USBFRAC=1, USBDIV=0)
 //     <0=> Multiply by 1 (USBFRAC=0, USBDIV=0)

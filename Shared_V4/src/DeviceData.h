@@ -1,5 +1,5 @@
 /*! \file
-    \brief Header file for DeviceData.cpp
+    \brief Header file for DeviceData
 
     \verbatim
     Copyright (C) 2015  Peter O'Donoghue
@@ -73,8 +73,9 @@
 #include "MyException.h"
 #include "USBDM_API.h"
 
-//! RS08/HCS08/CFV1 clock types
-//!
+/**
+ * RS08/HCS08/CFV1 clock types
+ */
 typedef enum {
    CLKINVALID = -1,
    CLKEXT = 0,
@@ -86,8 +87,9 @@ typedef enum {
    MKMCGV1,
 } ClockTypes_t;
 
-//! memory types
-//!
+/**
+ * Memory types
+ */
 typedef enum {
    MemInvalid  = 0,
    MemRAM      = 1,
@@ -105,9 +107,12 @@ typedef enum {
    MemPROM     = 13, // DSC
 } MemType_t;
 
+/**
+ * Address types
+ */
 typedef enum {
-  AddrLinear,
-  AddrPaged,
+  AddrLinear, //<! Linear addresses
+  AddrPaged,  //<! Pages addresses
 } AddressType;
 
 
@@ -128,267 +133,635 @@ typedef enum {
  */
 class DEVICE_DATA_DESCSPEC EnumValuePair;
 
-//! Information on clock types
-//!
+/**
+ * Information on clock types
+ */
 class DEVICE_DATA_DESCSPEC ClockTypes {
 private:
    //! Mappings for Clock types
    static const EnumValuePair clockNames[];
 
 public:
+   /**
+    *  Determines the clock type from a string description
+    */
    static ClockTypes_t        getClockType(const std::string &typeName);
+   /**
+    *  Determines the clock type from a string description
+    */
    static ClockTypes_t        getClockType(const char *typeName);
+   /**
+    *  Determines the clock name from a clock type
+    *
+    * @param clockType Clocktype to map to name
+    *
+    * @return string describing the clock
+    */
    static const std::string   getClockName(ClockTypes_t clockType);
+   /**
+    * Determine clock index from name
+    *
+    * @return index
+    */
    static int                 getClockIndex(const std::string &typeName);
+   /**
+    * Determine clock index from clock type
+    *
+    * @return index
+    */
    static int                 getClockIndex(ClockTypes_t clockType);
+
+private:
+   /**
+    *  Empty constructor
+    */
    ClockTypes() {};
 };
 
 /*
  * ============================================================================================
  */
+
+/**
+ * Class Representing shared information in the database
+ */
 class DEVICE_DATA_DESCSPEC SharedInformationItem {
 
-public:
+protected:
+   /**
+    * Constructor
+    */
    SharedInformationItem() {}
+
+public:
    virtual ~SharedInformationItem() {};
+
+   /**
+    *  Tests equality (same object)
+    */
    int operator==(const SharedInformationItem &other) {
       return this == &other;
    }
 };
 
+/**
+ * Smart pointer for SharedInformationItem
+ */
 typedef std::tr1::shared_ptr<SharedInformationItem> SharedInformationItemPtr;
 
 /*
  * ============================================================================================
  */
+
+/**
+ * Class Representing TCL script in the database
+ */
 class DEVICE_DATA_DESCSPEC TclScript : public SharedInformationItem {
 
 private:
-   std::string script;
+   std::string script;     //!< String representing script
 
 public:
+   /**
+    * Construct script
+    *
+    * @param script String representing script
+    */
    TclScript(std::string script) : script(script) {}
    ~TclScript() {}
+   /**
+    * Return readable representation
+    *
+    * @return Description
+    */
    const std::string toString() const;
+   /**
+    * Get script
+    *
+    * @return string representing the script
+    */
    const std::string getScript() const;
 };
+
+/**
+ * Smart pointer for TclScript
+ */
 typedef std::tr1::shared_ptr<TclScript>         TclScriptPtr;
+/**
+ * Smart pointer for TclScript
+ */
 typedef std::tr1::shared_ptr<const TclScript>   TclScriptConstPtr;
 
 /*
  * ============================================================================================
  */
+
+/**
+ * Class Representing a Target register description (used by GDB) in the database
+ */
 class DEVICE_DATA_DESCSPEC RegisterDescription: public SharedInformationItem {
 
 private:
-   std::string description;
-   unsigned    lastRegisterIndex;
+   std::string description;         //!< Description of registers as required by GDB
+   unsigned    lastRegisterIndex;   //!< Index of last register
 
 public:
+   /**
+    * Construct description
+    *
+    * @param description         Description of registers as required by GDB
+    * @param lastRegisterIndex   Index of last register
+    */
    RegisterDescription(std::string description, unsigned lastRegisterIndex) :
       description(description),
       lastRegisterIndex(lastRegisterIndex) {}
    ~RegisterDescription() {}
+   /**
+    * Returns description in readable form
+    *
+    * @return string
+    */
    const std::string toString() const;
+   /**
+    * Get GDB register description
+    *
+    * @return String description
+    */
    const std::string getDescription() const;
+   /**
+    * Get index of last register in description
+    *
+    * @return index
+    */
    unsigned          getLastRegisterIndex() const;
 };
+/**
+ * Smart pointer for RegisterDescription
+ */
 typedef std::tr1::shared_ptr<RegisterDescription>         RegisterDescriptionPtr;
+/**
+ * Smart pointer for RegisterDescription
+ */
 typedef std::tr1::shared_ptr<const RegisterDescription>   RegisterDescriptionConstPtr;
 
 /*
  * ============================================================================================
  */
+
+/**
+ * Class Representing a Flash program in the database
+ */
 class DEVICE_DATA_DESCSPEC FlashProgram: public SharedInformationItem {
 
 private:
-   std::string flashProgram;
+   std::string flashProgram;  //!< String representing the flash program (SRECs)
 
 public:
-   FlashProgram(std::string script) :
-      flashProgram(script) {}
+   /**
+    * Construct Flash program entry
+    *
+    * @param program Flash program (SRECs)
+    */
+   FlashProgram(std::string program) :
+      flashProgram(program) {}
    ~FlashProgram() {}
+   /**
+    * Returns the flash program as a string
+    *
+    * @return Readable string representing the flash program
+    */
    const std::string toString() const;
+   /**
+    * Returns the flash program as a string
+    *
+    * @return Flash program as string
+    */
    const std::string getFlashProgram() const;
 };
+/**
+ * Smart pointer for FlashProgram
+ */
 typedef std::tr1::shared_ptr<FlashProgram>       FlashProgramPtr;
+/**
+ * Smart pointer for FlashProgram
+ */
 typedef std::tr1::shared_ptr<const FlashProgram> FlashProgramConstPtr;
 
 /*
  * ============================================================================================
  */
+/**
+ * Class Representing a Security description in the database
+ */
 class DEVICE_DATA_DESCSPEC SecurityDescription: public SharedInformationItem {
 
 private:
-   std::string securityDescription;
+   std::string securityDescription;    //!< String describing entry
 
 public:
+   /**
+    * Construct security description
+    *
+    * @param desc Description
+    */
    SecurityDescription(std::string desc) : securityDescription(desc) {}
    ~SecurityDescription() {}
    const std::string toString() const;
+   /**
+    * Get security description
+    *
+    * @return Description
+    */
    const std::string getSecurityDescription() const;
-   void              setSecurityDescription(std::string s);
+   /**
+    * Set security description
+    *
+    * @param desc Description
+    */
+   void setSecurityDescription(std::string desc);
 };
 
+/**
+ * Smart pointer for SecurityDescription
+ */
 typedef std::tr1::shared_ptr<SecurityDescription>       SecurityDescriptionPtr;
+/**
+ * Smart pointer for SecurityDescription
+ */
 typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConstPtr;
 
 /*
  * ============================================================================================
  */
-class DEVICE_DATA_DESCSPEC GnuInfoList: public SharedInformationItem {
-
-public:
-   GnuInfoList() {}
-   ~GnuInfoList() {}
-   const std::string toString() const;
-};
-
-typedef std::tr1::shared_ptr<GnuInfoList>       GnuInfoListPtr;
-typedef std::tr1::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
+///**
+// * Class representing a list of GNU information in the database
+// */
+//class DEVICE_DATA_DESCSPEC GnuInfoList: public SharedInformationItem {
+//
+//public:
+//   GnuInfoList() {}
+//   ~GnuInfoList() {}
+//   const std::string toString() const;
+//};
+//
+///**
+// * Smart pointer for GnuInfoList
+// */
+//typedef std::tr1::shared_ptr<GnuInfoList>       GnuInfoListPtr;
+///**
+// * Smart pointer for GnuInfoList
+// */
+//typedef std::tr1::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
 
 /*
  * ============================================================================================
  */
-class DEVICE_DATA_DESCSPEC GnuInfo {
-
-public:
-   GnuInfo() {}
-    ~GnuInfo() {}
-    const std::string toString() const;
-};
-
-typedef std::tr1::shared_ptr<GnuInfo>       GnuInfoPtr;
-typedef std::tr1::shared_ptr<const GnuInfo> GnuInfoConstPtr;
+///**
+// * Class representing GNU information in the database
+// */
+//class DEVICE_DATA_DESCSPEC GnuInfo {
+//
+//public:
+//   GnuInfo() {}
+//    ~GnuInfo() {}
+//    /*
+//     *
+//     */
+//    const std::string toString() const;
+//};
+//
+///**
+// * Smart pointer for GnuInfo
+// */
+//typedef std::tr1::shared_ptr<GnuInfo>       GnuInfoPtr;
+///**
+// * Smart pointer for GnuInfo
+// */
+//typedef std::tr1::shared_ptr<const GnuInfo> GnuInfoConstPtr;
 /*
  * ============================================================================================
  */
 
+/**
+ * Class representing security information in the database
+ */
 class DEVICE_DATA_DESCSPEC SecurityInfo: public SharedInformationItem {
 
 public:
-   enum SecType {unsecure, secure, custom};
+   //! Type of security value
+   enum SecType {
+      unsecure,   //!< Unsecure value
+      secure,     //!< Secure value
+      custom      //!< Custom value
+   };
 
 private:
-   unsigned    size;
-   SecType     mode;
-   std::string securityInfo;
+   unsigned    size;          //!< Size of entry in bytes
+   SecType     mode;          //!< Type of entry
+   std::string securityInfo;  //!< String representing the values
 
 public:
+   /**
+    * Create empty security information
+    */
    SecurityInfo() : size(0), mode(custom), securityInfo("") {}
+   /**
+    * Create security information
+    *
+    * @param   size           Size of entry in bytes
+    * @param   mode           Type of entry
+    * @param   securityInfo   String representing the values
+    */
    SecurityInfo(int size, SecType mode, std::string securityInfo);
+   /**
+    * Copy constructor
+    *
+    * @param other Other to copy
+    */
    SecurityInfo(const SecurityInfo& other);
    ~SecurityInfo() {}
-
+   /**
+    * Returns the flash program as a string
+    *
+    * @return Readable string representing the flash program
+    */
    const std::string toString() const;
+   /**
+    * Get security values as string
+    *
+    * @return string
+    */
    std::string       getSecurityInfo() const;
+   /**
+    * Set security value
+    *
+    * @param securityInfo Values to set
+    */
    void              setSecurityInfo(const std::string &securityInfo);
+   /**
+    * Get security values as array of uint8_t
+    *
+    * @return constant array
+    */
    const uint8_t    *getData() const;
+   /**
+    * Set security value
+    *
+    * @param size Size of security information
+    * @param data Values to set
+    */
    void              setData(unsigned size, uint8_t *data);
+   /**
+    * Set security mode
+    *
+    * @param mode Mode to set
+    */
    void              setMode(SecType mode);
-   unsigned          getSize() const;
+   /**
+    * Get security mode
+    *
+    * @return mode
+    */
    SecType           getMode() const;
+   /**
+    * Get size of security information
+    *
+    * @return size
+    */
+   unsigned          getSize() const;
 };
+/**
+ * Smart pointer for SecurityInfo
+ */
 typedef std::tr1::shared_ptr<SecurityInfo> SecurityInfoPtr;
+/**
+ * Smart pointer for SecurityInfo
+ */
 typedef std::tr1::shared_ptr<const SecurityInfo> SecurityInfoConstPtr;
 /*
  * ============================================================================================
  */
 
+/**
+ * Class representing security information in the database
+ */
 class DEVICE_DATA_DESCSPEC SecurityEntry: public SharedInformationItem {
 private:
-   SecurityDescriptionPtr  securityDescription;
-   SecurityInfoPtr         unsecureInformation;
-   SecurityInfoPtr         secureInformation;
-   SecurityInfoPtr         customSecureInformation;
+   SecurityDescriptionPtr  securityDescription;       //!< Description of entry
+   SecurityInfoPtr         unsecureInformation;       //!< Unsecure information
+   SecurityInfoPtr         secureInformation;         //!< Secure information
+   SecurityInfoPtr         customSecureInformation;   //!< Custom security information
 
 public:
+   /**
+    * Create security entry
+    *
+    * @param securityDesc  Description of entry
+    * @param unsecureInfo  Unsecure information
+    * @param secureInfo    Secure information
+    */
    SecurityEntry(SecurityDescriptionPtr securityDesc,
                  SecurityInfoPtr        unsecureInfo,
                  SecurityInfoPtr        secureInfo)
     : securityDescription(securityDesc),
       unsecureInformation(unsecureInfo),
       secureInformation(secureInfo) {}
+   /**
+    * Construct emty entry
+    */
    SecurityEntry() {}
     ~SecurityEntry() {}
+
+    /**
+     * Get readable description
+     *
+     * @return string
+     */
     const std::string           toString() const;
+    /**
+     * Get security description
+     *
+     * @return string
+     */
     SecurityDescriptionConstPtr getSecurityDescription()     const;
+    /**
+     * Get unsecure information
+     *
+     * @return string
+     */
     SecurityInfoConstPtr        getUnsecureInformation()     const;
+    /**
+     * Get secure information
+     *
+     * @return string
+     */
     SecurityInfoConstPtr        getSecureInformation()       const;
+    /**
+     * Get custom secure information
+     *
+     * @return string
+     */
     SecurityInfoConstPtr        getCustomSecureInformation() const;
+    /**
+     * Get security description
+     *
+     * @return string
+     */
     SecurityDescriptionPtr      getSecurityDescription();
+    /**
+     * Get unsecure information
+     *
+     * @return string
+     */
     SecurityInfoPtr             getUnsecureInformation();
+    /**
+     * Get custom secure information
+     *
+     * @return string
+     */
     SecurityInfoPtr             getSecureInformation();
+    /**
+     * Get custom secure information
+     *
+     * @return string
+     */
     SecurityInfoPtr             getCustomSecureInformation();
-    void                        setCustomSecureInformation(SecurityInfoPtr ptr);
+    /**
+     * Set custom secure information
+     *
+     * @param securityInfo
+     */
+    void                        setCustomSecureInformation(SecurityInfoPtr securityInfo);
 };
 
+/**
+ * Smart pointer for SecurityEntry
+ */
 typedef std::tr1::shared_ptr<SecurityEntry> SecurityEntryPtr;
+/**
+ * Smart pointer for SecurityEntry
+ */
 typedef std::tr1::shared_ptr<const SecurityEntry> SecurityEntryConstPtr;
 /*
  * ============================================================================================
  */
 
+/**
+ * Class representing Flex Memory information in the database
+ */
 class DEVICE_DATA_DESCSPEC FlexNVMInfo: public SharedInformationItem {
 
 public:
+   /**
+    * EEEPROM size entry
+    */
    class EeepromSizeValue {
    public:
-      std::string    description;   // Description of this value
-      uint8_t        value;         // EEPROM Data Set Size (as used in Program Partition command)
-      unsigned       size;          // EEEPROM size in bytes (FlexRAM used for EEPROM emulation)
+      std::string    description;   //!< Description of this value
+      uint8_t        value;         //!< EEPROM Data Set Size (as used in Program Partition command)
+      unsigned       size;          //!< EEEPROM size in bytes (FlexRAM used for EEPROM emulation)
+      /**
+       * Create EEEPROM size entry
+       *
+       * @param description   Readable description
+       * @param value         Value used in programming
+       * @param size          Size represented by this value
+       */
       EeepromSizeValue(std::string description, uint8_t value, unsigned size);
    };
+   /**
+    * FLEX NVM partition entry
+    */
    class FlexNvmPartitionValue {
    public:
-      std::string    description;  // Description of this value
-      uint8_t        value;        // FlexNVM Partition Code (as used in Program Partition command)
-      unsigned       backingStore; // EEPROM backing store size in bytes
+      std::string    description;  //!< Description of this value
+      uint8_t        value;        //!< FlexNVM Partition Code (as used in Program Partition command)
+      unsigned       backingStore; //!< EEPROM backing store size in bytes
+      /**
+       * Create FLEX NVM partition entry
+       *
+       * @param description   Readable description
+       * @param value         Value used in programming
+       * @param backingStore  Backing store size for this entry
+       */
       FlexNvmPartitionValue(std::string description, uint8_t value, unsigned backingStore);
    };
 
 private:
-    unsigned backingRatio;
-    std::vector<EeepromSizeValue>      eeepromSizeValues;
-    std::vector<FlexNvmPartitionValue> flexNvmPartitionValues;
+    unsigned                           backingRatio;           //!< Ratio of EEEPROM to backing EEPROM
+    std::vector<EeepromSizeValue>      eeepromSizeValues;      //!< Vector of EEEPROM values
+    std::vector<FlexNvmPartitionValue> flexNvmPartitionValues; //!< Vector of FLEX NVM partition values
 
 public:
+    /**
+     * Create FLEX NVM information
+     *
+     * @param backingRatio Ratio between EEEPROM and backing EEPROM
+     */
     FlexNVMInfo(int backingRatio = 16) : backingRatio(backingRatio) {}
     ~FlexNVMInfo() {}
-
+    /**
+     * Provides readable description of object
+     *
+     * @return string
+     */
     const std::string toString() const;
-
-    //! Returns list of permitted EEEPROM values for use in partition command
-    //!
-    //! @return vector of permitted values
-    //!
+    /**
+     * Returns list of permitted EEEPROM values for use in partition command
+     *
+     * @return vector of permitted values
+     */
     const std::vector<FlexNVMInfo::EeepromSizeValue> &getEeepromSizeValues() const;
-
-    //! Returns list of permitted Partition values for use in partition command
-    //!
-    //! @return vector of permitted values
-    //!
+    /**
+     *  Returns list of permitted Partition values for use in partition command
+     *
+     * @return vector of permitted values
+     */
     const std::vector<FlexNVMInfo::FlexNvmPartitionValue> &getFlexNvmPartitionValues() const;
-
+    /**
+     * Add EEPROM size value
+     *
+     * @param eeepromSizeValue value to add
+     */
     void addEeepromSizeValues(const EeepromSizeValue &eeepromSizeValue);
+    /**
+     * Add FLEX NVM partition value
+     *
+     * @param flexNvmPartitionValue value to add
+     */
     void addFlexNvmPartitionValues(const FlexNvmPartitionValue &flexNvmPartitionValue);
-
+    /*
+     * Get backing ratio
+     *
+     * @return Current ratio
+     */
     unsigned getBackingRatio() const;
+    /**
+     * Set backing ratio
+     *
+     * @param backingRatio Ratio to set
+     */
     void setBackingRatio(unsigned  backingRatio);
 };
+/**
+ * Smart pointer for FlexNVMInfo
+ */
 typedef std::tr1::shared_ptr<FlexNVMInfo> FlexNVMInfoPtr;
+/**
+ * Smart pointer for FlexNVMInfo
+ */
 typedef std::tr1::shared_ptr<const FlexNVMInfo> FlexNVMInfoConstPtr;
 
 /*
  * ============================================================================================
  */
 
-// Represents a collection of related memory ranges
-//
-// This may be used to represent a non-contiguous range of memory locations that are related
-// e.g. two ranges of Flash that are controlled by the same Flash controller as occurs in some HCS08s
-//
+/**
+ * Represents a collection of related memory ranges
+ *
+ * This may be used to represent a non-contiguous range of memory locations that are related
+ * e.g. two ranges of Flash that are controlled by the same Flash controller as occurs in some HCS08s
+ */
 class DEVICE_DATA_DESCSPEC MemoryRegion: public SharedInformationItem {
 
 private:
@@ -418,17 +791,28 @@ public:
    FlexNVMInfoConstPtr      flexNVMInfo;
 
 private:
-   //! Find the index of the memory range containing the given address
-   //!
-   //! @param address - address to look for
-   //!
-   //! @return range index or -1 if not found
-   //!
-   //! @note - Uses cache
-   //!
+   /**
+    *  Find the index of the memory range containing the given address
+    *
+    * @param address - address to look for
+    *
+    * @return range index or -1 if not found
+    *
+    * @note - Uses cache
+    */
    int findMemoryRangeIndex(uint32_t address) const;
 
 public:
+   /**
+    * Constructor for memory region
+    *
+    * @param type
+    * @param registerAddress
+    * @param pageAddress
+    * @param securityAddress
+    * @param sectorSize
+    * @param alignment
+    */
    MemoryRegion (MemType_t type = MemInvalid,
                  uint32_t  registerAddress = 0,
                  uint32_t  pageAddress = 0,
@@ -447,81 +831,93 @@ public:
 
    friend std::ostream & operator <<(std::ostream & s, const MemoryRegion mr);
 
-   //! Add a memory range to this memory region
-   //!
-   //! @param startAddress - start address (inclusive)
-   //! @param endAddress   - end address (inclusive)
-   //! @param pageNo       - page number (if used)
-   //!
+   /**
+    *  Add a memory range to this memory region
+    *
+    * @param startAddress - start address (inclusive)
+    * @param endAddress   - end address (inclusive)
+    * @param pageNo       - page number (if used)
+    */
    void addRange (uint32_t startAddress, uint32_t endAddress, uint16_t pageNo=DefaultPageNo);
 
-   //! Check if an address is within this memory region
-   //! @param address - address to check
-   //!
-   //! @return true/false result
-   //!
+   /**
+    *  Check if an address is within this memory region
+    * @param address - address to check
+    *
+    * @return true/false result
+    */
    bool contains(uint32_t address) const;
 
-   //! Find the last contiguous address relative to the address
-   //!
-   //! @param address        Start address to check
-   //! @param lastContinuous The end address of the largest contiguous memory range including address
-   //! @param memorySpace    Memory space to check
-   //!
-   //! @return true  = start address is within memory
-   //!         false = start address is not within memory
-   //!
+   /**
+    *  Find the last contiguous address relative to the address
+    *
+    * @param address        Start address to check
+    * @param lastContinuous The end address of the largest contiguous memory range including address
+    * @param memorySpace    Memory space to check
+    *
+    * @return true  = start address is within memory
+    *         false = start address is not within memory
+    */
    bool findLastContiguous(uint32_t address, uint32_t *lastContinuous, MemorySpace_t memorySpace = MS_None) const;
 
-   //! Get page number for address
-   //! @param address - address to check
-   //!
-   //! @return MemoryRegion::NoPageNo if not paged/within memory
-   //!
+   /**
+    *  Get page number for address
+    *
+    * @param address - address to check
+    *
+    * @return MemoryRegion::NoPageNo if not paged/within memory
+    */
    uint16_t getPageNo(uint32_t address) const;
 
-   //! Obtain string describing the memory type
-   //!
-   //! @param memoryType - Memory type
-   //!
-   //! @return - ptr to static string describing type
-   //!
+   /**
+    *  Obtain string describing the memory type
+    *
+    * @param memoryType - Memory type
+    *
+    * @return - ptr to static string describing type
+    */
    static const char *getMemoryTypeName(MemType_t memoryType);
 
-   //! Get name of memory type
-   //!
+   /**
+    *  Get name of memory type
+    */
    const char *getMemoryTypeName(void) const;
 
-   //! Indicates if a programmable type e.g Flash, eeprom etc.
-   //!
-   //! @param memoryType - Memory type
-   //!
-   //! @return - true/false result
-   //!
+   /**
+    *  Indicates if a programmable type e.g Flash, eeprom etc.
+    *
+    * @param memoryType - Memory type
+    *
+    * @return - true/false result
+    */
    static bool isProgrammableMemory(MemType_t memoryType);
 
-   //! Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
-   //!
-   //! @return - true/false result
-   //!
+   /**
+    *  Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
+    *
+    * @return - true/false result
+    */
    bool isProgrammableMemory() const;
 
-   //! Indicates if a simple writable type e.g RAM etc.
-   //!
-   //! @param memoryType - Memory type
-   //!
-   //! @return - true/false result
-   //!
+   /**
+    *  Indicates if a simple writable type e.g RAM etc.
+    *
+    * @param memoryType - Memory type
+    *
+    * @return - true/false result
+    */
    static bool isWritableMemory(MemType_t memoryType);
 
-   //! Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
-   //!
-   //! @return - true/false result
-   //!
+   /**
+    *  Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
+    *
+    * @return - true/false result
+    */
    bool isWritableMemory() const;
 
-   //! Get security address (Flash location)
-   //!
+   /**
+    *  Get security address (Flash location)
+    */
    uint32_t    getSecurityAddress()   const;
 
    // Only available on Flash & EEPROM
@@ -610,9 +1006,12 @@ public:
    //! Structure to hold FlexNVM information
    class FlexNVMParameters {
    public:
-      uint8_t eeepromSize;
-      uint8_t partionValue;
+      uint8_t eeepromSize;    //!< EEPROM size value
+      uint8_t partionValue;   //!< Partition value
    public:
+      /**
+       * Default Constructor
+       */
       FlexNVMParameters() : eeepromSize(0xFF), partionValue(0xFF) {}
    };
 
@@ -727,33 +1126,63 @@ public:
  * ============================================================================================
  */
 
-//! Database of device information
-//!
+/**
+ * Database of device information
+ */
 class DEVICE_DATA_DESCSPEC DeviceDataBase {
 
 private:
-   std::vector<DeviceDataPtr>                            deviceData;         //! List of devices
-   std::map<const std::string, SharedInformationItemPtr> sharedInformation;  //! Shared information referenced by devices
-   DeviceDataPtr                                         defaultDevice;      //! Generic 'default' device
-   TargetType_t                                          targetType;
+   std::vector<DeviceDataPtr>                            deviceData;         //!< List of devices
+   std::map<const std::string, SharedInformationItemPtr> sharedInformation;  //!< Shared information referenced by devices
+   DeviceDataPtr                                         defaultDevice;      //!< Generic 'default' device
+   TargetType_t                                          targetType;         //!< Target type
 
-   DeviceDataBase (DeviceDataBase &);                                        //! No copying
-   DeviceDataBase &operator=(DeviceDataBase &);                              //! No assignment
+   DeviceDataBase (DeviceDataBase &);                                        //!< No copying
+   DeviceDataBase &operator=(DeviceDataBase &);                              //!< No assignment
    void loadDeviceData();
 
 private:
    SharedInformationItemPtr getSharedData(std::string key) const;
 
 public:
+   /**
+    * Constructs device database for given target type
+    *
+    * @param targetType Type of target device
+    */
    DeviceDataBase(const TargetType_t targetType) : targetType(targetType) {
       loadDeviceData();
    };
    ~DeviceDataBase();
 
+   /**
+    * Obtain iterator for start of database
+    *
+    *  @return iterator positioned at start
+    */
    std::vector<DeviceDataPtr>::const_iterator begin() const;
+   /**
+    * Obtain iterator for end of database
+    *
+    *  @return iterator positioned at end
+    */
    std::vector<DeviceDataPtr>::const_iterator end() const;
 
+   /** Searches the known devices for a device with given name
+    *
+    * @param targetName - Name of device
+    *
+    * @returns entry found or NULL if no suitable device found
+    *
+    * @note - If the device is an alias then it will return the true device
+    */
    DeviceDataConstPtr          findDeviceFromName(const std::string &targetName) const;
+   /** Searches the known devices for a device with given name
+    *
+    * @param targetName - Name of device
+    *
+    * @returns index or -1 if not found
+    */
    int                         findDeviceIndexFromName(const std::string &targetName) const;
    const DeviceData           &operator[](unsigned index) const;
    DeviceDataPtr               getDefaultDevice();

@@ -15,6 +15,7 @@
 <stringAttribute key="net.sourceforge.usbdm.gdb.gdbCommand" value="${usbdm_armLtd_arm_prefix}gdb"/>
 <intAttribute key="net.sourceforge.usbdm.gdb.interfaceFrequency" value="12000000"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.interfaceType" value="T_ARM"/>
+<booleanAttribute key="net.sourceforge.usbdm.gdb.maskInterrupts" value="false"/>
 <intAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="0"/>
 <intAttribute key="net.sourceforge.usbdm.gdb.port" value="1234"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.restartPC" value=""/>

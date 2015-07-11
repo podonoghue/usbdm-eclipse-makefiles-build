@@ -1,19 +1,48 @@
-/*
- * UsbdmTclInterperFactory.h
- *
- *  Created on: 11 Apr 2015
- *      Author: podonoghue
- */
+/*! \file
+    \brief Factory for UsbdmTclInterpreter
+
+    \verbatim
+    Copyright (C) 2015  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Change History
+   +====================================================================
+   |   6 Apr 2015 | Created
+   +====================================================================
+    \endverbatim
+*/
 
 #ifndef SRC_UsbdmTclInterperFACTORY_H_
 #define SRC_UsbdmTclInterperFACTORY_H_
 
 #include "PluginFactory.h"
-#include "UsbdmTclInterper.h"
+#include "UsbdmTclInterpreter.h"
 
-class UsbdmTclInterperFactory: public PluginFactory<UsbdmTclInterper> {
+/**
+ * Factory for creating USBDM TCL interpreters
+ * This uses a plug-in approach to loading the required module
+ */
+class UsbdmTclInterperFactory: public PluginFactory<UsbdmTclInterpreter> {
 
 public:
+   /**
+    * Create a TCL interpreter for running scripts
+    *
+    * @param bdmInterface Interface to use to communicate with target
+    */
    static UsbdmTclInterperPtr createUsbdmTclInterper(BdmInterfacePtr bdmInterface) {
       LOGGING;
       UsbdmTclInterperPtr pp = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
@@ -21,6 +50,11 @@ public:
       return pp;
    }
 
+   /**
+    * Create a TCL interpreter for interactive use
+    *
+    * @param bdmInterface Interface to use to communicate with target
+    */
    static UsbdmTclInterperPtr createInteractiveTclInterper(BdmInterfacePtr bdmInterface) {
       LOGGING;
       UsbdmTclInterperPtr pp = createPlugin(DLL_NAME("usbdm-tcl"), "createInteractivePluginInstance");
@@ -28,9 +62,12 @@ public:
       return pp;
    }
 
-   public:
-      UsbdmTclInterperFactory();
-      virtual ~UsbdmTclInterperFactory();
+private:
+   /**
+    * Not used
+    */
+   UsbdmTclInterperFactory();
+   virtual ~UsbdmTclInterperFactory() {};
    };
 
 #endif /* SRC_UsbdmTclInterperFACTORY_H_ */

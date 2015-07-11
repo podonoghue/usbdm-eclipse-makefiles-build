@@ -1,0 +1,9 @@
+<!--
+Devices using this vector table: 
+   MKM33Z5
+-->
+      <interrupts>
+         <name>Empty_VectorTable</name>
+         <description>CortexM3 Generic VectorTable</description>
+      </interrupts>
+

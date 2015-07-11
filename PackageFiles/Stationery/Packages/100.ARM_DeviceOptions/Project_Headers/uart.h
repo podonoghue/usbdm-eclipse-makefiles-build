@@ -1,10 +1,8 @@
-/*
-* uart.h
- *
- *  Created on: 14/04/2013
- *      Author: pgo
+/**
+ * @file    uart.h
+ * @brief   Basic UART routines
+ * @date    13 June 2015
  */
-
 #include <derivative.h>
 
 #ifndef UART_H_
@@ -14,8 +12,23 @@
 extern "C" {
 #endif
 
+/**
+ * Initialises the UART
+ *
+ * @param baudRate - the baud rate to use e.g. @ref DEFAULT_BAUD_RATE
+ */
 void uart_initialise(int baudRate);
+/**
+ * Transmits a single character over the UART (blocking)
+ *
+ * @param ch - character to send
+ */
 void uart_txChar(int ch);
+/**
+ * Receives a single character over the UART (blocking)
+ *
+ * @return - character received
+ */
 int  uart_rxChar(void);
 
 #ifdef __cplusplus

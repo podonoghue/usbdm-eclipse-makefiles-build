@@ -57,8 +57,8 @@ static void ep5StartTxTransactionIfIdle();
 #endif
 
 #if CPU == MK20D5
-   #define enableUSBIrq()   NVIC_EnableIRQ(USBOTG_IRQn)
-   #define disableUSBIrq()  NVIC_DisableIRQ(USBOTG_IRQn)
+   #define enableUSBIrq()   NVIC_EnableIRQ(USB0_IRQn)
+   #define disableUSBIrq()  NVIC_DisableIRQ(USB0_IRQn)
 #elif CPU == MKL25Z4
    #define enableUSBIrq()   NVIC_ISER = NVIC_ISER_SETENA(1<<((INT_USB0-16)%32));
    #define disableUSBIrq()  NVIC_ICER = NVIC_ICER_CLRENA(1<<((INT_USB0-16)%32));
@@ -68,33 +68,35 @@ static void ep5StartTxTransactionIfIdle();
 
 uint8_t commandBuffer[300];
 
-#ifdef __BIG_ENDIAN__
-__inline
-static uint32_t swap32(uint32_t data) {
-   return ((data<<24)&0xFF000000)|((data<<8)&0x00FF0000)|
-          ((data>>24)&0x000000FF)|((data>>8)&0x0000FF00);
-}
-__inline
-static uint16_t swap16(uint16_t data) {
-       return ((data<<16)&0xFF00)|((data>>8)&0xFF);
-}
-#define leToNative32(x) swap32(x)
-#define leToNative16(x) swap16(x)
-#define nativeToLe32(x) swap32(x)
-#define nativeToLe16(x) swap16(x)
-#elif defined(__LITTLE_ENDIAN__)
-__inline
-static uint32_t noChange32(uint32_t data) {
-   return data;
-}
-__inline
-static uint16_t noChange16(uint16_t data) {
-       return data;
-}
-#define leToNative32(x) noChange32(x)
-#define leToNative16(x) noChange16(x)
-#define nativeToLe32(x) noChange32(x)
-#define nativeToLe16(x) noChange16(x)
+#ifdef __BYTE_ORDER__
+   #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+      __inline
+      static uint32_t swap32(uint32_t data) {
+         return ((data<<24)&0xFF000000)|((data<<8)&0x00FF0000)|
+               ((data>>24)&0x000000FF)|((data>>8)&0x0000FF00);
+      }
+      __inline
+      static uint16_t swap16(uint16_t data) {
+         return ((data<<16)&0xFF00)|((data>>8)&0xFF);
+      }
+      #define leToNative32(x) swap32(x)
+      #define leToNative16(x) swap16(x)
+      #define nativeToLe32(x) swap32(x)
+      #define nativeToLe16(x) swap16(x)
+   #elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+      __inline
+      static uint32_t noChange32(uint32_t data) {
+         return data;
+      }
+      __inline
+      static uint16_t noChange16(uint16_t data) {
+         return data;
+      }
+      #define leToNative32(x) noChange32(x)
+      #define leToNative16(x) noChange16(x)
+      #define nativeToLe32(x) noChange32(x)
+      #define nativeToLe16(x) noChange16(x)
+   #endif
 #else
 #error "Please define __BIG_ENDIAN__ or __LITTLE_ENDIAN__"
 #endif
@@ -563,7 +565,7 @@ typedef struct {
    uint16_t  volatile       dataRemaining;         //!< Count of remaining bytes to Rx/Tx
    uint16_t  volatile       dataCount;             //!< Count of bytes Rx/Tx so far
    uint8_t   volatile       shortInTransaction:1;  //!< Indicates that the IN transaction is undersized
-   void   (*volatile callback)( void );            //!< Callback used on completion of pkt reception
+   void   (*volatile callback)( void );            //!< Callback used on completion of packet reception
 } EPState;
 
 //! Endpoint hardware state
@@ -777,7 +779,7 @@ static void ep0EnsureReadyForSetupTransaction( void ) {
 //
 static void ep0InitialiseBdtTx( void ) {
    BdtEntry *bdt;
-   U16 size;
+   uint16_t size;
 
    size = ep0State.dataRemaining;
    if (size > ENDPT0MAXSIZE) {
@@ -895,7 +897,7 @@ static void ep1StartRxTransaction( uint8_t bufSize, uint8_t *bufPtr ) {
 // Configure the BDT for EP2 In [Tx, device -> host]
 //
 static void ep2InitialiseBdtTx( void ) {
-   U16 size;
+   uint16_t size;
    BdtEntry *bdt;
 
    // Set up to Rx packet
@@ -923,7 +925,7 @@ static void ep2InitialiseBdtTx( void ) {
 }
 
 static const uint8_t busyResponse[] = {BDM_RC_BUSY,1,2,3};
-static uint8_t commandBusyFlag = FALSE;
+static uint8_t commandBusyFlag = false;
 
 //======================================================================
 // Configure EP2 for an IN transaction [Tx, device -> host, DATA0/1]
@@ -944,7 +946,10 @@ static void ep2StartTxTransaction( uint8_t bufSize, const uint8_t *bufPtr ) {
    ep2InitialiseBdtTx(); // Configure the BDT for transfer
 }
 
-//!
+
+//======================================================================
+// (re)Initialises end-points other than EP0
+//
 static void initialiseEndpoints(void) {
 
    PUTS("initialiseEndpoints()\n");
@@ -969,7 +974,7 @@ static void initialiseEndpoints(void) {
 
    initEndpointBuffers();
    epClearStall(0);
-   epClearStall(1);  reInit = TRUE;
+   epClearStall(1);  reInit = true;
    epClearStall(2);
 
 #if (HW_CAPABILITY&CAP_CDC)
@@ -988,21 +993,21 @@ static void initialiseEndpoints(void) {
 #endif
 
    // Clear odd/even bits & Enable Rx/Tx
-   USB0_CTL = USB_CTL_USBENSOFEN_MASK|USB_CTL_ODDRST_MASK;
-   USB0_CTL = USB_CTL_USBENSOFEN_MASK;
+   USB0->CTL = USB_CTL_USBENSOFEN_MASK|USB_CTL_ODDRST_MASK;
+   USB0->CTL = USB_CTL_USBENSOFEN_MASK;
 
    // Enable endpoints
-   USB0_ENDPT0  = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Rx/Tx/SEUP
-   USB0_ENDPT1  = USB_ENDPT_EPRXEN_MASK|                      USB_ENDPT_EPHSHK_MASK; // Rx
-   USB0_ENDPT2  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
+   USB0->ENDPOINT[0].ENDPT  = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Rx/Tx/SEUP
+   USB0->ENDPOINT[1].ENDPT  = USB_ENDPT_EPRXEN_MASK|                      USB_ENDPT_EPHSHK_MASK; // Rx
+   USB0->ENDPOINT[2].ENDPT  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
 #if (HW_CAPABILITY&CAP_CDC)
-   USB0_ENDPT3  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
-   USB0_ENDPT4  = USB_ENDPT_EPRXEN_MASK|                      USB_ENDPT_EPHSHK_MASK; // Rx
-   USB0_ENDPT5  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
+   USB0->ENDPOINT[3].ENDPT  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
+   USB0->ENDPOINT[4].ENDPT  = USB_ENDPT_EPRXEN_MASK|                      USB_ENDPT_EPHSHK_MASK; // Rx
+   USB0->ENDPOINT[5].ENDPT  =                       USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK; // Tx
 #else
-   USB0_ENDPT3 = 0;
-   USB0_ENDPT4 = 0;
-   USB0_ENDPT5 = 0;
+   USB0->ENDPOINT[3].ENDPT = 0;
+   USB0->ENDPOINT[4].ENDPT = 0;
+   USB0->ENDPOINT[5].ENDPT = 0;
 #endif
 }
 
@@ -1010,7 +1015,7 @@ static void initialiseEndpoints(void) {
 //!
 void setBDMBusy(void) {
 //    disableUSBIrq();
-    commandBusyFlag = TRUE;
+    commandBusyFlag = true;
     if (epHardwareState[2].state == EPIdle) {
        ep2StartTxTransaction(sizeof(busyResponse), busyResponse);
     }
@@ -1192,7 +1197,7 @@ void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer) {
          size = maxSize;
       }
       // Get 1st/only pkt of command
-      reInit = FALSE;
+      reInit = false;
       ep1StartRxTransaction( size, buffer );
       while ((epHardwareState[1].state != EPComplete) && !reInit) {
           __WFI();
@@ -1209,7 +1214,7 @@ void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer) {
           // Invalid pkt - try again
           // 0 indicates this is not an initial command pkt
           // but part of a longer command
-          reInit = TRUE;
+          reInit = true;
           continue;
       }
       // Receive rest of data if present (only possibly 2 transactions total)
@@ -1225,7 +1230,7 @@ void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer) {
          // Check if second pkt has correct marker
          if (buffer[saveByteOffset] != 0) {
             // packet corrupt
-            reInit = TRUE;
+            reInit = true;
          }
          // Restore saved byte
          buffer[saveByteOffset] = saveByte;
@@ -1248,7 +1253,7 @@ void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer) {
 //!
 void sendUSBResponse( uint8_t size, const uint8_t *buffer) {
 //   disableUSBIrq();
-   commandBusyFlag = FALSE;
+   commandBusyFlag = false;
 //   enableUSBIrq();
 //   while (epHardwareState[2].state != EPIdle) {
 //   }
@@ -1265,10 +1270,6 @@ void sendUSBResponse( uint8_t size, const uint8_t *buffer) {
 //! @param epNum - endpoint number
 //!
 static void epStall(uint8_t epNum) {
-//   bdts[epNum].rxEven.u.bits = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
-//   bdts[epNum].rxOdd.u.bits  = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
-//   bdts[epNum].txEven.u.bits = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
-//   bdts[epNum].txOdd.u.bits  = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
    if (epNum == 0) {
       // Stall Tx only
       endPointBdts[0].txEven.u.bits = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
@@ -1308,7 +1309,7 @@ static void epClearStall(uint8_t epNum) {
 static void setUSBdefaultState( void ) {
    greenLedOff();
    deviceState.state                = USBdefault;
-   USB0_ADDR                        = 0;
+   USB0->ADDR                        = 0;
    deviceState.configuration        = 0;
    deviceState.interfaceAltSetting  = 0;
 }
@@ -1321,7 +1322,7 @@ static void setUSBaddressedState( uint8_t address ) {
    else {
       greenLedOff();
       deviceState.state                = USBaddressed;
-      USB0_ADDR                        = address;
+      USB0->ADDR                        = address;
       deviceState.configuration        = 0;
       deviceState.interfaceAltSetting  = 0;
    }
@@ -1330,7 +1331,7 @@ static void setUSBaddressedState( uint8_t address ) {
 static void setUSBconfiguredState( uint8_t config ){
    if (config == 0) {
       // unconfigure
-      setUSBaddressedState(USB0_ADDR);
+      setUSBaddressedState(USB0->ADDR);
    }
    else {
       greenLedOn();
@@ -1340,9 +1341,6 @@ static void setUSBconfiguredState( uint8_t config ){
    }
 }
 
-//======================================================================
-// (re)Initialises end-points other than EP0
-//
 //==================================================================
 // Handler for USB Bus reset
 //
@@ -1359,19 +1357,19 @@ static void handleUSBReset(void) {
    resHigh();
 #endif
 
-   USB0_ERRSTAT = 0xFF;                 // Clear USB error flags
+   USB0->ERRSTAT = 0xFF;                 // Clear USB error flags
 
    // Clear all USB interrupt flags
-   USB0_ISTAT = 0xFF;
+   USB0->ISTAT = 0xFF;
 
-   USB0_ERREN  = 0x00;                 // Disable all USB error interrupt sources
+   USB0->ERREN  = 0x00;                 // Disable all USB error interrupt sources
 
    setUSBdefaultState();
 
    initialiseEndpoints();
 
    // Enable various interrupts
-   USB0_INTEN = USB_INTMASKS;
+   USB0->INTEN = USB_INTMASKS;
 }
 
 //======================================================================
@@ -1379,7 +1377,7 @@ static void handleUSBReset(void) {
 //!
 //! @note Assumes clock set up for USB operation (48MHz)
 //!
-void initUSB( void ) {
+void initUSB() {
 #ifdef SUSPEND_RESUME_TESTING
    resInit();
    resLow();
@@ -1398,30 +1396,30 @@ void initUSB( void ) {
    memset((uint8_t*)endPointBdts, 0, sizeof(endPointBdts));
 
    // Enable clock to USB Module
-   SIM_SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+   SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
 
-   USB0_OTGISTAT = 0;
-   USB0_OTGICR   = 0;
-   USB0_OTGCTL   = 0;
-   USB0_INTEN    = 0;
-   USB0_ERRSTAT  = 0;
-   USB0_ERREN    = 0;
-   USB0_CTL      = 0;
-   USB0_ADDR     = 0;
+   USB0->OTGISTAT = 0;
+   USB0->OTGICR   = 0;
+   USB0->OTGCTL   = 0;
+   USB0->INTEN    = 0;
+   USB0->ERRSTAT  = 0;
+   USB0->ERREN    = 0;
+   USB0->CTL      = 0;
+   USB0->ADDR     = 0;
    for (unsigned i=0; i<(sizeof(USB0->ENDPOINT)/sizeof(USB0->ENDPOINT[0])); i++) {
       USB0->ENDPOINT[i].ENDPT = 0;
    }
-   USB0_USBCTRL = 0;
-   USB0_CONTROL = 0;
-   USB0_USBTRC0 = 0;
+   USB0->USBCTRL = 0;
+   USB0->CONTROL = 0;
+   USB0->USBTRC0 = 0;
 
 #ifdef MPU_CESR
    // Disable MPU
    MPU_CESR = 0;
 #endif
    // Enable USB regulator
-   SIM_SOPT1CFG  = SIM_SOPT1CFG_URWE_MASK;
-   SIM_SOPT1    |= SIM_SOPT1_USBREGEN_MASK;
+   SIM->SOPT1CFG  = SIM_SOPT1CFG_URWE_MASK;
+   SIM->SOPT1    |= SIM_SOPT1_USBREGEN_MASK;
 
    //   DEBUG_PIN_DDR = 1;
 
@@ -1432,31 +1430,31 @@ void initUSB( void ) {
 //   while ((USB0_USBTRC0&USB_USBTRC0_USBRESET_MASK) != 0) {
 //   }
 
-   USB0_USBTRC0 = 0x40;
+   USB0->USBTRC0 = 0x40;
 
    // Set initial USB state
    setUSBdefaultState();
 //   ep0State    = initialEPState;
 
    // Point USB at BDT array
-   USB0_BDTPAGE3 = (uint8_t) (((unsigned)endPointBdts)>>24);
-   USB0_BDTPAGE2 = (uint8_t) (((unsigned)endPointBdts)>>16);
-   USB0_BDTPAGE1 = (uint8_t) (((unsigned)endPointBdts)>>8);
+   USB0->BDTPAGE3 = (uint8_t) (((unsigned)endPointBdts)>>24);
+   USB0->BDTPAGE2 = (uint8_t) (((unsigned)endPointBdts)>>16);
+   USB0->BDTPAGE1 = (uint8_t) (((unsigned)endPointBdts)>>8);
 
    for (int i=0; i<100000; i++) {
       __asm__("nop");
    }
    // Clear all pending interrupts except reset.
-   USB0_ISTAT = (USB_ISTAT_USBRST_MASK^0xFF);
+   USB0->ISTAT = (USB_ISTAT_USBRST_MASK^0xFF);
 
    // Enable usb reset interrupt
-   USB0_INTEN = USB_INTEN_USBRSTEN_MASK|USB_INTEN_SLEEPEN_MASK;
+   USB0->INTEN = USB_INTEN_USBRSTEN_MASK|USB_INTEN_SLEEPEN_MASK;
 
    // Weak pull downs
-   USB0_USBCTRL = USB_USBCTRL_PDE_MASK;
+   USB0->USBCTRL = USB_USBCTRL_PDE_MASK;
 
    // Enable Pull-up
-   USB0_CONTROL = USB_CONTROL_DPPULLUPNONOTG_MASK;
+   USB0->CONTROL = USB_CONTROL_DPPULLUPNONOTG_MASK;
 
    // Enable USB interrupts
    enableUSBIrq();
@@ -1603,7 +1601,7 @@ uint8_t *size = dest; // 1st byte is where to place descriptor size
     *dest++ = DT_STRING; // 2nd byte = DT_STRING;
 
     while (*source != '\0') {
-       U16 utf16Char;
+      uint16_t utf16Char;
        *size  += 2;         // Update size
        if (*source < 0x80) {  // 1-byte
           utf16Char = *source++;
@@ -1672,7 +1670,7 @@ static void handleGetDescriptor( void ) {
 #if defined(UNIQUE_ID)
          else if (descriptorIndex == 3) {
             // Generate Semi-unique Serial number
-            uint32_t uid = SIM_UIDH^SIM_UIDMH^SIM_UIDML^SIM_UIDL;
+            uint32_t uid = SIM->UIDH^SIM->UIDMH^SIM->UIDML^SIM->UIDL;
             // Use part of commandBuffer as temporary (leave 60 free at start)
             snprintf((char*)commandBuffer+2*22+10, 22, SERIAL_NO, uid);
             dataPtr = commandBuffer;
@@ -1745,7 +1743,7 @@ static void handleGetConfiguration( void ) {
 //
 static void handleSetConfiguration( void ) {
 
-   reInit = TRUE;  // tell command handler to re-init
+   reInit = true;  // tell command handler to re-init
 
    //dprint("hSC()\r\n");
    if ((ep0SetupBuffer.bmRequestType != (EP_OUT|RT_DEVICE)) || // Out,Standard,Device
@@ -1759,7 +1757,6 @@ static void handleSetConfiguration( void ) {
    initialiseEndpoints();
 
    ep1InitialiseBdtRx();
-//   initialiseEndpoints();
 
    ep0StartTxTransaction( 0, NULL ); // Tx empty Status packet
 }
@@ -1856,13 +1853,14 @@ static void handleSetupToken( void ) {
    epHardwareState[0].state    = EPIdle;
    ep0State.callback           = NULL;
 
-   switch(REQ_TYPE(ep0SetupBuffer.bmRequestType)) {
-   case REQ_TYPE_STANDARD :
-      // Standard device requests
       // Convert SETUP values to big-endian
       ep0SetupBuffer.wLength.word = leToNative16(ep0SetupBuffer.wLength.word);
       ep0SetupBuffer.wValue.word  = leToNative16(ep0SetupBuffer.wValue.word);
       ep0SetupBuffer.wIndex.word  = leToNative16(ep0SetupBuffer.wIndex.word);
+
+   switch(REQ_TYPE(ep0SetupBuffer.bmRequestType)) {
+   case REQ_TYPE_STANDARD :
+      // Standard device requests
       switch (ep0SetupBuffer.bRequest) {
       case GET_STATUS :          handleGetStatus();            break;
       case CLEAR_FEATURE :       handleClearFeature();         break;
@@ -1898,7 +1896,7 @@ static void handleSetupToken( void ) {
       // Handle special commands here
       switch (ep0SetupBuffer.bRequest) {
       case ICP_GET_VER : {
-         reInit = TRUE;  // tell command handler to re-init
+         reInit = true;  // tell command handler to re-init
          uint8_t versionResponse[5];
          versionResponse[0] = BDM_RC_OK;
          versionResponse[1] = VERSION_SW;      // BDM SW version
@@ -1942,7 +1940,7 @@ static void handleSetupToken( void ) {
    ep0EnsureReadyForSetupTransaction();   // In case another SETUP pkt
 
    // Allow transactions post SETUP pkt (clear TXSUSPENDTOKENBUSY)
-   USB0_CTL = USB_CTL_USBENSOFEN_MASK;
+   USB0->CTL = USB_CTL_USBENSOFEN_MASK;
 }
 
 //==================================================================
@@ -2113,7 +2111,7 @@ static void ep2HandleInToken( void ) {
 // Handles ep5 [In]
 //
 static void handleTokenComplete(void) {
-   uint8_t  usbStat       = USB0_STAT;
+   uint8_t  usbStat       = USB0->STAT;
    uint8_t  endPoint      = ((uint8_t)usbStat)>>4;        // Endpoint number
    uint8_t  isTx          = usbStat&USB_STAT_TX_MASK;     // Direction of T/F 0=>OUT, (!=0)=>IN
    uint8_t  isOdd         = usbStat&USB_STAT_ODD_MASK;    // Odd/even buffer
@@ -2193,8 +2191,8 @@ static void handleSOFToken( void ) {
    // On                      - no USB activity, connected
    // Off, flash briefly on   - USB activity, not connected
    // On,  flash briefly off  - USB activity, connected
-   if (USB0_FRMNUML==0) { // Every ~256 ms
-      switch (USB0_FRMNUMH&0x03) {
+   if (USB0->FRMNUML==0) { // Every ~256 ms
+      switch (USB0->FRMNUMH&0x03) {
          case 0:
             if (deviceState.state == USBconfigured) {
                 // Green LED on when USB connection established
@@ -2221,13 +2219,6 @@ static void handleSOFToken( void ) {
 #if (HW_CAPABILITY&CAP_CDC)
    // Check if need to restart EP5 (CDC IN)
    ep5StartTxTransactionIfIdle();
-//   if (serialDelayCount++>SERIAL_THRESHOLD) {
-//     ep5StartInTransactionIfIdle();
-//   }
-#endif
-#if (HW_CAPABILITY&CAP_CDC) && 0
-   // Check for need to restart idle EP3
-   ep3StartInTransactionIfIdle();
 #endif
 }
 //#pragma MESSAGE DEFAULT C4003
@@ -2274,13 +2265,13 @@ static void handleUSBSuspend( void ) {
    VDD_OFF();
 
    // Clear the sleep and resume interrupt flags
-   USB0_ISTAT    = USB_ISTAT_SLEEP_MASK;
+   USB0->ISTAT    = USB_ISTAT_SLEEP_MASK;
 
    // Asynchronous Resume Interrupt Enable (USB->CPU)
-   USB0_USBTRC0  = USB_USBTRC0_USBRESMEN_MASK;
+   USB0->USBTRC0  = USB_USBTRC0_USBRESMEN_MASK;
 
    // Enable resume detection or reset interrupts from the USB
-   USB0_INTEN   |= (USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK);
+   USB0->INTEN   |= (USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK);
    deviceState.state = USBsuspended;
    greenLedOff();
 
@@ -2291,7 +2282,7 @@ static void handleUSBSuspend( void ) {
 #endif
    do {
       __WFI();  // Processor stop for low power
-   } while ((USB0_ISTAT&(USB_ISTAT_RESUME_MASK|USB_INTMASKS)) == 0);
+   } while ((USB0->ISTAT&(USB_ISTAT_RESUME_MASK|USB_INTMASKS)) == 0);
 #ifdef SUSPEND_RESUME_TESTING
    resHigh();
 #endif
@@ -2299,26 +2290,26 @@ static void handleUSBSuspend( void ) {
 #else
    // A re-check loop is used here to ensure USB bus noise doesn't wake-up the CPU
    do {
-      USB0_ISTAT = USB_ISTAT_RESUME_MASK;       // Clear resume interrupt flag
+      USB0->ISTAT = USB_ISTAT_RESUME_MASK;       // Clear resume interrupt flag
 
       __WFI();  // Processor stop for low power
 
       // The CPU has woken up!
 
-      if ((USB0_ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0) {
+      if ((USB0->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0) {
          // Ignore if not resume or reset from USB module
          continue;
       }
-      USB0_ISTAT = USB_ISTAT_RESUME_MASK;  // Clear resume interrupt flag
+      USB0->ISTAT = USB_ISTAT_RESUME_MASK;  // Clear resume interrupt flag
 
       // Wait for a second resume (or existing reset) ~5 ms
       for(int delay=0; delay<24000; delay++) {
          // We should have another resume interrupt by end of loop
-         if ((USB0_ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) != 0) {
+         if ((USB0->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) != 0) {
             break;
          }
       }
-   } while ((USB0_ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0);
+   } while ((USB0->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0);
 #endif
    return;
 }
@@ -2344,16 +2335,16 @@ static void handleUSBResume( void ) {
 #endif
 
    // Mask further resume interrupts
-   USB0_INTEN &= ~USB_INTEN_RESUMEEN_MASK;
+   USB0->INTEN &= ~USB_INTEN_RESUMEEN_MASK;
 
    // Clear the sleep and resume interrupt flags
-   USB0_ISTAT = USB_ISTAT_SLEEP_MASK|USB_ISTAT_RESUME_MASK;
+   USB0->ISTAT = USB_ISTAT_SLEEP_MASK|USB_ISTAT_RESUME_MASK;
 
    deviceState.state = USBconfigured;
 
    // Set up to receive setup packet
    ep0ConfigureSetupTransaction();       // re-initialise EP0 OUT // v4.7
-   USB0_CTL = USB_CTL_USBENSOFEN_MASK;   // Enable the transmit or receive of packets
+   USB0->CTL = USB_CTL_USBENSOFEN_MASK;   // Enable the transmit or receive of packets
    // power up BDM interface?
 }
 
@@ -2363,37 +2354,37 @@ static void handleUSBResume( void ) {
 // Determines source and dispatches to appropriate routine.
 //
 //! Handler for USB interrupts
-void USBOTG_IRQHandler( void ) {
-uint8_t interruptFlags = USB0_ISTAT;
+void USB0_IRQHandler( void ) {
+uint8_t interruptFlags = USB0->ISTAT;
 
    if ((interruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) { // Token complete interrupt?
       handleTokenComplete();
-      USB0_ISTAT = USB_ISTAT_TOKDNE_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_TOKDNE_MASK; // Clear source
    }
 //   else if ((USBCTL0_LPRESF) && (deviceState.state==USBsuspended)) {
 //      USBCTL0_USBRESMEN = 0;
 //   }
    else if ((interruptFlags&USB_ISTAT_RESUME_MASK) != 0) { // Resume signaled on Bus?
       handleUSBResume();
-      USB0_ISTAT = USB_ISTAT_RESUME_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_RESUME_MASK; // Clear source
    }
    else if ((interruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
       handleUSBReset();
-      USB0_ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
    }
    else if ((interruptFlags&USB_ISTAT_STALL_MASK) != 0) { // Stall sent?
       ep0HandleStallComplete();
-      USB0_ISTAT = USB_ISTAT_STALL_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_STALL_MASK; // Clear source
    }
    else if ((interruptFlags&USB_ISTAT_SOFTOK_MASK) != 0) { // SOF Token?
       handleSOFToken();
-      USB0_ISTAT = USB_ISTAT_SOFTOK_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_SOFTOK_MASK; // Clear source
    }
    else if ((interruptFlags&USB_ISTAT_SLEEP_MASK) != 0) { // Bus Idle 3ms? => sleep
       handleUSBSuspend();
-      USB0_ISTAT = USB_ISTAT_SLEEP_MASK; // Clear source
+      USB0->ISTAT = USB_ISTAT_SLEEP_MASK; // Clear source
    }
    else  { // unexpected int
-      USB0_ISTAT = interruptFlags; // Clear & ignore
+      USB0->ISTAT = interruptFlags; // Clear & ignore
    }
 }

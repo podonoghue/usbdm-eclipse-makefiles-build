@@ -87,7 +87,7 @@ osThreadDef(blueThread,    osPriorityNormal, 1, 0);
 osThreadDef(threadClock,   osPriorityNormal, 1, 0);
 
 /*----------------------------------------------------------------------------
- *      Main: Initialize and start RTX Kernel
+ *      Main: Initialise and start RTX Kernel
  *---------------------------------------------------------------------------*/
 int main (void) {
 

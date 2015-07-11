@@ -149,8 +149,8 @@ extern void dputs(char *msg);
 //
 #define VERSION_MAJOR 4
 #define VERSION_MINOR 11
-#define VERSION_MICRO 1
-#define VERSION_STR "4.11.1.50"
+#define VERSION_MICRO 2
+#define VERSION_STR "4.11.2.10"
 #define VERSION_SW  ((VERSION_MAJOR<<4)+VERSION_MINOR)
 
 //! Selected hardware platform

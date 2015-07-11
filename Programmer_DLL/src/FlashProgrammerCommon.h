@@ -9,7 +9,7 @@
 #define SRC_FLASHPROGRAMMERCOMMON_H_
 
 #include "FlashProgrammer.h"
-#include "UsbdmTclInterper.h"
+#include "UsbdmTclInterpreter.h"
 #include "BdmInterface.h"
 #include "ProgressTimer.h"
 

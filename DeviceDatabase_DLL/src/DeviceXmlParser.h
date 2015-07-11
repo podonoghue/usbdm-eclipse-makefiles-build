@@ -117,8 +117,8 @@ private:
    FlexNVMInfoPtr                     parseFlexNVMInfo(xercesc::DOMElement *flexNVMInfoElement);
    FlexNVMInfo::EeepromSizeValue      parseEeepromEntry(xercesc::DOMElement *eeepromElement);
    FlexNVMInfo::FlexNvmPartitionValue parsePartitionEntry(xercesc::DOMElement *partitionElement);
-   GnuInfoPtr                         parseGnuInfo(xercesc::DOMElement *currentProperty);
-   GnuInfoListPtr                     parseGnuInfoList(xercesc::DOMElement *currentProperty);
+//   GnuInfoPtr                         parseGnuInfo(xercesc::DOMElement *currentProperty);
+//   GnuInfoListPtr                     parseGnuInfoList(xercesc::DOMElement *currentProperty);
 
    void          loadFile(const std::string &xmlFile);
 

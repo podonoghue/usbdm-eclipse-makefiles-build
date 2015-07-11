@@ -1,20 +1,47 @@
-/*
- * FlashProgrammerFactory.h
- *
- *  Created on: 24 Mar 2015
- *      Author: podonoghue
- */
+/** \file
+    \brief Factory for FlashProgrammer
 
+    \verbatim
+    Copyright (C) 2015  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Change History
+   +====================================================================
+   |    May 2015 | Created
+   +====================================================================
+    \endverbatim
+*/
 #ifndef SRC_FLASHPROGRAMMERFACTORY_H_
 #define SRC_FLASHPROGRAMMERFACTORY_H_
 
 #include "PluginFactory.h"
 #include "FlashProgrammer.h"
 
+/**
+ * Factory class for programmers
+ */
 class FlashProgrammerFactory : PluginFactory<FlashProgrammer> {
 public:
    // ToDo : This class assumes that the programmers are loaded sequentially as it confuses different programmer DLLs
 
+   /**
+    * Creates a flash programmer for the given interface
+    *
+    * @param bdmInterface Interface the programmer is to use
+    */
    static FlashProgrammerPtr createFlashProgrammer(BdmInterfacePtr bdmInterface) {
       LOGGING_Q;
       FlashProgrammerPtr fp;

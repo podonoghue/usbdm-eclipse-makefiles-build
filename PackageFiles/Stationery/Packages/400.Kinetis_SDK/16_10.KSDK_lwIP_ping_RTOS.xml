@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <!-- Freescale group-ksdk-demoes -->
+   <!-- Freescale group-ksdk-demos -->
    <projectActionList id="KSDK-ping-rtos" root="">
       <applyWhen>
          <and>
@@ -10,7 +10,19 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.KSDK-ping-rtos" 
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+               <or>
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
+               </or>
+            </and>
+         </applyWhen>
+         <variable id="projectOptionValue.KSDK-ping-rtos" 
             name="Ping Demo on lwIP TCP/IP Stack (RTOS)" 
             description=
 "This is a Ping Demo on the lwIP TCP/IP stack which uses the ICMP protocol. The application\n
@@ -18,148 +30,135 @@ on board periodically sends the ICMP echo request to a PC and processes the PC r
 Type the &quot;ping $board_address&quot; in the PC command window to send an ICMP echo request to the board.\n
 The lwIP stack sends the ICMP echo reply back to the PC."
             radioGroup="group-ksdk-demo" >
-         <enableWhen>
-            <and>
-               <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
-               <or>
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-mqx" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-free-rtos" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosii" />
-                  <requirement idRef="projectOptionValue.Kinetis-SDK-os-ucosiii" />
-               </or>
-            </and>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <applyWhen>
-            <and>
-               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </variable>
+         <projectActionList>
+            <applyWhen>
                <variableRef idRef="projectOptionValue.KSDK-ping-rtos" />
-            </and>
-         </applyWhen>
-         <deleteResource target="Sources/main.c" /> 
-         
-         <createFolder type="" target="lwip" />
-         <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_pit_irq.c" target="lwip/port/fsl_hwtimer_pit_irq.c"   type="link"  sourcePathType="absolute" />
-                                                                                                                                    
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/ethernetif.c"           target="lwip/port/ethernetif.c"            type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/lwip_fsl_irq.c"         target="lwip/port/lwip_fsl_irq.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/sys_arch.c"             target="lwip/port/sys_arch.c"              type="link"  sourcePathType="absolute" />
-                                                                                                                                    
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/api_lib.c"           target="lwip/src/api/api_lib.c"            type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/api_msg.c"           target="lwip/src/api/api_msg.c"            type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/err.c"               target="lwip/src/api/err.c"                type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netbuf.c"            target="lwip/src/api/netbuf.c"             type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netdb.c"             target="lwip/src/api/netdb.c"              type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netifapi.c"          target="lwip/src/api/netifapi.c"           type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/sockets.c"           target="lwip/src/api/sockets.c"            type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/tcpip.c"             target="lwip/src/api/tcpip.c"              type="link"  sourcePathType="absolute" />
-         
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/def.c"              target="lwip/src/core/def.c"               type="link"  sourcePathType="absolute" />    
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/dhcp.c"             target="lwip/src/core/dhcp.c"              type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/dns.c"              target="lwip/src/core/dns.c"               type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/init.c"             target="lwip/src/core/init.c"              type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/lwip_timers.c"      target="lwip/src/core/lwip_timers.c"       type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/mem.c"              target="lwip/src/core/mem.c"               type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/memp.c"             target="lwip/src/core/memp.c"              type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/netif.c"            target="lwip/src/core/netif.c"             type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/pbuf.c"             target="lwip/src/core/pbuf.c"              type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/raw.c"              target="lwip/src/core/raw.c"               type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/stats.c"            target="lwip/src/core/stats.c"             type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/sys.c"              target="lwip/src/core/sys.c"               type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp_in.c"           target="lwip/src/core/tcp_in.c"            type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp_out.c"          target="lwip/src/core/tcp_out.c"           type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp.c"              target="lwip/src/core/tcp.c"               type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/udp.c"              target="lwip/src/core/udp.c"               type="link"  sourcePathType="absolute" />         
-         
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/autoip.c"      target="lwip/src/core/ipv4/autoip.c"       type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/icmp.c"        target="lwip/src/core/ipv4/icmp.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/igmp.c"        target="lwip/src/core/ipv4/igmp.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/inet_chksum.c" target="lwip/src/core/ipv4/inet_chksum.c"  type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/inet.c"        target="lwip/src/core/ipv4/inet.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip_addr.c"     target="lwip/src/core/ipv4/ip_addr.c"      type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip_frag.c"     target="lwip/src/core/ipv4/ip_frag.c"      type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip.c"          target="lwip/src/core/ipv4/ip.c"           type="link"  sourcePathType="absolute" />
-                                                                                                                              
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/asn1_dec.c"    target="lwip/src/core/snmp/asn1_dec.c"     type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/asn1_enc.c"    target="lwip/src/core/snmp/asn1_enc.c"     type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/mib_structs.c" target="lwip/src/core/snmp/mib_structs.c"  type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/mib2.c"        target="lwip/src/core/snmp/mib2.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/msg_in.c"      target="lwip/src/core/snmp/msg_in.c"       type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/msg_out.c"     target="lwip/src/core/snmp/msg_out.c"      type="link"  sourcePathType="absolute" />
-         
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/etharp.c"          target="lwip/src/netif/etharp.c"           type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/slipif.c"          target="lwip/src/netif/slipif.c"           type="link"  sourcePathType="absolute" />
-                                                                                                                                    
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/auth.c"        target="lwip/src/netif/ppp/auth.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/chap.c"        target="lwip/src/netif/ppp/chap.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/chpms.c"       target="lwip/src/netif/ppp/chpms.c"        type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/fsm.c"         target="lwip/src/netif/ppp/fsm.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ipcp.c"        target="lwip/src/netif/ppp/ipcp.c"         type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/lcp.c"         target="lwip/src/netif/ppp/lcp.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/magic.c"       target="lwip/src/netif/ppp/magic.c"        type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/md5.c"         target="lwip/src/netif/ppp/md5.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/pap.c"         target="lwip/src/netif/ppp/pap.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ppp_oe.c"      target="lwip/src/netif/ppp/ppp_oe.c"       type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ppp.c"         target="lwip/src/netif/ppp/ppp.c"          type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/randm.c"       target="lwip/src/netif/ppp/randm.c"        type="link"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/vj.c"          target="lwip/src/netif/ppp/vj.c"           type="link"  sourcePathType="absolute" />
-
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/lwip/lwip_ping_demo/ping_rtos/hardware_init.c" target="board/hardware_init.c"     sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/lwip/lwip_ping_demo/ping_rtos/main.c"          target="Sources/main.c"            sourcePathType="absolute" />
-         
-         <copy source="usbdm_kds_path/middleware/tcpip/rtcs/source/port/phyksz8081/fsl_phy_driver.c"  target="Sources/fsl_phy_driver.c"  sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/middleware/tcpip/rtcs/source/port/phyksz8081/fsl_phy_driver.h"  target="Sources/fsl_phy_driver.h"  sourcePathType="absolute" />
-
-         <!-- C Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port/arch&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/api&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/ipv4&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/snmp&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/netif&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/posix&quot;</value>
-            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
-         </projectOption>
-         <!-- C++ Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port/arch&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/api&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/ipv4&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/snmp&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/lwip&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/netif&quot;</value>
-            <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/posix&quot;</value>
-            <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
-         </projectOption>
-         <!-- C Link options -->
+            </applyWhen>
+            <deleteResource target="Sources/main.c" />
+            
+            <createFolder type="" target="lwip" />
+            <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_pit_irq.c" target="lwip/port/fsl_hwtimer_pit_irq.c"   type="link"  sourcePathType="absolute" />
+                                                                                                                                       
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/ethernetif.c"           target="lwip/port/ethernetif.c"            type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/lwip_fsl_irq.c"         target="lwip/port/lwip_fsl_irq.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/sys_arch.c"             target="lwip/port/sys_arch.c"              type="link"  sourcePathType="absolute" />
+                                                                                                                                       
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/api_lib.c"           target="lwip/src/api/api_lib.c"            type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/api_msg.c"           target="lwip/src/api/api_msg.c"            type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/err.c"               target="lwip/src/api/err.c"                type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netbuf.c"            target="lwip/src/api/netbuf.c"             type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netdb.c"             target="lwip/src/api/netdb.c"              type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/netifapi.c"          target="lwip/src/api/netifapi.c"           type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/sockets.c"           target="lwip/src/api/sockets.c"            type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/api/tcpip.c"             target="lwip/src/api/tcpip.c"              type="link"  sourcePathType="absolute" />
+            
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/def.c"              target="lwip/src/core/def.c"               type="link"  sourcePathType="absolute" />    
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/dhcp.c"             target="lwip/src/core/dhcp.c"              type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/dns.c"              target="lwip/src/core/dns.c"               type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/init.c"             target="lwip/src/core/init.c"              type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/lwip_timers.c"      target="lwip/src/core/lwip_timers.c"       type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/mem.c"              target="lwip/src/core/mem.c"               type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/memp.c"             target="lwip/src/core/memp.c"              type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/netif.c"            target="lwip/src/core/netif.c"             type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/pbuf.c"             target="lwip/src/core/pbuf.c"              type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/raw.c"              target="lwip/src/core/raw.c"               type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/stats.c"            target="lwip/src/core/stats.c"             type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/sys.c"              target="lwip/src/core/sys.c"               type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp_in.c"           target="lwip/src/core/tcp_in.c"            type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp_out.c"          target="lwip/src/core/tcp_out.c"           type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/tcp.c"              target="lwip/src/core/tcp.c"               type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/udp.c"              target="lwip/src/core/udp.c"               type="link"  sourcePathType="absolute" />         
+            
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/autoip.c"      target="lwip/src/core/ipv4/autoip.c"       type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/icmp.c"        target="lwip/src/core/ipv4/icmp.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/igmp.c"        target="lwip/src/core/ipv4/igmp.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/inet_chksum.c" target="lwip/src/core/ipv4/inet_chksum.c"  type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/inet.c"        target="lwip/src/core/ipv4/inet.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip_addr.c"     target="lwip/src/core/ipv4/ip_addr.c"      type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip_frag.c"     target="lwip/src/core/ipv4/ip_frag.c"      type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/ipv4/ip.c"          target="lwip/src/core/ipv4/ip.c"           type="link"  sourcePathType="absolute" />
+                                                                                                                                 
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/asn1_dec.c"    target="lwip/src/core/snmp/asn1_dec.c"     type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/asn1_enc.c"    target="lwip/src/core/snmp/asn1_enc.c"     type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/mib_structs.c" target="lwip/src/core/snmp/mib_structs.c"  type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/mib2.c"        target="lwip/src/core/snmp/mib2.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/msg_in.c"      target="lwip/src/core/snmp/msg_in.c"       type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/core/snmp/msg_out.c"     target="lwip/src/core/snmp/msg_out.c"      type="link"  sourcePathType="absolute" />
+            
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/etharp.c"          target="lwip/src/netif/etharp.c"           type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/slipif.c"          target="lwip/src/netif/slipif.c"           type="link"  sourcePathType="absolute" />
+                                                                                                                                       
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/auth.c"        target="lwip/src/netif/ppp/auth.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/chap.c"        target="lwip/src/netif/ppp/chap.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/chpms.c"       target="lwip/src/netif/ppp/chpms.c"        type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/fsm.c"         target="lwip/src/netif/ppp/fsm.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ipcp.c"        target="lwip/src/netif/ppp/ipcp.c"         type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/lcp.c"         target="lwip/src/netif/ppp/lcp.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/magic.c"       target="lwip/src/netif/ppp/magic.c"        type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/md5.c"         target="lwip/src/netif/ppp/md5.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/pap.c"         target="lwip/src/netif/ppp/pap.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ppp_oe.c"      target="lwip/src/netif/ppp/ppp_oe.c"       type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/ppp.c"         target="lwip/src/netif/ppp/ppp.c"          type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/randm.c"       target="lwip/src/netif/ppp/randm.c"        type="link"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/lwip/src/netif/ppp/vj.c"          target="lwip/src/netif/ppp/vj.c"           type="link"  sourcePathType="absolute" />
+   
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/lwip/lwip_ping_demo/ping_bm/hardware_init.c" target="board/hardware_init.c"     sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/examples/$(demo.KDS.boardName)/demo_apps/lwip/lwip_ping_demo/ping_bm/main.c"          target="Sources/main.c"            sourcePathType="absolute" />
+            
+            <copy source="usbdm_kds_path/middleware/tcpip/rtcs/source/port/phyksz8081/fsl_phy_driver.c"  target="Sources/fsl_phy_driver.c"  sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/middleware/tcpip/rtcs/source/port/phyksz8081/fsl_phy_driver.h"  target="Sources/fsl_phy_driver.h"  sourcePathType="absolute" />
+   
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port/arch&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/api&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/ipv4&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/snmp&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/netif&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/posix&quot;</value>
+               <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/port/arch&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/api&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/ipv4&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/core/snmp&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv4/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/ipv6/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/lwip&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/netif&quot;</value>
+               <value>&quot;${usbdm_kds_path}/middleware/tcpip/lwip/src/include/posix&quot;</value>
+               <value>&quot;${workspace_loc:/${ProjName}/Sources}&quot;</value>
+            </projectOption>
+            <!-- C Link options -->
          <projectOption id="gnu.c.link.option.other" replace="true">
-            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
-         </projectOption>
-         <!-- C++ Link options -->
-         <projectOption id="gnu.cpp.link.option.other" replace="true">
-            <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
-         </projectOption>
-         <excludeSourceFolder target="lwip/core/ipv6" />
+               <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+            </projectOption>
+            <!-- C++ Link options -->
+            <projectOption id="gnu.cpp.link.option.other" replace="true">
+               <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
+            </projectOption>
+            <excludeSourceFolder target="lwip/core/ipv6" />
+         </projectActionList>
       </projectActionList>
    </projectActionList>
 </root>

@@ -2,14 +2,16 @@
  * newlib_stubs.c
  *
  *  Created on: 2 Nov 2010
- *      Author: nanoage.co.uk
+ *      Author:   nanoage.co.uk
+ *      Modified: pgo
+ *
+ *  All routines have been marked "weak" in case already defined in library or elsewhere
  */
 #include <errno.h>
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/unistd.h>
-#include "derivative.h"
 
 #undef errno
 extern int errno;
@@ -44,6 +46,7 @@ char **environ = __env;
  *
  *  Close file
  */
+__attribute__((__weak__))
 int _close(int file __attribute__((unused))) {
    return -1;
 }
@@ -53,6 +56,7 @@ int _close(int file __attribute__((unused))) {
  *
  *  Transfer control to a new process. Minimal implementation (for a system without processes):
  */
+__attribute__((__weak__))
 int _execve(char *name __attribute__((unused)), char **argv __attribute__((unused)), char **env __attribute__((unused))) {
    errno = ENOMEM;
    return -1;
@@ -63,7 +67,7 @@ int _execve(char *name __attribute__((unused)), char **argv __attribute__((unuse
  *
  *  Create a new process. Minimal implementation (for a system without processes):
  */
-
+__attribute__((__weak__))
 int _fork() {
    errno = EAGAIN;
    return -1;
@@ -76,6 +80,7 @@ int _fork() {
  *   all files are regarded as character special devices.
  *   The `sys/stat.h' header file required is distributed in the `include' subdirectory for this C library.
  */
+__attribute__((__weak__))
 int _fstat(int file __attribute__((unused)), struct stat *st __attribute__((unused))) {
    st->st_mode = S_IFCHR;
    return 0;
@@ -86,6 +91,7 @@ int _fstat(int file __attribute__((unused)), struct stat *st __attribute__((unus
  *
  *  Process-ID; this is sometimes used to generate strings unlikely to conflict with other processes. Minimal implementation, for a system without processes:
  */
+__attribute__((__weak__))
 int _getpid() {
    return 1;
 }
@@ -95,6 +101,7 @@ int _getpid() {
  *
  *  Query whether output stream is a terminal. For consistency with the other minimal implementations,
  */
+__attribute__((weak))  // KSDK defines this elsewhere
 int _isatty(int file) {
    switch (file){
    case STDOUT_FILENO:
@@ -113,6 +120,7 @@ int _isatty(int file) {
  *
  *  Send a signal. Minimal implementation:
  */
+__attribute__((__weak__))
 int _kill(int pid __attribute__((unused)), int sig __attribute__((unused))) {
    errno = EINVAL;
    return (-1);
@@ -123,7 +131,7 @@ int _kill(int pid __attribute__((unused)), int sig __attribute__((unused))) {
  *
  *   Establish a new name for an existing file. Minimal implementation:
  */
-
+__attribute__((__weak__))
 int _link(char *old __attribute__((unused)), char *new __attribute__((unused))) {
    errno = EMLINK;
    return -1;
@@ -133,6 +141,7 @@ int _link(char *old __attribute__((unused)), char *new __attribute__((unused))) 
  *
  *  Set position in a file. Minimal implementation:
  */
+__attribute__((__weak__))
 int _lseek(int file __attribute__((unused)), int ptr __attribute__((unused)), int dir __attribute__((unused))) {
    return 0;
 }
@@ -148,23 +157,25 @@ static caddr_t heap_end = NULL;
  *   Increase program data space.
  *   Malloc and related functions depend on this
  */
+__attribute__((__weak__))
 caddr_t _sbrk(int incr) {
-   extern char __HeapBottom; /* Defined by the linker */
+   extern char __HeapBase;   /* Defined by the linker */
    extern char __HeapLimit;  /* Defined by the linker */
    caddr_t prev_heap_end;
    caddr_t next_heap_end;
 
    if (heap_end == NULL) {
       /* First allocation */
-      heap_end = &__HeapBottom;
+      heap_end = &__HeapBase;
    }
    prev_heap_end = heap_end;
    // Round top to 2^3 boundary
    next_heap_end = (caddr_t)(((int)prev_heap_end + incr + 7) & ~7);
    if (next_heap_end > &__HeapLimit) {
       /* Heap and stack collision */
-      __BKPT(0);
-      return NULL;
+//      __asm__("bkpt");
+      errno = ENOMEM;
+      return (caddr_t)-1;
    }
    heap_end = next_heap_end;
    return prev_heap_end;
@@ -183,6 +194,7 @@ caddr_t _sbrk(int incr) {
  *
  * @return -1 on error or the number of characters read
  */
+__attribute__((__weak__))
 int _read(int file, char *ptr, int len) {
    if (file != STDIN_FILENO) {
       errno = EBADF;
@@ -203,6 +215,7 @@ int _read(int file, char *ptr, int len) {
  * Status of a file (by name). Minimal implementation.
  *
  */
+__attribute__((__weak__))
 int _stat(const char *filepath __attribute__((unused)), struct stat *st __attribute__((unused))) {
    st->st_mode = S_IFCHR;
    return 0;
@@ -212,6 +225,7 @@ int _stat(const char *filepath __attribute__((unused)), struct stat *st __attrib
  * times
  * Timing information for current process. Minimal implementation:
  */
+__attribute__((__weak__))
 clock_t _times(struct tms *buf __attribute__((unused))) {
    return -1;
 }
@@ -221,6 +235,7 @@ clock_t _times(struct tms *buf __attribute__((unused))) {
  *
  * Remove a file's directory entry. Minimal implementation:
  */
+__attribute__((__weak__))
 int _unlink(char *name __attribute__((unused))) {
    errno = ENOENT;
    return -1;
@@ -231,6 +246,7 @@ int _unlink(char *name __attribute__((unused))) {
  *
  *  Wait for a child process. Minimal implementation:
  */
+__attribute__((__weak__))
 int _wait(int *status __attribute__((unused))) {
    errno = ECHILD;
    return -1;
@@ -243,6 +259,7 @@ int _wait(int *status __attribute__((unused))) {
  *
  *  @return -1 on error or number of bytes sent
  */
+__attribute__((__weak__))
 int _write(int file, char *ptr, int len) {
    int n;
    switch (file) {
@@ -265,6 +282,7 @@ int _write(int file, char *ptr, int len) {
 /*
  * cmsis-os optional routine
  */
+__attribute__((__weak__))
 void os_tmr_call(uint16_t  info __attribute__((unused))) {
    (void)info;
 }
@@ -276,9 +294,10 @@ void os_tmr_call(uint16_t  info __attribute__((unused))) {
  *
  * @param rc - Return code from process
  */
+__attribute__((__weak__))
 void _exit(int rc __attribute__((unused))) {
    for(;;) {
-      __BKPT(0);
+      __asm__("bkpt");
    }
 }
 

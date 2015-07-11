@@ -11,7 +11,7 @@
          </and>
       </applyWhen>
       
-      <!-- This constant enable KDS options -->
+      <!-- This constant enables KDS options -->
       <constant id="kdsOptionsAvailable" value="true" />
       
       <projectActionList>
@@ -34,6 +34,7 @@
                <or>
                   <requirement idRef="projectOptionValue.Clock-setup" />
                   <requirement idRef="projectOptionValue.FRDM-Blinky" />
+                  <requirement idRef="projectOptionValue.CPP-abstraction" />
                   <requirement idRef="projectOptionValue.CMSIS-RTOS" />
                   <requirement idRef="projectOptionValue.Kinetis-PE" />
                </or>

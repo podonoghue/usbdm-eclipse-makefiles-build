@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd">
 
+<!-- 
+This file lists all the devices KSDK supports 
+-->
 <root version="1.0">
    <!-- Freescale Kinetis SDK - CPU name, also enable KDS options -->
    <projectActionList id="Kinetis-KSDK-devices" >
@@ -54,6 +57,5 @@
 
       <projectActionList><applyWhen><deviceNameIs>MK64FN1M0M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK64FN1M0VDC12" /> </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>FRDM_K64F</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MK64FN1M0VDC12" />  </projectActionList>
-
    </projectActionList>
 </root>
