@@ -1,5 +1,5 @@
 /**
- * @file      GPIO.h
+ * @file      gpio.h
  * @version   1.0.0
  * @brief     Pin declarations for MKL25Z4
  */
@@ -8,80 +8,80 @@
 #define GPIO_H_
 
 #include "derivative.h"
-#include "PinMapping.h"
-#include "GPIO_defs.h"
+#include "pin_mapping.h"
+#include "gpio_defs.h"
 
 /**
 * @addtogroup DigitalIO_Group Digital Input/Output
 * @brief Allows use of port pins as simple digital inputs or outputs
 * @{
 */
-extern const DigitalIO digitalIO_PTA0;          //!< Digital I/O on PTA0
-extern const DigitalIO digitalIO_PTA1;          //!< Digital I/O on PTA1
-extern const DigitalIO digitalIO_PTA2;          //!< Digital I/O on PTA2
-extern const DigitalIO digitalIO_PTA3;          //!< Digital I/O on PTA3
-extern const DigitalIO digitalIO_PTA4;          //!< Digital I/O on PTA4
-extern const DigitalIO digitalIO_PTA5;          //!< Digital I/O on PTA5
-extern const DigitalIO digitalIO_PTA12;         //!< Digital I/O on PTA12
-extern const DigitalIO digitalIO_PTA13;         //!< Digital I/O on PTA13
-extern const DigitalIO digitalIO_PTA14;         //!< Digital I/O on PTA14
-extern const DigitalIO digitalIO_PTA15;         //!< Digital I/O on PTA15
-extern const DigitalIO digitalIO_PTA16;         //!< Digital I/O on PTA16
-extern const DigitalIO digitalIO_PTA17;         //!< Digital I/O on PTA17
-extern const DigitalIO digitalIO_PTA18;         //!< Digital I/O on PTA18
-extern const DigitalIO digitalIO_PTA19;         //!< Digital I/O on PTA19
-extern const DigitalIO digitalIO_PTA20;         //!< Digital I/O on PTA20
-extern const DigitalIO digitalIO_PTB0;          //!< Digital I/O on PTB0
-extern const DigitalIO digitalIO_PTB1;          //!< Digital I/O on PTB1
-extern const DigitalIO digitalIO_PTB2;          //!< Digital I/O on PTB2
-extern const DigitalIO digitalIO_PTB3;          //!< Digital I/O on PTB3
-extern const DigitalIO digitalIO_PTB8;          //!< Digital I/O on PTB8
-extern const DigitalIO digitalIO_PTB9;          //!< Digital I/O on PTB9
-extern const DigitalIO digitalIO_PTB10;         //!< Digital I/O on PTB10
-extern const DigitalIO digitalIO_PTB11;         //!< Digital I/O on PTB11
-extern const DigitalIO digitalIO_PTB16;         //!< Digital I/O on PTB16
-extern const DigitalIO digitalIO_PTB17;         //!< Digital I/O on PTB17
-extern const DigitalIO digitalIO_PTB18;         //!< Digital I/O on PTB18
-extern const DigitalIO digitalIO_PTB19;         //!< Digital I/O on PTB19
-extern const DigitalIO digitalIO_PTC0;          //!< Digital I/O on PTC0
-extern const DigitalIO digitalIO_PTC1;          //!< Digital I/O on PTC1
-extern const DigitalIO digitalIO_PTC2;          //!< Digital I/O on PTC2
-extern const DigitalIO digitalIO_PTC3;          //!< Digital I/O on PTC3
-extern const DigitalIO digitalIO_PTC4;          //!< Digital I/O on PTC4
-extern const DigitalIO digitalIO_PTC5;          //!< Digital I/O on PTC5
-extern const DigitalIO digitalIO_PTC6;          //!< Digital I/O on PTC6
-extern const DigitalIO digitalIO_PTC7;          //!< Digital I/O on PTC7
-extern const DigitalIO digitalIO_PTC8;          //!< Digital I/O on PTC8
-extern const DigitalIO digitalIO_PTC9;          //!< Digital I/O on PTC9
-extern const DigitalIO digitalIO_PTC10;         //!< Digital I/O on PTC10
-extern const DigitalIO digitalIO_PTC11;         //!< Digital I/O on PTC11
-extern const DigitalIO digitalIO_PTC12;         //!< Digital I/O on PTC12
-extern const DigitalIO digitalIO_PTC13;         //!< Digital I/O on PTC13
-extern const DigitalIO digitalIO_PTC16;         //!< Digital I/O on PTC16
-extern const DigitalIO digitalIO_PTC17;         //!< Digital I/O on PTC17
-extern const DigitalIO digitalIO_PTD0;          //!< Digital I/O on PTD0
-extern const DigitalIO digitalIO_PTD1;          //!< Digital I/O on PTD1
-extern const DigitalIO digitalIO_PTD2;          //!< Digital I/O on PTD2
-extern const DigitalIO digitalIO_PTD3;          //!< Digital I/O on PTD3
-extern const DigitalIO digitalIO_PTD4;          //!< Digital I/O on PTD4
-extern const DigitalIO digitalIO_PTD5;          //!< Digital I/O on PTD5
-extern const DigitalIO digitalIO_PTD6;          //!< Digital I/O on PTD6
-extern const DigitalIO digitalIO_PTD7;          //!< Digital I/O on PTD7
-extern const DigitalIO digitalIO_PTE0;          //!< Digital I/O on PTE0
-extern const DigitalIO digitalIO_PTE1;          //!< Digital I/O on PTE1
-extern const DigitalIO digitalIO_PTE2;          //!< Digital I/O on PTE2
-extern const DigitalIO digitalIO_PTE3;          //!< Digital I/O on PTE3
-extern const DigitalIO digitalIO_PTE4;          //!< Digital I/O on PTE4
-extern const DigitalIO digitalIO_PTE5;          //!< Digital I/O on PTE5
-extern const DigitalIO digitalIO_PTE20;         //!< Digital I/O on PTE20
-extern const DigitalIO digitalIO_PTE21;         //!< Digital I/O on PTE21
-extern const DigitalIO digitalIO_PTE22;         //!< Digital I/O on PTE22
-extern const DigitalIO digitalIO_PTE23;         //!< Digital I/O on PTE23
-extern const DigitalIO digitalIO_PTE24;         //!< Digital I/O on PTE24
-extern const DigitalIO digitalIO_PTE25;         //!< Digital I/O on PTE25
-extern const DigitalIO digitalIO_PTE29;         //!< Digital I/O on PTE29
-extern const DigitalIO digitalIO_PTE30;         //!< Digital I/O on PTE30
-extern const DigitalIO digitalIO_PTE31;         //!< Digital I/O on PTE31
+extern const DigitalIO digitalIO_PTA0;          //!< DigitalIO on PTA0
+extern const DigitalIO digitalIO_PTA1;          //!< DigitalIO on PTA1
+extern const DigitalIO digitalIO_PTA2;          //!< DigitalIO on PTA2
+extern const DigitalIO digitalIO_PTA3;          //!< DigitalIO on PTA3
+extern const DigitalIO digitalIO_PTA4;          //!< DigitalIO on PTA4
+extern const DigitalIO digitalIO_PTA5;          //!< DigitalIO on PTA5
+extern const DigitalIO digitalIO_PTA12;         //!< DigitalIO on PTA12
+extern const DigitalIO digitalIO_PTA13;         //!< DigitalIO on PTA13
+extern const DigitalIO digitalIO_PTA14;         //!< DigitalIO on PTA14
+extern const DigitalIO digitalIO_PTA15;         //!< DigitalIO on PTA15
+extern const DigitalIO digitalIO_PTA16;         //!< DigitalIO on PTA16
+extern const DigitalIO digitalIO_PTA17;         //!< DigitalIO on PTA17
+extern const DigitalIO digitalIO_PTA18;         //!< DigitalIO on PTA18
+extern const DigitalIO digitalIO_PTA19;         //!< DigitalIO on PTA19
+extern const DigitalIO digitalIO_PTA20;         //!< DigitalIO on PTA20
+extern const DigitalIO digitalIO_PTB0;          //!< DigitalIO on PTB0
+extern const DigitalIO digitalIO_PTB1;          //!< DigitalIO on PTB1
+extern const DigitalIO digitalIO_PTB2;          //!< DigitalIO on PTB2
+extern const DigitalIO digitalIO_PTB3;          //!< DigitalIO on PTB3
+extern const DigitalIO digitalIO_PTB8;          //!< DigitalIO on PTB8
+extern const DigitalIO digitalIO_PTB9;          //!< DigitalIO on PTB9
+extern const DigitalIO digitalIO_PTB10;         //!< DigitalIO on PTB10
+extern const DigitalIO digitalIO_PTB11;         //!< DigitalIO on PTB11
+extern const DigitalIO digitalIO_PTB16;         //!< DigitalIO on PTB16
+extern const DigitalIO digitalIO_PTB17;         //!< DigitalIO on PTB17
+extern const DigitalIO digitalIO_PTB18;         //!< DigitalIO on PTB18
+extern const DigitalIO digitalIO_PTB19;         //!< DigitalIO on PTB19
+extern const DigitalIO digitalIO_PTC0;          //!< DigitalIO on PTC0
+extern const DigitalIO digitalIO_PTC1;          //!< DigitalIO on PTC1
+extern const DigitalIO digitalIO_PTC2;          //!< DigitalIO on PTC2
+extern const DigitalIO digitalIO_PTC3;          //!< DigitalIO on PTC3
+extern const DigitalIO digitalIO_PTC4;          //!< DigitalIO on PTC4
+extern const DigitalIO digitalIO_PTC5;          //!< DigitalIO on PTC5
+extern const DigitalIO digitalIO_PTC6;          //!< DigitalIO on PTC6
+extern const DigitalIO digitalIO_PTC7;          //!< DigitalIO on PTC7
+extern const DigitalIO digitalIO_PTC8;          //!< DigitalIO on PTC8
+extern const DigitalIO digitalIO_PTC9;          //!< DigitalIO on PTC9
+extern const DigitalIO digitalIO_PTC10;         //!< DigitalIO on PTC10
+extern const DigitalIO digitalIO_PTC11;         //!< DigitalIO on PTC11
+extern const DigitalIO digitalIO_PTC12;         //!< DigitalIO on PTC12
+extern const DigitalIO digitalIO_PTC13;         //!< DigitalIO on PTC13
+extern const DigitalIO digitalIO_PTC16;         //!< DigitalIO on PTC16
+extern const DigitalIO digitalIO_PTC17;         //!< DigitalIO on PTC17
+extern const DigitalIO digitalIO_PTD0;          //!< DigitalIO on PTD0
+extern const DigitalIO digitalIO_PTD1;          //!< DigitalIO on PTD1
+extern const DigitalIO digitalIO_PTD2;          //!< DigitalIO on PTD2
+extern const DigitalIO digitalIO_PTD3;          //!< DigitalIO on PTD3
+extern const DigitalIO digitalIO_PTD4;          //!< DigitalIO on PTD4
+extern const DigitalIO digitalIO_PTD5;          //!< DigitalIO on PTD5
+extern const DigitalIO digitalIO_PTD6;          //!< DigitalIO on PTD6
+extern const DigitalIO digitalIO_PTD7;          //!< DigitalIO on PTD7
+extern const DigitalIO digitalIO_PTE0;          //!< DigitalIO on PTE0
+extern const DigitalIO digitalIO_PTE1;          //!< DigitalIO on PTE1
+extern const DigitalIO digitalIO_PTE2;          //!< DigitalIO on PTE2
+extern const DigitalIO digitalIO_PTE3;          //!< DigitalIO on PTE3
+extern const DigitalIO digitalIO_PTE4;          //!< DigitalIO on PTE4
+extern const DigitalIO digitalIO_PTE5;          //!< DigitalIO on PTE5
+extern const DigitalIO digitalIO_PTE20;         //!< DigitalIO on PTE20
+extern const DigitalIO digitalIO_PTE21;         //!< DigitalIO on PTE21
+extern const DigitalIO digitalIO_PTE22;         //!< DigitalIO on PTE22
+extern const DigitalIO digitalIO_PTE23;         //!< DigitalIO on PTE23
+extern const DigitalIO digitalIO_PTE24;         //!< DigitalIO on PTE24
+extern const DigitalIO digitalIO_PTE25;         //!< DigitalIO on PTE25
+extern const DigitalIO digitalIO_PTE29;         //!< DigitalIO on PTE29
+extern const DigitalIO digitalIO_PTE30;         //!< DigitalIO on PTE30
+extern const DigitalIO digitalIO_PTE31;         //!< DigitalIO on PTE31
 /**
  * @}
  */
@@ -90,20 +90,48 @@ extern const DigitalIO digitalIO_PTE31;         //!< Digital I/O on PTE31
 * @brief Allows use of port pins as analogue inputs
 * @{
 */
-extern const AnalogueIO analogueIO_PTB0;         //!< ADC0_8 on PTB0
-extern const AnalogueIO analogueIO_PTB1;         //!< ADC0_9 on PTB1
-extern const AnalogueIO analogueIO_PTB2;         //!< ADC0_12 on PTB2
-extern const AnalogueIO analogueIO_PTB3;         //!< ADC0_13 on PTB3
-extern const AnalogueIO analogueIO_PTC0;         //!< ADC0_14 on PTC0
-extern const AnalogueIO analogueIO_PTC1;         //!< ADC0_15 on PTC1
-extern const AnalogueIO analogueIO_PTC2;         //!< ADC0_11 on PTC2
-extern const AnalogueIO analogueIO_PTD1;         //!< ADC0_5 on PTD1
-extern const AnalogueIO analogueIO_PTD5;         //!< ADC0_6 on PTD5
-extern const AnalogueIO analogueIO_PTD6;         //!< ADC0_7 on PTD6
-extern const AnalogueIO analogueIO_PTE20;        //!< ADC0_0 on PTE20
-extern const AnalogueIO analogueIO_PTE22;        //!< ADC0_3 on PTE22
-extern const AnalogueIO analogueIO_PTE29;        //!< ADC0_4 on PTE29
-extern const AnalogueIO analogueIO_PTE30;        //!< ADC0_23 on PTE30
+#if ADC0_8_SEL == 1
+extern const AnalogueIO analogueIO_PTB0;         //!< AnalogueIO on PTB0
+#endif
+#if ADC0_9_SEL == 1
+extern const AnalogueIO analogueIO_PTB1;         //!< AnalogueIO on PTB1
+#endif
+#if ADC0_12_SEL == 1
+extern const AnalogueIO analogueIO_PTB2;         //!< AnalogueIO on PTB2
+#endif
+#if ADC0_13_SEL == 1
+extern const AnalogueIO analogueIO_PTB3;         //!< AnalogueIO on PTB3
+#endif
+#if ADC0_14_SEL == 1
+extern const AnalogueIO analogueIO_PTC0;         //!< AnalogueIO on PTC0
+#endif
+#if ADC0_15_SEL == 1
+extern const AnalogueIO analogueIO_PTC1;         //!< AnalogueIO on PTC1
+#endif
+#if ADC0_11_SEL == 1
+extern const AnalogueIO analogueIO_PTC2;         //!< AnalogueIO on PTC2
+#endif
+#if ADC0_5_SEL == 1
+extern const AnalogueIO analogueIO_PTD1;         //!< AnalogueIO on PTD1
+#endif
+#if ADC0_6_SEL == 1
+extern const AnalogueIO analogueIO_PTD5;         //!< AnalogueIO on PTD5
+#endif
+#if ADC0_7_SEL == 1
+extern const AnalogueIO analogueIO_PTD6;         //!< AnalogueIO on PTD6
+#endif
+#if ADC0_0_SEL == 1
+extern const AnalogueIO analogueIO_PTE20;        //!< AnalogueIO on PTE20
+#endif
+#if ADC0_3_SEL == 1
+extern const AnalogueIO analogueIO_PTE22;        //!< AnalogueIO on PTE22
+#endif
+#if ADC0_4_SEL == 1
+extern const AnalogueIO analogueIO_PTE29;        //!< AnalogueIO on PTE29
+#endif
+#if ADC0_23_SEL == 1
+extern const AnalogueIO analogueIO_PTE30;        //!< AnalogueIO on PTE30
+#endif
 /**
  * @}
  */
@@ -113,109 +141,109 @@ extern const AnalogueIO analogueIO_PTE30;        //!< ADC0_23 on PTE30
 * @{
 */
 #if TPM0_5_SEL == 1
-extern const PwmIO  pwmIO_PTA0;              //!< TPM0_5 on PTA0
+extern const PwmIO  pwmIO_PTA0;              //!< PwmIO on PTA0
 #endif
 #if TPM2_0_SEL == 1
-extern const PwmIO  pwmIO_PTA1;              //!< TPM2_0 on PTA1
+extern const PwmIO  pwmIO_PTA1;              //!< PwmIO on PTA1
 #endif
 #if TPM2_1_SEL == 1
-extern const PwmIO  pwmIO_PTA2;              //!< TPM2_1 on PTA2
+extern const PwmIO  pwmIO_PTA2;              //!< PwmIO on PTA2
 #endif
 #if TPM0_0_SEL == 1
-extern const PwmIO  pwmIO_PTA3;              //!< TPM0_0 on PTA3
+extern const PwmIO  pwmIO_PTA3;              //!< PwmIO on PTA3
 #endif
 #if TPM0_1_SEL == 1
-extern const PwmIO  pwmIO_PTA4;              //!< TPM0_1 on PTA4
+extern const PwmIO  pwmIO_PTA4;              //!< PwmIO on PTA4
 #endif
 #if TPM0_2_SEL == 1
-extern const PwmIO  pwmIO_PTA5;              //!< TPM0_2 on PTA5
+extern const PwmIO  pwmIO_PTA5;              //!< PwmIO on PTA5
 #endif
 #if TPM1_0_SEL == 1
-extern const PwmIO  pwmIO_PTA12;             //!< TPM1_0 on PTA12
+extern const PwmIO  pwmIO_PTA12;             //!< PwmIO on PTA12
 #endif
 #if TPM1_1_SEL == 1
-extern const PwmIO  pwmIO_PTA13;             //!< TPM1_1 on PTA13
+extern const PwmIO  pwmIO_PTA13;             //!< PwmIO on PTA13
 #endif
 #if TPM1_0_SEL == 2
-extern const PwmIO  pwmIO_PTB0;              //!< TPM1_0 on PTB0
+extern const PwmIO  pwmIO_PTB0;              //!< PwmIO on PTB0
 #endif
 #if TPM1_1_SEL == 2
-extern const PwmIO  pwmIO_PTB1;              //!< TPM1_1 on PTB1
+extern const PwmIO  pwmIO_PTB1;              //!< PwmIO on PTB1
 #endif
 #if TPM2_0_SEL == 2
-extern const PwmIO  pwmIO_PTB2;              //!< TPM2_0 on PTB2
+extern const PwmIO  pwmIO_PTB2;              //!< PwmIO on PTB2
 #endif
 #if TPM2_1_SEL == 2
-extern const PwmIO  pwmIO_PTB3;              //!< TPM2_1 on PTB3
+extern const PwmIO  pwmIO_PTB3;              //!< PwmIO on PTB3
 #endif
 #if TPM2_0_SEL == 3
-extern const PwmIO  pwmIO_PTB18;             //!< TPM2_0 on PTB18
+extern const PwmIO  pwmIO_PTB18;             //!< PwmIO on PTB18
 #endif
 #if TPM2_1_SEL == 3
-extern const PwmIO  pwmIO_PTB19;             //!< TPM2_1 on PTB19
+extern const PwmIO  pwmIO_PTB19;             //!< PwmIO on PTB19
 #endif
 #if TPM0_0_SEL == 2
-extern const PwmIO  pwmIO_PTC1;              //!< TPM0_0 on PTC1
+extern const PwmIO  pwmIO_PTC1;              //!< PwmIO on PTC1
 #endif
 #if TPM0_1_SEL == 2
-extern const PwmIO  pwmIO_PTC2;              //!< TPM0_1 on PTC2
+extern const PwmIO  pwmIO_PTC2;              //!< PwmIO on PTC2
 #endif
 #if TPM0_2_SEL == 2
-extern const PwmIO  pwmIO_PTC3;              //!< TPM0_2 on PTC3
+extern const PwmIO  pwmIO_PTC3;              //!< PwmIO on PTC3
 #endif
 #if TPM0_3_SEL == 1
-extern const PwmIO  pwmIO_PTC4;              //!< TPM0_3 on PTC4
+extern const PwmIO  pwmIO_PTC4;              //!< PwmIO on PTC4
 #endif
 #if TPM0_4_SEL == 1
-extern const PwmIO  pwmIO_PTC8;              //!< TPM0_4 on PTC8
+extern const PwmIO  pwmIO_PTC8;              //!< PwmIO on PTC8
 #endif
 #if TPM0_5_SEL == 2
-extern const PwmIO  pwmIO_PTC9;              //!< TPM0_5 on PTC9
+extern const PwmIO  pwmIO_PTC9;              //!< PwmIO on PTC9
 #endif
 #if TPM0_0_SEL == 3
-extern const PwmIO  pwmIO_PTD0;              //!< TPM0_0 on PTD0
+extern const PwmIO  pwmIO_PTD0;              //!< PwmIO on PTD0
 #endif
 #if TPM0_1_SEL == 3
-extern const PwmIO  pwmIO_PTD1;              //!< TPM0_1 on PTD1
+extern const PwmIO  pwmIO_PTD1;              //!< PwmIO on PTD1
 #endif
 #if TPM0_2_SEL == 3
-extern const PwmIO  pwmIO_PTD2;              //!< TPM0_2 on PTD2
+extern const PwmIO  pwmIO_PTD2;              //!< PwmIO on PTD2
 #endif
 #if TPM0_3_SEL == 2
-extern const PwmIO  pwmIO_PTD3;              //!< TPM0_3 on PTD3
+extern const PwmIO  pwmIO_PTD3;              //!< PwmIO on PTD3
 #endif
 #if TPM0_4_SEL == 2
-extern const PwmIO  pwmIO_PTD4;              //!< TPM0_4 on PTD4
+extern const PwmIO  pwmIO_PTD4;              //!< PwmIO on PTD4
 #endif
 #if TPM0_5_SEL == 3
-extern const PwmIO  pwmIO_PTD5;              //!< TPM0_5 on PTD5
+extern const PwmIO  pwmIO_PTD5;              //!< PwmIO on PTD5
 #endif
 #if TPM1_0_SEL == 3
-extern const PwmIO  pwmIO_PTE20;             //!< TPM1_0 on PTE20
+extern const PwmIO  pwmIO_PTE20;             //!< PwmIO on PTE20
 #endif
 #if TPM1_1_SEL == 3
-extern const PwmIO  pwmIO_PTE21;             //!< TPM1_1 on PTE21
+extern const PwmIO  pwmIO_PTE21;             //!< PwmIO on PTE21
 #endif
 #if TPM2_0_SEL == 4
-extern const PwmIO  pwmIO_PTE22;             //!< TPM2_0 on PTE22
+extern const PwmIO  pwmIO_PTE22;             //!< PwmIO on PTE22
 #endif
 #if TPM2_1_SEL == 4
-extern const PwmIO  pwmIO_PTE23;             //!< TPM2_1 on PTE23
+extern const PwmIO  pwmIO_PTE23;             //!< PwmIO on PTE23
 #endif
 #if TPM0_0_SEL == 4
-extern const PwmIO  pwmIO_PTE24;             //!< TPM0_0 on PTE24
+extern const PwmIO  pwmIO_PTE24;             //!< PwmIO on PTE24
 #endif
 #if TPM0_1_SEL == 4
-extern const PwmIO  pwmIO_PTE25;             //!< TPM0_1 on PTE25
+extern const PwmIO  pwmIO_PTE25;             //!< PwmIO on PTE25
 #endif
 #if TPM0_2_SEL == 4
-extern const PwmIO  pwmIO_PTE29;             //!< TPM0_2 on PTE29
+extern const PwmIO  pwmIO_PTE29;             //!< PwmIO on PTE29
 #endif
 #if TPM0_3_SEL == 3
-extern const PwmIO  pwmIO_PTE30;             //!< TPM0_3 on PTE30
+extern const PwmIO  pwmIO_PTE30;             //!< PwmIO on PTE30
 #endif
 #if TPM0_4_SEL == 3
-extern const PwmIO  pwmIO_PTE31;             //!< TPM0_4 on PTE31
+extern const PwmIO  pwmIO_PTE31;             //!< PwmIO on PTE31
 #endif
 /**
  * @}
@@ -343,6 +371,8 @@ I2C0_SCL=PTE24=[Disabled, PTB0, PTB2, PTC8, PTE24]
 I2C0_SDA=PTE25=[Disabled, PTB1, PTB3, PTC9, PTE25]
 I2C1_SCL=PTE1=[Disabled, PTA3, PTC1, PTC10, PTE1]
 I2C1_SDA=PTE0=[Disabled, PTA4, PTC2, PTC11, PTE0]
+LPTMR0_1=Disabled=[Disabled, PTA19]
+LPTMR0_2=Disabled=[Disabled, PTC5]
 SPI0_MISO=PTD3=[Disabled, PTA16, PTA17, PTC6, PTC7, PTD2, PTD3]
 SPI0_MOSI=PTD2=[Disabled, PTA16, PTA17, PTC6, PTC7, PTD2, PTD3]
 SPI0_PCS0=Disabled=[Disabled, PTA14, PTC4, PTD0]
@@ -366,6 +396,7 @@ TPM0=SIM->SCGC6=SIM_SCGC6_TPM0_MASK
 TPM1=SIM->SCGC6=SIM_SCGC6_TPM1_MASK
 TPM2=SIM->SCGC6=SIM_SCGC6_TPM2_MASK
 ADC0=SIM->SCGC6=SIM_SCGC6_ADC0_MASK
+LPTMR0=SIM->SCGC5=SIM_SCGC5_LPTMR_MASK
 I2C0=SIM->SCGC4=SIM_SCGC4_I2C0_MASK
 I2C1=SIM->SCGC4=SIM_SCGC4_I2C1_MASK
 SPI0=SIM->SCGC4=SIM_SCGC4_SPI0_MASK

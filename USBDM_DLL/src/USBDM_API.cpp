@@ -1512,42 +1512,8 @@ USBDM_ErrorCode USBDM_SetSpeed( unsigned long frequency) {
 //!
 USBDM_API
 USBDM_ErrorCode USBDM_GetSpeed(unsigned long *frequency /* kHz */) {
-   USBDM_ErrorCode rc;
-   uint16_t value;
-   LOGGING_Q;
-
-   usb_data[0] = 0;
-   usb_data[1] = CMD_USBDM_GET_SPEED;
-   rc = bdm_usb_transaction(2, 3, usb_data);
-   value = (usb_data[1]<<8)+usb_data[2];
-   if ((rc != BDM_RC_OK)||(value == 0)) {
-      *frequency = 1001; // default to safe 1MHz on error
-   }
-   else {
-      switch (bdmState.targetType) {
-      case T_HC12 :
-      case T_S12Z :
-      case T_HCS08 :
-      case T_RS08 :
-      case T_CFV1 :
-         // BDM return value is length of SYNC pulse in 60MHz ticks
-         // The SYNC pulse is 128 BDM clock cycles
-         *frequency = (60000UL * 128) / value;
-         break;
-      case T_CFVx :
-      case T_JTAG :
-      case T_MC56F80xx:
-      case T_ARM_JTAG:
-      case T_ARM_SWD:
-         // BDM command value is frequency in kHz. Should be less than 1/5 target clk
-         *frequency = value;
-         break;
-      default :
-         rc = BDM_RC_ILLEGAL_COMMAND;
-         break;
-      }
-   }
-   log.print("BDM Clk = %lu kHz\n", *frequency);
+   USBDM_ErrorCode rc = USBDM_GetSpeedHz(frequency);
+   *frequency = round(*frequency/1000.0);
    return rc;
 }
 
@@ -1570,14 +1536,34 @@ USBDM_ErrorCode USBDM_GetSpeedHz(unsigned long *frequency /* Hz */) {
    rc = bdm_usb_transaction(2, 3, usb_data);
    value = (usb_data[1]<<8)+usb_data[2];
    if ((rc != BDM_RC_OK)||(value == 0)) {
-      *frequency = 8000000; // default to safe 8MHz on error
+      *frequency = 8001000; // default to safe 8MHz on error
    }
    else {
-      // BDM command value is length of SYNC pulse in 60MHz ticks
-      // The SYNC pulse is 128 BDM clock cycles
-      *frequency = (60000000UL/value) * 128;
+      switch (bdmState.targetType) {
+      case T_HC12 :
+      case T_S12Z :
+      case T_HCS08 :
+      case T_RS08 :
+      case T_CFV1 :
+         // BDM return value is length of SYNC pulse in 60MHz ticks
+         // The SYNC pulse is 128 BDM clock cycles
+         *frequency = round((60.0E6 * 128) / value);
+         log.print("Ticks = %d, BDM Clk = %lu Hz\n", value, *frequency);
+         break;
+      case T_CFVx :
+      case T_JTAG :
+      case T_MC56F80xx:
+      case T_ARM_JTAG:
+      case T_ARM_SWD:
+         // BDM command value is frequency in kHz. Should be less than 1/5 target clk
+         *frequency = 1000*value;
+         log.print("BDM Clk = %lu Hz\n", *frequency);
+         break;
+      default :
+         rc = BDM_RC_ILLEGAL_COMMAND;
+         break;
+      }
    }
-   log.print("Ticks = %d, BDM Clk = %lu Hz\n", value, *frequency);
    return rc;
 }
 

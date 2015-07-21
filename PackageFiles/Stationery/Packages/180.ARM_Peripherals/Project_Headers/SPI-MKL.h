@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     SPI.h
+ * @file     spi.h
  *
  * @brief    Abstracion layer for I2C interface
  *
@@ -13,8 +13,8 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "DMA.h"
-#include "GPIO.h"
+#include "dma.h"
+#include "gpio.h"
 
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface

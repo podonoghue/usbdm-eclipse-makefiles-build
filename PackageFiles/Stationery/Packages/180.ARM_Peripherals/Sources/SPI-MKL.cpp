@@ -9,8 +9,8 @@
 #include "system.h"
 #include "derivative.h"
 #include "utilities.h"
-#include "SPI.h"
-#include "GPIO.h"
+#include "spi.h"
+#include "gpio.h"
 
 #define DEFAULT_SPI_FREQUENCY  (10000000)     //!< Default SPI frequency 10 MHz
 

@@ -1,12 +1,12 @@
  /**
-  * @file     GPIO.cpp
+  * @file     gpio.cpp
   *
   * @brief   Pin declarations for MK20D5
   */
 
 #include "utilities.h"
-#include "GPIO.h"
-#include "PinMapping.h"
+#include "gpio.h"
+#include "pin_mapping.h"
 
 /**
  * @brief Create Timer Clock register name from timer number

@@ -1,5 +1,5 @@
 /**
- * @file     GPIO_defs.h
+ * @file     gpio_defs.h
  * @brief    GPIO Pin routines
  *
  * @version  V4.11.1.70

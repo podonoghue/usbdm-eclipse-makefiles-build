@@ -1,12 +1,12 @@
 /*
- * DMA.cpp
+ * dma.cpp
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue
  */
 
 #include "derivative.h"
-#include "DMA.h"
+#include "dma.h"
 
 DMAChannel0 *DMAChannel0::thisPtr = 0;
 

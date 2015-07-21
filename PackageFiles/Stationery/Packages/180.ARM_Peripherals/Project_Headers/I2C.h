@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     I2C.h
+ * @file     i2c.h
  *
  * @brief    Abstracion layer for I2C interface
  *
@@ -13,8 +13,8 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "GPIO.h"
-#include "PinMapping.h"
+#include "gpio.h"
+#include "pin_mapping.h"
 
 /**
  * @addtogroup I2C_Group Inter IC

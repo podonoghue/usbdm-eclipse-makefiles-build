@@ -9,8 +9,7 @@
 #include "derivative.h"
 #include "utilities.h"
 #include "system.h"
-#include "clock_configure.h"
-#include "I2C.h"
+#include "i2c.h"
 
 #ifndef PORT_PCR_ODE_MASK
 // Some devices don't have ODE function on pin

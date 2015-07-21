@@ -1,12 +1,12 @@
 /*
- * @file Delay.cpp
+ * @file delay.cpp
  * @brief Very simple delay routine using SysTick timer
  *
  *  Created on: 5 Jul 2015
  *      Author: podonoghue
  */
 #include "derivative.h"
-#include "Delay.h"
+#include "delay.h"
 
 static unsigned timer;
 static unsigned ticks;

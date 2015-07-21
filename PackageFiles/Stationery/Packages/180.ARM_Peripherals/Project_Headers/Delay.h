@@ -1,5 +1,5 @@
 /**
- * @file     Delay.h
+ * @file     delay.h
  * @brief    Simple delay routines using SysTick timer
  *
  * @version  V4.11.1.70
