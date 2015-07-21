@@ -148,7 +148,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>System oscillator</description>
+                           <description>System oscillator (OSC32KCLK)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -517,7 +517,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>USB SOF pulse</description>
+                           <description>USB start of frame pulse</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -852,17 +852,17 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0110</name>
-                           <description>Reserved</description>
+                           <description>80-pin</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0111</name>
-                           <description>Reserved</description>
+                           <description>81-pin</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Reserved</description>
+                           <description>100-pin</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -920,12 +920,12 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Reserved</description>
+                           <description>K30</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Reserved</description>
+                           <description>K40</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -940,12 +940,12 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Reserved</description>
+                           <description>K50</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>Reserved</description>
+                           <description>K51</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1135,7 +1135,7 @@ Allows extra drive-strength for PTD7</description>
                <resetValue>0x40182</resetValue>
                <fields>
                   <field>
-                     <name>LPTIMER</name>
+                     <name>LPTMR</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -1994,19 +1994,19 @@ This field concatenated with leading zeros indicates the first invalid address o
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Flash block 1 is FlexNVM</description>
+                           <description>Physical Flash block 1 is FlexNVM</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Flash block 1 is PFlash</description>
+                           <description>Physical Flash block 1 is PFlash</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MAXADDR0</name>
-                     <description>Max address block 1\n
+                     <description>Max address block 0\n
 This field concatenated with leading zeros indicates the first invalid address of flash block 0</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>

@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-simple-systick" >
+   <projectActionList id="CPP-abstraction-LPTMR" >
       <applyWhen>
          <and>
             <or>
@@ -18,19 +18,20 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-simple-systick" 
-            name="Timer" 
-            description="Adds a Simple timer using Systick interrupt" 
+         <variable id="projectOptionValue.CPP-abstraction-LPTMR" 
+            name="LPTMR interface" 
+            description="Adds a CPP abstraction layer for Low Power Timer hardware" 
             checkGroup="group-CPP-abstraction-options" >
          </variable>
-         
+   
+         <!-- LPTMR CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.CPP-abstraction-simple-systick" />
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-LPTMR" />
                </applyWhen>
-               <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" />
-               <copy source="Sources/Delay.cpp"            target="Sources/Delay.cpp" />
+               <copy source="Project_Headers/lptmr.h"        target="Project_Headers/lptmr.h" />
+               <copy source="Sources/lptmr.cpp"              target="Sources/lptmr.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

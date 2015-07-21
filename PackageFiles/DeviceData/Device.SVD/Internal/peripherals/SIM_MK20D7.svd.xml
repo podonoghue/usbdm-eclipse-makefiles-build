@@ -100,7 +100,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Undefined</description>
+                           <description>128 KBytes</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -165,54 +165,56 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>USBVSTBY</name>
-                     <description>USB voltage regulator in standby mode during VLPR and VLPW modes</description>
+                     <description>USB Regulator standby in run/wait modes\n
+This bit controls whether the USB VREG enters standby in VLPW and VLPR modes</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>USB voltage regulator not in standby during VLPR and VLPW modes</description>
+                           <description>Operates\tin VLPW/VLPR</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>USB voltage regulator in standby during VLPR and VLPW modes</description>
+                           <description>Standby\tin VLPW/VLPR</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>USBSSTBY</name>
-                     <description>USB voltage regulator in standby mode during Stop, VLPS, LLS and VLLS modes</description>
+                     <description>USB Regulator standby in stop modes\n
+This bit controls whether the USB VREG enters standby in STOP, VLPS, LLS and VLLS modes</description>
                      <bitOffset>30</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>USB voltage regulator not in standby during Stop, VLPS, LLS and VLLS modes</description>
+                           <description>Operates\tin STOP/VLPS/LLS/VLLS</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>USB voltage regulator in standby during Stop, VLPS, LLS and VLLS modes</description>
+                           <description>Standby\tin STOP/VLPS/LLS/VLLS</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>USBREGEN</name>
-                     <description>USB voltage regulator enable</description>
+                     <description>USB Voltage Regulator enable</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>USB voltage regulator is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>USB voltage regulator is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -226,18 +228,18 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>URWE</name>
-                     <description>USB voltage regulator enable write enable</description>
+                     <description>USB Standby write enable</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>SOPT1 USBREGEN cannot be written</description>
+                           <description>USBREGEN protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SOPT1 USBREGEN can be written</description>
+                           <description>USBREGEN can be written</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -250,30 +252,30 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>SOPT1 USBVSTB cannot be written</description>
+                           <description>USBVSTB protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SOPT1 USBVSTB can be written</description>
+                           <description>USBVSTB can be written</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>USSWE</name>
-                     <description>USB voltage regulator stop standby write enable</description>
+                     <description>USB voltage regulator write enable</description>
                      <bitOffset>26</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>SOPT1 USBSSTB cannot be written</description>
+                           <description>USBSSTB cannot be written</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SOPT1 USBSSTB can be written</description>
+                           <description>USBSSTB can be written</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -288,18 +290,19 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>RTCCLKOUTSEL</name>
-                     <description>RTC clock out select</description>
+                     <description>RTC clock out select\n
+Select which clock is output on the RTC_CLKOUT pin</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>RTC 1 Hz clock is output on the RTC_CLKOUT pin</description>
+                           <description>RTC 1 Hz clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RTC 32.768kHz clock is output on the RTC_CLKOUT pin</description>
+                           <description>RTC 32.768kHz clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -332,7 +335,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>IRCLK</description>
+                           <description>MCGIRCLK</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -342,7 +345,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>ERCLK0</description>
+                           <description>OSCERCLK0</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -382,18 +385,19 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PTD7PAD</name>
-                     <description>PTD7 pad drive strength</description>
+                     <description>PTD7 pad drive strength\n
+Allows extra drive-strength for PTD7</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Single-pad drive strength for PTD7</description>
+                           <description>Single-pad strength</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Double pad drive strength for PTD7</description>
+                           <description>Double-pad strength</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -442,12 +446,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>External bypass clock (USB_CLKIN)</description>
+                           <description>External clock (USB_CLKIN)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGPLLCLK/MCGFLLCLK clock divided by the USB fractional divider. See the SIM_CLKDIV2[USBFRAC, USBDIV] descriptions</description>
+                           <description>MCGPLLCLK/MCGFLLCLK divided</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -667,12 +671,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>HSCMP0 output drives FTM0 hardware trigger 0</description>
+                           <description>HSCMP0 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM1 channel match drives FTM0 hardware trigger 0</description>
+                           <description>FTM1 channel match</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -829,22 +833,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0000</name>
-                           <description>PDB external trigger pin input (PDB0_EXTRG)</description>
+                           <description>PDB external trigger</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0001</name>
-                           <description>High speed comparator 0 output</description>
+                           <description>CMP 0</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>High speed comparator 1 output</description>
+                           <description>CMP 1</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>High speed comparator 2 output</description>
+                           <description>CMP 2</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -899,7 +903,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>
-                           <description>Low-power timer trigger</description>
+                           <description>LPTMR trigger</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1095,7 +1099,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>Reserved</description>
+                           <description>32-pin</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1105,7 +1109,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>Reserved</description>
+                           <description>48-pin</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1130,12 +1134,12 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Reserved</description>
+                           <description>121-pin</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Reserved</description>
+                           <description>144-pin</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1193,7 +1197,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Reserved</description>
+                           <description>K60</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1203,12 +1207,12 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>K50</description>
+                           <description>K50 and K52</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>K51</description>
+                           <description>K51 and K53</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1527,7 +1531,7 @@ Devices using this peripheral:
                <resetValue>0x40182</resetValue>
                <fields>
                   <field>
-                     <name>LPTIMER</name>
+                     <name>LPTMR</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -1902,12 +1906,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Access and interrupts disabled</description>
+                           <description>Access &amp; interrupts disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Access and interrupts enabled</description>
+                           <description>Access &amp; interrupts enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2371,18 +2375,19 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                   </field>
                   <field>
                      <name>FLASHDOZE</name>
-                     <description>Flash Doze</description>
+                     <description>Flash Doze\n
+Allows flash to be disabled during Wait mode</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Flash remains enabled during Wait mode</description>
+                           <description>Enabled during Wait</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Flash is disabled for the duration of Wait mode</description>
+                           <description>Disabled during Wait</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2413,7 +2418,7 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>Reserved</description>
+                           <description>4 KB</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -2467,22 +2472,22 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>32 KB of program flash memory, 1 KB protection region</description>
+                           <description>32 KB PFLASH, 1 KB protection</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0101</name>
-                           <description>64 KB of program flash memory, 2 KB protection region</description>
+                           <description>64 KB PFLASH, 2 KB protection</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0111</name>
-                           <description>128 KB of program flash, 4 KB protection region</description>
+                           <description>128 KB PFLASH, 4 KB protection</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>256 KB of program flash, 8 KB protection region</description>
+                           <description>256 KB PFLASH, 8 KB protection</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2501,7 +2506,7 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>32 KB of FlexNVM, 4 KB protection region</description>
+                           <description>32 KB FlexNVM, 4 KB protection</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2516,7 +2521,8 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                <fields>
                   <field>
                      <name>MAXADDR1</name>
-                     <description>Max address block 1</description>
+                     <description>Max address block 1\n
+This field concatenated with leading zeros indicates the first invalid address of flash block 1</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
@@ -2528,19 +2534,20 @@ Output clock = Input clock x [ (USBFRAC+1) / (USBDIV+1) ]</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Physical flash block 1 is used as FlexNVM</description>
+                           <description>Physical Flash block 1 is FlexNVM</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Physical flash block 1 is used as program flash</description>
+                           <description>Physical Flash block 1 is PFlash</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MAXADDR0</name>
-                     <description>Max address block 0</description>
+                     <description>Max address block 0\n
+This field concatenated with leading zeros indicates the first invalid address of flash block 0</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>

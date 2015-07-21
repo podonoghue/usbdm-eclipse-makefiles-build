@@ -11,7 +11,7 @@ Devices using this vector table:
             <value>5</value>
          </interrupt>
          <interrupt>
-            <name>PMC</name>
+            <name>LVD_LVW</name>
             <description>PMC Low-voltage detect, low-voltage warning</description>
             <value>6</value>
          </interrupt>
@@ -41,8 +41,8 @@ Devices using this vector table:
             <value>15</value>
          </interrupt>
          <interrupt>
-            <name>ACMP0</name>
-            <description>Analogue comparator 0</description>
+            <name>CMP0</name>
+            <description>Comparator 0</description>
             <value>16</value>
          </interrupt>
          <interrupt>

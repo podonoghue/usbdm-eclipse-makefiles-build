@@ -24,8 +24,8 @@
 #ifndef __GT20L16_DRIVE_H__
 #define __GT20L16_DRIVE_H__
 
-#include "Gpio.h"
-#include "SPI.h"
+#include "gpio.h"
+#include "spi.h"
 #include "Seeed_SLD00200P.h"  // Pin mappings
 
 class GT20L16 {

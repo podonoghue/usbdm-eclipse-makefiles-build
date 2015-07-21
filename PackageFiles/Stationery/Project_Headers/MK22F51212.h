@@ -85,12 +85,12 @@ typedef enum {
   FTM2_IRQn                     =  44,   /**<  60 FTM2 fault, overflow and channels interrupt                                      */
   RTC_Alarm_IRQn                =  46,   /**<  62 RTC interrupt                                                                    */
   RTC_Seconds_IRQn              =  47,   /**<  63 RTC interrupt                                                                    */
-  PIT_Ch0_IRQn                  =  48,   /**<  64 PIT timer channel 0 interrupt                                                    */
-  PIT_Ch1_IRQn                  =  49,   /**<  65 PIT timer channel 1 interrupt                                                    */
-  PIT_Ch2_IRQn                  =  50,   /**<  66 PIT timer channel 2 interrupt                                                    */
-  PIT_Ch3_IRQn                  =  51,   /**<  67 PIT timer channel 3 interrupt                                                    */
-  PDB_IRQn                      =  52,   /**<  68 PDB Programmable Delay Block interrupt                                           */
-  USBOTG_IRQn                   =  53,   /**<  69 USB0 OTG interrupt                                                               */
+  PIT0_IRQn                     =  48,   /**<  64 PIT timer channel 0 interrupt                                                    */
+  PIT1_IRQn                     =  49,   /**<  65 PIT timer channel 1 interrupt                                                    */
+  PIT2_IRQn                     =  50,   /**<  66 PIT timer channel 2 interrupt                                                    */
+  PIT3_IRQn                     =  51,   /**<  67 PIT timer channel 3 interrupt                                                    */
+  PDB0_IRQn                     =  52,   /**<  68 PDB Programmable Delay Block interrupt                                           */
+  USB0_IRQn                     =  53,   /**<  69 USB0 OTG interrupt                                                               */
   DAC0_IRQn                     =  56,   /**<  72 Digital to Analogue Converter                                                    */
   MCG_IRQn                      =  57,   /**<  73 Multipurpose Clock Generator                                                     */
   LPTMR0_IRQn                   =  58,   /**<  74 LPTMR Low Power Timer interrupt                                                  */
@@ -168,12 +168,12 @@ extern void FTM1_IRQHandler(void);             /**< FTM1 fault, overflow and cha
 extern void FTM2_IRQHandler(void);             /**< FTM2 fault, overflow and channels interrupt                                      */
 extern void RTC_Alarm_IRQHandler(void);        /**< RTC interrupt                                                                    */
 extern void RTC_Seconds_IRQHandler(void);      /**< RTC interrupt                                                                    */
-extern void PIT_Ch0_IRQHandler(void);          /**< PIT timer channel 0 interrupt                                                    */
-extern void PIT_Ch1_IRQHandler(void);          /**< PIT timer channel 1 interrupt                                                    */
-extern void PIT_Ch2_IRQHandler(void);          /**< PIT timer channel 2 interrupt                                                    */
-extern void PIT_Ch3_IRQHandler(void);          /**< PIT timer channel 3 interrupt                                                    */
-extern void PDB_IRQHandler(void);              /**< PDB Programmable Delay Block interrupt                                           */
-extern void USBOTG_IRQHandler(void);           /**< USB0 OTG interrupt                                                               */
+extern void PIT0_IRQHandler(void);             /**< PIT timer channel 0 interrupt                                                    */
+extern void PIT1_IRQHandler(void);             /**< PIT timer channel 1 interrupt                                                    */
+extern void PIT2_IRQHandler(void);             /**< PIT timer channel 2 interrupt                                                    */
+extern void PIT3_IRQHandler(void);             /**< PIT timer channel 3 interrupt                                                    */
+extern void PDB0_IRQHandler(void);             /**< PDB Programmable Delay Block interrupt                                           */
+extern void USB0_IRQHandler(void);             /**< USB0 OTG interrupt                                                               */
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
 extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */
 extern void LPTMR0_IRQHandler(void);           /**< LPTMR Low Power Timer interrupt                                                  */

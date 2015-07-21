@@ -14,7 +14,7 @@
 
 #include <limits.h>
 #include <string.h>
-#include "Delay.h"
+#include "delay.h"
 #include "EPD.h"
 #include "Seeed_SLD00200P.h"
 

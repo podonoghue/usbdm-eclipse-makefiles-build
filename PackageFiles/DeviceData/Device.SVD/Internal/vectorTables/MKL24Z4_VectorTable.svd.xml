@@ -81,8 +81,8 @@ Devices using this vector table:
             <value>15</value>
          </interrupt>
          <interrupt>
-            <name>ACMP0</name>
-            <description>Analogue comparator 0</description>
+            <name>CMP0</name>
+            <description>Comparator 0</description>
             <value>16</value>
          </interrupt>
          <interrupt>
@@ -101,7 +101,7 @@ Devices using this vector table:
             <value>19</value>
          </interrupt>
          <interrupt>
-            <name>RTC_Alarm</name>
+            <name>RTC</name>
             <description>Real Time Clock Alarm</description>
             <value>20</value>
          </interrupt>
@@ -116,7 +116,7 @@ Devices using this vector table:
             <value>22</value>
          </interrupt>
          <interrupt>
-            <name>USBOTG</name>
+            <name>USB0</name>
             <description>USBB On The Go</description>
             <value>24</value>
          </interrupt>
@@ -136,8 +136,8 @@ Devices using this vector table:
             <value>30</value>
          </interrupt>
          <interrupt>
-            <name>PORTC_D</name>
-            <description>Port C &amp; Port D</description>
+            <name>PORTD</name>
+            <description>Port D</description>
             <value>31</value>
          </interrupt>
       </interrupts>

@@ -66,12 +66,12 @@ Devices using this vector table:
             <value>21</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch0</name>
+            <name>PIT_CH0</name>
             <description>Programmable Interrupt Timer Channel 0</description>
             <value>22</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch1</name>
+            <name>PIT_CH1</name>
             <description>Programmable Interrupt Timer Channel 1</description>
             <value>23</value>
          </interrupt>

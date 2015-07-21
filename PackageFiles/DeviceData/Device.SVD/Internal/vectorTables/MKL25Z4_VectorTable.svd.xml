@@ -36,7 +36,7 @@ Devices using this vector table:
             <value>6</value>
          </interrupt>
          <interrupt>
-            <name>LLW</name>
+            <name>LLWU</name>
             <description>Low Leakage Wakeup</description>
             <value>7</value>
          </interrupt>
@@ -136,7 +136,7 @@ Devices using this vector table:
             <value>27</value>
          </interrupt>
          <interrupt>
-            <name>LPTimer</name>
+            <name>LPTMR0</name>
             <description>Low Power Timer</description>
             <value>28</value>
          </interrupt>

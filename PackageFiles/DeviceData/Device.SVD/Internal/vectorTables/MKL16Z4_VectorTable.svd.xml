@@ -31,7 +31,7 @@ Devices using this vector table:
             <value>5</value>
          </interrupt>
          <interrupt>
-            <name>PMC</name>
+            <name>LVD_LVW</name>
             <description>PMC Low-voltage detect, low-voltage warning</description>
             <value>6</value>
          </interrupt>
@@ -81,8 +81,8 @@ Devices using this vector table:
             <value>15</value>
          </interrupt>
          <interrupt>
-            <name>ACMP0</name>
-            <description>Analogue comparator 0</description>
+            <name>CMP0</name>
+            <description>Comparator 0</description>
             <value>16</value>
          </interrupt>
          <interrupt>
@@ -101,7 +101,7 @@ Devices using this vector table:
             <value>19</value>
          </interrupt>
          <interrupt>
-            <name>RTC_Alarm</name>
+            <name>RTC</name>
             <description>Real Time Clock Alarm</description>
             <value>20</value>
          </interrupt>
@@ -146,8 +146,8 @@ Devices using this vector table:
             <value>30</value>
          </interrupt>
          <interrupt>
-            <name>PORTC_D</name>
-            <description>Port C &amp; Port D</description>
+            <name>PORTC_PORTD</name>
+            <description>Port C &amp; D</description>
             <value>31</value>
          </interrupt>
       </interrupts>

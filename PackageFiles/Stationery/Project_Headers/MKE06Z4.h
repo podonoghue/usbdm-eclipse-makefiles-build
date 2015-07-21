@@ -53,8 +53,8 @@ typedef enum {
   FTM2_IRQn                     =  19,   /**<  35 Flexible Timer Module 2                                                          */
   RTC_IRQn                      =  20,   /**<  36 Real Time Clock overflow                                                         */
   ACMP1_IRQn                    =  21,   /**<  37 Analogue comparator 0                                                            */
-  PIT_Ch0_IRQn                  =  22,   /**<  38 Programmable Interrupt Timer Channel 0                                           */
-  PIT_Ch1_IRQn                  =  23,   /**<  39 Programmable Interrupt Timer Channel 1                                           */
+  PIT_CH0_IRQn                  =  22,   /**<  38 Programmable Interrupt Timer Channel 0                                           */
+  PIT_CH1_IRQn                  =  23,   /**<  39 Programmable Interrupt Timer Channel 1                                           */
   KBI0_IRQn                     =  24,   /**<  40 Keyboard Interrupt 0                                                             */
   KBI1_IRQn                     =  25,   /**<  41 Keyboard Interrupt 1                                                             */
   ICS_IRQn                      =  27,   /**<  43 ICS                                                                              */
@@ -95,8 +95,8 @@ extern void FTM1_IRQHandler(void);             /**< Flexible Timer Module 1     
 extern void FTM2_IRQHandler(void);             /**< Flexible Timer Module 2                                                          */
 extern void RTC_IRQHandler(void);              /**< Real Time Clock overflow                                                         */
 extern void ACMP1_IRQHandler(void);            /**< Analogue comparator 0                                                            */
-extern void PIT_Ch0_IRQHandler(void);          /**< Programmable Interrupt Timer Channel 0                                           */
-extern void PIT_Ch1_IRQHandler(void);          /**< Programmable Interrupt Timer Channel 1                                           */
+extern void PIT_CH0_IRQHandler(void);          /**< Programmable Interrupt Timer Channel 0                                           */
+extern void PIT_CH1_IRQHandler(void);          /**< Programmable Interrupt Timer Channel 1                                           */
 extern void KBI0_IRQHandler(void);             /**< Keyboard Interrupt 0                                                             */
 extern void KBI1_IRQHandler(void);             /**< Keyboard Interrupt 1                                                             */
 extern void ICS_IRQHandler(void);              /**< ICS                                                                              */

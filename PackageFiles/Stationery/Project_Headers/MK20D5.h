@@ -78,7 +78,7 @@ typedef enum {
   USBDCD_IRQn                   =  36,   /**<  52 USBDCD interrupt                                                                 */
   TSI0_IRQn                     =  37,   /**<  53 TSI0 interrupt                                                                   */
   MCG_IRQn                      =  38,   /**<  54 MCG interrupt                                                                    */
-  LPTimer_IRQn                  =  39,   /**<  55 LPTMR Low Power Timer interrupt                                                  */
+  LPTMR0_IRQn                   =  39,   /**<  55 LPTMR Low Power Timer interrupt                                                  */
   PORTA_IRQn                    =  40,   /**<  56 Port A interrupt                                                                 */
   PORTB_IRQn                    =  41,   /**<  57 Port B interrupt                                                                 */
   PORTC_IRQn                    =  42,   /**<  58 Port C interrupt                                                                 */
@@ -143,7 +143,7 @@ extern void USB0_IRQHandler(void);             /**< USB0 OTG interrupt          
 extern void USBDCD_IRQHandler(void);           /**< USBDCD interrupt                                                                 */
 extern void TSI0_IRQHandler(void);             /**< TSI0 interrupt                                                                   */
 extern void MCG_IRQHandler(void);              /**< MCG interrupt                                                                    */
-extern void LPTimer_IRQHandler(void);          /**< LPTMR Low Power Timer interrupt                                                  */
+extern void LPTMR0_IRQHandler(void);           /**< LPTMR Low Power Timer interrupt                                                  */
 extern void PORTA_IRQHandler(void);            /**< Port A interrupt                                                                 */
 extern void PORTB_IRQHandler(void);            /**< Port B interrupt                                                                 */
 extern void PORTC_IRQHandler(void);            /**< Port C interrupt                                                                 */
@@ -4747,8 +4747,8 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC4_VREF_MASK                      (0x01UL << SIM_SCGC4_VREF_SHIFT)                    /*!< SIM_SCGC4: VREF Mask                    */
 #define SIM_SCGC4_VREF_SHIFT                     20                                                  /*!< SIM_SCGC4: VREF Position                */
 /* ------- SCGC5 Bit Fields                         ------ */
-#define SIM_SCGC5_LPTIMER_MASK                   (0x01UL << SIM_SCGC5_LPTIMER_SHIFT)                 /*!< SIM_SCGC5: LPTIMER Mask                 */
-#define SIM_SCGC5_LPTIMER_SHIFT                  0                                                   /*!< SIM_SCGC5: LPTIMER Position             */
+#define SIM_SCGC5_LPTMR_MASK                     (0x01UL << SIM_SCGC5_LPTMR_SHIFT)                   /*!< SIM_SCGC5: LPTMR Mask                   */
+#define SIM_SCGC5_LPTMR_SHIFT                    0                                                   /*!< SIM_SCGC5: LPTMR Position               */
 #define SIM_SCGC5_TSI_MASK                       (0x01UL << SIM_SCGC5_TSI_SHIFT)                     /*!< SIM_SCGC5: TSI Mask                     */
 #define SIM_SCGC5_TSI_SHIFT                      5                                                   /*!< SIM_SCGC5: TSI Position                 */
 #define SIM_SCGC5_PORTA_MASK                     (0x01UL << SIM_SCGC5_PORTA_SHIFT)                   /*!< SIM_SCGC5: PORTA Mask                   */

@@ -10,7 +10,7 @@
 #define FXOS8700CQ_H_
 
 #include <stdint.h>
-#include "I2C.h"
+#include "i2c.h"
 
 /**
  * @addtogroup FXOS8700CQ_Group FXOS8700CQ 3-axis accelerometer and magnetometer

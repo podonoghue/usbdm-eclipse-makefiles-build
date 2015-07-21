@@ -95,14 +95,14 @@ typedef enum {
   FTM1_IRQn                     =  63,   /**<  79 FTM1 fault, overflow and channels interrupt                                      */
   FTM2_IRQn                     =  64,   /**<  80 FTM2 fault, overflow and channels interrupt                                      */
   CMT_IRQn                      =  65,   /**<  81 CMT interrupt                                                                    */
-  RTC_Alarm_IRQn                =  66,   /**<  82 RTC Alarm interrupt                                                              */
+  RTC_IRQn                      =  66,   /**<  82 RTC Alarm interrupt                                                              */
   RTC_Seconds_IRQn              =  67,   /**<  83 RTC seconds interrupt                                                            */
-  PIT_Ch0_IRQn                  =  68,   /**<  84 PIT timer channel 0 interrupt                                                    */
-  PIT_Ch1_IRQn                  =  69,   /**<  85 PIT timer channel 1 interrupt                                                    */
-  PIT_Ch2_IRQn                  =  70,   /**<  86 PIT timer channel 2 interrupt                                                    */
-  PIT_Ch3_IRQn                  =  71,   /**<  87 PIT timer channel 3 interrupt                                                    */
+  PIT0_IRQn                     =  68,   /**<  84 PIT timer channel 0 interrupt                                                    */
+  PIT1_IRQn                     =  69,   /**<  85 PIT timer channel 1 interrupt                                                    */
+  PIT2_IRQn                     =  70,   /**<  86 PIT timer channel 2 interrupt                                                    */
+  PIT3_IRQn                     =  71,   /**<  87 PIT timer channel 3 interrupt                                                    */
   PDB0_IRQn                     =  72,   /**<  88 PDB0 Programmable Delay Block interrupt                                          */
-  USBOTG_IRQn                   =  73,   /**<  89 USB0 OTG interrupt                                                               */
+  USB0_IRQn                     =  73,   /**<  89 USB0 OTG interrupt                                                               */
   USBDCD_IRQn                   =  74,   /**<  90 USBDCD interrupt                                                                 */
   DAC0_IRQn                     =  81,   /**<  97 Digital to Analogue Converter                                                    */
   TSI0_IRQn                     =  83,   /**<  99 Touch Sense Interface                                                            */
@@ -189,14 +189,14 @@ extern void FTM0_IRQHandler(void);             /**< FTM0 fault, overflow and cha
 extern void FTM1_IRQHandler(void);             /**< FTM1 fault, overflow and channels interrupt                                      */
 extern void FTM2_IRQHandler(void);             /**< FTM2 fault, overflow and channels interrupt                                      */
 extern void CMT_IRQHandler(void);              /**< CMT interrupt                                                                    */
-extern void RTC_Alarm_IRQHandler(void);        /**< RTC Alarm interrupt                                                              */
+extern void RTC_IRQHandler(void);              /**< RTC Alarm interrupt                                                              */
 extern void RTC_Seconds_IRQHandler(void);      /**< RTC seconds interrupt                                                            */
-extern void PIT_Ch0_IRQHandler(void);          /**< PIT timer channel 0 interrupt                                                    */
-extern void PIT_Ch1_IRQHandler(void);          /**< PIT timer channel 1 interrupt                                                    */
-extern void PIT_Ch2_IRQHandler(void);          /**< PIT timer channel 2 interrupt                                                    */
-extern void PIT_Ch3_IRQHandler(void);          /**< PIT timer channel 3 interrupt                                                    */
+extern void PIT0_IRQHandler(void);             /**< PIT timer channel 0 interrupt                                                    */
+extern void PIT1_IRQHandler(void);             /**< PIT timer channel 1 interrupt                                                    */
+extern void PIT2_IRQHandler(void);             /**< PIT timer channel 2 interrupt                                                    */
+extern void PIT3_IRQHandler(void);             /**< PIT timer channel 3 interrupt                                                    */
 extern void PDB0_IRQHandler(void);             /**< PDB0 Programmable Delay Block interrupt                                          */
-extern void USBOTG_IRQHandler(void);           /**< USB0 OTG interrupt                                                               */
+extern void USB0_IRQHandler(void);             /**< USB0 OTG interrupt                                                               */
 extern void USBDCD_IRQHandler(void);           /**< USBDCD interrupt                                                                 */
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
 extern void TSI0_IRQHandler(void);             /**< Touch Sense Interface                                                            */
@@ -5772,8 +5772,8 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC4_VREF_MASK                      (0x01UL << SIM_SCGC4_VREF_SHIFT)                    /*!< SIM_SCGC4: VREF Mask                    */
 #define SIM_SCGC4_VREF_SHIFT                     20                                                  /*!< SIM_SCGC4: VREF Position                */
 /* ------- SCGC5 Bit Fields                         ------ */
-#define SIM_SCGC5_LPTIMER_MASK                   (0x01UL << SIM_SCGC5_LPTIMER_SHIFT)                 /*!< SIM_SCGC5: LPTIMER Mask                 */
-#define SIM_SCGC5_LPTIMER_SHIFT                  0                                                   /*!< SIM_SCGC5: LPTIMER Position             */
+#define SIM_SCGC5_LPTMR_MASK                     (0x01UL << SIM_SCGC5_LPTMR_SHIFT)                   /*!< SIM_SCGC5: LPTMR Mask                   */
+#define SIM_SCGC5_LPTMR_SHIFT                    0                                                   /*!< SIM_SCGC5: LPTMR Position               */
 #define SIM_SCGC5_TSI_MASK                       (0x01UL << SIM_SCGC5_TSI_SHIFT)                     /*!< SIM_SCGC5: TSI Mask                     */
 #define SIM_SCGC5_TSI_SHIFT                      5                                                   /*!< SIM_SCGC5: TSI Position                 */
 #define SIM_SCGC5_PORTA_MASK                     (0x01UL << SIM_SCGC5_PORTA_SHIFT)                   /*!< SIM_SCGC5: PORTA Mask                   */

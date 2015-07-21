@@ -41,7 +41,7 @@ typedef enum {
   DMA2_IRQn                     =   2,   /**<  18 DMA2 Transfer complete or error                                                  */
   DMA3_IRQn                     =   3,   /**<  19 DMA3 Transfer complete or error                                                  */
   FTFA_IRQn                     =   5,   /**<  21 FTFA Command complete or error                                                   */
-  PMC_IRQn                      =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
+  LVD_LVW_IRQn                  =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
   LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 I2C Interface 0                                                                  */
   I2C1_IRQn                     =   9,   /**<  25 I2C Interface 1                                                                  */
@@ -51,11 +51,11 @@ typedef enum {
   UART1_IRQn                    =  13,   /**<  29 UART1 Status and error                                                           */
   UART2_IRQn                    =  14,   /**<  30 UART2 Status and error                                                           */
   ADC0_IRQn                     =  15,   /**<  31 Analogue to Digital Converter 0                                                  */
-  ACMP0_IRQn                    =  16,   /**<  32 Analogue comparator 0                                                            */
+  CMP0_IRQn                     =  16,   /**<  32 Comparator 0                                                                     */
   TPM0_IRQn                     =  17,   /**<  33 Timer/PWM Module 0                                                               */
   TPM1_IRQn                     =  18,   /**<  34 Timer/PWM Module 1                                                               */
   TPM2_IRQn                     =  19,   /**<  35 Timer/PWM Module 2                                                               */
-  RTC_Alarm_IRQn                =  20,   /**<  36 Real Time Clock Alarm                                                            */
+  RTC_IRQn                      =  20,   /**<  36 Real Time Clock Alarm                                                            */
   RTC_Seconds_IRQn              =  21,   /**<  37 Real Time Clock Seconds                                                          */
   PIT_IRQn                      =  22,   /**<  38 Programmable Interrupt Timer (All channels)                                      */
   I2S0_IRQn                     =  23,   /**<  39 I2S0                                                                             */
@@ -63,9 +63,9 @@ typedef enum {
   TSI0_IRQn                     =  26,   /**<  42 Touch Sense Input                                                                */
   MCG_IRQn                      =  27,   /**<  43 Clock interrupt                                                                  */
   LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
-  SLCD_IRQn                     =  29,   /**<  45 LCD Controller                                                                   */
+  LCD_IRQn                      =  29,   /**<  45 LCD Controller                                                                   */
   PORTA_IRQn                    =  30,   /**<  46 Port A                                                                           */
-  PORTC_D_IRQn                  =  31,   /**<  47 Port C & Port D                                                                  */
+  PORTC_PORTD_IRQn              =  31,   /**<  47 Port C & D                                                                       */
 } IRQn_Type;
 
 /**
@@ -87,7 +87,7 @@ extern void DMA1_IRQHandler(void);             /**< DMA1 Transfer complete or er
 extern void DMA2_IRQHandler(void);             /**< DMA2 Transfer complete or error                                                  */
 extern void DMA3_IRQHandler(void);             /**< DMA3 Transfer complete or error                                                  */
 extern void FTFA_IRQHandler(void);             /**< FTFA Command complete or error                                                   */
-extern void PMC_IRQHandler(void);              /**< PMC Low-voltage detect, low-voltage warning                                      */
+extern void LVD_LVW_IRQHandler(void);          /**< PMC Low-voltage detect, low-voltage warning                                      */
 extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);             /**< I2C Interface 0                                                                  */
 extern void I2C1_IRQHandler(void);             /**< I2C Interface 1                                                                  */
@@ -97,11 +97,11 @@ extern void UART0_IRQHandler(void);            /**< UART0 Status and error      
 extern void UART1_IRQHandler(void);            /**< UART1 Status and error                                                           */
 extern void UART2_IRQHandler(void);            /**< UART2 Status and error                                                           */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter 0                                                  */
-extern void ACMP0_IRQHandler(void);            /**< Analogue comparator 0                                                            */
+extern void CMP0_IRQHandler(void);             /**< Comparator 0                                                                     */
 extern void TPM0_IRQHandler(void);             /**< Timer/PWM Module 0                                                               */
 extern void TPM1_IRQHandler(void);             /**< Timer/PWM Module 1                                                               */
 extern void TPM2_IRQHandler(void);             /**< Timer/PWM Module 2                                                               */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock Alarm                                                            */
+extern void RTC_IRQHandler(void);              /**< Real Time Clock Alarm                                                            */
 extern void RTC_Seconds_IRQHandler(void);      /**< Real Time Clock Seconds                                                          */
 extern void PIT_IRQHandler(void);              /**< Programmable Interrupt Timer (All channels)                                      */
 extern void I2S0_IRQHandler(void);             /**< I2S0                                                                             */
@@ -109,9 +109,9 @@ extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converte
 extern void TSI0_IRQHandler(void);             /**< Touch Sense Input                                                                */
 extern void MCG_IRQHandler(void);              /**< Clock interrupt                                                                  */
 extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
-extern void SLCD_IRQHandler(void);             /**< LCD Controller                                                                   */
+extern void LCD_IRQHandler(void);              /**< LCD Controller                                                                   */
 extern void PORTA_IRQHandler(void);            /**< Port A                                                                           */
-extern void PORTC_D_IRQHandler(void);          /**< Port C & Port D                                                                  */
+extern void PORTC_PORTD_IRQHandler(void);      /**< Port C & D                                                                       */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 

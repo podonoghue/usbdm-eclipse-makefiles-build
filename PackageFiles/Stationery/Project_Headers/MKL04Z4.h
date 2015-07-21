@@ -41,16 +41,16 @@ typedef enum {
   DMA2_IRQn                     =   2,   /**<  18 DMA2 Transfer complete or error                                                  */
   DMA3_IRQn                     =   3,   /**<  19 DMA3 Transfer complete or error                                                  */
   FTFA_IRQn                     =   5,   /**<  21 FTFA Command complete or error                                                   */
-  PMC_IRQn                      =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
+  LVD_LVW_IRQn                  =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
   LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 I2C Interface 0                                                                  */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface 0                                                    */
   UART0_IRQn                    =  12,   /**<  28 UART0 Status and error                                                           */
   ADC0_IRQn                     =  15,   /**<  31 Analogue to Digital Converter 0                                                  */
-  ACMP0_IRQn                    =  16,   /**<  32 Analogue comparator 0                                                            */
+  CMP0_IRQn                     =  16,   /**<  32 Comparator 0                                                                     */
   TPM0_IRQn                     =  17,   /**<  33 Timer/PWM Module 0                                                               */
   TPM1_IRQn                     =  18,   /**<  34 Timer/PWM Module 1                                                               */
-  RTC_Alarm_IRQn                =  20,   /**<  36 Real Time Clock Alarm                                                            */
+  RTC_IRQn                      =  20,   /**<  36 Real Time Clock Alarm                                                            */
   RTC_Seconds_IRQn              =  21,   /**<  37 Real Time Clock Seconds                                                          */
   PIT_IRQn                      =  22,   /**<  38 Programmable Interrupt Timer (All channels)                                      */
   MCG_IRQn                      =  27,   /**<  43 Clock interrupt                                                                  */
@@ -78,16 +78,16 @@ extern void DMA1_IRQHandler(void);             /**< DMA1 Transfer complete or er
 extern void DMA2_IRQHandler(void);             /**< DMA2 Transfer complete or error                                                  */
 extern void DMA3_IRQHandler(void);             /**< DMA3 Transfer complete or error                                                  */
 extern void FTFA_IRQHandler(void);             /**< FTFA Command complete or error                                                   */
-extern void PMC_IRQHandler(void);              /**< PMC Low-voltage detect, low-voltage warning                                      */
+extern void LVD_LVW_IRQHandler(void);          /**< PMC Low-voltage detect, low-voltage warning                                      */
 extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);             /**< I2C Interface 0                                                                  */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface 0                                                    */
 extern void UART0_IRQHandler(void);            /**< UART0 Status and error                                                           */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter 0                                                  */
-extern void ACMP0_IRQHandler(void);            /**< Analogue comparator 0                                                            */
+extern void CMP0_IRQHandler(void);             /**< Comparator 0                                                                     */
 extern void TPM0_IRQHandler(void);             /**< Timer/PWM Module 0                                                               */
 extern void TPM1_IRQHandler(void);             /**< Timer/PWM Module 1                                                               */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock Alarm                                                            */
+extern void RTC_IRQHandler(void);              /**< Real Time Clock Alarm                                                            */
 extern void RTC_Seconds_IRQHandler(void);      /**< Real Time Clock Seconds                                                          */
 extern void PIT_IRQHandler(void);              /**< Programmable Interrupt Timer (All channels)                                      */
 extern void MCG_IRQHandler(void);              /**< Clock interrupt                                                                  */

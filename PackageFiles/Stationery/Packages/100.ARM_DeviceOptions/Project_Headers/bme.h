@@ -28,22 +28,22 @@ extern "C" {
  *
  * Setting a clock enable bit within SIM_SCGC
  * ~~~~~~~~~~~~~~~{.c}
- *    BME_BIT_SET(&SIM_SCGC, SIM_SCGC_ACMP0_SHIFT);  // Set SIM_SCGC.ACMP0 bit
+ *    BME_BIT_TEST_AND_SETw(&SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Set SIM_SCGC6.ADC0 bit
  *~~~~~~~~~~~~~~~
  *
  * Clearing a clock enable bit within SIM_SCGC
  * ~~~~~~~~~~~~~~~{.c}
- *    BME_BIT_CLEAR(&SIM_SCGC, SIM_SCGC_ACMP0_SHIFT);  // Clear SIM_SCGC.ACMP0 bit
+ *    BME_BIT_TEST_AND_CLEARw(&SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Clear SIM_SCGC6.ADC0 bit
  *~~~~~~~~~~~~~~~
  *
  * Settting multiple bits
  * ~~~~~~~~~~~~~~~{.c}
- *    BME_OR(&SIM_SCGC,SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK);
+ *    BME_ORw(&SIM_SCGC,SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK);
  *~~~~~~~~~~~~~~~
  *
  * Clearing multiple bits
  * ~~~~~~~~~~~~~~~{.c}
- *    BME_AND(&SIM_SCGC,~(SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK));
+ *    BME_ANDw(&SIM_SCGC,~(SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK));
  *~~~~~~~~~~~~~~~
  *
  * Spin-lock - Wait until successful at setting the bit i.e. the bit was 0 and now is 1
@@ -170,7 +170,7 @@ extern "C" {
  * i.e. Clear 1 bit and return original bit value
  *
  * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
+ * @param bitNum Number of bit to test
  *
  */
 #define BME_BIT_TEST_AND_CLEARh(addr, bitNum)        (*(volatile uint16_t *)(((uint32_t)(addr))   \
@@ -182,7 +182,7 @@ extern "C" {
  * i.e. Set 1 bit and return original bit value
  *
  * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
+ * @param bitNum Number of bit to test
  *
  */
 #define BME_BIT_TEST_AND_SETh(addr, bitNum)        (*(volatile uint16_t *)(((uint32_t)(addr))   \

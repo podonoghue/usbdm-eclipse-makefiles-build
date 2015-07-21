@@ -42,7 +42,7 @@ typedef enum {
   DMA3_IRQn                     =   3,   /**<  19 DMA3 Transfer complete or error                                                  */
   FTFA_IRQn                     =   5,   /**<  21 FTFA Command complete or error                                                   */
   LVD_LVW_IRQn                  =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
-  LLW_IRQn                      =   7,   /**<  23 Low Leakage Wakeup                                                               */
+  LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 I2C Interface 0                                                                  */
   I2C1_IRQn                     =   9,   /**<  25 I2C Interface 1                                                                  */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface 0                                                    */
@@ -62,7 +62,7 @@ typedef enum {
   DAC0_IRQn                     =  25,   /**<  41 Digital to Analogue Converter                                                    */
   TSI0_IRQn                     =  26,   /**<  42 Touch Sense Input                                                                */
   MCG_IRQn                      =  27,   /**<  43 Clock interrupt                                                                  */
-  LPTimer_IRQn                  =  28,   /**<  44 Low Power Timer                                                                  */
+  LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
   PORTA_IRQn                    =  30,   /**<  46 Port A                                                                           */
   PORTD_IRQn                    =  31,   /**<  47 Port D                                                                           */
 } IRQn_Type;
@@ -87,7 +87,7 @@ extern void DMA2_IRQHandler(void);             /**< DMA2 Transfer complete or er
 extern void DMA3_IRQHandler(void);             /**< DMA3 Transfer complete or error                                                  */
 extern void FTFA_IRQHandler(void);             /**< FTFA Command complete or error                                                   */
 extern void LVD_LVW_IRQHandler(void);          /**< PMC Low-voltage detect, low-voltage warning                                      */
-extern void LLW_IRQHandler(void);              /**< Low Leakage Wakeup                                                               */
+extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);             /**< I2C Interface 0                                                                  */
 extern void I2C1_IRQHandler(void);             /**< I2C Interface 1                                                                  */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface 0                                                    */
@@ -107,7 +107,7 @@ extern void USB0_IRQHandler(void);             /**< USBB On The Go              
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
 extern void TSI0_IRQHandler(void);             /**< Touch Sense Input                                                                */
 extern void MCG_IRQHandler(void);              /**< Clock interrupt                                                                  */
-extern void LPTimer_IRQHandler(void);          /**< Low Power Timer                                                                  */
+extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
 extern void PORTA_IRQHandler(void);            /**< Port A                                                                           */
 extern void PORTD_IRQHandler(void);            /**< Port D                                                                           */
 

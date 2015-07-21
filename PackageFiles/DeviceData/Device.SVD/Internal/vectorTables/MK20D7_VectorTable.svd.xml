@@ -281,7 +281,7 @@ Devices using this vector table:
             <value>65</value>
          </interrupt>
          <interrupt>
-            <name>RTC_Alarm</name>
+            <name>RTC</name>
             <description>RTC Alarm interrupt</description>
             <value>66</value>
          </interrupt>
@@ -291,22 +291,22 @@ Devices using this vector table:
             <value>67</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch0</name>
+            <name>PIT0</name>
             <description>PIT timer channel 0 interrupt</description>
             <value>68</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch1</name>
+            <name>PIT1</name>
             <description>PIT timer channel 1 interrupt</description>
             <value>69</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch2</name>
+            <name>PIT2</name>
             <description>PIT timer channel 2 interrupt</description>
             <value>70</value>
          </interrupt>
          <interrupt>
-            <name>PIT_Ch3</name>
+            <name>PIT3</name>
             <description>PIT timer channel 3 interrupt</description>
             <value>71</value>
          </interrupt>
@@ -316,7 +316,7 @@ Devices using this vector table:
             <value>72</value>
          </interrupt>
          <interrupt>
-            <name>USBOTG</name>
+            <name>USB0</name>
             <description>USB0 OTG interrupt</description>
             <value>73</value>
          </interrupt>

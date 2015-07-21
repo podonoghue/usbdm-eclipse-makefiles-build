@@ -9,7 +9,7 @@
  */
 #include "derivative.h"
 #include "utilities.h"
-#include "I2C.h"
+#include "i2c.h"
 #include "PCA9685.h"
 
 #define I2C_SWRST_ADDRESS        (0x00<<1) // General I2C Software reset address

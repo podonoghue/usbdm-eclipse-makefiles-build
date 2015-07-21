@@ -196,7 +196,7 @@ Devices using this vector table:
             <value>38</value>
          </interrupt>
          <interrupt>
-            <name>LPTimer</name>
+            <name>LPTMR0</name>
             <description>LPTMR Low Power Timer interrupt</description>
             <value>39</value>
          </interrupt>

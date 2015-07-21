@@ -4,10 +4,12 @@
 <root version="1.0">
    <!-- Freescale Kinetis SDK - Common paths, files and project modifications -->
    <projectActionList id="Kinetis-KSDK" root="usbdm_resource_path/Stationery/ARM/">
-
-      <group id="group-ksdk-library-import-device"         name="Device" />
-      <group id="group-ksdk-library-import-os-abstraction" name="Operating System Support" />
-
+      
+      <page name="Create KDS Library Project" description="Select options for creation of library project" id="usbdm-kds-creation-page">
+         <group id="group-ksdk-library-import-device"         name="Device" />
+         <group id="group-ksdk-library-import-os-abstraction" name="Operating System Support" />
+      </page>
+      
       <!-- Project name with macros osType=(bm|FreeRTOS|mqx), targetDevice=(K22F51212|K64F12|KL03Z4|KL46Z4)  -->
       <constant id="projectName"     value="ksdk_lib_$(kdsTargetName)_$(osType)_usbdm" />
       <constant id="projectHomePath" value="" />       <!--  Where project is created (empty for default=workspace) -->

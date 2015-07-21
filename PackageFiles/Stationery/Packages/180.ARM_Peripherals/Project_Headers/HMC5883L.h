@@ -10,7 +10,7 @@
 #define HMC5883L_H_
 
 #include <stdint.h>
-#include "I2C.h"
+#include "i2c.h"
 
 /**
  * @addtogroup HMC5883L_Group HMC5883L 3-axis magnetometer

@@ -1,11 +1,11 @@
 /**
- * @file      PinMapping.h
+ * @file      pin_mapping.h
  * @version   1.0.0
  * @brief     Pin declarations for MKL25Z4
  */
 
-#ifndef PINMAPPING_H_
-#define PINMAPPING_H_
+#ifndef PIN_MAPPING_H_
+#define PIN_MAPPING_H_
 
 #include "derivative.h"
 
@@ -39,22 +39,48 @@
 
 // </h>
 
-#define TPM0_CLOCK_REG       SIM->SCGC6          
-#define TPM0_CLOCK_MASK      SIM_SCGC6_TPM0_MASK 
-#define TPM1_CLOCK_REG       SIM->SCGC6          
-#define TPM1_CLOCK_MASK      SIM_SCGC6_TPM1_MASK 
-#define TPM2_CLOCK_REG       SIM->SCGC6          
-#define TPM2_CLOCK_MASK      SIM_SCGC6_TPM2_MASK 
-#define ADC0_CLOCK_REG       SIM->SCGC6          
-#define ADC0_CLOCK_MASK      SIM_SCGC6_ADC0_MASK 
-#define I2C0_CLOCK_REG       SIM->SCGC4          
-#define I2C0_CLOCK_MASK      SIM_SCGC4_I2C0_MASK 
-#define I2C1_CLOCK_REG       SIM->SCGC4          
-#define I2C1_CLOCK_MASK      SIM_SCGC4_I2C1_MASK 
+#define RTC_CLOCK_REG        SIM->SCGC6          
+#define RTC_CLOCK_MASK       SIM_SCGC6_RTC_MASK  
 #define SPI0_CLOCK_REG       SIM->SCGC4          
 #define SPI0_CLOCK_MASK      SIM_SCGC4_SPI0_MASK 
+#define USBOTG_CLOCK_REG     SIM->SCGC4          
+#define USBOTG_CLOCK_MASK    SIM_SCGC4_USBOTG_MASK
 #define SPI1_CLOCK_REG       SIM->SCGC4          
 #define SPI1_CLOCK_MASK      SIM_SCGC4_SPI1_MASK 
+#define LPTMR0_CLOCK_REG     SIM->SCGC5          
+#define LPTMR0_CLOCK_MASK    SIM_SCGC5_LPTMR_MASK
+#define TPM2_CLOCK_REG       SIM->SCGC6          
+#define TPM2_CLOCK_MASK      SIM_SCGC6_TPM2_MASK 
+#define CMP_CLOCK_REG        SIM->SCGC4          
+#define CMP_CLOCK_MASK       SIM_SCGC4_CMP_MASK  
+#define TPM1_CLOCK_REG       SIM->SCGC6          
+#define TPM1_CLOCK_MASK      SIM_SCGC6_TPM1_MASK 
+#define UART2_CLOCK_REG      SIM->SCGC4          
+#define UART2_CLOCK_MASK     SIM_SCGC4_UART2_MASK
+#define TSI_CLOCK_REG        SIM->SCGC5          
+#define TSI_CLOCK_MASK       SIM_SCGC5_TSI_MASK  
+#define ADC0_CLOCK_REG       SIM->SCGC6          
+#define ADC0_CLOCK_MASK      SIM_SCGC6_ADC0_MASK 
+#define UART0_CLOCK_REG      SIM->SCGC4          
+#define UART0_CLOCK_MASK     SIM_SCGC4_UART0_MASK
+#define UART1_CLOCK_REG      SIM->SCGC4          
+#define UART1_CLOCK_MASK     SIM_SCGC4_UART1_MASK
+#define DAC0_CLOCK_REG       SIM->SCGC6          
+#define DAC0_CLOCK_MASK      SIM_SCGC6_DAC0_MASK 
+#define VREF_CLOCK_REG       SIM->SCGC4          
+#define VREF_CLOCK_MASK      SIM_SCGC4_VREF_MASK 
+#define I2C1_CLOCK_REG       SIM->SCGC4          
+#define I2C1_CLOCK_MASK      SIM_SCGC4_I2C1_MASK 
+#define I2C0_CLOCK_REG       SIM->SCGC4          
+#define I2C0_CLOCK_MASK      SIM_SCGC4_I2C0_MASK 
+#define TPM0_CLOCK_REG       SIM->SCGC6          
+#define TPM0_CLOCK_MASK      SIM_SCGC6_TPM0_MASK 
+#define DMA_CLOCK_REG        SIM->SCGC7          
+#define DMA_CLOCK_MASK       SIM_SCGC7_DMA_MASK  
+#define PIT_CLOCK_REG        SIM->SCGC6          
+#define PIT_CLOCK_MASK       SIM_SCGC6_PIT_MASK  
+#define DMAMUX_CLOCK_REG     SIM->SCGC6          
+#define DMAMUX_CLOCK_MASK    SIM_SCGC6_DMAMUX_MASK
 
 // <h> Pin Peripheral mapping
 
@@ -213,6 +239,22 @@
 //     <4=> PTE0 (Alias: D15)
 //     <4=> Default
 #define I2C1_SDA_SEL         4                   
+
+// LPTMR0_1 maps to [Disabled, PTA19]
+//   <o> LPTMR0_1 Pin Selection [PTA19] 
+//   <i> Selects which pin is used for LPTMR0_1
+//     <0=> Disabled
+//     <1=> PTA19
+//     <0=> Default
+#define LPTMR0_1_SEL         0                   
+
+// LPTMR0_2 maps to [Disabled, PTC5]
+//   <o> LPTMR0_2 Pin Selection [PTC5(D20)] 
+//   <i> Selects which pin is used for LPTMR0_2
+//     <0=> Disabled
+//     <1=> PTC5 (Alias: D20)
+//     <0=> Default
+#define LPTMR0_2_SEL         0                   
 
 // SPI0_MISO maps to [Disabled, PTA16, PTA17, PTC6, PTC7, PTD2, PTD3]
 //   <o> SPI0_MISO Pin Selection [PTA16(D28), PTA17(D29), PTC6(D21), PTC7(D16), PTD2(D11), PTD3(D12)] 
@@ -447,8 +489,8 @@
 #define PTA3_TPM_FN                3     //!< PTA3 Pin multiplexor for TPM
 #endif
 #if I2C1_SCL_SEL == 1
-#define I2C1_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTA3  //!< PTA3 = I2C
+#define I2C1_SCL_FN                2     //!< PTA3 Pin multiplexor for I2C
+#define I2C1_SCL_GPIO              digitalIO_PTA3   //!< PTA3 I2C GPIO
 #endif
 
 // PTA4 = TPM0_1,I2C1_SDA (Alias: D4)
@@ -460,8 +502,8 @@
 #define PTA4_TPM_FN                3     //!< PTA4 Pin multiplexor for TPM
 #endif
 #if I2C1_SDA_SEL == 1
-#define I2C1_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTA4  //!< PTA4 = I2C
+#define I2C1_SDA_FN                2     //!< PTA4 Pin multiplexor for I2C
+#define I2C1_SDA_GPIO              digitalIO_PTA4   //!< PTA4 I2C GPIO
 #endif
 
 // PTA5 = TPM0_2 (Alias: D5)
@@ -496,7 +538,7 @@
 #define PTA14_NUM                  14    //!< PTA14 Port number
 #if SPI0_PCS0_SEL == 1
 #define SPI0_PCS0_FN               2     //!< PTA14 Pin multiplexor for SPI
-#define SPI0_PCS0_GPIO             digitalIO_PTA14  //!< PTA14 = SPI
+#define SPI0_PCS0_GPIO             digitalIO_PTA14   //!< PTA14 SPI GPIO
 #endif
 
 // PTA15 = SPI0_SCK
@@ -504,7 +546,7 @@
 #define PTA15_NUM                  15    //!< PTA15 Port number
 #if SPI0_SCK_SEL == 1
 #define SPI0_SCK_FN                2     //!< PTA15 Pin multiplexor for SPI
-#define SPI0_SCK_GPIO              digitalIO_PTA15  //!< PTA15 = SPI
+#define SPI0_SCK_GPIO              digitalIO_PTA15   //!< PTA15 SPI GPIO
 #endif
 
 // PTA16 = SPI0_MOSI,SPI0_MISO (Alias: D28)
@@ -512,11 +554,11 @@
 #define PTA16_NUM                  16    //!< PTA16 Port number
 #if SPI0_MOSI_SEL == 1
 #define SPI0_MOSI_FN               2     //!< PTA16 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTA16  //!< PTA16 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTA16   //!< PTA16 SPI GPIO
 #endif
 #if SPI0_MISO_SEL == 1
 #define SPI0_MISO_FN               5     //!< PTA16 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTA16  //!< PTA16 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTA16   //!< PTA16 SPI GPIO
 #endif
 
 // PTA17 = SPI0_MISO,SPI0_MOSI (Alias: D29)
@@ -524,20 +566,24 @@
 #define PTA17_NUM                  17    //!< PTA17 Port number
 #if SPI0_MISO_SEL == 2
 #define SPI0_MISO_FN               2     //!< PTA17 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTA17  //!< PTA17 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTA17   //!< PTA17 SPI GPIO
 #endif
 #if SPI0_MOSI_SEL == 2
 #define SPI0_MOSI_FN               5     //!< PTA17 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTA17  //!< PTA17 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTA17   //!< PTA17 SPI GPIO
 #endif
 
 // PTA18
 #define PTA18_PORT                 A     //!< PTA18 Port name
 #define PTA18_NUM                  18    //!< PTA18 Port number
 
-// PTA19
+// PTA19 = LPTMR0_1
 #define PTA19_PORT                 A     //!< PTA19 Port name
 #define PTA19_NUM                  19    //!< PTA19 Port number
+#if LPTMR0_1_SEL == 1
+#define LPTMR0_1_FN                6     //!< PTA19 Pin multiplexor for LPTMR
+#define LPTMR0_1_GPIO              digitalIO_PTA19   //!< PTA19 LPTMR GPIO
+#endif
 
 // PTA20
 #define PTA20_PORT                 A     //!< PTA20 Port name
@@ -554,8 +600,8 @@
 #define PTB0_TPM_FN                3     //!< PTB0 Pin multiplexor for TPM
 #endif
 #if I2C0_SCL_SEL == 1
-#define I2C0_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTB0  //!< PTB0 = I2C
+#define I2C0_SCL_FN                2     //!< PTB0 Pin multiplexor for I2C
+#define I2C0_SCL_GPIO              digitalIO_PTB0   //!< PTB0 I2C GPIO
 #endif
 
 // PTB1 = ADC0_9,TPM1_1,I2C0_SDA (Alias: A1)
@@ -569,8 +615,8 @@
 #define PTB1_TPM_FN                3     //!< PTB1 Pin multiplexor for TPM
 #endif
 #if I2C0_SDA_SEL == 1
-#define I2C0_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTB1  //!< PTB1 = I2C
+#define I2C0_SDA_FN                2     //!< PTB1 Pin multiplexor for I2C
+#define I2C0_SDA_GPIO              digitalIO_PTB1   //!< PTB1 I2C GPIO
 #endif
 
 // PTB2 = ADC0_12,TPM2_0,I2C0_SCL (Alias: A2)
@@ -584,8 +630,8 @@
 #define PTB2_TPM_FN                3     //!< PTB2 Pin multiplexor for TPM
 #endif
 #if I2C0_SCL_SEL == 2
-#define I2C0_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTB2  //!< PTB2 = I2C
+#define I2C0_SCL_FN                2     //!< PTB2 Pin multiplexor for I2C
+#define I2C0_SCL_GPIO              digitalIO_PTB2   //!< PTB2 I2C GPIO
 #endif
 
 // PTB3 = ADC0_13,TPM2_1,I2C0_SDA (Alias: A3)
@@ -599,8 +645,8 @@
 #define PTB3_TPM_FN                3     //!< PTB3 Pin multiplexor for TPM
 #endif
 #if I2C0_SDA_SEL == 2
-#define I2C0_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTB3  //!< PTB3 = I2C
+#define I2C0_SDA_FN                2     //!< PTB3 Pin multiplexor for I2C
+#define I2C0_SDA_GPIO              digitalIO_PTB3   //!< PTB3 I2C GPIO
 #endif
 
 // PTB8 (Alias: A20)
@@ -616,7 +662,7 @@
 #define PTB10_NUM                  10    //!< PTB10 Port number
 #if SPI1_PCS0_SEL == 1
 #define SPI1_PCS0_FN               2     //!< PTB10 Pin multiplexor for SPI
-#define SPI1_PCS0_GPIO             digitalIO_PTB10  //!< PTB10 = SPI
+#define SPI1_PCS0_GPIO             digitalIO_PTB10   //!< PTB10 SPI GPIO
 #endif
 
 // PTB11 = SPI1_SCK (Alias: A17)
@@ -624,7 +670,7 @@
 #define PTB11_NUM                  11    //!< PTB11 Port number
 #if SPI1_SCK_SEL == 1
 #define SPI1_SCK_FN                2     //!< PTB11 Pin multiplexor for SPI
-#define SPI1_SCK_GPIO              digitalIO_PTB11  //!< PTB11 = SPI
+#define SPI1_SCK_GPIO              digitalIO_PTB11   //!< PTB11 SPI GPIO
 #endif
 
 // PTB16 = SPI1_MOSI,SPI1_MISO
@@ -632,11 +678,11 @@
 #define PTB16_NUM                  16    //!< PTB16 Port number
 #if SPI1_MOSI_SEL == 1
 #define SPI1_MOSI_FN               2     //!< PTB16 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTB16  //!< PTB16 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTB16   //!< PTB16 SPI GPIO
 #endif
 #if SPI1_MISO_SEL == 1
 #define SPI1_MISO_FN               5     //!< PTB16 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTB16  //!< PTB16 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTB16   //!< PTB16 SPI GPIO
 #endif
 
 // PTB17 = SPI1_MISO,SPI1_MOSI
@@ -644,11 +690,11 @@
 #define PTB17_NUM                  17    //!< PTB17 Port number
 #if SPI1_MISO_SEL == 2
 #define SPI1_MISO_FN               2     //!< PTB17 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTB17  //!< PTB17 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTB17   //!< PTB17 SPI GPIO
 #endif
 #if SPI1_MOSI_SEL == 2
 #define SPI1_MOSI_FN               5     //!< PTB17 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTB17  //!< PTB17 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTB17   //!< PTB17 SPI GPIO
 #endif
 
 // PTB18 = TPM2_0
@@ -686,8 +732,8 @@
 #define PTC1_TPM_FN                4     //!< PTC1 Pin multiplexor for TPM
 #endif
 #if I2C1_SCL_SEL == 2
-#define I2C1_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTC1  //!< PTC1 = I2C
+#define I2C1_SCL_FN                2     //!< PTC1 Pin multiplexor for I2C
+#define I2C1_SCL_GPIO              digitalIO_PTC1   //!< PTC1 I2C GPIO
 #endif
 
 // PTC2 = ADC0_11,TPM0_1,I2C1_SDA (Alias: A4)
@@ -701,8 +747,8 @@
 #define PTC2_TPM_FN                4     //!< PTC2 Pin multiplexor for TPM
 #endif
 #if I2C1_SDA_SEL == 2
-#define I2C1_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTC2  //!< PTC2 = I2C
+#define I2C1_SDA_FN                2     //!< PTC2 Pin multiplexor for I2C
+#define I2C1_SDA_GPIO              digitalIO_PTC2   //!< PTC2 I2C GPIO
 #endif
 
 // PTC3 = TPM0_2 (Alias: D18)
@@ -724,15 +770,19 @@
 #endif
 #if SPI0_PCS0_SEL == 2
 #define SPI0_PCS0_FN               2     //!< PTC4 Pin multiplexor for SPI
-#define SPI0_PCS0_GPIO             digitalIO_PTC4  //!< PTC4 = SPI
+#define SPI0_PCS0_GPIO             digitalIO_PTC4   //!< PTC4 SPI GPIO
 #endif
 
-// PTC5 = SPI0_SCK (Alias: D20)
+// PTC5 = LPTMR0_2,SPI0_SCK (Alias: D20)
 #define PTC5_PORT                  C     //!< PTC5 Port name
 #define PTC5_NUM                   5     //!< PTC5 Port number
+#if LPTMR0_2_SEL == 1
+#define LPTMR0_2_FN                3     //!< PTC5 Pin multiplexor for LPTMR
+#define LPTMR0_2_GPIO              digitalIO_PTC5   //!< PTC5 LPTMR GPIO
+#endif
 #if SPI0_SCK_SEL == 2
 #define SPI0_SCK_FN                2     //!< PTC5 Pin multiplexor for SPI
-#define SPI0_SCK_GPIO              digitalIO_PTC5  //!< PTC5 = SPI
+#define SPI0_SCK_GPIO              digitalIO_PTC5   //!< PTC5 SPI GPIO
 #endif
 
 // PTC6 = SPI0_MOSI,SPI0_MISO (Alias: D21)
@@ -740,11 +790,11 @@
 #define PTC6_NUM                   6     //!< PTC6 Port number
 #if SPI0_MOSI_SEL == 3
 #define SPI0_MOSI_FN               2     //!< PTC6 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTC6  //!< PTC6 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTC6   //!< PTC6 SPI GPIO
 #endif
 #if SPI0_MISO_SEL == 3
 #define SPI0_MISO_FN               5     //!< PTC6 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTC6  //!< PTC6 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTC6   //!< PTC6 SPI GPIO
 #endif
 
 // PTC7 = SPI0_MISO,SPI0_MOSI (Alias: D16)
@@ -752,11 +802,11 @@
 #define PTC7_NUM                   7     //!< PTC7 Port number
 #if SPI0_MISO_SEL == 4
 #define SPI0_MISO_FN               2     //!< PTC7 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTC7  //!< PTC7 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTC7   //!< PTC7 SPI GPIO
 #endif
 #if SPI0_MOSI_SEL == 4
 #define SPI0_MOSI_FN               5     //!< PTC7 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTC7  //!< PTC7 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTC7   //!< PTC7 SPI GPIO
 #endif
 
 // PTC8 = TPM0_4,I2C0_SCL (Alias: D6)
@@ -768,8 +818,8 @@
 #define PTC8_TPM_FN                3     //!< PTC8 Pin multiplexor for TPM
 #endif
 #if I2C0_SCL_SEL == 3
-#define I2C0_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTC8  //!< PTC8 = I2C
+#define I2C0_SCL_FN                2     //!< PTC8 Pin multiplexor for I2C
+#define I2C0_SCL_GPIO              digitalIO_PTC8   //!< PTC8 I2C GPIO
 #endif
 
 // PTC9 = TPM0_5,I2C0_SDA (Alias: D7)
@@ -781,24 +831,24 @@
 #define PTC9_TPM_FN                3     //!< PTC9 Pin multiplexor for TPM
 #endif
 #if I2C0_SDA_SEL == 3
-#define I2C0_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTC9  //!< PTC9 = I2C
+#define I2C0_SDA_FN                2     //!< PTC9 Pin multiplexor for I2C
+#define I2C0_SDA_GPIO              digitalIO_PTC9   //!< PTC9 I2C GPIO
 #endif
 
 // PTC10 = I2C1_SCL (Alias: D22)
 #define PTC10_PORT                 C     //!< PTC10 Port name
 #define PTC10_NUM                  10    //!< PTC10 Port number
 #if I2C1_SCL_SEL == 3
-#define I2C1_SCL_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTC10  //!< PTC10 = I2C
+#define I2C1_SCL_FN                2     //!< PTC10 Pin multiplexor for I2C
+#define I2C1_SCL_GPIO              digitalIO_PTC10   //!< PTC10 I2C GPIO
 #endif
 
 // PTC11 = I2C1_SDA (Alias: D23)
 #define PTC11_PORT                 C     //!< PTC11 Port name
 #define PTC11_NUM                  11    //!< PTC11 Port number
 #if I2C1_SDA_SEL == 3
-#define I2C1_SDA_FN                2     //!< Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTC11  //!< PTC11 = I2C
+#define I2C1_SDA_FN                2     //!< PTC11 Pin multiplexor for I2C
+#define I2C1_SDA_GPIO              digitalIO_PTC11   //!< PTC11 I2C GPIO
 #endif
 
 // PTC12 (Alias: D24)
@@ -827,7 +877,7 @@
 #endif
 #if SPI0_PCS0_SEL == 3
 #define SPI0_PCS0_FN               2     //!< PTD0 Pin multiplexor for SPI
-#define SPI0_PCS0_GPIO             digitalIO_PTD0  //!< PTD0 = SPI
+#define SPI0_PCS0_GPIO             digitalIO_PTD0   //!< PTD0 SPI GPIO
 #endif
 
 // PTD1 = ADC0_5,TPM0_1,SPI0_SCK (Alias: D13)
@@ -842,7 +892,7 @@
 #endif
 #if SPI0_SCK_SEL == 3
 #define SPI0_SCK_FN                2     //!< PTD1 Pin multiplexor for SPI
-#define SPI0_SCK_GPIO              digitalIO_PTD1  //!< PTD1 = SPI
+#define SPI0_SCK_GPIO              digitalIO_PTD1   //!< PTD1 SPI GPIO
 #endif
 
 // PTD2 = TPM0_2,SPI0_MOSI,SPI0_MISO (Alias: D11)
@@ -855,11 +905,11 @@
 #endif
 #if SPI0_MOSI_SEL == 5
 #define SPI0_MOSI_FN               2     //!< PTD2 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTD2  //!< PTD2 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTD2   //!< PTD2 SPI GPIO
 #endif
 #if SPI0_MISO_SEL == 5
 #define SPI0_MISO_FN               5     //!< PTD2 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTD2  //!< PTD2 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTD2   //!< PTD2 SPI GPIO
 #endif
 
 // PTD3 = TPM0_3,SPI0_MISO,SPI0_MOSI (Alias: D12)
@@ -872,11 +922,11 @@
 #endif
 #if SPI0_MISO_SEL == 6
 #define SPI0_MISO_FN               2     //!< PTD3 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTD3  //!< PTD3 = SPI
+#define SPI0_MISO_GPIO             digitalIO_PTD3   //!< PTD3 SPI GPIO
 #endif
 #if SPI0_MOSI_SEL == 6
 #define SPI0_MOSI_FN               5     //!< PTD3 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTD3  //!< PTD3 = SPI
+#define SPI0_MOSI_GPIO             digitalIO_PTD3   //!< PTD3 SPI GPIO
 #endif
 
 // PTD4 = TPM0_4,SPI1_PCS0 (Alias: D2)
@@ -889,7 +939,7 @@
 #endif
 #if SPI1_PCS0_SEL == 2
 #define SPI1_PCS0_FN               2     //!< PTD4 Pin multiplexor for SPI
-#define SPI1_PCS0_GPIO             digitalIO_PTD4  //!< PTD4 = SPI
+#define SPI1_PCS0_GPIO             digitalIO_PTD4   //!< PTD4 SPI GPIO
 #endif
 
 // PTD5 = ADC0_6,TPM0_5,SPI1_SCK (Alias: D9)
@@ -904,7 +954,7 @@
 #endif
 #if SPI1_SCK_SEL == 2
 #define SPI1_SCK_FN                2     //!< PTD5 Pin multiplexor for SPI
-#define SPI1_SCK_GPIO              digitalIO_PTD5  //!< PTD5 = SPI
+#define SPI1_SCK_GPIO              digitalIO_PTD5   //!< PTD5 SPI GPIO
 #endif
 
 // PTD6 = ADC0_7,SPI1_MOSI,SPI1_MISO (Alias: D32)
@@ -914,11 +964,11 @@
 #define PTD6_ADC_CH                7     //!< PTD6 ADC channel
 #if SPI1_MOSI_SEL == 3
 #define SPI1_MOSI_FN               2     //!< PTD6 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTD6  //!< PTD6 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTD6   //!< PTD6 SPI GPIO
 #endif
 #if SPI1_MISO_SEL == 3
 #define SPI1_MISO_FN               5     //!< PTD6 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTD6  //!< PTD6 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTD6   //!< PTD6 SPI GPIO
 #endif
 
 // PTD7 = SPI1_MISO,SPI1_MOSI (Alias: D33)
@@ -926,19 +976,19 @@
 #define PTD7_NUM                   7     //!< PTD7 Port number
 #if SPI1_MISO_SEL == 4
 #define SPI1_MISO_FN               2     //!< PTD7 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTD7  //!< PTD7 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTD7   //!< PTD7 SPI GPIO
 #endif
 #if SPI1_MOSI_SEL == 4
 #define SPI1_MOSI_FN               5     //!< PTD7 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTD7  //!< PTD7 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTD7   //!< PTD7 SPI GPIO
 #endif
 
 // PTE0 = I2C1_SDA (Alias: D15)
 #define PTE0_PORT                  E     //!< PTE0 Port name
 #define PTE0_NUM                   0     //!< PTE0 Port number
 #if I2C1_SDA_SEL == 4
-#define I2C1_SDA_FN                6     //!< Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTE0  //!< PTE0 = I2C
+#define I2C1_SDA_FN                6     //!< PTE0 Pin multiplexor for I2C
+#define I2C1_SDA_GPIO              digitalIO_PTE0   //!< PTE0 I2C GPIO
 #endif
 
 // PTE1 = SPI1_MOSI,SPI1_MISO,I2C1_SCL (Alias: D14)
@@ -946,15 +996,15 @@
 #define PTE1_NUM                   1     //!< PTE1 Port number
 #if SPI1_MOSI_SEL == 5
 #define SPI1_MOSI_FN               2     //!< PTE1 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTE1  //!< PTE1 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTE1   //!< PTE1 SPI GPIO
 #endif
 #if SPI1_MISO_SEL == 5
 #define SPI1_MISO_FN               5     //!< PTE1 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTE1  //!< PTE1 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTE1   //!< PTE1 SPI GPIO
 #endif
 #if I2C1_SCL_SEL == 4
-#define I2C1_SCL_FN                6     //!< Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTE1  //!< PTE1 = I2C
+#define I2C1_SCL_FN                6     //!< PTE1 Pin multiplexor for I2C
+#define I2C1_SCL_GPIO              digitalIO_PTE1   //!< PTE1 I2C GPIO
 #endif
 
 // PTE2 = SPI1_SCK (Alias: A16)
@@ -962,7 +1012,7 @@
 #define PTE2_NUM                   2     //!< PTE2 Port number
 #if SPI1_SCK_SEL == 3
 #define SPI1_SCK_FN                2     //!< PTE2 Pin multiplexor for SPI
-#define SPI1_SCK_GPIO              digitalIO_PTE2  //!< PTE2 = SPI
+#define SPI1_SCK_GPIO              digitalIO_PTE2   //!< PTE2 SPI GPIO
 #endif
 
 // PTE3 = SPI1_MISO,SPI1_MOSI (Alias: A15)
@@ -970,11 +1020,11 @@
 #define PTE3_NUM                   3     //!< PTE3 Port number
 #if SPI1_MISO_SEL == 6
 #define SPI1_MISO_FN               2     //!< PTE3 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTE3  //!< PTE3 = SPI
+#define SPI1_MISO_GPIO             digitalIO_PTE3   //!< PTE3 SPI GPIO
 #endif
 #if SPI1_MOSI_SEL == 6
 #define SPI1_MOSI_FN               5     //!< PTE3 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTE3  //!< PTE3 = SPI
+#define SPI1_MOSI_GPIO             digitalIO_PTE3   //!< PTE3 SPI GPIO
 #endif
 
 // PTE4 = SPI1_PCS0 (Alias: A14)
@@ -982,7 +1032,7 @@
 #define PTE4_NUM                   4     //!< PTE4 Port number
 #if SPI1_PCS0_SEL == 3
 #define SPI1_PCS0_FN               2     //!< PTE4 Pin multiplexor for SPI
-#define SPI1_PCS0_GPIO             digitalIO_PTE4  //!< PTE4 = SPI
+#define SPI1_PCS0_GPIO             digitalIO_PTE4   //!< PTE4 SPI GPIO
 #endif
 
 // PTE5 (Alias: A13)
@@ -1038,8 +1088,8 @@
 #define PTE24_TPM_FN               3     //!< PTE24 Pin multiplexor for TPM
 #endif
 #if I2C0_SCL_SEL == 4
-#define I2C0_SCL_FN                5     //!< Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTE24  //!< PTE24 = I2C
+#define I2C0_SCL_FN                5     //!< PTE24 Pin multiplexor for I2C
+#define I2C0_SCL_GPIO              digitalIO_PTE24   //!< PTE24 I2C GPIO
 #endif
 
 // PTE25 = TPM0_1,I2C0_SDA
@@ -1051,8 +1101,8 @@
 #define PTE25_TPM_FN               3     //!< PTE25 Pin multiplexor for TPM
 #endif
 #if I2C0_SDA_SEL == 4
-#define I2C0_SDA_FN                5     //!< Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTE25  //!< PTE25 = I2C
+#define I2C0_SDA_FN                5     //!< PTE25 Pin multiplexor for I2C
+#define I2C0_SDA_GPIO              digitalIO_PTE25   //!< PTE25 I2C GPIO
 #endif
 
 // PTE29 = ADC0_4,TPM0_2 (Alias: A7)
@@ -1089,4 +1139,4 @@
 // </h>
 
 
-#endif /* PINMAPPING_H_ */
+#endif /* PIN_MAPPING_H_ */

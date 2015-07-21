@@ -12,7 +12,7 @@
       </applyWhen>
       <projectActionList>
          <applyWhen>
-               <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
          </applyWhen>
          <variable id="projectOptionValue.KSDK-empty" 
                name="Minimal Project" 

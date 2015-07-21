@@ -71,7 +71,7 @@
 <!ELEMENT constant EMPTY >
    <!ATTLIST constant id           CDATA #REQUIRED>
    <!ATTLIST constant value        CDATA #REQUIRED>
-   <!ATTLIST constant type         (boolean|int|string) 	"string" >
+   <!ATTLIST constant type         (boolean|int|string)  "string" >
    <!ATTLIST constant weak         (true|false)          "false">
    <!ATTLIST constant replace      (true|false)          "false">
    

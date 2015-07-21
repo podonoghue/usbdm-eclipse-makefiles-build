@@ -37,13 +37,13 @@ typedef enum {
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKL02Z4 VectorTable                      ---------------------- */
   FTFA_IRQn                     =   5,   /**<  21 FTFA Command complete or error                                                   */
-  PMC_IRQn                      =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
+  LVD_LVW_IRQn                  =   6,   /**<  22 PMC Low-voltage detect, low-voltage warning                                      */
   I2C0_IRQn                     =   8,   /**<  24 I2C Interface 0                                                                  */
   I2C1_IRQn                     =   9,   /**<  25 I2C Interface 1                                                                  */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface 0                                                    */
   UART0_IRQn                    =  12,   /**<  28 UART0 Status and error                                                           */
   ADC0_IRQn                     =  15,   /**<  31 Analogue to Digital Converter 0                                                  */
-  ACMP0_IRQn                    =  16,   /**<  32 Analogue comparator 0                                                            */
+  CMP0_IRQn                     =  16,   /**<  32 Comparator 0                                                                     */
   TPM0_IRQn                     =  17,   /**<  33 Timer/PWM Module 0                                                               */
   TPM1_IRQn                     =  18,   /**<  34 Timer/PWM Module 1                                                               */
   MCG_IRQn                      =  27,   /**<  43 Clock interrupt                                                                  */
@@ -67,13 +67,13 @@ extern void SVC_Handler(void);                 /**< System Service Call via SVC 
 extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
 extern void FTFA_IRQHandler(void);             /**< FTFA Command complete or error                                                   */
-extern void PMC_IRQHandler(void);              /**< PMC Low-voltage detect, low-voltage warning                                      */
+extern void LVD_LVW_IRQHandler(void);          /**< PMC Low-voltage detect, low-voltage warning                                      */
 extern void I2C0_IRQHandler(void);             /**< I2C Interface 0                                                                  */
 extern void I2C1_IRQHandler(void);             /**< I2C Interface 1                                                                  */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface 0                                                    */
 extern void UART0_IRQHandler(void);            /**< UART0 Status and error                                                           */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter 0                                                  */
-extern void ACMP0_IRQHandler(void);            /**< Analogue comparator 0                                                            */
+extern void CMP0_IRQHandler(void);             /**< Comparator 0                                                                     */
 extern void TPM0_IRQHandler(void);             /**< Timer/PWM Module 0                                                               */
 extern void TPM1_IRQHandler(void);             /**< Timer/PWM Module 1                                                               */
 extern void MCG_IRQHandler(void);              /**< Clock interrupt                                                                  */

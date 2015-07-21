@@ -70,11 +70,11 @@ typedef enum {
   SPI1_IRQn                     =  27,   /**<  43 SPI1 interrupt                                                                   */
   I2S0_Tx_IRQn                  =  28,   /**<  44 I2S0 Tx Interrupt                                                                */
   I2S0_Rx_IRQn                  =  29,   /**<  45 I2S0 Rx Interrupt                                                                */
-  UART0_RxTx_IRQn               =  31,   /**<  47 UART status sources                                                              */
+  UART0_RX_TX_IRQn              =  31,   /**<  47 UART status sources                                                              */
   UART0_Error_IRQn              =  32,   /**<  48 UART error sources                                                               */
-  UART1_RxTx_IRQn               =  33,   /**<  49 UART status sources                                                              */
+  UART1_RX_TX_IRQn              =  33,   /**<  49 UART status sources                                                              */
   UART1_Error_IRQn              =  34,   /**<  50 UART error sources                                                               */
-  UART2_RxTx_IRQn               =  35,   /**<  51 UART status sources                                                              */
+  UART2_RX_TX_IRQn              =  35,   /**<  51 UART status sources                                                              */
   UART2_Error_IRQn              =  36,   /**<  52 UART error sources                                                               */
   UART3_RxTx_IRQn               =  37,   /**<  53 UART status sources                                                              */
   UART3_Error_IRQn              =  38,   /**<  54 UART error sources                                                               */
@@ -87,12 +87,12 @@ typedef enum {
   CMT_IRQn                      =  45,   /**<  61 CMT interrupt                                                                    */
   RTC_Alarm_IRQn                =  46,   /**<  62 RTC interrupt                                                                    */
   RTC_Seconds_IRQn              =  47,   /**<  63 RTC interrupt                                                                    */
-  PIT_Ch0_IRQn                  =  48,   /**<  64 PIT timer channel 0 interrupt                                                    */
-  PIT_Ch1_IRQn                  =  49,   /**<  65 PIT timer channel 1 interrupt                                                    */
-  PIT_Ch2_IRQn                  =  50,   /**<  66 PIT timer channel 2 interrupt                                                    */
-  PIT_Ch3_IRQn                  =  51,   /**<  67 PIT timer channel 3 interrupt                                                    */
-  PDB_IRQn                      =  52,   /**<  68 PDB Programmable Delay Block interrupt                                           */
-  USBOTG_IRQn                   =  53,   /**<  69 USB0 OTG interrupt                                                               */
+  PIT0_IRQn                     =  48,   /**<  64 PIT timer channel 0 interrupt                                                    */
+  PIT1_IRQn                     =  49,   /**<  65 PIT timer channel 1 interrupt                                                    */
+  PIT2_IRQn                     =  50,   /**<  66 PIT timer channel 2 interrupt                                                    */
+  PIT3_IRQn                     =  51,   /**<  67 PIT timer channel 3 interrupt                                                    */
+  PDB0_IRQn                     =  52,   /**<  68 PDB Programmable Delay Block interrupt                                           */
+  USB0_IRQn                     =  53,   /**<  69 USB0 OTG interrupt                                                               */
   USBDCD_IRQn                   =  54,   /**<  70 USBDCD interrupt                                                                 */
   DAC0_IRQn                     =  56,   /**<  72 Digital to Analogue Converter                                                    */
   MCG_IRQn                      =  57,   /**<  73 Multipurpose Clock Generator                                                     */
@@ -170,11 +170,11 @@ extern void SPI0_IRQHandler(void);             /**< SPI0 interrupt              
 extern void SPI1_IRQHandler(void);             /**< SPI1 interrupt                                                                   */
 extern void I2S0_Tx_IRQHandler(void);          /**< I2S0 Tx Interrupt                                                                */
 extern void I2S0_Rx_IRQHandler(void);          /**< I2S0 Rx Interrupt                                                                */
-extern void UART0_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
+extern void UART0_RX_TX_IRQHandler(void);      /**< UART status sources                                                              */
 extern void UART0_Error_IRQHandler(void);      /**< UART error sources                                                               */
-extern void UART1_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
+extern void UART1_RX_TX_IRQHandler(void);      /**< UART status sources                                                              */
 extern void UART1_Error_IRQHandler(void);      /**< UART error sources                                                               */
-extern void UART2_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
+extern void UART2_RX_TX_IRQHandler(void);      /**< UART status sources                                                              */
 extern void UART2_Error_IRQHandler(void);      /**< UART error sources                                                               */
 extern void UART3_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
 extern void UART3_Error_IRQHandler(void);      /**< UART error sources                                                               */
@@ -187,12 +187,12 @@ extern void FTM2_IRQHandler(void);             /**< FTM2 fault, overflow and cha
 extern void CMT_IRQHandler(void);              /**< CMT interrupt                                                                    */
 extern void RTC_Alarm_IRQHandler(void);        /**< RTC interrupt                                                                    */
 extern void RTC_Seconds_IRQHandler(void);      /**< RTC interrupt                                                                    */
-extern void PIT_Ch0_IRQHandler(void);          /**< PIT timer channel 0 interrupt                                                    */
-extern void PIT_Ch1_IRQHandler(void);          /**< PIT timer channel 1 interrupt                                                    */
-extern void PIT_Ch2_IRQHandler(void);          /**< PIT timer channel 2 interrupt                                                    */
-extern void PIT_Ch3_IRQHandler(void);          /**< PIT timer channel 3 interrupt                                                    */
-extern void PDB_IRQHandler(void);              /**< PDB Programmable Delay Block interrupt                                           */
-extern void USBOTG_IRQHandler(void);           /**< USB0 OTG interrupt                                                               */
+extern void PIT0_IRQHandler(void);             /**< PIT timer channel 0 interrupt                                                    */
+extern void PIT1_IRQHandler(void);             /**< PIT timer channel 1 interrupt                                                    */
+extern void PIT2_IRQHandler(void);             /**< PIT timer channel 2 interrupt                                                    */
+extern void PIT3_IRQHandler(void);             /**< PIT timer channel 3 interrupt                                                    */
+extern void PDB0_IRQHandler(void);             /**< PDB Programmable Delay Block interrupt                                           */
+extern void USB0_IRQHandler(void);             /**< USB0 OTG interrupt                                                               */
 extern void USBDCD_IRQHandler(void);           /**< USBDCD interrupt                                                                 */
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
 extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */

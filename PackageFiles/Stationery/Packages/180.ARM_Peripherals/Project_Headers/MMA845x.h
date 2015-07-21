@@ -10,7 +10,7 @@
 #define MMA845X_H_
 
 #include <stdint.h>
-#include "I2C.h"
+#include "i2c.h"
 
 /**
  * @addtogroup MMA845x_Group MMA845x 3-axis accelerometer
