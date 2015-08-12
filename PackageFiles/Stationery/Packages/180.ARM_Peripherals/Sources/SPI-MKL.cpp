@@ -1,5 +1,5 @@
 /*
- * SPI.c
+ * SPI-MKL.c
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue
@@ -52,9 +52,13 @@ SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
+#if !defined(SPI0_SCK_GPIO)  || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
+#error "Please check pin mappings for SCK, MOSI & MISO in pin_mapping.h"
+#else
    SPI0_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_MOSI_GPIO.setPCR(PORT_PCR_MUX(SPI0_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_MISO_GPIO.setPCR(PORT_PCR_MUX(SPI0_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+#endif
 
 #ifdef SPI0_PCS0_GPIO
    SPI0_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -92,9 +96,13 @@ SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
+#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
+#error "Please check pin mappings for SCK, MOSI & MISO in pin_mapping.h"
+#else
    SPI1_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_MOSI_GPIO.setPCR(PORT_PCR_MUX(SPI1_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_MISO_GPIO.setPCR(PORT_PCR_MUX(SPI1_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+#endif
 
 #ifdef SPI1_PCS0_GPIO
    SPI1_PCS1_GPIO.setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);

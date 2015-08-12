@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-FXOS8700CQ" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-FXOS8700CQ" 
+            name="FXOS8700CQ C++ interface" 
+            description="Adds a CPP abstraction layer for FXOS8700CQ 3-axis accelerometer and magnetometer" 
+            checkGroup="group-i2c-peripheral-optionso" >
+            <enableWhen>
+               <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
+            </enableWhen>
+         </variable>
+   
+         <!-- I2C CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-FXOS8700CQ" />
+               </applyWhen>
+               <copy source="Project_Headers/FXOS8700CQ.h"        target="Project_Headers/FXOS8700CQ.h" />
+               <copy source="Sources/FXOS8700CQ.cpp"              target="Sources/FXOS8700CQ.cpp" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-MMA845x" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-MMA845x" 
+            name="MMA845x C++ interface" 
+            description="Adds a CPP abstraction layer for MMA845x accelerometer" 
+            checkGroup="group-i2c-peripheral-optionso" >
+            <enableWhen>
+               <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
+            </enableWhen>
+         </variable>
+   
+         <!-- I2C CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-MMA845x" />
+               </applyWhen>
+               <copy source="Project_Headers/MMA845x.h"        target="Project_Headers/MMA845x.h" />
+               <copy source="Sources/MMA845x.cpp"              target="Sources/MMA845x.cpp" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>
