@@ -5,9 +5,11 @@
 //#define ProductID (0x0567)
 
 //! Vendor ID for USBDM
-#define USBDM_VID    (0x16D0)
-//! Product ID for TBDML
-#define USBDM_PID    (0x0567)
+#define USBDM_VID          (0x16D0)
+//! Product ID for USBDM
+#define USBDM_PID          (0x0567)
+//! Product ID for USBDM Composite device
+#define USBDM_COMP_PID     (0x06A5)
 
 //! Vendor ID for TBDML
 #define TBDML_VID    (0x0425)

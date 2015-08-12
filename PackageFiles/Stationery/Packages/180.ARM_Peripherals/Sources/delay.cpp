@@ -8,6 +8,7 @@
 #include "derivative.h"
 #include "delay.h"
 
+#ifndef __CMSIS_RTOS
 static unsigned timer;
 static unsigned ticks;
 
@@ -39,6 +40,27 @@ void waitMS(unsigned msToWait) {
 }
 
 /**
+ * Get count of timer ticks
+ *
+ * @return ticks since arbitrary epoch
+ */
+unsigned getTicks() {
+   return ticks;
+}
+#else
+#include "cmsis_os.h"
+
+/**
+ * Simple delay routine
+ *
+ * @param msToWait How many milliseconds to busy-wait
+ */
+void waitMS(unsigned msToWait) {
+   osDelay(msToWait);
+}
+#endif
+
+/**
  * Very <b>approximate</b> 10us delay routine
  * This is only provided for LCD interface etc where
  * some pulses have a minimum duration
@@ -56,11 +78,3 @@ void wait10us() {
    }
 }
 
-/**
- * Get count of timer ticks
- *
- * @return ticks since arbitrary epoch
- */
-unsigned getTicks() {
-   return ticks;
-}

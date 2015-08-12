@@ -24,7 +24,7 @@
             <!-- Kinetis Design Studio directory structure-->
             <Directory Id="D.KINETIS_DESIGN_STUDIO">
                <!-- Eclipse directory structure -->
-               <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT" Name="Eclipse">
+               <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse" Name="eclipse">
                   <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
                   <!-- PE directory structure -->
                   <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
@@ -69,13 +69,13 @@
       <CustomAction
          Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
          
       <CustomAction
          Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
          Execute="immediate"/>
          
       <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
@@ -110,6 +110,19 @@
          </Component>
       </DirectoryRef>
 
+      <!-- 
+           Missing eclipse.ini
+      -->
+      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse">
+         <Component Id='C.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse_ini' Guid='d575788f-8fc8-46d8-a2ca-c9be53c79496' >
+            <CopyFile Id='F.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse_ini' 
+              SourceProperty="D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse" 
+              DestinationProperty="D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse" 
+              SourceName="kinetis-design-studio.ini"
+              DestinationName="eclipse.ini"/>
+         </Component>
+      </DirectoryRef>
+      
       <!--======================================================
             Eclipse feature
       =======================================================-->
@@ -122,6 +135,7 @@
          <Condition Level='1'>
             <![CDATA[Installed OR P.ECLIPSE_$(var.ECLIPSE_VER)_CDT]]>
          </Condition>
+         <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse_ini' />
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' />
          <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />

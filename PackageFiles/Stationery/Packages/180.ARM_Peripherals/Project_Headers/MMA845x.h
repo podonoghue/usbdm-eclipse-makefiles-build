@@ -103,6 +103,12 @@ public:
     * @param mode - one of MMA45x_2Gmode etc.
     */
    void setMode(Mode mode);
+   /**
+    * Read ID from accelerometer
+    *
+    * @return ID value as 8-bit number (0x1A for MMA8451Q)
+    */
+   uint32_t readID(void);
 };
 
 /**

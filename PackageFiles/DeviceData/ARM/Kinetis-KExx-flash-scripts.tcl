@@ -269,12 +269,11 @@ proc massEraseTarget { } {
       }
       after 50
    }
-   
-   puts "massEraseTarget{} - Doing reset sh"
-   reset sh
-   
-   ;# Release Kinetis specific halt 
-   ;# Target should be halted by ARM specific HALT
+
+   ;# Resetting target using MDM
+   puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET"
+   wcreg $::MDM_AP_Control $::MDM_AP_C_SYSTEM_RESET
+   puts "massEraseTarget{} - Clearing MDM_AP_C_SYSTEM_RESET"
    wcreg $::MDM_AP_Control 0
 
    return [ isUnsecure ] 

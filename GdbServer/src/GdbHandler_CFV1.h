@@ -12,20 +12,27 @@
 
 class GdbHandler_CFV1: public GdbHandlerCommon {
 public:
-   GdbHandler_CFV1(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr);
+   GdbHandler_CFV1(
+         GdbInOut            *gdbInOut,
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         GdbCallback          gdbCallBackPtr,
+         IGdbTty              *tty);
    virtual ~GdbHandler_CFV1();
 
-   virtual USBDM_ErrorCode initialise();
 
 protected:
    USBDM_ErrorCode           resetTarget(TargetMode_t mode);
    void                      maskInterrupts(bool disableInterrupts);
+   virtual void              continueTarget(void);
    virtual void              writeReg(unsigned regNo, unsigned long regValue);
 
+   virtual USBDM_ErrorCode   initialise();
    virtual bool              atMemoryBreakpoint();
    virtual bool              initRegisterDescription(void);
    virtual void              reportLocation(char mode, int reason);
    virtual GdbTargetStatus   pollTarget(void);
+   GdbTargetStatus           handleHalted();
    GdbTargetStatus           handleHostedBreak();
    bool                      checkHostedBreak(uint32_t currentPC);
 
@@ -47,6 +54,6 @@ protected:
    virtual USBDM_ErrorCode   updateTarget();
 };
 
-GdbHandler *createCFV1GdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr) ;
+GdbHandler *createCFV1GdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) ;
 
 #endif /* SRC_GDBHANDLER_CFV1_H_ */

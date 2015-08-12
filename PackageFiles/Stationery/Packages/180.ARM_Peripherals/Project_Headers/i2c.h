@@ -183,6 +183,10 @@ protected:
  */
 class I2C_0 : public I2C {
 
+#if !defined(I2C0_SCL_GPIO) || !defined(I2C0_SDA_GPIO)
+#error "Check pin mapping for SCL & SDA in pin_mapping.h"
+#endif
+
 public:
    /**
     * Constructor for I2C #0 interface
@@ -214,6 +218,10 @@ private:
  */
 class I2C_1 : public I2C {
 
+#if !defined(I2C1_SCL_GPIO) ||!defined(I2C1_SDA_GPIO)
+#error "Check pin mapping for SCL & SDA in pin_mapping.h"
+#endif
+
 public:
    /**
     * Constructor for I2C #1 interface
@@ -242,6 +250,10 @@ private:
  * I2C2 interface
  */
 class I2C_2 : public I2C {
+
+#if !defined(I2C2_SCL_GPIO) ||!defined(I2C2_SDA_GPIO)
+#error "Check pin mapping for SCL & SDA in pin_mapping.h"
+#endif
 
 public:
    /**

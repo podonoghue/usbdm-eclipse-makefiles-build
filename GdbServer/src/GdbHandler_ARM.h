@@ -17,7 +17,12 @@ protected:
    USBDM_ErrorCode configureMDM_AP();
 
 public:
-   GdbHandler_ARM(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr);
+   GdbHandler_ARM(
+         GdbInOut            *gdbInOut,
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         GdbCallback          gdbCallBackPtr,
+         IGdbTty              *tty);
    virtual ~GdbHandler_ARM();
 
    USBDM_ErrorCode           resetTarget(TargetMode_t mode);
@@ -30,6 +35,7 @@ public:
    virtual bool              initRegisterDescription(void);
    virtual void              reportLocation(char mode, int reason);
    virtual GdbTargetStatus   pollTarget(void);
+   GdbTargetStatus           handleHalted();
    USBDM_ErrorCode           configureKinetisMDM_AP();
    GdbTargetStatus           handleHostedBreak();
    bool                      checkHostedBreak(uint32_t currentPC);
@@ -51,10 +57,12 @@ public:
 
    virtual USBDM_ErrorCode   writePC(unsigned long value);
    virtual USBDM_ErrorCode   readPC(unsigned long *value);
+   virtual USBDM_ErrorCode   readR0(unsigned long *value);
+   virtual USBDM_ErrorCode   readR1(unsigned long *value);
    virtual USBDM_ErrorCode   writeSP(unsigned long value);
    virtual USBDM_ErrorCode   updateTarget();
 };
 
-GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr) ;
+GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) ;
 
 #endif /* SRC_GDBHANDLER_ARM_H_ */

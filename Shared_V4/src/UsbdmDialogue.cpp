@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -=========================================================================================
+   |  7 Aug 2015 | Changed handling of corrupt database                    - pgo V4.12.1.10
    |  1 Jun 2015 | Changed how device choice is handled (bdmDeviceNum)     - pgo V4.11.1.10
    | 15 Mar 2015 | Complete redesign using wxFormBuilder                   - pgo V4.11.1.10
    +=========================================================================================
@@ -63,9 +64,9 @@ const uint32_t UsbdmDialogue::targetPropertyFlags[] = {
 /*  5 JTAG      */  HAS_NONE,
 /*  6 EZFLASH   */  HAS_NONE,
 /*  7 MC56F80xx */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_PROBE_SECURED|HAS_SELECT_SPEED,
-/*  8 ARM       */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
-/*  9 ARM_JTAG  */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
-/* 10 ARM_SWD   */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
+/*  8 ARM       */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_OPTIONAL_RESET|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
+/*  9 ARM_JTAG  */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_OPTIONAL_RESET|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
+/* 10 ARM_SWD   */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_OPTIONAL_RESET|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS,
 /* 11 S12Z      */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE,
 };
 
@@ -347,7 +348,7 @@ std::string UsbdmDialogue::update() {
          // BDM doesn't support reset
          log.print("Disabling reset due to BDM feature missing\n");
          useResetSignalControl->Enable(false);
-         bdmInterface->getBdmOptions().useResetSignal = false;
+//         bdmInterface->getBdmOptions().useResetSignal = true;
       }
       else {
          useResetSignalControl->Enable(true);
@@ -503,6 +504,7 @@ std::string UsbdmDialogue::update() {
    }
    if (targetProperties & IS_GDB_SERVER) {
       gdbServerPortNumberTextControl->SetDecimalValue(bdmInterface->getGdbServerPort());
+      gdbTtyPortNumberTextControl->SetDecimalValue(bdmInterface->getGdbTtyPort());
    }
 
    bool enableProgramming = ((deviceInterface->getCurrentDeviceIndex() >= 0) &&
@@ -1884,7 +1886,7 @@ void UsbdmDialogue::populateSecurityControl() {
       log.print("CurrentDevice not set\n");
       securityMemoryRegionChoice->Append(_("[No device selected]"));
       securityMemoryRegionChoice->Select(0);
-      securityMemoryRegionChoice->SetClientData(0, 0);
+      securityMemoryRegionChoice->SetClientData(0, (void*)-1);
       securityMemoryRegionChoice->Enable(false);
       customSecurityIndex = 0;
 
@@ -1934,10 +1936,9 @@ void UsbdmDialogue::populateSecurityControl() {
    if (customSecurityIndex >= securityRegionsFound) {
       customSecurityIndex = 0;
    }
-   securityValuesTextControl->setWidth(customSecurityInfo[customSecurityIndex].ptr->getSize());
-
    securityMemoryRegionChoice->Enable(securityRegionsFound >= 2);
    if (securityRegionsFound > 0) {
+      securityValuesTextControl->setWidth(customSecurityInfo[customSecurityIndex].ptr->getSize());
       customSecurityCheckbox->Enable(true);
       securityMemoryRegionChoice->Select(0);
    }
@@ -1945,7 +1946,7 @@ void UsbdmDialogue::populateSecurityControl() {
       log.print("No Memory Regions\n");
       securityMemoryRegionChoice->Append(_("[No memory regions]"));
       securityMemoryRegionChoice->Select(0);
-      securityMemoryRegionChoice->SetClientData(0, 0);
+      securityMemoryRegionChoice->SetClientData(0, (void*)-1);
       securityMemoryRegionChoice->Enable(false);
    }
 }
@@ -1972,7 +1973,7 @@ wxString UsbdmDialogue::parseSecurityValue() {
          ptr = customSecurityInfo[customSecurityIndex].ptr;
          break;
    }
-   if (ptr == NULL) {
+   if (ptr == 0) {
       log.print("ptr == NULL\n");
       return _("[not applicable]");
    }
@@ -2134,6 +2135,10 @@ void UsbdmDialogue::updateSecurity() {
    log.print("securityMemoryRegionIndex = %d\n", customSecurityIndex);
    int memoryIndex = (int)(intptr_t)securityMemoryRegionChoice->GetClientData(customSecurityIndex);
    log.print("memoryIndex = %d\n", memoryIndex);
+   if (memoryIndex<0) {
+      // Invalid - usually means Database is corrupt
+      return;
+   }
    log.print("current device = %s\n", (const char *)deviceInterface->getCurrentDevice()->getTargetName().c_str());
    MemoryRegionConstPtr   memoryRegionPtr = deviceInterface->getCurrentDevice()->getMemoryRegion(memoryIndex);
    if (memoryRegionPtr == NULL) {
@@ -2698,6 +2703,14 @@ void UsbdmDialogue::OnSoundCheckboxClick( wxCommandEvent& event ) {
  */
 void UsbdmDialogue::OnGdbServerPortNumberTextUpdated( wxCommandEvent& event ) {
    bdmInterface->setGdbServerPort(gdbServerPortNumberTextControl->GetDecimalValue());
+}
+
+/*! Handler for OnGdbTtyPortNumberTextUpdated
+ *
+ *  @param event The event to handle
+ */
+void UsbdmDialogue::OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event ) {
+   bdmInterface->setGdbTtyPort(gdbTtyPortNumberTextControl->GetDecimalValue());
 }
 
 /*! Handler for OnProgramFlashButton

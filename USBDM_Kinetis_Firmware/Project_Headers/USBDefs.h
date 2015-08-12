@@ -67,15 +67,7 @@ typedef struct {
    U16u         wIndex;              //!<  Index or Offset Field
    U16u         wLength;             //!<  Number of Bytes to transfer (Data Stage)
 } SetupPacket;
-//
-//typedef struct {
-//   uint16_t     wValue;              //!<  Value Field
-//   uint8_t      bRequest;            //!<  Standard Request Code
-//   uint8_t      bmRequestType;       //!<  Characteristics (Direction,Type,Recipient)
-//   uint16_t     wLength;             //!<  Number of Bytes to transfer (Data Stage)
-//   U16u         wIndex;              //!<  Index or Offset Field
-//} SetupPacket;
-//
+
 //! Structure of Device Qualifier Descriptor
 typedef struct {
    uint8_t           bLength;             //!<  Size of this Descriptor in Bytes

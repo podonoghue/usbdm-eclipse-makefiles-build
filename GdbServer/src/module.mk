@@ -17,6 +17,7 @@ SRC += GdbServerApp.cpp
 SRC += GdbServerDialogue.cpp
 SRC += GdbServerWindow.cpp
 SRC += GdbServerWindowSkeleton.cpp
+SRC += SocketTty.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)

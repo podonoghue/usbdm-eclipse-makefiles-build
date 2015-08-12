@@ -93,7 +93,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	
 	sbSizer6->Add( automaticallyReconnectControl, 0, wxALL, 5 );
 	
-	useResetSignalControl = new wxCheckBox( fInterfacePanel, wxID_ANY, wxT("Use RESET signal"), wxDefaultPosition, wxDefaultSize, 0 );
+	useResetSignalControl = new wxCheckBox( fInterfacePanel, wxID_ANY, wxT("Use hardware RESET"), wxDefaultPosition, wxDefaultSize, 0 );
 	useResetSignalControl->SetValue(true); 
 	useResetSignalControl->SetToolTip( wxT("Drive RESET signal when resetting target") );
 	
@@ -185,7 +185,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -378,14 +378,23 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxStaticBoxSizer* sbSizer14;
 	sbSizer14 = new wxStaticBoxSizer( new wxStaticBox( fTargetPanel, wxID_GDB_SERVER_GROUP, wxT("GDB Server") ), wxHORIZONTAL );
 	
-	gdbServerPortNumberStaticControl = new wxStaticText( fTargetPanel, wxID_ANY, wxT("Port"), wxDefaultPosition, wxDefaultSize, 0 );
+	gdbServerPortNumberStaticControl = new wxStaticText( fTargetPanel, wxID_ANY, wxT("Debug Port"), wxDefaultPosition, wxDefaultSize, 0 );
 	gdbServerPortNumberStaticControl->Wrap( -1 );
 	sbSizer14->Add( gdbServerPortNumberStaticControl, 0, wxALL, 5 );
 	
 	gdbServerPortNumberTextControl = new NumberTextEditCtrl( fTargetPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gdbServerPortNumberTextControl->SetToolTip( wxT("GDB Network address") );
+	gdbServerPortNumberTextControl->SetToolTip( wxT("Socket port number for GDB debug connection") );
 	
 	sbSizer14->Add( gdbServerPortNumberTextControl, 0, wxALL, 5 );
+	
+	gdbTtyPortNumberStaticControl = new wxStaticText( fTargetPanel, wxID_ANY, wxT("TTY (semi-hosting)"), wxDefaultPosition, wxDefaultSize, 0 );
+	gdbTtyPortNumberStaticControl->Wrap( -1 );
+	sbSizer14->Add( gdbTtyPortNumberStaticControl, 0, wxALL, 5 );
+	
+	gdbTtyPortNumberTextControl = new NumberTextEditCtrl( fTargetPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gdbTtyPortNumberTextControl->SetToolTip( wxT("Socket port number for GDB TTY connection") );
+	
+	sbSizer14->Add( gdbTtyPortNumberTextControl, 0, wxALL, 5 );
 	
 	
 	bSizer4->Add( sbSizer14, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -418,7 +427,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -663,6 +672,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	unlockButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUnlockButtonClick ), NULL, this );
 	enableSoundsCheckBoxControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSoundCheckboxClick ), NULL, this );
 	gdbServerPortNumberTextControl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGdbServerPortNumberTextUpdated ), NULL, this );
+	gdbTtyPortNumberTextControl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGdbTtyPortNumberTextUpdated ), NULL, this );
 	programFlashButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnProgramFlashButtonClick ), NULL, this );
 	verifyFlashButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVerifyFlashButtonClick ), NULL, this );
 	loadAndGoButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLoadAndGoButtonClick ), NULL, this );
@@ -716,6 +726,7 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	unlockButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUnlockButtonClick ), NULL, this );
 	enableSoundsCheckBoxControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSoundCheckboxClick ), NULL, this );
 	gdbServerPortNumberTextControl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGdbServerPortNumberTextUpdated ), NULL, this );
+	gdbTtyPortNumberTextControl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGdbTtyPortNumberTextUpdated ), NULL, this );
 	programFlashButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnProgramFlashButtonClick ), NULL, this );
 	verifyFlashButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVerifyFlashButtonClick ), NULL, this );
 	loadAndGoButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLoadAndGoButtonClick ), NULL, this );

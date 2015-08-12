@@ -1,5 +1,5 @@
 /**
- * @file      gpio.h
+ * @file      gpio.h (derived from gpio-MK64F12.h)
  * @version   1.0.0
  * @brief     Pin declarations for MK64F12
  */
@@ -373,64 +373,68 @@ extern const PwmIO  pwmIO_PTE12;             //!< PwmIO on PTE12
 * @brief Aliases for port pins for example Arduino based names
 * @{
 */
-#define digitalIO_A0         digitalIO_PTB2       //!< alias A0=>PTB2
-#define digitalIO_A1         digitalIO_PTB3       //!< alias A1=>PTB3
-#define digitalIO_A2         digitalIO_PTB10      //!< alias A2=>PTB10
-#define digitalIO_A3         digitalIO_PTB11      //!< alias A3=>PTB11
-#define digitalIO_A4         digitalIO_PTC11      //!< alias A4=>PTC11
-#define digitalIO_A5         digitalIO_PTC10      //!< alias A5=>PTC10
-#define digitalIO_D0         digitalIO_PTC16      //!< alias D0=>PTC16
-#define digitalIO_D1         digitalIO_PTC17      //!< alias D1=>PTC17
-#define digitalIO_D2         digitalIO_PTB9       //!< alias D2=>PTB9
-#define digitalIO_D3         digitalIO_PTA1       //!< alias D3=>PTA1
-#define digitalIO_D4         digitalIO_PTB23      //!< alias D4=>PTB23
-#define digitalIO_D5         digitalIO_PTA2       //!< alias D5=>PTA2
-#define digitalIO_D6         digitalIO_PTC2       //!< alias D6=>PTC2
-#define digitalIO_D7         digitalIO_PTC3       //!< alias D7=>PTC3
-#define digitalIO_D8         digitalIO_PTA0       //!< alias D8=>PTA0
-#define digitalIO_D9         digitalIO_PTC4       //!< alias D9=>PTC4
-#define digitalIO_D10        digitalIO_PTD0       //!< alias D10=>PTD0
-#define digitalIO_D11        digitalIO_PTD2       //!< alias D11=>PTD2
-#define digitalIO_D12        digitalIO_PTD3       //!< alias D12=>PTD3
-#define digitalIO_D13        digitalIO_PTD1       //!< alias D13=>PTD1
-#define digitalIO_D14        digitalIO_PTE25      //!< alias D14=>PTE25
-#define digitalIO_D15        digitalIO_PTE24      //!< alias D15=>PTE24
-#define digitalIO_nRF24L01_cs digitalIO_PTD4       //!< alias nRF24L01_cs=>PTD4
-#define digitalIO_nRF24L01_miso digitalIO_PTD7       //!< alias nRF24L01_miso=>PTD7
-#define digitalIO_nRF24L01_mosi digitalIO_PTD6       //!< alias nRF24L01_mosi=>PTD6
-#define digitalIO_nRF24L01_sck digitalIO_PTD5       //!< alias nRF24L01_sck=>PTD5
-#define analogueIO_A0        analogueIO_PTB2      //!< alias A0=>PTB2
-#define analogueIO_A1        analogueIO_PTB3      //!< alias A1=>PTB3
-#define analogueIO_A2        analogueIO_PTB10     //!< alias A2=>PTB10
-#define analogueIO_A3        analogueIO_PTB11     //!< alias A3=>PTB11
-#define analogueIO_A4        analogueIO_PTC11     //!< alias A4=>PTC11
-#define analogueIO_A5        analogueIO_PTC10     //!< alias A5=>PTC10
-#define analogueIO_D6        analogueIO_PTC2      //!< alias D6=>PTC2
-#define analogueIO_D13       analogueIO_PTD1      //!< alias D13=>PTD1
-#define analogueIO_D14       analogueIO_PTE25     //!< alias D14=>PTE25
-#define analogueIO_D15       analogueIO_PTE24     //!< alias D15=>PTE24
-#define analogueIO_nRF24L01_mosi analogueIO_PTD6      //!< alias nRF24L01_mosi=>PTD6
-#define analogueIO_nRF24L01_sck analogueIO_PTD5      //!< alias nRF24L01_sck=>PTD5
-#define pwmIO_A4             pwmIO_PTC11          //!< alias A4=>PTC11
-#define pwmIO_A5             pwmIO_PTC10          //!< alias A5=>PTC10
-#define pwmIO_D3             pwmIO_PTA1           //!< alias D3=>PTA1
-#define pwmIO_D5             pwmIO_PTA2           //!< alias D5=>PTA2
-#define pwmIO_D6             pwmIO_PTC2           //!< alias D6=>PTC2
-#define pwmIO_D7             pwmIO_PTC3           //!< alias D7=>PTC3
-#define pwmIO_D8             pwmIO_PTA0           //!< alias D8=>PTA0
-#define pwmIO_D9             pwmIO_PTC4           //!< alias D9=>PTC4
-#define pwmIO_D10            pwmIO_PTD0           //!< alias D10=>PTD0
-#define pwmIO_D11            pwmIO_PTD2           //!< alias D11=>PTD2
-#define pwmIO_D12            pwmIO_PTD3           //!< alias D12=>PTD3
-#define pwmIO_D13            pwmIO_PTD1           //!< alias D13=>PTD1
-#define pwmIO_nRF24L01_cs    pwmIO_PTD4           //!< alias nRF24L01_cs=>PTD4
-#define pwmIO_nRF24L01_miso  pwmIO_PTD7           //!< alias nRF24L01_miso=>PTD7
-#define pwmIO_nRF24L01_mosi  pwmIO_PTD6           //!< alias nRF24L01_mosi=>PTD6
-#define pwmIO_nRF24L01_sck   pwmIO_PTD5           //!< alias nRF24L01_sck=>PTD5
+#define digitalIO_A0              digitalIO_PTB2       //!< alias A0=>PTB2
+#define digitalIO_A1              digitalIO_PTB3       //!< alias A1=>PTB3
+#define digitalIO_A2              digitalIO_PTB10      //!< alias A2=>PTB10
+#define digitalIO_A3              digitalIO_PTB11      //!< alias A3=>PTB11
+#define digitalIO_A4              digitalIO_PTC11      //!< alias A4=>PTC11
+#define digitalIO_A5              digitalIO_PTC10      //!< alias A5=>PTC10
+#define digitalIO_D0              digitalIO_PTC16      //!< alias D0=>PTC16
+#define digitalIO_D1              digitalIO_PTC17      //!< alias D1=>PTC17
+#define digitalIO_D2              digitalIO_PTB9       //!< alias D2=>PTB9
+#define digitalIO_D3              digitalIO_PTA1       //!< alias D3=>PTA1
+#define digitalIO_D4              digitalIO_PTB23      //!< alias D4=>PTB23
+#define digitalIO_D5              digitalIO_PTA2       //!< alias D5=>PTA2
+#define digitalIO_D6              digitalIO_PTC2       //!< alias D6=>PTC2
+#define digitalIO_D7              digitalIO_PTC3       //!< alias D7=>PTC3
+#define digitalIO_D8              digitalIO_PTA0       //!< alias D8=>PTA0
+#define digitalIO_D9              digitalIO_PTC4       //!< alias D9=>PTC4
+#define digitalIO_D10             digitalIO_PTD0       //!< alias D10=>PTD0
+#define digitalIO_D11             digitalIO_PTD2       //!< alias D11=>PTD2
+#define digitalIO_D12             digitalIO_PTD3       //!< alias D12=>PTD3
+#define digitalIO_D13             digitalIO_PTD1       //!< alias D13=>PTD1
+#define digitalIO_D14             digitalIO_PTE25      //!< alias D14=>PTE25
+#define digitalIO_D15             digitalIO_PTE24      //!< alias D15=>PTE24
+#define digitalIO_nRF24L01_miso   digitalIO_PTD7       //!< alias nRF24L01_miso=>PTD7
+#define digitalIO_nRF24L01_mosi   digitalIO_PTD6       //!< alias nRF24L01_mosi=>PTD6
+#define digitalIO_nRF24L01_sck    digitalIO_PTD5       //!< alias nRF24L01_sck=>PTD5
+#define digitalIO_nRF24L01_cs     digitalIO_PTD4       //!< alias nRF24L01_cs=>PTD4
+#define analogueIO_A0             analogueIO_PTB2      //!< alias A0=>PTB2
+#define analogueIO_A1             analogueIO_PTB3      //!< alias A1=>PTB3
+#define analogueIO_A2             analogueIO_PTB10     //!< alias A2=>PTB10
+#define analogueIO_A3             analogueIO_PTB11     //!< alias A3=>PTB11
+#define analogueIO_A4             analogueIO_PTC11     //!< alias A4=>PTC11
+#define analogueIO_A5             analogueIO_PTC10     //!< alias A5=>PTC10
+#define analogueIO_D6             analogueIO_PTC2      //!< alias D6=>PTC2
+#define analogueIO_D13            analogueIO_PTD1      //!< alias D13=>PTD1
+#define analogueIO_D14            analogueIO_PTE25     //!< alias D14=>PTE25
+#define analogueIO_D15            analogueIO_PTE24     //!< alias D15=>PTE24
+#define analogueIO_nRF24L01_mosi  analogueIO_PTD6      //!< alias nRF24L01_mosi=>PTD6
+#define analogueIO_nRF24L01_sck   analogueIO_PTD5      //!< alias nRF24L01_sck=>PTD5
+#define pwmIO_A4                  pwmIO_PTC11          //!< alias A4=>PTC11
+#define pwmIO_A5                  pwmIO_PTC10          //!< alias A5=>PTC10
+#define pwmIO_D3                  pwmIO_PTA1           //!< alias D3=>PTA1
+#define pwmIO_D5                  pwmIO_PTA2           //!< alias D5=>PTA2
+#define pwmIO_D6                  pwmIO_PTC2           //!< alias D6=>PTC2
+#define pwmIO_D7                  pwmIO_PTC3           //!< alias D7=>PTC3
+#define pwmIO_D8                  pwmIO_PTA0           //!< alias D8=>PTA0
+#define pwmIO_D9                  pwmIO_PTC4           //!< alias D9=>PTC4
+#define pwmIO_D10                 pwmIO_PTD0           //!< alias D10=>PTD0
+#define pwmIO_D11                 pwmIO_PTD2           //!< alias D11=>PTD2
+#define pwmIO_D12                 pwmIO_PTD3           //!< alias D12=>PTD3
+#define pwmIO_D13                 pwmIO_PTD1           //!< alias D13=>PTD1
+#define pwmIO_nRF24L01_miso       pwmIO_PTD7           //!< alias nRF24L01_miso=>PTD7
+#define pwmIO_nRF24L01_mosi       pwmIO_PTD6           //!< alias nRF24L01_mosi=>PTD6
+#define pwmIO_nRF24L01_sck        pwmIO_PTD5           //!< alias nRF24L01_sck=>PTD5
+#define pwmIO_nRF24L01_cs         pwmIO_PTD4           //!< alias nRF24L01_cs=>PTD4
 /**
  * @}
  */
 /*
+ADC0_4=PTC2=[Disabled, PTC2]
+ADC0_5=PTD1=[Disabled, PTD1]
+ADC0_6=PTD5=[Disabled, PTD5]
+ADC0_7=PTD6=[Disabled, PTD6]
 ADC0_10=PTA7=[Disabled, PTA7]
 ADC0_11=PTA8=[Disabled, PTA8]
 ADC0_12=PTB2=[Disabled, PTB2]
@@ -442,10 +446,12 @@ ADC0_18=PTE25=[Disabled, PTE25]
 ADC0_21=ADC0_SE16=[Disabled, ADC0_SE16]
 ADC0_22=ADC1_SE16=[Disabled, ADC1_SE16]
 ADC0_23=ADC0_SE23=[Disabled, ADC0_SE23]
-ADC0_4=PTC2=[Disabled, PTC2]
-ADC0_5=PTD1=[Disabled, PTD1]
-ADC0_6=PTD5=[Disabled, PTD5]
-ADC0_7=PTD6=[Disabled, PTD6]
+ADC1_4=PTC8=[Disabled, PTC8]
+ADC1_5=PTC9=[Disabled, PTC9]
+ADC1_6=PTC10=[Disabled, PTC10]
+ADC1_7=PTC11=[Disabled, PTC11]
+ADC1_8=PTB0=[Disabled, PTB0]
+ADC1_9=PTB1=[Disabled, PTB1]
 ADC1_10=PTB4=[Disabled, PTB4]
 ADC1_11=PTB5=[Disabled, PTB5]
 ADC1_12=PTB6=[Disabled, PTB6]
@@ -455,12 +461,6 @@ ADC1_15=PTB11=[Disabled, PTB11]
 ADC1_17=PTA17=[Disabled, PTA17]
 ADC1_18=ADC1_SE18=[Disabled, ADC1_SE18]
 ADC1_23=ADC1_SE23=[Disabled, ADC1_SE23]
-ADC1_4=PTC8=[Disabled, PTC8]
-ADC1_5=PTC9=[Disabled, PTC9]
-ADC1_6=PTC10=[Disabled, PTC10]
-ADC1_7=PTC11=[Disabled, PTC11]
-ADC1_8=PTB0=[Disabled, PTB0]
-ADC1_9=PTB1=[Disabled, PTB1]
 FTM0_0=PTC1=[Disabled, PTA3, PTC1]
 FTM0_1=PTC2=[Disabled, PTA4, PTC2]
 FTM0_2=PTC3=[Disabled, PTA5, PTC3, PTC5]
@@ -483,10 +483,10 @@ FTM3_6=PTC10=[Disabled, PTC10, PTE11]
 FTM3_7=PTC11=[Disabled, PTC11, PTE12]
 I2C0_SCL=PTE24=[Disabled, PTB0, PTB2, PTD2, PTD8, PTE24]
 I2C0_SDA=PTE25=[Disabled, PTB1, PTB3, PTD3, PTD9, PTE25]
-I2C1_SCL=PTC10=[Disabled, PTC10, PTE1]
 I2C1_SDA=PTC11=[Disabled, PTC11, PTE0]
-I2C2_SCL=PTA12=[Disabled, PTA12, PTA14]
+I2C1_SCL=PTC10=[Disabled, PTC10, PTE1]
 I2C2_SDA=PTA11=[Disabled, PTA11, PTA13]
+I2C2_SCL=PTA12=[Disabled, PTA12, PTA14]
 LPTMR0_1=Disabled=[Disabled, PTA19]
 LPTMR0_2=Disabled=[Disabled, PTC5]
 SPI0_PCS0=Disabled=[Disabled, PTA14, PTC4, PTD0]

@@ -6,7 +6,8 @@
 /* ---- <<< Use Configuration Wizard in Context Menu >>> ---- */
 
 /* <o> Stack Size
-   <i> Required amount of stack space  
+   <i> Required amount of stack space
+   <i> In CMSIS this will determine the ISR stack size
    <0x0-$(linkerRamSize)> 
 */
 __stack_size = $(linkerStackSize);

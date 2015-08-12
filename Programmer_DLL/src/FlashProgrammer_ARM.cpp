@@ -2171,6 +2171,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage) 
       }
       rc = setFlashSecurity(flashImage, memoryRegionPtr);
       if (rc != BDM_RC_OK) {
+         log.print("Failed to set security for %s\n", memoryRegionPtr->getMemoryTypeName());
          break;
       }
    }
@@ -3031,7 +3032,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
       return rc;
    }
 #endif
-#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
+#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08)// || (TARGET == ARM)
    // Calculate clock trim values & update memory image
    // log.print("setFlashTrimValues() - trimming\n");
    progressTimer->restart("Calculating Clock Trim");

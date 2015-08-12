@@ -117,6 +117,14 @@ void BdmInterfaceCommon::setGdbServerPort(int port) {
    gdbServerPort = port;
 }
 
+int BdmInterfaceCommon::getGdbTtyPort() {
+   return ttyServerPort;
+}
+
+void BdmInterfaceCommon::setGdbTtyPort(int port) {
+   ttyServerPort = port;
+}
+
 /*! Sets BDM to use based on serial number
  *
  *   @param serialNumber  BDM serial number to look for
@@ -191,7 +199,7 @@ USBDM_ErrorCode BdmInterfaceCommon::initBdm(void) {
       }
       USBDM_ExtendedOptions_t options = bdmOptions;
 
-      // Tell BDM not to do cycle Vdd sa done by interface
+      // Tell BDM not to do cycle Vdd as done by interface
       options.cycleVddOnConnect = false;
 
       rc = USBDM_SetExtendedOptions(&options);
@@ -228,6 +236,7 @@ const string resetDurationKey(           settingsKey ".resetDuration");
 const string resetReleaseIntervalKey(    settingsKey ".resetReleaseInterval");
 const string resetRecoveryIntervalKey(   settingsKey ".resetRecoveryInterval");
 const string gdbServerPortNumberKey(     settingsKey ".gdbServerPortNumber");
+const string gdbTtyPortNumberKey(        settingsKey ".gdbTtyPortNumberKey");
 const string catchVLLSxKey(              settingsKey ".catchVLLSx");
 const string connectionTimeoutKey(       settingsKey ".connectionTimeout");
 //
@@ -256,6 +265,7 @@ BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
    bdmOptions.maskInterrupts  = true;
    extendedRetry              = false;
    gdbServerPort              = 1234;
+   ttyServerPort              = 4321;
    bdmSerialNumber            = "";
    bdmMatchRequired           = false;
    catchVLLSx                 = false;
@@ -294,6 +304,7 @@ void BdmInterfaceCommon::loadSettings(const AppSettings &settings) {
    setCatchVLLSx(            settings.getValue(catchVLLSxKey,            isCatchVLLSx()));
 
    setGdbServerPort(settings.getValue(gdbServerPortNumberKey, getGdbServerPort()));
+   setGdbTtyPort(settings.getValue(gdbTtyPortNumberKey, getGdbTtyPort()));
 
    bdmOptions.targetVdd                = (TargetVddSelect_t) settings.getValue(setTargetVddKey,             bdmOptions.targetVdd);
    bdmOptions.cycleVddOnReset          =                     settings.getValue(cycleTargetVddOnResetKey,    bdmOptions.cycleVddOnReset);
@@ -327,6 +338,7 @@ void BdmInterfaceCommon::saveSettings(AppSettings &settings) {
    settings.addValue(catchVLLSxKey,                isCatchVLLSx());
 
    settings.addValue(gdbServerPortNumberKey,       getGdbServerPort());
+   settings.addValue(gdbTtyPortNumberKey,          getGdbTtyPort());
 
    settings.addValue(setTargetVddKey,              bdmOptions.targetVdd);
    settings.addValue(cycleTargetVddOnResetKey,     bdmOptions.cycleVddOnReset);
@@ -1243,31 +1255,37 @@ USBDM_ErrorCode BdmInterfaceCommon::readMultipleRegs(unsigned char regValueBuffe
    return USBDM_ReadMultipleRegs(regValueBuffer, startRegIndex, endRegIndex);
 }
 
+USBDM_ErrorCode BdmInterfaceCommon::setProgrammingBdmOptions() {
+   // BDM Options to be used with the target when Flash programming
+   USBDM_ExtendedOptions_t bdmProgrammingOptions = {
+      sizeof(USBDM_ExtendedOptions_t),
+      bdmOptions.targetType,
+   };
+
+   // Get copy of current BDM options
+   USBDM_ExtendedOptions_t bdmOptions = getBdmOptions();
+
+   // Use default options for Flash programming.
+   USBDM_GetDefaultExtendedOptions(&bdmProgrammingOptions);
+
+   // Copy some settings
+   bdmProgrammingOptions.targetVdd           = bdmOptions.targetVdd;
+   bdmProgrammingOptions.interfaceFrequency  = bdmOptions.interfaceFrequency;
+   bdmProgrammingOptions.hcs08sbdfrAddress   = bdmOptions.hcs08sbdfrAddress;
+   return USBDM_SetExtendedOptions(&bdmProgrammingOptions);
+}
+
+USBDM_ErrorCode BdmInterfaceCommon::restoreBdmOptions() {
+   return USBDM_SetExtendedOptions(&bdmOptions);
+}
+
 USBDM_ErrorCode BdmInterfaceCommon::setProgrammingMode(bool programmingMode) {
-   USBDM_ErrorCode rc = BDM_RC_OK;
-
    if (programmingMode) {
-      // BDM Options to be used with the target when Flash programming
-      USBDM_ExtendedOptions_t bdmProgrammingOptions = {
-         sizeof(USBDM_ExtendedOptions_t),
-         bdmOptions.targetType,
-      };
-
-      // Get copy of current BDM options
-      USBDM_ExtendedOptions_t bdmOptions = getBdmOptions();
-
-      // Use default options for Flash programming.
-      USBDM_GetDefaultExtendedOptions(&bdmProgrammingOptions);
-
-      // Copy some settings
-      bdmProgrammingOptions.targetVdd           = bdmOptions.targetVdd;
-      bdmProgrammingOptions.interfaceFrequency  = bdmOptions.interfaceFrequency;
-      rc = USBDM_SetExtendedOptions(&bdmProgrammingOptions);
+      return setProgrammingBdmOptions();
    }
    else {
-      rc = USBDM_SetExtendedOptions(&bdmOptions);
+      return restoreBdmOptions();
    }
-   return rc;
 }
 
 /*

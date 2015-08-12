@@ -984,7 +984,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *cloc
 //!       This is not an error.
 //!
 USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashImage) {
-   LOGGING_Q;
+   LOGGING;
    ClockParameters clockTrimParameters;
    USBDM_ErrorCode rc;
    uint16_t  ftrimMergeValue;

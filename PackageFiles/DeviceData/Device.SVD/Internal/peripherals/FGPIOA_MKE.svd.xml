@@ -13,7 +13,7 @@ Devices using this peripheral:
          <description>General Purpose Input/Output</description>
          <groupName>FGPIOA</groupName>
          <prependToName>FGPIOA</prependToName>
-         <headerStructName>FGPIOA</headerStructName>
+         <headerStructName>GPIO</headerStructName>
          <baseAddress>0xF8000000</baseAddress>
          <size>32</size>
          <access>read-write</access>

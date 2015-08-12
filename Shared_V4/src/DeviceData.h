@@ -72,6 +72,7 @@
 #include "Common.h"
 #include "MyException.h"
 #include "USBDM_API.h"
+#include "TargetDefines.h"
 
 /**
  * RS08/HCS08/CFV1 clock types
@@ -1040,12 +1041,17 @@ private:
    FlexNVMInfoConstPtr           flexNVMInfo;            //!< Table describing FlexNVM partitioning
    std::vector<TargetSDID>       targetSDIDs;            //!< System Device Identification Register values (0=> don't know/care)
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
+   uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
 
 public:
    static const DeviceData       defaultDevice;
    static const unsigned int     BDMtoBUSFactor = 1;     //!< Factor relating measured BDM frequency to Target BUS frequency\n
                                                          //!< busFrequency = connectionFreq * BDMtoBUSFactor
 public:
+   static uint32_t                getDefaultHCS08sbdfrAddress();
+   uint32_t                       getHCS08sbdfrAddress() const;
+   void                           setHCS08sbdfrAddress(uint32_t address);
+
    const std::string              getTargetName() const;
    const std::string              getAliasName() const;
    const TargetType_t             getTargetType() const;

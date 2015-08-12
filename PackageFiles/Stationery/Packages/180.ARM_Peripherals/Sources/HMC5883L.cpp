@@ -104,6 +104,6 @@ enum {
       uint8_t values[] = {XMSB, 0x00, 0x00, 0x00, 0x00, 0x00};
       i2c->receive(deviceAddress, values, sizeof(values));
       *x = (values[0]<<8)+values[1];
-      *y = (values[2]<<8)+values[3];
-      *z = (values[4]<<8)+values[5];
+      *z = (values[2]<<8)+values[3];
+      *y = (values[4]<<8)+values[5];
    }

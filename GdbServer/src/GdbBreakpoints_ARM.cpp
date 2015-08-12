@@ -69,7 +69,7 @@ void GdbBreakpoints_ARM::activateBreakpoints(void) {
         bpPtr < memoryBreakpoints+MAX_MEMORY_BREAKPOINTS;
         bpPtr++) {
       if (bpPtr->inUse) {
-         log.print("(%s@%08X)\n", getBreakpointName(memoryBreak), bpPtr->address);
+         log.print("Activating: %s@%08X\n", getBreakpointName(memoryBreak), bpPtr->address);
          bdmInterface->readMemory(sizeof(haltOpcode),sizeof(haltOpcode),bpPtr->address,bpPtr->opcode);
          bdmInterface->writeMemory(sizeof(haltOpcode),sizeof(haltOpcode),bpPtr->address,haltOpcode);
          breakpointsActive = true;
@@ -79,8 +79,7 @@ void GdbBreakpoints_ARM::activateBreakpoints(void) {
    uint32_t fp_ctrl = FP_CTRL_DISABLE;
    for (unsigned breakPtNum=0; breakPtNum<maxNumHardwareBreakPoints; breakPtNum++) {
       if (hardwareBreakpoints[breakPtNum].inUse) {
-         log.print("Activating: %s@%08X\n", getBreakpointName(hardBreak),
-                                                 hardwareBreakpoints[breakPtNum].address&~0x1);
+         log.print("Activating: %s@%08X\n", getBreakpointName(hardBreak), hardwareBreakpoints[breakPtNum].address&~0x1);
          fp_ctrl = FP_CTRL_ENABLE;
          bdmInterface->writeMemory(4, 4, FP_COMP0+4*breakPtNum, getFpCompAddress(hardwareBreakpoints[breakPtNum].address));
          breakpointsActive = true;
@@ -136,7 +135,7 @@ void GdbBreakpoints_ARM::deactivateBreakpoints(void) {
         bpPtr < memoryBreakpoints+MAX_MEMORY_BREAKPOINTS;
         bpPtr++) {
       if (bpPtr->inUse) {
-         log.print("MEM@%08X\n", bpPtr->address);
+         log.print("De-activating: %s@%08X\n", getBreakpointName(memoryBreak), bpPtr->address);
          bdmInterface->writeMemory(sizeof(haltOpcode),sizeof(haltOpcode),bpPtr->address,bpPtr->opcode);
       }
    }
@@ -144,17 +143,18 @@ void GdbBreakpoints_ARM::deactivateBreakpoints(void) {
    bdmInterface->writeMemory(4, 4, FP_CTRL, getData4x8Le(FP_CTRL_DISABLE));
    breakpointsActive = false;
 }
-//! RAM based breakpoints leave the PC pointing at the instruction following
-//  the HALT instruction.  This routine checks for this situation and adjusts
-//! the target PC.
-//!
+
+/** RAM based breakpoints leave the PC pointing at the instruction following
+ *  the HALT instruction.  This routine checks for this situation and adjusts
+ *  the target PC.
+ */
 void GdbBreakpoints_ARM::checkAndAdjustBreakpointHalt(void) {
    LOGGING_Q;
    unsigned long pcAddress;
    unsigned char currentInstruction[2];
    bdmInterface->readPC(&pcAddress);
    bdmInterface->readMemory(MS_Word, 2, pcAddress, currentInstruction);
-   if ((currentInstruction[0] == 0xAB) && (currentInstruction[1] == 0xBE)) {
+   if ((currentInstruction[0] == haltOpcode[0]) && (currentInstruction[1] == haltOpcode[1])) {
       // Adjust location for hosted BKPT #0xAB
       pcAddress += 2;
       log.print("- adjusting PC=%08lX\n", pcAddress);

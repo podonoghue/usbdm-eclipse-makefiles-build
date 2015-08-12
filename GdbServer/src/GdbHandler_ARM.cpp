@@ -6,19 +6,19 @@
  */
 
 #include <string.h>
-
+#include <time.h>
 #include "GdbHandler_ARM.h"
 #include "ArmDefinitions.h"
 #include "Names.h"
 #include "signals.h"
 #include "GdbBreakpoints_ARM.h"
 
-GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr) {
-   return new GdbHandler_ARM(gdbInOut, bdmInterface, deviceInterface, gdbCallBackPtr);
+GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) {
+   return new GdbHandler_ARM(gdbInOut, bdmInterface, deviceInterface, gdbCallBackPtr, tty);
 }
 
-GdbHandler_ARM::GdbHandler_ARM(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr) :
-   GdbHandlerCommon(T_ARM, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_ARM(bdmInterface), gdbCallBackPtr) {
+GdbHandler_ARM::GdbHandler_ARM(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr, IGdbTty *tty) :
+   GdbHandlerCommon(T_ARM, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_ARM(bdmInterface), gdbCallBackPtr, tty) {
    isKinetisDevice = false;
 }
 
@@ -117,7 +117,7 @@ void GdbHandler_ARM::continueTarget(void) {
  */
 void GdbHandler_ARM::maskInterrupts(bool disableInterrupts) {
    const uint8_t disableInts[4] = {DHCSR_C_MASKINTS|DHCSR_C_HALT|DHCSR_C_DEBUGEN,0x00,0x5F,0xA0};
-   const uint8_t enableInts[4]  = {DHCSR_C_HALT|DHCSR_C_DEBUGEN,0x00,0x5F,0xA0};
+   const uint8_t enableInts[4]  = {                 DHCSR_C_HALT|DHCSR_C_DEBUGEN,0x00,0x5F,0xA0};
 
    if (disableInterrupts) {
       bdmInterface->writeMemory(MS_Long, 4, DHCSR, disableInts);
@@ -192,12 +192,14 @@ static int registerMap[] = {
 bool GdbHandler_ARM::initRegisterDescription(void) {
    LOGGING_E;
 
-   if (!GdbHandlerCommon::initRegisterDescription()) {
-      reportGdbPrintf("Using default register description\n");
-      strcpy(targetRegsXML, defaultTargetRegsXML);
-      targetRegsXMLSize  = sizeof(defaultTargetRegsXML);
-      targetLastRegIndex = (sizeof(registerMap)/sizeof(registerMap[0]))-1;
+   if (GdbHandlerCommon::initRegisterDescription()) {
+      return true;
    }
+   reportGdbPrintf("Using default register description\n");
+   strcpy(targetRegsXML, defaultTargetRegsXML);
+   targetRegsXMLSize  = sizeof(defaultTargetRegsXML);
+   targetLastRegIndex = (sizeof(registerMap)/sizeof(registerMap[0]))-1;
+
    return true;
 }
 
@@ -482,45 +484,426 @@ void GdbHandler_ARM::reportLocation(char mode, int reason) {
    gdbInOut->sendGdbString(buff);
 }
 
-#define SEMI_HOSTED_WRITE_OPCODE (5)
+#define SEMI_HOSTING_OPCODE      (0xBEAB)
 
+#define SEMI_HOSTED_CLOSE        (0x02)
+#define SEMI_HOSTED_CLOCK        (0x10)
+#define SEMI_HOSTED_ELAPSED      (0x30)
+#define SEMI_HOSTED_ERRNO        (0x13)
+#define SEMI_HOSTED_FLEN         (0x0C)
+#define SEMI_HOSTED_GET_CMDLINE  (0x15)
+#define SEMI_HOSTED_HEAPINFO     (0x16)
+#define SEMI_HOSTED_ISERROR      (0x08)
+#define SEMI_HOSTED_ISTTY        (0x09)
+#define SEMI_HOSTED_OPEN         (0x01)
+#define SEMI_HOSTED_READ         (0x06)
+#define SEMI_HOSTED_READC        (0x07)
+#define SEMI_HOSTED_REMOVE       (0x0E)
+#define SEMI_HOSTED_RENAME       (0x0F)
+#define SEMI_HOSTED_SEEK         (0x0A)
+#define SEMI_HOSTED_SYSTEM       (0x12)
+#define SEMI_HOSTED_TICKFREQ     (0x31)
+#define SEMI_HOSTED_TIME         (0x11)
+#define SEMI_HOSTED_TMPNAM       (0x0D)
+#define SEMI_HOSTED_WRITE        (0x05)
+#define SEMI_HOSTED_WRITEC       (0x03)
+#define SEMI_HOSTED_WRITE0       (0x04)
+
+struct HeapInfoBlock {
+    uint32_t heap_base;
+    uint32_t heap_limit;
+    uint32_t stack_base;
+    uint32_t stack_limit;
+};
+HeapInfoBlock heapInfo = {0};
+
+struct OpenInfoBlock {
+   uint32_t name;
+   uint32_t mode;
+   uint32_t length;
+};
+OpenInfoBlock openInfoBlock = {0};
+
+struct ReadInfoBlock {
+   uint32_t handle;
+   uint32_t dataPtr;
+   uint32_t length;
+};
+ReadInfoBlock readInfoBlock = {0};
+
+struct WriteInfoBlock {
+   uint32_t handle;
+   uint32_t dataPtr;
+   uint32_t length;
+};
+WriteInfoBlock writeInfoBlock = {0};
+
+struct IsTtyInfoBlock {
+   uint32_t handle;
+};
+IsTtyInfoBlock isTtyInfoBlock = {0};
+
+struct CloseInfoBlock {
+   uint32_t handle;
+};
+CloseInfoBlock closeInfoBlock = {0};
+
+static uint32_t semiHostingErrno = 0;
+
+/**
+ * Checks if target at a semi-hosting break
+ */
+bool GdbHandler_ARM::checkHostedBreak(uint32_t currentPC) {
+   LOGGING_Q;
+   uint16_t opcode;
+   if (bdmInterface->readMemory(MS_Word, 2, currentPC, (uint8_t *)&opcode) != BDM_RC_OK) {
+      return false;
+   }
+   bool atHostedBreak = (targetToNative16(opcode) == SEMI_HOSTING_OPCODE);
+   if (atHostedBreak) {
+      log.print("detected\n");
+   }
+   return atHostedBreak;
+}
+
+/**
+ * Handles target halted due to semi-hosting break
+ * May quietly continue target
+ *
+ * @return T_HALT          on error or no action
+ *         T_RUNNING       if restarted
+ *         T_USER_INPUT    if halted waiting for user input
+ */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHostedBreak() {
-   uint32_t r0 = getCachedR0();
-   uint32_t r1 = getCachedR1();
+   LOGGING_Q;
+   unsigned long pc,r0,r1;
+   time_t theTime;
 
-   uint8_t commandBuff[2000];
-   uint32_t arg0, buffPtr, buffLength;
+   if (targetBreakPending) {
+      // Change to halt
+      return T_HALT;
+   }
+   if (readPC(&pc) != BDM_RC_OK) {
+      return T_HALT;
+   }
+   if (readR0(&r0) != BDM_RC_OK) {
+      return T_HALT;
+   }
+   if (readR1(&r1) != BDM_RC_OK) {
+      return T_HALT;
+   }
+   log.print("pc=0x%08lX, r0=0x%08lX, r1=0x%08lX\n", pc, r0, r1);
+
+   if (runState != Running) {
+      // Only check for Hosted break when actually halting
+      log.print("Ignored as not running\n");
+      return T_HALT;
+   }
+   // Default to Halted
+   GdbTargetStatus targetStatus = T_HALT;
+
+   bool adjustPCandContinue = false;
+   char commandBuff[2000];
+   uint32_t buffLength;
+   char *p;
+   bool success;
+   int handle = -1;
+   unsigned long ch;
+   int len;
+
    switch(r0) {
-   case SEMI_HOSTED_WRITE_OPCODE:
-      bdmInterface->writeMemory(MS_Long, 12, r1, commandBuff);
-      arg0       = getTarget32Bits(commandBuff, 0);
-      buffPtr    = getTarget32Bits(commandBuff, 4);
-      buffLength = getTarget32Bits(commandBuff, 8);
-      reportGdbPrintf(M_INFO, "Semi-hosting %d, 0x%X, %d\n", arg0, buffPtr, buffLength);
-      if (buffLength>sizeof(commandBuff)) {
-         buffLength = sizeof(commandBuff);
+   case SEMI_HOSTED_HEAPINFO:
+      log.print("Semi-hosting heapInfo\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting heapInfo\n");
+      bdmInterface->readMemory(MS_Byte, sizeof(heapInfo), r1, (uint8_t *)&heapInfo);
+      log.print("heap[0x%08X-0x%08X], stack[0x%08X-0x%08X]\n",
+            heapInfo.heap_base, heapInfo.heap_limit,
+            heapInfo.stack_base, heapInfo.stack_limit);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_OPEN:
+      log.print("Semi-hosting open\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting open\n");
+      bdmInterface->readMemory(MS_Byte, sizeof(openInfoBlock), r1, (uint8_t *)&openInfoBlock);
+      len = openInfoBlock.length+1;
+      if (len>(int)sizeof(commandBuff)) {
+         len = (int)sizeof(commandBuff);
       }
-      bdmInterface->writeMemory(MS_Byte, buffLength, buffPtr, commandBuff);
-      commandBuff[buffLength] = '\0';
-      reportGdbPrintf(M_INFO, "%s", commandBuff);
+      bdmInterface->readMemory(MS_Byte, len, openInfoBlock.name, (uint8_t *)commandBuff);
+      log.print("name=%s, mode=0x%08X\n", commandBuff, openInfoBlock.mode);
+      // Only accept 'tt' => tty
+      if (strcmp(commandBuff, ":tt") == 0) {
+         if (openInfoBlock.mode < 4) {
+            // Read mode - stdin
+            success = tty->openInput();
+            handle = IGdbTty::STD_IN;
+         }
+         else {
+            // Write mode - stdout, errout
+            if (!tty->isOutputOpen()) {
+               success = tty->openOutput();
+               handle = IGdbTty::STD_OUT;
+            }
+            else {
+               success = tty->openError();
+               handle = IGdbTty::STD_ERR;
+            }
+         }
+         if (!success) {
+            semiHostingErrno = EIO;
+            bdmInterface->writeReg(ARM_RegR0, -1);
+            reportGdbPrintf(M_ERROR, "Semi-hosting open - error opening \'tt\'\n");
+         }
+         else {
+            bdmInterface->writeReg(ARM_RegR0, handle);
+         }
+      }
+      else {
+         semiHostingErrno = EINVAL;
+         bdmInterface->writeReg(ARM_RegR0, -1);
+         reportGdbPrintf(M_ERROR, "Semi-hosting open - error, Illegal device \'%s\'\n", commandBuff);
+      }
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_CLOSE:
+      log.print("Semi-hosting close %ld\n", r0);
+      reportGdbPrintf(M_INFO, "Semi-hosting close %d\n", r0);
+      bdmInterface->readMemory(MS_Byte, sizeof(closeInfoBlock), r1, (uint8_t *)&closeInfoBlock);
+      switch (closeInfoBlock.handle) {
+      case IGdbTty::STD_IN:
+         tty->closeInput();
+         break;
+      case IGdbTty::STD_OUT:
+         tty->closeOutput();
+         break;
+      case IGdbTty::STD_ERR:
+         tty->closeError();
+         break;
+      }
+      bdmInterface->writeReg(ARM_RegR0, 0);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_READC:
+      log.print("Semi-hosting readc\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting readc\n");
+      bdmInterface->writeReg(ARM_RegR0, tty->getChar());
+      adjustPCandContinue = true;
+//      targetStatus = T_USER_INPUT;
+//      runState = UserInput;
+      break;
+
+   case SEMI_HOSTED_READ:
+      log.print("Semi-hosting read\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting read\n");
+      bdmInterface->readMemory(MS_Byte, sizeof(readInfoBlock), r1, (uint8_t *)&readInfoBlock);
+      log.print("handle=%d, data=0x%08X, length=%d\n", readInfoBlock.handle, readInfoBlock.dataPtr, readInfoBlock.length);
+      switch (readInfoBlock.handle) {
+      case IGdbTty::STD_IN:
+         len = tty->gets(commandBuff, readInfoBlock.length);
+         break;
+      case IGdbTty::STD_OUT:
+      case IGdbTty::STD_ERR:
+      default:
+         len = EOF;
+         break;
+      }
+      buffLength = readInfoBlock.length;
+      if (len==EOF) {
+         // Indicates EOF
+         len = readInfoBlock.length;
+      }
+      // Indicates EOF
+      bdmInterface->writeReg(ARM_RegR0, len);
+//      adjustPCandContinue = false;
+//      targetStatus = T_USER_INPUT;
+//      runState = UserInput;
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_WRITEC:
+      log.print("Semi-hosting writec\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting writec\n");
+      bdmInterface->readReg(ARM_RegR0, &ch);
+      tty->putChar(ch);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_WRITE:
+      log.print("Semi-hosting write\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting write\n");
+      bdmInterface->readMemory(MS_Byte, sizeof(writeInfoBlock), r1, (uint8_t *)&writeInfoBlock);
+      log.print("handle=%d, data=0x%08X, length=%d\n", writeInfoBlock.handle, writeInfoBlock.dataPtr, writeInfoBlock.length);
+      switch (writeInfoBlock.handle) {
+      default:
+      case IGdbTty::STD_IN:
+         log.print("Semi-hosting write - wrong handle\n");
+         success = false;
+         break;
+      case IGdbTty::STD_OUT:
+      case IGdbTty::STD_ERR:
+         success = true;
+         buffLength = writeInfoBlock.length;
+         if (buffLength>sizeof(commandBuff)) {
+            buffLength = sizeof(commandBuff);
+         }
+         bdmInterface->readMemory(MS_Byte, buffLength, writeInfoBlock.dataPtr, (uint8_t *)commandBuff);
+         commandBuff[buffLength] = '\0';
+         tty->puts(commandBuff);
+         log.print("Semi-hosting write - %s\n", commandBuff);
+         break;
+      }
+      bdmInterface->writeReg(ARM_RegR0, success?0:-1);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_WRITE0:
+      log.print("Semi-hosting write0\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting write0\n");
+      p = commandBuff;
+      do {
+         // Read message a few bytes at a time to help prevent overrun without
+         // being horribly inefficient
+         char buff[22];
+         bdmInterface->readMemory(MS_Byte, sizeof(buff)-1, r1, (uint8_t *)buff);
+         buff[sizeof(buff)-1] = '\0';
+         strcat(p, buff);
+         int len = strlen(buff);
+         p += len;
+         if ((len == 0) || (p >= (commandBuff+sizeof(commandBuff)))) {
+            break;
+         }
+      } while (1);
+      *p = '\0';
+      tty->puts(commandBuff);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_GET_CMDLINE:
+      log.print("Semi-hosting get_cmdline\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting get_cmdline\n");
+      bdmInterface->readMemory(MS_Byte, sizeof(isTtyInfoBlock), r1, (uint8_t *)&isTtyInfoBlock);
+      // Just assume TTY
+      bdmInterface->writeReg(ARM_RegR0, 1);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_ISTTY:
+      log.print("Semi-hosting is_tty\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting is_tty\n");
+      switch (r1) {
+      case IGdbTty::STD_IN:
+      case IGdbTty::STD_OUT:
+      case IGdbTty::STD_ERR:
+         success = true;
+         break;
+      default:
+         success = false;
+         break;
+      }
+      bdmInterface->writeReg(ARM_RegR0, success?1:0);
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_ERRNO:
+      log.print("Semi-hosting errno %d\n", semiHostingErrno);
+      reportGdbPrintf(M_INFO, "Semi-hosting errno %d\n", semiHostingErrno);
+      bdmInterface->writeReg(ARM_RegR0, semiHostingErrno);
+      semiHostingErrno = 0;
+      adjustPCandContinue = true;
+      break;
+
+   case SEMI_HOSTED_TIME:
+      log.print("Semi-hosting time\n\n");
+      reportGdbPrintf(M_INFO, "Semi-hosting time\n");
+      theTime = time(0);
+      bdmInterface->writeReg(ARM_RegR0, (unsigned long)theTime);
+      adjustPCandContinue = true;
       break;
 
    default:
-      // Treat as regular halt
-      return T_HALT;
+      log.print("Semi-hosting ????\n");
+      bdmInterface->writeReg(ARM_RegR0, -1);
+      adjustPCandContinue = true;
+      break;
    }
-   return T_HALT;
+   if (adjustPCandContinue) {
+      log.print("Adjusting PC and continuing \n");
+      // Adjust PC past break
+      writePC(pc+2);
+      // Restart
+      bdmInterface->go();
+      runState = Running;
+      return T_RUNNING;
+   }
+   else {
+      log.print("Not restarting at hosted break \n");
+   }
+   return targetStatus;
 }
 
-bool GdbHandler_ARM::checkHostedBreak(uint32_t currentPC) {
-   LOGGING_E;
-   static const uint16_t SEMI_HOSTING_OPCODE = 0xbeab;
-   uint16_t opcode;
-   if (bdmInterface->writeMemory(MS_Word, 2, currentPC, (uint8_t *)&opcode) != BDM_RC_OK) {
-      return false;
+/**
+ * Handles target halted apart from semi-hosting break
+ */
+GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
+   LOGGING;
+   bool looping = false;
+   if (runState == Running) {
+      // Target has just halted - cache registers
+      readRegs();
+      uint32_t currentPC = getCachedPC();
+      looping = (currentPC == lastStoppedPC);
+      lastStoppedPC = currentPC;
    }
-//   log.print("opcode = 0x%04X\n", targetToNative16(opcode));
-   return (targetToNative16(opcode) == SEMI_HOSTING_OPCODE);
+   switch(runState) {
+   case Halted :  // halted -> halted
+      // No change
+      break;
+   case UserInput: // already halted
+      // No change
+      return T_USER_INPUT;
+   case Breaking : // user breaking -> halted
+      reportLocation('T', TARGET_SIGNAL_INT);
+      log.print("Target has halted (from breaking) @0x%08X\n", lastStoppedPC);
+      reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      runState = Halted;
+      break;
+   case Stepping : // stepping -> halted
+      // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
+      // This detects the PC not changing on step and return TARGET_SIGNAL_INT rather than TARGET_SIGNAL_TRAP to abort stepping
+      if (looping) {
+            reportLocation('T', TARGET_SIGNAL_INT);
+         }
+         else {
+            reportLocation('T', TARGET_SIGNAL_TRAP);
+         }
+      log.print("Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
+      reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      runState = Halted;
+      break;
+   default:       // ???     -> halted
+   case Running : // running -> halted
+      if (atBreakpoint(getCachedPC())) {
+         reportLocation('T', TARGET_SIGNAL_TRAP);
+      }
+      else {
+         reportLocation('T', TARGET_SIGNAL_INT);
+      }
+      log.print("Target has halted (from running) @%s\n", getCachedPcAsString());
+      reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      runState = Halted;
+      break;
+   }
+   targetBreakPending = false;
+   return T_HALT;
 }
 
 /*!
@@ -532,12 +915,19 @@ bool GdbHandler_ARM::checkHostedBreak(uint32_t currentPC) {
  *   @return Target status
  */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::pollTarget(void) {
-   LOGGING_Q;
-
+   LOGGING;
+   static int  unsuccessfulPollCount = 0;                    // Count of unsuccessful polls of the target
    static bool resetAttempted = false;                       // Set if reset already tried
-   unsigned    timeoutLimit   = getConnectionTimeout() * 10; // scale to 100 ms ticks
+   int         timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
 
-   gdbTargetStatus = getTargetStatus();
+   if (targetBreakPending) {
+      // Halt target
+      bdmInterface->halt();
+   }
+   GdbTargetStatus gdbTargetStatus = getTargetStatus();
+   log.print("gdbTargetStatus(on poll) = %s\n", getStatusName(gdbTargetStatus));
+   log.print("runState(on entry)       = %s\n", getRunStateName(runState));
+
    if (gdbTargetStatus == T_NOCONNECTION) {
       if (resetAttempted) {
          return T_NOCONNECTION;
@@ -550,75 +940,28 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::pollTarget(void) {
       resetAttempted = true;
       return T_UNKNOWN;
    }
-
    resetAttempted = false;
+   unsuccessfulPollCount = 0;
 
    if ((gdbTargetStatus == T_VLLSxRESET) || (gdbTargetStatus == T_LLSxRESET)) {
       configureKinetisMDM_AP();
+      // Re-establish breakpoints as lost on reset
       notifyBreakpointsCleared();
       activateBreakpoints();
    }
-   if (targetBreakPending) {
-      // halt target
-      bdmInterface->halt();
-      targetBreakPending = false;
-   }
-   unsuccessfulPollCount = 0;
    if ((gdbTargetStatus == T_HALT)) {
-      bool looping = false;
-      if (runState != halted) {
-         // Target has just halted - cache registers
-         readRegs();
-         uint32_t currentPC = getCachedPC();
-         looping = (currentPC == lastStoppedPC);
-         lastStoppedPC = currentPC;
-         if (checkHostedBreak(currentPC)) {
-            gdbTargetStatus = handleHostedBreak();
-         }
+      // Check for semi-hosting
+      unsigned long pc;
+      readPC(&pc);
+      if (checkHostedBreak(pc)) {
+         gdbTargetStatus = handleHostedBreak();
       }
-      switch(runState) {
-      case halted :  // halted -> halted
-         break;
-      case breaking : // user breaking -> halted
-         reportLocation('T', TARGET_SIGNAL_INT);
-         log.print("Target has halted (from breaking) @0x%08X\n", lastStoppedPC);
-         reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      case stepping : // stepping -> halted
-         // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
-         // This detects the PC not changing on step and return TARGET_SIGNAL_INT rather than TARGET_SIGNAL_TRAP to abort stepping
-         if (looping) {
-               reportLocation('T', TARGET_SIGNAL_INT);
-            }
-            else {
-               reportLocation('T', TARGET_SIGNAL_TRAP);
-            }
-         log.print("Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
-         reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      default:       // ???     -> halted
-      case running : // running -> halted
-         if (atBreakpoint(getCachedPC())) {
-            reportLocation('T', TARGET_SIGNAL_TRAP);
-         }
-         else {
-            reportLocation('T', TARGET_SIGNAL_INT);
-         }
-         log.print("Target has halted (from running) @%s\n", getCachedPcAsString());
-         reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      }
-      runState = halted;
    }
-   else {
-      runState = running;
+   if ((gdbTargetStatus == T_HALT)) {
+      gdbTargetStatus = handleHalted();
    }
+   log.print("gdbTargetStatus(on exit) = %s\n", getStatusName(gdbTargetStatus));
+   log.print("runState(on exit)        = %s\n", getRunStateName(runState));
    return gdbTargetStatus;
 }
 
@@ -632,6 +975,14 @@ USBDM_ErrorCode GdbHandler_ARM::readPC(unsigned long *value) {
 
 USBDM_ErrorCode GdbHandler_ARM::writeSP(unsigned long value) {
    return bdmInterface->writeReg(ARM_RegSP, value);
+}
+
+USBDM_ErrorCode GdbHandler_ARM::readR0(unsigned long *value) {
+   return bdmInterface->readReg(ARM_RegR0, value);
+}
+
+USBDM_ErrorCode GdbHandler_ARM::readR1(unsigned long *value) {
+   return bdmInterface->readReg(ARM_RegR1, value);
 }
 
 USBDM_ErrorCode GdbHandler_ARM::updateTarget() {

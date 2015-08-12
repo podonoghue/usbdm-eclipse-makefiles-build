@@ -3770,31 +3770,31 @@ typedef struct {                                /*       PIT0 Structure         
 * @{
 */
 /* ------- PCSR Bit Fields                          ------ */
-#define PIT0_PCSR_EN_MASK                        (0x01UL << PIT0_PCSR_EN_SHIFT)                      /*!< PIT0_PCSR: EN Mask                      */
-#define PIT0_PCSR_EN_SHIFT                       0                                                   /*!< PIT0_PCSR: EN Position                  */
-#define PIT0_PCSR_RLD_MASK                       (0x01UL << PIT0_PCSR_RLD_SHIFT)                     /*!< PIT0_PCSR: RLD Mask                     */
-#define PIT0_PCSR_RLD_SHIFT                      1                                                   /*!< PIT0_PCSR: RLD Position                 */
-#define PIT0_PCSR_PIF_MASK                       (0x01UL << PIT0_PCSR_PIF_SHIFT)                     /*!< PIT0_PCSR: PIF Mask                     */
-#define PIT0_PCSR_PIF_SHIFT                      2                                                   /*!< PIT0_PCSR: PIF Position                 */
-#define PIT0_PCSR_PIE_MASK                       (0x01UL << PIT0_PCSR_PIE_SHIFT)                     /*!< PIT0_PCSR: PIE Mask                     */
-#define PIT0_PCSR_PIE_SHIFT                      3                                                   /*!< PIT0_PCSR: PIE Position                 */
-#define PIT0_PCSR_OVW_MASK                       (0x01UL << PIT0_PCSR_OVW_SHIFT)                     /*!< PIT0_PCSR: OVW Mask                     */
-#define PIT0_PCSR_OVW_SHIFT                      4                                                   /*!< PIT0_PCSR: OVW Position                 */
-#define PIT0_PCSR_DBG_MASK                       (0x01UL << PIT0_PCSR_DBG_SHIFT)                     /*!< PIT0_PCSR: DBG Mask                     */
-#define PIT0_PCSR_DBG_SHIFT                      5                                                   /*!< PIT0_PCSR: DBG Position                 */
-#define PIT0_PCSR_DOZE_MASK                      (0x01UL << PIT0_PCSR_DOZE_SHIFT)                    /*!< PIT0_PCSR: DOZE Mask                    */
-#define PIT0_PCSR_DOZE_SHIFT                     6                                                   /*!< PIT0_PCSR: DOZE Position                */
-#define PIT0_PCSR_PRE_MASK                       (0x0FUL << PIT0_PCSR_PRE_SHIFT)                     /*!< PIT0_PCSR: PRE Mask                     */
-#define PIT0_PCSR_PRE_SHIFT                      8                                                   /*!< PIT0_PCSR: PRE Position                 */
-#define PIT0_PCSR_PRE(x)                         (((uint16_t)(((uint16_t)(x))<<PIT0_PCSR_PRE_SHIFT))&PIT0_PCSR_PRE_MASK) /*!< PIT0_PCSR                               */
+#define PIT_PCSR_EN_MASK                         (0x01UL << PIT_PCSR_EN_SHIFT)                       /*!< PIT0_PCSR: EN Mask                      */
+#define PIT_PCSR_EN_SHIFT                        0                                                   /*!< PIT0_PCSR: EN Position                  */
+#define PIT_PCSR_RLD_MASK                        (0x01UL << PIT_PCSR_RLD_SHIFT)                      /*!< PIT0_PCSR: RLD Mask                     */
+#define PIT_PCSR_RLD_SHIFT                       1                                                   /*!< PIT0_PCSR: RLD Position                 */
+#define PIT_PCSR_PIF_MASK                        (0x01UL << PIT_PCSR_PIF_SHIFT)                      /*!< PIT0_PCSR: PIF Mask                     */
+#define PIT_PCSR_PIF_SHIFT                       2                                                   /*!< PIT0_PCSR: PIF Position                 */
+#define PIT_PCSR_PIE_MASK                        (0x01UL << PIT_PCSR_PIE_SHIFT)                      /*!< PIT0_PCSR: PIE Mask                     */
+#define PIT_PCSR_PIE_SHIFT                       3                                                   /*!< PIT0_PCSR: PIE Position                 */
+#define PIT_PCSR_OVW_MASK                        (0x01UL << PIT_PCSR_OVW_SHIFT)                      /*!< PIT0_PCSR: OVW Mask                     */
+#define PIT_PCSR_OVW_SHIFT                       4                                                   /*!< PIT0_PCSR: OVW Position                 */
+#define PIT_PCSR_DBG_MASK                        (0x01UL << PIT_PCSR_DBG_SHIFT)                      /*!< PIT0_PCSR: DBG Mask                     */
+#define PIT_PCSR_DBG_SHIFT                       5                                                   /*!< PIT0_PCSR: DBG Position                 */
+#define PIT_PCSR_DOZE_MASK                       (0x01UL << PIT_PCSR_DOZE_SHIFT)                     /*!< PIT0_PCSR: DOZE Mask                    */
+#define PIT_PCSR_DOZE_SHIFT                      6                                                   /*!< PIT0_PCSR: DOZE Position                */
+#define PIT_PCSR_PRE_MASK                        (0x0FUL << PIT_PCSR_PRE_SHIFT)                      /*!< PIT0_PCSR: PRE Mask                     */
+#define PIT_PCSR_PRE_SHIFT                       8                                                   /*!< PIT0_PCSR: PRE Position                 */
+#define PIT_PCSR_PRE(x)                          (((uint16_t)(((uint16_t)(x))<<PIT_PCSR_PRE_SHIFT))&PIT_PCSR_PRE_MASK) /*!< PIT0_PCSR                               */
 /* ------- PMR Bit Fields                           ------ */
-#define PIT0_PMR_PM_MASK                         (0xFFFFUL << PIT0_PMR_PM_SHIFT)                     /*!< PIT0_PMR: PM Mask                       */
-#define PIT0_PMR_PM_SHIFT                        0                                                   /*!< PIT0_PMR: PM Position                   */
-#define PIT0_PMR_PM(x)                           (((uint16_t)(((uint16_t)(x))<<PIT0_PMR_PM_SHIFT))&PIT0_PMR_PM_MASK) /*!< PIT0_PMR                                */
+#define PIT_PMR_PM_MASK                          (0xFFFFUL << PIT_PMR_PM_SHIFT)                      /*!< PIT0_PMR: PM Mask                       */
+#define PIT_PMR_PM_SHIFT                         0                                                   /*!< PIT0_PMR: PM Position                   */
+#define PIT_PMR_PM(x)                            (((uint16_t)(((uint16_t)(x))<<PIT_PMR_PM_SHIFT))&PIT_PMR_PM_MASK) /*!< PIT0_PMR                                */
 /* ------- PCNTR Bit Fields                         ------ */
-#define PIT0_PCNTR_PC_MASK                       (0xFFFFUL << PIT0_PCNTR_PC_SHIFT)                   /*!< PIT0_PCNTR: PC Mask                     */
-#define PIT0_PCNTR_PC_SHIFT                      0                                                   /*!< PIT0_PCNTR: PC Position                 */
-#define PIT0_PCNTR_PC(x)                         (((uint16_t)(((uint16_t)(x))<<PIT0_PCNTR_PC_SHIFT))&PIT0_PCNTR_PC_MASK) /*!< PIT0_PCNTR                              */
+#define PIT_PCNTR_PC_MASK                        (0xFFFFUL << PIT_PCNTR_PC_SHIFT)                    /*!< PIT0_PCNTR: PC Mask                     */
+#define PIT_PCNTR_PC_SHIFT                       0                                                   /*!< PIT0_PCNTR: PC Position                 */
+#define PIT_PCNTR_PC(x)                          (((uint16_t)(((uint16_t)(x))<<PIT_PCNTR_PC_SHIFT))&PIT_PCNTR_PC_MASK) /*!< PIT0_PCNTR                              */
 /**
  * @} */ /* End group PIT_Register_Masks_GROUP 
  */

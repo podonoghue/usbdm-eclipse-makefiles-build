@@ -13,16 +13,23 @@
 #include "FlashProgrammerFactory.h"
 #include "GdbBreakpoints.h"
 #include "DeviceInterface.h"
+#include "IGdbTty.h"
 
 class GdbHandlerCommon: public GdbHandler {
 
 public:
-   GdbHandlerCommon(TargetType_t targetType, GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbBreakpoints *gdbBreakpoints, GdbCallback gdbCallBackPtr);
+   GdbHandlerCommon(
+         TargetType_t         targetType,
+         GdbInOut            *gdbInOut,
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         GdbBreakpoints      *gdbBreakpoints,
+         GdbCallback          gdbCallBackPtr,
+         IGdbTty              *tty);
    virtual ~GdbHandlerCommon();
 
    virtual USBDM_ErrorCode      initialise();
    virtual USBDM_ErrorCode      doCommand(const GdbPacket *pkt);
-   virtual GdbTargetStatus      getGdbTargetStatus(void);
    virtual GdbTargetStatus      pollTarget(void) = 0;
    virtual USBDM_ErrorCode      updateTarget() = 0;
 
@@ -36,15 +43,14 @@ protected:
    BdmInterfacePtr             bdmInterface;
    DeviceInterfacePtr          deviceInterface;
    DeviceDataPtr        const &deviceData;
+   IGdbTty                     *tty;
    bool                        useFastRegisterRead;
    RunState                    runState;
-   GdbTargetStatus             gdbTargetStatus;
    DeviceData                  deviceOptions;          //!< Description of currently selected device
    FlashImagePtr               flashImage;             //!< Flash image for programming
    unsigned                    unsuccessfulPollCount;  //!< Count of unsuccessful polls of target
    bool                        targetBreakPending;
    uint32_t                    lastStoppedPC;
-
    static GdbHandlerCommon    *This;
    static void                errorLogger(const char *msg);
 

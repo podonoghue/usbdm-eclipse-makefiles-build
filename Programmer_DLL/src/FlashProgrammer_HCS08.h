@@ -124,6 +124,7 @@ public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
+   virtual USBDM_ErrorCode setDeviceData(const DeviceDataConstPtr device);
    virtual USBDM_ErrorCode checkTargetUnSecured();
    virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
    virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);

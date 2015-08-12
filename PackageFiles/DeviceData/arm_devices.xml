@@ -24,7 +24,12 @@
 <!ENTITY CortexM-sfpu-register-description SYSTEM "ARM/CortexM-sfpu-register-description.xml">
 ]>
 <!-- 
+FTMRH - MKE02
+FTMRE - MKE04, MKE06
+ -->
+<!-- 
 ToDo - review flash block sizes for MK20-MK70
+      V4.11.1.70   - Added disable NMI to FTMRH, FTMRE, MKM-FTFA (MKE, MKM family)
       V4.11.1.20   - Added MK22FN128M10
       V4.10.6.260  - Added MK24, various corrections
       V4.10.6.250a - Corrected MK64FX/FN..M12 RAM boundaries
@@ -1662,7 +1667,7 @@ NOTES:
          <note>K20P32M50SF0RM</note>
       </device>
       <device name="MK20DX128M5" family="CortexM4" subfamily="MK20D5">
-         <clock registerAddress="0x40064000" type="MCG_MK" />
+         <!-- clock registerAddress="0x40064000" type="MCG_MK" / -->
          <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />

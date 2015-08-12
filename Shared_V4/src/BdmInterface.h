@@ -204,21 +204,30 @@ public:
     * Indicates if GDB session closure ends the GDB server
     */
    virtual bool                       isExitOnClose() const = 0;
-
    /**
     * Set port number for GDB server to monitor
     *
     * @param port Port number
     */
    virtual void                       setGdbServerPort(int port) = 0;
-
    /**
-    * Gets port number that GDB server is to monitor
+    * Get port number that GDB server monitors
     *
     * @return Port number
     */
    virtual int                        getGdbServerPort() = 0;
-
+   /**
+    * Set port number that TTY connection is to use
+    *
+    * @param port Port number
+    */
+   virtual void                       setGdbTtyPort(int port) = 0;
+   /**
+    * Gets port number that TTY connection is to use
+    *
+    * @return Port number
+    */
+   virtual int                        getGdbTtyPort() = 0;
    /**
     * Load setting from settings object
     *
@@ -454,7 +463,7 @@ public:
    *  USBDM_Connect() to re-connect.  This is no longer done automatically
    *  as it may interfere with security checking if attempted too soon after reset.
    */
-   virtual USBDM_ErrorCode            reset(TargetMode_t target_mode) = 0;
+   virtual USBDM_ErrorCode            reset(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT)) = 0;
 
   /**
    * Connects to Target.
@@ -902,7 +911,7 @@ public:
     *  This is needed because some settings are incompatible with programming
     *  Don't need to use this unless you have changed the settings from the default
     *
-    *  @param mode  true sets programming mode
+    *  @param mode  true sets programming mode, false restores previous settings
     *
     *  @return
     *      BDM_RC_OK    => OK \n

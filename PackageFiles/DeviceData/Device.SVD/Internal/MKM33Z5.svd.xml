@@ -2,6 +2,7 @@
 <!DOCTYPE device
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKM33Z4_VectorTable.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKM.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_MKM.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY FTFA         SYSTEM "peripherals/FTFA.svd.xml">
@@ -14,6 +15,7 @@
 <!ENTITY NV           SYSTEM "peripherals/NV_FTFA.svd.xml">
 <!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKL.svd.xml">
 <!ENTITY OSC0         SYSTEM "peripherals/OSC_MKM.svd.xml">
+<!ENTITY PIT0         SYSTEM "peripherals/PIT0_2CH_MKM.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKM.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MKM.svd.xml">
 <!ENTITY RNG          SYSTEM "peripherals/RNG_1.svd.xml">
@@ -46,6 +48,7 @@
    <addressUnitBits>8</addressUnitBits>
    <width>32</width>
    <peripherals>
+&ADC0;
 &CRC;
 &CoreDebug;
 &FTFA;
@@ -66,6 +69,8 @@
 &NV;
 &NVIC;
 &OSC0;
+&PIT0;
+<peripheral derivedFrom="PIT0"><name>PIT1</name><prependToName>PIT1</prependToName><baseAddress>0x4002E000</baseAddress></peripheral>
 &PORTA;
 <peripheral derivedFrom="PORTA"><name>PORTB</name><prependToName>PORTB</prependToName><baseAddress>0x40047000</baseAddress></peripheral>
 <peripheral derivedFrom="PORTA"><name>PORTC</name><prependToName>PORTC</prependToName><baseAddress>0x40048000</baseAddress></peripheral>

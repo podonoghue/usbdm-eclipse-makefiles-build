@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -====================================================================================================
+   | 20 Jan 2015 | Added HCS08sbdfrAddress filed etc.                                  - pgo 4.12.1.10
    | 20 Jan 2015 | Added isWritableMemory()                                            - pgo 4.10.6.250
    |  1 Dec 2014 | Fixed format in printf()s                                           - pgo 4.10.6.230
    | 12 Dec 2014 | Started changes for Kinetis clock trimming                          - pgo 4.10.6.220
@@ -50,6 +51,7 @@
 #include "Common.h"
 #include "UsbdmSystem.h"
 #include "DeviceData.h"
+#include "TargetDefines.h"
 
 using namespace std;
 
@@ -818,6 +820,18 @@ MemoryRegionPtr DeviceData::getMemoryRegion(unsigned index) {
       return MemoryRegionPtr();
    }
    return memoryRegions[index];
+}
+
+uint32_t DeviceData::getDefaultHCS08sbdfrAddress() {
+   return HCS08_SBDFR_DEFAULT;
+}
+
+uint32_t DeviceData::getHCS08sbdfrAddress() const {
+   return hcs08sbdfrAddress;
+}
+
+void DeviceData::setHCS08sbdfrAddress(uint32_t address) {
+   hcs08sbdfrAddress = address;
 }
 
 //! Determines the memory region containing an address in given memory space
@@ -1723,7 +1737,8 @@ DeviceData::DeviceData(
                watchdogAddress(0),
                SDIDAddress(0),
                security(SEC_DEFAULT),
-               eraseOption(eraseAll) {
+               eraseOption(eraseAll),
+               hcs08sbdfrAddress(HCS08_SBDFR_DEFAULT) {
 
    flexNVMParameters.eeepromSize  = 0xFF;
    flexNVMParameters.partionValue = 0xFF;

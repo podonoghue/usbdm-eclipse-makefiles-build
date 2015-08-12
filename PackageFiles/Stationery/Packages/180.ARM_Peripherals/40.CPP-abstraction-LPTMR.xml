@@ -11,6 +11,7 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
+            <variableRef idRef="demo.cpp.peripheral.lptmr" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -21,7 +22,7 @@
          <variable id="projectOptionValue.CPP-abstraction-LPTMR" 
             name="LPTMR interface" 
             description="Adds a CPP abstraction layer for Low Power Timer hardware" 
-            checkGroup="group-CPP-abstraction-options" >
+            checkGroup="group-peripheral-options" >
          </variable>
    
          <!-- LPTMR CPP abstraction layer -->

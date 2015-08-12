@@ -13,7 +13,7 @@ set ECLIPSE_ROOT=%USBDM_ROOT%\usbdm-eclipse-makefiles-build
 
 set CW_Kinetis_ROOT=%ECLIPSE_ROOT%\USBDM_Kinetis_Firmware
 set FLASH_DIR=%ECLIPSE_ROOT%\PackageFiles\FlashImages
-set MK_FLASH_DIR="%FLASH_DIR%\MKxxX"
+set MK_FLASH_DIR="%FLASH_DIR%\MKxxNew"
 
 echo ***  ****************************************
 echo ***  Do Firmware files

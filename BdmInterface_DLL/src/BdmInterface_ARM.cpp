@@ -37,6 +37,11 @@ USBDM_ErrorCode BdmInterface_ARM::readPC(unsigned long *regValue) {
    return USBDM_ReadReg(ARM_RegPC, regValue);
 }
 
+USBDM_ErrorCode BdmInterface_ARM::setProgrammingMode(bool) {
+   // No changes for programming
+   return BDM_RC_OK;
+}
+
 /*
  * Create the plugin instance
  */

@@ -1,7 +1,7 @@
 /**
  * @file      pit.h
  * @version   1.0.0
- * @brief     Programmable Interrupt  Timer MK
+ * @brief     Programmable Interrupt Timer MK
  */
 
 #ifndef PIT_H_
@@ -61,6 +61,7 @@
  */
 #define PIT_TCTRL_DEFAULT_VALUE (PIT_TCTRL_TEN_MASK|PIT_TCTRL_TIE_MASK)
 
+#define PIT_NUMBER_OF_CHANNELS (sizeof(PIT->CHANNEL)/sizeof(PIT->CHANNEL[0]))
 
 #if PIT_USES_NAKED_HANDLER == 0
    /**
@@ -103,20 +104,21 @@ public:
    /**
     *   Disable the PIT channel
     */
-   void finalise(uint8_t channel) {
+   void finalise(uint8_t channel) const {
       PIT_CLOCK_REG &= ~PIT_CLOCK_MASK;
    }
    /**
     *  Configure the PIT channel
     *
     *  @param channel   Channel to configure
-    *  @param interval  Interval for the channel
+    *  @param interval  Interval in timer ticks (usually bus clock period)
     *  @param tctrl     Timer Control Register value
     */
    void configureChannel(uint8_t channel, uint32_t interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) const {
 
       PIT->CHANNEL[channel].LDVAL = interval;
       PIT->CHANNEL[channel].TCTRL = tctrl;
+      PIT->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
       
       if (tctrl & PIT_TCTRL_TIE_MASK) {
          // Enable timer interrupts
@@ -129,7 +131,7 @@ public:
    /**
     *   Disable the PIT channel
     */
-   void finaliseChannel(uint8_t channel) {
+   void finaliseChannel(uint8_t channel) const {
 
       // Disable timer channel
       PIT->CHANNEL[channel].TCTRL = 0;
@@ -137,6 +139,21 @@ public:
 
       // Enable timer interrupts
       NVIC_EnableIRQ((IRQn_Type)(PIT0_IRQn+channel));
+   }
+   /**
+    *  Use a PIT channel to implement a busy-wait delay
+    *
+    *  @param channel   Channel to use
+    *  @param interval  Interval to wait in timer ticks (usually bus clock period)
+    *
+    *  @note Function doesn't return until interval has expired
+    */
+   void delay(uint8_t channel, uint32_t interval) const {
+      configureChannel(channel, interval, PIT_TCTRL_TEN_MASK);
+      while (PIT->CHANNEL[channel].TFLG == 0) {
+         __NOP();
+      }
+      configureChannel(channel, 0, 0);
    }
 };
 

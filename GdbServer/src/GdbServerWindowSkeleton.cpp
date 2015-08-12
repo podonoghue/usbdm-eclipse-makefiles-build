@@ -15,17 +15,14 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	
 	menuBar = new wxMenuBar( 0 );
 	serverMenu = new wxMenu();
-	wxMenuItem* m_menuItem1;
 	m_menuItem1 = new wxMenuItem( serverMenu, wxID_ANY, wxString( wxT("&Change Server Settings") ) , wxT("Restart server with new settings"), wxITEM_NORMAL );
 	serverMenu->Append( m_menuItem1 );
 	
-	serverMenu->AppendSeparator();
+	m_separator1 = serverMenu->AppendSeparator();
 	
-	wxMenuItem* m_menuItem2;
 	m_menuItem2 = new wxMenuItem( serverMenu, wxID_ANY, wxString( wxT("&Drop Connection") ) , wxT("Forcibly drop connection"), wxITEM_NORMAL );
 	serverMenu->Append( m_menuItem2 );
 	
-	wxMenuItem* m_menuItem3;
 	m_menuItem3 = new wxMenuItem( serverMenu, wxID_ANY, wxString( wxT("E&xit\tAlt-X") ) , wxT("Quit server"), wxITEM_NORMAL );
 	serverMenu->Append( m_menuItem3 );
 	
@@ -87,6 +84,9 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	statusTextControl = new wxTextCtrl( mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	bSizer2->Add( statusTextControl, 1, wxEXPAND, 5 );
 	
+	entryTextControl = new wxTextCtrl( mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( entryTextControl, 0, wxEXPAND, 5 );
+	
 	
 	mainPanel->SetSizer( bSizer2 );
 	mainPanel->Layout();
@@ -116,6 +116,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	this->Connect( m_menuItem12->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnSetTimeout ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleMaskISR ) );
 	this->Connect( m_menuItem13->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleCatchVLLS ) );
+	entryTextControl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( GdbServerWindowSkeleton::OnEntryTextEnter ), NULL, this );
 }
 
 GdbServerWindowSkeleton::~GdbServerWindowSkeleton()
@@ -134,5 +135,6 @@ GdbServerWindowSkeleton::~GdbServerWindowSkeleton()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnSetTimeout ) );
 	this->Disconnect( wxID_DISABLE_INTERRUPTS, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleMaskISR ) );
 	this->Disconnect( wxID_CATCH_VLLS_ID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GdbServerWindowSkeleton::OnToggleCatchVLLS ) );
+	entryTextControl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( GdbServerWindowSkeleton::OnEntryTextEnter ), NULL, this );
 	
 }

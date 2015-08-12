@@ -11,10 +11,6 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
-            <or>
-               <deviceSubfamilyMatches>^MK\d+.*</deviceSubfamilyMatches>
-               <deviceSubfamilyMatches>^MKV\d+.*</deviceSubfamilyMatches>
-            </or>
             <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>

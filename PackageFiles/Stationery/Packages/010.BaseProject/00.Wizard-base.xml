@@ -17,10 +17,23 @@
           />
       </page>
       <page id="kinetis-additional-options-page" name="Additional Options" description="Select Additional Options">
-         <group id="group-CPP-abstraction-options"
-            name="CPP Abstraction Support"
+         <group id="group-peripheral-options"
+            name="Internal Peripherals"
             row="1"
             width="1"
+            span="2"
+          />
+         <group id="group-i2c-peripheral-optionso"
+            name="I2C Devices"
+            row="2"
+            width="1"
+            span="2"
+          />
+         <group id="group-spi-peripheral-options"
+            name="SPI Devices"
+            row="2"
+            width="1"
+            span="2"
           />
          <group id="group-ksdk-demo"
             name="Kinetis SDK Demo"

@@ -13,6 +13,7 @@
                     sdidAddress?,
                     sdidMask?,
                     sdid+,
+                    sbdfrAddress?,
                     flashScripts?,
                     (tclScript|tclScriptRef)?,
                     (flashProgram|flashProgramRef)?,
@@ -138,6 +139,9 @@
   <!-- SDID address -->
 <!ELEMENT sdidAddress EMPTY>
      <!ATTLIST sdidAddress value CDATA #REQUIRED>
+  <!--SBDFR address -->
+<!ELEMENT sbdfrAddress EMPTY>
+     <!ATTLIST sbdfrAddress value CDATA #REQUIRED>
   <!--SDID mask for device significant bits -->
 <!ELEMENT sdidMask EMPTY>
      <!ATTLIST sdidMask value CDATA #REQUIRED>

@@ -326,7 +326,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Project_Headers&quot;"/>
 								</option>
 								<option id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols.1581793705" name="Defined symbols (-D)" superClass="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="TARGET_HARDWARE=H_USBDM_OPENSDA"/>
+									<listOptionValue builtIn="false" value="TARGET_HARDWARE=H_USBDM_MK20D5"/>
 									<listOptionValue builtIn="false" value="CPU=MK20D5"/>
 									<listOptionValue builtIn="false" value="TARGET_DEBUG"/>
 								</option>

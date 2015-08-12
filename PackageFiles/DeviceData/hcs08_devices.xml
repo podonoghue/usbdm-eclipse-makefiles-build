@@ -1212,6 +1212,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0000" mask="0x0000"/>
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
@@ -1233,6 +1234,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0043" />
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
@@ -1252,6 +1254,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0042" />
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
@@ -1272,6 +1275,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0042" />
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
@@ -1292,6 +1296,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0040" />
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
@@ -1313,6 +1318,7 @@
          <soptAddress value="0x3030" />
          <sdidAddress value="0x3002" />
          <sdid value="0x0040" />
+         <sbdfrAddress value="0x3001"/>
          <flashScripts>
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>

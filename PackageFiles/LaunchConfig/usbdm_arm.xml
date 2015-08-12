@@ -9,7 +9,7 @@
 				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Protocol Plugin Name" value="ARM GDI" type="string" />
 				<applySetting id="com.freescale.cdt.debug.cw.core.settings.DebuggerCommonData.Connection Type" value="net.sourceforge.usbdm.connections.usbdm.arm" type="string" />
 				<applySetting id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.PhysicalConnectionAttributeBase" value="net.sourceforge.usbdm.connections.usbdm." type="string" />
-				<applySetting id="net.sourceforge.usbdm.connections.usbdm.Library" value="usbdm-arm-gdi" type="string" />
+				<applySetting id="net.sourceforge.usbdm.connections.usbdm.Library" value="usbdm-gdi-arm.4" type="string" />
                                 
 				<!-- These download settings override those in arm_common_settings -->
 				<applySetting id="com.freescale.cdt.debug.cw.CW_SHADOWED_PREF.Embedded Download.IDconstant" value="true" type="boolean"/>

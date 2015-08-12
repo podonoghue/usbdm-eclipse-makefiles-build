@@ -1,5 +1,5 @@
 /*
- * pit.c
+ * pit-MK.c
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
@@ -23,9 +23,9 @@
 
 #if PIT_USES_NAKED_HANDLER == 0
 
-PITCallbackFunction PIT_::callback[4] = {0, 0, 0, 0};
+PITCallbackFunction PIT_::callback[PIT_NUMBER_OF_CHANNELS] = {0};
 
-/*!
+/**
  *   PIT interrupt handler
  *
  *   Calls PIT callback
@@ -38,7 +38,7 @@ void PIT0_IRQHandler(void) {
       PIT_::callback[0]();
    }
 }
-/*!
+/**
  *   PIT interrupt handler
  *
  *   Calls PIT callback
@@ -51,7 +51,7 @@ void PIT1_IRQHandler(void) {
       PIT_::callback[1]();
    }
 }
-/*!
+/**
  *   PIT interrupt handler
  *
  *   Calls PIT callback
@@ -64,7 +64,7 @@ void PIT2_IRQHandler(void) {
       PIT_::callback[2]();
    }
 }
-/*!
+/**
  *   PIT interrupt handler
  *
  *   Calls PIT callback

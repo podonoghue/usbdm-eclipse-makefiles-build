@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -=============================================================================================
+   | 20 Jan 2015 | Added <sbdfrAddress> parsing etc.                            - pgo 4.12.1.10
    |  1 Dec 2014 | Fixed format in printf()s                                    - pgo 4.10.6.230
    | 12 Jul 2014 | Added getCommonFlashProgram(), changed getFlashProgram() etc - pgo V4.10.6.170
    | 12 Jul 2014 | Changed alias handling to be better defined                  - pgo 4.10.6.170
@@ -382,6 +383,7 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    tag_memoryRange("memoryRange"),
    tag_sdid("sdid"),
    tag_sdidMask("sdidMask"),
+   tag_sbdfrAddress("sbdfrAddress"),
    tag_sdidAddress("sdidAddress"),
    tag_soptAddress("soptAddress"),
    tag_securityAddress("securityAddress"),
@@ -1258,6 +1260,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
    static uint32_t defWatchdogAddress = 0;
    static uint32_t defSDIDAddress     = 0;
    static uint32_t defSDIDMask        = 0;
+   static uint32_t defSbdfrAddress    = DeviceData::getDefaultHCS08sbdfrAddress();
    static bool     initDone = false;
 
    if (!initDone) {
@@ -1310,6 +1313,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
    itDev->setFlashScripts(defaultTCLScript);
    itDev->setRegisterDescription(defaultRegisterDescription);
    itDev->setSDIDAddress(defSDIDAddress);
+   itDev->setHCS08sbdfrAddress(defSbdfrAddress);
 
    DOMChildIterator propertyIt(deviceEl);
    for (;
@@ -1371,6 +1375,19 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          if (isDefault) {
 //            log.warning("Setting default SDID Address 0x%08lX \n", sdidAddress);
             defSDIDAddress = sdidAddress;
+         }
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_sbdfrAddress.asXMLString())) {
+         // <sbdfrAddress>
+         DualString sSbdfrAddress(currentProperty->getAttribute(attr_value.asXMLString()));
+         long sbdfrAddress;
+         if (!strToULong(sSbdfrAddress.asCString(), NULL, &sbdfrAddress)) {
+            throw MyException(string("DeviceXmlParser::parseDevice() - Illegal sbdfrAddress ")+sSbdfrAddress.asCString());
+         }
+         itDev->setHCS08sbdfrAddress(sbdfrAddress);
+         if (isDefault) {
+//            log.warning("Setting default SDID mask 0x%08lX \n", sdidMask);
+            defSbdfrAddress = sbdfrAddress;
          }
       }
       else if (XMLString::equals(propertyTag.asXMLString(), tag_sdidMask.asXMLString())) {

@@ -9,30 +9,14 @@
 osThreadId tid_redThread;               // Thread id of redThread
 osThreadId tid_blueThread;              // Thread id of blueThread
 osThreadId tid_clockThread;             // Thread id of clockThread
+osThreadId tid_lcdThread;               // Thread id of lcdThread
 
 #define MAIN_SIGNAL  (1<<1)
 #define CLOCK_SIGNAL (1<<8)
 
-#ifdef MCU_MKL25Z4
-#define RED_LED   digitalIO_PTB18
-#define GREEN_LED digitalIO_PTB19
-#define BLUE_LED  digitalIO_PTD1
-#endif
-#ifdef MCU_MK20D5
-#define RED_LED   digitalIO_PTC3
-#define GREEN_LED digitalIO_PTD4
-#define BLUE_LED  digitalIO_PTA2
-#endif
-#ifdef MCU_MK22F51212
-#define RED_LED   digitalIO_PTA1
-#define GREEN_LED digitalIO_PTA2
-#define BLUE_LED  digitalIO_PTD5
-#endif
-#ifdef MCU_MK64F12
-#define RED_LED   digitalIO_PTB22
-#define GREEN_LED digitalIO_PTE26
-#define BLUE_LED  digitalIO_PTB21
-#endif
+#define RED_LED   digitalIO_$(demo.cpp.red.led)
+#define GREEN_LED digitalIO_$(demo.cpp.green.led)
+#define BLUE_LED  digitalIO_$(demo.cpp.blue.led)
 
 /*----------------------------------------------------------------------------
      Function that turns on Red LED
@@ -103,6 +87,30 @@ void blueThread (void const *argument __attribute__((unused))) {
    }
 }
 
+/*----------------------------------------------------------------------------
+ *    LCD thread
+ *---------------------------------------------------------------------------*/
+#ifdef LCD_AVAILABLE
+#include "lcd.h"
+#include "spi.h"
+
+void lcdThread (void const *argument __attribute__((unused))) {
+   // Instantiate interface
+   SPI *spi = new $(demo.cpp.lcd.spi)();
+   spi->setSpeed(1000000);
+   LCD *lcd = new LCD(spi);
+
+   for (;;) {
+      lcd->clear(RED);
+      lcd->drawCircle(65, 65, 20, WHITE);
+      lcd->drawCircle(65, 65, 30, WHITE);
+      lcd->drawCircle(65, 65, 40, WHITE);
+      lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+      osDelay(1000);
+   }
+}
+#endif
+
 void led_initialise(void) {
    RED_LED.setDigitalOutput();
    GREEN_LED.setDigitalOutput();
@@ -115,6 +123,9 @@ void led_initialise(void) {
 osThreadDef(redThread,     osPriorityNormal, 1, 0);
 osThreadDef(blueThread,    osPriorityNormal, 1, 0);
 osThreadDef(threadClock,   osPriorityNormal, 1, 0);
+#ifdef LCD_AVAILABLE
+osThreadDef(lcdThread,     osPriorityNormal, 1, 0);
+#endif
 
 /*----------------------------------------------------------------------------
  *      Main: Initialise and start RTX Kernel
@@ -126,9 +137,13 @@ int main (void) {
    tid_redThread     = osThreadCreate(osThread(redThread),   NULL);
    tid_blueThread    = osThreadCreate(osThread(blueThread),  NULL);
    tid_clockThread   = osThreadCreate(osThread(threadClock), NULL);
+#ifdef LCD_AVAILABLE
+   tid_lcdThread     = osThreadCreate(osThread(lcdThread),   NULL);
+#endif
 
    osSignalSet(tid_redThread, MAIN_SIGNAL);          // set signal to phaseA thread
 
    osDelay(osWaitForever);
+
    while(1);
 }

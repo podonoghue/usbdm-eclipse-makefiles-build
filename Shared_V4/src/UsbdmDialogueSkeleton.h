@@ -102,6 +102,8 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxCheckBox* enableSoundsCheckBoxControl;
 		wxStaticText* gdbServerPortNumberStaticControl;
 		NumberTextEditCtrl* gdbServerPortNumberTextControl;
+		wxStaticText* gdbTtyPortNumberStaticControl;
+		NumberTextEditCtrl* gdbTtyPortNumberTextControl;
 		wxButton* programFlashButtonControl;
 		wxButton* verifyFlashButtonControl;
 		wxButton* loadAndGoButtonControl;
@@ -170,6 +172,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnUnlockButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSoundCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGdbServerPortNumberTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProgramFlashButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVerifyFlashButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLoadAndGoButtonClick( wxCommandEvent& event ) { event.Skip(); }

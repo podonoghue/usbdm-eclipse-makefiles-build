@@ -775,7 +775,7 @@ uint8_t rc = BDM_RC_OK;
     	  
       default:
          bdm_off();          // Turn off the interface
-         bdm_clearStatus();  // Safe mode!
+         (void)bdm_clearStatus();  // Safe mode!
          return BDM_RC_UNKNOWN_TARGET;
    }
    return rc;

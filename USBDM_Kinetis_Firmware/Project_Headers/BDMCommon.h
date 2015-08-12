@@ -65,10 +65,11 @@
 /*! \brief A Macro to wait for given time or until a condition is met
 
     @param  t  Maximum time to wait in \e seconds.
-    @param  c  Condition to exit wait early (checked every ~10 ms and affects timing)
+    @param  c  Condition to exit wait early 
+    @note Condition is only checked every ~10 ms and affects timing slightly
 */
 #define WAIT_WITH_TIMEOUT_S(t,c) {       \
-    int tt = 100*(t);                    \
+    unsigned tt = 100*(t);               \
       do {                               \
          millisecondTimerWait(10);       \
       } while (!(c) & (tt-->0));         \
@@ -102,7 +103,7 @@ void      bdm_interfaceOff( void );
 
 uint8_t   bdm_clearStatus(void);
 
-//// Interrupt monitoring routines
+// Interrupt monitoring routines
 //interrupt void timerHandler(void);
 //interrupt void kbiHandler(void);
 //interrupt void acmpHandler(void);

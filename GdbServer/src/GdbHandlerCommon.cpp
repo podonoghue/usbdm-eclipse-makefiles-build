@@ -27,14 +27,22 @@ static const char targetXML[] =
       "</target>\n"
       ;
 
-GdbHandlerCommon::GdbHandlerCommon(TargetType_t targetType, GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbBreakpoints *gdbBreakpoints, GdbCallback gdbCallBackPtr) :
-   GdbHandler(),
-   gdbBreakpoints(gdbBreakpoints),
-   targetType(targetType),
-   gdbInOut(gdbInOut),
-   bdmInterface(bdmInterface),
-   deviceInterface(deviceInterface),
-   deviceData(deviceInterface->getCurrentDevice()) {
+GdbHandlerCommon::GdbHandlerCommon(
+      TargetType_t         targetType,
+      GdbInOut            *gdbInOut,
+      BdmInterfacePtr      bdmInterface,
+      DeviceInterfacePtr   deviceInterface,
+      GdbBreakpoints      *gdbBreakpoints,
+      GdbCallback          gdbCallBackPtr,
+      IGdbTty *tty) :
+         GdbHandler(),
+         gdbBreakpoints(gdbBreakpoints),
+         targetType(targetType),
+         gdbInOut(gdbInOut),
+         bdmInterface(bdmInterface),
+         deviceInterface(deviceInterface),
+         deviceData(deviceInterface->getCurrentDevice()),
+         tty(tty) {
    LOGGING;
 
    if (gdbCallBackPtr == 0) {
@@ -43,13 +51,9 @@ GdbHandlerCommon::GdbHandlerCommon(TargetType_t targetType, GdbInOut *gdbInOut, 
    else {
       this->gdbCallBackPtr      = gdbCallBackPtr;
    }
-   runState                     = halted;
-   gdbTargetStatus              = T_UNKNOWN;
+   runState                     = Halted;
    useFastRegisterRead          = true;
-   runState                     = halted;
-   gdbTargetStatus              = T_UNKNOWN;
    unsuccessfulPollCount        = 0;
-   targetBreakPending           = false;
    targetBreakPending           = false;
    registerBufferSize           = 0;
    targetRegsXMLSize            = 0;
@@ -259,7 +263,11 @@ USBDM_ErrorCode GdbHandlerCommon::resetTarget(TargetMode_t mode) {
  * @param disableInterrupts - true/false -> disable/enable interrupts on step
  */
 USBDM_ErrorCode GdbHandlerCommon::stepTarget(bool disableInterrupts) {
+   LOGGING_Q;
    maskInterrupts(disableInterrupts);
+   unsigned long pc;
+   readPC(&pc);
+   log.print("step from 0x%lX\n", pc);
    return bdmInterface->step();
 }
 
@@ -1043,24 +1051,24 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
 
 //   log.print("doGdbCommand()\n");
    if (pkt->isBreak()) {
-      if ((runState != running)) {
-         log.print("Ignoring Break\n");
-         reportGdbPrintf(M_INFO, "Ignoring Break as not running\n");
-         return BDM_RC_OK;
-      }
-      runState = breaking;
+//      if ((runState != Running)) {
+//         log.print("Ignoring Break\n");
+//         reportGdbPrintf(M_INFO, "Ignoring Break as not running\n");
+//         return BDM_RC_OK;
+//      }
+      runState = Breaking;
       log.print("Breaking...\n");
       reportGdbPrintf(M_INFO, "Breaking...\n");
       targetBreakPending = true;
-      USBDM_ErrorCode rc = bdmInterface->connect();
-      if (rc != BDM_RC_OK) {
-         return rc;
-      }
-      rc = bdmInterface->halt();
-      if (rc != BDM_RC_OK) {
-         return rc;
-      }
-      targetBreakPending = false;
+//      USBDM_ErrorCode rc = bdmInterface->connect();
+//      if (rc != BDM_RC_OK) {
+//         return rc;
+//      }
+//      rc = bdmInterface->halt();
+//      if (rc != BDM_RC_OK) {
+//         return rc;
+//      }
+//      targetBreakPending = false;
       return BDM_RC_OK;
    }
    switch (pkt->buffer[0]) {
@@ -1072,6 +1080,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       log.print("Target Reset\n");
       reportGdbPrintf(M_INFO, "Resetting target\n");
       resetTarget();
+      tty->closeAll();
       break;
    case 'g' : // 'g' - Read general registers.
 //   Reply:
@@ -1146,7 +1155,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
          reportGdbPrintf(M_INFO, "Continue @PC\n");
       }
       continueTarget();
-      runState = running;
+      runState = Running;
       registerBufferSize = 0;
 //      gdbPollTarget();
       break;
@@ -1164,7 +1173,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
          log.print("Single step @PC\n");
          reportGdbPrintf(M_INFO, "Single step @PC\n");
       }
-      runState = stepping;
+      runState = Stepping;
       stepTarget(bdmInterface->isMaskISR());
       registerBufferSize = 0;
 //      gdbPollTarget();
@@ -1260,12 +1269,14 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    case 'k' : // Kill
       reportGdbPrintf(M_INFO, "Kill...\n");
       log.print("Kill...\n");
+      tty->closeAll();
       gdbInOut->sendGdbString("OK");
       gdbInOut->finish();
       return BDM_RC_OK;
    case 'D' : // Detach
       reportGdbPrintf(M_INFO, "Detach...\n");
       log.print("Detach...\n");
+      tty->closeAll();
       gdbInOut->sendGdbString("OK");
       continueTarget();
       gdbInOut->finish();
@@ -1286,14 +1297,14 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    return BDM_RC_OK;
 }
 
-/*
- *   Return target status without polling target
- *
- *   @return Target status
- */
-GdbHandler::GdbTargetStatus GdbHandlerCommon::getGdbTargetStatus(void) {
-   return gdbTargetStatus;
-}
+///*
+// *   Return target status without polling target
+// *
+// *   @return Target status
+// */
+//GdbHandler::GdbTargetStatus GdbHandlerCommon::getGdbTargetStatus(void) {
+//   return gdbTargetStatus;
+//}
 
 /**
  * Get the current timeout value

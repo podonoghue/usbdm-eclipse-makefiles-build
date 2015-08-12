@@ -13,12 +13,12 @@
 #include "signals.h"
 #include "GdbBreakpoints_CFV1.h"
 
-GdbHandler *createCFVxGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr) {
-   return new GdbHandler_CFVx(gdbInOut, bdmInterface, deviceInterface, gdbCallBackPtr);
+GdbHandler *createCFVxGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) {
+   return new GdbHandler_CFVx(gdbInOut, bdmInterface, deviceInterface, gdbCallBackPtr, tty);
 }
 
-GdbHandler_CFVx::GdbHandler_CFVx(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr) :
-   GdbHandlerCommon(T_CFVx, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_CFV1(bdmInterface), gdbCallBackPtr) {
+GdbHandler_CFVx::GdbHandler_CFVx(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr, IGdbTty *tty) :
+   GdbHandlerCommon(T_CFVx, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_CFV1(bdmInterface), gdbCallBackPtr, tty) {
 }
 
 GdbHandler_CFVx::~GdbHandler_CFVx() {
@@ -75,6 +75,12 @@ USBDM_ErrorCode GdbHandler_CFVx::resetTarget(TargetMode_t mode) {
    LOGGING;
 
    return GdbHandlerCommon::resetTarget(mode);
+}
+
+void GdbHandler_CFVx::continueTarget(void) {
+   LOGGING_Q;
+
+   GdbHandlerCommon::continueTarget();
 }
 
 /*! Mask/unmask interrupts (in SR)
@@ -134,6 +140,7 @@ static const char defaultTargetRegsXML[] =
       "   \n"
       "</feature>\n";
 
+// Maps GDB register numbers to USBDM register numbers (or -1 if invalid)
 static int registerMap[] = {
       CFVx_RegD0,CFVx_RegD1,CFVx_RegD2,CFVx_RegD3,
       CFVx_RegD4,CFVx_RegD5,CFVx_RegD6,CFVx_RegD7,
@@ -150,6 +157,8 @@ static int registerMap[] = {
  *   or hard-coded default
  */
 bool GdbHandler_CFVx::initRegisterDescription(void) {
+   LOGGING_E;
+
    if (GdbHandlerCommon::initRegisterDescription()) {
       return true;
    }
@@ -248,7 +257,7 @@ void GdbHandler_CFVx::writeReg(unsigned regNo, unsigned long regValue) {
    }
 }
 
-//! Get CFVx run state by polling target
+//! Get run state by polling target
 //!
 //! @return status - status of target T_UNKNOWN/T_SLEEP/T_HALT/T_RUNNING
 //!
@@ -277,9 +286,10 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::getTargetStatus(void) {
          status = T_HALT;
          break;
       }
-      status =  T_RUNNING;
+      status = T_RUNNING;
       break;
    } while (0);
+   
    if (status != lastStatus) {
       log.print("Status changed => %s\n", getStatusName(status));
       lastStatus = status;
@@ -306,11 +316,74 @@ void GdbHandler_CFVx::reportLocation(char mode, int reason) {
    *cPtr++ = '\0';
    gdbInOut->sendGdbString(buff);
 }
+/**
+ * Checks if target at a semi-hosting break
+ */
+bool GdbHandler_CFVx::checkHostedBreak(uint32_t currentPC) {
+   return false;
+}
+
+/**
+ * Handles target halted due to semi-hosting break
+ */
 GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHostedBreak() {
    return T_HALT;
 }
-bool GdbHandler_CFVx::checkHostedBreak(uint32_t currentPC) {
-   return false;
+
+/**
+ * Handles target halted apart from semi-hosting break
+ */
+GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
+   LOGGING;
+   bool looping = false;
+   if (runState != Halted) {
+      // Target has just halted - cache registers
+      readRegs();
+      uint32_t currentPC = getCachedPC();
+      looping = (currentPC == lastStoppedPC);
+      lastStoppedPC = currentPC;
+   }
+   switch(runState) {
+   case Halted :  // halted -> halted
+      break;
+   case Breaking : // user breaking -> halted
+      reportLocation('T', TARGET_SIGNAL_INT);
+      log.print("Target has halted (from breaking) @0x%08X\n", lastStoppedPC);
+      reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      break;
+   case Stepping : // stepping -> halted
+      // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
+      // This detects the PC not changing on step and return TARGET_SIGNAL_INT rather than TARGET_SIGNAL_TRAP to abort stepping
+      if (looping) {
+            reportLocation('T', TARGET_SIGNAL_INT);
+         }
+         else {
+            reportLocation('T', TARGET_SIGNAL_TRAP);
+         }
+      log.print("Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
+      reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      break;
+   default:       // ???     -> halted
+   case Running : // running -> halted
+      if (atBreakpoint(getCachedPC())) {
+         reportLocation('T', TARGET_SIGNAL_TRAP);
+      }
+      else {
+         reportLocation('T', TARGET_SIGNAL_INT);
+      }
+      log.print("Target has halted (from running) @%s\n", getCachedPcAsString());
+      reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
+      deactivateBreakpoints();
+      checkAndAdjustBreakpointHalt();
+      break;
+   }
+   targetBreakPending = false;
+   runState = Halted;
+   return T_HALT;
 }
 
 /*!
@@ -325,9 +398,9 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::pollTarget(void) {
    LOGGING_Q;
 
    static bool resetAttempted = false;                       // Set if reset already tried
-   unsigned    timeoutLimit   = getConnectionTimeout() * 10; // scale to 100 ms ticks
+   unsigned    timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
 
-   gdbTargetStatus = getTargetStatus();
+   GdbTargetStatus gdbTargetStatus = getTargetStatus();
    if (gdbTargetStatus == T_NOCONNECTION) {
       if (resetAttempted) {
          return T_NOCONNECTION;
@@ -346,65 +419,23 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::pollTarget(void) {
    if (targetBreakPending) {
       // halt target
       bdmInterface->halt();
-      targetBreakPending = false;
    }
    unsuccessfulPollCount = 0;
    if ((gdbTargetStatus == T_HALT)) {
-      bool looping = false;
-      if (runState != halted) {
-         // Target has just halted - cache registers
-         readRegs();
-         uint32_t currentPC = getCachedPC();
-         looping = (currentPC == lastStoppedPC);
-         lastStoppedPC = currentPC;
-         if (checkHostedBreak(currentPC)) {
-            gdbTargetStatus = handleHostedBreak();
-         }
+      // Check for semi-hosting
+      unsigned long pc;
+      readPC(&pc);
+      if (checkHostedBreak(pc)) {
+         gdbTargetStatus = handleHostedBreak();
       }
-      switch(runState) {
-      case halted :  // halted -> halted
-         break;
-      case breaking : // user breaking -> halted
-         reportLocation('T', TARGET_SIGNAL_INT);
-         log.print("Target has halted (from breaking) @0x%08X\n", lastStoppedPC);
-         reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      case stepping : // stepping -> halted
-         // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
-         // This detects the PC not changing on step and return TARGET_SIGNAL_INT rather than TARGET_SIGNAL_TRAP to abort stepping
-         if (looping) {
-               reportLocation('T', TARGET_SIGNAL_INT);
-            }
-            else {
-               reportLocation('T', TARGET_SIGNAL_TRAP);
-            }
-         log.print("Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
-         reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      default:       // ???     -> halted
-      case running : // running -> halted
-         if (atBreakpoint(getCachedPC())) {
-            reportLocation('T', TARGET_SIGNAL_TRAP);
-         }
-         else {
-            reportLocation('T', TARGET_SIGNAL_INT);
-         }
-         log.print("Target has halted (from running) @%s\n", getCachedPcAsString());
-         reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
-         deactivateBreakpoints();
-         checkAndAdjustBreakpointHalt();
-         break;
-      }
-      runState = halted;
+   }
+   if ((gdbTargetStatus == T_HALT)) {
+      return handleHalted();
    }
    else {
-      runState = running;
+      runState = Running;
+      return gdbTargetStatus;
    }
-   return gdbTargetStatus;
 }
 
 USBDM_ErrorCode GdbHandler_CFVx::writePC(unsigned long value) {

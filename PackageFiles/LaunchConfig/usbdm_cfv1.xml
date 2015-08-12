@@ -15,7 +15,7 @@
 					id="com.freescale.cdt.debug.cw.core.settings.GdiConnection.Common.PhysicalConnectionAttributeBase"
 					value="net.sourceforge.usbdm.connections.usbdm." type="string" />
 				<applySetting id="net.sourceforge.usbdm.connections.usbdm.Library"
-					value="usbdm-cfv1-gdi" type="string" />
+					value="usbdm-gdi-cfv1.4" type="string" />
 
 				<applySetting
 					id="net.sourceforge.usbdm.connections.usbdm.automaticReconnect"

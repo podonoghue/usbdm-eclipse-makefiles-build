@@ -37,6 +37,8 @@ public:
    virtual bool                       isExitOnClose() const;
    virtual void                       setGdbServerPort(int port);
    virtual int                        getGdbServerPort();
+   virtual void                       setGdbTtyPort(int port);
+   virtual int                        getGdbTtyPort();
 
    virtual void                       loadSettings(const AppSettings &settings);
    virtual void                       saveSettings(AppSettings &settings);
@@ -104,6 +106,7 @@ protected:
    std::string                bdmSerialNumber;         //!< Serial number of BDM to use
    bool                       bdmMatchRequired;        //!< If true then opened BDM must match serial number
    unsigned int               gdbServerPort;           //!< Port for GDB server
+   unsigned int               ttyServerPort;           //!< Port for Semi-hosting TTY server connection
    bool                       exitOnClose;             //!< Indicates GDB server should exit when connection closed
    bool                       extendedRetry;           //!< Indicates if extend retries should be done
 
@@ -125,7 +128,8 @@ protected:
    USBDM_ErrorCode            setTargetTypeWithRetry();
    int                        handleError(USBDM_ErrorCode rc);
    USBDM_ErrorCode            probeMemory(MemorySpace_t memorySpace, uint32_t address);
-
+   USBDM_ErrorCode            setProgrammingBdmOptions();
+   USBDM_ErrorCode            restoreBdmOptions();
 };
 
 #endif /* SRC_BDMINTERFACECOMMON_H_ */

@@ -25,6 +25,7 @@
 +============================================================================================
 | Revision History
 +============================================================================================
+|  7 Aug 15 | Aded setDeviceData()                                          - pgo 4.12.1.10 
 |  5 Jun 15 | Initialises target clock earlier in programming & verifying   - pgo 4.10.7.10 
 | 29 Mar 15 | Refactored                                                    - pgo 4.11.1.10 
 +-----------+--------------------------------------------------------------------------------
@@ -2157,6 +2158,12 @@ USBDM_ErrorCode FlashProgrammer_HCS08::getTargetBusSpeed(unsigned long *busFrequ
    return PROGRAMMING_RC_OK;
 }
 #endif
+
+USBDM_ErrorCode FlashProgrammer_HCS08::setDeviceData(const DeviceDataConstPtr device) {
+   USBDM_ErrorCode rc = FlashProgrammerCommon::setDeviceData(device);
+   bdmInterface->getBdmOptions().hcs08sbdfrAddress = device->getHCS08sbdfrAddress();
+   return rc;
+}
 
 //=======================================================================
 //! Check security state of target

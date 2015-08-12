@@ -56,6 +56,7 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
          </applyWhen>
+         <constant id="cmsis.stack.size"   value="100" />
          <createFolder target="cmsis" type="include" />
          <copy source="../cmsis/Doc/index.html" target="CMSIS.html" type="link" />
          <copy source="../cmsis/INC" target="cmsis/INC" />

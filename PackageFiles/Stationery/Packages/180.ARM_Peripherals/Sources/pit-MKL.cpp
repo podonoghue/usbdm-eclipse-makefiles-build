@@ -1,5 +1,5 @@
 /*
- * pit.c
+ * pit-MKL.c
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
@@ -23,14 +23,15 @@
 
 #if PIT_USES_NAKED_HANDLER == 0
 
-PITCallbackFunction PIT_::callback[sizeof(PIT->CHANNEL)/sizeof(PIT->CHANNEL[0])] = {0};
+PITCallbackFunction PIT_::callback[PIT_NUMBER_OF_CHANNELS] = {0};
 
-/*
- * If using naked handler it must be named exactly as shown
- * MKL version - shared handler for all PIT channels
+/**
+ *   PIT interrupt handler
+ *
+ *   Calls PIT callback
  */
 void PIT_IRQHandler(void) {
-   for (unsigned channel=0; channel<(sizeof(PIT_::callback)/sizeof(PIT_::callback[0])); channel++) {
+   for (unsigned channel=0; channel<PIT_NUMBER_OF_CHANNELS; channel++) {
       if (PIT->CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
          // Clear interrupt flag
          PIT->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;

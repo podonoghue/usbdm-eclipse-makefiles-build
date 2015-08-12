@@ -19,6 +19,7 @@ public:
    virtual USBDM_ErrorCode targetConnectWithRetry(USBDMStatus_t *usbdmStatus, RetryMode retry);
    virtual USBDM_ErrorCode writePC(unsigned long regValue);
    virtual USBDM_ErrorCode readPC(unsigned long *regValue);
+   virtual USBDM_ErrorCode setProgrammingMode(bool);
 };
 
 #endif /* SRC_BDMINTERFACE_ARM_H_ */

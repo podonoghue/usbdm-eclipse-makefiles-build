@@ -1,5 +1,5 @@
 /*
- * SPI.c
+ * SPI-MK.c
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue
@@ -20,10 +20,14 @@
 SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
 
    // Enable SPI port pin clocks & configure PCS register
-   // MOSI,MISO,SCLK,PCS
+   // SIN,SOUT,SCLK,PCS
+#if !defined(SPI0_SCK_GPIO)  || !defined(SPI0_SIN_GPIO) || !defined(SPI0_SOUT_GPIO)
+#error "Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
    SPI0_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_SIN_GPIO.setPCR(PORT_PCR_MUX(SPI0_SIN_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_SOUT_GPIO.setPCR(PORT_PCR_MUX(SPI0_SOUT_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+#endif
 
 #ifdef SPI0_PCS0_GPIO
    SPI0_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -74,10 +78,14 @@ SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
 SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
 
    // Enable SPI port pin clocks
-   // PCS,MOSI,MISO,SCLK
+   // SIN,SOUT,SCLK,PCS
+#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_SIN_GPIO) || !defined(SPI1_SOUT_GPIO)
+#error "Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
    SPI1_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_SIN_GPIO.setPCR(PORT_PCR_MUX(SPI1_SIN_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_SOUT_GPIO.setPCR(PORT_PCR_MUX(SPI1_SOUT_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+#endif
 
 #ifdef SPI1_PCS0_GPIO
    SPI1_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);

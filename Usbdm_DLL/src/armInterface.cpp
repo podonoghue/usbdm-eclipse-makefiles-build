@@ -30,6 +30,8 @@
 \verbatim
  Change History
 +==================================================================================================
+| 27 Jul 2015 | Reset special+hardware now sets target halt in case of failure      - pgo 4.11.1.70
+| 27 Jul 2015 | bdmoptions now controls software/hardware reset method              - pgo 4.11.1.70
 | 10 Feb 2015 | Changes to MDM-AP, DHCSR and DEMCR handing etc                      - pgo 4.10.6.260
 |  1 Dec 2014 | Fixed format in printf()s                                           - pgo 4.10.6.230
 | 12 Nov 2014 | Added armDisconnect() to allow reset behaviour to be restored       - pgo - V4.10.6.220
@@ -191,6 +193,10 @@ static USBDM_ErrorCode armSoftwareReset(TargetMode_t resetMode) {
    USBDM_ErrorCode rc;
    resetMode      = (TargetMode_t)(resetMode&RESET_MODE_MASK);
 
+   // Make sure any pending hardware reset is released first
+   USBDM_ControlPins(PIN_RESET_3STATE);
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
+
    unsigned long demcrValue = 0;
    if (resetMode==RESET_SPECIAL) {
       log.print("Doing +Special reset\n");
@@ -240,7 +246,7 @@ static USBDM_ErrorCode armSoftwareReset(TargetMode_t resetMode) {
 //!        RESET_SPECIAL/RESET_NORMAL
 //!
 static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
-   LOGGING_Q;
+   LOGGING;
    USBDM_ErrorCode rc;
 
    rc = targetDebugEnable();
@@ -264,8 +270,9 @@ static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
    mdm_ap_control |= MDM_AP_Control_Debug_Request|MDM_AP_Control_System_Reset_Request;
    rc = USBDM_WriteCReg(ARM_CRegMDM_AP_Control, mdm_ap_control);
 
-   // Release any hardware reset - ignore errors
-   (void)USBDM_ControlPins(PIN_RELEASE);
+   // Release any hardware reset - ignore errors as reset will remain low
+   log.error("Ignore BDM_RC_RESET_TIMEOUT_RISE as reset held low by target\n");
+   (void)USBDM_ControlPins(PIN_RESET_3STATE);
 
    //   resetDebugInterface();
 
@@ -344,7 +351,12 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
    TargetMode_t resetMode   = (TargetMode_t)(targetMode&RESET_MODE_MASK);
    log.print("%s\n", getTargetModeName((TargetMode_t)(resetMethod|resetMode)));
    if (resetMethod == RESET_DEFAULT) {
-      resetMethod = RESET_HARDWARE;
+      if (bdmOptions.useResetSignal) {
+         resetMethod = RESET_HARDWARE;
+      }
+      else {
+         resetMethod = RESET_SOFTWARE;
+      }
       log.print("modified=(%s)\n", getTargetModeName((TargetMode_t)(resetMethod|resetMode)));
    }
 #ifdef LOG
@@ -365,6 +377,7 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
       log.print("Doing +Special reset\n");
       // Set catch on reset vector fetch
       demcrValue = DEMCR_VC_CORERESET|DEMCR_TRCENA;
+      dhcsrValue |= DHCSR_C_HALT;
    }
    switch (resetMethod) {
       case RESET_ALL:
@@ -415,9 +428,6 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
          break;
       case RESET_SOFTWARE:
          log.print("Doing Software reset\n");
-         // Make sure any pending hardware reset is released first
-         USBDM_ControlPins(PIN_RESET_3STATE);
-         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
          // Do software (local) reset via ARM debug function
          if (armDebugInformation.MDM_AP_present) {
             kinetisSoftwareReset(targetMode);

@@ -1,7 +1,7 @@
 @echo off
 cls
-set VERSION=4_11_1_70
-set VERSIONn=4.11.1.70
+set VERSION=4_12_1_10
+set VERSIONn=4.12.1.10
 
 set WXWIDGETS_VERSION=30u
 
@@ -52,6 +52,13 @@ mkdir %WIX_BUILD_DIR%
 
 %CANDLE% %CANDLE_OPTIONS% -dProductVersion=%VERSIONn% -dWxWidgetsVer=%WXWIDGETS_VERSION% -dSrcDir="%SRC_DIR%" -o %WIX_BUILD_DIR%\ *.wxs %WIX_BUILD_DIR%\*.wxs
 %LIGHT% %LIGHT_OPTIONS% %LIGHT_DIRS% -out %MSI_FILE% %WIX_BUILD_DIR%\*.wixobj
+
+set STORE=PrivateCertStore
+set SIGNTOOL=C:\Apps\WinDDK\7600.16385.1\bin\amd64\SignTool.exe
+set TIMESTAMP_URL=http://timestamp.verisign.com/scripts/timstamp.dll
+
+echo Signing files
+for %%f in (*.msi) do %SIGNTOOL% sign /s %STORE% /t %TIMESTAMP_URL% %%f
 
 goto finish
 :doPatch

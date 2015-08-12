@@ -292,6 +292,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
 #ifdef _UNIX_
       { wxCMD_LINE_SWITCH, _("verbose"),       NULL, _("Print progress messages to stdout") },
 #endif
+      { wxCMD_LINE_SWITCH, _("useReset"),      NULL, _("Use hardware reset"),                                             wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("unsecure"),      NULL, _("Leave device unsecure after programming") },
       { wxCMD_LINE_OPTION, _("vdd"),           NULL, _("Supply Vdd to target (3V3 or 5V)"),                                wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("verify"),        NULL, _("Verify flash contents") },
@@ -621,6 +622,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       deviceData->setFlexNVMParameters(flexParameters);
    }
    // Reset options
+   bdmOptions.useResetSignal = parser.Found(_("useReset"));
    if (parser.Found(_("reset"), &sValue)) {
       unsigned long uValue=100000; // invalid so faults later
 
@@ -675,7 +677,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    }
    if (parser.Found(_("speed"), &sValue)) {
       unsigned long uValue;
-      if (sValue.ToULong(&uValue, 10)) {
+      if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal speed value.\n"));
          success = false;
       }

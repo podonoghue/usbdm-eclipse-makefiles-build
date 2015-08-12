@@ -66,6 +66,7 @@
 #include "Common.h"
 #include "Configure.h"
 #include "Commands.h"
+#include "TargetDefines.h"
 #include "BDMCommon.h"
 #include "SPI.h"
 //#include "BDM_CF.h"
@@ -94,15 +95,16 @@ CableStatus_t cable_status;
 //!
 //! see \ref BDM_Option_t
 BDM_Option_t bdm_option = {
-   BDM_TARGET_VDD_OFF,  //!< Target Vdd (off, 3.3V or 5V)
-   false,               //!< Cycle target Power when resetting
-   false,               //!< Cycle target Power if connection problems (when resetting?)
-   false,               //!< Leave target power on when exiting
-   AUTOCONNECT_STATUS,  //!< Automatically re-connect to target (for speed change)
-   true,                //!< Guess speed for target w/o ACKN
-   CS_DEFAULT,          //!< Use alternative BDM clock source in target
-   false,               //!< Use RESET signal on BDM interface
-   {0}                  //   Reserved
+ /* cycleVddOnReset    */   false,               //!< Cycle target Power when resetting
+ /* cycleVddOnConnect  */   false,               //!< Cycle target Power if connection problems (when resetting?)
+ /* leaveTargetPowered */   false,               //!< Leave target power on when exiting
+ /* guessSpeed         */   true,                //!< Guess speed for target w/o ACKN
+ /* useResetSignal     */   false,               //!< Use RESET signal on BDM interface
+ /* targetVdd          */   BDM_TARGET_VDD_OFF,  //!< Target Vdd (off, 3.3V or 5V)
+ /* useAltBDMClock     */   CS_DEFAULT,          //!< Use alternative BDM clock source in target
+ /* autoReconnect      */   AUTOCONNECT_STATUS,  //!< Automatically re-connect to target (for speed change)
+ /* SBDFRaddress       */   HCS08_SBDFR_DEFAULT, //!< Default HCS08_SBDFR address
+ /* reserved           */   {0}                  //   Reserved
 };
 
 //! Buffer for Rx and Tx of commands & results
@@ -387,10 +389,10 @@ DebugSubCommands subCommand = commandBuffer[2];
          while (*++stackProbe == 0) { // Find 1st used (non-zero) byte on stack
          }
          size =  (uint32_t) __SEG_END_SSTACK - (uint32_t) stackProbe;
-         commanBuffer[1] = (uint8_t) (size>>24);
-         commanBuffer[2] = (uint8_t) (size>>16);
-         commanBuffer[3] = (uint8_t) (size>>8);
-         commanBuffer[4] = (uint8_t) (size>);
+         commandBuffer[1] = (uint8_t) (size>>24);
+         commandBuffer[2] = (uint8_t) (size>>16);
+         commandBuffer[3] = (uint8_t) (size>>8);
+         commandBuffer[4] = (uint8_t) (size);
          returnSize = 5;
          return BDM_RC_OK;
          }
@@ -432,17 +434,29 @@ uint8_t f_CMD_SET_OPTIONS(void) {
    uint8_t rc = BDM_RC_OK;
    // Save BDM Options
    int sub=2;
+   uint8_t value = commandBuffer[sub++];
+   bdm_option.cycleVddOnReset    = value&(1<<0);
+   bdm_option.cycleVddOnConnect  = value&(1<<1);
+   bdm_option.leaveTargetPowered = value&(1<<2);
+   bdm_option.guessSpeed         = value&(1<<3);
+   bdm_option.useResetSignal     = value&(1<<4);
    bdm_option.targetVdd          = commandBuffer[sub++];
-   bdm_option.cycleVddOnReset    = commandBuffer[sub++];
-   bdm_option.cycleVddOnConnect  = commandBuffer[sub++];
-   bdm_option.leaveTargetPowered = commandBuffer[sub++];
-   bdm_option.autoReconnect      = commandBuffer[sub++];
-   bdm_option.guessSpeed         = commandBuffer[sub++];
    bdm_option.useAltBDMClock     = commandBuffer[sub++];
-   bdm_option.useResetSignal     = commandBuffer[sub++];
-//   (void)memcpy((uint8_t*)&bdm_option, commandBuffer+2, sizeof(bdm_option));
+   bdm_option.autoReconnect      = commandBuffer[sub++];
    return rc;
 }
+
+static const uint8_t capabilities[] = {
+	// Inversion is hidden by driver!
+	// Note: CAP_HCS08 & CAP_CFV1 are returned inverted for backwards compatibility
+   (uint8_t)((TARGET_CAPABILITY^(CAP_HCS08|CAP_CFV1))>>8),  // Returns 16-bit value
+   (uint8_t)((TARGET_CAPABILITY^(CAP_HCS08|CAP_CFV1))&0xFF),
+   (uint8_t)(MAX_COMMAND_SIZE>>8),
+   (uint8_t)MAX_COMMAND_SIZE,
+   VERSION_MAJOR,             // Extended firmware version number nn.nn.nn
+   VERSION_MINOR,
+   VERSION_MICRO,
+};
 
 //! Returns capability vector for hardware
 //! @return
@@ -451,16 +465,9 @@ uint8_t f_CMD_SET_OPTIONS(void) {
 //!   - [3..4] = Maximum command buffer size
 //!
 uint8_t f_CMD_GET_CAPABILITIES(void) {
-	// Note: CAP_HCS08 & CAP_CFV1 are returned inverted for backwards compatibility
-	// Inversion is hidden by driver!
-   commandBuffer[1] = (uint8_t)((TARGET_CAPABILITY^(CAP_HCS08|CAP_CFV1))>>8);  // Returns 16-bit value
-   commandBuffer[2] = (uint8_t)(TARGET_CAPABILITY^(CAP_HCS08|CAP_CFV1));
-   commandBuffer[3] = (uint8_t)(MAX_COMMAND_SIZE>>8);
-   commandBuffer[4] = (uint8_t)MAX_COMMAND_SIZE;
-   commandBuffer[5] = VERSION_MAJOR;             // Extended firmware version number nn.nn.nn
-   commandBuffer[6] = VERSION_MINOR;
-   commandBuffer[7] = VERSION_MICRO;
-   returnSize = 8;
+   // Copy BDM Options
+   (void)memcpy(commandBuffer+1, capabilities, sizeof(capabilities));
+   returnSize = sizeof(capabilities) + 1;
    return BDM_RC_OK;
 }
 
@@ -630,7 +637,9 @@ uint8_t f_CMD_CONTROL_PINS(void) {
 #if (HW_CAPABILITY&CAP_JTAG_HW)
    switch(control&PIN_TRST) {
    case PIN_TRST_3STATE:
+#ifdef TRST_3STATE
 	   TRST_3STATE();
+#endif
 	   break;
    case PIN_TRST_LOW:
 	   TRST_LOW();
@@ -734,12 +743,12 @@ static const FunctionPtr commonFunctionPtrs[] = {
 // f_CMD_GET_SETTINGS               ,//= 7,  CMD_USBDM_GET_SETTINGS
    f_CMD_ILLEGAL                    ,//= 7,  Reserved
    f_CMD_CONTROL_PINS               ,//= 8,  CMD_USBDM_CONTROL_PINS
-   f_CMD_ILLEGAL                    ,//= 9,  Reserved
-   f_CMD_ILLEGAL                    ,//= 10, Reserved
-   f_CMD_ILLEGAL                    ,//= 11, Reserved
-   f_CMD_ILLEGAL                    ,//= 12, CMD_USBDM_GET_VER (EP0)
-   f_CMD_ILLEGAL                    ,//= 13, Reserved
-   f_CMD_ILLEGAL                    ,//= 14, CMD_USBDM_ICP_BOOT (EP0)
+//   f_CMD_ILLEGAL                    ,//= 9,  Reserved
+//   f_CMD_ILLEGAL                    ,//= 10, Reserved
+//   f_CMD_ILLEGAL                    ,//= 11, Reserved
+//   f_CMD_ILLEGAL                    ,//= 12, CMD_USBDM_GET_VER (EP0)
+//   f_CMD_ILLEGAL                    ,//= 13, Reserved
+//   f_CMD_ILLEGAL                    ,//= 14, CMD_USBDM_ICP_BOOT (EP0)
 };
 
 #if (TARGET_CAPABILITY&CAP_HCS12)
@@ -1054,7 +1063,6 @@ static const FunctionPtrs SWDFunctionPointers   = {CMD_USBDM_CONNECT,
 //! Ptr to function table for current target type
 static const FunctionPtrs *currentFunctions = NULL; // default to empty
 
-#if 1
 static const FunctionPtrs *const functionsPtrs[] = {
 #if (TARGET_CAPABILITY&CAP_HCS12)
    /* T_HC12 */ &HCS12FunctionPointers,
@@ -1102,6 +1110,12 @@ static const FunctionPtrs *const functionsPtrs[] = {
 #else
    NULL,   
 #endif
+   /* T_ARM     */  NULL,   
+#if (TARGET_CAPABILITY&CAP_S12Z)
+   /* T_HC12ZVM */ &S12ZFunctionPointers,
+#else
+   NULL,   
+#endif
 };
 
 //! Set target type
@@ -1124,74 +1138,6 @@ uint8_t f_CMD_SET_TARGET(void) {
    }
    return bdm_setTarget(target);
 }
-#else
-//! Set target type
-//! Initialise interface for given target
-//! @note
-//!   commandBuffer        \n
-//!   - [2] = target type
-//!
-uint8_t f_CMD_SET_TARGET(void) {
-uint8_t target = commandBuffer[2];
-
-   switch (target) {
-#if (TARGET_CAPABILITY&CAP_HCS12)
-   case T_HC12:
-         currentFunctions = &HCS12FunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY&CAP_HCS08)
-      case T_HCS08:
-         currentFunctions = &HCS08FunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY & CAP_RS08)
-      case T_RS08:
-          currentFunctions = &HCS08FunctionPointers;
-          break;
-#endif
-#if (TARGET_CAPABILITY & CAP_CFV1)
-      case T_CFV1:
-         currentFunctions = &CFV1FunctionPointers;
-         break;
-#endif         
-#if (TARGET_CAPABILITY&CAP_CFVx)
-      case T_CFVx:
-         currentFunctions = &CFVxFunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY&CAP_JTAG)
-      case T_JTAG:
-         currentFunctions = &JTAGFunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY&CAP_DSC)
-      case T_MC56F80xx:
-         currentFunctions = &JTAGFunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY&CAP_ARM_JTAG)
-      case T_ARM_JTAG:
-         currentFunctions = &JTAGFunctionPointers;
-         break;
-#endif
-#if (TARGET_CAPABILITY&CAP_ARM_SWD)
-      case T_ARM_SWD:
-         currentFunctions = &SWDFunctionPointers;
-         break;
-#endif
-      case T_OFF:
-         currentFunctions = NULL;
-         break;
-         
-      default:
-         currentFunctions = NULL;
-         (void)bdm_setTarget(T_OFF);
-         return BDM_RC_UNKNOWN_TARGET; 
-   }
-   return bdm_setTarget(target);
-}
-#endif
 
 //!  Processes all commands received over USB
 //!

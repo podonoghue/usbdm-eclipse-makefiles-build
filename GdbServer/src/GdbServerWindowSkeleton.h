@@ -40,9 +40,15 @@ class GdbServerWindowSkeleton : public wxFrame
 	protected:
 		wxMenuBar* menuBar;
 		wxMenu* serverMenu;
+		wxMenuItem* m_menuItem1;
+		wxMenuItem* m_separator1;
+		wxMenuItem* m_menuItem2;
+		wxMenuItem* m_menuItem3;
 		wxMenu* logMenu;
 		wxMenu* targetMenu;
 		wxPanel* mainPanel;
+		wxTextCtrl* statusTextControl;
+		wxTextCtrl* entryTextControl;
 		wxStatusBar* statusBar;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -59,10 +65,10 @@ class GdbServerWindowSkeleton : public wxFrame
 		virtual void OnSetTimeout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToggleMaskISR( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToggleCatchVLLS( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEntryTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		wxTextCtrl* statusTextControl;
 		
 		GdbServerWindowSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("GDB Server"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 510,618 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		

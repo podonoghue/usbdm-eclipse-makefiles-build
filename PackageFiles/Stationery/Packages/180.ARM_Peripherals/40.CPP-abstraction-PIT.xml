@@ -11,6 +11,7 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
+            <variableRef idRef="demo.cpp.peripheral.pit" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -21,10 +22,10 @@
          <variable id="projectOptionValue.CPP-abstraction-PIT" 
             name="PIT interface" 
             description="Adds a CPP abstraction layer for Programmable Interrupt Timer hardware" 
-            checkGroup="group-CPP-abstraction-options" >
+            checkGroup="group-peripheral-options" >
          </variable>
    
-         <!-- MKL PIT CPP abstraction layer -->
+         <!-- MK PIT CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
                <applyWhen >
@@ -32,6 +33,9 @@
                      <or>
                         <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                         <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+                     </or>
+                     <or>
+                        <deviceSubfamilyMatches>MK.*</deviceSubfamilyMatches>
                      </or>
                      <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
                   </and>
@@ -41,7 +45,7 @@
             </projectActionList>
          </projectActionList>
          
-         <!-- MK PIT CPP abstraction layer -->
+         <!-- MKL PIT CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
                <applyWhen >
@@ -50,11 +54,35 @@
                         <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
                         <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
                      </or>
+                     <or>
+                        <deviceSubfamilyMatches>MKL.*</deviceSubfamilyMatches>
+                        <deviceSubfamilyMatches>MKE.*</deviceSubfamilyMatches>
+                     </or>
                      <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
                   </and>
                </applyWhen>
                <copy source="Project_Headers/pit-MKL.h"        target="Project_Headers/pit.h" />
                <copy source="Sources/pit-MKL.cpp"              target="Sources/pit.cpp" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MKM PIT CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+                     </or>
+                     <or>
+                        <deviceSubfamilyMatches>MKM.*</deviceSubfamilyMatches>
+                     </or>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
+                  </and>
+               </applyWhen>
+               <copy source="Project_Headers/pit-MKM.h"        target="Project_Headers/pit.h" />
+               <copy source="Sources/pit-MKM.cpp"              target="Sources/pit.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

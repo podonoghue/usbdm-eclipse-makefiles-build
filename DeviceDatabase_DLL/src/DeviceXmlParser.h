@@ -27,6 +27,7 @@ private:
    DualString   tag_memoryRange;
    DualString   tag_sdid;
    DualString   tag_sdidMask;
+   DualString   tag_sbdfrAddress;
    DualString   tag_sdidAddress;
    DualString   tag_soptAddress;
    DualString   tag_securityAddress; // NVOPT, NVSEC

@@ -66,7 +66,7 @@ typedef enum {
   EWM_IRQn                      =  27,   /**<  43 External Watchdog Monitor                                                        */
   MCG_IRQn                      =  28,   /**<  44 MCG Loss of Clock, Loss of Lock                                                  */
   WDOG_IRQn                     =  29,   /**<  45 ORed WDOG Interrupt                                                              */
-  LPTMR_IRQn                    =  30,   /**<  46 ORed LPTMR Interrupt                                                             */
+  LPTMR0_IRQn                   =  30,   /**<  46 ORed LPTMR Interrupt                                                             */
   XBAR_IRQn                     =  31,   /**<  47 Peripheral XBAR ORed Interrupt                                                   */
 } IRQn_Type;
 
@@ -114,7 +114,7 @@ extern void I2C0_1_IRQHandler(void);           /**< ORed I2C interrupt          
 extern void EWM_IRQHandler(void);              /**< External Watchdog Monitor                                                        */
 extern void MCG_IRQHandler(void);              /**< MCG Loss of Clock, Loss of Lock                                                  */
 extern void WDOG_IRQHandler(void);             /**< ORed WDOG Interrupt                                                              */
-extern void LPTMR_IRQHandler(void);            /**< ORed LPTMR Interrupt                                                             */
+extern void LPTMR0_IRQHandler(void);           /**< ORed LPTMR Interrupt                                                             */
 extern void XBAR_IRQHandler(void);             /**< Peripheral XBAR ORed Interrupt                                                   */
 
 /**
@@ -181,6 +181,173 @@ extern void XBAR_IRQHandler(void);             /**< Peripheral XBAR ORed Interru
 * @brief C structs allowing access to peripheral registers
 * @{
 */
+/**
+* @addtogroup ADC_Peripheral_access_layer_GROUP ADC Peripheral Access Layer
+* @brief C Struct for ADC
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           ADC0 (file:ADC0_MKM)                 ================ */
+/* ================================================================================ */
+
+/**
+ * @brief Analog-to-Digital Converter
+ */
+/**
+* @addtogroup ADC_structs_GROUP ADC struct
+* @brief Struct for ADC
+* @{
+*/
+typedef struct {                                /*       ADC0 Structure                                               */
+   __IO uint32_t  SC1[4];                       /**< 0000: Status and Control Registers 1                               */
+   __IO uint32_t  CFG1;                         /**< 0010: Configuration Register 1                                     */
+   __IO uint32_t  CFG2;                         /**< 0014: Configuration Register 2                                     */
+   __I  uint32_t  R[4];                         /**< 0018: Data Result Register                                         */
+   __IO uint32_t  CV1;                          /**< 0028: Compare Value                                                */
+   __IO uint32_t  CV2;                          /**< 002C: Compare Value                                                */
+   __IO uint32_t  SC2;                          /**< 0030: Status and Control Register 2                                */
+   __IO uint32_t  SC3;                          /**< 0034: Status and Control Register 3                                */
+   __IO uint32_t  OFS;                          /**< 0038: Offset Correction Register                                   */
+   __IO uint32_t  PG;                           /**< 003C: Plus-Side Gain Register                                      */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  CLPD;                         /**< 0044: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLPS;                         /**< 0048: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP4;                         /**< 004C: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP3;                         /**< 0050: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP2;                         /**< 0054: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP1;                         /**< 0058: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP0;                         /**< 005C: Plus-Side General Calibration Value                          */
+} ADC_Type;
+
+/**
+ * @} */ /* End group ADC_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'ADC0' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup ADC_Register_Masks_GROUP ADC Register Masks
+* @brief Register Masks for ADC
+* @{
+*/
+/* ------- SC1 Bit Fields                           ------ */
+#define ADC_SC1_ADCH_MASK                        (0x1FUL << ADC_SC1_ADCH_SHIFT)                      /*!< ADC0_SC1: ADCH Mask                     */
+#define ADC_SC1_ADCH_SHIFT                       0                                                   /*!< ADC0_SC1: ADCH Position                 */
+#define ADC_SC1_ADCH(x)                          (((uint32_t)(((uint32_t)(x))<<ADC_SC1_ADCH_SHIFT))&ADC_SC1_ADCH_MASK) /*!< ADC0_SC1                                */
+#define ADC_SC1_AIEN_MASK                        (0x01UL << ADC_SC1_AIEN_SHIFT)                      /*!< ADC0_SC1: AIEN Mask                     */
+#define ADC_SC1_AIEN_SHIFT                       6                                                   /*!< ADC0_SC1: AIEN Position                 */
+#define ADC_SC1_COCO_MASK                        (0x01UL << ADC_SC1_COCO_SHIFT)                      /*!< ADC0_SC1: COCO Mask                     */
+#define ADC_SC1_COCO_SHIFT                       7                                                   /*!< ADC0_SC1: COCO Position                 */
+/* ------- CFG1 Bit Fields                          ------ */
+#define ADC_CFG1_ADICLK_MASK                     (0x03UL << ADC_CFG1_ADICLK_SHIFT)                   /*!< ADC0_CFG1: ADICLK Mask                  */
+#define ADC_CFG1_ADICLK_SHIFT                    0                                                   /*!< ADC0_CFG1: ADICLK Position              */
+#define ADC_CFG1_ADICLK(x)                       (((uint32_t)(((uint32_t)(x))<<ADC_CFG1_ADICLK_SHIFT))&ADC_CFG1_ADICLK_MASK) /*!< ADC0_CFG1                               */
+#define ADC_CFG1_MODE_MASK                       (0x03UL << ADC_CFG1_MODE_SHIFT)                     /*!< ADC0_CFG1: MODE Mask                    */
+#define ADC_CFG1_MODE_SHIFT                      2                                                   /*!< ADC0_CFG1: MODE Position                */
+#define ADC_CFG1_MODE(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CFG1_MODE_SHIFT))&ADC_CFG1_MODE_MASK) /*!< ADC0_CFG1                               */
+#define ADC_CFG1_ADLSMP_MASK                     (0x01UL << ADC_CFG1_ADLSMP_SHIFT)                   /*!< ADC0_CFG1: ADLSMP Mask                  */
+#define ADC_CFG1_ADLSMP_SHIFT                    4                                                   /*!< ADC0_CFG1: ADLSMP Position              */
+#define ADC_CFG1_ADIV_MASK                       (0x03UL << ADC_CFG1_ADIV_SHIFT)                     /*!< ADC0_CFG1: ADIV Mask                    */
+#define ADC_CFG1_ADIV_SHIFT                      5                                                   /*!< ADC0_CFG1: ADIV Position                */
+#define ADC_CFG1_ADIV(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CFG1_ADIV_SHIFT))&ADC_CFG1_ADIV_MASK) /*!< ADC0_CFG1                               */
+#define ADC_CFG1_ADLPC_MASK                      (0x01UL << ADC_CFG1_ADLPC_SHIFT)                    /*!< ADC0_CFG1: ADLPC Mask                   */
+#define ADC_CFG1_ADLPC_SHIFT                     7                                                   /*!< ADC0_CFG1: ADLPC Position               */
+/* ------- CFG2 Bit Fields                          ------ */
+#define ADC_CFG2_ADLSTS_MASK                     (0x03UL << ADC_CFG2_ADLSTS_SHIFT)                   /*!< ADC0_CFG2: ADLSTS Mask                  */
+#define ADC_CFG2_ADLSTS_SHIFT                    0                                                   /*!< ADC0_CFG2: ADLSTS Position              */
+#define ADC_CFG2_ADLSTS(x)                       (((uint32_t)(((uint32_t)(x))<<ADC_CFG2_ADLSTS_SHIFT))&ADC_CFG2_ADLSTS_MASK) /*!< ADC0_CFG2                               */
+#define ADC_CFG2_ADHSC_MASK                      (0x01UL << ADC_CFG2_ADHSC_SHIFT)                    /*!< ADC0_CFG2: ADHSC Mask                   */
+#define ADC_CFG2_ADHSC_SHIFT                     2                                                   /*!< ADC0_CFG2: ADHSC Position               */
+#define ADC_CFG2_ADACKEN_MASK                    (0x01UL << ADC_CFG2_ADACKEN_SHIFT)                  /*!< ADC0_CFG2: ADACKEN Mask                 */
+#define ADC_CFG2_ADACKEN_SHIFT                   3                                                   /*!< ADC0_CFG2: ADACKEN Position             */
+#define ADC_CFG2_MUXSEL_MASK                     (0x01UL << ADC_CFG2_MUXSEL_SHIFT)                   /*!< ADC0_CFG2: MUXSEL Mask                  */
+#define ADC_CFG2_MUXSEL_SHIFT                    4                                                   /*!< ADC0_CFG2: MUXSEL Position              */
+/* ------- R Bit Fields                             ------ */
+#define ADC_R_D_MASK                             (0xFFFFUL << ADC_R_D_SHIFT)                         /*!< ADC0_R: D Mask                          */
+#define ADC_R_D_SHIFT                            0                                                   /*!< ADC0_R: D Position                      */
+#define ADC_R_D(x)                               (((uint32_t)(((uint32_t)(x))<<ADC_R_D_SHIFT))&ADC_R_D_MASK) /*!< ADC0_R                                  */
+/* ------- CV Bit Fields                            ------ */
+#define ADC_CV_CV_MASK                           (0xFFFFUL << ADC_CV_CV_SHIFT)                       /*!< ADC0_CV: CV Mask                        */
+#define ADC_CV_CV_SHIFT                          0                                                   /*!< ADC0_CV: CV Position                    */
+#define ADC_CV_CV(x)                             (((uint32_t)(((uint32_t)(x))<<ADC_CV_CV_SHIFT))&ADC_CV_CV_MASK) /*!< ADC0_CV                                 */
+/* ------- SC2 Bit Fields                           ------ */
+#define ADC_SC2_REFSEL_MASK                      (0x03UL << ADC_SC2_REFSEL_SHIFT)                    /*!< ADC0_SC2: REFSEL Mask                   */
+#define ADC_SC2_REFSEL_SHIFT                     0                                                   /*!< ADC0_SC2: REFSEL Position               */
+#define ADC_SC2_REFSEL(x)                        (((uint32_t)(((uint32_t)(x))<<ADC_SC2_REFSEL_SHIFT))&ADC_SC2_REFSEL_MASK) /*!< ADC0_SC2                                */
+#define ADC_SC2_DMAEN_MASK                       (0x01UL << ADC_SC2_DMAEN_SHIFT)                     /*!< ADC0_SC2: DMAEN Mask                    */
+#define ADC_SC2_DMAEN_SHIFT                      2                                                   /*!< ADC0_SC2: DMAEN Position                */
+#define ADC_SC2_ACREN_MASK                       (0x01UL << ADC_SC2_ACREN_SHIFT)                     /*!< ADC0_SC2: ACREN Mask                    */
+#define ADC_SC2_ACREN_SHIFT                      3                                                   /*!< ADC0_SC2: ACREN Position                */
+#define ADC_SC2_ACFGT_MASK                       (0x01UL << ADC_SC2_ACFGT_SHIFT)                     /*!< ADC0_SC2: ACFGT Mask                    */
+#define ADC_SC2_ACFGT_SHIFT                      4                                                   /*!< ADC0_SC2: ACFGT Position                */
+#define ADC_SC2_ACFE_MASK                        (0x01UL << ADC_SC2_ACFE_SHIFT)                      /*!< ADC0_SC2: ACFE Mask                     */
+#define ADC_SC2_ACFE_SHIFT                       5                                                   /*!< ADC0_SC2: ACFE Position                 */
+#define ADC_SC2_ADTRG_MASK                       (0x01UL << ADC_SC2_ADTRG_SHIFT)                     /*!< ADC0_SC2: ADTRG Mask                    */
+#define ADC_SC2_ADTRG_SHIFT                      6                                                   /*!< ADC0_SC2: ADTRG Position                */
+#define ADC_SC2_ADACT_MASK                       (0x01UL << ADC_SC2_ADACT_SHIFT)                     /*!< ADC0_SC2: ADACT Mask                    */
+#define ADC_SC2_ADACT_SHIFT                      7                                                   /*!< ADC0_SC2: ADACT Position                */
+/* ------- SC3 Bit Fields                           ------ */
+#define ADC_SC3_AVGS_MASK                        (0x03UL << ADC_SC3_AVGS_SHIFT)                      /*!< ADC0_SC3: AVGS Mask                     */
+#define ADC_SC3_AVGS_SHIFT                       0                                                   /*!< ADC0_SC3: AVGS Position                 */
+#define ADC_SC3_AVGS(x)                          (((uint32_t)(((uint32_t)(x))<<ADC_SC3_AVGS_SHIFT))&ADC_SC3_AVGS_MASK) /*!< ADC0_SC3                                */
+#define ADC_SC3_AVGE_MASK                        (0x01UL << ADC_SC3_AVGE_SHIFT)                      /*!< ADC0_SC3: AVGE Mask                     */
+#define ADC_SC3_AVGE_SHIFT                       2                                                   /*!< ADC0_SC3: AVGE Position                 */
+#define ADC_SC3_ADCO_MASK                        (0x01UL << ADC_SC3_ADCO_SHIFT)                      /*!< ADC0_SC3: ADCO Mask                     */
+#define ADC_SC3_ADCO_SHIFT                       3                                                   /*!< ADC0_SC3: ADCO Position                 */
+#define ADC_SC3_CALF_MASK                        (0x01UL << ADC_SC3_CALF_SHIFT)                      /*!< ADC0_SC3: CALF Mask                     */
+#define ADC_SC3_CALF_SHIFT                       6                                                   /*!< ADC0_SC3: CALF Position                 */
+#define ADC_SC3_CAL_MASK                         (0x01UL << ADC_SC3_CAL_SHIFT)                       /*!< ADC0_SC3: CAL Mask                      */
+#define ADC_SC3_CAL_SHIFT                        7                                                   /*!< ADC0_SC3: CAL Position                  */
+/* ------- OFS Bit Fields                           ------ */
+#define ADC_OFS_OFS_MASK                         (0xFFFFUL << ADC_OFS_OFS_SHIFT)                     /*!< ADC0_OFS: OFS Mask                      */
+#define ADC_OFS_OFS_SHIFT                        0                                                   /*!< ADC0_OFS: OFS Position                  */
+#define ADC_OFS_OFS(x)                           (((uint32_t)(((uint32_t)(x))<<ADC_OFS_OFS_SHIFT))&ADC_OFS_OFS_MASK) /*!< ADC0_OFS                                */
+/* ------- PG Bit Fields                            ------ */
+#define ADC_PG_PG_MASK                           (0xFFFFUL << ADC_PG_PG_SHIFT)                       /*!< ADC0_PG: PG Mask                        */
+#define ADC_PG_PG_SHIFT                          0                                                   /*!< ADC0_PG: PG Position                    */
+#define ADC_PG_PG(x)                             (((uint32_t)(((uint32_t)(x))<<ADC_PG_PG_SHIFT))&ADC_PG_PG_MASK) /*!< ADC0_PG                                 */
+/* ------- CLPD Bit Fields                          ------ */
+#define ADC_CLPD_CLPD_MASK                       (0x3FUL << ADC_CLPD_CLPD_SHIFT)                     /*!< ADC0_CLPD: CLPD Mask                    */
+#define ADC_CLPD_CLPD_SHIFT                      0                                                   /*!< ADC0_CLPD: CLPD Position                */
+#define ADC_CLPD_CLPD(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLPD_CLPD_SHIFT))&ADC_CLPD_CLPD_MASK) /*!< ADC0_CLPD                               */
+/* ------- CLPS Bit Fields                          ------ */
+#define ADC_CLPS_CLPS_MASK                       (0x3FUL << ADC_CLPS_CLPS_SHIFT)                     /*!< ADC0_CLPS: CLPS Mask                    */
+#define ADC_CLPS_CLPS_SHIFT                      0                                                   /*!< ADC0_CLPS: CLPS Position                */
+#define ADC_CLPS_CLPS(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLPS_CLPS_SHIFT))&ADC_CLPS_CLPS_MASK) /*!< ADC0_CLPS                               */
+/* ------- CLP4 Bit Fields                          ------ */
+#define ADC_CLP4_CLP4_MASK                       (0x3FFUL << ADC_CLP4_CLP4_SHIFT)                    /*!< ADC0_CLP4: CLP4 Mask                    */
+#define ADC_CLP4_CLP4_SHIFT                      0                                                   /*!< ADC0_CLP4: CLP4 Position                */
+#define ADC_CLP4_CLP4(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP4_CLP4_SHIFT))&ADC_CLP4_CLP4_MASK) /*!< ADC0_CLP4                               */
+/* ------- CLP3 Bit Fields                          ------ */
+#define ADC_CLP3_CLP3_MASK                       (0x1FFUL << ADC_CLP3_CLP3_SHIFT)                    /*!< ADC0_CLP3: CLP3 Mask                    */
+#define ADC_CLP3_CLP3_SHIFT                      0                                                   /*!< ADC0_CLP3: CLP3 Position                */
+#define ADC_CLP3_CLP3(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP3_CLP3_SHIFT))&ADC_CLP3_CLP3_MASK) /*!< ADC0_CLP3                               */
+/* ------- CLP2 Bit Fields                          ------ */
+#define ADC_CLP2_CLP2_MASK                       (0xFFUL << ADC_CLP2_CLP2_SHIFT)                     /*!< ADC0_CLP2: CLP2 Mask                    */
+#define ADC_CLP2_CLP2_SHIFT                      0                                                   /*!< ADC0_CLP2: CLP2 Position                */
+#define ADC_CLP2_CLP2(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP2_CLP2_SHIFT))&ADC_CLP2_CLP2_MASK) /*!< ADC0_CLP2                               */
+/* ------- CLP1 Bit Fields                          ------ */
+#define ADC_CLP1_CLP1_MASK                       (0x7FUL << ADC_CLP1_CLP1_SHIFT)                     /*!< ADC0_CLP1: CLP1 Mask                    */
+#define ADC_CLP1_CLP1_SHIFT                      0                                                   /*!< ADC0_CLP1: CLP1 Position                */
+#define ADC_CLP1_CLP1(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP1_CLP1_SHIFT))&ADC_CLP1_CLP1_MASK) /*!< ADC0_CLP1                               */
+/* ------- CLP0 Bit Fields                          ------ */
+#define ADC_CLP0_CLP0_MASK                       (0x3FUL << ADC_CLP0_CLP0_SHIFT)                     /*!< ADC0_CLP0: CLP0 Mask                    */
+#define ADC_CLP0_CLP0_SHIFT                      0                                                   /*!< ADC0_CLP0: CLP0 Position                */
+#define ADC_CLP0_CLP0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP0_CLP0_SHIFT))&ADC_CLP0_CLP0_MASK) /*!< ADC0_CLP0                               */
+/**
+ * @} */ /* End group ADC_Register_Masks_GROUP 
+ */
+
+/* ADC0 - Peripheral instance base addresses */
+#define ADC0_BasePtr                   0x4002B000UL //!< Peripheral base address
+#define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
+#define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
+ */
 /**
 * @addtogroup CRC_Peripheral_access_layer_GROUP CRC Peripheral Access Layer
 * @brief C Struct for CRC
@@ -1551,6 +1718,103 @@ typedef struct {                                /*       OSC0 Structure         
 #define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PIT_Peripheral_access_layer_GROUP PIT Peripheral Access Layer
+* @brief C Struct for PIT
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           PIT0 (file:PIT0_2CH_MKM)             ================ */
+/* ================================================================================ */
+
+/**
+ * @brief Periodic Interrupt Timer (2 channels)
+ */
+/**
+* @addtogroup PIT_structs_GROUP PIT struct
+* @brief Struct for PIT
+* @{
+*/
+typedef struct {                                /*       PIT0 Structure                                               */
+   __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
+   __I  uint32_t  RESERVED0[63];               
+   struct {
+      __IO uint32_t  LDVAL;                     /**< 0100: Timer Load Value Register                                    */
+      __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
+      __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
+      __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
+   } CHANNEL[2];                                /**< 0100: (cluster: size=0x0020, 32)                                   */
+} PIT_Type;
+
+/**
+ * @} */ /* End group PIT_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'PIT0' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup PIT_Register_Masks_GROUP PIT Register Masks
+* @brief Register Masks for PIT
+* @{
+*/
+/* ------- MCR Bit Fields                           ------ */
+#define PIT_MCR_FRZ_MASK                         (0x01UL << PIT_MCR_FRZ_SHIFT)                       /*!< PIT0_MCR: FRZ Mask                      */
+#define PIT_MCR_FRZ_SHIFT                        0                                                   /*!< PIT0_MCR: FRZ Position                  */
+#define PIT_MCR_MDIS_MASK                        (0x01UL << PIT_MCR_MDIS_SHIFT)                      /*!< PIT0_MCR: MDIS Mask                     */
+#define PIT_MCR_MDIS_SHIFT                       1                                                   /*!< PIT0_MCR: MDIS Position                 */
+/* ------- LDVAL Bit Fields                         ------ */
+#define PIT_LDVAL_TSV_MASK                       (0xFFFFFFFFUL << PIT_LDVAL_TSV_SHIFT)               /*!< PIT0_LDVAL: TSV Mask                    */
+#define PIT_LDVAL_TSV_SHIFT                      0                                                   /*!< PIT0_LDVAL: TSV Position                */
+#define PIT_LDVAL_TSV(x)                         (((uint32_t)(((uint32_t)(x))<<PIT_LDVAL_TSV_SHIFT))&PIT_LDVAL_TSV_MASK) /*!< PIT0_LDVAL                              */
+/* ------- CVAL Bit Fields                          ------ */
+#define PIT_CVAL_TVL_MASK                        (0xFFFFFFFFUL << PIT_CVAL_TVL_SHIFT)                /*!< PIT0_CVAL: TVL Mask                     */
+#define PIT_CVAL_TVL_SHIFT                       0                                                   /*!< PIT0_CVAL: TVL Position                 */
+#define PIT_CVAL_TVL(x)                          (((uint32_t)(((uint32_t)(x))<<PIT_CVAL_TVL_SHIFT))&PIT_CVAL_TVL_MASK) /*!< PIT0_CVAL                               */
+/* ------- TCTRL Bit Fields                         ------ */
+#define PIT_TCTRL_TEN_MASK                       (0x01UL << PIT_TCTRL_TEN_SHIFT)                     /*!< PIT0_TCTRL: TEN Mask                    */
+#define PIT_TCTRL_TEN_SHIFT                      0                                                   /*!< PIT0_TCTRL: TEN Position                */
+#define PIT_TCTRL_TIE_MASK                       (0x01UL << PIT_TCTRL_TIE_SHIFT)                     /*!< PIT0_TCTRL: TIE Mask                    */
+#define PIT_TCTRL_TIE_SHIFT                      1                                                   /*!< PIT0_TCTRL: TIE Position                */
+#define PIT_TCTRL_CHN_MASK                       (0x01UL << PIT_TCTRL_CHN_SHIFT)                     /*!< PIT0_TCTRL: CHN Mask                    */
+#define PIT_TCTRL_CHN_SHIFT                      2                                                   /*!< PIT0_TCTRL: CHN Position                */
+/* ------- TFLG Bit Fields                          ------ */
+#define PIT_TFLG_TIF_MASK                        (0x01UL << PIT_TFLG_TIF_SHIFT)                      /*!< PIT0_TFLG: TIF Mask                     */
+#define PIT_TFLG_TIF_SHIFT                       0                                                   /*!< PIT0_TFLG: TIF Position                 */
+/**
+ * @} */ /* End group PIT_Register_Masks_GROUP 
+ */
+
+/* PIT0 - Peripheral instance base addresses */
+#define PIT0_BasePtr                   0x4002D000UL //!< Peripheral base address
+#define PIT0                           ((PIT_Type *) PIT0_BasePtr) //!< Freescale base pointer
+#define PIT0_BASE_PTR                  (PIT0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PIT_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PIT_Peripheral_access_layer_GROUP PIT Peripheral Access Layer
+* @brief C Struct for PIT
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           PIT1 (derived from PIT0)             ================ */
+/* ================================================================================ */
+
+/**
+ * @brief Periodic Interrupt Timer (2 channels)
+ */
+
+/* PIT1 - Peripheral instance base addresses */
+#define PIT1_BasePtr                   0x4002E000UL //!< Peripheral base address
+#define PIT1                           ((PIT_Type *) PIT1_BasePtr) //!< Freescale base pointer
+#define PIT1_BASE_PTR                  (PIT1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PIT_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup PORTA_Peripheral_access_layer_GROUP PORTA Peripheral Access Layer

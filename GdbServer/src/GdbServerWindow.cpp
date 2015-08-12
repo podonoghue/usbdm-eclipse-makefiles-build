@@ -12,7 +12,7 @@
 #include "wx/busyinfo.h"
 #include "GdbServerDialogue.h"
 #include "GdbHandlerFactory.h"
-
+#include "SocketTty.h"
 #include "UsbdmSystem.h"
 
 using namespace std;
@@ -35,6 +35,9 @@ GdbServerWindow::GdbServerWindow(BdmInterfacePtr bdmInterface, DeviceInterfacePt
    clientSocket = NULL;
 
    gdbHandler.reset();
+
+//   tty = new WxWidgetsTty(statusTextControl, entryTextControl);
+   tty = new SocketTty(bdmInterface->getGdbTtyPort());
 
    this->Connect( SERVER_ID,      wxEVT_SOCKET, wxSocketEventHandler( GdbServerWindow::OnServerEvent ) );
    this->Connect( SOCKET_ID,      wxEVT_SOCKET, wxSocketEventHandler( GdbServerWindow::OnSocketEvent ) );
@@ -138,7 +141,6 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
        statusTextControl->AppendText(_("ERROR: Could not create server at the specified port !\n"));
        return;
     }
-
     string bdmSerialNumber = bdmInterface->getBdmSerialNumber();
     if (bdmSerialNumber.length() > 0) {
        if (bdmInterface->getBdmMatchRequired()) {
@@ -314,6 +316,10 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
  }
 
+ void GdbServerWindow::OnEntryTextEnter( wxCommandEvent& event ) {
+
+ }
+
  /*!  Handler for Timeout menu item
   *
   */
@@ -338,7 +344,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *  @param event Event to handle
   */
  void GdbServerWindow::OnServerEvent(wxSocketEvent& event) {
-    LOGGING_Q;
+    LOGGING;
 
     if (event.GetSocketEvent() != wxSOCKET_CONNECTION) {
        statusTextControl->AppendText(_("Unexpected event on Server\n"));
@@ -400,6 +406,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *   - Handles polling target when running
   */
  void GdbServerWindow::OnTimer(wxTimerEvent& event) {
+    LOGGING;
     pollTarget();
  //   if ((clientSocket!= NULL) && clientSocket->IsData()) {
  //      log.print("OnTimer:: Data available?\n");
@@ -521,6 +528,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              clientSocket->SetNotify(wxSOCKET_LOST_FLAG);
           }
           if (deferredOpen) {
+
              // Open on first access after socket creation
              setDeferredOpen(false);
 
@@ -535,9 +543,12 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
              gdbInOut = new GdbInOutWx(clientSocket, statusTextControl);
              GdbHandler::GdbCallback cb = GdbMessageWrapper::getCallBack(this);
-             gdbHandler = GdbHandlerFactory::createGdbHandler(bdmInterface->getBdmOptions().targetType, gdbInOut, bdmInterface, deviceInterface, cb);
+             gdbHandler = GdbHandlerFactory::createGdbHandler(bdmInterface->getBdmOptions().targetType, gdbInOut, bdmInterface, deviceInterface, cb, tty);
              rc = gdbHandler->initialise();
-
+             if (rc != BDM_RC_OK) {
+                bdmInterface->reset();
+                rc = gdbHandler->initialise();
+             }
              if (rc != BDM_RC_OK) {
                 reportError("GDB Handler initialisation failed, reason: ", GdbHandler::M_FATAL, rc);
                 log.print("GDB Handler initialisation failed\n");
@@ -606,14 +617,24 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
        return;
     }
 
+    if (deferredOpen || deferredFail) {
+       // Don't poll before opening target or shutting down
+       return;
+    }
     targetStatus = gdbHandler->pollTarget();
     log.print("Status = %s\n", GdbHandler::getStatusName(targetStatus));
     switch (targetStatus) {
        case GdbHandler::T_HALT:
        case GdbHandler::T_RESET:
           pollInterval = pollIntervalSlow;
+          entryTextControl->Enable(0);
+          break;
+       case GdbHandler::T_USER_INPUT:
+          entryTextControl->Enable();
+          pollInterval = pollIntervalSlow;
           break;
        default:
+          entryTextControl->Enable(0);
           break;
     }
 
@@ -630,7 +651,6 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *
   */
  void GdbServerWindow::UpdateStatusBar() {
-
 
  #if wxUSE_STATUSBAR
     wxString serverStatusString = wxEmptyString;

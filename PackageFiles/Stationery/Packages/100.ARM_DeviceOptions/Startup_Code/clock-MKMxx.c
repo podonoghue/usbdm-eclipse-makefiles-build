@@ -43,7 +43,7 @@ void clock_initialise(void) {
    // Configure the Crystal Oscillator
    OSC0->CR = OSC_CR_ERCLKEN_M|OSC_CR_EREFSTEN_M|OSC_CR_SCP_M;
 
-#if defined(RTC->OSC) && defined(RTC_OSC_OSC_DISABLE_M)
+#if defined(RTC_OSC_OSC_DISABLE_MASK) && defined(RTC_OSC_OSC_DISABLE_M)
    SIM->SCGC5 |= SIM_SCGC5_IRTC_MASK|SIM_SCGC5_IRTCREGFILE_MASK;
 #define RTC_OSC_VALUE (RTC_OSC_OSC_DISABLE_M|RTC_OSC_SCP_M|RTC_OSC_BOOT_MODE_M)
 #if (RTC_OSC_VALUE!=0)
@@ -58,11 +58,11 @@ void clock_initialise(void) {
 #endif
 #endif
 
-#if defined(MCG->C7) && defined(MCG_C7_PLL32KREFSEL_M)
+#if defined(MCG_C7_PLL32KREFSEL_MASK) && defined(MCG_C7_PLL32KREFSEL_M)
    MCG->C7 = MCG_C7_PLL32KREFSEL_M | MCG_C7_OSCSEL_M;
 #endif
 
-#if defined(MCG->C8) && defined(MCG_C8_LOCRE1_M)
+#if defined(MCG_C8_LOCRE1_MASK) && defined(MCG_C8_LOCRE1_M)
    MCG->C8 = MCG_C8_LOCRE1_M | MCG_C8_LOLRE_M | MCG_C8_CME1_M | MCG_C8_COARSE_LOLIE_M;
 #endif
 

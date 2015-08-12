@@ -30,7 +30,9 @@
 \verbatim
  Change History
 +======================================================================================================
-| 10 Mar 2015 | Added initilisatin checks                                           - pgo V4.10.6.260
+|  7 Aug 2015 | Added HCS08_SBDFR handling and changed bdmOptions format            - pgo V4.12.1.10
+| 27 Jul 2015 | Changes to handling of default and required bdmOptions              - pgo V4.10.6.260
+| 10 Mar 2015 | Added initialisation checks                                         - pgo V4.10.6.260
 | 10 Feb 2015 | Logging changes                                                     - pgo V4.10.6.260
 | 20 Jan 2015 | Added USBDM_SetLogFile() and USBDM_GetLogFile()                     - pgo V4.10.6.250
 |  1 Dec 2014 | Fixed format in printf()s                                           - pgo V4.10.6.230
@@ -137,7 +139,9 @@ static const USBDM_ExtendedOptions_t defaultBdmOptions = {
       100,                 // resetDuration           - How long to assert reset
       100,                 // resetReleaseInterval    - How long to wait after reset release to release other signals
       100,                 // resetRecoveryInterval   - How long to wait after reset sequence complete
+      HCS08_SBDFR_DEFAULT, // hcs08sbdfrAddress       - Address to use to access SBDFR register
 };
+
 CPP_DLL_LOCAL
 USBDM_ExtendedOptions_t bdmOptions = defaultBdmOptions;
 
@@ -274,6 +278,7 @@ USBDM_ErrorCode USBDM_FindDevices(unsigned int *deviceCount) {
    LOGGING_Q;
    static const UsbId usbIds[] = {
        {USBDM_VID, USBDM_PID},
+       {USBDM_VID, USBDM_COMP_PID},
        {TBDML_VID, TBDML_PID},
        {OSBDM_VID, OSBDM_PID},
        {TBLCF_VID, TBLCF_PID},
@@ -640,12 +645,13 @@ USBDM_ErrorCode USBDM_GetBdmInformation(USBDM_bdmInformation_t *info) {
 }
 
 //! \brief Transmits BDM options to BDM interface
+//! Versions prior to 4.12.1.10
 //!
 //! @return \n
 //!     BDM_RC_OK => OK \n
 //!     other     => Error code - see \ref USBDM_ErrorCode
 //!
-static USBDM_ErrorCode sendBdmOptions(void) {
+static USBDM_ErrorCode sendBdmOptions_old(void) {
    LOGGING_E;
    bdmState.activityFlag = BDM_ACTIVE;
 
@@ -664,11 +670,68 @@ static USBDM_ErrorCode sendBdmOptions(void) {
    return bdm_usb_transaction(index, 1, usb_data);
 }
 
+//! \brief Transmits BDM options to BDM interface
+//! Version 4.12.1.10 and later
+//!
+//! @return \n
+//!     BDM_RC_OK => OK \n
+//!     other     => Error code - see \ref USBDM_ErrorCode
+//!
+static USBDM_ErrorCode sendBdmOptionsV4_12_1(void) {
+   LOGGING_E;
+   bdmState.activityFlag = BDM_ACTIVE;
+
+   int index = 0;
+   usb_data[index++] = 0;
+   usb_data[index++] = CMD_USBDM_SET_OPTIONS;
+   uint8_t options = 0;
+   if (bdmOptions.cycleVddOnReset) {
+      options |= (1<<0);
+   }
+   if (bdmOptions.cycleVddOnConnect) {
+      options |= (1<<1);
+   }
+   if (bdmOptions.leaveTargetPowered) {
+      options |= (1<<2);
+   }
+   if (bdmOptions.guessSpeed) {
+      options |= (1<<3);
+   }
+   if (bdmOptions.useResetSignal) {
+      options |= (1<<4);
+   }
+   usb_data[index++] = options;
+   usb_data[index++] = (uint8_t)  bdmOptions.targetVdd;
+   usb_data[index++] = (uint8_t)  bdmOptions.bdmClockSource;
+   usb_data[index++] = (uint8_t)  bdmOptions.autoReconnect;
+   if (bdmOptions.targetType == T_HCS08) {
+      usb_data[index++] = (uint8_t)(bdmOptions.hcs08sbdfrAddress>>8);
+      usb_data[index++] = (uint8_t)bdmOptions.hcs08sbdfrAddress;
+   }
+   log.printDump(usb_data, index);
+   return bdm_usb_transaction(index, 1, usb_data);
+}
+
+//! \brief Transmits BDM options to BDM interface
+//!
+//! @return \n
+//!     BDM_RC_OK => OK \n
+//!     other     => Error code - see \ref USBDM_ErrorCode
+//!
+static USBDM_ErrorCode sendBdmOptions(void) {
+   if (bdmInfo.BDMsoftwareVersion>=0x040C01) {
+      return sendBdmOptionsV4_12_1();
+   }
+   else {
+      return sendBdmOptions_old();
+   }
+}
 //! Adapts the bdm options to the specified target
+//! This only changes the REQUIRED options
 //!
 //! @param bdmOptions - The options to modify
 //!
-static void adaptBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
+static void adaptRequiredBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
 
    switch (bdmOptions->targetType) {
    case T_HC12:
@@ -680,18 +743,16 @@ static void adaptBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
       if (bdmOptions->interfaceFrequency == 0) {
          bdmOptions->interfaceFrequency = 12000; // kHz
       }
-      bdmOptions->guessSpeed         = false;
-      bdmOptions->useResetSignal     = true;
-      bdmOptions->usePSTSignals  = false;
+      bdmOptions->guessSpeed      = false;
+      bdmOptions->usePSTSignals   = false;
       break;
    case T_ARM:
    case T_ARM_JTAG:
       if (bdmOptions->interfaceFrequency == 0) {
          bdmOptions->interfaceFrequency = 2000; // kHz
       }
-      bdmOptions->guessSpeed         = false;
-      bdmOptions->useResetSignal     = true;
-      bdmOptions->usePSTSignals  = false;
+      bdmOptions->guessSpeed      = false;
+      bdmOptions->usePSTSignals   = false;
       break;
    case T_CFVx:
    case T_MC56F80xx:
@@ -701,7 +762,6 @@ static void adaptBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
          bdmOptions->interfaceFrequency = 2000; // kHz
       }
       bdmOptions->guessSpeed     = false;
-      bdmOptions->useResetSignal = true;
       bdmOptions->usePSTSignals  = false;
       break;
    default:
@@ -710,6 +770,37 @@ static void adaptBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
    case T_CFV1:
       bdmOptions->guessSpeed     = false;
       bdmOptions->usePSTSignals  = false;
+      break;
+   }
+}
+
+//! Adapts the default bdm options to the specified target
+//! This changes the recommended options
+//!
+//! @param bdmOptions - The options to modify
+//!
+static void adaptDefaultBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
+
+   adaptRequiredBdmOptions(bdmOptions);
+
+   switch (bdmOptions->targetType) {
+   case T_ILLEGAL:
+   case T_OFF:
+   case T_HC12:
+   case T_S12Z:
+      break;
+   case T_ARM_SWD:
+   case T_ARM:
+   case T_ARM_JTAG:
+      bdmOptions->useResetSignal  = true;
+      break;
+   case T_CFVx:
+   case T_MC56F80xx:
+   case T_EZFLASH:
+   case T_JTAG:
+   case T_RS08:
+   case T_HCS08:
+   case T_CFV1:
       break;
    }
 }
@@ -745,10 +836,10 @@ USBDM_ErrorCode USBDM_SetOptions(BDM_Options_t *newBdmOptions) {
    bdmOptions.interfaceFrequency =                     newBdmOptions->interfaceSpeed;
    bdmOptions.usePSTSignals      =              (bool) newBdmOptions->usePSTSignals;
 
-   adaptBdmOptions(&bdmOptions);
+   adaptRequiredBdmOptions(&bdmOptions);
 
    log.print("=>\n");
-   printBdmOptions(&bdmOptions);
+   log.printq(printBdmOptions(&bdmOptions));
 
    return sendBdmOptions();
 }
@@ -783,7 +874,7 @@ USBDM_ErrorCode USBDM_GetDefaultExtendedOptions(USBDM_ExtendedOptions_t *bdmOpti
    // Adapt the default options to the target type
    defaultOptions.targetType = targetType;
    defaultOptions.size       = size;
-   adaptBdmOptions(&defaultOptions);
+   adaptDefaultBdmOptions(&defaultOptions);
    memcpy(bdmOptions, &defaultOptions, size);
 
 //   log.print("\n");
@@ -822,8 +913,8 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
 //   log.print("=> offset (leaveTargetPowered)= %d\n",  ((int)&newBdmOptions->leaveTargetPowered)-((int)newBdmOptions));
 //   log.print("=> offset (autoReconnect)= %d\n",       ((int)&newBdmOptions->autoReconnect)-((int)newBdmOptions));
 
-   log.print("=> proposed => \n");
-   printBdmOptions(newBdmOptions);
+   log.print("proposed => \n");
+   log.printq(printBdmOptions(newBdmOptions));
 #endif
    // Validate some options
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -859,20 +950,24 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
       return rc;
    }
    // Save current target type (as may already be set)
-   TargetType_t currentTargetType   = bdmOptions.targetType;
+   TargetType_t currentTargetType   = newBdmOptions->targetType;
    bdmOptions = defaultBdmOptions;
    memcpy(&bdmOptions, newBdmOptions, newBdmOptions->size);
-   if ( currentTargetType != T_OFF) {
+   if ( bdmState.targetType != T_NONE) {
       // Override hint with currently set target type
       // before adapting to target
+      bdmOptions.targetType = bdmState.targetType;
+   }
+   else {
+      // Use hint provided
       bdmOptions.targetType = currentTargetType;
    }
-   adaptBdmOptions(&bdmOptions);
+   adaptRequiredBdmOptions(&bdmOptions);
    // Restore current target type
    bdmOptions.targetType = currentTargetType;
 
-   log.print("=> accepted\n");
-   printBdmOptions(&bdmOptions);
+   log.print("accepted => \n");
+   log.printq(printBdmOptions(&bdmOptions));
 
    return sendBdmOptions();
 }

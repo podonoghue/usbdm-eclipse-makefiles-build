@@ -16,6 +16,8 @@
 // Not extensively tested - may affect other coldfire chips adversely
 // NOTE: This has been moved to Codewarrior Legacy DLLs
 //#define MC51AC256_HACK (1)
+#ifndef _CONFIG_H
+#define _CONFIG_H
 
 //=================================================================================
 // Debugging options
@@ -40,7 +42,7 @@
 
     This is a bit mask made up of all the debugging options that are to be implemented in the code.
  */
-#define DEBUG (DEBUG_COMMANDS)
+#define DEBUG 0 //USB_PUTS_DEBUG // DEBUG_COMMANDS // (STACK_DEBUG)
 
 // Define for automatic WINUSB Driver loading
 //#define MS_COMPATIBLE_ID_FEATURE (1)
@@ -93,6 +95,7 @@ extern void dputs(char *msg);
 #define CAP_PST         (1<<11)     // Supports PST signal sensing
 #define CAP_CDC         (1<<12)     // Supports CDC Serial over USB interface
 #define CAP_ARM_SWD     (1<<13)     // Supports ARM targets via SWD
+#define CAP_S12Z        (1<<14)     // Supports HCS12ZVM
 
 //===========================================================================================
 // Three types of BDM interface chips are supported
@@ -147,12 +150,11 @@ extern void dputs(char *msg);
 //==========================================================================================
 //! Software Version Information
 //
-#define VERSION_MAJOR 4
-#define VERSION_MINOR 11
-#define VERSION_MICRO 2
-#define VERSION_STR "4.11.2.10"
+#define VERSION_MAJOR 4 
+#define VERSION_MINOR 12
+#define VERSION_MICRO 1
+#define VERSION_STR "4.12.1"
 #define VERSION_SW  ((VERSION_MAJOR<<4)+VERSION_MINOR)
-
 //! Selected hardware platform
 #if TARGET_HARDWARE==H_USBDM_JMxxCLD
 #include "USBDM_JMxxCLD.h" // Deluxe USBDM - see schematic
@@ -244,11 +246,13 @@ extern void dputs(char *msg);
 #define PLATFORM USBDM   // Choose BDM emulation
 #endif
 
-#define VendorID  (0x16D0)
-#define ProductID (0x0567)
+#define VendorID        (0x16D0)
+#define ProductID       (0x0567)
+#define ProductID_CDC   (0x06A5)
+
 //#define ProductID (0x9999) // Testing
-//#define ProductID (0x06A5) // Alternative number
-//#define ProductID (0x06A6) // Alternative number
+//#define ProductID (0x06A5) // Alternative number (from MCS)
+//#define ProductID (0x06A6) // Alternative number (from MCS)
 
 //==========================================================================================
 // CPUs supported (just clock frequency changes)
@@ -292,3 +296,5 @@ extern void dputs(char *msg);
 #error "Please correctly define CPU in Configure.h"
 #define CPU JM60
 #endif
+
+#endif // _CONFIG_H

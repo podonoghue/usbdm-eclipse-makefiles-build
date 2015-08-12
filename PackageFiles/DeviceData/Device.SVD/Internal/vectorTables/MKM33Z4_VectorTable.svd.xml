@@ -156,7 +156,7 @@ Devices using this vector table:
             <value>29</value>
          </interrupt>
          <interrupt>
-            <name>LPTMR</name>
+            <name>LPTMR0</name>
             <description>ORed LPTMR Interrupt</description>
             <value>30</value>
          </interrupt>

@@ -46,7 +46,7 @@ protected:
       HAS_NONE                = 0,
 
       // Interface
-      HAS_OPTIONAL_RESET      = 1<<1,  // Reset may be used optionally
+      HAS_OPTIONAL_RESET      = 1<<1,  // Hardware reset may be used optionally
       HAS_USE_PST             = 1<<2,  // PST signal may be used optionally (only CFVx)
       HAS_GUESS_SPEED         = 1<<3,  // Connection speed may need to be optionally 'guessed'
       HAS_CLK_SW              = 1<<4,  // ALT & BUS clock options are available
@@ -104,6 +104,7 @@ protected:
    virtual void OnUnlockButtonClick( wxCommandEvent& event );
    virtual void OnSoundCheckboxClick( wxCommandEvent& event );
    virtual void OnGdbServerPortNumberTextUpdated( wxCommandEvent& event );
+   virtual void OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event );
    virtual void OnProgramFlashButtonClick( wxCommandEvent& event );
    virtual void OnVerifyFlashButtonClick( wxCommandEvent& event );
    virtual void OnLoadAndGoButtonClick( wxCommandEvent& event );

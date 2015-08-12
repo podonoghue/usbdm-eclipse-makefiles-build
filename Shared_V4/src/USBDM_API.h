@@ -880,6 +880,7 @@ typedef struct {
    unsigned           resetDuration;              //!< How long to assert reset (ms)
    unsigned           resetReleaseInterval;       //!< How long to wait after reset release to release other signals (ms)
    unsigned           resetRecoveryInterval;      //!< How long to wait after reset sequence completes (ms)
+   unsigned           hcs08sbdfrAddress;          //!< Address to use to access SBDFR register
 } USBDM_ExtendedOptions_t;
 
 //! Structure to hold version information for BDM

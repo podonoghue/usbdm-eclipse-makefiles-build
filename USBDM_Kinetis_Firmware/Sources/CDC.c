@@ -82,10 +82,10 @@ static uint8_t cdcStatus = SERIAL_STATE_CHANGE;
 
 #if CPU == MK20D5
 #if UART_NUM == 0
-   #define enableUartIrq()   NVIC_EnableIRQ(UART0_RxTx_IRQn)
-   #define disableUartIrq()  NVIC_DisableIRQ(UART0_RxTx_IRQn)
+   #define enableUartIrq()   NVIC_EnableIRQ( UART0_RX_TX_IRQn)
+   #define disableUartIrq()  NVIC_DisableIRQ(UART0_RX_TX_IRQn)
 #else
-   #define enableUartIrq()   NVIC_EnableIRQ(UART1_RX_TX_IRQn)
+   #define enableUartIrq()   NVIC_EnableIRQ( UART1_RX_TX_IRQn)
    #define disableUartIrq()  NVIC_DisableIRQ(UART1_RX_TX_IRQn)
 #endif
 #else

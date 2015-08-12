@@ -19,8 +19,12 @@ typedef  wxIPV4address IPaddress;
 #include "GdbHandler.h"
 #include "DeviceInterface.h"
 #include "GdbServerWindowSkeleton.h"
+#include "WxWidgetsTty.h"
+#include "IGdbTty.h"
 
 class GdbServerWindow: public GdbServerWindowSkeleton {
+
+private:
 
 protected:
    class GdbMessageWrapper {
@@ -49,6 +53,7 @@ protected:
    virtual void OnToggleMaskISR( wxCommandEvent& event );
    virtual void OnSetTimeout( wxCommandEvent& event );
    virtual void OnToggleCatchVLLS( wxCommandEvent& event );
+   virtual void OnEntryTextEnter( wxCommandEvent& event );
 
    // Timer Event handler
    void OnTimer(wxTimerEvent& event);
@@ -61,48 +66,53 @@ protected:
    void UpdateStatusBar();
    void pollTarget();
 
-   USBDM_ErrorCode   doSettingsDialogue(bool reloadSettings);
-   bool              confirmDropConnection();
-   void              createServer();
-   void              closeServer();
-   void              dropConnection();
-   void              updateMenu();
+   USBDM_ErrorCode        doSettingsDialogue(bool reloadSettings);
+   bool                   confirmDropConnection();
+   void                   createServer();
+   void                   closeServer();
+   void                   dropConnection();
+   void                   updateMenu();
 
    GdbHandler::GdbMessageLevel   getLoggingLevel();
 
-   void              setLoggingLevel(GdbHandler::GdbMessageLevel level);
-   USBDM_ErrorCode   reportError(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc);
+   void                   setLoggingLevel(GdbHandler::GdbMessageLevel level);
+   USBDM_ErrorCode        reportError(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc);
 
-   static wxString   getAddr(IPaddress addr);
-   void              setDeferredFail(bool value = true);
-   void              setDeferredOpen(bool value = true);
+   static wxString        getAddr(IPaddress addr);
+   void                   setDeferredFail(bool value = true);
+   void                   setDeferredOpen(bool value = true);
 
-   wxString                     serverAddr;         // Current server address as string
-   wxString                     clientAddr;         // Current client address as string
-   wxSocketServer              *serverSocket;       // Server socket
-   wxSocketBase                *clientSocket;       // Client socket
+   wxString                      serverAddr;         // Current server address as string
+   wxString                      clientAddr;         // Current client address as string
+   wxSocketServer               *serverSocket;       // Server socket
+   wxSocketBase                 *clientSocket;       // Client socket
 
-   BdmInterfacePtr              bdmInterface;
-   DeviceInterfacePtr           deviceInterface;
-   AppSettingsPtr               appSettings;
+   BdmInterfacePtr               bdmInterface;
+   DeviceInterfacePtr            deviceInterface;
+   AppSettingsPtr                appSettings;
 
    GdbHandler::GdbMessageLevel   loggingLevel;
    GdbHandler::GdbTargetStatus   targetStatus;
 
-   typedef enum {idle, listening, connected, abort} ServerState;
-   ServerState              serverState;
+   typedef enum {
+      idle,
+      listening,
+      connected,
+      abort} ServerState;
+   ServerState                   serverState;
 
-   GdbInOutWx              *gdbInOut;
+   GdbInOutWx                   *gdbInOut;
 
-   wxTimer                 *statusTimer;
+   wxTimer                      *statusTimer;
 
-   bool                     deferredFail;
-   bool                     deferredOpen;
+   bool                          deferredFail;
+   bool                          deferredOpen;
 
-   GdbHandlerPtr            gdbHandler;
+   IGdbTty                      *tty;
+   GdbHandlerPtr                 gdbHandler;
 
-   static const int         pollIntervalFast = 100;      // ms
-   static const int         pollIntervalSlow = 1000;     // ms
+   static const int              pollIntervalFast = 100;      // ms
+   static const int              pollIntervalSlow = 1000;     // ms
 
    enum {
       // id for sockets

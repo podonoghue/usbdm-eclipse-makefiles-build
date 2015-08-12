@@ -24,12 +24,14 @@ void waitMS(unsigned msToWait);
  */
 void wait10us();
 
+#ifndef __CMSIS_RTOS
 /**
  * Get count of timer ticks
  *
  * @return ticks since arbitrary epoch
  */
 unsigned getTicks();
+#endif
 
 #ifdef __cplusplus
 }

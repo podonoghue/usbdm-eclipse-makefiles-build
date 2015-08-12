@@ -156,9 +156,10 @@ void GdbInOutWx::writeBuffer(unsigned char *buffer, int size) {
 //   logScreen->AppendText("\n");
    int bytesWritten = 0;
    do {
-      clientSocket->Write(buffer, size);
+      clientSocket->Write(buffer+bytesWritten, size);
       bytesWritten += clientSocket->LastCount();
-   } while ((bytesWritten < size) && !clientSocket->Error());
+      size -= bytesWritten;
+   } while ((size>0) && !clientSocket->Error());
    if (clientSocket->Error()) {
       errorLogger("clientSocket error");
    }

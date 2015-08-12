@@ -20,13 +20,31 @@ const char *GdbHandler::getStatusName(GdbTargetStatus status) {
          "VLPW",
          "VLPS",
          "LLSxRESET",
-         "VLLSxRESET"
+         "VLLSxRESET",
+         "USER INPUT",
          };
 
    if (status>=(sizeof(names)/sizeof(names[0]))) {
       return "ILLEGAL";
    }
    return names[status];
+}
+
+const char *GdbHandler::getRunStateName(RunState runState) {
+   enum RunState {Halted, Stepping, Running, Breaking, UserInput};
+
+   const char *names[] = {
+         "Halted",
+         "Stepping",
+         "Running",
+         "Breaking",
+         "UserInput",
+         };
+
+   if (runState>=(sizeof(names)/sizeof(names[0]))) {
+      return "Illegal";
+   }
+   return names[runState];
 }
 
 

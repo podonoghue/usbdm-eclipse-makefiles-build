@@ -1,5 +1,5 @@
 /**
- * @file     gpio_defs.h
+ * @file     gpio_defs.h (from gpio_defs-MK.h)
  * @brief    GPIO Pin routines
  *
  * @version  V4.11.1.70
@@ -9,6 +9,22 @@
 #define HEADER_GPIO_DEFS_H
 
 #include "derivative.h"
+
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+// Inline port functions
+//   <q> Force inline port functions
+//   <i> This option forces some small GPIO functions to be inlined
+//   <i> This increases speed but may also increase code size
+//     <0=> Disabled
+//     <1=> Enabled
+#define DO_INLINE   0
+
+#if DO_INLINE != 0
+#define OPTIONAL_INLINE __attribute__((always_inline))
+#else
+#define OPTIONAL_INLINE
+#endif
 
 /**
  * @addtogroup DigitalIO_Group Digital Input/Output
@@ -46,32 +62,32 @@ struct DigitalIO {
     * High drive strength + Pull-up
     */
    static const uint32_t    GPIO_DEFAULT_PCR = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(0); //!< PCR multiplexor value for analogue function
-   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(1); //!< PCR multiplexor value for digital function
+   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(DEFAULT_ADC_FN);  //!< PCR multiplexor value for analogue function
+   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(DEFAULT_GPIO_FN); //!< PCR multiplexor value for digital function
 
    /**
     * Toggle pin
     */
-   void toggle() const {
+   void toggle() const OPTIONAL_INLINE {
       gpio->PTOR = bitMask;
    }
    /**
     * Set pin high
     */
-   void set() const  {
+   void set() const OPTIONAL_INLINE {
       gpio->PSOR = bitMask;
    }
    /**
     * Set pin low
     */
-   void clear() const  {
+   void clear() const OPTIONAL_INLINE {
       gpio->PCOR = bitMask;
    }
    /**
     * Enable clock to port
     */
-   void enableClock() const  {
-      SIM->SCGC5 |= clockMask;
+   void enableClock() const {
+      PORT_CLOCK_REG |= clockMask;
    }
    /**
     * Set pin PCR value
@@ -105,7 +121,7 @@ struct DigitalIO {
     *
     * @param value high/low value
     */
-   void write(bool value) const  {
+   void write(bool value) const OPTIONAL_INLINE {
       if (value) {
          set();
       }
@@ -118,7 +134,7 @@ struct DigitalIO {
     *
     * @return true/false reflecting pin value
     */
-   bool read() const  {
+   bool read() const OPTIONAL_INLINE {
       return (gpio->PDIR & bitMask);
    }
 };

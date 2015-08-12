@@ -1239,6 +1239,7 @@ const char *printBdmOptions(const USBDM_ExtendedOptions_t *options) {
    static char buff[1000];
    snprintf(buff, sizeof(buff), "\n"
          "========================================\n"
+         "size                  => %d\n"
          "autoReconnect         => %s\n"
          "bdmClockSource        => %s\n"
          "cycleVddOnConnect     => %s\n"
@@ -1252,12 +1253,13 @@ const char *printBdmOptions(const USBDM_ExtendedOptions_t *options) {
          "resetDuration         => %d ms\n"
          "resetReleaseInterval  => %d ms\n"
          "resetRecoveryInterval => %d ms\n"
-         "size                  => %d\n"
          "targetType            => %s\n"
          "targetVdd             => %s\n"
          "usePSTSignals         => %s\n"
          "useResetSignal        => %s\n"
+         "hcs08sbdfrAddress     => 0x%X\n"
          "========================================\n",
+         options->size,
          getAutoConnectName(options->autoReconnect),
          getClockSelectName(options->bdmClockSource),
          options->cycleVddOnConnect?"T":"F",
@@ -1271,11 +1273,11 @@ const char *printBdmOptions(const USBDM_ExtendedOptions_t *options) {
          options->resetDuration,
          options->resetReleaseInterval,
          options->resetRecoveryInterval,
-         options->size,
          getTargetTypeName(options->targetType),
          getVoltageSelectName(options->targetVdd),
          options->usePSTSignals?"T":"F",
-         options->useResetSignal?"T":"F"
+         options->useResetSignal?"T":"F",
+         options->hcs08sbdfrAddress
          );
    return buff;
 }

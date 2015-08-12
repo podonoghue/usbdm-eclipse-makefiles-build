@@ -177,7 +177,6 @@ GdbBreakpoints::DataBreakInfo *GdbBreakpoints::findFreeDataWatchPoint(void) {
 int GdbBreakpoints::insertBreakpoint(BreakType type, uint32_t address, unsigned size) {
    LOGGING_Q;
    log.print("(%s, a=%08X, s=%d)\n", getBreakpointName(type), address, size);
-
    switch (type) {
    case memoryBreak: {
       if (findMemoryBreakpoint(address)) {
@@ -253,7 +252,7 @@ int GdbBreakpoints::removeBreakpoint(BreakType type, uint32_t address, unsigned 
       bpPtr->address   = 0;
       bpPtr->opcode[0] = 0;
       bpPtr->opcode[1] = 0;
-      log.print("(t=MEM, a=%08X, s=%d) - done\n", address, size);
+      log.print("(%s, a=%08X, s=%d) - done\n", getBreakpointName(type), address, size);
       return true; // Done
    }
    break;
@@ -263,7 +262,7 @@ int GdbBreakpoints::removeBreakpoint(BreakType type, uint32_t address, unsigned 
          return false; // Non-existent breakpoint
       }
       bpPtr->inUse     = false;
-      log.print("(t=HW, a=%08X, s=%d) - done\n", address, size);
+      log.print("(%s, a=%08X, s=%d) - done\n", getBreakpointName(type), address, size);
       return true; // Done
       }
       break;

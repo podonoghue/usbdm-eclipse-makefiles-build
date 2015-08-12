@@ -8,12 +8,19 @@
 #ifndef SRC_GDBHANDLERFACTORY_H_
 #define SRC_GDBHANDLERFACTORY_H_
 
+#include "IGdbTty.h"
 #include "GdbHandler.h"
 #include "DeviceInterface.h"
 
 class GdbHandlerFactory {
 public:
-   static GdbHandlerPtr createGdbHandler(TargetType_t targetType, GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr);
+   static GdbHandlerPtr createGdbHandler(
+         TargetType_t             targetType,
+         GdbInOut                *gdbInOut,
+         BdmInterfacePtr          bdmInterface,
+         DeviceInterfacePtr       deviceInterface,
+         GdbHandler::GdbCallback  gdbCallBackPtr,
+         IGdbTty                  *tty);
 
 protected:
    GdbHandlerFactory() {};

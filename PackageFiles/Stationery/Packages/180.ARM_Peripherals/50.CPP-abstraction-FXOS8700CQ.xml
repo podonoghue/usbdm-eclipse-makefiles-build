@@ -21,7 +21,7 @@
          <variable id="projectOptionValue.CPP-abstraction-FXOS8700CQ" 
             name="FXOS8700CQ C++ interface" 
             description="Adds a CPP abstraction layer for FXOS8700CQ 3-axis accelerometer and magnetometer" 
-            checkGroup="group-CPP-abstraction-options" >
+            checkGroup="group-i2c-peripheral-optionso" >
             <enableWhen>
                <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
             </enableWhen>

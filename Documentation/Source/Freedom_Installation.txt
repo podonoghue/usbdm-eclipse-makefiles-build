@@ -21,16 +21,16 @@ The above steps are described in the following:
 \section FreedomFirmwareInstallation Installing USBDM firmware on FRDM-xxxx
    Complete the USBDM \ref softwareInstallationPage and \ref driverPage before doing the following:  \n
    
-   - Locate the various USBDM_OpenSDAxxx.xxx files in the USBDM firmware folder.
+   - Locate the various USBDM_OpenSDAxxx.xxx files in the USBDM firmware folder. 
+     This folder may be opened from the Windows Start Menu.
+   - Navigate to the MKxx folder.
    
 <table border="0">
    <tr>
-      <td width=400>This folder may be opened from the Windows Start Menu.</td>
-      <td>Navigate to the MKxx folder.</td>
-   </tr>
-   <tr>
-      <td>\image html BDMFlashImagesMenuItem.png</td>
-      <td>\image html BDMFlashImagesFolder.png</td>
+      <td>Open from Start Menu
+      \image html BDMFlashImagesMenuItem.png</td>
+      <td>Locate MKxx folder
+      \image html BDMFlashImagesFolder.png</td>
    </tr>
 </table>
 	- There are six firmware images for the FRDM board. These are OpenSDA applications.  
@@ -49,7 +49,8 @@ The above steps are described in the following:
 	a different	BDM is plugged in.\n
    These are OpenSDA applications and installation uses the usual OpenSDA bootloader process: \n
    - Unplug the Freedom board.
-   - Whilst holding the reset switch depressed plug in the Freedom board.  The green LED should start blinking at a rate of about 1Hz.  
+   - Whilst holding the reset switch depressed, plug in the Freedom board.  The green LED should start blinking at a rate of about 1Hz.  
+      <td>\image html Bootloader.png</td>
    - Open a file explorer and locate the USB drive that has now appeared.  It will have the drive name "BOOTLOADER".
    - Drag the file <b>USBDM_OpenSDAxxxxx.sx</b> to the USB drive and wait a short while.  The OpenSDA bootloader on the Freedom board will 
      program the USBDM firmware into the MK20 debugger chip on the board.

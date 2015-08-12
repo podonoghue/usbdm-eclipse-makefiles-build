@@ -708,7 +708,7 @@ typedef struct {                                /*       FGPIOA Structure       
          __IO uint8_t   PIDRD;                  /**< 001B: Port Input Disable Register                                  */
       };
    };
-} FGPIOA_Type;
+} GPIO_Type;
 
 /**
  * @} */ /* End group FGPIOA_structs_GROUP 
@@ -743,7 +743,7 @@ typedef struct {                                /*       FGPIOA Structure       
 
 /* FGPIOA - Peripheral instance base addresses */
 #define FGPIOA_BasePtr                 0xF8000000UL //!< Peripheral base address
-#define FGPIOA                         ((FGPIOA_Type *) FGPIOA_BasePtr) //!< Freescale base pointer
+#define FGPIOA                         ((GPIO_Type *) FGPIOA_BasePtr) //!< Freescale base pointer
 #define FGPIOA_BASE_PTR                (FGPIOA) //!< Freescale style base pointer
 /**
  * @} */ /* End group FGPIOA_Peripheral_access_layer_GROUP 
@@ -1403,7 +1403,7 @@ typedef struct {                                /*       FTMRE Structure        
 
 /* GPIOA - Peripheral instance base addresses */
 #define GPIOA_BasePtr                  0x400FF000UL //!< Peripheral base address
-#define GPIOA                          ((FGPIOA_Type *) GPIOA_BasePtr) //!< Freescale base pointer
+#define GPIOA                          ((GPIO_Type *) GPIOA_BasePtr) //!< Freescale base pointer
 #define GPIOA_BASE_PTR                 (GPIOA) //!< Freescale style base pointer
 /**
  * @} */ /* End group FGPIOA_Peripheral_access_layer_GROUP 

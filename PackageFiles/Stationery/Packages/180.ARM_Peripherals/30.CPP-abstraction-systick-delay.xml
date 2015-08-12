@@ -20,9 +20,9 @@
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
          <variable id="projectOptionValue.CPP-abstraction-systick" 
-            name="Timer" 
+            name="SysTick Timer" 
             description="Adds a simple timer using Systick interrupt" 
-            checkGroup="group-CPP-abstraction-options" >
+            checkGroup="group-peripheral-options" >
          </variable>
          
          <projectActionList>

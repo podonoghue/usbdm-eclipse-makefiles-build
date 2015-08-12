@@ -162,3 +162,14 @@ void MMA845x::setMode(Mode mode) {
    active();
 }
 
+/*!
+ * Read ID from accelerometer
+ *
+ * @return ID value as 8-bit number (0x1A for MMA8451Q)
+ */
+uint32_t MMA845x::readID(void) {
+   uint8_t values[] = {WHO_AM_I};
+   i2c->receive(deviceAddress, values, sizeof(values));
+   return values[0];
+}
+

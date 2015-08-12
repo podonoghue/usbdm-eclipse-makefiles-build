@@ -279,7 +279,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_SWITCH, _("noerase"),       NULL, _("Equivalent to erase=None") },
       { wxCMD_LINE_OPTION, _("nvloc"),         NULL, _("Trim non-volatile memory location (hex)"),                        wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("power"),         NULL, _("Power timing (off,recovery) 100-10000 ms"),                       wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("port"),          NULL, _("Server port # to use e.g. 1234"),                                 wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("port"),          NULL, _("Server port # to use for GDB e.g. 1234"),                         wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("reset"),         NULL, _("Reset timing (active,release,recovery) 100-10000 ms"),            wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("security"),      NULL, _("Device security (unsecured, image, smart)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("securityValue"), NULL, _("Explicit security value to use (as hex string)"),                 wxCMD_LINE_VAL_STRING },
@@ -290,8 +290,10 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
 #ifdef _UNIX_
       { wxCMD_LINE_SWITCH, _("verbose"),       NULL, _("Print progress messages to stdout") },
 #endif
+      { wxCMD_LINE_SWITCH, _("useReset"),      NULL, _("Use hardware reset"),                                             wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("unsecure"),      NULL, _("Leave device unsecure after programming") },
       { wxCMD_LINE_OPTION, _("timeout"),       NULL, _("Connection timeout (seconds), 0 indicates indefinite"),            wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("tty"),           NULL, _("Port # to use for semi-hosting TTY e.g. 4321"),                                 wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("vdd"),           NULL, _("Supply Vdd to target (3V3 or 5V)"),                                wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_NONE }
 };
@@ -399,7 +401,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    // Command line requires at least a device name
    USBDM_ErrorCode rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.ToAscii());
    if (rc != BDM_RC_OK) {
-      log.print("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
+      log.error("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
       logUsageError(parser, _("***** Error: Failed to find device.\n"));
       success = false;
    }
@@ -564,6 +566,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       deviceData->setFlexNVMParameters(flexParameters);
    }
    // Reset options
+   bdmOptions.useResetSignal = parser.Found(_("useReset"));
    if (parser.Found(_("reset"), &sValue)) {
       unsigned long uValue=100000; // invalid so faults later
 
@@ -627,10 +630,18 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    if (parser.Found(_("port"), &sValue)) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
-         logUsageError(parser, _("***** Error: Illegal port value.\n"));
+         logUsageError(parser, _("***** Error: Illegal GDB port value.\n"));
          success = false;
       }
       bdmInterface->setGdbServerPort(uValue);
+   }
+   if (parser.Found(_("tty"), &sValue)) {
+      unsigned long uValue;
+      if (!sValue.ToULong(&uValue, 10)) {
+         logUsageError(parser, _("***** Error: Illegal TTY port value.\n"));
+         success = false;
+      }
+      bdmInterface->setGdbTtyPort(uValue);
    }
    if (parser.Found(_("timeout"), &sValue)) {
       unsigned long uValue;
