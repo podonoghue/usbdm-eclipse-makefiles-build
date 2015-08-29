@@ -1,5 +1,5 @@
 /*!
-\page codeSourceryNewProject Eclipse - USBDM Features
+\page eclipeUsbdmFeatures Eclipse - USBDM Features
 
 \section usbdmForEclipse USBDM Functions in Eclipse (including Kinetis Design Studio)
 
@@ -38,50 +38,29 @@ The following example is for an Kinetis target but a similar process is followed
 - USBDM Parameters         	
 	- Select the Build Tools being used (choice only available for Kinetis devices)				
 	- Select the device to be used.  
-- Linker Parameters
-   - Auto-generate linker script - The USBDM Wizard will automatically create a linker script based upon the device's
-     memory map.  The linker script is designed to work with the startup files provided by the Wizard.
-   - Linker Script - This allows selection of a pre-existing linker script instead of automatically generating one.  Codesourcery
-     provides various linker scripts that may be used.  This linker script will be <b>copied</b> into the project 
-     directory.   
 - Click <i>Next</i> 
 
 \image html 3.USBDMProjectParameters.png
 
 <b>Select project options</b>         	
-	- This page is specific to a particular device and the options will vary.			
+	- This page is specific to a particular device and the options will vary.	The various options on this page interact so only
+	certain combinations are allowed.		
 	- Choose which optional components (files) to add to the project.  Some of these will require manual customization upon completion of the Wizard.
 	This is often the case for CMSIS on smaller devices where the heap and stack sizes as well as CMSIS options will need to be adjusted for the 
 	very limited amount of RAM available.
 	- Click <i>Next</i> 
 	
-\image html 4.USBDMProjectOptions.png
+\image html 4.USBDMProjectOptions-Basic.png
+\image html 4.USBDMProjectOptions-CPP.png
+\image html 4.USBDMProjectOptions-KSDK.png
 
-<b>Select USBDM Tool Settings</b>
+<b>Select USBDM Additional Options</b>
+   - This page selects different options that depend on the previous page.      
 
-These values are used to update system-level settings and affect all existing and new projects.  It is usually
-only necessary to set these value once for Eclipse.  These values may also be accessed from the USBDM menu.
-- ARM Ltd GNU Tools for ARM
-- Codesourcery Tools for Coldfire
-   - The Eclipse tools need to know the target-specific tool prefix.\n
-     The prefix <b>arm-eabi-</b> is usual for ARM targets.\n
-     The prefix <b>m68k-elf-</b> is usual for M68K (Coldfire etc) targets.\n
-   - Eclipse needs to know where to find the GCC Tools.\n  
-   
-   These two options can be conveniently set by using the Browse Button to browse to the 
-   installation location of the XXXXXgcc.exe program included with the tools e.g. arm-eabi-gcc.exe.\n
-   If a particular toolchain is not being used then the entries should be cleared.  
-- Make command \n
-  Under windows it is necessary to provide a GNU make tool to use in project builds.  
-  USBDM includes a copy of the GNU make utility renamed as usbdm-make.  This is a convenient choice.
-- Rm (delete) command \n
-  Under windows it is necessary to provide a usable delete command to use in project builds.  
-  USBDM includes a copy of the GNU rm utility renamed as usbdm-rm.  This is a convenient choice.
-- Click <i>Next</i> 
+\image html 4b.USBDMProjectOptions-CPP.png
+\image html 4b.USBDMProjectOptions-KSDK.png
 
-\image html 5.USBDMToolSettings.png
-
-<b>Project Structure</b>
+\section eclipseProjectStructure Project Structure
 
 <table border="0">
    <tr>
@@ -303,7 +282,7 @@ by the USBDM Wizard.\n
   	  much can be done to improve the speed since this basically requires pushing many messages through 
   	  GDB which is a bottleneck.
 
-         \image html AnnotatedPeripheralView.png
+\image html AnnotatedPeripheralView.png
 
 - The peripheral view supports modifying registers interactively but this feature should be used carefully.  
 	When a register or field is changed the updated value is written to the target and then the register
@@ -319,7 +298,7 @@ by the USBDM Wizard.\n
   This dialogue is opened from the icon bar of the peripheral view.  The same information is available in the 
   appropriate SCB registers (CFSR, HFSR, DFSR, MMFAR, BFAR) although not in as convenient a form \image html OpenFaultReport.png
   	
-         \image html FaultStatusDialogue.png
+\image html FaultStatusDialogue.png
 
 - A couple of useful references relating to handling faults are:
    - @htmlonly <a href="http://www.keil.com/appnotes/files/apnt209.pdf"><b>Application Note 209 Abstract Introduction - Keil</b></a> @endhtmlonly

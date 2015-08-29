@@ -6,7 +6,7 @@
  *      Author: podonoghue
  */
 #include "derivative.h"
-#include "delay.h"
+#include "Delay.h"
 
 #ifndef __CMSIS_RTOS
 static unsigned timer;

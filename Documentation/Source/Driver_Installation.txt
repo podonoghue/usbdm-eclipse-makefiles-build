@@ -3,8 +3,7 @@
 
 \section InstallingDriversSectionWindows Installation of USBDM USB drivers for Windows
   
-The driver installation has been considerably simplified from version 4.10.3 by the provision of a separate driver 
-installation.  There are four installers provided: \n
+There are four installers provided: \n
 - <b>USBDM_Drivers_x_x_x_WinXP_x32.msi</b> - Windows XP 32-bit
 - <b>USBDM_Drivers_x_x_x_WinXP_x64.msi</b> - Windows XP 64-bit
 - <b>USBDM_Drivers_x_x_x_Win_x32.msi</b> - Windows 7 32-bit
@@ -12,27 +11,18 @@ installation.  There are four installers provided: \n
 
 <b>Note:</b> On Windows, libusb1.0 is a thin wrapper around the Microsoft winUSB low-level USB drivers.  Because
 of this you may see references to winusb in the following.\n
+<b>Note:</b> These drivers are signed.\n
 
 Please install the drivers before plugging in a BDM. \n
 
-Steps to follow undex Windows-8
-	- Before installation it is necessary to enable the use of unsigned drivers.  This is necessary because I have not paid 
-	for them to be signed.\n
-	- Please follow the steps outlined here:\n 
-	https://learn.sparkfun.com/tutorials/disabling-driver-signature-on-windows-8/disabling-signed-driver-enforcement-on-windows-8
-	- After this you should be able to follow the steps given below for WIN-7 to install the drivers.
-	
-Steps to follow under WIN-7 (it's similar for WIN-XP but there will be other confirmation dialogues)
+Steps to follow under WIN-7 (it's similar for WIN-XP but there will be other confirmation dialogues).  
+Windows 8 and 10 are less talkative.
    - Download the appropriate driver installation file (as above) from Sourceforge:
-   <A HREF="http://sourceforge.net/projects/usbdm/files/Version 4.10.6/Software/">USBDM Sourceforge</A>\n
+   <A HREF="http://sourceforge.net/projects/usbdm/files/Version%204.12.1/Drivers/">USBDM Sourceforge</A>\n
    - Remove the BDM if it is already plugged in.
-   - If you have installed a previous driver version (.msi file) and you wish to install a later version then
-     use add/remove programs to uninstall the existing drivers first (look for the <b>USBDM drivers</b> entry).
    - Install the driver .msi file.  This should clean out any incompatible driver files.
+   - You will be prompted by a UAC dialogue to allow the installation of the drivers.
    \image html MSI_DriverInstaller.png
-     During the installation you may receive several prompts warning you that the drivers are not signed.  
-     This is to be expected since I have not paid for them to be signed.\n
-   \image html DriverWarning.png
    - After installing the drivers, plugging in a BDM should trigger the actual driver installation. \n
    \image html InstallingDeviceDriverPopUp.png
    - If you click on the pop-up you can confirm the driver installation steps.\n

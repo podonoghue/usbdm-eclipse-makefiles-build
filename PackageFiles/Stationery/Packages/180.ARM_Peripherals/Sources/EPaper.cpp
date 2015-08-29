@@ -35,8 +35,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "spi.h"
-#include "ePaper.h"
+#include "SPI.h"
+#include "EPaper.h"
 
 /*!
  * Constructor - Create ePaper interface

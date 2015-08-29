@@ -6,7 +6,9 @@
 This page provides brief instructions on how to set up CodeSourcery Lite or GNU tools for use with 
 Eclipse IDE and USBDM BDM hardware for Kinetis and Coldfire targets on a MS-Windows platform.
 A similar setup works on Linux with obvious changes.\n
-<b>It is important that this software is installed before installing USBDM as USBDM must place plugin components into the already present Eclipse installation</b>
+-  <b>It is important that this software is installed before installing USBDM as USBDM must place plugin components into the already present Eclipse installation</b>\n
+-  <b>The USBDM plugin may also be used with Kinetis Design Studio but it does NOT require the installation of the CDT plugins described below.</b>\n\n
+
 
 <b>Eclipse Installation Considerations</b> \n
 Some points to note about installing Eclipse plugins (mostly applies to Linux):
@@ -81,4 +83,30 @@ The following software needs to be installed:\n
    - /opt/eclipse
    
    This installation must be done <b>after</b> installing Eclipse since it adds Eclipse plugins.\n
+   
+\section usbdmEclipseOptions Select USBDM Tool Settings
+Before using the USBDM plugin it is necessary to configure the tool path.  This is done from the USBDM menu within Eclipse or KDS:
+
+   \image html USBDM-Configure.png
+
+These values are used to update system-level settings and affect all existing and new projects.  It is usually
+only necessary to set these value once for Eclipse.  These values may also be accessed from the USBDM menu.
+- ARM Ltd GNU Tools for ARM
+- Codesourcery Tools for Coldfire
+   - The Eclipse tools need to know the target-specific tool prefix.\n
+     The prefix <b>arm-eabi-</b> is usual for ARM targets.\n
+     The prefix <b>m68k-elf-</b> is usual for M68K (Coldfire etc) targets.\n
+   - Eclipse needs to know where to find the GCC Tools.\n  
+   
+   These two options can be conveniently set by using the Browse Button to browse to the 
+   installation location of the XXXXXgcc.exe program included with the tools e.g. arm-eabi-gcc.exe.\n
+   If a particular toolchain is not being used then the entries should be cleared.  
+- Make command \n
+  Under windows it is necessary to provide a GNU make tool to use in project builds.  
+  USBDM includes a copy of the GNU make utility renamed as usbdm-make.  This is a convenient choice.
+- Rm (delete) command \n
+  Under windows it is necessary to provide a usable delete command to use in project builds.  
+  USBDM includes a copy of the GNU rm utility renamed as usbdm-rm.  This is a convenient choice.
+  \image html 5.USBDMToolSettings.png
+   
 */

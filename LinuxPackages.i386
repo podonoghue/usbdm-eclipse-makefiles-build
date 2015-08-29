@@ -5,6 +5,9 @@
 # openjdk-7-jre
 # default-jre-headless
 
+echo disabled
+exit
+
 echo This installs the packages to build i386 version
 echo
 
@@ -31,6 +34,9 @@ sudo apt-get -y install tcl8.5-dev
 sudo apt-get -y install libxerces-c-dev
 sudo apt-get -y install libwxgtk3.0-dev
 sudo apt-get -y install libwxbase3.0-dev
+sudo apt-get -y install g++
+sudo apt-get -y install openjdk-7-jdk
+sudo apt-get -y install libusb-1.0-0
 
 elif [ "${BITNESS}" == "64" ]; then
 # On 64-bit to build 32-bit usbdm library for KDS

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include "GT20L16.h"
-#include "delay.h"
+#include "Delay.h"
 
 #define GT20L16_READ_COMMAND        (0x03)
 #define GT20L16_FAST_READ_COMMAND   (0x0B)

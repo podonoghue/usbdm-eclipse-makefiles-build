@@ -168,6 +168,8 @@ typedef enum  {
  BDM_RC_HCS_ACCESS_ERROR                       = 54,    //!< Memory access failed due to target in stop or wait state
  BDM_RC_CF_DATA_INVALID                        = 55,    //!< CF target returned data invalid response (whatever that means!)
  BDM_RC_CF_OVERRUN                             = 56,    //!< CF target returned overrun response
+ BDM_RC_MASS_ERASE_DISABLED                    = 57,    //!< ARM Device has mass erase disabled
+ BDM_RC_FLASH_NOT_READY                        = 58,    //!< ARM - Flash failed to become ready
 } USBDM_ErrorCode;
 
 //! Capabilities of the hardware

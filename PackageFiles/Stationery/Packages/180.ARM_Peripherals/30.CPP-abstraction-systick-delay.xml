@@ -30,7 +30,7 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-systick" />
                </applyWhen>
-               <copy source="Project_Headers/delay.h"      target="Project_Headers/delay.h" />
+               <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" />
                <copy source="Sources/delay.cpp"            target="Sources/delay.cpp" />
             </projectActionList>
          </projectActionList>

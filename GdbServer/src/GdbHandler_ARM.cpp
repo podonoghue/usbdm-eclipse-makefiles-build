@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 #include "GdbHandler_ARM.h"
 #include "ArmDefinitions.h"
 #include "Names.h"

@@ -9,7 +9,7 @@
 #include "derivative.h"
 #include "utilities.h"
 #include "system.h"
-#include "i2c.h"
+#include "I2C.h"
 
 #ifndef PORT_PCR_ODE_MASK
 // Some devices don't have ODE function on pin

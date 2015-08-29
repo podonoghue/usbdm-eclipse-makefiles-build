@@ -127,7 +127,7 @@ int main(void) {
 #endif
 
 #if EXAMPLE == 4
-#include "lptmr.h"
+#include "LPTMR.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)
@@ -171,7 +171,7 @@ int main() {
 #endif
 
 #if EXAMPLE == 5
-#include "pit.h"
+#include "PIT.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)
@@ -246,7 +246,7 @@ int main() {
 #endif
 
 #if EXAMPLE == 6
-#include "pit.h"
+#include "PIT.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)

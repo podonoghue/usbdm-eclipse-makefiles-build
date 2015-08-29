@@ -334,6 +334,7 @@ std::string UsbdmDialogue::update() {
    cycleVddOnConnectionControl->SetValue(bdmInterface->getBdmOptions().cycleVddOnConnect);
    cycleVddOnResetControl->SetValue(bdmInterface->getBdmOptions().cycleVddOnReset);
    if ((targetProperties & IS_PROGRAMMER) == 0) {
+      log.print("leaveTargetPowered = %d\n", bdmInterface->getBdmOptions().leaveTargetPowered);
       leaveTargetPoweredControl->Enable(checkBoxEnable);
       leaveTargetPoweredControl->SetValue(bdmInterface->getBdmOptions().leaveTargetPowered);
    }
@@ -2345,6 +2346,7 @@ void UsbdmDialogue::OnCycleVddOnResetCheckboxClick( wxCommandEvent& event ) {
 /*! Handler for OnLeaveTargetOnCheckbox
  */
 void UsbdmDialogue::OnLeaveTargetOnCheckboxClick( wxCommandEvent& event ) {
+   UsbdmSystem::Log::print("event.IsChecked() = ", event.IsChecked());
    bdmInterface->getBdmOptions().leaveTargetPowered = event.IsChecked();
 }
 

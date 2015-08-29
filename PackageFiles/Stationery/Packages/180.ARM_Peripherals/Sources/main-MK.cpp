@@ -140,7 +140,7 @@ int main(void) {
 #endif
 
 #if EXAMPLE == 4
-#include "lptmr.h"
+#include "LPTMR.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)
@@ -185,7 +185,7 @@ int main() {
 #endif
 
 #if EXAMPLE == 5
-#include "pit.h"
+#include "PIT.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)
@@ -269,7 +269,7 @@ int main() {
 #endif
 
 #if EXAMPLE == 6
-#include "pit.h"
+#include "PIT.h"
 
 // LED connections
 #define RED_LED   digitalIO_$(demo.cpp.red.led)
@@ -300,8 +300,8 @@ int main() {
  * You may need to change the pin-mapping of the SPI interface
  */
 
-#include "lcd.h"
-#include "spi.h"
+#include "LCD.h"
+#include "SPI.h"
 
 int main() {
    SPI *spi = new $(demo.cpp.lcd.spi)();
@@ -322,7 +322,7 @@ int main() {
 /*
  * You may need to change the pin-mapping of the I2C interface
  */
-#include "i2c.h"
+#include "I2C.h"
 #include "HMC5883L.h"
 
 int main() {
@@ -345,7 +345,7 @@ int main() {
 /*
  * You may need to change the pin-mapping of the I2C interface
  */
-#include "i2c.h"
+#include "I2C.h"
 #include "MMA845x.h"
 
 int main() {

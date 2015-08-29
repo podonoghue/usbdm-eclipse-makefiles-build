@@ -1,0 +1,778 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM" ?>
+   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
+   <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   
+   <?define DescSRecord="Freescale S-Record binary file" ?>
+   <?define ExplorerMenuOpen="Open" ?>
+
+   <!-- ?define WxWidgetsVer="295u" ?-->
+   
+   <Product
+      Name="$(var.ProductName)"
+      Id="$(var.ProductCode)"
+      UpgradeCode="$(var.UpgradeCode)"
+      Version="$(var.ProductVersion)"
+      Manufacturer="$(var.Manufacturer)"
+      Language='1033'
+      Codepage='1252' >
+
+      <Package
+         Id='*'
+         Keywords='Installer'
+         Description="$(var.ProductName) Installer"
+         Comments="$(var.ProductName) Package"
+         Manufacturer="$(var.Manufacturer)"
+         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+      <Media Id='1' Cabinet="disk1.cab" EmbedCab='yes' DiskPrompt="$(var.ProductCode) Media" />
+
+      <MajorUpgrade
+         AllowDowngrades="no"
+         MigrateFeatures="yes"
+         DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+      <Property Id='ARPCOMMENTS'>Programmer for Freescale processors</Property>
+      <Property Id='ARPURLINFOABOUT'>$(var.InfoURL)</Property>
+      <Property Id='DiskPrompt' Value="$(var.ProductName) $(var.ProductVersion) Installation" />
+      <Property Id="ARPPRODUCTICON" Value="ChipIcon.ico" />
+<!--
+      <Property Id='ARPCONTACT'>contact info</Property>
+      <Property Id='ARPHELPLINK'>URL for technical support</Property>
+      <Property Id='ARPURLUPDATEINFO'>URL for product updates</Property>
+      <Property Id='ARPHELPTELEPHONE'>URL for technical support</Property>
+      <Property Id='ARPREADME'>path</Property>
+      <Property Id='ARPSIZE'>app size in kilobytes</Property>
+-->
+      
+      <!-- Per machine -->
+      <Property Id="ALLUSERS"><![CDATA[2]]></Property>
+
+      <!--====================================================== -->
+      <!--           Directory structure                         -->
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+         <Directory Id='ProgramFilesFolder' Name='PFiles'>
+            <Directory Id="D.CODESOURCERY" Name="CodeSourcery"/>
+
+            <Directory Id='MANUFACTURER_FOLDER' Name="$(var.Manufacturer)">
+               <Directory Id='INSTALLDIR' Name="$(var.ProductName) $(var.ProductVersion)">
+                  <Directory Id="D.Stationery"       Name='Stationery' />
+                  <Directory Id="D.DeviceData"       Name='DeviceData' />
+                  <Directory Id="D.WizardPatchData"  Name='WizardPatches' />
+                  <Directory Id="D.FlashImages"      Name='FlashImages' />
+                  <Directory Id="D.Examples"         Name='Examples' />
+                  <Directory Id="D.EclipsePlugins"   Name='EclipsePlugins' />
+                  <Directory Id="D.CWEclipsePlugins" Name='CodewarriorPlugins' />
+                  <Component Id='C.ApplicationDirectoryKey' Guid='*'>
+                     <RegistryValue Root='HKLM' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                                    Type='string' Name='InstallationDirectory' Value="[INSTALLDIR]" KeyPath='yes' />
+                  </Component>
+               </Directory>
+            </Directory>
+         </Directory>
+
+         <!-- Program menu folder -->
+         <Directory Id="ProgramMenuFolder" Name="Programs">
+            <Directory Id="D.UsbdmProgramMenuDir" Name="$(var.ProductName) $(var.ProductVersion)">
+               <Directory Id="D.ProgramMenuHelpDir"  Name="Manuals"/>
+               <Directory Id="D.ProgramMenuPatchDir" Name="Codewarrior Wizard Patches"/>
+            </Directory>
+         </Directory>
+
+         <!-- Desktop Folder -->
+         <Directory Id="DesktopFolder" Name="Desktop" />
+      </Directory>
+
+      <!--======================================================-->
+      <!--       Directory searches                             -->
+      <Property Id="D.CODESOURCERY">
+         <DirectorySearch Id="Ds.ProgramFilesFolder" Path="[ProgramFilesFolder]">
+            <DirectorySearch Id="Ds.CODESOURCERY" AssignToProperty="yes" Path="CodeSourcery"/>
+         </DirectorySearch>
+      </Property>
+      
+      <!--======================================================-->
+      <!-- Binary containing custom actions -->
+      <Binary Id='MyCustomAction' SourceFile='bin\MyCustomAction.dll' />
+      
+      <!-- Custom action to validate install paths -->
+      <CustomAction Id='CheckInstallPaths' BinaryKey='MyCustomAction' DllEntry='CheckInstallPaths@4' />
+      
+      <!-- Custom action to write Eclipse plugin link files -->
+      <CustomAction Id='WriteLinkFiles' BinaryKey='MyCustomAction' DllEntry='WriteLinkFiles@4' />      
+
+      <!-- Custom action to remove Eclipse plugin link files -->
+      <CustomAction Id='RemoveLinkFiles' BinaryKey='MyCustomAction' DllEntry='RemoveLinkFiles@4' />      
+
+      <InstallExecuteSequence>
+         <Custom Action='WriteLinkFiles'  After='InstallFiles'/>
+         <Custom Action='RemoveLinkFiles' Before='RemoveFiles'/>
+      </InstallExecuteSequence>
+      
+      <!--======================================================-->
+      <!--          Menu & Application components               -->
+      <!--======================================================-->
+      <!-- Program Menu Folder -->
+      <DirectoryRef Id="ProgramMenuFolder">
+         <Component Id="C.ProgramMenuFolder" Guid="*">
+            <CreateFolder Directory='D.UsbdmProgramMenuDir'/>
+            <RemoveFolder Directory='D.UsbdmProgramMenuDir' Id="RemoveProgramMenuDir" On='uninstall' />
+            <RegistryValue Root='HKMU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='Version' Value="$(var.ProductVersion)" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Uninstall Menu shortcut -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id="C.UninstallProductShortcut">
+            <Shortcut Id="UninstallProduct"
+                Name="Uninstall USBDM"
+                Directory="D.UsbdmProgramMenuDir"
+                Target="[SystemFolder]msiexec.exe"
+                Arguments="/x [ProductCode]"
+                Description="Uninstall USBDM" />
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='UninstallProductShortcut' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Program Menu Help Folder -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id="C.ProgramMenuHelpFolder" Guid="*">
+            <CreateFolder Directory="D.ProgramMenuHelpDir"/>
+            <RemoveFolder Directory="D.ProgramMenuHelpDir"        Id="RemoveMenuHelpDir"        On="uninstall" />
+            <RegistryValue Root='HKMU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='HelpFilesInstalled' Value="yes" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- Program Menu Patch Codewarrior Folder -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id='C.ProgramMenuPatchDir' Guid='*'>
+            <CreateFolder Directory="D.ProgramMenuPatchDir"/>
+            <RemoveFolder Directory="D.ProgramMenuPatchDir"        Id="RemoveMenuPatchDir"        On="uninstall" />
+            <RegistryValue Root='HKMU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorInstalled' Value="yes" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <!-- Flash images folder shortcut -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id="C.FlashShortCut">
+            <Shortcut Id="FlashFolderShortcut"
+               Name="BDM Flash Images" 
+               Directory="D.UsbdmProgramMenuDir" 
+               Target="[D.FlashImages]" />
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='FlashShortCut' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Patch Codewarrior ReadMe file -->
+      <DirectoryRef Id="INSTALLDIR">
+         <Component Id='C.WizardsReadme' Guid='*'>
+            <File Id='F.ReadMeWizardTXT' DiskId='1' Source='bin\ReadMeWizard.txt'  KeyPath='yes' >
+               <Shortcut Id="Sc.ReadMeWizardTXT"
+                  Name="Read Me"
+                  Directory="D.ProgramMenuPatchDir" 
+                  WorkingDirectory='INSTALLDIR' 
+                  Advertise="yes" />
+            </File>
+         </Component>
+      </DirectoryRef>
+      
+      <!-- Patch Codewarrior Executable file (XML merge) -->
+      <DirectoryRef Id="INSTALLDIR">
+         <Component Id='C.MergeEXE' Guid='*'>
+            <File Id='F.MergeEXE' DiskId='1' Source='bin\mergeXml.exe' KeyPath='yes'/>
+         </Component>
+      </DirectoryRef>
+      
+      <!-- Codewarrior Patches Common elements and Menu items -->
+      <ComponentGroup Id='Cg.PatchCodewarriorWizardsCommon'>
+         <ComponentRef Id='C.ProgramMenuPatchDir' />
+         <ComponentRef Id='C.MergeEXE'/>
+         <ComponentRef Id='C.WizardsReadme'/>
+         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.WizardPatchData' />
+      </ComponentGroup>
+
+      <!-- Examples folder shortcut -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id="C.ExampleShortCut">
+            <Shortcut Id="ExampleFolderShortcut"
+               Name="Examples Folder" 
+               Directory="D.UsbdmProgramMenuDir" 
+               Target="[D.Examples]" />
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='ExamplesShortCut' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!--====================================================== -->
+      <!--         Application Components & shortcuts            -->
+      <DirectoryRef Id='INSTALLDIR'>
+         <Component Id='C.HCS12Programmer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
+            <File Id='HCS12_FlashProgrammerEXE' DiskId='1'
+               Source='bin\HCS12_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_1" Directory="D.UsbdmProgramMenuDir" Name="HCS12 Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='HCS12_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\HCS12_FlashProgrammer-debug.exe' />
+         </Component>
+         <Component Id='C.S12ZProgrammer' Guid='e07ac73b-cd3b-46e3-bab8-cc27d2290bef'>
+            <File Id='S12Z_FlashProgrammerEXE' DiskId='1'
+               Source='bin\S12Z_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_1a" Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='S12Z_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\S12Z_FlashProgrammer-debug.exe' />
+         </Component>
+         <!--
+         <Component Id='C.SRecord.Support' Guid='81c6fbea-67c4-41d5-b455-2c7d26a6f9d7'>
+            <RegistryValue 
+               Root="HKLM" Key="SOFTWARE\Classes\FreescaleSRecord" 
+               Name="S-Record" Value="$(var.DescSRecord)" 
+               Type="string" KeyPath="yes"/>
+            <Extension Id="sx">
+               <MIME Advertise="no" ContentType="application/sx" Default="yes" />
+            </Extension>
+         </Component>
+         -->
+         <Component Id='C.HCS08Programmer' Guid='c2b5671c-fbcc-4179-aa33-516f1d9e0910'>
+            <File Id='HCS08_FlashProgrammerEXE' DiskId='1'
+               Source='bin\HCS08_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_2" Directory="D.UsbdmProgramMenuDir" Name="HCS08 Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='HCS08_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\HCS08_FlashProgrammer-debug.exe' />
+            <ProgId Id="USBDM.HCS08Programmer" Description="USBDM HCS08 Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.hcs08" Sequence="1" Command="Open HCS08 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.hcs08" Sequence="1" Command="Open HCS08 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+         </Component>
+         
+         <Component Id='C.RS08Programmer' Guid='ad047fa8-fa37-483a-863d-c05b100efa24'>
+            <File Id='RS08_FlashProgrammerEXE' DiskId='1'
+               Source='bin\RS08_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_3" Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='RS08_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\RS08_FlashProgrammer-debug.exe' />
+            <!--
+            <ProgId Id="USBDM.RS08Programmer" Description="USBDM RS08 Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.rs08" Sequence="2" Command="Open RS08 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.rs08" Sequence="2" Command="Open RS08 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+            -->
+         </Component>
+         
+         <Component Id='C.CFV1Programmer' Guid='a7bb220f-7e80-4933-940b-d24038e87596'>
+            <File Id='CFV1_FlashProgrammerEXE' DiskId='1'
+               Source='bin\CFV1_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_4" Directory="D.UsbdmProgramMenuDir" Name="Coldfire V1 Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='CFV1_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\CFV1_FlashProgrammer-debug.exe' />
+            <!--
+            <ProgId Id="USBDM.CFV1Programmer" Description="USBDM CFV1 Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.cfv1" Command="Open CFV1 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.cfv1" Command="Open CFV1 Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+            -->
+         </Component>
+         <Component Id='C.CFVxProgrammer' Guid='85ff92ba-b42e-4925-923f-f8096207ecb9'>
+            <File Id='CFVx_FlashProgrammerEXE' DiskId='1'
+               Source='bin\CFVx_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_5" Directory="D.UsbdmProgramMenuDir" Name="ColdFire V2,3,4 Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='CFVx_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\CFVx_FlashProgrammer-debug.exe' />
+            <!--
+            <ProgId Id="USBDM.CFVxProgrammer" Description="USBDM CFV1,2,3 Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.cfvx" Command="Open CFVx Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.cfvx" Command="Open CFVx Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+            -->
+         </Component>
+         <Component Id='C.DSCProgrammer' Guid='e4343520-b2c3-487e-9a1e-8b1cdce727df'>
+            <File Id='DSC_FlashProgrammerEXE' DiskId='1'
+               Source='bin\DSC_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_5a" Directory="D.UsbdmProgramMenuDir" Name="MC56F80xx Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='DSC_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\DSC_FlashProgrammer-debug.exe' />
+            <!--
+            <ProgId Id="USBDM.DSCProgrammer" Description="USBDM MC56F80xx Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.dsc" Command="Open MC56F80xx Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.dsc" Command="Open MC56F80xx Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+            -->
+         </Component>
+         <Component Id='C.ARMProgrammer' Guid='a7510d33-187e-4c7a-a63e-efe23a53b910'>
+            <File Id='ARM_FlashProgrammerEXE' DiskId='1'
+               Source='bin\ARM_FlashProgrammer.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_6" Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='ARM_FlashProgrammerDebugEXE'   DiskId='1' Source='bin\ARM_FlashProgrammer-debug.exe' />
+            <!--
+            <ProgId Id="USBDM.ARMProgrammer" Description="USBDM ARM Programmer" Icon="ChipIcon.ico" Advertise="yes">
+               <Extension Id="sx">
+                  <Verb Id="open.arm" Command="Open ARM Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+               <Extension Id="s19">
+                  <Verb Id="open.arm" Command="Open ARM Programmer" Argument="&quot;%1&quot;" />
+               </Extension>
+            </ProgId>         
+            -->
+         </Component>
+
+         <Component Id='C.USBDMBootloader' Guid='*'>
+            <File Id='FirmwareChangerEXE' DiskId='1'
+               Source='bin\FirmwareChanger.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_7" Directory="D.UsbdmProgramMenuDir" Name="USBDM Firmware Updater"
+                  WorkingDirectory='D.FlashImages' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+         <Component Id='C.USBDMScript' Guid='*'>
+            <File Id='USBDMScriptEXE' DiskId='1'
+               Source='bin\USBDMScript.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_8" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+         <Component Id='C.CFUnlocker' Guid='*'>
+            <File Id='CFUnlockerEXE' DiskId='1'
+               Source='bin\CFVx_Unlocker.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_9" Directory="D.UsbdmProgramMenuDir" Name="Coldfire V2,3,4 JTAG Unlocker"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+         <Component Id='C.SetBoot' Guid='*'>
+            <File Id='SetBootEXE' DiskId='1'
+               Source='bin\SetBoot.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_10" Directory="D.UsbdmProgramMenuDir" Name="JB16 Set boot utility"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+         <Component Id='C.JS16Bootloader' Guid='*'>
+            <File Id='JS16BootloaderEXE' DiskId='1'
+               Source='bin\JS16_Bootloader.exe' KeyPath='yes'>
+               <Shortcut Id="startmenuUSBDM_11" Directory="D.UsbdmProgramMenuDir" Name="JS16 First Level Bootloader"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+
+         <Component Id='C.ARMGdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418'>
+            <File Id='ARM_GDBServerEXE' DiskId='1'
+               Source='bin\ARM_GDBServer.exe' KeyPath='yes'>
+               <Shortcut Id="SC.ARMGdbServer" Directory="D.UsbdmProgramMenuDir" Name="ARM GDB Server"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='ARM_GDBServerDebugEXE'       DiskId='1' Source='bin\ARM_GDBServer-debug.exe' />
+            <File Id='ARM_GDBServerPipeEXE'        DiskId='1' Source='bin\usbdm-arm-gdbPipeServer.exe' />
+            <File Id='ARM_GDBServerPipeDebugEXE'   DiskId='1' Source='bin\usbdm-arm-gdbPipeServer-debug.exe' />
+         </Component>
+         <Component Id='C.CFV1GdbServer' Guid='158f1c7d-cb4c-44e0-8946-43aa89f5dafb'>
+            <File Id='CFV1_GDBServerEXE' DiskId='1'
+               Source='bin\CFV1_GDBServer.exe' KeyPath='yes'>
+               <Shortcut Id="SC.CFV1GdbServer" Directory="D.UsbdmProgramMenuDir" Name="Coldfire V1 GDB Server"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='CFV1_GDBServerDebugEXE'      DiskId='1' Source='bin\CFV1_GDBServer-debug.exe' />
+            <File Id='CFV1_GDBServerPipeEXE'       DiskId='1' Source='bin\usbdm-cfv1-gdbPipeServer.exe' />
+            <File Id='CFV1_GDBServerPipeDebugEXE'  DiskId='1' Source='bin\usbdm-cfv1-gdbPipeServer-debug.exe' />
+         </Component>
+         <Component Id='C.CFVxGdbServer' Guid='3031ca64-f18d-432f-94be-6da1605f63f4'>
+            <File Id='CFVx_GDBServerEXE' DiskId='1'
+               Source='bin\CFVx_GDBServer.exe' KeyPath='yes'>
+               <Shortcut Id="SC.CFVxGdbServer" Directory="D.UsbdmProgramMenuDir" Name="Coldfire V2,3,4 GDB Server"
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+            </File>
+            <File Id='CFVx_GDBServerDebugEXE'      DiskId='1' Source='bin\CFVx_GDBServer-debug.exe' />
+            <File Id='CFVx_GDBServerPipeEXE'       DiskId='1' Source='bin\usbdm-cfvx-gdbPipeServer.exe' />
+            <File Id='CFVx_GDBServerPipeDebugEXE'  DiskId='1' Source='bin\usbdm-cfvx-gdbPipeServer-debug.exe' />
+         </Component>
+      </DirectoryRef>
+
+      <ComponentGroup Id='Cg.ARMGdbServer'>
+         <ComponentRef Id='C.ProgramMenuFolder'/>
+         <ComponentRef Id='C.ARMGdbServer'/>
+         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+      </ComponentGroup>
+
+      <ComponentGroup Id='Cg.CFV1GdbServer'>
+         <ComponentRef Id='C.ProgramMenuFolder'/>
+         <ComponentRef Id='C.CFV1GdbServer'/>
+         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+      </ComponentGroup>
+
+      <ComponentGroup Id='Cg.CFVxGdbServer'>
+         <ComponentRef Id='C.ProgramMenuFolder'/>
+         <ComponentRef Id='C.CFVxGdbServer'/>
+         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+      </ComponentGroup>
+
+      <ComponentGroup Id='Cg.GDBServers'>
+         <ComponentGroupRef Id='Cg.ARMGdbServer'/>
+         <ComponentGroupRef Id='Cg.CFV1GdbServer'/>
+         <ComponentGroupRef Id='Cg.CFVxGdbServer'/>
+      </ComponentGroup>
+
+      <!--======================================================
+               Components
+      =======================================================-->
+
+      <!-- Shared files -->
+      <DirectoryRef Id="INSTALLDIR">
+         <Component Id='C.CommonFiles' Guid='7c988e6d-bf01-439a-9829-43e9cfeff9f9'>
+<!--            <File Id='ComonFiles1'       DiskId='1' Source='bin\libusb-1.0.dll' /> -->
+            <File Id='ComonFiles2'       DiskId='1' Source='bin\libxerces-c-3-1.dll' />
+            <File Id='ComonFiles3'       DiskId='1' Source='bin\tcl85.dll' />
+            <File Id='ComonFiles4'       DiskId='1' Source='bin\usbdm-wxPlugin.dll' />
+                                         
+            <File Id='ComonFiles5'       DiskId='1' Source='bin\usbdm.4.dll' KeyPath='yes' />
+            <File Id='ComonFiles6'       DiskId='1' Source='bin\usbdm-arm.4.dll' />
+            <File Id='ComonFiles7'       DiskId='1' Source='bin\usbdm-dsc.4.dll' />
+            <File Id='ComonFiles8'       DiskId='1' Source='bin\usbdmTCL.4.dll' />
+                                         
+            <File Id='ComonFiles9'       DiskId='1' Source='bin\usbdm-debug.4.dll' />
+            <File Id='ComonFiles10'      DiskId='1' Source='bin\usbdm-arm-debug.4.dll' />
+            <File Id='ComonFiles11'      DiskId='1' Source='bin\usbdm-dsc-debug.4.dll' />
+            <File Id='ComonFiles12'      DiskId='1' Source='bin\usbdmTCL-debug.4.dll' />
+                                         
+            <File Id='ComonFiles13'      DiskId='1' Source='bin\error.wav' />
+            <File Id='ComonFiles14'      DiskId='1' Source='bin\usbdm_rc.tcl' />
+                                         
+            <File Id='ComonFiles15'      DiskId='1' Source='bin\libgcc_s_dw2-1.dll' />
+            <File Id='ComonFiles16'      DiskId='1' Source='bin\libstdc++-6.dll' />
+            <File Id='ComonFiles17'      DiskId='1' Source='bin\pthreadGC2.dll' />
+            
+            <File Id='wxComonFiles1'     DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
+            <File Id='wxComonFiles2'     DiskId='1' Source='bin\wxbase$(var.WxWidgetsVer)_net_gcc_custom.dll' />
+            <File Id='wxComonFiles3'     DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_adv_gcc_custom.dll' />
+            <File Id='wxComonFiles4'     DiskId='1' Source='bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+
+            <File Id='gdbComonFiles13'   DiskId='1' Source='bin\usbdm-make.exe' />
+            <File Id='gdbComonFiles14'   DiskId='1' Source='bin\usbdm-rm.exe' />
+            <File Id='gdbComonFiles15'   DiskId='1' Source='bin\libiconv2.dll' />
+            <File Id='gdbComonFiles16'   DiskId='1' Source='bin\libiconv-2.dll' />
+            <File Id='gdbComonFiles17'   DiskId='1' Source='bin\libintl3.dll' />
+            <File Id='gdbComonFiles18'   DiskId='1' Source='bin\libintl-8.dll' />
+	    
+         </Component>
+      </DirectoryRef>
+
+      <!-- License file -->
+      <WixVariable Id="WixUILicenseRtf" 
+         Value="..\licenses\GNU General Public License - GNU Project - Free Software Foundation (FSF).rtf" />
+
+      <!-- Device data -->
+      <ComponentGroup Id='Cg.DeviceDataInstall'>
+         <ComponentGroupRef Id='Cg.DeviceData' /> <!-- Generated elsewhere -->
+         <ComponentRef Id='C.ApplicationDirectoryKey'/>
+      </ComponentGroup>
+
+      <!-- Device data -->
+      <ComponentGroup Id='Cg.StationeryInstall'>
+         <ComponentGroupRef Id='Cg.Stationery' /> <!-- Generated elsewhere -->
+         <ComponentRef Id='C.ApplicationDirectoryKey'/>
+      </ComponentGroup>
+
+      <!-- Help manual files & shortcuts -->
+      <DirectoryRef Id="INSTALLDIR">
+         <Component Id='C.Manual1' Guid='*' >
+            <File Id='F.ProgrammerManualCHM' DiskId='1' Source='..\Documentation\USBDM_FlashProgrammers.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_110" Directory="D.ProgramMenuHelpDir" Name="Programmer Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual2' Guid='*' >
+            <File Id='F.CFJMxxCHM'           DiskId='1' Source='..\Documentation\USBDM_CF_JMxx.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_111" Directory="D.ProgramMenuHelpDir" Name="JMxx Deluxe Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual3' Guid='*' >
+            <File Id='F.CFJS16CHM'           DiskId='1' Source='..\Documentation\USBDM_CF_JS16.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_112" Directory="D.ProgramMenuHelpDir" Name="JS16 (Coldfire V2-4, DSC, Kinetis) Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual4' Guid='*' >
+            <File Id='F.JB16CHM'             DiskId='1' Source='..\Documentation\USBDM_JB16.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_113" Directory="D.ProgramMenuHelpDir" Name="JB16 (HCS08,HCS12,Coldfire V1) Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual5' Guid='*' >
+            <File Id='F.JMxxCHM'             DiskId='1' Source='..\Documentation\USBDM_JMxx.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_114" Directory="D.ProgramMenuHelpDir" Name="JMxx (HCS08,HCS12,Coldfire V1) Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual6' Guid='*' >
+            <File Id='F.JS16CHM'             DiskId='1' Source='..\Documentation\USBDM_JS16.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_115" Directory="D.ProgramMenuHelpDir" Name="JS16 (HCS08,HCS12,Coldfire V1) Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+         <Component Id='C.Manual7' Guid='*' >
+            <File Id='F.FRDMCHM'           DiskId='1' Source='..\Documentation\USBDM_Freedom.chm' KeyPath="yes">
+               <Shortcut Id="startmenuUSBDM_116" Directory="D.ProgramMenuHelpDir" Name="FRDM-KL25Z Manual"
+                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
+            </File>
+         </Component>
+      </DirectoryRef>
+
+      <ComponentGroup Id='Cg.Documentation'>
+         <ComponentRef Id="C.ProgramMenuHelpFolder" />
+         <ComponentRef Id='C.Manual1'/>
+         <ComponentRef Id='C.Manual2'/>
+         <ComponentRef Id='C.Manual3'/>
+         <ComponentRef Id='C.Manual4'/>
+         <ComponentRef Id='C.Manual5'/>
+         <ComponentRef Id='C.Manual6'/>
+         <ComponentRef Id='C.Manual7'/>
+      </ComponentGroup>
+
+      <!--=================================================================================
+           Features
+      ==================================================================================-->
+      <Feature Id='F.Complete'
+              Title='USBDM $(var.ProductVersion)'
+              Description='The complete package.'
+              AllowAdvertise="no"
+              Display='expand'
+              Level='1'
+              ConfigurableDirectory='INSTALLDIR'>
+         <ComponentRef Id='C.ProgramMenuFolder' />
+         <ComponentRef Id="C.UninstallProductShortcut" />
+         <ComponentRef Id='C.ApplicationDirectoryKey'/>
+         <Feature Id='F.CodewarriorSupport'
+               Title='CodeWarrior'
+               Description='Add USBDM support to various versions of CodeWarrior software.'
+               AllowAdvertise="no"
+               Level='1'>
+            <FeatureRef Id='F.CW_FOR_MCU_V10.3'/>
+            <FeatureRef Id='F.CW_FOR_MCU_V10.4'/>
+            <FeatureRef Id='F.CW_FOR_MCU_V10.5'/>
+            <FeatureRef Id='F.CW_FOR_MCU_V10.6'/>
+            <FeatureRef Id='F.CW_FOR_MICROCONTROLLERS_V6_3' />
+            <FeatureRef Id='F.CWS12_X_V5_1' />
+            <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
+            <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
+         </Feature>
+         <FeatureRef Id='F.KINETIS_DESIGN_STUDIO' />
+         <FeatureRef Id='F.ECLIPSE_JUNO_CDT' />
+         <FeatureRef Id='F.ECLIPSE_KEPLER_CDT' />
+         <FeatureRef Id='F.ECLIPSE_LUNA_CDT' />
+         <FeatureRef Id='F.FREEMASTER_V1_3' />
+         <FeatureRef Id='F.FREEMASTER_V1_4' />
+         <FeatureRef Id='F.CFFLASHER_V3_1' />
+         <Feature Id='F.Programmers'
+               Title='Programmers'
+               Description='Stand-alone flash programmers.'
+               AllowAdvertise="no"
+               Level='1'>
+               <!--<ComponentRef Id='C.SRecord.Support' />-->
+            <!--ComponentRef Id="EmptyComponent_WindowsInstallerBugWorkaround" /-->
+            <Feature Id='F.ARMProgrammer'
+                  Title='ARM Programmer'
+                  Description='Stand-alone ARM flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.ARMProgrammer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.CFV1Programmer'
+                  Title='Coldfire V1 Programmer'
+                  Description='Stand-alone Coldfire V1 flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.CFV1Programmer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.CFVxProgrammer'
+                  Title='Coldfire V2,3,4 Programmer'
+                  Description='Stand-alone Coldfire V2,3,4 flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.CFVxProgrammer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.DSCProgrammer'
+                  Title='MC56F80xx Programmer'
+                  Description='Stand-alone MC56F800xx flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.DSCProgrammer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.HCS08Programmer'
+                  Title='HCS08 Programmer'
+                  Description='Stand-alone HCS08 flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.HCS08Programmer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.HCS12Programmer'
+                  Title='HCS12 Programmer'
+                  Description='Stand-alone HCS12 flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.HCS12Programmer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.S12ZProgrammer'
+                  Title='S12Z Programmer'
+                  Description='Stand-alone S12Z flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.S12ZProgrammer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+            <Feature Id='F.RS08Programmer'
+                  Title='RS08 Programmer'
+                  Description='Stand-alone RS08 flash programmer.'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentRef Id='C.RS08Programmer' />
+               <ComponentRef Id='C.CommonFiles' />
+               <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
+            </Feature>
+         </Feature>
+         <Feature Id='F.GDBServers'
+               Title='GDB Servers'
+               Description='USBDM GDB Servers. &#10;&#10;Socket based server for use with GNU Project Debugger (GDB).'
+               AllowAdvertise="no"
+               Level='1'>
+            <Feature Id='F.ARMGdbServer'
+                  Title='ARM GDB Server'
+                  Description='ARM Socket based server for use with GNU Project Debugger (GDB).'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentGroupRef Id='Cg.ARMGdbServer' />
+            </Feature>
+            <Feature Id='F.CFV1GdbServer'
+                  Title='Coldfire V1 GDB Server'
+                  Description='Coldfire V1 Socket based server for use with GNU Project Debugger (GDB).'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentGroupRef Id='Cg.CFV1GdbServer' />
+            </Feature>
+            <Feature Id='F.CFVxGdbServer'
+                  Title='Coldfire V2,3,4 GDB Server'
+                  Description='Coldfire V2,3,4 Socket based server for use with GNU Project Debugger (GDB).'
+                  AllowAdvertise="no"
+                  Level='1'>
+               <ComponentGroupRef Id='Cg.CFVxGdbServer' />
+            </Feature>
+         </Feature>
+         <Feature Id='F.USBDMBootloader'
+               Title='Firmware Updater'
+               Description='USBDM Firmware Updater and Flash images.&#10;&#10;Needed to upgrade BDM firmware.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.USBDMBootloader' />
+            <ComponentRef Id='C.CommonFiles' />
+            <ComponentRef Id="C.FlashShortCut" />
+            <ComponentGroupRef Id='Cg.FlashImages' />
+         </Feature>
+         <Feature Id='F.JS16Bootloader'
+               Title='JS16 Bootloader'
+               Description='JS16 Firmware Bootloader and Flash images.&#10;Only needed for intial programming of JS16 BDMs.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.JS16Bootloader' />
+            <ComponentRef Id='C.CommonFiles' />
+            <ComponentRef Id="C.FlashShortCut" />
+            <ComponentGroupRef Id='Cg.FlashImages' />
+         </Feature>
+         <Feature Id='F.USBDMScript'
+               Title='TCL Interpreter'
+               Description='USBDM command line TCL interpreter.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.USBDMScript' />
+            <ComponentRef Id='C.CommonFiles' />
+         </Feature>
+         <Feature Id='F.CFUnlocker'
+               Title='Coldfire Unlocker'
+               Description='Coldfire V2,3,4 JTAG Unlocker.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.CFUnlocker' />
+            <ComponentRef Id='C.CommonFiles' />
+            <ComponentGroupRef Id='Cg.DeviceDataInstall' />
+         </Feature>
+         <Feature Id='F.SetBoot'
+               Title='JB16 Setboot utility'
+               Description='Sets JB16 BDMs into ICP mode for upgrade by Freescale ICP tool.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef Id='C.SetBoot' />
+            <ComponentRef Id='C.CommonFiles' />
+         </Feature>
+         <Feature Id='F.Documentation'
+               Title='Documentation'
+               Description='USBDM Manuals.'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentGroupRef Id='Cg.Documentation' />
+         </Feature>
+         <Feature Id='F.Examples'
+               Title='Examples'
+               Description='USBDM Examples:&#10;- Codesourcery Projects&#10;- USBDM API Demonstration Project'
+               AllowAdvertise="no"
+               Level='1'>
+            <ComponentRef      Id='C.ExampleShortCut' />
+            <ComponentGroupRef Id='Cg.Examples' />
+         </Feature>
+      </Feature>
+
+      <!-- GUI Installer -->
+      <UIRef Id="MyFeatureTree" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <Icon Id="ChipIcon.ico" SourceFile="bin\Hardware-Chip.ico" />
+      <!--Icon Id="HelpIcon" SourceFile="hh.exe" /-->
+   </Product>
+</Wix>

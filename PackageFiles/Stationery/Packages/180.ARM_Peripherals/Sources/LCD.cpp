@@ -69,11 +69,11 @@
 #include <ctype.h>
 #include <stddef.h>
 #include "derivative.h"
-#include "delay.h"
+#include "Delay.h"
 #include "utilities.h"
 #include "LCD.h"
 #include "gpio.h"
-#include "fonts.h"
+#include "Fonts.h"
 
 #ifdef ELEC_FREAKS
 #define   PHILIPS
@@ -385,7 +385,7 @@ void LCD::setXY(int x, int y) {
  * @param  y     - column address (0 .. 131)
  * @param  color - 12-bit color value rrrrggggbbbb
  *
- * @note See lcd.h for some sample color settings
+ * @note See LCD.h for some sample color settings
  *
  * @author James P Lynch July 7, 2007
  */
@@ -417,12 +417,12 @@ void LCD::drawPixel(int x, int y, int color) {
  * @param  y1     - column address (0 .. 131)
  * @param  color  - 12-bit color value rrrrggggbbbb
  *
- * @note See lcd.h for some sample color settings
+ * @note See LCD.h for some sample color settings
  *
  * @author James P Lynch July 7, 2007
  *
  * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)
- * @note See lcd.h for some sample color settings
+ * @note See LCD.h for some sample color settings
  *
  * @author Authors: Dr. Leonard McMillan, Associate Professor UNC \n
  *                  Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
@@ -483,7 +483,7 @@ void LCD::drawLine(int x0, int y0, int x1, int y1, int color) {
  * param  y1     - column address (0 .. 131)
  * param  color  - 12-bit color value rrrrggggbbbb
  *
- * note See lcd.h for some sample color settings
+ * note See LCD.h for some sample color settings
  *
  * author James P Lynch July 7, 2007
  *

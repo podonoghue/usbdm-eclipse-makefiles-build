@@ -1,6 +1,5 @@
 /*!
- \page freedomSetup Setting Up the FRDM-KL25Z
- 
+ \page freedomSetup Setting Up the FRDM-XXXX
 Installing the USBDM firmware to the FRDM board allows the on-board target chip to be programmed using the USBDM tools.  This
 does not require any hardware modification of the board.  This is useful as an initial test of the USBDM system.\n
 
@@ -33,7 +32,7 @@ The above steps are described in the following:
       \image html BDMFlashImagesFolder.png</td>
    </tr>
 </table>
-	- There are six firmware images for the FRDM board. These are OpenSDA applications.  
+	- There are six firmware images for the FRDM boards. These are OpenSDA applications.  
 		- <b>USBDM_OpenSDAv1.sx</b> - OpenSDAv1 Image with a fixed USB ID (FRDM-K2L25 etc)
 		- <b>USBDM_OpenSDAv1_Unique_ID.sx</b> - OpenSDAv1 Image with a USB ID that is determined from the device unique ID.
 		- <b>USBDM_OpenSDAv2_0.bin</b> - OpenSDAv2.0 Image with a fixed USB ID (FRDM-K64)
@@ -41,12 +40,12 @@ The above steps are described in the following:
 		- <b>USBDM_OpenSDAv2_1.bin</b> - OpenSDAv2.1 Image with a fixed USB ID (FRDM-K22)
 		- <b>USBDM_OpenSDAv2_1_Unique_ID.bin</b> - OpenSDAv2.1 Image with a USB ID that is determined from the device unique ID.
 
-	Using the <b>'..._Unique_ID'</b> version of these images means that each BDM will be assigned a unique and consistent serial port number irrespective
-	of which USB port is used. 
-	This really only makes a difference if you have multiple BDMs and you don't want to play "find the com port number" when you plug the BDM
-	into a different USB port under windows.\n
-	In a laboratory environment it may be better to use the first image as otherwise a different serial port number will be assigned whenever
-	a different	BDM is plugged in.\n
+	Using the <b>'..._Unique_ID'</b> version of these images means that each BDM will be assigned a unique and consistent serial 
+	port number irrespective of which USB port is used. 
+	This really only makes a difference if you have multiple BDMs and you don't want to play "find the com port number" when you
+	plug the BDM into a different USB port under windows.\n
+	In a laboratory environment it may be better to use the first image as otherwise a different serial port number will be 
+	assigned whenever	a different	BDM is plugged in.\n
    These are OpenSDA applications and installation uses the usual OpenSDA bootloader process: \n
    - Unplug the Freedom board.
    - Whilst holding the reset switch depressed, plug in the Freedom board.  The green LED should start blinking at a rate of about 1Hz.  

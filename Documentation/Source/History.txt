@@ -2,6 +2,39 @@
 \page pageHistory History & Issues
 
 \section sectionHistory Revision History
+USBDM V4.12.1.10 (Aug 2015) 
+======================================================================================= 
+- Changes to USBDM new project wizard (new features)
+- Driver related changes
+- Drivers are now signed
+
+********************************************************************************
+********************************************************************************
+<b>REQUIREMENTS</b> 
+- BDM firmware <b>must</b> be updated
+- Current drivers <b>must</b> be used
+********************************************************************************
+********************************************************************************
+
+USBDM V4.11.1.80 (Not released) 
+======================================================================================= 
+- Changes to USBDM new project wizard (new features)
+
+USBDM V4.11.1.70#2 (Aug 2015) (previous upload was incomplete)
+======================================================================================= 
+- KDS Eclipse plugin installation no longer requires Java to to be installed
+- Installation no longer requires the previous version to be uninstalled
+- Eclipse GDB interface now tracks pre-set breakpoints correctly 
+- Fixed bug in eclipse peripheral view that prevented use with non-USBDM interfaces
+- Added wizard options to demonstrate CPP interfaces
+- Added Semi-hosting for ARM GDB (incomplete - output only)
+- Modified MKM programming to improve connection mass-erase reliability
+- Added hardware/software reset choice for kinetis
+
+V4.11.1.60 (Jun 2015) 
+======================================================================================= 
+- Fix for USB bug that prevented BDM use on many Linux machines
+- Minor device connection changes
 
 V4.11.1.50 (Jun 2015) 
 ======================================================================================= 

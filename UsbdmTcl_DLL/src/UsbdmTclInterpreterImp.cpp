@@ -1842,6 +1842,9 @@ static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       case ARM_CRegMDM_AP_Control:
          PRINT("reg=MDM-AP.Control(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APControlName(data), (int)data);
          break;
+      case ARM_CRegMDM_AP_Ident:
+         PRINT("reg=MDM-AP.IDR(0x%08X)->0x%08X\n", regNo, (int)data);
+         break;
       default:
          PRINT(":rCreg r=0x%08X(%s)->0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
          break;
@@ -2649,11 +2652,14 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 //         return TCL_ERROR;
 //      }
 //   }
-//   usb_data[2]=command;
-//   usb_data[3]=arg1;
-//   usb_data[4]=arg2;
+//   unsigned char usb_data[20] = {0};
+//   usb_data[0] = 0;
+//   usb_data[1] = CMD_USBDM_DEBUG;
+//   usb_data[2] = command;
+//   usb_data[3] = arg1;
+//   usb_data[4] = arg2;
 //
-//   if (checkUsbdmRC(interp,  USBDM_Debug(usb_data)) != 0) {
+//   if (checkUsbdmRC(interp,  bdmInterface->bdmCommand(3, sizeof(usb_data), usb_data)) != 0) {
 //      PRINT(":debug Failed\n");
 //      return TCL_ERROR;
 //   }
