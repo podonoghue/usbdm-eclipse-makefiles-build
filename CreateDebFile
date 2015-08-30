@@ -2,9 +2,9 @@
 
 # Version Information
 MAJOR=4
-MINOR=11
+MINOR=12
 MICRO=1
-NANO=70
+NANO=10
 DEBIAN_VERSION=1
 VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
@@ -35,6 +35,8 @@ makeDebFile() {
    # Where to find 64-bit libraries and binaries
    USBDM_SOURCE_LIBDIR64=${SOURCE_DIRECTORY}/PackageFiles/lib/x86_64-linux-gnu
    USBDM_SOURCE_BINDIR64=${SOURCE_DIRECTORY}/PackageFiles/bin/x86_64-linux-gnu
+
+   USBDM_UPDATE_SITE=${SOURCE_DIRECTORY}/../usbdm-eclipse-plugins/UpdateSite
 
    if [[ (${BITNESS} == "32") ]]; then
       # Where to construct the install tree
@@ -99,7 +101,7 @@ makeDebFile() {
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/copyright             ${USBDM_SHARED_DOC_DIR}
 
    ${MKDIR} ${USBDM_SHARED_DIR}
-   ${CP} -r "${SOURCE_DIRECTORY}/PackageFiles/UpdateSite"                      ${USBDM_SHARED_DIR}
+   ${CP} -r "${USBDM_UPDATE_SITE}"                                             ${USBDM_SHARED_DIR}
    ${CP} -r "${SOURCE_DIRECTORY}/PackageFiles/WizardPatches"                   ${USBDM_SHARED_DIR}
    ${CP} -r "${SOURCE_DIRECTORY}/PackageFiles/DeviceData"                      ${USBDM_SHARED_DIR}
    ${CP} -r "${SOURCE_DIRECTORY}/PackageFiles/Stationery"                      ${USBDM_SHARED_DIR}

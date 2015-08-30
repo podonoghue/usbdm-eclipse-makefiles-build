@@ -1,5 +1,5 @@
 /*
- * pit-MKL.c
+ * @file PIT.cpp (from PIT-MKL.cpp)
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue

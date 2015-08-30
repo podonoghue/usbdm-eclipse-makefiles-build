@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     spi.h (from spi-MKL.h)
+ * @file     SPI.h (from SPI-MKL.h)
  *
  * @brief    Abstracion layer for I2C interface
  *

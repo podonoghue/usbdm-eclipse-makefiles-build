@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     lcd.h
+ * @file     LCD.h
  *
  * @brief    Abstraction layer for I2C interface
  *
@@ -12,8 +12,8 @@
 #define LCD_H
 
 #include <stdint.h>
-#include "spi.h"
-#include "fonts.h"
+#include "SPI.h"
+#include "Fonts.h"
 
 #define ELEC_FREAKS
 /**
@@ -176,12 +176,12 @@ public:
     * @param  y1     column address (0 .. 131)
     * @param  color  12-bit color value rrrrggggbbbb
     *
-    * @note See lcd.h for some sample color settings
+    * @note See LCD.h for some sample color settings
     *
     * @author James P Lynch July 7, 2007
     *
     * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)
-    * @note See lcd.h for some sample color settings
+    * @note See LCD.h for some sample color settings
     *
     * @author Authors: Dr. Leonard McMillan, Associate Professor UNC \n
     *                  Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
@@ -199,7 +199,7 @@ public:
     * param  y1     column address (0 .. 131)
     * param  color  12-bit color value rrrrggggbbbb
     *
-    * note See lcd.h for some sample color settings
+    * note See LCD.h for some sample color settings
     *
     * author James P Lynch July 7, 2007
     *

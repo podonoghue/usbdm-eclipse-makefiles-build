@@ -32,7 +32,7 @@
                   <variableRef idRef="projectOptionValue.CPP-abstraction-I2C" />
                </applyWhen>
                <copy source="Project_Headers/I2C.h"        target="Project_Headers/I2C.h" />
-               <copy source="Sources/i2c.cpp"              target="Sources/i2c.cpp" />
+               <copy source="Sources/I2C.cpp"              target="Sources/I2C.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

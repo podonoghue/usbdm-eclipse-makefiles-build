@@ -45,6 +45,30 @@ Cortex-M0
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
+      <!-- No Start up files for devices with very limited RAM -->
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="linkerRamSize" condition="lessThanOrEqual" value="2048" />
+               <not>
+                  <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue" />
+               </not>
+            </and>
+         </applyWhen>
+         <projectOption id="gnu.c.link.option.nostart">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="gnu.cpp.link.option.nostart">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>__NO_STARTFILES__</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>__NO_STARTFILES__</value>
+         </projectOption>
+      </projectActionList>
+
       <!-- Base MKE files -->
       <projectActionList id="Kinetis-MKE-files" >
          <applyWhen>

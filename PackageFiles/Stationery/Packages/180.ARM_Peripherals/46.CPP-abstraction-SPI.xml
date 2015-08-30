@@ -37,8 +37,8 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-SPI" />
                   </and>
                </applyWhen>
-               <copy source="Project_Headers/spi-MK.h"        target="Project_Headers/SPI.h" />
-               <copy source="Sources/spi-MK.cpp"              target="Sources/spi.cpp" />
+               <copy source="Project_Headers/SPI-MK.h"        target="Project_Headers/SPI.h" />
+               <copy source="Sources/SPI-MK.cpp"              target="Sources/SPI.cpp" />
             </projectActionList>
          </projectActionList>
          
@@ -54,10 +54,10 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-SPI" />
                   </and>
                </applyWhen>
-               <copy source="Project_Headers/spi-MKL.h"        target="Project_Headers/SPI.h" />
-               <copy source="Project_Headers/dma-MKL.h"        target="Project_Headers/dma.h" />
-               <copy source="Sources/spi-MKL.cpp"              target="Sources/spi.cpp" />
-               <copy source="Sources/dma-MKL.cpp"              target="Sources/dma.cpp" />
+               <copy source="Project_Headers/SPI-MKL.h"        target="Project_Headers/SPI.h" />
+               <copy source="Project_Headers/DMA-MKL.h"        target="Project_Headers/DMA.h" />
+               <copy source="Sources/SPI-MKL.cpp"              target="Sources/SPI.cpp" />
+               <copy source="Sources/DMA-MKL.cpp"              target="Sources/DMA.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

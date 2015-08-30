@@ -1,5 +1,5 @@
 /*!
- *  @file
+ *  @file LCD.cpp
  *    
  *  @brief  Driver for Nokia 6610 LCD Display (PCF8833 Controller)
  *    

@@ -1,5 +1,5 @@
 /**
- * @file      lptmr.h
+ * @file      LPTMR.h
  * @version   1.0.0
  * @brief     Low Power Timer
  */

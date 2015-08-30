@@ -4,7 +4,7 @@
 
   \verbatim
 
-  ePaper.cpp
+  EPaper.cpp
   2013 Copyright (c) Seeed Technology Inc.  All right reserved.
 
   Modified by Loovee
@@ -37,7 +37,6 @@
 #include <stdlib.h>
 #include "SPI.h"
 #include "EPaper.h"
-
 /*!
  * Constructor - Create ePaper interface
  *

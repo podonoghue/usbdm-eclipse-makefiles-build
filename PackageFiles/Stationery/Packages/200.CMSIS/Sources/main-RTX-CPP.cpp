@@ -4,7 +4,7 @@
  */
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
-#include "GPIO.h"
+#include "gpio.h"
 
 osThreadId tid_redThread;               // Thread id of redThread
 osThreadId tid_blueThread;              // Thread id of blueThread
@@ -91,8 +91,8 @@ void blueThread (void const *argument __attribute__((unused))) {
  *    LCD thread
  *---------------------------------------------------------------------------*/
 #ifdef LCD_AVAILABLE
-#include "lcd.h"
-#include "spi.h"
+#include "LCD.h"
+#include "SPI.h"
 
 void lcdThread (void const *argument __attribute__((unused))) {
    // Instantiate interface

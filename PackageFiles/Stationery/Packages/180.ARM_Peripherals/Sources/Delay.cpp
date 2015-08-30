@@ -1,5 +1,5 @@
 /*
- * @file delay.cpp
+ * @file Delay.cpp
  * @brief Very simple delay routine using SysTick timer
  *
  *  Created on: 5 Jul 2015

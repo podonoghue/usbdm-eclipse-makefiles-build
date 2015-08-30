@@ -12,7 +12,7 @@
 
       <!-- C Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile">
-         <value>&quot;Linker-rom.ld&quot;</value>
+         <value>Linker-rom.ld</value>
       </projectOption>
       <projectOption id="gnu.c.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
@@ -20,10 +20,20 @@
 
       <!-- C++ Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile">
-         <value>&quot;Linker-rom.ld&quot;</value>
+         <value>Linker-rom.ld</value>
       </projectOption>
       <projectOption id="gnu.cpp.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
       </projectOption>
+      
+      <!-- Semi-hosting library option-->
+      <projectActionList id="Semi-hosting-actions" >
+         <applyWhen>
+            <variableRef idRef="semiHosting" condition="isTrue" />
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.debug.rdimon" config="debug">
+            <value>true</value>
+         </projectOption>
+      </projectActionList>
    </projectActionList>
 </root>

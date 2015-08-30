@@ -13,11 +13,12 @@
 *.a
 *.lib
 *.obj
-*.i386/
 
 # Everything in build dirs
 Debug/
 Release/
+*.i386/
+*.x86_64/
 
 # Packages #
 ############
@@ -48,3 +49,4 @@ Release/
 ehthumbs.db
 Thumbs.db 
 .metadata
+/RemoteSystemsTempFiles/

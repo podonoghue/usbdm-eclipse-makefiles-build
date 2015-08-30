@@ -32,7 +32,7 @@ removeEclipsePlugins() {
    local FEATURE_GROUP="$2"
 
    echo 
-   echo "Removing Eclipse CDT plugins from ${ECLIPSE_DIR}"
+   echo "Removing USBDM Eclipse CDT plugins from ${ECLIPSE_DIR}"
    echo "=================================================================="
    for FILENAME in kinetis-design-studio cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then

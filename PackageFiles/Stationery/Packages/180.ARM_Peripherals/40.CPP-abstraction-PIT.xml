@@ -40,8 +40,8 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
                   </and>
                </applyWhen>
-               <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/pit-MK.cpp"              target="Sources/pit.cpp" />
+               <copy source="Project_Headers/PIT-MK.h"        target="Project_Headers/PIT.h" />
+               <copy source="Sources/PIT-MK.cpp"              target="Sources/PIT.cpp" />
             </projectActionList>
          </projectActionList>
          
@@ -61,8 +61,8 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
                   </and>
                </applyWhen>
-               <copy source="Project_Headers/pit-MKL.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/pit-MKL.cpp"              target="Sources/pit.cpp" />
+               <copy source="Project_Headers/PIT-MKL.h"        target="Project_Headers/PIT.h" />
+               <copy source="Sources/PIT-MKL.cpp"              target="Sources/PIT.cpp" />
             </projectActionList>
          </projectActionList>
          
@@ -81,8 +81,8 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-PIT" />
                   </and>
                </applyWhen>
-               <copy source="Project_Headers/pit-MKM.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/pit-MKM.cpp"              target="Sources/pit.cpp" />
+               <copy source="Project_Headers/PIT-MKM.h"        target="Project_Headers/PIT.h" />
+               <copy source="Sources/PIT-MKM.cpp"              target="Sources/PIT.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

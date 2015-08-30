@@ -1,5 +1,5 @@
 /*
- * dma.cpp
+ * @file DMA.cpp
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue

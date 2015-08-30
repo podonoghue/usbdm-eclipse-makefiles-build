@@ -1,5 +1,5 @@
 /*
- * lptrm.c
+ * LPTMR.cpp
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
