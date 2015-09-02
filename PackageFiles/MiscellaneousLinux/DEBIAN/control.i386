@@ -1,5 +1,5 @@
 Package: usbdm
-Version: 4.11-1
+Version: 4.12-1
 Section: embedded
 Priority: optional
 Architecture: i386
