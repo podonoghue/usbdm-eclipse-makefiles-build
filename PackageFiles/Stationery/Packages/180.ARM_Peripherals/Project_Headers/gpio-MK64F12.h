@@ -395,10 +395,10 @@ extern const PwmIO  pwmIO_PTE12;             //!< PwmIO on PTE12
 #define digitalIO_D13             digitalIO_PTD1       //!< alias D13=>PTD1
 #define digitalIO_D14             digitalIO_PTE25      //!< alias D14=>PTE25
 #define digitalIO_D15             digitalIO_PTE24      //!< alias D15=>PTE24
-#define digitalIO_nRF24L01_miso   digitalIO_PTD7       //!< alias nRF24L01_miso=>PTD7
-#define digitalIO_nRF24L01_mosi   digitalIO_PTD6       //!< alias nRF24L01_mosi=>PTD6
 #define digitalIO_nRF24L01_sck    digitalIO_PTD5       //!< alias nRF24L01_sck=>PTD5
 #define digitalIO_nRF24L01_cs     digitalIO_PTD4       //!< alias nRF24L01_cs=>PTD4
+#define digitalIO_nRF24L01_miso   digitalIO_PTD7       //!< alias nRF24L01_miso=>PTD7
+#define digitalIO_nRF24L01_mosi   digitalIO_PTD6       //!< alias nRF24L01_mosi=>PTD6
 #define analogueIO_A0             analogueIO_PTB2      //!< alias A0=>PTB2
 #define analogueIO_A1             analogueIO_PTB3      //!< alias A1=>PTB3
 #define analogueIO_A2             analogueIO_PTB10     //!< alias A2=>PTB10
@@ -409,8 +409,8 @@ extern const PwmIO  pwmIO_PTE12;             //!< PwmIO on PTE12
 #define analogueIO_D13            analogueIO_PTD1      //!< alias D13=>PTD1
 #define analogueIO_D14            analogueIO_PTE25     //!< alias D14=>PTE25
 #define analogueIO_D15            analogueIO_PTE24     //!< alias D15=>PTE24
-#define analogueIO_nRF24L01_mosi  analogueIO_PTD6      //!< alias nRF24L01_mosi=>PTD6
 #define analogueIO_nRF24L01_sck   analogueIO_PTD5      //!< alias nRF24L01_sck=>PTD5
+#define analogueIO_nRF24L01_mosi  analogueIO_PTD6      //!< alias nRF24L01_mosi=>PTD6
 #define pwmIO_A4                  pwmIO_PTC11          //!< alias A4=>PTC11
 #define pwmIO_A5                  pwmIO_PTC10          //!< alias A5=>PTC10
 #define pwmIO_D3                  pwmIO_PTA1           //!< alias D3=>PTA1
@@ -423,10 +423,10 @@ extern const PwmIO  pwmIO_PTE12;             //!< PwmIO on PTE12
 #define pwmIO_D11                 pwmIO_PTD2           //!< alias D11=>PTD2
 #define pwmIO_D12                 pwmIO_PTD3           //!< alias D12=>PTD3
 #define pwmIO_D13                 pwmIO_PTD1           //!< alias D13=>PTD1
-#define pwmIO_nRF24L01_miso       pwmIO_PTD7           //!< alias nRF24L01_miso=>PTD7
-#define pwmIO_nRF24L01_mosi       pwmIO_PTD6           //!< alias nRF24L01_mosi=>PTD6
 #define pwmIO_nRF24L01_sck        pwmIO_PTD5           //!< alias nRF24L01_sck=>PTD5
 #define pwmIO_nRF24L01_cs         pwmIO_PTD4           //!< alias nRF24L01_cs=>PTD4
+#define pwmIO_nRF24L01_miso       pwmIO_PTD7           //!< alias nRF24L01_miso=>PTD7
+#define pwmIO_nRF24L01_mosi       pwmIO_PTD6           //!< alias nRF24L01_mosi=>PTD6
 /**
  * @}
  */
@@ -485,8 +485,8 @@ I2C0_SCL=PTE24=[Disabled, PTB0, PTB2, PTD2, PTD8, PTE24]
 I2C0_SDA=PTE25=[Disabled, PTB1, PTB3, PTD3, PTD9, PTE25]
 I2C1_SDA=PTC11=[Disabled, PTC11, PTE0]
 I2C1_SCL=PTC10=[Disabled, PTC10, PTE1]
-I2C2_SDA=PTA11=[Disabled, PTA11, PTA13]
 I2C2_SCL=PTA12=[Disabled, PTA12, PTA14]
+I2C2_SDA=PTA11=[Disabled, PTA11, PTA13]
 LPTMR0_1=Disabled=[Disabled, PTA19]
 LPTMR0_2=Disabled=[Disabled, PTC5]
 SPI0_PCS0=Disabled=[Disabled, PTA14, PTC4, PTD0]
@@ -511,20 +511,20 @@ SPI2_SCK=PTB21=[Disabled, PTB21, PTD12]
 SPI2_SIN=PTB23=[Disabled, PTB23, PTD14]
 SPI2_SOUT=PTB22=[Disabled, PTB22, PTD13]
 
-ADC0=SIM->SCGC6=SIM_SCGC6_ADC0_MASK
-ADC1=SIM->SCGC3=SIM_SCGC3_ADC1_MASK
+SPI2=SIM->SCGC3=SIM_SCGC3_SPI2_MASK
+SPI1=SIM->SCGC6=SIM_SCGC6_SPI1_MASK
+SPI0=SIM->SCGC6=SIM_SCGC6_SPI0_MASK
 LPTMR0=SIM->SCGC5=SIM_SCGC5_LPTMR_MASK
 SDHC0=SIM->SCGC3=SIM_SCGC3_SDHC0_MASK
-I2C0=SIM->SCGC4=SIM_SCGC4_I2C0_MASK
-I2C1=SIM->SCGC4=SIM_SCGC4_I2C1_MASK
-I2C2=SIM->SCGC1=SIM_SCGC1_I2C2_MASK
-SPI0=SIM->SCGC6=SIM_SCGC6_SPI0_MASK
-SPI1=SIM->SCGC6=SIM_SCGC6_SPI1_MASK
-SPI2=SIM->SCGC3=SIM_SCGC3_SPI2_MASK
-FTM0=SIM->SCGC6=SIM_SCGC6_FTM0_MASK
-FTM1=SIM->SCGC6=SIM_SCGC6_FTM1_MASK
-FTM2=SIM->SCGC6=SIM_SCGC6_FTM2_MASK
 FTM3=SIM->SCGC3=SIM_SCGC3_FTM3_MASK
+FTM2=SIM->SCGC6=SIM_SCGC6_FTM2_MASK
+FTM1=SIM->SCGC6=SIM_SCGC6_FTM1_MASK
+FTM0=SIM->SCGC6=SIM_SCGC6_FTM0_MASK
+ADC1=SIM->SCGC3=SIM_SCGC3_ADC1_MASK
+ADC0=SIM->SCGC6=SIM_SCGC6_ADC0_MASK
+I2C2=SIM->SCGC1=SIM_SCGC1_I2C2_MASK
+I2C1=SIM->SCGC4=SIM_SCGC4_I2C1_MASK
+I2C0=SIM->SCGC4=SIM_SCGC4_I2C0_MASK
 */
 
 #endif /* GPIO_H_ */

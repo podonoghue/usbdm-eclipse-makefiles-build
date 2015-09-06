@@ -298,8 +298,8 @@ WIN_XML_INSTALLER_LIBS    := -lMsi
 PROGRAM_DIR_JAVA = C:/'Program Files'
 #PROGRAM_DIR_JAVA = C:/'Program Files (x86)'
 ifeq ($(UNAME_S),Windows)
-   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_40/include
-   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_40/include/win32
+   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
+   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
 else
    JAVA_INC := -I/usr/lib/jvm/default-java/include
 endif

@@ -600,15 +600,6 @@
 //     <1=> Default
 #define I2C1_SCL_SEL         1                   
 
-// I2C2_SDA maps to [Disabled, PTA11, PTA13]
-//   <o> I2C2_SDA Pin Selection [PTA11, PTA13] 
-//   <i> Selects which pin is used for I2C2_SDA
-//     <0=> Disabled
-//     <1=> PTA11
-//     <2=> PTA13
-//     <1=> Default
-#define I2C2_SDA_SEL         1                   
-
 // I2C2_SCL maps to [Disabled, PTA12, PTA14]
 //   <o> I2C2_SCL Pin Selection [PTA12, PTA14] 
 //   <i> Selects which pin is used for I2C2_SCL
@@ -617,6 +608,15 @@
 //     <2=> PTA14
 //     <1=> Default
 #define I2C2_SCL_SEL         1                   
+
+// I2C2_SDA maps to [Disabled, PTA11, PTA13]
+//   <o> I2C2_SDA Pin Selection [PTA11, PTA13] 
+//   <i> Selects which pin is used for I2C2_SDA
+//     <0=> Disabled
+//     <1=> PTA11
+//     <2=> PTA13
+//     <1=> Default
+#define I2C2_SDA_SEL         1                   
 
 // LPTMR0_1 maps to [Disabled, PTA19]
 //   <o> LPTMR0_1 Pin Selection [PTA19] 
