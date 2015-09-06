@@ -315,22 +315,22 @@ ifeq ($(UNAME_S),Windows)
    LIB_USB = -l$(_LIB_USB_STATIC)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug$(VSUFFIX) 
-      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc-debug$(VSUFFIX) 
    else
       USBDM_LIBS     := -lusbdm$(VSUFFIX) 
-      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
    LIB_USB = -l$(_LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
-      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
    else
       USBDM_LIBS     := -lusbdm
-      USBDM_TCL_LIBS := -ldeleteMe
+      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc 
    endif
 endif
