@@ -460,9 +460,8 @@
             <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
          </Feature>
          <FeatureRef Id='F.KINETIS_DESIGN_STUDIO' />
-         <FeatureRef Id='F.ECLIPSE_JUNO_CDT' />
-         <FeatureRef Id='F.ECLIPSE_KEPLER_CDT' />
-         <FeatureRef Id='F.ECLIPSE_LUNA_CDT' />
+         <FeatureRef Id='F.ECLIPSE_INSTALL1_CDT' />
+         <FeatureRef Id='F.ECLIPSE_INSTALL2_CDT' />
          <Feature Id='F.UsbdmProgrammers'
             Title='Programmers'
             Description='Stand-alone flash programmers.'

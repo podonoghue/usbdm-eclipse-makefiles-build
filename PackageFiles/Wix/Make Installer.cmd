@@ -40,6 +40,7 @@ rem del %MSI_FILE%.msi
 
 if "%1"=="clean" goto finish
 
+echo Cleaning build directory
 if exist %WIX_BUILD_DIR% rmdir /S /Q %WIX_BUILD_DIR%
 mkdir %WIX_BUILD_DIR%
 
@@ -52,13 +53,6 @@ mkdir %WIX_BUILD_DIR%
 
 %CANDLE% %CANDLE_OPTIONS% -dProductVersion=%VERSIONn% -dWxWidgetsVer=%WXWIDGETS_VERSION% -dSrcDir="%SRC_DIR%" -o %WIX_BUILD_DIR%\ *.wxs %WIX_BUILD_DIR%\*.wxs
 %LIGHT% %LIGHT_OPTIONS% %LIGHT_DIRS% -out %MSI_FILE% %WIX_BUILD_DIR%\*.wixobj
-
-set STORE=PrivateCertStore
-set SIGNTOOL=C:\Apps\WinDDK\7600.16385.1\bin\amd64\SignTool.exe
-set TIMESTAMP_URL=http://timestamp.verisign.com/scripts/timstamp.dll
-
-echo Signing files
-for %%f in (*.msi) do %SIGNTOOL% sign /s %STORE% /t %TIMESTAMP_URL% %%f
 
 goto finish
 :doPatch
