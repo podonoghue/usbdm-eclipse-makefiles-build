@@ -9,6 +9,7 @@ USBDM V4.12.1.20 (Sep 2015)
 	- Threading improved (UI blocking prevented)
 	- Improved project renaming support
 	- Peripheral view info-panel now correctly updates information in all cases
+	- Minor fix to header files to prevent documentation warning
 - GDB Server now retries correctly on initial connection failure
 
 USBDM V4.12.1.10 (Aug 2015) 
