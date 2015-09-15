@@ -25,12 +25,12 @@
  * Set bit-1 of location 0x20000000
  * ~~~~~~~~~~~~~~~{.c}
  * BIT_BAND_SET(0x20000000, 1); // Set bit 1 of fixed location
- *~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~
  *
  * Assuming a local variable 'local'
  * ~~~~~~~~~~~~~~~{.c}
  * BIT_BAND_CLEAR(&local, 3); // Clear bit 3 of local
- *~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~
  *
  * Note: The efficiency of this operation depends greatly on whether the address is a constant or can be pre-calculated.
  *       The code will usually be quite inefficient for local variables as the required address will be
