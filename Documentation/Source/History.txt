@@ -2,6 +2,15 @@
 \page pageHistory History & Issues
 
 \section sectionHistory Revision History
+USBDM V4.12.1.20 (Sep 2015) 
+======================================================================================= 
+- Fixes for USBDM Eclipse plugin
+	- JARs are now signed
+	- Threading improved (UI blocking prevented)
+	- Improved project renaming support
+	- Peripheral view info-panel now correctly updates information in all cases
+- GDB Server now retries correctly on initial connection failure
+
 USBDM V4.12.1.10 (Aug 2015) 
 ======================================================================================= 
 - Changes to USBDM new project wizard (new features)
