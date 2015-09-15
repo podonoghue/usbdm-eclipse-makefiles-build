@@ -1,15 +1,33 @@
-/*
- * BdmInterfaceCommon.cpp
- *
- *  Created on: 12 Apr 2015
- *      Author: podonoghue
- */
-/*
- * Shared.cpp
- *
- *  Created on: 05/07/2013
- *      Author: Peter
- */
+/*! \file
+   \brief Common BDM Interface Code
+
+   BdmInterfaceCommon.cpp
+
+   \verbatim
+   USBDM GDI interface DLL
+   Copyright (C) 2008  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+\endverbatim
+\verbatim
+Change History
+-==================================================================================================
+|  Dec 21 2012 | Fixed Retry in initBdm()                                          - pgo V4.12.1.20
++==================================================================================================
+\endverbatim
+*/
 
 //#include "wxPlugin.h"
 #include "BdmInformation.h"
@@ -208,8 +226,8 @@ USBDM_ErrorCode BdmInterfaceCommon::initBdm(void) {
          continue;
       }
       rc = setTargetTypeWithRetry();
-      if (rc != BDM_RC_OK) {
-         continue;
+      if (rc == BDM_RC_OK) {
+         break;
       }
    } while (getYesNo == YES);
    if (rc != BDM_RC_OK) {
@@ -761,7 +779,7 @@ int BdmInterfaceCommon::handleError(USBDM_ErrorCode rc) {
       break;
       }
    }
-   log.print("(%d (%s)) => %s\n", rc, USBDM_GetErrorString(rc), (getYesNo==YES)?"Yes":"No");
+   log.print("(%d (%s)) => Retry = %s\n", rc, USBDM_GetErrorString(rc), (getYesNo==YES)?"Yes":"No");
    return getYesNo;
 }
 
