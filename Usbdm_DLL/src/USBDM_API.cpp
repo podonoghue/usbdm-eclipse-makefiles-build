@@ -839,7 +839,7 @@ USBDM_ErrorCode USBDM_SetOptions(BDM_Options_t *newBdmOptions) {
    adaptRequiredBdmOptions(&bdmOptions);
 
    log.print("=>\n");
-   log.printq(printBdmOptions(&bdmOptions));
+   log.printq("%s", printBdmOptions(&bdmOptions));
 
    return sendBdmOptions();
 }
@@ -914,7 +914,7 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
 //   log.print("=> offset (autoReconnect)= %d\n",       ((int)&newBdmOptions->autoReconnect)-((int)newBdmOptions));
 
    log.print("proposed => \n");
-   log.printq(printBdmOptions(newBdmOptions));
+   log.printq("%s", printBdmOptions(newBdmOptions));
 #endif
    // Validate some options
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -967,7 +967,7 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
    bdmOptions.targetType = currentTargetType;
 
    log.print("accepted => \n");
-   log.printq(printBdmOptions(&bdmOptions));
+   log.printq("%s", printBdmOptions(&bdmOptions));
 
    return sendBdmOptions();
 }
@@ -997,7 +997,7 @@ USBDM_ErrorCode USBDM_GetExtendedOptions(USBDM_ExtendedOptions_t *currentBdmOpti
    currentBdmOptions->size = size;
 
    log.print("=>\n");
-   printBdmOptions(&bdmOptions);
+   log.printq("%s", printBdmOptions(&bdmOptions));
 
    return BDM_RC_OK;
 }
