@@ -1,0 +1,11 @@
+To Build under Linux
+
+Run LinuxPackages to install the developer version of several packages
+Run MakeAll to build the binaries
+Run CreateDebFile to Create the Deb file
+Run Update to install the Deb file
+
+
+=== OR ===
+
+Run doit to do the last three steps
