@@ -192,6 +192,13 @@ SECTIONS
   PROVIDE(__cs3_stack = __StackTop);
   
   /*
+   * These are very 'weak' to ensure semi-hosting version 
+   * will be used for rdimon.specs option
+   */
+  PROVIDE(_write = _usbdm_write);
+  PROVIDE(_read  = _usbdm_read);
+
+  /*
    RAM Memory map                                            Example
   +----------------------+ __data_start__                    0x1FFFFF00
   | DATA                 |
