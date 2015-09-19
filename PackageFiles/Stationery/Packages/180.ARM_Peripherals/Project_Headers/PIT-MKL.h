@@ -9,7 +9,7 @@
 
 #include "derivative.h"
 #include "system.h"
-#include "pin_mapping.h"
+#include "gpio.h"
 
 /**
  * @addtogroup PIT_Group Programmable Interrupt Timer

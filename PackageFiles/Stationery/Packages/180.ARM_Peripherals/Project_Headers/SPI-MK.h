@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "pin_mapping.h"
+#include "gpio.h"
 
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface

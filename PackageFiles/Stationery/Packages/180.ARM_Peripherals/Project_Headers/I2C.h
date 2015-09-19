@@ -14,7 +14,6 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "gpio.h"
-#include "pin_mapping.h"
 
 /**
  * @addtogroup I2C_Group Inter IC
