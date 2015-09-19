@@ -31,7 +31,6 @@ void SysTick_Handler(void) {
 
 int main(void) {
 
-   __attribute__((unused))
    volatile int count = 0;
 
    SysTick_Config(1000);
@@ -40,6 +39,7 @@ int main(void) {
 
    // Real programs never die!
    for(;;) {
+      count++;
 //      printf("Count = %d\n", count++);
       delay();
    }
