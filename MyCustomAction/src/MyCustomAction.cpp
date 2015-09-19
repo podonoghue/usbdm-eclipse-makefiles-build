@@ -71,13 +71,10 @@ extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
    DWORD filePathLength;
    DirectoryQuad pathsToCheck[] = {
          // directory                         feature                            subdir               description
-         {"D.CW_FOR_MCU_V10_7",              "F.CW_FOR_MCU_V10_7",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.7"},
-         {"D.CW_FOR_MCU_V10_6",              "F.CW_FOR_MCU_V10_6",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.6"},
-         {"D.CW_FOR_MCU_V10_5",              "F.CW_FOR_MCU_V10_5",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.5"},
-         {"D.CW_FOR_MCU_V10_4",              "F.CW_FOR_MCU_V10_4",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.4"},
-         {"D.CW_FOR_MCU_V10_3",              "F.CW_FOR_MCU_V10_3",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.3"},
-         {"D.CW_FOR_MCU_V10_2",              "F.CW_FOR_MCU_V10_2",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.2"},
-         {"D.CW_FOR_MCU_V10_1",              "F.CW_FOR_MCU_V10_1",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.1"},
+         {"D.CW_FOR_MCU_V10.7",              "F.CW_FOR_MCU_V10_7",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.7"},
+         {"D.CW_FOR_MCU_V10.6.4",            "F.CW_FOR_MCU_V10.6.4",            "MCU",               "Codewarrior Interfaces\n     - MCU V10.6"},
+         {"D.CW_FOR_MCU_V10.6",              "F.CW_FOR_MCU_V10.6",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.6"},
+         {"D.CW_FOR_MCU_V10.5",              "F.CW_FOR_MCU_V10.5",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.5"},
          {"D.CODEWARRIOR_COLDFIRE_V7_2",     "F.CODEWARRIOR_COLDFIRE_V7_2",     "bin",               "Codewarrior Interfaces\n     - Coldfire V7.2"},
          {"D.CODEWARRIOR_COLDFIRE_V7_1",     "F.CODEWARRIOR_COLDFIRE_V7_1",     "bin",               "Codewarrior Interfaces\n     - Coldfire V7.1"},
          {"D.CODEWARRIOR_COLDFIRE_V7",       "F.CODEWARRIOR_COLDFIRE_V7",       "bin",               "Codewarrior Interfaces\n     - Coldfire V7.x"},
@@ -88,13 +85,8 @@ extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
          {"D.CWS12_X_V5_1",                  "F.CWS12_X_V5_1",                  "bin",               "Codewarrior Interfaces\n     - S12(X) V5.1"},
          {"D.FREEMASTER_V1_3",               "F.FREEMASTER_V1_3",               "plugins",           "FreeMASTER V1.3"},
          {"D.CFFLASHER_V3_1",                "F.CFFLASHER_V3_1",                "BDM Protocol",      "CF Flasher V3.1"},
-         {"D.CODESOURCERY_CF",               "F.CODESOURCERY_CF",               "bin",               "Sourcery Interfaces\n        - Codebench Lite for Coldfire ELF"},
-         {"D.CODESOURCERY_KINETIS",          "F.CODESOURCERY_KINETIS",          "bin",               "Sourcery Interfaces\n        - Codebench Lite for Kinetis EABI"},
-         {"D.CODESOURCERY_ARM",              "F.CODESOURCERY_ARM",              "bin",               "Sourcery Interfaces\n        - Codebench Lite for ARM EABI"},
-         {"D.ECLIPSE_CDT",                   "F.ECLIPSE_CDT",                   "dropins",           "Eclipse CDT Interfaces\n     - Eclipse Plugin"},
-         {"D.ECLIPSE_JUNO_CDT",              "F.ECLIPSE_JUNO_CDT",              "dropins",           "Eclipse JUNO Interfaces\n    - Eclipse Plugin"},
-         {"D.ECLIPSE_KEPLER_CDT",            "F.ECLIPSE_KEPLER_CDT",            "dropins",           "Eclipse KEPLER Interfaces\n  - Eclipse Plugin"},
-         {"D.ECLIPSE_LUNA_CDT",              "F.ECLIPSE_LUNA_CDT",              "dropins",           "Eclipse LUNA Interfaces\n    - Eclipse Plugin"},
+         {"D.ECLIPSE_INSTALL2_CDT",          "F.ECLIPSE_INSTALL2_CDT",          "dropins",           "Eclipse Install 2\n          - Eclipse Plugin"},
+         {"D.ECLIPSE_INSTALL1_CDT",          "F.ECLIPSE_INSTALL1_CDT",          "dropins",           "Eclipse Install 1\n          - Eclipse Plugin"},
          {"D.KINETIS_DESIGN_STUDIO",         "F.KINETIS_DESIGN_STUDIO",         "eclipse/dropins",   "Freescale Design Studio"},
          {NULL,                              NULL,                              NULL,                NULL}
    };

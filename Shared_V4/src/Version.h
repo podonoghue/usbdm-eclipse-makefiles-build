@@ -6,12 +6,12 @@
 #define USBDM_VERSION_MAJOR  4       //!< DLL Major version #
 #define USBDM_VERSION_MINOR  12      //!< DLL Minor version #
 #define USBDM_VERSION_MICRO  1       //!< DLL Micro version #
-#define USBDM_VERSION_NANO   20      //!< DLL Nano version #
+#define USBDM_VERSION_NANO   30      //!< DLL Nano version #
 
 #ifdef LOG
-#define USBDM_VERSION_STRING "4.12.1.20-Debug" //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.30-Debug" //!< Version as string
 #else
-#define USBDM_VERSION_STRING "4.12.1.20"       //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.30"       //!< Version as string
 #endif
 
 // The version of the GDI standard implemented
@@ -23,19 +23,21 @@
 //----------------------------------------------------------------------------
 // Revision History
 //-----------+----------------------------------------------------------------
-//   Aug  20 | 4.12.1.20 Build                                           - pgo
+//    Oct 15 | 4.12.1.30 Build                                           - pgo
 //-----------+----------------------------------------------------------------
-//   Aug  20 | 4.12.1.10 Build - broke interface                         - pgo
+// 19 Sep 15 | 4.12.1.20 Build                                           - pgo
 //-----------+----------------------------------------------------------------
-//   July 28 | 4.11.1.70 Build                                           - pgo
+// 20 Aug 15 | 4.12.1.10 Build - broke interface                         - pgo
 //-----------+----------------------------------------------------------------
-//   June  8 | 4.11.1.60 Build                                           - pgo
+// 28 Jul 15 | 4.11.1.70 Build                                           - pgo
 //-----------+----------------------------------------------------------------
-//   June  6 | 4.11.1.50 Build                                           - pgo
+//  8 Jun 15 | 4.11.1.60 Build                                           - pgo
 //-----------+----------------------------------------------------------------
-//    May 26 | 4.11.1.40 Build                                           - pgo
+//  6 Jun 15 | 4.11.1.50 Build                                           - pgo
 //-----------+----------------------------------------------------------------
-//    May 21 | 4.11.1.30 Build                                           - pgo
+// 26 May 15 | 4.11.1.40 Build                                           - pgo
+//-----------+----------------------------------------------------------------
+// 21 May 15 | 4.11.1.30 Build                                           - pgo
 //-----------+----------------------------------------------------------------
 //    May 15 | 4.11.1.20 Build                                           - pgo
 //-----------+----------------------------------------------------------------
