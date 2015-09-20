@@ -8,6 +8,7 @@
 <!ENTITY HCS12-MMCV4-FTS-flash-program    SYSTEM "HCS12/HCS12-MMCV4-FTS-flash-program.s19">
 <!ENTITY HCS12-MMCV4-FTS_2-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_2-flash-program.s19">
 <!ENTITY HCS12-MMCV4-FTS_3-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_3-flash-program.s19">
+<!ENTITY HCS12-MMCV4-FTS_T-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_T-flash-program.s19">
 <!ENTITY HCS12-PMMC-FTMRCK-flash-program  SYSTEM "HCS12/HCS12-PMMC-FTMRCK-flash-program.s19">
 <!ENTITY HCS12-GMMC-FTMRG-flash-program   SYSTEM "HCS12/HCS12-GMMC-FTMRG-flash-program.s19">
 <!ENTITY HCS12-XMMC-XFTMRK-flash-program  SYSTEM "HCS12/HCS12-XMMC-XFTMRK-flash-program.s19">
@@ -16,7 +17,7 @@
 <!ENTITY Custom-Devices                   SYSTEM "Custom/custom-hcs12.xml">
 ]>
 <!-- 
-      V4.11.2.70  - Modified MC9S12T64 - untested
+      V4.12.1.30  - Fixed MC9S12T64
       V4.10.6.230 - Added MC9S12XF512 - untested
       V4.10.6.210 - Added MC9S12Gxxx - untested
       V4.10.5     - Added MC9S12HZ256 - untested
@@ -45,6 +46,9 @@
       </flashProgram>
       <flashProgram id="HCS12-MMCV4-FTS_3-flash-program">
          &HCS12-MMCV4-FTS_3-flash-program;
+      </flashProgram>
+      <flashProgram id="HCS12-MMCV4-FTS_T-flash-program">
+         &HCS12-MMCV4-FTS_T-flash-program;
       </flashProgram>
       <flashProgram id="HCS12-PMMC-FTMRCK-flash-program">
          &HCS12-PMMC-FTMRCK-flash-program;
@@ -1548,7 +1552,7 @@
          </memory>
          <sdidMask value="0xFFF0" />
          <sdid value="0x4220" />
-         <flashProgramRef ref="HCS12-MMCV4-FTS_3-flash-program" />
+         <flashProgramRef ref="HCS12-MMCV4-FTS_T-flash-program" />
       </device>
 <!-- 
 ===================================================================================
