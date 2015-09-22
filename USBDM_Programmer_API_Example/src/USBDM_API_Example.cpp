@@ -4,9 +4,10 @@
  *  Created on: 21/10/2011
  *      Author: podonoghue
  *
- *  Simple program demonstrating use of USBDM API
+ *  Simple program demonstrating use of USBDM Higher-level API
  *
- *  This program dumps the contents of a chip to stdout in S19 format.
+ *  The program programs a file to the target device
+ *
  */
 #include <stdint.h>
 #include <stdio.h>
