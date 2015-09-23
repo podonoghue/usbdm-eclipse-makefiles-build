@@ -2918,6 +2918,10 @@ void UsbdmDialogue::OnResetRecoveryIntervalText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().resetRecoveryInterval = resetRecoveryIntervalTextControl->GetDecimalValue();
 }
 
+//void UsbdmDialogue::OnOkClick( wxCommandEvent& event ) {
+//   LOGGING;
+//}
+
 //void UsbdmDialogue::OnCloseHandler( wxCloseEvent& event ) {
 //   event.Skip();
 //}

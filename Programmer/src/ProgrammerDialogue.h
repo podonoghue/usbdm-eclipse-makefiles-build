@@ -14,8 +14,8 @@ class ProgrammerDialogue : public UsbdmDialogue {
 
 protected:
    virtual uint32_t getTargetProperties(TargetType_t targetType);
-   virtual void OnOkClick( wxCommandEvent& event );
-//   virtual void OnCloseHandler( wxCloseEvent& event );
+   virtual void OnClose( wxCloseEvent& event );
+   virtual void onCloseButton( wxCommandEvent& event );
 
 public:
    ProgrammerDialogue(wxWindow* parent, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);

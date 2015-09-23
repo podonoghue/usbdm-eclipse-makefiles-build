@@ -7,11 +7,14 @@
 
 #include <ProgrammerDialogue.h>
 
+#include <wx/wx.h>
+
 ProgrammerDialogue::ProgrammerDialogue(wxWindow* parent, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface) :
    UsbdmDialogue(parent, _("Flash Programmer"), bdmInterface, deviceInterface) {
 }
 
 ProgrammerDialogue::~ProgrammerDialogue() {
+   LOGGING_E;
 }
 
 /*!
@@ -38,17 +41,17 @@ uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
    return flags;
 }
 
-/*! Handler for OnOk
- *
- *  @param event The event to handle
- */
-void ProgrammerDialogue::OnOkClick( wxCommandEvent& event ) {
-   LOGGING;
-   if (TransferDataFromWindow()) {
-      wxWindow::Close();
-//      EndModal(BDM_RC_OK);
-   }
-}
+///*! Handler for OnOk
+// *
+// *  @param event The event to handle
+// */
+//void ProgrammerDialogue::OnOkClick( wxCommandEvent& event ) {
+//   LOGGING;
+//   if (TransferDataFromWindow()) {
+//      wxWindow::Close();
+////      EndModal(BDM_RC_OK);
+//   }
+//}
 
 /*! This displays the Dialogue which represents the entire application
  *  for the stand-alone flash programmers.
@@ -69,7 +72,19 @@ bool ProgrammerDialogue::setUpAndShow(wxString const &hexFilename) {
    return Show();
 }
 
-//// handler of the Close Event.
-//void ProgrammerDialogue::OnCloseHandler( wxCloseEvent& event ) {
-//   LOGGING;
-//}
+extern wxApp& wxGetApp();
+
+void ProgrammerDialogue::OnClose( wxCloseEvent& event ) {
+   LOGGING;
+   if (TransferDataFromWindow()) {
+      log.print("done TransferDataFromWindow() - OK\n");
+      wxGetApp().ExitMainLoop();
+//      log.print("doing Destroy()\n");
+//      Destroy();
+   }
+}
+
+void ProgrammerDialogue::onCloseButton( wxCommandEvent& event ) {
+   LOGGING;
+   Close();
+}

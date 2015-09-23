@@ -641,6 +641,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeleton::OnClose ) );
 	bdmSelectChoiceControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	bdmRefreshButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	targetVddControl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVddSelectBoxSelected ), NULL, this );
@@ -689,12 +690,13 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	securityValuesTextControl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSecurityEditUpdate ), NULL, this );
 	keepChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnKeepChangesClick ), NULL, this );
 	discardChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDiscardChangesClick ), NULL, this );
-	closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
+	closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::onCloseButton ), NULL, this );
 }
 
 UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeleton::OnClose ) );
 	bdmSelectChoiceControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	bdmRefreshButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	targetVddControl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVddSelectBoxSelected ), NULL, this );
@@ -743,6 +745,6 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	securityValuesTextControl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSecurityEditUpdate ), NULL, this );
 	keepChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnKeepChangesClick ), NULL, this );
 	discardChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDiscardChangesClick ), NULL, this );
-	closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
+	closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::onCloseButton ), NULL, this );
 	
 }

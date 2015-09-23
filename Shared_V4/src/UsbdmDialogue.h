@@ -71,7 +71,8 @@ protected:
 
    static const uint32_t targetPropertyFlags[];
 
-//   virtual void OnCloseHandler( wxCloseEvent& event );
+//   virtual void OnClose( wxCloseEvent& event );
+//   virtual void OnOkClick( wxCommandEvent& event );
 
    // Handlers for Interface page
    virtual void OnBdmSelectComboSelected( wxCommandEvent& event );

@@ -38,10 +38,6 @@
 #include <wx/cmdline.h>
 #include <wx/stdpaths.h>
 
-#include <wx/wx.h>
-#include <wx/cmdline.h>
-#include <wx/stdpaths.h>
-
 #include "ProgrammerDialogue.h"
 
 #include "UsbdmSystem.h"
@@ -261,7 +257,6 @@ int FlashProgrammerApp::OnRun(void) {
    else {
       returnValue = doCommandLineProgram();
    }
-
    if (returnValue != PROGRAMMING_RC_OK) {
       log.error("Failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
 #ifdef _UNIX_

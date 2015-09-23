@@ -84,8 +84,6 @@ string AppSettings::getSettingsFilename(const string &rootFilename, TargetType_t
  *  @param comment - string to add as comment line in file.
  */
 void AppSettings::writeToFile(FILE *fp, const string &comment) const {
-   LOGGING;
-
    fprintf(fp, "# %s\n\n", comment.c_str()); fflush(fp);
 
    map<string,Value*>::const_iterator it;
@@ -123,10 +121,7 @@ FILE *openConfigurationFile(string fileName, const char *attributes) {
  * Write settings to file in %APPDATA% system directory
  */
 bool AppSettings::save() const {
-   LOGGING_E;
-
-//   printToLog();
-
+   LOGGING;
    FILE *fp = openConfigurationFile(fileName, "wt");
    if (fp== NULL) {
       log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fileName.c_str());
