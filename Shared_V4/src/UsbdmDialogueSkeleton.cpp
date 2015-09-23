@@ -690,7 +690,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	securityValuesTextControl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSecurityEditUpdate ), NULL, this );
 	keepChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnKeepChangesClick ), NULL, this );
 	discardChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDiscardChangesClick ), NULL, this );
-//	closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
+	closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
 }
 
 UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
@@ -745,6 +745,6 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	securityValuesTextControl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnSecurityEditUpdate ), NULL, this );
 	keepChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnKeepChangesClick ), NULL, this );
 	discardChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDiscardChangesClick ), NULL, this );
-//	closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
+	closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnOkClick ), NULL, this );
 	
 }

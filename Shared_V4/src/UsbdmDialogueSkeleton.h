@@ -190,7 +190,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnSecurityEditUpdate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepChangesClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDiscardChangesClick( wxCommandEvent& event ) { event.Skip(); }
-//		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
