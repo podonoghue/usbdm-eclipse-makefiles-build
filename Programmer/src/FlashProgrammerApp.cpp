@@ -84,8 +84,10 @@ private:
    DeviceInterfacePtr           deviceInterface;
    AppSettingsPtr               appSettings;
    ProgrammerDialogue          *dialogue;
+   USBDM_ErrorCode              commandLineRC;
 
    USBDM_ErrorCode doCommandLineProgram();
+   USBDM_ErrorCode parseCommandLine(wxCmdLineParser& parser);
 
 public:
    FlashProgrammerApp();
@@ -126,6 +128,7 @@ FlashProgrammerApp::FlashProgrammerApp() :
    verify         = false;
    program        = false;
    dialogue       = 0;
+   commandLineRC  = BDM_RC_OK;
 }
 
 USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const char *message) {
@@ -218,7 +221,7 @@ bool FlashProgrammerApp::OnInit() {
    // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
       log.error("Failed OnInit()\n");
-      return false;
+      return true; // Return OK here as we want OnRun() to execute
    }
 
 #if TARGET == MC56F80xx
@@ -239,14 +242,17 @@ bool FlashProgrammerApp::OnInit() {
       SetTopWindow((wxWindow*)dialogue);
       dialogue->setUpAndShow(hexFileName);
    }
-
    return true;
 }
 
 int FlashProgrammerApp::OnRun(void) {
    LOGGING;
-   USBDM_ErrorCode returnValue = BDM_RC_OK;
 
+   if (commandLineRC != BDM_RC_OK) {
+      return commandLineRC;
+   }
+
+   USBDM_ErrorCode returnValue = BDM_RC_OK;
    if (useGUI) {
       wxApp::OnRun();
       dialogue->saveSettings(*appSettings);
@@ -355,18 +361,41 @@ static long connectionCallback(std::string message, std::string  caption, long s
    return wxMessageBox(message, caption, style);
 }
 
-//! Process command line arguments
-//!
+/**
+ * Process command line arguments
+ *
+ * @return  error code
+ *
+ * @note commandLineRC is set to error code on failure
+ */
 bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
+
+   commandLineRC  = parseCommandLine(parser);
+   if (commandLineRC != BDM_RC_OK) {
+      parser.Usage();
+      return false;
+   }
+   return true;
+}
+
+/**
+ * Process command line arguments
+ *
+ * @return  true  success
+ *          false command line parse failure
+ *
+ * @note commandLineRC is set to error code on failure
+ */
+USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
    LOGGING;
    wxString  sValue;
-   bool      success = true;
 
-   useGUI       = true;
-   verbose      = false;
+   useGUI             = true;
+   verbose            = false;
+   USBDM_ErrorCode rc = BDM_RC_OK;
 
    if (parser.GetParamCount() > 0) {
-      // file to load may always be given
+      // File to load may always be given as only param
       hexFileName = parser.GetParam(0);
    }
 
@@ -401,14 +430,12 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal target type.\n"));
-         success = false;
+         return(BDM_RC_ILLEGAL_PARAMS);
       }
    }
    else {
-      wxString argv0(argv[0]);
-
       // Determine target from name of program
-//      log.print("argv0 = %s\n", (const char *)argv0.c_str());
+      wxString argv0(argv[0]);
       if (argv0.Contains(_("RS08"))) {
          log.print("Setting target RS08\n");
          targetType = T_RS08;
@@ -453,12 +480,9 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
 
    // Ignore other options unless "verify" or "program" are given
    if (!parser.Found(_("verify")) && !parser.Found(_("program"))) {
-      if (!success) {
-         parser.Usage();
-      }
       bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionCallback);
       deviceInterface.reset(new DeviceInterface(targetType));
-      return success;
+      return BDM_RC_OK;
    }
 
    bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionNullCallback);
@@ -474,15 +498,14 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    // Command line requires at least a device name
    if (!parser.Found(_("device"), &sValue)) {
       logUsageError(parser, _("***** Error: Device Option missing.\n"));
-      success = false;
+      return(BDM_RC_ILLEGAL_PARAMS);
    }
    
-   // Command line requires at least a device name
-   USBDM_ErrorCode rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.ToAscii());
+   rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.ToAscii());
    if (rc != BDM_RC_OK) {
       log.error("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
       logUsageError(parser, _("***** Error: Failed to find device.\n"));
-      success = false;
+      return rc;
    }
 
    USBDM_ExtendedOptions_t &bdmOptions = bdmInterface->getBdmOptions();
@@ -522,15 +545,19 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       else if (sValue.CmpNoCase(_("Unsecured")) == 0) {
          deviceData->setSecurity(SEC_UNSECURED);
       }
+      else if (sValue.CmpNoCase(_("Secured")) == 0) {
+         deviceData->setSecurity(SEC_SECURED);
+      }
       else {
          logUsageError(parser, _("***** Error: Illegal security value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("securityValue"), &sValue)) {
       if (deviceData->getSecurity() != SEC_DEFAULT) {
          // Can't use this option with secure/unsecure
-         success = false;
          logUsageError(parser, _("***** Error: Conflicting security values.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       else {
          deviceData->setSecurity(SEC_CUSTOM);
@@ -544,7 +571,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal nvloc value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       deviceData->setClockTrimNVAddress(uValue);
    }
@@ -563,7 +590,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("vdd"), &sValue)) {
@@ -575,7 +602,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal vdd value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("bdm"), &sValue)) {
@@ -588,7 +615,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       double    dValue;
       if (!sValue.ToDouble(&dValue)) {
          logUsageError(parser, _("***** Error: Illegal trim value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       deviceData->setClockTrimFreq(dValue * 1000);
    }
@@ -605,24 +632,26 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
-      else {
-         flexParameters.eeepromSize = (uint8_t)uValue;
-         // Check for truncation
-         success = success && (flexParameters.eeepromSize == uValue);
+      flexParameters.eeepromSize = (uint8_t)uValue;
+      // Check for truncation
+      if (flexParameters.eeepromSize != uValue) {
+         logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       index1 = index2+1;
       index2 = sValue.find(',', index1);
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
-      else {
-         flexParameters.partionValue = (uint8_t)uValue;
-         // Check for truncation
-         success = success && (flexParameters.partionValue == uValue);
+      flexParameters.partionValue = (uint8_t)uValue;
+      // Check for truncation
+      if (flexParameters.partionValue != uValue) {
+         logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       flexParameters.partionValue = (uint8_t)uValue;
       deviceData->setFlexNVMParameters(flexParameters);
@@ -637,7 +666,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetDuration = uValue;
 
@@ -646,7 +675,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetReleaseInterval = uValue;
 
@@ -655,7 +684,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetRecoveryInterval = uValue;
    }
@@ -668,7 +697,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal power value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.powerOffDuration = uValue;
 
@@ -677,7 +706,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal power value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.powerOnRecoveryInterval = uValue;
    }
@@ -685,7 +714,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal speed value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.interfaceFrequency = uValue;
    }
@@ -694,9 +723,6 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    if (program) {
       verify = false;
    }
-   if (!success) {
-      parser.Usage();
-   }
-   return success;
+   return BDM_RC_OK;
 }
 
