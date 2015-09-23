@@ -74,22 +74,21 @@ class GdbServerApp : public wxApp {
    DECLARE_EVENT_TABLE()
 
 private:
-   TargetType_t                targetType;
-   std::string                 customSecurityValue;
-   bool                        noGUI;
-   bool                        verify;
-   bool                        program;
-   bool                        verbose;
-//   wxString                    hexFileName;
-   double                      trimFrequency;
-   long                        trimNVAddress;
-   int                         returnValue;
-   OpenLog                     openLog;
-   BdmInterfacePtr             bdmInterface;
-   DeviceInterfacePtr          deviceInterface;
-   AppSettingsPtr              appSettings;
+   TargetType_t                 targetType;
+   std::string                  customSecurityValue;
+   bool                         useGUI;
+   bool                         verify;
+   bool                         program;
+   double                       trimFrequency;
+   long                         trimNVAddress;
+   int                          returnValue;
+   OpenLog                      openLog;
+   BdmInterfacePtr              bdmInterface;
+   DeviceInterfacePtr           deviceInterface;
+   AppSettingsPtr               appSettings;
+   USBDM_ErrorCode              commandLineRC;
 
-//   void doCommandLineProgram();
+   USBDM_ErrorCode parseCommandLine(wxCmdLineParser& parser);
 
 public:
    GdbServerApp();
@@ -123,87 +122,20 @@ END_EVENT_TABLE()
 GdbServerApp::GdbServerApp() :
    targetType(T_ARM),
    openLog() {
-   noGUI          = false;
+   useGUI         = true;
    trimNVAddress  = 0;
-   verbose        = false;
    trimFrequency  = 0;
    returnValue    = 0;
    verify         = false;
    program        = false;
+   commandLineRC  = BDM_RC_OK;
 }
 
 USBDM_ErrorCode callBack(USBDM_ErrorCode status, int percent, const char *message) {
    fprintf(stdout, "%d%%: %s", percent, message);
-   return PROGRAMMING_RC_OK;
+   return status;
 }
 
-//void GdbServerApp::doCommandLineProgram() {
-//   LOGGING;
-//   FlashImagePtr      flashImage      = FlashImageFactory::createFlashImage(targetType);
-//   FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
-//
-//   do {
-//      // Initialise the BDM
-//      if (bdmInterface->initBdm() != BDM_RC_OK) {
-//         returnValue = 1;
-//         break;
-//      }
-////      if (!hexFileName.IsEmpty() &&
-////         (flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType) != BDM_RC_OK)) {
-////         log.print("Failed to load Hex file\n");
-////         returnValue = 1;
-////         break;
-////      }
-//      // Copy device description and change mutable settings
-//      DeviceDataPtr &deviceData = deviceInterface->getCurrentDevice();
-//      if (deviceData->getSecurity() == SEC_CUSTOM) {
-//         deviceData->setCustomSecurity(customSecurityValue);
-//      }
-//      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(*deviceData);
-//      if (rc != BDM_RC_OK) {
-//         continue;
-//      }
-//      if (program) {
-//         // Program & Verify
-//         if (verbose) {
-//            rc = flashProgrammer->programFlash(flashImage, callBack);
-//         }
-//         else {
-//            rc = flashProgrammer->programFlash(flashImage, NULL);
-//         }
-//
-//      }
-//      else {
-//         // Verify only
-//         if (verbose) {
-//            rc = flashProgrammer->verifyFlash(flashImage, callBack);
-//         }
-//         else{
-//            rc = flashProgrammer->verifyFlash(flashImage);
-//         }
-//      }
-//      if (rc != PROGRAMMING_RC_OK) {
-//         log.print("- failed, rc = %s\n", bdmInterface->getErrorString(rc));
-//#ifdef _UNIX_
-//         fprintf(stderr, "GDBServerApp::doCommandLineProgram() - failed, rc = %s\n", USBDM_GetErrorString(rc));
-//#endif
-//         returnValue = 1;
-//         break;
-//      }
-//   } while (false);
-//
-//   log.print(" Closing BDM\n");
-//   if (bdmInterface->getBdmOptions().leaveTargetPowered) {
-//      bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_NORMAL));
-//   }
-//   bdmInterface->closeBdm();
-//
-//#ifdef _UNIX_
-//   if (returnValue == 0) {
-//      fprintf(stdout, "Operation completed successfully\n");
-//   }
-//#endif
-//}
 
 bool GdbServerApp::OnInit() {
    LOGGING;
@@ -216,15 +148,15 @@ bool GdbServerApp::OnInit() {
 
    SetAppName(_("usbdm")); // So application files are kept in the correct directory
 
-   // call for default command parsing behaviour
+   // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
-      log.print("Failed OnInit()\n");
-      return false;
+      log.error("Failed OnInit()\n");
+      return true; // Return true here as we want OnRun() to execute
    }
    // Create empty app settings
    appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "GDB Server settings"));
-   if (!noGUI) {
-      // Not using command line options so load saved settings
+   if (useGUI) {
+      // Using GUI so load saved settings
       appSettings->load();
    }
 #if TARGET == MC56F80xx
@@ -234,13 +166,17 @@ bool GdbServerApp::OnInit() {
    GdbServerWindow *serverWindow = new GdbServerWindow(bdmInterface, deviceInterface, appSettings);
    serverWindow->SetTitle(_("GDB Server"));
    SetTopWindow(serverWindow);
-   serverWindow->execute(noGUI);
+   serverWindow->execute(!useGUI);
 
    return true;
 }
 
 int GdbServerApp::OnRun(void) {
    LOGGING;
+
+   if (commandLineRC != BDM_RC_OK) {
+      return commandLineRC;
+   }
    int exitcode = wxApp::OnRun();
    if (exitcode != 0) {
       return exitcode;
@@ -251,12 +187,12 @@ int GdbServerApp::OnRun(void) {
 }
 
 int GdbServerApp::OnExit(void) {
-   LOGGING_E;
+   LOGGING;
 
    bdmInterface.reset();
 
-   if (!noGUI) {
-      // Not using command line so save changed settings
+   if (useGUI) {
+      // Using GUI so save changed settings
       appSettings->save();
    }
    return wxApp::OnExit();
@@ -319,26 +255,42 @@ void GdbServerApp::OnInitCmdLine(wxCmdLineParser& parser) {
 }
 
 void GdbServerApp::logUsageError(wxCmdLineParser& parser, const wxString& text){
-   UsbdmSystem::Log::error("%s", (const char *)text.ToAscii());
+   UsbdmSystem::Log::error("%s", (const char *)text.c_str());
 #if (wxCHECK_VERSION(2, 9, 0))
    parser.AddUsageText(text);
 #endif
 }
 
-//! Process command line arguments
-//!
+/**
+ * Process command line arguments
+ *
+ * @return  error code
+ *
+ * @note commandLineRC is set to error code on failure
+ */
 bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
+
+   commandLineRC  = parseCommandLine(parser);
+   if (commandLineRC != BDM_RC_OK) {
+      parser.Usage();
+      return false;
+   }
+   return true;
+}
+
+/**
+ * Process command line arguments
+ *
+ * @return  true  success
+ *          false command line parse failure
+ *
+ * @note commandLineRC is set to error code on failure
+ */
+USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
    LOGGING;
    wxString  sValue;
-   bool      success = true;
 
-   verbose      = false;
-//   if (parser.GetParamCount() > 0) {
-//      // File to load may always be given
-//      hexFileName = parser.GetParam(0);
-//      log.print("Hex file = %s\n", (const char*)hexFileName.ToAscii());
-//   }
-
+   useGUI             = true;
    // "-target=..." option may always be given
    if (parser.Found(_("target"), &sValue)) {
       if (sValue.CmpNoCase(_("cfv1")) == 0) {
@@ -352,14 +304,13 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal target type.\n"));
-         success = false;
+         return(BDM_RC_ILLEGAL_PARAMS);
       }
    }
    else {
+      // Determine target from name of program
       wxString argv0(argv[0]);
 
-      // Determine target from name of program
-      log.print("argv0 = %s\n", (const char *)argv0.c_str());
       if (argv0.Contains(_("CFV1"))) {
          log.print("Setting target CFV1\n");
          targetType = T_CFV1;
@@ -380,17 +331,19 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    deviceInterface.reset(new DeviceInterface(targetType));
 
-   // If a device is given the server will open without the GUI configuration dialogue
-   // and it will not load default parameters.
+   /*
+    * If no device is given then server ignores all options and opens in GUI mode
+    * It will also load default parameters.
+    */
    if (!parser.Found(_("device"), &sValue)) {
-      if (!success) {
-         parser.Usage();
-      }
-      return success;
+      return BDM_RC_OK;
    }
 
-   // Have device name - no GUI
-   noGUI = true;
+   /*
+    *  If a device name is given the server will open without the GUI configuration dialogue
+    *  and it will not load default parameters.
+    */
+   useGUI = false;
 
 #ifdef _UNIX_
    if (parser.Found(_("verbose"))) {
@@ -403,7 +356,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
    if (rc != BDM_RC_OK) {
       log.error("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
       logUsageError(parser, _("***** Error: Failed to find device.\n"));
-      success = false;
+      return rc;
    }
 
    USBDM_ExtendedOptions_t &bdmOptions = bdmInterface->getBdmOptions();
@@ -446,13 +399,14 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal security value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("securityValue"), &sValue)) {
       if (deviceData->getSecurity() != SEC_DEFAULT) {
          // Can't use this option with secure/unsecure
-         success = false;
          logUsageError(parser, _("***** Error: Conflicting security values.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       else {
          deviceData->setSecurity(SEC_CUSTOM);
@@ -464,7 +418,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal nvloc value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       deviceData->setClockTrimNVAddress(uValue);
    }
@@ -483,7 +437,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal auto value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("erase"), &sValue)) {
@@ -501,7 +455,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("vdd"), &sValue)) {
@@ -513,7 +467,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       }
       else {
          logUsageError(parser, _("***** Error: Illegal vdd value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
    }
    if (parser.Found(_("bdm"), &sValue)) {
@@ -526,7 +480,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       double    dValue;
       if (!sValue.ToDouble(&dValue)) {
          logUsageError(parser, _("***** Error: Illegal trim value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       deviceData->setClockTrimFreq(dValue * 1000);
    }
@@ -543,24 +497,26 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
-      else {
-         flexParameters.eeepromSize = (uint8_t)uValue;
-         // Check for truncation
-         success = success && (flexParameters.eeepromSize == uValue);
+      flexParameters.eeepromSize = (uint8_t)uValue;
+      // Check for truncation
+      if (flexParameters.eeepromSize != uValue) {
+         logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       index1 = index2+1;
       index2 = sValue.find(',', index1);
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 16)) {
          logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
-      else {
-         flexParameters.partionValue = (uint8_t)uValue;
-         // Check for truncation
-         success = success && (flexParameters.partionValue == uValue);
+      flexParameters.partionValue = (uint8_t)uValue;
+      // Check for truncation
+      if (flexParameters.partionValue != uValue) {
+         logUsageError(parser, _("***** Error: Illegal flexNVM value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       flexParameters.partionValue = (uint8_t)uValue;
       deviceData->setFlexNVMParameters(flexParameters);
@@ -575,7 +531,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetDuration = uValue;
 
@@ -584,7 +540,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetReleaseInterval = uValue;
 
@@ -593,7 +549,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal reset value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.resetRecoveryInterval = uValue;
    }
@@ -606,7 +562,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       wxString t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal power value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.powerOffDuration = uValue;
 
@@ -615,7 +571,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       t = sValue.substr(index1, index2-index1);
       if (!t.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal power value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.powerOnRecoveryInterval = uValue;
    }
@@ -623,7 +579,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal speed value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmOptions.interfaceFrequency = uValue;
    }
@@ -631,7 +587,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal GDB port value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmInterface->setGdbServerPort(uValue);
    }
@@ -639,7 +595,7 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal TTY port value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmInterface->setGdbTtyPort(uValue);
    }
@@ -647,13 +603,10 @@ bool GdbServerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       unsigned long uValue;
       if (!sValue.ToULong(&uValue, 10)) {
          logUsageError(parser, _("***** Error: Illegal timeout value.\n"));
-         success = false;
+         return BDM_RC_ILLEGAL_PARAMS;
       }
       bdmInterface->setConnectionTimeout(uValue);
    }
-   if (!success) {
-      parser.Usage();
-   }
-   return success;
+   return BDM_RC_OK;
 }
 

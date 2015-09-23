@@ -201,7 +201,7 @@ USBDM_ErrorCode FlashProgrammerApp::doCommandLineProgram() {
    bdmInterface->closeBdm();
 
 #ifdef _UNIX_
-   if (returnValue == 0) {
+   if (verbose && (returnValue == 0)) {
       fprintf(stdout, "Operation completed successfully\n");
    }
 #endif
@@ -221,7 +221,7 @@ bool FlashProgrammerApp::OnInit() {
    // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
       log.error("Failed OnInit()\n");
-      return true; // Return OK here as we want OnRun() to execute
+      return true; // Return true here as we want OnRun() to execute
    }
 
 #if TARGET == MC56F80xx
@@ -274,7 +274,9 @@ int FlashProgrammerApp::OnRun(void) {
 
 int FlashProgrammerApp::OnExit(void) {
    LOGGING;
+
    bdmInterface.reset();
+
    return wxApp::OnExit();
 }
 
