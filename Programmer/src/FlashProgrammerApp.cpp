@@ -76,20 +76,20 @@ class FlashProgrammerApp : public wxApp {
 private:
    TargetType_t                 targetType;
    std::string                  customSecurityValue;
-   bool                         noGUI;
+   bool                         useGUI;
    bool                         verify;
    bool                         program;
    bool                         verbose;
    wxString                     hexFileName;
    double                       trimFrequency;
    long                         trimNVAddress;
-   int                          returnValue;
    OpenLog                      openLog;
    BdmInterfacePtr              bdmInterface;
    DeviceInterfacePtr           deviceInterface;
    AppSettingsPtr               appSettings;
+   ProgrammerDialogue          *dialogue;
 
-   void doCommandLineProgram();
+   USBDM_ErrorCode doCommandLineProgram();
 
 public:
    FlashProgrammerApp();
@@ -123,13 +123,13 @@ END_EVENT_TABLE()
 FlashProgrammerApp::FlashProgrammerApp() :
    targetType(T_ARM),
    openLog() {
-   noGUI          = false;
+   useGUI         = true;
    trimNVAddress  = 0;
    verbose        = false;
    trimFrequency  = 0;
-   returnValue    = 0;
    verify         = false;
    program        = false;
+   dialogue       = 0;
 }
 
 USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const char *message) {
@@ -137,61 +137,64 @@ USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const ch
    return status;
 }
 
-void FlashProgrammerApp::doCommandLineProgram() {
+/**
+ * Command line operation
+ *
+ * @return Error code
+ */
+USBDM_ErrorCode FlashProgrammerApp::doCommandLineProgram() {
    LOGGING;
    FlashImagePtr      flashImage      = FlashImageFactory::createFlashImage(targetType);
    FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
+   USBDM_ErrorCode    returnValue = BDM_RC_OK;
 
    do {
       // Initialise the BDM
-      if (bdmInterface->initBdm() != BDM_RC_OK) {
-         returnValue = 1;
+      returnValue = bdmInterface->initBdm();
+      if (returnValue != BDM_RC_OK) {
          break;
       }
-      if (!hexFileName.IsEmpty() &&
-         (flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType) != BDM_RC_OK)) {
-         log.error("Failed to load Hex file\n");
-         returnValue = 1;
-         break;
+      if (!hexFileName.IsEmpty()) {
+         returnValue = flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType);
+         if (returnValue != BDM_RC_OK) {
+            break;
+         }
       }
       // Copy device description and change mutable settings
       DeviceDataPtr &deviceData = deviceInterface->getCurrentDevice();
       if (deviceData->getSecurity() == SEC_CUSTOM) {
          deviceData->setCustomSecurity(customSecurityValue);
       }
-      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
-      if (rc != BDM_RC_OK) {
-         continue;
+      returnValue = flashProgrammer->setDeviceData(deviceData);
+      if (returnValue != BDM_RC_OK) {
+         break;
       }
       if (program) {
          // Program & Verify
          if (verbose) {
-            rc = flashProgrammer->programFlash(flashImage, programmerCallBack);
+            returnValue = flashProgrammer->programFlash(flashImage, programmerCallBack);
          }
          else {
-            rc = flashProgrammer->programFlash(flashImage, NULL);
+            returnValue = flashProgrammer->programFlash(flashImage, NULL);
          }
 
       }
       else {
          // Verify only
          if (verbose) {
-            rc = flashProgrammer->verifyFlash(flashImage, programmerCallBack);
+            returnValue = flashProgrammer->verifyFlash(flashImage, programmerCallBack);
          }
          else{
-            rc = flashProgrammer->verifyFlash(flashImage);
+            returnValue = flashProgrammer->verifyFlash(flashImage);
          }
       }
-      if (rc != PROGRAMMING_RC_OK) {
-         log.error("- failed, rc = %s\n", bdmInterface->getErrorString(rc));
-#ifdef _UNIX_
-         fprintf(stderr, "FlashProgrammerApp::doCommandLineProgram() - failed, rc = %s\n", bdmInterface->getErrorString(rc));
-#endif
-         returnValue = 1;
+      if (returnValue != PROGRAMMING_RC_OK) {
          break;
       }
    } while (false);
-
+   if (returnValue != PROGRAMMING_RC_OK) {
+      log.error("Failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
+   }
    log.print(" Closing BDM\n");
    if (bdmInterface->getBdmOptions().leaveTargetPowered) {
       bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_NORMAL));
@@ -203,11 +206,11 @@ void FlashProgrammerApp::doCommandLineProgram() {
       fprintf(stdout, "Operation completed successfully\n");
    }
 #endif
+   return returnValue;
 }
 
 bool FlashProgrammerApp::OnInit() {
-   LOGGING_E;
-   returnValue = 0;
+   LOGGING;
 
 #ifndef _WIN32
    // Otherwise wxWidgets doesn't look in the correct location
@@ -216,52 +219,60 @@ bool FlashProgrammerApp::OnInit() {
 
    SetAppName(_("usbdm")); // So application files are kept in the correct directory
 
-   // call for default command parsing behaviour
+   // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
       log.error("Failed OnInit()\n");
       return false;
    }
 
-   // Create empty app settings
-   appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "Programmer settings"));
-   if (!noGUI) {
-      // Not using command line options so load saved settings
-      appSettings->load();
-   }
 #if TARGET == MC56F80xx
    DSC_SetLogFile(0);
 #endif
 
-   if (noGUI) {
-      doCommandLineProgram();
-   }
-   else {
+   // Create empty app settings
+   appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "Programmer settings"));
+   if (useGUI) {
       // Create the main application window
-      ProgrammerDialogue *dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface);
+      dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface);
+
+      // load saved settings
+      appSettings->load();
+      appSettings->printToLog();
+      dialogue->loadSettings(*appSettings);
+
       SetTopWindow((wxWindow*)dialogue);
-      dialogue->execute(appSettings, hexFileName);
-      dialogue->Destroy();
-//      appSettings->printToLog();
-      appSettings->save();
+      dialogue->setUpAndShow(hexFileName);
    }
+
    return true;
 }
 
 int FlashProgrammerApp::OnRun(void) {
    LOGGING;
-   if (!noGUI) {
-      int exitcode = wxApp::OnRun();
-      if (exitcode != 0) {
-         return exitcode;
-      }
+   USBDM_ErrorCode returnValue = BDM_RC_OK;
+
+   if (useGUI) {
+      wxApp::OnRun();
+      dialogue->saveSettings(*appSettings);
+      appSettings->printToLog();
+      appSettings->save();
+      dialogue->Destroy();
    }
-   // Everything is done in OnInit()!
-   log.print(" - return value = %d\n", returnValue);
+   else {
+      returnValue = doCommandLineProgram();
+   }
+
+   if (returnValue != PROGRAMMING_RC_OK) {
+      log.error("Failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
+#ifdef _UNIX_
+      fprintf(stderr, "FlashProgrammerApp::doCommandLineProgram() - failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
+#endif
+   }
    return returnValue;
 }
 
 int FlashProgrammerApp::OnExit(void) {
-   LOGGING_E;
+   LOGGING;
    bdmInterface.reset();
    return wxApp::OnExit();
 }
@@ -352,11 +363,11 @@ static long connectionCallback(std::string message, std::string  caption, long s
 //! Process command line arguments
 //!
 bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
-   LOGGING_E;
+   LOGGING;
    wxString  sValue;
    bool      success = true;
 
-   noGUI        = false;
+   useGUI       = true;
    verbose      = false;
 
    if (parser.GetParamCount() > 0) {
@@ -457,7 +468,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
 
    bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionNullCallback);
    deviceInterface.reset(new DeviceInterface(targetType));
-   noGUI = true;
+   useGUI = false;
 
 #ifdef _UNIX_
    if (parser.Found(_("verbose"))) {

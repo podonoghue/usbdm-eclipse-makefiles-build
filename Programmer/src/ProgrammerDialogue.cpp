@@ -14,9 +14,18 @@ ProgrammerDialogue::ProgrammerDialogue(wxWindow* parent, BdmInterfacePtr bdmInte
 ProgrammerDialogue::~ProgrammerDialogue() {
 }
 
+/*!
+ * Get properties of target type modified for programmer
+ *
+ * @return Bit-mask describing properties
+ *
+ */
 uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
    LOGGING_E;
+
    uint32_t flags = UsbdmDialogue::getTargetProperties(targetType);
+
+   // This is a programmer
    flags |= IS_PROGRAMMER;
 
    // These options don't apply to programmer
@@ -34,42 +43,33 @@ uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
  *  @param event The event to handle
  */
 void ProgrammerDialogue::OnOkClick( wxCommandEvent& event ) {
+   LOGGING;
    if (TransferDataFromWindow()) {
-      EndModal(BDM_RC_OK);
+      wxWindow::Close();
+//      EndModal(BDM_RC_OK);
    }
 }
 
 /*! This displays the Dialogue which represents the entire application
- *  for the stand-alone flash programmers.  Accepts starting parameters.
+ *  for the stand-alone flash programmers.
  *
- *  @param settingsFilename Base name of settings file to use
- *  @param hexFilename      Hex file to load
+ *  @param hexFilename  Optional hex file to load
  *
- *  @return BDM_RC_OK - no useful return vale
+ *  @return value from wxDialog::Show();
  */
-USBDM_ErrorCode ProgrammerDialogue::execute(AppSettingsPtr appSettings, wxString const &hexFilename) {
+bool ProgrammerDialogue::setUpAndShow(wxString const &hexFilename) {
    LOGGING;
 
    hideUnusedControls();
    Fit();
-
    Init();
-
    if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true) != PROGRAMMING_RC_OK)) {
       log.print(" - Failed to load Hex file\n");
    }
-
-   loadSettings(*appSettings);
-
-   USBDM_ErrorCode result = (USBDM_ErrorCode)ShowModal();
-
-   if (result == BDM_RC_OK) {
-      saveSettings(*appSettings);
-   }
-   else {
-      // Restore setting to original values
-      loadSettings(*appSettings);
-   }
-   return result;
+   return Show();
 }
 
+//// handler of the Close Event.
+//void ProgrammerDialogue::OnCloseHandler( wxCloseEvent& event ) {
+//   LOGGING;
+//}

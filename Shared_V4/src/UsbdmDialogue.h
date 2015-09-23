@@ -25,6 +25,7 @@ class UsbdmDialogue: public UsbdmDialogueSkeleton {
 
 private:
    class SecurityInfoEntry {
+
    public:
       SecurityInfoPtr       ptr;
       SecurityInfoConstPtr  resetValue;
@@ -69,6 +70,8 @@ protected:
    };
 
    static const uint32_t targetPropertyFlags[];
+
+//   virtual void OnCloseHandler( wxCloseEvent& event );
 
    // Handlers for Interface page
    virtual void OnBdmSelectComboSelected( wxCommandEvent& event );
@@ -124,6 +127,11 @@ protected:
 
    static USBDM_ErrorCode progressCallBack(USBDM_ErrorCode status, int percent, const char *message);
 
+   /*!
+    * Get properties of target type
+    *
+    * @return Bit-mask describing properties
+    */
    virtual uint32_t     getTargetProperties(TargetType_t targetType);
    void                 failBeep();
 

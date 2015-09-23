@@ -15,12 +15,13 @@ class ProgrammerDialogue : public UsbdmDialogue {
 protected:
    virtual uint32_t getTargetProperties(TargetType_t targetType);
    virtual void OnOkClick( wxCommandEvent& event );
+//   virtual void OnCloseHandler( wxCloseEvent& event );
 
 public:
    ProgrammerDialogue(wxWindow* parent, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);
    virtual ~ProgrammerDialogue();
 
-   USBDM_ErrorCode execute(AppSettingsPtr appSettings, wxString const &hexFilename=wxEmptyString);
+   bool setUpAndShow(wxString const &hexFilename=wxEmptyString);
 };
 
 #endif /* SRC_PROGRAMMERDIALOGUE_H_ */

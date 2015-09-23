@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -141,6 +141,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxButton* closeButton;
 		
 		// Virtual event handlers, overide them in your derived class
+//		virtual void OnCloseHandler( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRefreshBDMClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVddSelectBoxSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -189,7 +190,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnSecurityEditUpdate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepChangesClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDiscardChangesClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+//		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
