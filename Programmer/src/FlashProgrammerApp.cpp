@@ -266,7 +266,7 @@ int FlashProgrammerApp::OnRun(void) {
    if (returnValue != PROGRAMMING_RC_OK) {
       log.error("Failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
 #ifdef __unix__
-      fprintf(stderr, "FlashProgrammerApp::doCommandLineProgram() - failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
+      fprintf(stderr, "Programming failed, rc = %d, %s\n", returnValue, bdmInterface->getErrorString(returnValue));
 #endif
    }
    return returnValue;
