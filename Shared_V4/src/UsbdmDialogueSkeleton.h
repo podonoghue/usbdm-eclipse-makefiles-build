@@ -141,7 +141,6 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxButton* closeButton;
 		
 		// Virtual event handlers, overide them in your derived class
-//		virtual void OnCloseHandler( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRefreshBDMClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVddSelectBoxSelected( wxCommandEvent& event ) { event.Skip(); }

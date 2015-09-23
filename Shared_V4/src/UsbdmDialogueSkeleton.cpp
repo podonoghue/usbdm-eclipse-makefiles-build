@@ -641,7 +641,6 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-//	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeleton::OnCloseHandler ) );
 	bdmSelectChoiceControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	bdmRefreshButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	targetVddControl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVddSelectBoxSelected ), NULL, this );
@@ -696,7 +695,6 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 {
 	// Disconnect Events
-//	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeleton::OnCloseHandler ) );
 	bdmSelectChoiceControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	bdmRefreshButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	targetVddControl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnVddSelectBoxSelected ), NULL, this );
