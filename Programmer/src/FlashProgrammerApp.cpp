@@ -200,7 +200,7 @@ USBDM_ErrorCode FlashProgrammerApp::doCommandLineProgram() {
    }
    bdmInterface->closeBdm();
 
-#ifdef _UNIX_
+#ifdef __unix__
    if (verbose && (returnValue == 0)) {
       fprintf(stdout, "Operation completed successfully\n");
    }
@@ -265,7 +265,7 @@ int FlashProgrammerApp::OnRun(void) {
    }
    if (returnValue != PROGRAMMING_RC_OK) {
       log.error("Failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
-#ifdef _UNIX_
+#ifdef __unix__
       fprintf(stderr, "FlashProgrammerApp::doCommandLineProgram() - failed, rc = %s\n", bdmInterface->getErrorString(returnValue));
 #endif
    }
@@ -303,7 +303,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("speed"),         NULL, _("Interface speed (CFVx/Kinetis/DSC) kHz"),                         wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("trim"),          NULL, _("Trim internal clock to frequency (in kHz) e.g. 32.7"),            wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("target"),        NULL, _("Target type (RS08, HCS08, HCS12, S12Z, CFV1, CFVX, ARM, MC56F)"), wxCMD_LINE_VAL_STRING },
-#ifdef _UNIX_
+#ifdef __unix__
       { wxCMD_LINE_SWITCH, _("verbose"),       NULL, _("Print progress messages to stdout") },
 #endif
       { wxCMD_LINE_SWITCH, _("useReset"),      NULL, _("Use hardware reset"),                                             wxCMD_LINE_VAL_STRING },
@@ -491,7 +491,7 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
    deviceInterface.reset(new DeviceInterface(targetType));
    useGUI = false;
 
-#ifdef _UNIX_
+#ifdef __unix__
    if (parser.Found(_("verbose"))) {
       verbose = true;
    }
