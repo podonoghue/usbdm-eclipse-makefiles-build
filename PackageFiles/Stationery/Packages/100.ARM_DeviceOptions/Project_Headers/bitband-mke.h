@@ -16,20 +16,20 @@
  * Assumes the location has been allocated to:
  *    - SRAM_U           (0x2000_0000-0x2000_02FF) with bit-band alias (0x2200_0000-0x2200_5FFF)
  *
- * Most Global or Local Static variables end up in SRAM_L so are not usable
+ * Most Global or Local Static variables end up in SRAM_L so are not usable\n
  * Most Parameters and Local variables end up in SRAM_U
  *
  * Examples:
  *
  * Set bit-1 of location 0x20000000
- * ~~~~~~~~~~~~~~~{.c}
+ * @code{.c}
  * BIT_BAND_SET(0x20000000, 1); // Set bit 1 of fixed location
- * ~~~~~~~~~~~~~~~
+ * @endcode
  *
  * Assuming a local variable 'local'
- * ~~~~~~~~~~~~~~~{.c}
+ * @code{.c}
  * BIT_BAND_CLEAR(&local, 3); // Clear bit 3 of local
- * ~~~~~~~~~~~~~~~
+ * @endcode
  *
  * Note: The efficiency of this operation depends greatly on whether the address is a constant or can be pre-calculated.
  *       The code will usually be quite inefficient for local variables as the required address will be
