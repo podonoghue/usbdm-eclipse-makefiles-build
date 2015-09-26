@@ -21,7 +21,7 @@
 //
 //   <o> LCD PWM Backlight support
 //   <i> Enables the use of PWM to adjust the LCD backlight
-//   <i> This ties up one off the FTMs so is rather expensive to provide.
+//   <i> This ties up one of the FTMs so is rather expensive to provide.
 //     <0=> Backlight on/off only
 //     <1=> Backlight adjustable
 //     <0=> Default
