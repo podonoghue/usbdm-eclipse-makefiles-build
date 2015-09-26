@@ -15,7 +15,28 @@
 #include "SPI.h"
 #include "Fonts.h"
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+// LCD Options ==============================
+//
+//   <o> LCD PWM Backlight support
+//   <i> Enables the use of PWM to adjust the LCD backlight
+//   <i> This ties up one off the FTMs so is rather expensive to provide.
+//     <0=> Backlight on/off only
+//     <1=> Backlight adjustable
+//     <0=> Default
+/**
+ * Controls if PWM feature is available for backlight
+ */
+#define LCD_BACKLIGHT_PWM_FEATURE 0
+
+//------------- <<< end of configuration section >>> -----------------------
+
+/**
+ * Indicates the code should be for a ELEC FREAKS version of the LCD
+ */
 #define ELEC_FREAKS
+
 /**
  * @addtogroup LCD_Group Elecfreaks Liquid Crystal Display
  * @brief C++ Class allowing access LCD
@@ -105,7 +126,7 @@
  *
  * <b>Example</b>
  * @code
- *  // Instantiate interface
+ * // Instantiate interface
  *	LCD *lcd = new LCD(new SPI_0());
  *
  * lcd->clear(RED);
@@ -118,7 +139,7 @@
  */
 
 class LCD {
-   SPI *spi;   //!< SPI interface to LCD
+   SPI *spi;   //!< SPI interface used to communicate with LCD
 
 public:
    /**
@@ -136,6 +157,8 @@ public:
     * Set backlight level
     *
     * @param level back-light level as percentage
+    * @note  Requires @ref LCD_BACKLIGHT_PWM_FEATURE to be fully implemented.\n
+    * Otherwise it falls back to basic on/off
     */
    void backlightSetLevel(int level);
    /**
@@ -148,9 +171,9 @@ public:
    void backLightOff(void) { backlightSetLevel(0); }
 #endif
 
-   /** Set LCD contrast - varies with device
+   /** Set LCD contrast - range varies with device
     *
-    *  @param setting - contrast level (0..127) ?
+    *  @param setting contrast level (0..127) ?
     */
    void setContrast(uint8_t setting);
    /** This function will clear the screen to the given color.
@@ -161,13 +184,18 @@ public:
     */
    void clear(int color=DEFAULT_BACKGROUND);
 
-   /** Set LCD contrast - varies with device
+   /** Lights a single pixel in the specified color at the specified x and y addresses
     *
-    * @param  x      row address (0 .. 131)
-    * @param  y      column address (0 .. 131)
-    * @param  color  12-bit color value rrrrggggbbbb
+    * @param  x     row address (0 .. 131)
+    * @param  y     column address (0 .. 131)
+    * @param  color 12-bit color value rrrrggggbbbb
+    *
+    * @note See LCD.h for some sample color settings
+    *
+    * @author James P Lynch July 7, 2007
     */
    void drawPixel(int x, int y, int color=DEFAULT_FOREGROUND);
+
    /** Draws a line in the specified color from (x0,y0) to (x1,y1)
     *
     * @param  x0     row address (0 .. 131)
@@ -176,82 +204,37 @@ public:
     * @param  y1     column address (0 .. 131)
     * @param  color  12-bit color value rrrrggggbbbb
     *
-    * @note See LCD.h for some sample color settings
-    *
     * @author James P Lynch July 7, 2007
     *
-    * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)
     * @note See LCD.h for some sample color settings
     *
-    * @author Authors: Dr. Leonard McMillan, Associate Professor UNC \n
-    *                  Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
+    * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)\n
+    * Authors: \n
+    *   - Dr. Leonard McMillan, Associate Professor UNC \n
+    *   - Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
     *
     * @note Taken verbatim from Professor McMillan's presentation: \n
     *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
     */
    void drawLine(int x0, int y0, int x1, int y1, int color=DEFAULT_FOREGROUND);
-   /** Draws a rectangle in the specified color from (x1,y1) to (x2,y2)
+
+   /** Draws a rectangle in the specified color from (x1,y1) to (x2,y2)\n
     *  Rectangle can be filled with a color if desired
     *
-    * param  x0     row address (0 .. 131)
-    * param  y0     column address (0 .. 131)
-    * param  x1     row address (0 .. 131)
-    * param  y1     column address (0 .. 131)
-    * param  color  12-bit color value rrrrggggbbbb
+    * @param  x0     row address (0 .. 131)
+    * @param  y0     column address (0 .. 131)
+    * @param  x1     row address (0 .. 131)
+    * @param  y1     column address (0 .. 131)
+    * @param  fill   indicates if the rectangle will be filled
+    * @param  color  12-bit color value rrrrggggbbbb
     *
-    * note See LCD.h for some sample color settings
+    * @note See LCD.h for some sample color settings
     *
-    * author James P Lynch July 7, 2007
+    * @author James P Lynch July 7, 2007
     *
-    * note
-    *    The best way to fill a rectangle is to take advantage of the "wrap-around" feature
-    *    built into the Philips PCF8833 controller. By defining a drawing box, the memory can
-    *    be simply filled by successive memory writes until all pixels have been illuminated.
-    *
-    *    1. Given the coordinates of two opposing corners (x0, y0) (x1, y1)
-    *       calculate the minimums and maximums of the coordinates
-    *
-    *       xmin = (x0 <= x1) ? x0 : x1;
-    *       xmax = (x0 > x1) ? x0 : x1;
-    *       ymin = (y0 <= y1) ? y0 : y1;
-    *       ymax = (y0 > y1) ? y0 : y1;
-    *
-    *    2. Now set up the drawing box to be the desired rectangle
-    *
-    *       LCDCommand(PASET); // set the row boundaries
-    *       LCDData(xmin);
-    *       LCDData(xmax);
-    *       LCDCommand(CASET); // set the column boundaries
-    *       LCDData(ymin);
-    *       LCDData(ymax);
-    *
-    *    3. Calculate the number of pixels to be written divided by 2
-    *
-    *       NumPixels = ((((xmax - xmin + 1) * (ymax - ymin + 1)) / 2) + 1)
-    *
-    *       You may notice that I added one pixel to the formula.
-    *       This covers the case where the number of pixels is odd and we
-    *       would lose one pixel due to rounding error. In the case of
-    *       odd pixels, the number of pixels is exact.
-    *       in the case of even pixels, we have one more pixel than
-    *       needed, but it cannot be displayed because it is outside
-    *       the drawing box.
-    *
-    *       We divide by 2 because two pixels are represented by three bytes.
-    *       So we work through the rectangle two pixels at a time.
-    *
-    *    4. Now a simple memory write loop will fill the rectangle
-    *
-    *       for (i = 0; i < ((((xmax - xmin + 1) * (ymax - ymin + 1)) / 2) + 1); i++) {
-    *          LCDData((color >> 4) & 0xFF);
-    *          LCDData(((color & 0xF) << 4) | ((color >> 8) & 0xF));
-    *          LCDData(color & 0xFF);
-    *       }
-    *
-    *       In the case of an unfilled rectangle, drawing four lines with the Bresenham line
-    *       drawing algorithm is reasonably efficient.
     */
    void drawRect(int x0, int y0, int x1, int y1, int fill, int color=DEFAULT_FOREGROUND);
+
    /** Draws a line circle in the specified colour at center (x0,y0) with radius
     *
     * @param x          row address (0 .. 131)
@@ -266,12 +249,13 @@ public:
     *        http://www.wikipedia.org
     */
    void drawCircle(int x, int y, int radius, int color, int sectors=FULLCIRCLE);
-   /** Writes the entire LCD screen from a bmp file
-    *  Uses Olimex BmpToArray.exe utility
+   /** Writes the entire LCD screen from a bmp file\n
     *
     * @param bmp - bitmap to display
     *
     * @author Olimex, James P Lynch July 7, 2007
+    *
+    * @note Use Olimex BmpToArray.exe utility to create bitmap
     */
    void drawBitmap(uint8_t bmp[131*131]);
    /** Draws an ASCII character at the specified (x,y) address and color
@@ -283,10 +267,10 @@ public:
     * @param fColor     12-bit foreground color value
     * @param bColor     12-bit background color value
     *
-    * @verbatim
-    * Notes: Here's an example to display "E" at address (20,20)
+    * @code{.c}
+    *   Notes: Here's an example to display "E" at address (20,20)
     *
-    *           LCDPutChar('E', 20, 20, LCD::FontMedium, WHITE, BLACK);
+    *   LCDPutChar('E', 20, 20, LCD::FontMedium, WHITE, BLACK);
     *
     *                (27,20)       (27,27)
     *                   |             |
@@ -306,48 +290,12 @@ public:
     *                   |             |
     *                   |             |
     *                (20,20)       (20,27)
-    *
-    *
-    *    The most efficient way to display a character is to make use of the "wrap-around" feature
-    *    of the Philips PCF8833 LCD controller chip.
-    *
-    *    Assume that we position the character at (20, 20) that's a (row, col) specification.
-    *    With the row and column address set commands, you can specify an 8x8 box for the SMALL and MEDIUM
-    *    characters or a 16x8 box for the LARGE characters.
-    *
-    *            spi_txCommand(PASET);   // set the row drawing limits
-    *            spi_txData(20);         //
-    *            spi_txData(27);         // limit rows to (20, 27)
-    *
-    *            spi_txCommand(CASET);   // set the column drawing limits
-    *            spi_txData(20);         //
-    *            spi_txData(27);         // limit columns to (20,27)
-    *
-    *    When the algorithm completes col 27, the column address wraps back to 20
-    *    At the same time, the row address increases by one (this is done by the controller)
-    *
-    *    We walk through each row, two pixels at a time. The purpose is to create three
-    *    data bytes representing these two pixels in the following format (as specified by Philips
-    *    for RGB 4 : 4 : 4 format (see page 62 of PCF8833 controller manual).
-    *
-    *            Data for pixel 0: RRRRGGGGBBBB
-    *            Data for Pixel 1: RRRRGGGGBBBB
-    *
-    *            spi_txCommand(RAMWR);                 // start a memory write (96 data bytes to follow)
-    *
-    *            spi_txData(RRRRGGGG);                 // first pixel, red and green data
-    *            spi_txData(BBBBRRRR);                 // first pixel, blue data; second pixel, red data
-    *            spi_txData(GGGGBBBB);                 // second pixel, green and blue data
-    *            :
-    *            and so on until all pixels displayed!
-    *            :
-    *            spi_txCommand(NOP);                   // this will terminate the RAMWR command
-    *
-    *  @endverbatim
+    * @endcode
     *
     *  @author James P Lynch July 7, 2007
     */
    void putChar(char c, int x, int y, Fonts::FontSize fontSize=Fonts::FontSmall, int fColor=DEFAULT_FOREGROUND, int bColor=DEFAULT_BACKGROUND);
+
    /** Draws a null-terminated character string at the specified (x,y) address and color
     *
     * @param pString = pointer to character string to be displayed
@@ -357,8 +305,11 @@ public:
     * @param fColor = 12-bit foreground colour value rrrrggggbbbb
     * @param bColor = 12-bit background colour value rrrrggggbbbb
     *
-    * @note Here's an example to display "Hello World!" at address (20,20) \n
+    * @code{.c}
+    *       // Here's an example to display "Hello World!" at address (20,20)
+    *
     *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
+    * @endcode
     *
     * @author James P Lynch, August 30, 2007 \n
     *         Edited by Peter Davenport on August 23, 2010
@@ -367,14 +318,6 @@ public:
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
    void putStr(const char *pString, int x, int y, Fonts::FontSize fontSize=Fonts::FontSmall, int fColor=DEFAULT_FOREGROUND, int bColor=DEFAULT_BACKGROUND);
-   /** Sets the Row and Column addresses
-    *
-    * @param x = row address (0 .. 131)
-    * @param y = column address (0 .. 131)
-    *
-    * @author James P Lynch July 7, 2007
-    */
-   void setXY(int x, int y);
 
 private:
    /**
@@ -389,6 +332,16 @@ private:
     * Send a single data byte to the display
     */
    void txData(uint8_t data);
+
+   /** Sets the Row and Column addresses
+    *
+    * @param x = row address (0 .. 131)
+    * @param y = column address (0 .. 131)
+    *
+    * @author James P Lynch July 7, 2007
+    */
+   void setXY(int x, int y);
+
 };
 
 /**

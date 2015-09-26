@@ -86,8 +86,12 @@
 #define DEFAULT_LCD_CONTRAST (65) // Philips controller
 
 #ifdef ELEC_FREAKS
+#if LCD_BACKLIGHT_PWM_FEATURE
 // PWM Control for back-light
 #define LCD_PWM pwmIO_D10 // = D10 on Arduino
+#else
+#define LCD_PWM digitalIO_PTC2 // = D10 on Arduino
+#endif
 #endif
 
 // Display CS
@@ -103,7 +107,8 @@
  * @param level 0-100 back-light level as percentage
  */
 void LCD::backlightSetLevel(int level) {
-	LCD_PWM.setPwmOutput(1000, PwmIO::ftm_leftAlign);
+#if LCD_BACKLIGHT_PWM_FEATURE
+   LCD_PWM.setPwmOutput(1000, PwmIO::ftm_leftAlign);
 	if (level>100) {
 		level = 100;
 	}
@@ -111,6 +116,10 @@ void LCD::backlightSetLevel(int level) {
 		level = 0;
 	}
 	LCD_PWM.setDutyCycle(level);
+#else
+   LCD_PWM.setDigitalOutput(DigitalIO::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
+   LCD_PWM.write(level>0);
+#endif
 }
 #endif
 
@@ -417,8 +426,6 @@ void LCD::drawPixel(int x, int y, int color) {
  * @param  y1     - column address (0 .. 131)
  * @param  color  - 12-bit color value rrrrggggbbbb
  *
- * @note See LCD.h for some sample color settings
- *
  * @author James P Lynch July 7, 2007
  *
  * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)
@@ -474,14 +481,15 @@ void LCD::drawLine(int x0, int y0, int x1, int y1, int color) {
    }
 }
 
-/** Draws a rectangle in the specified color from (x1,y1) to (x2,y2)
+/** Draws a rectangle in the specified color from (x1,y1) to (x2,y2)\n
  *  Rectangle can be filled with a color if desired
  *
- * param  x0     - row address (0 .. 131)
- * param  y0     - column address (0 .. 131)
- * param  x1     - row address (0 .. 131)
- * param  y1     - column address (0 .. 131)
- * param  color  - 12-bit color value rrrrggggbbbb
+ * @param  x0     row address (0 .. 131)
+ * @param  y0     column address (0 .. 131)
+ * @param  x1     row address (0 .. 131)
+ * @param  y1     column address (0 .. 131)
+ * @param  fill   indicates if the
+ * @param  color  12-bit color value rrrrggggbbbb
  *
  * note See LCD.h for some sample color settings
  *
