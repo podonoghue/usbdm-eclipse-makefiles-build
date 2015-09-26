@@ -58,12 +58,22 @@ struct DigitalIO {
    const    uint32_t    bitMask;    //!< Bit-mask to use when manipulating individual bit
 
    /**
-    * Default PCR setting for ports (excluding MUX value)
+    * Default PCR setting for pins (excluding multiplexor value)
     * High drive strength + Pull-up
     */
-   static const uint32_t    GPIO_DEFAULT_PCR = (PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(DEFAULT_ADC_FN);  //!< PCR multiplexor value for analogue function
-   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(DEFAULT_GPIO_FN); //!< PCR multiplexor value for digital function
+   static const uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   /**
+    * PCR multiplexor value for analogue function
+    */
+   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(DEFAULT_ADC_FN);
+   /**
+    * PCR multiplexor value for digital function
+    */
+   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(DEFAULT_GPIO_FN);
+   /**
+    * Default PCR value for pins used as GPIO (including multiplexor value)
+    */
+   static const uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
 
    /**
     * Toggle pin
@@ -103,7 +113,7 @@ struct DigitalIO {
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   void setDigitalOutput(uint32_t pcrValue=GPIO_PORT_FN|GPIO_DEFAULT_PCR) const  {
+   void setDigitalOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       setPCR(pcrValue);
       gpio->PDDR |= bitMask;
    }
@@ -112,7 +122,7 @@ struct DigitalIO {
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   void setDigitalInput(uint32_t pcrValue=GPIO_PORT_FN|GPIO_DEFAULT_PCR) const  {
+   void setDigitalInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       setPCR(pcrValue);
       gpio->PDDR &= ~bitMask;
    }
