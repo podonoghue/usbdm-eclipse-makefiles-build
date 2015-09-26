@@ -111,7 +111,7 @@
       <CustomAction
          Id="Ca.CreateMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
          Property="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig]\&quot; _sdk.xml &quot;[D.WizardPatchData]PatchLaunchConfiguration_$(var.ECLIPSE_VER).xml&quot; "
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_kds]\&quot; _sdk.xml &quot;[D.WizardPatchData]PatchLaunchConfiguration_$(var.ECLIPSE_VER).xml&quot; "
          Execute="immediate"/>
       <CustomAction Id="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
       
@@ -119,7 +119,7 @@
       <CustomAction
          Id="Ca.CreateUnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig]\&quot; _sdk.xml.original"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_kds]\&quot; _sdk.xml.original"
          Execute="immediate"/>
       <CustomAction Id="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
       
