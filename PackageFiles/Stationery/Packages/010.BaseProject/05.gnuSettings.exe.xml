@@ -19,22 +19,22 @@
       </projectOption>
       
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="debug">
-         <value>BUILD=DEBUG</value>
+         <value>DEBUG_BUILD</value>
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="debug">
-         <value>BUILD=DEBUG</value>
+         <value>DEBUG_BUILD</value>
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
-         <value>BUILD=DEBUG</value>
+         <value>DEBUG_BUILD</value>
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="release">
-         <value>BUILD=RELEASE</value>
+         <value>RELEASE_BUILD</value>
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
-         <value>BUILD=RELEASE</value>
+         <value>RELEASE_BUILD</value>
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
-         <value>BUILD=RELEASE</value>
+         <value>RELEASE_BUILD</value>
       </projectOption>
 
       <!-- C++ Linker file and path -->
