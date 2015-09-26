@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<wizardExtension>
+   <newProjectExtension>
+      <launchSettings>
+         <settingsGroup id="com.processorexpert.launch.gdb.usbdm">
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.bdmSerialNumber"                   value="[Any connected USBDM]" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.autoReconnect"                     value="AUTOCONNECT_ALWAYS" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.bdmSerialNumberMatchRequired"      value="false" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.buildToolId"                       value="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.catchVLLSxEvents"                  value="false" />
+            <applySetting type="integer" id="net.sourceforge.usbdm.gdb.clockTrimFrequency"                value="0" />
+            <applySetting type="integer" id="net.sourceforge.usbdm.gdb.connectionTimeout"                 value="10" />
+
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.deviceName"                        value="M${DebuggerPnEId}" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.driveReset"                        value="true" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.eraseMethod"                       value="ERASE_MASS" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.exitOnClose"                       value="true" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.gdbBinPath"                        value="${usbdm_armLtd_arm_path}" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.gdbCommand"                        value="${usbdm_armLtd_arm_prefix}gdb" />
+            <applySetting type="integer" id="net.sourceforge.usbdm.gdb.interfaceFrequency"                value="12000000" />
+                                                                                                          
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.interfaceType"                     value="T_ARM" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.maskInterrupts"                    value="false" />
+            <applySetting type="integer" id="net.sourceforge.usbdm.gdb.nvmClockTrimLocation"              value="0" />
+            <applySetting type="integer" id="net.sourceforge.usbdm.gdb.port"                              value="1234" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.restartPC"                         value="__HardReset" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.restartSetPC"                      value="false" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.restartSetResume"                  value="true" />
+            <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.restartSetStopAt"                  value="true" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.restartStopAt"                     value="main" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.gdbCommand"                        value="${usbdm_armLtd_arm_prefix}gdb" />
+
+            <applySetting type="boolean"  id="net.sourceforge.usbdm.gdb.restartUsesStartup"               value="true"/>
+            <applySetting type="string"   id="net.sourceforge.usbdm.gdb.securityOption"                   value="SECURITY_SMART"/>
+            <applySetting type="string"   id="net.sourceforge.usbdm.gdb.serverType"                       value="SERVER_SOCKET"/>
+            <applySetting type="string"   id="net.sourceforge.usbdm.gdb.targetVdd"                        value="BDM_TARGET_VDD_3V3"/>
+            <applySetting type="boolean"  id="net.sourceforge.usbdm.gdb.trimClock"                        value="false"/>
+            <applySetting type="integer"  id="net.sourceforge.usbdm.gdb.ttyPort"                          value="4321"/>
+            <applySetting type="boolean"  id="net.sourceforge.usbdm.gdb.useDebugVersion"                  value="false"/>
+            <applySetting type="boolean"  id="net.sourceforge.usbdm.gdb.usePstSignals"                    value="false"/>
+            <applySetting type="boolean"  id="net.sourceforge.usbdm.gdb.useSemiHosting"                   value="false"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.connection"              value="gdb:$(usbdmGdbSprite)%20FRDM_K20D50M#"/>
+            <applySetting type="integer"  id="org.eclipse.cdt.debug.gdbjtag.core.delay"                   value="0"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.doHalt"                  value="false"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.doReset"                 value="false"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.imageFileName"           value=""/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.imageOffset"             value=""/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.initCommands"            value=""/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.jtagDevice"              value="USBDM Interface"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.loadImage"               value="true"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols"             value="true"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.pcRegister"              value="__HardReset"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.runCommands"             value=""/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister"           value="false"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.setResume"               value="true"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.setStopAt"               value="true"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.stopAt"                  value="main"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName"         value=""/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.gdbjtag.core.symbolsOffset"           value=""/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.useFileForImage"         value="false"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.useFileForSymbols"       value="false"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.useProjBinaryForImage"   value="true"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.useProjBinaryForSymbols" value="true"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.gdbjtag.core.useRemoteTarget"         value="true"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.mi.core.DEBUG_NAME"                   value="${usbdm_armLtd_arm_path}/${usbdm_armLtd_arm_prefix}gdb"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.mi.core.commandFactory"               value="Standard"/>
+            <applySetting type="string"   id="org.eclipse.cdt.debug.mi.core.protocol"                     value="mi"/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.debug.mi.core.verboseMode"                  value="false"/>
+            <applySetting type="string"   id="org.eclipse.cdt.dsf.gdb.DEBUG_NAME"                         value="${usbdm_armLtd_arm_path}/${usbdm_armLtd_arm_prefix}gdb"/>
+            <applySetting type="integer"  id="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR"       value="2"/>
+            <applySetting type="string"   id="org.eclipse.cdt.launch.COREFILE_PATH"                       value=""/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR"      value="true"/>
+            <applySetting type="string"   id="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR"        value=""/>
+            <applySetting type="boolean"  id="org.eclipse.cdt.launch.use_terminal"                        value="true"/>
+         </settingsGroup>
+      </launchSettings>
+   </newProjectExtension>
+   <uiExtension>
+      <conditions>
+         <condition
+            id="com.processorexpert.condition.launch.gnuarm.gdb.usbdm">
+            <or>
+               <conditionRef conditionId="com.processorexpert.condition.false" />
+            </or>
+         </condition>
+      </conditions>
+   </uiExtension>
+
+</wizardExtension>

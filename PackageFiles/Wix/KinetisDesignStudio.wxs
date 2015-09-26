@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="KDS" ?> 
+   <?define ECLIPSE_VER="KDS_3_0_0" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -24,14 +24,26 @@
 		<Directory Id="D.KINETIS_DESIGN_STUDIO">
 		   <!-- Eclipse directory structure -->
 		   <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse" Name="eclipse">
-			  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
-			  <!-- PE directory structure -->
-			  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
-				 <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
-					<Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
-				 </Directory>
-			  </Directory>
+            <!-- Eclipse plugins -->
+            <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_EclipsePlugins" Name="plugins"/>
+            <!-- PE directory structure -->
+			   <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
+				   <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
+                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
+                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_PE" Name="PE">
+                     <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_PE_CPE" Name="CPE">
+                     <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_PE_CPE_WizardData_" Name="wizard_data">
+                        <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_PE_CPE_WizardData_wizards" Name="wizards">
+                           <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig" Name="launch_config" />
+                           <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_kds" Name="kds" />
+                        </Directory>
+                     </Directory>
+                     </Directory>
+                  </Directory>
+				   </Directory>
+			   </Directory>
 		   </Directory>
+
 		   <!-- Toolchain directory structure -->
 		   <Directory Id="D.KDSToolChain" Name="toolchain">
 			  <Directory Id="D.KDSarm_none_eabi" Name="arm-none-eabi">
@@ -69,22 +81,76 @@
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
          Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
+      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
          
+      <!-- Uninstall Eclipse plugins -->
       <CustomAction
          Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
-         Execute="immediate"/>
-         
-      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+         Execute="immediate"/>         
       <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
-      <InstallExecuteSequence>
+      <!-- Patch Eclipse New Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.MergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_EclipsePlugins]com.freescale.processorexpert.ui.kds.newprojectwizard_1.*.*.*\\&quot; plugin.xml &quot;[D.WizardPatchData]PatchNewWizardPlugin_$(var.ECLIPSE_VER).xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      
+      <!-- Unpatch Eclipse New Project Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateUnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.UnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_EclipsePlugins]com.freescale.processorexpert.ui.kds.newprojectwizard_1.*.*.*\\&quot; plugin.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Patch Launch Configuration XLM-->
+      <CustomAction
+         Id="Ca.CreateMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig]\&quot; _sdk.xml &quot;[D.WizardPatchData]PatchLaunchConfiguration_$(var.ECLIPSE_VER).xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      
+      <!-- UnPatch Launch Configuration XLM-->
+      <CustomAction
+         Id="Ca.CreateUnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
+         Property="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig]\&quot; _sdk.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      
+	  <InstallExecuteSequence>
+	      <!--
+		       Install plugins
+		    -->
+          <!-- These actions set Properties used by later actions -->
           <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
           <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
-          
-          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
-          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" Before="RemoveFiles"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+          <!-- These actions patch or restore the various XML files -->
+          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"           Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"         Before="RemoveFiles"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>         
+	      <!--
+		       Patch KDS new project wizard
+		   -->
+         <!-- These actions set Properties used by later actions -->
+         <Custom Action="Ca.CreateMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"           After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+         <Custom Action="Ca.CreateUnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"         After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+         <!-- These actions patch or restore the various XML files -->
+         <Custom Action="Ca.MergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"                 After="PublishProduct"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+         <Custom Action="Ca.UnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)"               Before="RemoveFiles">  <![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+	      <!--
+		       Patch KDS launch configuration list
+		   -->
+         <!-- These actions set Properties used by later actions -->
+         <Custom Action="Ca.CreateMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"    After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+         <Custom Action="Ca.CreateUnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"  After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+         <!-- These actions patch or restore the various XML files -->
+         <Custom Action="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"          After="PublishProduct"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+         <Custom Action="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"        Before="RemoveFiles">  <![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
       </InstallExecuteSequence>
       
       <!--======================================================
@@ -121,6 +187,23 @@
          </Component>
       </DirectoryRef>
       
+      <!--
+      Add launch config for usbdm 'launch_gdb_usbdm.xml'
+      -->
+      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_launchConfig">
+         <Component Id='C.ECLIPSE_$(var.ECLIPSE_VER)_launch_gdb_usbdm_xml' Guid='5d078bea-3698-4097-9bf0-a61d2aa86130' >
+            <File Id='EclipseLaunchFiles1_$(var.ECLIPSE_VER)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\launch_gdb_usbdm.xml'     KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- KDS Patches Common elements -->
+      <ComponentGroup Id='Cg.PatchKDSCommon'>
+         <!-- ComponentRef Id='C.ProgramMenuPatchDir' -->
+         <ComponentRef Id='C.MergeEXE'/>
+         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.WizardPatchData' />
+      </ComponentGroup>
+
       <!--======================================================
             Eclipse feature
       =======================================================-->
@@ -134,9 +217,11 @@
             <![CDATA[Installed OR P.ECLIPSE_$(var.ECLIPSE_VER)_CDT]]>
          </Condition>
          <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_Eclipse_ini' />
+         <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_launch_gdb_usbdm_xml' />
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' />
          <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />
+         <ComponentGroupRef Id='Cg.PatchKDSCommon' />
          <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.UsbdmGdbServer' />
          <ComponentGroupRef Id='Cg.UpdateSite' />

@@ -1,0 +1,13 @@
+<wizardExtension>
+  <uiExtension>
+    <conditions>
+         <!-- Added pgo -->
+         <condition merge-actions="insert"
+            id="com.processorexpert.condition.launch.gnuarm.gdb.usbdm">
+            <or>
+               <conditionRef conditionId="com.processorexpert.condition.true" />
+            </or>
+         </condition>
+    </conditions>
+  </uiExtension>
+</wizardExtension>
