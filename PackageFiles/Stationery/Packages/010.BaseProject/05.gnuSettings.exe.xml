@@ -17,6 +17,25 @@
       <projectOption id="gnu.c.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
       </projectOption>
+      
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="debug">
+         <value>BUILD=DEBUG</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="debug">
+         <value>BUILD=DEBUG</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
+         <value>BUILD=DEBUG</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="release">
+         <value>BUILD=RELEASE</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
+         <value>BUILD=RELEASE</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
+         <value>BUILD=RELEASE</value>
+      </projectOption>
 
       <!-- C++ Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile">
@@ -35,5 +54,6 @@
             <value>true</value>
          </projectOption>
       </projectActionList>
+
    </projectActionList>
 </root>
