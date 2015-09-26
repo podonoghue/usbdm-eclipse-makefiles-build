@@ -26,16 +26,16 @@ void delay(void) {
  * This function is used for the System Timer interrupt handler.
  *
  */
-void SysTick_Handler(void) {
-   __asm__("nop");
-}
+//void SysTick_Handler(void) {
+//   __asm__("nop");
+//}
 
 int main(void) {
 
    volatile int count = 0;
 
    // 1 ms tick
-   SysTick_Config(SystemBusClock/1000);
+//   SysTick_Config(SystemBusClock/1000);
 
    led_initialise();
 

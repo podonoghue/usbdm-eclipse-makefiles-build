@@ -17,7 +17,9 @@
       </applyWhen>
       <projectActionList>
          <applyWhen>
+         <and>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </and>
          </applyWhen>
          <variable id="projectOptionValue.CPP-abstraction-LCD" 
             name="LCD C++ interface" 
@@ -25,7 +27,6 @@
             checkGroup="group-spi-peripheral-options" >
             <enableWhen>
                <and>
-                  <requirement idRef="projectOptionValue.CPP-abstraction-systick"/>
                   <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
                </and>
             </enableWhen>
@@ -42,12 +43,14 @@
                <copy source="Project_Headers/Fonts.h"        target="Project_Headers/Fonts.h" replace="true"/>
                <copy source="Sources/LCD.cpp"                target="Sources/LCD.cpp" />
                <copy source="Sources/Fonts.cpp"              target="Sources/Fonts.cpp" replace="true"/>
-         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
-            <value>LCD_AVAILABLE</value>
-         </projectOption>
-         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
-            <value>LCD_AVAILABLE</value>
-         </projectOption>
+               <copy source="Project_Headers/Delay.h"        target="Project_Headers/Delay.h" replace="true"/>
+               <copy source="Sources/Delay.cpp"              target="Sources/Delay.cpp" replace="true"/>
+               <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+                  <value>LCD_AVAILABLE</value>
+               </projectOption>
+               <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+                  <value>LCD_AVAILABLE</value>
+               </projectOption>
             </projectActionList>
          </projectActionList>
       </projectActionList>

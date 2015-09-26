@@ -16,9 +16,6 @@
       </applyWhen>
       
       <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
-         </applyWhen>
          <variable id="projectOptionValue.abstraction-systick" 
             name="SysTick Timer" 
             description="Adds a simple timer using Systick interrupt" 
@@ -30,8 +27,8 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.abstraction-systick" />
                </applyWhen>
-               <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" replace="true"/>
-               <copy source="Sources/Delay.cpp"            target="Sources/Delay.cpp" replace="true"/>
+               <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" />
+               <copy source="Sources/Delay.cpp"            target="Sources/Delay.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

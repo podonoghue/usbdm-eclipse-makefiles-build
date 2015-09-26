@@ -25,15 +25,15 @@ void delay(void) {
  * This function is used for the System Timer interrupt handler.
  *
  */
-void SysTick_Handler(void) {
-   __asm__("nop");
-}
+//void SysTick_Handler(void) {
+//   __asm__("nop");
+//}
 
 int main(void) {
 
    volatile int count = 0;
 
-   SysTick_Config(1000);
+//   SysTick_Config(1000);
 
 //   printf("SystemBusClock  = %ld\n", SystemBusClock);
 
