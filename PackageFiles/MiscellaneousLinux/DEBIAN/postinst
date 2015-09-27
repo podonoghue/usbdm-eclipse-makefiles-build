@@ -78,35 +78,59 @@ installKDSInstance() {
    local KDS_DIR="$1"
    local KDS_TOOLCHAIN_LIB_DIR="${KDS_DIR}/toolchain/arm-none-eabi/lib"
    local KDS_ECLIPSE_DIR="${KDS_DIR}/eclipse"
-   local KDS_PE_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
-   local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
-   #local KDS_NANO_SPECS_FILENAME="nano.specs"
-   
-   # Add USBDM plugins to eclipse
-   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
+   local KDS_ECLIPSE_PLUGIN_DIR="${KDS_DIR}/eclipse/plugins"
 
-   # Add Toolchain nano.specs files
-   # KDS now used the OS GNU tools - not their own version
-   #local SOURCE="${USBDM_SHARED_DIR}/${KDS_NANO_SPECS_FILENAME}"
-   #local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
-   
-   #echo Installing nano.specs files...
-   #if [[ -d ${KDS_TOOLCHAIN_LIB_DIR} ]]; then
-   #   ln -svf ${SOURCE} ${DESTINATION}
-   #else
-   #  echo " Toolchain directory '${KDS_TOOLCHAIN_LIB_DIR}' - Not Found"
-   #fi
+   local KDS_PE_COMPILER_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
+   local KDS_PE_WIZARD_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/PE/CPE/wizard_data/wizards"
+   local KDS_PE_WIZARD_LAUNCH_DIR="${KDS_PE_WIZARD_DIR}/launch_config"
 
-   # Add PE files
-   local SOURCE="${USBDM_SHARED_DIR}/${KDS_PR_XLKR_FILENAME}"
-   local DESTINATION="${KDS_PE_DIR}/${KDS_PR_XLKR_FILENAME}"
-   
-   echo Installing PE files...
-   if [[ -d ${KDS_PE_DIR} ]]; then
+   local KDS_VER="3_0_0"
+
+   echo
+   echo "Patching KDS New Project Wizard"
+   local WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchNewWizardPlugin_KDS_${KDS_VER}.xml"
+   local WIZARD_BASE_DIR=${KDS_ECLIPSE_PLUGIN_DIR}/"com.freescale.processorexpert.ui.kds.newprojectwizard_"
+   echo ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+   echo touch ${WIZARD_BASE_DIR}\*
+   touch ${WIZARD_BASE_DIR}*
+
+   echo
+   echo "Patching KDS Launch Config Information"
+   local LAUNCH_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchLaunchConfiguration_KDS_${KDS_VER}.xml"
+   local LAUNCH_BASE_DIR=${KDS_PE_WIZARD_DIR}/kd
+   echo ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml" ${LAUNCH_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml" ${LAUNCH_PATCH_FILE}
+   echo touch ${LAUNCH_BASE_DIR}\*
+   touch ${LAUNCH_BASE_DIR}*
+
+   # Install PE files
+   echo "Installing PE files..."
+   echo
+
+   local SOURCE="${USBDM_LAUNCH_CONFIG_DIR}/launch_gdb_usbdm.xml"
+   local DESTINATION="${KDS_PE_WIZARD_LAUNCH_DIR}/launch_gdb_usbdm.xml"
+
+   if [[ -d ${KDS_PE_WIZARD_LAUNCH_DIR} ]]; then
+      echo "Linking KDS USBDM Launch config"
       ln -svf ${SOURCE} ${DESTINATION}
    else
-     echo " Processor Expert directory '${KDS_PE_DIR}' - Not Found"
+      echo " KDS Launch config directory '${KDS_PE_WIZARD_LAUNCH_DIR}' not found"
    fi
+
+   local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
+   local SOURCE="${USBDM_SHARED_DIR}/${KDS_PR_XLKR_FILENAME}"
+   local DESTINATION="${KDS_PE_COMPILER_DIR}/${KDS_PR_XLKR_FILENAME}"
+   
+   if [[ -d ${KDS_PE_COMPILER_DIR} ]]; then
+      echo "Linking xlkr file"
+      ln -svf ${SOURCE} ${DESTINATION}
+   else
+     echo " KDS Processor Expert directory '${KDS_PE_COMPILER_DIR}' - Not Found"
+   fi
+
+   # Add USBDM plugins to eclipse
+   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
 }
 
 #======================================================
@@ -216,12 +240,12 @@ installCodewarriorInstance() {
    echo "=================================================================="
    echo "Installing launch settings"
    echo "Linking ..."
-   ln -svf "${USBDM_CW_LAUNCH_CONFIG_DIR}/"*".xml" ${WIZARD_DIRECTORY}/launch_config
+   ln -svf "${USBDM_LAUNCH_CONFIG_DIR}/"*".xml" ${WIZARD_DIRECTORY}/launch_config
 
    echo
    echo "Patching New Project Wizard"
    CODEWARRIOR_PATCH_NEW_WIZARD="PatchNewWizardPlugin_V10.2.xml"
-   WIZARD_PATCH_FILE=${USBDM_CW_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_NEW_WIZARD}
+   WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_NEW_WIZARD}
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.projectwizard_"  
    ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
    echo touch ${WIZARD_BASE_DIR}\*
@@ -230,7 +254,7 @@ installCodewarriorInstance() {
    echo
    echo "Patching Change Project Wizard"
    CODEWARRIOR_PATCH_CHANGE_WIZARD="PatchChangeWizardPlugin_V10.2.xml"
-   WIZARD_PATCH_FILE=${USBDM_CW_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
+   WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.changewizard_"  
    ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
 
@@ -297,8 +321,8 @@ fi
 
 USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
 USBDM_UPDATE_SITE="${USBDM_SHARED_DIR}/UpdateSite"
-USBDM_CW_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
-USBDM_CW_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
+USBDM_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
+USBDM_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
 
 CDT_FEATURE_GROUP="net.sourceforge.usbdm.cdt.feature.feature.group"
 CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"

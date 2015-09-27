@@ -72,33 +72,58 @@ removeKDSInstance() {
    local KDS_DIR="$1"
    local KDS_TOOLCHAIN_LIB_DIR="${KDS_DIR}/toolchain/arm-none-eabi/lib"
    local KDS_ECLIPSE_DIR="${KDS_DIR}/eclipse"
-   local KDS_PE_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
-   local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
-   #local KDS_NANO_SPECS_FILENAME="nano.specs"
-   
-   # Remove USBDM plugins to eclipse
-   removeEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
+   local KDS_ECLIPSE_PLUGIN_DIR="${KDS_DIR}/eclipse/plugins"
 
-   # Add Toolchain nano.specs files
-   # KDS now used the OS GNU tools - not their own version
-   #local DESTINATION="${KDS_TOOLCHAIN_LIB_DIR}/${KDS_NANO_SPECS_FILENAME}"
-   
-   #echo Removing nano.specs files...
-   #if [[ -f ${DESTINATION} ]]; then
-   #   rm -fv ${DESTINATION}
-   #else
-   #  echo " Specs file '${DESTINATION}' - Not Found"
-   #fi
+   local KDS_PE_COMPILER_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/Compiler"
+   local KDS_PE_WIZARD_DIR="${KDS_ECLIPSE_DIR}/ProcessorExpert/Config/PE/CPE/wizard_data/wizards"
+   local KDS_PE_WIZARD_LAUNCH_DIR="${KDS_PE_WIZARD_DIR}/launch_config"
+
+   local KDS_VER="3_0_0"
+
+   echo
+   echo "UnPatching KDS New Project Wizard"
+   local WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchNewWizardPlugin_KDS_${KDS_VER}.xml"
+   local WIZARD_BASE_DIR=${KDS_ECLIPSE_PLUGIN_DIR}/"com.freescale.processorexpert.ui.kds.newprojectwizard_"
+   echo ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml
+   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml
+   echo touch ${WIZARD_BASE_DIR}\*
+   touch ${WIZARD_BASE_DIR}*
+
+   echo
+   echo "UnPatching KDS Launch Config Information"
+   local LAUNCH_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchLaunchConfiguration_KDS_${KDS_VER}.xml"
+   local LAUNCH_BASE_DIR=${KDS_PE_WIZARD_DIR}/kd
+   echo ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml"
+   ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml"
+   echo touch ${LAUNCH_BASE_DIR}\*
+   touch ${LAUNCH_BASE_DIR}*
 
    # Remove PE files
-   local DESTINATION="${KDS_PE_DIR}/${KDS_PR_XLKR_FILENAME}"
+   echo "Removing PE files..."
+   echo
+
+   local DESTINATION="${KDS_PE_WIZARD_LAUNCH_DIR}/launch_gdb_usbdm.xml"
+
+   if [[ -d ${DESTINATION} ]]; then
+      echo "Removing KDS USBDM Launch config"
+      rm -fv ${DESTINATION}
+   else
+      echo " KDS Launch config file '${DESTINATION}' - Not Found"
+   fi
+
+   local KDS_PR_XLKR_FILENAME="net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr"
+
+   local DESTINATION="${KDS_PE_COMPILER_DIR}/${KDS_PR_XLKR_FILENAME}"
    
-   echo Removing PE files...
    if [[ -f ${DESTINATION} ]]; then
+      echo "Removing xlkr file"
       rm -fv ${DESTINATION}
    else
      echo " Processor Expert file '${DESTINATION}' - Not Found"
    fi
+
+   # Remove USBDM plugins to eclipse
+   removeEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
 }
 
 #======================================================
@@ -275,8 +300,8 @@ LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-removeUSBHardware
-removeEclipse
+#removeUSBHardware
+#removeEclipse
 removeKDS
-removeCodewarrior
+#removeCodewarrior
 
