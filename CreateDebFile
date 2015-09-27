@@ -10,6 +10,8 @@ VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
 SOURCE_DIRECTORY=.
 
+DATE=`date +"%Y%m%d%H%M%S"`
+
 #======================================================
 # Create ARCH dependent DEB file
 #======================================================
