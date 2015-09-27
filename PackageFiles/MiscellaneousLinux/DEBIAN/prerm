@@ -234,7 +234,7 @@ removeCodewarriorInstance() {
 
    echo
    echo "Unpatching Change Project Wizard"
-   WIZARD_PATCH_FILE=${USBDM_CW_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
+   WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.changewizard_"  
    ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml
 
@@ -289,8 +289,8 @@ fi
 
 USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
 USBDM_UPDATE_SITE="${USBDM_SHARED_DIR}/UpdateSite"
-USBDM_CW_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
-USBDM_CW_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
+USBDM_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
+USBDM_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
 
 CDT_FEATURE_GROUP="net.sourceforge.usbdm.cdt.feature.feature.group"
 CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
@@ -300,8 +300,8 @@ LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-#removeUSBHardware
-#removeEclipse
+removeUSBHardware
+removeEclipse
 removeKDS
-#removeCodewarrior
+removeCodewarrior
 
