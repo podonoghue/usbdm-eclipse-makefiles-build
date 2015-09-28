@@ -11,14 +11,14 @@
             <applySetting type="integer" id="net.sourceforge.usbdm.gdb.clockTrimFrequency"                value="0" />
             <applySetting type="integer" id="net.sourceforge.usbdm.gdb.connectionTimeout"                 value="10" />
 
-            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.deviceName"                        value="M${DebuggerPnEId}" />
+            <applySetting type="string"  id="net.sourceforge.usbdm.gdb.deviceName"                        value="${Processor}" />
             <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.driveReset"                        value="true" />
             <applySetting type="string"  id="net.sourceforge.usbdm.gdb.eraseMethod"                       value="ERASE_MASS" />
             <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.exitOnClose"                       value="true" />
             <applySetting type="string"  id="net.sourceforge.usbdm.gdb.gdbBinPath"                        value="${usbdm_armLtd_arm_path}" />
             <applySetting type="string"  id="net.sourceforge.usbdm.gdb.gdbCommand"                        value="${usbdm_armLtd_arm_prefix}gdb" />
             <applySetting type="integer" id="net.sourceforge.usbdm.gdb.interfaceFrequency"                value="12000000" />
-                                                                                                          
+
             <applySetting type="string"  id="net.sourceforge.usbdm.gdb.interfaceType"                     value="T_ARM" />
             <applySetting type="boolean" id="net.sourceforge.usbdm.gdb.maskInterrupts"                    value="false" />
             <applySetting type="integer" id="net.sourceforge.usbdm.gdb.nvmClockTrimLocation"              value="0" />
