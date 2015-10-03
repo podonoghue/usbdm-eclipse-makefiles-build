@@ -293,6 +293,7 @@ struct PwmIO {
    const    uint32_t    portMux;    //!< Port multiplexor value for PWM operation
    volatile uint32_t   *simscgc;    //!< Associated SIM_SCGC register
    const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
+   const    uint32_t    scValue;    //!< FTM->SC base value (clock selection & divider)
 
    /**
     * Configure PWM operation
@@ -312,12 +313,12 @@ struct PwmIO {
       if (mode == ftm_centreAlign) {
          ftm->MOD     = period/2;
          // Centre aligned PWM with CPWMS not selected
-         ftm->SC      = TPM_SC|TPM_SC_CPWMS_MASK;
+         ftm->SC      = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
          ftm->MOD     = period-1;
          // Left aligned PWM without CPWMS selected
-         ftm->SC      = TPM_SC;
+         ftm->SC      = scValue;
       }
    }
    /**
@@ -346,12 +347,12 @@ struct PwmIO {
       if ((ftm->SC&TPM_SC_CPWMS_MASK) != 0) {
          ftm->MOD     = period/2;
          // Centre aligned PWM with CPWMS not selected
-         ftm->SC      = TPM_SC|TPM_SC_CPWMS_MASK;
+         ftm->SC      = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
          ftm->MOD     = period-1;
          // Left aligned PWM without CPWMS selected
-         ftm->SC      = TPM_SC;
+         ftm->SC      = scValue;
       }
    }
 };

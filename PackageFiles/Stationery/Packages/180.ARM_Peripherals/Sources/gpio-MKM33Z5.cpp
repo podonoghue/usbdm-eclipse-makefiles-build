@@ -11,14 +11,14 @@
 /**
  * @brief Create ADC Clock register name from ADC number
  *
- * @param number Timer number e.g. 1 => ADC1_CLOCK_REG
+ * @param number Timer number e.g. 1 = ADC1_CLOCK_REG
  */
 #define ADC_CLOCK_REG(number)  CONCAT3_(ADC,number,_CLOCK_REG)
 
 /**
  * @brief Create ADC Clock register mask from ADC number
  *
- * @param number Timer number e.g. 1 => ADC1_CLOCK_MASK
+ * @param number Timer number e.g. 1 = ADC1_CLOCK_MASK
  */
 #define ADC_CLOCK_MASK(number)  CONCAT3_(ADC,number,_CLOCK_MASK)
 
@@ -94,15 +94,15 @@ const DigitalIO digitalIO_PTI0     = {&PCR(PTI0_GPIO_NAME,PTI0_GPIO_BIT),GPIO(PT
 const DigitalIO digitalIO_PTI1     = {&PCR(PTI1_GPIO_NAME,PTI1_GPIO_BIT),GPIO(PTI1_GPIO_NAME),PORT_CLOCK_MASK(PTI1_GPIO_NAME),(1UL<<PTI1_GPIO_BIT)};
 const DigitalIO digitalIO_PTI2     = {&PCR(PTI2_GPIO_NAME,PTI2_GPIO_BIT),GPIO(PTI2_GPIO_NAME),PORT_CLOCK_MASK(PTI2_GPIO_NAME),(1UL<<PTI2_GPIO_BIT)};
 const DigitalIO digitalIO_PTI3     = {&PCR(PTI3_GPIO_NAME,PTI3_GPIO_BIT),GPIO(PTI3_GPIO_NAME),PORT_CLOCK_MASK(PTI3_GPIO_NAME),(1UL<<PTI3_GPIO_BIT)};
-const AnalogueIO analogueIO_PTC5        = {&digitalIO_PTC5,  ADC(PTC5_ADC_NUM),  &ADC_CLOCK_REG(PTC5_ADC_NUM),  ADC_CLOCK_MASK(PTC5_ADC_NUM),  PTC5_ADC_CH};
-const AnalogueIO analogueIO_PTC6        = {&digitalIO_PTC6,  ADC(PTC6_ADC_NUM),  &ADC_CLOCK_REG(PTC6_ADC_NUM),  ADC_CLOCK_MASK(PTC6_ADC_NUM),  PTC6_ADC_CH};
-const AnalogueIO analogueIO_PTC7        = {&digitalIO_PTC7,  ADC(PTC7_ADC_NUM),  &ADC_CLOCK_REG(PTC7_ADC_NUM),  ADC_CLOCK_MASK(PTC7_ADC_NUM),  PTC7_ADC_CH};
-const AnalogueIO analogueIO_PTD4        = {&digitalIO_PTD4,  ADC(PTD4_ADC_NUM),  &ADC_CLOCK_REG(PTD4_ADC_NUM),  ADC_CLOCK_MASK(PTD4_ADC_NUM),  PTD4_ADC_CH};
-const AnalogueIO analogueIO_PTD5        = {&digitalIO_PTD5,  ADC(PTD5_ADC_NUM),  &ADC_CLOCK_REG(PTD5_ADC_NUM),  ADC_CLOCK_MASK(PTD5_ADC_NUM),  PTD5_ADC_CH};
-const AnalogueIO analogueIO_PTD6        = {&digitalIO_PTD6,  ADC(PTD6_ADC_NUM),  &ADC_CLOCK_REG(PTD6_ADC_NUM),  ADC_CLOCK_MASK(PTD6_ADC_NUM),  PTD6_ADC_CH};
-const AnalogueIO analogueIO_PTE7        = {&digitalIO_PTE7,  ADC(PTE7_ADC_NUM),  &ADC_CLOCK_REG(PTE7_ADC_NUM),  ADC_CLOCK_MASK(PTE7_ADC_NUM),  PTE7_ADC_CH};
-const AnalogueIO analogueIO_PTF0        = {&digitalIO_PTF0,  ADC(PTF0_ADC_NUM),  &ADC_CLOCK_REG(PTF0_ADC_NUM),  ADC_CLOCK_MASK(PTF0_ADC_NUM),  PTF0_ADC_CH};
-const AnalogueIO analogueIO_PTF1        = {&digitalIO_PTF1,  ADC(PTF1_ADC_NUM),  &ADC_CLOCK_REG(PTF1_ADC_NUM),  ADC_CLOCK_MASK(PTF1_ADC_NUM),  PTF1_ADC_CH};
-const AnalogueIO analogueIO_PTF2        = {&digitalIO_PTF2,  ADC(PTF2_ADC_NUM),  &ADC_CLOCK_REG(PTF2_ADC_NUM),  ADC_CLOCK_MASK(PTF2_ADC_NUM),  PTF2_ADC_CH};
-const AnalogueIO analogueIO_PTG1        = {&digitalIO_PTG1,  ADC(PTG1_ADC_NUM),  &ADC_CLOCK_REG(PTG1_ADC_NUM),  ADC_CLOCK_MASK(PTG1_ADC_NUM),  PTG1_ADC_CH};
-const AnalogueIO analogueIO_PTG2        = {&digitalIO_PTG2,  ADC(PTG2_ADC_NUM),  &ADC_CLOCK_REG(PTG2_ADC_NUM),  ADC_CLOCK_MASK(PTG2_ADC_NUM),  PTG2_ADC_CH};
+const AnalogueIO analogueIO_PTC5              = {&digitalIO_PTC5,  ADC(PTC5_ADC_NUM),  &ADC_CLOCK_REG(PTC5_ADC_NUM),  ADC_CLOCK_MASK(PTC5_ADC_NUM),  PTC5_ADC_CH};
+const AnalogueIO analogueIO_PTC6              = {&digitalIO_PTC6,  ADC(PTC6_ADC_NUM),  &ADC_CLOCK_REG(PTC6_ADC_NUM),  ADC_CLOCK_MASK(PTC6_ADC_NUM),  PTC6_ADC_CH};
+const AnalogueIO analogueIO_PTC7              = {&digitalIO_PTC7,  ADC(PTC7_ADC_NUM),  &ADC_CLOCK_REG(PTC7_ADC_NUM),  ADC_CLOCK_MASK(PTC7_ADC_NUM),  PTC7_ADC_CH};
+const AnalogueIO analogueIO_PTD4              = {&digitalIO_PTD4,  ADC(PTD4_ADC_NUM),  &ADC_CLOCK_REG(PTD4_ADC_NUM),  ADC_CLOCK_MASK(PTD4_ADC_NUM),  PTD4_ADC_CH};
+const AnalogueIO analogueIO_PTD5              = {&digitalIO_PTD5,  ADC(PTD5_ADC_NUM),  &ADC_CLOCK_REG(PTD5_ADC_NUM),  ADC_CLOCK_MASK(PTD5_ADC_NUM),  PTD5_ADC_CH};
+const AnalogueIO analogueIO_PTD6              = {&digitalIO_PTD6,  ADC(PTD6_ADC_NUM),  &ADC_CLOCK_REG(PTD6_ADC_NUM),  ADC_CLOCK_MASK(PTD6_ADC_NUM),  PTD6_ADC_CH};
+const AnalogueIO analogueIO_PTE7              = {&digitalIO_PTE7,  ADC(PTE7_ADC_NUM),  &ADC_CLOCK_REG(PTE7_ADC_NUM),  ADC_CLOCK_MASK(PTE7_ADC_NUM),  PTE7_ADC_CH};
+const AnalogueIO analogueIO_PTF0              = {&digitalIO_PTF0,  ADC(PTF0_ADC_NUM),  &ADC_CLOCK_REG(PTF0_ADC_NUM),  ADC_CLOCK_MASK(PTF0_ADC_NUM),  PTF0_ADC_CH};
+const AnalogueIO analogueIO_PTF1              = {&digitalIO_PTF1,  ADC(PTF1_ADC_NUM),  &ADC_CLOCK_REG(PTF1_ADC_NUM),  ADC_CLOCK_MASK(PTF1_ADC_NUM),  PTF1_ADC_CH};
+const AnalogueIO analogueIO_PTF2              = {&digitalIO_PTF2,  ADC(PTF2_ADC_NUM),  &ADC_CLOCK_REG(PTF2_ADC_NUM),  ADC_CLOCK_MASK(PTF2_ADC_NUM),  PTF2_ADC_CH};
+const AnalogueIO analogueIO_PTG1              = {&digitalIO_PTG1,  ADC(PTG1_ADC_NUM),  &ADC_CLOCK_REG(PTG1_ADC_NUM),  ADC_CLOCK_MASK(PTG1_ADC_NUM),  PTG1_ADC_CH};
+const AnalogueIO analogueIO_PTG2              = {&digitalIO_PTG2,  ADC(PTG2_ADC_NUM),  &ADC_CLOCK_REG(PTG2_ADC_NUM),  ADC_CLOCK_MASK(PTG2_ADC_NUM),  PTG2_ADC_CH};

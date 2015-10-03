@@ -11,28 +11,28 @@
 /**
  * @brief Create Timer Clock register name from timer number
  *
- * @param number Timer number e.g. 1 => FTM1_CLOCK_REG
+ * @param number Timer number e.g. 1 = FTM1_CLOCK_REG
  */
 #define FTM_CLOCK_REG(number)  CONCAT3_(FTM,number,_CLOCK_REG)
 
 /**
  * @brief Create Timer Clock register mask from timer number
  *
- * @param number Timer number e.g. 1 => FTM1_CLOCK_MASK
+ * @param number Timer number e.g. 1 = FTM1_CLOCK_MASK
  */
 #define FTM_CLOCK_MASK(number)  CONCAT3_(FTM,number,_CLOCK_MASK)
 
 /**
  * @brief Create ADC Clock register name from ADC number
  *
- * @param number Timer number e.g. 1 => ADC1_CLOCK_REG
+ * @param number Timer number e.g. 1 = ADC1_CLOCK_REG
  */
 #define ADC_CLOCK_REG(number)  CONCAT3_(ADC,number,_CLOCK_REG)
 
 /**
  * @brief Create ADC Clock register mask from ADC number
  *
- * @param number Timer number e.g. 1 => ADC1_CLOCK_MASK
+ * @param number Timer number e.g. 1 = ADC1_CLOCK_MASK
  */
 #define ADC_CLOCK_MASK(number)  CONCAT3_(ADC,number,_CLOCK_MASK)
 
@@ -80,64 +80,68 @@ const DigitalIO digitalIO_PTD6     = {&PCR(PTD6_GPIO_NAME,PTD6_GPIO_BIT),GPIO(PT
 const DigitalIO digitalIO_PTD7     = {&PCR(PTD7_GPIO_NAME,PTD7_GPIO_BIT),GPIO(PTD7_GPIO_NAME),PORT_CLOCK_MASK(PTD7_GPIO_NAME),(1UL<<PTD7_GPIO_BIT)};
 const DigitalIO digitalIO_PTE0     = {&PCR(PTE0_GPIO_NAME,PTE0_GPIO_BIT),GPIO(PTE0_GPIO_NAME),PORT_CLOCK_MASK(PTE0_GPIO_NAME),(1UL<<PTE0_GPIO_BIT)};
 const DigitalIO digitalIO_PTE1     = {&PCR(PTE1_GPIO_NAME,PTE1_GPIO_BIT),GPIO(PTE1_GPIO_NAME),PORT_CLOCK_MASK(PTE1_GPIO_NAME),(1UL<<PTE1_GPIO_BIT)};
-const AnalogueIO analogueIO_ADC0_SE23   = {0,                ADC(ADC0_SE23_ADC_NUM),&ADC_CLOCK_REG(ADC0_SE23_ADC_NUM),ADC_CLOCK_MASK(ADC0_SE23_ADC_NUM),ADC0_SE23_ADC_CH};
-const AnalogueIO analogueIO_PTB0        = {&digitalIO_PTB0,  ADC(PTB0_ADC_NUM),  &ADC_CLOCK_REG(PTB0_ADC_NUM),  ADC_CLOCK_MASK(PTB0_ADC_NUM),  PTB0_ADC_CH};
-const AnalogueIO analogueIO_PTB1        = {&digitalIO_PTB1,  ADC(PTB1_ADC_NUM),  &ADC_CLOCK_REG(PTB1_ADC_NUM),  ADC_CLOCK_MASK(PTB1_ADC_NUM),  PTB1_ADC_CH};
-const AnalogueIO analogueIO_PTB2        = {&digitalIO_PTB2,  ADC(PTB2_ADC_NUM),  &ADC_CLOCK_REG(PTB2_ADC_NUM),  ADC_CLOCK_MASK(PTB2_ADC_NUM),  PTB2_ADC_CH};
-const AnalogueIO analogueIO_PTB3        = {&digitalIO_PTB3,  ADC(PTB3_ADC_NUM),  &ADC_CLOCK_REG(PTB3_ADC_NUM),  ADC_CLOCK_MASK(PTB3_ADC_NUM),  PTB3_ADC_CH};
-const AnalogueIO analogueIO_PTC0        = {&digitalIO_PTC0,  ADC(PTC0_ADC_NUM),  &ADC_CLOCK_REG(PTC0_ADC_NUM),  ADC_CLOCK_MASK(PTC0_ADC_NUM),  PTC0_ADC_CH};
-const AnalogueIO analogueIO_PTC1        = {&digitalIO_PTC1,  ADC(PTC1_ADC_NUM),  &ADC_CLOCK_REG(PTC1_ADC_NUM),  ADC_CLOCK_MASK(PTC1_ADC_NUM),  PTC1_ADC_CH};
-const AnalogueIO analogueIO_PTC2        = {&digitalIO_PTC2,  ADC(PTC2_ADC_NUM),  &ADC_CLOCK_REG(PTC2_ADC_NUM),  ADC_CLOCK_MASK(PTC2_ADC_NUM),  PTC2_ADC_CH};
-const AnalogueIO analogueIO_PTD1        = {&digitalIO_PTD1,  ADC(PTD1_ADC_NUM),  &ADC_CLOCK_REG(PTD1_ADC_NUM),  ADC_CLOCK_MASK(PTD1_ADC_NUM),  PTD1_ADC_CH};
-const AnalogueIO analogueIO_PTD5        = {&digitalIO_PTD5,  ADC(PTD5_ADC_NUM),  &ADC_CLOCK_REG(PTD5_ADC_NUM),  ADC_CLOCK_MASK(PTD5_ADC_NUM),  PTD5_ADC_CH};
-const AnalogueIO analogueIO_PTD6        = {&digitalIO_PTD6,  ADC(PTD6_ADC_NUM),  &ADC_CLOCK_REG(PTD6_ADC_NUM),  ADC_CLOCK_MASK(PTD6_ADC_NUM),  PTD6_ADC_CH};
-#if FTM0_5_SEL == 1
-const PwmIO  pwmIO_PTA0      = {&digitalIO_PTA0,   (volatile FTM_Type*)FTM(PTA0_FTM_NUM),  PTA0_FTM_CH,   PORT_PCR_MUX(PTA0_FTM_FN),  &FTM_CLOCK_REG(PTA0_FTM_NUM),  FTM_CLOCK_MASK(PTA0_FTM_NUM)};
+const AnalogueIO analogueIO_ADC0_DM0          = {0,                ADC(ADC0_DM0_ADC_NUM),&ADC_CLOCK_REG(ADC0_DM0_ADC_NUM),ADC_CLOCK_MASK(ADC0_DM0_ADC_NUM),ADC0_DM0_ADC_CH};
+const AnalogueIO analogueIO_ADC0_DM3          = {0,                ADC(ADC0_DM3_ADC_NUM),&ADC_CLOCK_REG(ADC0_DM3_ADC_NUM),ADC_CLOCK_MASK(ADC0_DM3_ADC_NUM),ADC0_DM3_ADC_CH};
+const AnalogueIO analogueIO_ADC0_DP0          = {0,                ADC(ADC0_DP0_ADC_NUM),&ADC_CLOCK_REG(ADC0_DP0_ADC_NUM),ADC_CLOCK_MASK(ADC0_DP0_ADC_NUM),ADC0_DP0_ADC_CH};
+const AnalogueIO analogueIO_ADC0_DP3          = {0,                ADC(ADC0_DP3_ADC_NUM),&ADC_CLOCK_REG(ADC0_DP3_ADC_NUM),ADC_CLOCK_MASK(ADC0_DP3_ADC_NUM),ADC0_DP3_ADC_CH};
+const AnalogueIO analogueIO_ADC0_SE23         = {0,                ADC(ADC0_SE23_ADC_NUM),&ADC_CLOCK_REG(ADC0_SE23_ADC_NUM),ADC_CLOCK_MASK(ADC0_SE23_ADC_NUM),ADC0_SE23_ADC_CH};
+const AnalogueIO analogueIO_PTB0              = {&digitalIO_PTB0,  ADC(PTB0_ADC_NUM),  &ADC_CLOCK_REG(PTB0_ADC_NUM),  ADC_CLOCK_MASK(PTB0_ADC_NUM),  PTB0_ADC_CH};
+const AnalogueIO analogueIO_PTB1              = {&digitalIO_PTB1,  ADC(PTB1_ADC_NUM),  &ADC_CLOCK_REG(PTB1_ADC_NUM),  ADC_CLOCK_MASK(PTB1_ADC_NUM),  PTB1_ADC_CH};
+const AnalogueIO analogueIO_PTB2              = {&digitalIO_PTB2,  ADC(PTB2_ADC_NUM),  &ADC_CLOCK_REG(PTB2_ADC_NUM),  ADC_CLOCK_MASK(PTB2_ADC_NUM),  PTB2_ADC_CH};
+const AnalogueIO analogueIO_PTB3              = {&digitalIO_PTB3,  ADC(PTB3_ADC_NUM),  &ADC_CLOCK_REG(PTB3_ADC_NUM),  ADC_CLOCK_MASK(PTB3_ADC_NUM),  PTB3_ADC_CH};
+const AnalogueIO analogueIO_PTC0              = {&digitalIO_PTC0,  ADC(PTC0_ADC_NUM),  &ADC_CLOCK_REG(PTC0_ADC_NUM),  ADC_CLOCK_MASK(PTC0_ADC_NUM),  PTC0_ADC_CH};
+const AnalogueIO analogueIO_PTC1              = {&digitalIO_PTC1,  ADC(PTC1_ADC_NUM),  &ADC_CLOCK_REG(PTC1_ADC_NUM),  ADC_CLOCK_MASK(PTC1_ADC_NUM),  PTC1_ADC_CH};
+const AnalogueIO analogueIO_PTC2              = {&digitalIO_PTC2,  ADC(PTC2_ADC_NUM),  &ADC_CLOCK_REG(PTC2_ADC_NUM),  ADC_CLOCK_MASK(PTC2_ADC_NUM),  PTC2_ADC_CH};
+const AnalogueIO analogueIO_PTD1              = {&digitalIO_PTD1,  ADC(PTD1_ADC_NUM),  &ADC_CLOCK_REG(PTD1_ADC_NUM),  ADC_CLOCK_MASK(PTD1_ADC_NUM),  PTD1_ADC_CH};
+const AnalogueIO analogueIO_PTD5              = {&digitalIO_PTD5,  ADC(PTD5_ADC_NUM),  &ADC_CLOCK_REG(PTD5_ADC_NUM),  ADC_CLOCK_MASK(PTD5_ADC_NUM),  PTD5_ADC_CH};
+const AnalogueIO analogueIO_PTD6              = {&digitalIO_PTD6,  ADC(PTD6_ADC_NUM),  &ADC_CLOCK_REG(PTD6_ADC_NUM),  ADC_CLOCK_MASK(PTD6_ADC_NUM),  PTD6_ADC_CH};
+#if FTM0_CH5_SEL == 1
+const PwmIO  pwmIO_PTA0      = {&digitalIO_PTA0,   (volatile FTM_Type*)FTM(PTA0_FTM_NUM),  PTA0_FTM_CH,   PORT_PCR_MUX(PTA0_FTM_FN),  &FTM_CLOCK_REG(PTA0_FTM_NUM),  FTM_CLOCK_MASK(PTA0_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_6_SEL == 1
-const PwmIO  pwmIO_PTA1      = {&digitalIO_PTA1,   (volatile FTM_Type*)FTM(PTA1_FTM_NUM),  PTA1_FTM_CH,   PORT_PCR_MUX(PTA1_FTM_FN),  &FTM_CLOCK_REG(PTA1_FTM_NUM),  FTM_CLOCK_MASK(PTA1_FTM_NUM)};
+#if FTM0_CH6_SEL == 1
+const PwmIO  pwmIO_PTA1      = {&digitalIO_PTA1,   (volatile FTM_Type*)FTM(PTA1_FTM_NUM),  PTA1_FTM_CH,   PORT_PCR_MUX(PTA1_FTM_FN),  &FTM_CLOCK_REG(PTA1_FTM_NUM),  FTM_CLOCK_MASK(PTA1_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_7_SEL == 1
-const PwmIO  pwmIO_PTA2      = {&digitalIO_PTA2,   (volatile FTM_Type*)FTM(PTA2_FTM_NUM),  PTA2_FTM_CH,   PORT_PCR_MUX(PTA2_FTM_FN),  &FTM_CLOCK_REG(PTA2_FTM_NUM),  FTM_CLOCK_MASK(PTA2_FTM_NUM)};
+#if FTM0_CH7_SEL == 1
+const PwmIO  pwmIO_PTA2      = {&digitalIO_PTA2,   (volatile FTM_Type*)FTM(PTA2_FTM_NUM),  PTA2_FTM_CH,   PORT_PCR_MUX(PTA2_FTM_FN),  &FTM_CLOCK_REG(PTA2_FTM_NUM),  FTM_CLOCK_MASK(PTA2_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_0_SEL == 1
-const PwmIO  pwmIO_PTA3      = {&digitalIO_PTA3,   (volatile FTM_Type*)FTM(PTA3_FTM_NUM),  PTA3_FTM_CH,   PORT_PCR_MUX(PTA3_FTM_FN),  &FTM_CLOCK_REG(PTA3_FTM_NUM),  FTM_CLOCK_MASK(PTA3_FTM_NUM)};
+#if FTM0_CH0_SEL == 1
+const PwmIO  pwmIO_PTA3      = {&digitalIO_PTA3,   (volatile FTM_Type*)FTM(PTA3_FTM_NUM),  PTA3_FTM_CH,   PORT_PCR_MUX(PTA3_FTM_FN),  &FTM_CLOCK_REG(PTA3_FTM_NUM),  FTM_CLOCK_MASK(PTA3_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_1_SEL == 1
-const PwmIO  pwmIO_PTA4      = {&digitalIO_PTA4,   (volatile FTM_Type*)FTM(PTA4_FTM_NUM),  PTA4_FTM_CH,   PORT_PCR_MUX(PTA4_FTM_FN),  &FTM_CLOCK_REG(PTA4_FTM_NUM),  FTM_CLOCK_MASK(PTA4_FTM_NUM)};
+#if FTM0_CH1_SEL == 1
+const PwmIO  pwmIO_PTA4      = {&digitalIO_PTA4,   (volatile FTM_Type*)FTM(PTA4_FTM_NUM),  PTA4_FTM_CH,   PORT_PCR_MUX(PTA4_FTM_FN),  &FTM_CLOCK_REG(PTA4_FTM_NUM),  FTM_CLOCK_MASK(PTA4_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_2_SEL == 1
-const PwmIO  pwmIO_PTA5      = {&digitalIO_PTA5,   (volatile FTM_Type*)FTM(PTA5_FTM_NUM),  PTA5_FTM_CH,   PORT_PCR_MUX(PTA5_FTM_FN),  &FTM_CLOCK_REG(PTA5_FTM_NUM),  FTM_CLOCK_MASK(PTA5_FTM_NUM)};
+#if FTM0_CH2_SEL == 1
+const PwmIO  pwmIO_PTA5      = {&digitalIO_PTA5,   (volatile FTM_Type*)FTM(PTA5_FTM_NUM),  PTA5_FTM_CH,   PORT_PCR_MUX(PTA5_FTM_FN),  &FTM_CLOCK_REG(PTA5_FTM_NUM),  FTM_CLOCK_MASK(PTA5_FTM_NUM), FTM0_SC};
 #endif
-#if FTM1_0_SEL == 1
-const PwmIO  pwmIO_PTA12     = {&digitalIO_PTA12,  (volatile FTM_Type*)FTM(PTA12_FTM_NUM), PTA12_FTM_CH,  PORT_PCR_MUX(PTA12_FTM_FN), &FTM_CLOCK_REG(PTA12_FTM_NUM), FTM_CLOCK_MASK(PTA12_FTM_NUM)};
+#if FTM1_CH0_SEL == 1
+const PwmIO  pwmIO_PTA12     = {&digitalIO_PTA12,  (volatile FTM_Type*)FTM(PTA12_FTM_NUM), PTA12_FTM_CH,  PORT_PCR_MUX(PTA12_FTM_FN), &FTM_CLOCK_REG(PTA12_FTM_NUM), FTM_CLOCK_MASK(PTA12_FTM_NUM), FTM1_SC};
 #endif
-#if FTM1_1_SEL == 1
-const PwmIO  pwmIO_PTA13     = {&digitalIO_PTA13,  (volatile FTM_Type*)FTM(PTA13_FTM_NUM), PTA13_FTM_CH,  PORT_PCR_MUX(PTA13_FTM_FN), &FTM_CLOCK_REG(PTA13_FTM_NUM), FTM_CLOCK_MASK(PTA13_FTM_NUM)};
+#if FTM1_CH1_SEL == 1
+const PwmIO  pwmIO_PTA13     = {&digitalIO_PTA13,  (volatile FTM_Type*)FTM(PTA13_FTM_NUM), PTA13_FTM_CH,  PORT_PCR_MUX(PTA13_FTM_FN), &FTM_CLOCK_REG(PTA13_FTM_NUM), FTM_CLOCK_MASK(PTA13_FTM_NUM), FTM1_SC};
 #endif
-#if FTM1_0_SEL == 2
-const PwmIO  pwmIO_PTB0      = {&digitalIO_PTB0,   (volatile FTM_Type*)FTM(PTB0_FTM_NUM),  PTB0_FTM_CH,   PORT_PCR_MUX(PTB0_FTM_FN),  &FTM_CLOCK_REG(PTB0_FTM_NUM),  FTM_CLOCK_MASK(PTB0_FTM_NUM)};
+#if FTM1_CH0_SEL == 2
+const PwmIO  pwmIO_PTB0      = {&digitalIO_PTB0,   (volatile FTM_Type*)FTM(PTB0_FTM_NUM),  PTB0_FTM_CH,   PORT_PCR_MUX(PTB0_FTM_FN),  &FTM_CLOCK_REG(PTB0_FTM_NUM),  FTM_CLOCK_MASK(PTB0_FTM_NUM), FTM1_SC};
 #endif
-#if FTM1_1_SEL == 2
-const PwmIO  pwmIO_PTB1      = {&digitalIO_PTB1,   (volatile FTM_Type*)FTM(PTB1_FTM_NUM),  PTB1_FTM_CH,   PORT_PCR_MUX(PTB1_FTM_FN),  &FTM_CLOCK_REG(PTB1_FTM_NUM),  FTM_CLOCK_MASK(PTB1_FTM_NUM)};
+#if FTM1_CH1_SEL == 2
+const PwmIO  pwmIO_PTB1      = {&digitalIO_PTB1,   (volatile FTM_Type*)FTM(PTB1_FTM_NUM),  PTB1_FTM_CH,   PORT_PCR_MUX(PTB1_FTM_FN),  &FTM_CLOCK_REG(PTB1_FTM_NUM),  FTM_CLOCK_MASK(PTB1_FTM_NUM), FTM1_SC};
 #endif
-#if FTM0_0_SEL == 2
-const PwmIO  pwmIO_PTC1      = {&digitalIO_PTC1,   (volatile FTM_Type*)FTM(PTC1_FTM_NUM),  PTC1_FTM_CH,   PORT_PCR_MUX(PTC1_FTM_FN),  &FTM_CLOCK_REG(PTC1_FTM_NUM),  FTM_CLOCK_MASK(PTC1_FTM_NUM)};
+#if FTM0_CH0_SEL == 2
+const PwmIO  pwmIO_PTC1      = {&digitalIO_PTC1,   (volatile FTM_Type*)FTM(PTC1_FTM_NUM),  PTC1_FTM_CH,   PORT_PCR_MUX(PTC1_FTM_FN),  &FTM_CLOCK_REG(PTC1_FTM_NUM),  FTM_CLOCK_MASK(PTC1_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_1_SEL == 2
-const PwmIO  pwmIO_PTC2      = {&digitalIO_PTC2,   (volatile FTM_Type*)FTM(PTC2_FTM_NUM),  PTC2_FTM_CH,   PORT_PCR_MUX(PTC2_FTM_FN),  &FTM_CLOCK_REG(PTC2_FTM_NUM),  FTM_CLOCK_MASK(PTC2_FTM_NUM)};
+#if FTM0_CH1_SEL == 2
+const PwmIO  pwmIO_PTC2      = {&digitalIO_PTC2,   (volatile FTM_Type*)FTM(PTC2_FTM_NUM),  PTC2_FTM_CH,   PORT_PCR_MUX(PTC2_FTM_FN),  &FTM_CLOCK_REG(PTC2_FTM_NUM),  FTM_CLOCK_MASK(PTC2_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_2_SEL == 2
-const PwmIO  pwmIO_PTC3      = {&digitalIO_PTC3,   (volatile FTM_Type*)FTM(PTC3_FTM_NUM),  PTC3_FTM_CH,   PORT_PCR_MUX(PTC3_FTM_FN),  &FTM_CLOCK_REG(PTC3_FTM_NUM),  FTM_CLOCK_MASK(PTC3_FTM_NUM)};
+#if FTM0_CH2_SEL == 2
+const PwmIO  pwmIO_PTC3      = {&digitalIO_PTC3,   (volatile FTM_Type*)FTM(PTC3_FTM_NUM),  PTC3_FTM_CH,   PORT_PCR_MUX(PTC3_FTM_FN),  &FTM_CLOCK_REG(PTC3_FTM_NUM),  FTM_CLOCK_MASK(PTC3_FTM_NUM), FTM0_SC};
 #endif
-const PwmIO  pwmIO_PTC4      = {&digitalIO_PTC4,   (volatile FTM_Type*)FTM(PTC4_FTM_NUM),  PTC4_FTM_CH,   PORT_PCR_MUX(PTC4_FTM_FN),  &FTM_CLOCK_REG(PTC4_FTM_NUM),  FTM_CLOCK_MASK(PTC4_FTM_NUM)};
-const PwmIO  pwmIO_PTD4      = {&digitalIO_PTD4,   (volatile FTM_Type*)FTM(PTD4_FTM_NUM),  PTD4_FTM_CH,   PORT_PCR_MUX(PTD4_FTM_FN),  &FTM_CLOCK_REG(PTD4_FTM_NUM),  FTM_CLOCK_MASK(PTD4_FTM_NUM)};
-#if FTM0_5_SEL == 2
-const PwmIO  pwmIO_PTD5      = {&digitalIO_PTD5,   (volatile FTM_Type*)FTM(PTD5_FTM_NUM),  PTD5_FTM_CH,   PORT_PCR_MUX(PTD5_FTM_FN),  &FTM_CLOCK_REG(PTD5_FTM_NUM),  FTM_CLOCK_MASK(PTD5_FTM_NUM)};
+const PwmIO  pwmIO_PTC4      = {&digitalIO_PTC4,   (volatile FTM_Type*)FTM(PTC4_FTM_NUM),  PTC4_FTM_CH,   PORT_PCR_MUX(PTC4_FTM_FN),  &FTM_CLOCK_REG(PTC4_FTM_NUM),  FTM_CLOCK_MASK(PTC4_FTM_NUM), FTM0_SC};
+const PwmIO  pwmIO_PTD4      = {&digitalIO_PTD4,   (volatile FTM_Type*)FTM(PTD4_FTM_NUM),  PTD4_FTM_CH,   PORT_PCR_MUX(PTD4_FTM_FN),  &FTM_CLOCK_REG(PTD4_FTM_NUM),  FTM_CLOCK_MASK(PTD4_FTM_NUM), FTM0_SC};
+#if FTM0_CH5_SEL == 2
+const PwmIO  pwmIO_PTD5      = {&digitalIO_PTD5,   (volatile FTM_Type*)FTM(PTD5_FTM_NUM),  PTD5_FTM_CH,   PORT_PCR_MUX(PTD5_FTM_FN),  &FTM_CLOCK_REG(PTD5_FTM_NUM),  FTM_CLOCK_MASK(PTD5_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_6_SEL == 2
-const PwmIO  pwmIO_PTD6      = {&digitalIO_PTD6,   (volatile FTM_Type*)FTM(PTD6_FTM_NUM),  PTD6_FTM_CH,   PORT_PCR_MUX(PTD6_FTM_FN),  &FTM_CLOCK_REG(PTD6_FTM_NUM),  FTM_CLOCK_MASK(PTD6_FTM_NUM)};
+#if FTM0_CH6_SEL == 2
+const PwmIO  pwmIO_PTD6      = {&digitalIO_PTD6,   (volatile FTM_Type*)FTM(PTD6_FTM_NUM),  PTD6_FTM_CH,   PORT_PCR_MUX(PTD6_FTM_FN),  &FTM_CLOCK_REG(PTD6_FTM_NUM),  FTM_CLOCK_MASK(PTD6_FTM_NUM), FTM0_SC};
 #endif
-#if FTM0_7_SEL == 2
-const PwmIO  pwmIO_PTD7      = {&digitalIO_PTD7,   (volatile FTM_Type*)FTM(PTD7_FTM_NUM),  PTD7_FTM_CH,   PORT_PCR_MUX(PTD7_FTM_FN),  &FTM_CLOCK_REG(PTD7_FTM_NUM),  FTM_CLOCK_MASK(PTD7_FTM_NUM)};
+#if FTM0_CH7_SEL == 2
+const PwmIO  pwmIO_PTD7      = {&digitalIO_PTD7,   (volatile FTM_Type*)FTM(PTD7_FTM_NUM),  PTD7_FTM_CH,   PORT_PCR_MUX(PTD7_FTM_FN),  &FTM_CLOCK_REG(PTD7_FTM_NUM),  FTM_CLOCK_MASK(PTD7_FTM_NUM), FTM0_SC};
 #endif

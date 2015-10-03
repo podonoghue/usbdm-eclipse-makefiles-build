@@ -22,7 +22,9 @@ void waitMS(unsigned msToWait);
 /**
  * Very approximate 10us delay routine
  */
-void wait10us();
+/*
+  void wait10us();
+*/
 
 #ifndef __CMSIS_RTOS
 /**

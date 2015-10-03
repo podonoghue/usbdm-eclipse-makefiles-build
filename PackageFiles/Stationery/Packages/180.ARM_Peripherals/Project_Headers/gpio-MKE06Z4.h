@@ -89,16 +89,56 @@ extern const DigitalIO digitalIO_PTI6;          //!< DigitalIO on PTI6
 /**
  * @}
  */
-/**
-* @addtogroup alias_pin_mappings_GROUP Aliases for pins
-* @brief Aliases for port pins for example Arduino based names
-* @{
-*/
-/**
- * @}
- */
 /*
+ADC0_SE0,PTA0,[,Disabled, PTA0,]
+ADC0_SE1,PTA1,[,Disabled, PTA1,]
+ADC0_SE2,PTA6,[,Disabled, PTA6,]
+ADC0_SE3,PTA7,[,Disabled, PTA7,]
+ADC0_SE4,PTB0,[,Disabled, PTB0,]
+ADC0_SE5,PTB1,[,Disabled, PTB1,]
+ADC0_SE6,PTB2,[,Disabled, PTB2,]
+ADC0_SE7,PTB3,[,Disabled, PTB3,]
+ADC0_SE8,PTC0,[,Disabled, PTC0,]
+ADC0_SE9,PTC1,[,Disabled, PTC1,]
+ADC0_SE10,PTC2,[,Disabled, PTC2,]
+ADC0_SE11,PTC3,[,Disabled, PTC3,]
+ADC0_SE12,PTF4,[,Disabled, PTF4,]
+ADC0_SE13,PTF5,[,Disabled, PTF5,]
+ADC0_SE14,PTF6,[,Disabled, PTF6,]
+ADC0_SE15,PTF7,[,Disabled, PTF7,]
+FTM0_CH0,Disabled,[,Disabled, PTA0, PTB2,]
+FTM0_CH1,Disabled,[,Disabled, PTA1, PTB3,]
+FTM1_CH0,Disabled,[,Disabled, PTC4, PTH2,]
+FTM1_CH1,Disabled,[,Disabled, PTC5, PTE7,]
+FTM2_CH0,Disabled,[,Disabled, PTC0, PTF0, PTH0,]
+FTM2_CH1,Disabled,[,Disabled, PTC1, PTF1, PTH1,]
+FTM2_CH2,Disabled,[,Disabled, PTC2, PTD0, PTG4,]
+FTM2_CH3,Disabled,[,Disabled, PTC3, PTD1, PTG5,]
+FTM2_CH4,Disabled,[,Disabled, PTB4, PTG6,]
+FTM2_CH5,Disabled,[,Disabled, PTB5, PTG7,]
+I2C0_SCL,Disabled,[,Disabled, PTA3, PTB7,]
+I2C0_4WSDAOUT,Disabled,[,Disabled, PTA1,]
+I2C0_SDA,Disabled,[,Disabled, PTA2, PTB6,]
+I2C0_4WSCLOUT,Disabled,[,Disabled, PTA0,]
+I2C1_SDA,Disabled,[,Disabled, PTE0, PTH3,]
+I2C1_SCL,Disabled,[,Disabled, PTE1, PTH4,]
+SPI0_MISO,Disabled,[,Disabled, PTB4, PTE2,]
+SPI0_MOSI,Disabled,[,Disabled, PTB3, PTE1,]
+SPI0_PCS,Disabled,[,Disabled, PTB5, PTE3,]
+SPI0_SCK,Disabled,[,Disabled, PTB2, PTE0,]
+SPI1_MISO,Disabled,[,Disabled, PTD2, PTG6,]
+SPI1_MOSI,Disabled,[,Disabled, PTD1, PTG5,]
+SPI1_PCS,Disabled,[,Disabled, PTD3, PTG7,]
+SPI1_SCK,Disabled,[,Disabled, PTD0, PTG4,]
 
+ADC0,SIM->SCGC,SIM_SCGC_ADC0_MASK
+I2C0,SIM->SCGC,SIM_SCGC_I2C0_MASK
+I2C1,SIM->SCGC,SIM_SCGC_I2C1_MASK
+SPI0,SIM->SCGC,SIM_SCGC_SPI0_MASK
+SPI1,SIM->SCGC,SIM_SCGC_SPI1_MASK
+FTM0,SIM->SCGC,SIM_SCGC_FTM0_MASK
+FTM1,SIM->SCGC,SIM_SCGC_FTM1_MASK
+FTM2,SIM->SCGC,SIM_SCGC_FTM2_MASK
 */
 
 #endif /* GPIO_H_ */

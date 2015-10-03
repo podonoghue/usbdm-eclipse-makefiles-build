@@ -92,82 +92,76 @@ extern const DigitalIO digitalIO_PTI3;          //!< DigitalIO on PTI3
 * @brief Allows use of port pins as analogue inputs
 * @{
 */
-#if ADC0_0_SEL == 1
+#if ADC0_SE0_SEL == 1
 extern const AnalogueIO analogueIO_PTC5;         //!< AnalogueIO on PTC5
 #endif
-#if ADC0_1_SEL == 1
+#if ADC0_SE1_SEL == 1
 extern const AnalogueIO analogueIO_PTC6;         //!< AnalogueIO on PTC6
 #endif
-#if ADC0_2_SEL == 1
+#if ADC0_SE2_SEL == 1
 extern const AnalogueIO analogueIO_PTC7;         //!< AnalogueIO on PTC7
 #endif
-#if ADC0_3_SEL == 1
+#if ADC0_SE3_SEL == 1
 extern const AnalogueIO analogueIO_PTD4;         //!< AnalogueIO on PTD4
 #endif
-#if ADC0_4_SEL == 1
+#if ADC0_SE4_SEL == 1
 extern const AnalogueIO analogueIO_PTD5;         //!< AnalogueIO on PTD5
 #endif
-#if ADC0_5_SEL == 1
+#if ADC0_SE5_SEL == 1
 extern const AnalogueIO analogueIO_PTD6;         //!< AnalogueIO on PTD6
 #endif
-#if ADC0_6_SEL == 1
+#if ADC0_SE6_SEL == 1
 extern const AnalogueIO analogueIO_PTE7;         //!< AnalogueIO on PTE7
 #endif
-#if ADC0_7_SEL == 1
+#if ADC0_SE7_SEL == 1
 extern const AnalogueIO analogueIO_PTF0;         //!< AnalogueIO on PTF0
 #endif
-#if ADC0_8_SEL == 1
+#if ADC0_SE8_SEL == 1
 extern const AnalogueIO analogueIO_PTF1;         //!< AnalogueIO on PTF1
 #endif
-#if ADC0_9_SEL == 1
+#if ADC0_SE9_SEL == 1
 extern const AnalogueIO analogueIO_PTF2;         //!< AnalogueIO on PTF2
 #endif
-#if ADC0_10_SEL == 1
+#if ADC0_SE10_SEL == 1
 extern const AnalogueIO analogueIO_PTG1;         //!< AnalogueIO on PTG1
 #endif
-#if ADC0_11_SEL == 1
+#if ADC0_SE11_SEL == 1
 extern const AnalogueIO analogueIO_PTG2;         //!< AnalogueIO on PTG2
 #endif
 /**
  * @}
  */
-/**
-* @addtogroup alias_pin_mappings_GROUP Aliases for pins
-* @brief Aliases for port pins for example Arduino based names
-* @{
-*/
-/**
- * @}
- */
 /*
-ADC0_0=PTC5=[Disabled, PTC5]
-ADC0_1=PTC6=[Disabled, PTC6]
-ADC0_2=PTC7=[Disabled, PTC7]
-ADC0_3=PTD4=[Disabled, PTD4]
-ADC0_4=PTD5=[Disabled, PTD5]
-ADC0_5=PTD6=[Disabled, PTD6]
-ADC0_6=PTE7=[Disabled, PTE7]
-ADC0_7=PTF0=[Disabled, PTF0]
-ADC0_8=PTF1=[Disabled, PTF1]
-ADC0_9=PTF2=[Disabled, PTF2]
-ADC0_10=PTG1=[Disabled, PTG1]
-ADC0_11=PTG2=[Disabled, PTG2]
-I2C0_SCL=Disabled=[Disabled, PTD7, PTE6, PTG3]
-I2C0_SDA=Disabled=[Disabled, PTE0, PTE7, PTG4]
-I2C1_SDA=Disabled=[Disabled, PTE2, PTF6]
-I2C1_SCL=Disabled=[Disabled, PTE3, PTF5]
-SPI0_MISO=Disabled=[Disabled, PTD4, PTG5]
-SPI0_MOSI=Disabled=[Disabled, PTD3, PTG4]
-SPI0_SCK=Disabled=[Disabled, PTD2, PTG3]
-SPI1_MISO=Disabled=[Disabled, PTF5, PTI0, PTI1]
-SPI1_MOSI=Disabled=[Disabled, PTF6, PTI0, PTI1]
-SPI1_SCK=Disabled=[Disabled, PTF4, PTH7]
+ADC0_SE0,PTC5,[,Disabled, PTC5,]
+ADC0_SE1,PTC6,[,Disabled, PTC6,]
+ADC0_SE2,PTC7,[,Disabled, PTC7,]
+ADC0_SE3,PTD4,[,Disabled, PTD4,]
+ADC0_SE4,PTD5,[,Disabled, PTD5,]
+ADC0_SE5,PTD6,[,Disabled, PTD6,]
+ADC0_SE6,PTE7,[,Disabled, PTE7,]
+ADC0_SE7,PTF0,[,Disabled, PTF0,]
+ADC0_SE8,PTF1,[,Disabled, PTF1,]
+ADC0_SE9,PTF2,[,Disabled, PTF2,]
+ADC0_SE10,PTG1,[,Disabled, PTG1,]
+ADC0_SE11,PTG2,[,Disabled, PTG2,]
+I2C0_SCL,Disabled,[,Disabled, PTD7, PTE6, PTG3,]
+I2C0_SDA,Disabled,[,Disabled, PTE0, PTE7, PTG4,]
+I2C1_SDA,Disabled,[,Disabled, PTE2, PTF6,]
+I2C1_SCL,Disabled,[,Disabled, PTE3, PTF5,]
+SPI0_MISO,Disabled,[,Disabled, PTD4, PTG5,]
+SPI0_MOSI,Disabled,[,Disabled, PTD3, PTG4,]
+SPI0_SCK,Disabled,[,Disabled, PTD2, PTG3,]
+SPI0_SS_B,Disabled,[,Disabled, PTD1, PTG2,]
+SPI1_MISO,Disabled,[,Disabled, PTF5, PTI0, PTI1,]
+SPI1_MOSI,Disabled,[,Disabled, PTF6, PTI0, PTI1,]
+SPI1_SCK,Disabled,[,Disabled, PTF4, PTH7,]
+SPI1_SS_B,Disabled,[,Disabled, PTF3, PTH6,]
 
-ADC0=SIM->SCGC6=SIM_SCGC6_ADC_MASK
-I2C0=SIM->SCGC4=SIM_SCGC4_I2C0_MASK
-I2C1=SIM->SCGC4=SIM_SCGC4_I2C1_MASK
-SPI0=SIM->SCGC4=SIM_SCGC4_SPI0_MASK
-SPI1=SIM->SCGC4=SIM_SCGC4_SPI1_MASK
+ADC0,SIM->SCGC6,SIM_SCGC6_ADC_MASK
+I2C0,SIM->SCGC4,SIM_SCGC4_I2C0_MASK
+I2C1,SIM->SCGC4,SIM_SCGC4_I2C1_MASK
+SPI0,SIM->SCGC4,SIM_SCGC4_SPI0_MASK
+SPI1,SIM->SCGC4,SIM_SCGC4_SPI1_MASK
 */
 
 #endif /* GPIO_H_ */
