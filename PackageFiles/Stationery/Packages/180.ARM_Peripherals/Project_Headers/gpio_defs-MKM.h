@@ -65,11 +65,11 @@ struct DigitalIO {
    /**
     * PCR multiplexor value for analogue function
     */
-   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(DEFAULT_ADC_FN);
+   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(FIXED_ADC_FN);
    /**
     * PCR multiplexor value for digital function
     */
-   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(DEFAULT_GPIO_FN);
+   static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
    /**
     * Default PCR value for pins used as GPIO (including multiplexor value)
     */

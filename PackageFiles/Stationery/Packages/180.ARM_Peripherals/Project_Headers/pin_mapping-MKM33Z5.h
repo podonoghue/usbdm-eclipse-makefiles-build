@@ -11,822 +11,543 @@
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------  
 
-#define ADC0_CLOCK_REG       SIM->SCGC6          
-#define ADC0_CLOCK_MASK      SIM_SCGC6_ADC_MASK  
-#define AFE_CLOCK_REG        SIM->SCGC6          
-#define AFE_CLOCK_MASK       SIM_SCGC6_AFE_MASK  
-#define CMP0_CLOCK_REG       SIM->SCGC4          
-#define CMP0_CLOCK_MASK      SIM_SCGC4_CMP0_MASK 
-#define CMP1_CLOCK_REG       SIM->SCGC4          
-#define CMP1_CLOCK_MASK      SIM_SCGC4_CMP1_MASK 
-#define CRC_CLOCK_REG        SIM->SCGC6          
-#define CRC_CLOCK_MASK       SIM_SCGC6_CRC_MASK  
-#define DMA_CLOCK_REG        SIM->SCGC7          
-#define DMA_CLOCK_MASK       SIM_SCGC7_DMA_MASK  
-#define DMAMUX0_CLOCK_REG    SIM->SCGC6          
-#define DMAMUX0_CLOCK_MASK   SIM_SCGC6_DMAMUX0_MASK
-#define DMAMUX1_CLOCK_REG    SIM->SCGC6          
-#define DMAMUX1_CLOCK_MASK   SIM_SCGC6_DMAMUX1_MASK
-#define DMAMUX2_CLOCK_REG    SIM->SCGC6          
-#define DMAMUX2_CLOCK_MASK   SIM_SCGC6_DMAMUX2_MASK
-#define DMAMUX3_CLOCK_REG    SIM->SCGC6          
-#define DMAMUX3_CLOCK_MASK   SIM_SCGC6_DMAMUX3_MASK
-#define EWM_CLOCK_REG        SIM->SCGC4          
-#define EWM_CLOCK_MASK       SIM_SCGC4_EWM_MASK  
-#define I2C0_CLOCK_REG       SIM->SCGC4          
-#define I2C0_CLOCK_MASK      SIM_SCGC4_I2C0_MASK 
-#define I2C1_CLOCK_REG       SIM->SCGC4          
-#define I2C1_CLOCK_MASK      SIM_SCGC4_I2C1_MASK 
-#define IRTC_CLOCK_REG       SIM->SCGC5          
-#define IRTC_CLOCK_MASK      SIM_SCGC5_IRTC_MASK 
-#define IRTCREGFILE_CLOCK_REG SIM->SCGC5          
-#define IRTCREGFILE_CLOCK_MASK SIM_SCGC5_IRTCREGFILE_MASK
-#define LPTMR0_CLOCK_REG     SIM->SCGC6          
-#define LPTMR0_CLOCK_MASK    SIM_SCGC6_LPTMR_MASK
-#define MCG_CLOCK_REG        SIM->SCGC4          
-#define MCG_CLOCK_MASK       SIM_SCGC4_MCG_MASK  
-#define MPU_CLOCK_REG        SIM->SCGC7          
-#define MPU_CLOCK_MASK       SIM_SCGC7_MPU_MASK  
-#define OSC_CLOCK_REG        SIM->SCGC4          
-#define OSC_CLOCK_MASK       SIM_SCGC4_OSC_MASK  
-#define PIT0_CLOCK_REG       SIM->SCGC6          
-#define PIT0_CLOCK_MASK      SIM_SCGC6_PIT0_MASK 
-#define PIT1_CLOCK_REG       SIM->SCGC6          
-#define PIT1_CLOCK_MASK      SIM_SCGC6_PIT1_MASK 
-#define PORTA_CLOCK_REG      SIM->SCGC5          
-#define PORTA_CLOCK_MASK     SIM_SCGC5_PORTA_MASK
-#define PORTB_CLOCK_REG      SIM->SCGC5          
-#define PORTB_CLOCK_MASK     SIM_SCGC5_PORTB_MASK
-#define PORTC_CLOCK_REG      SIM->SCGC5          
-#define PORTC_CLOCK_MASK     SIM_SCGC5_PORTC_MASK
-#define PORTD_CLOCK_REG      SIM->SCGC5          
-#define PORTD_CLOCK_MASK     SIM_SCGC5_PORTD_MASK
-#define PORTE_CLOCK_REG      SIM->SCGC5          
-#define PORTE_CLOCK_MASK     SIM_SCGC5_PORTE_MASK
-#define PORTF_CLOCK_REG      SIM->SCGC5          
-#define PORTF_CLOCK_MASK     SIM_SCGC5_PORTF_MASK
-#define PORTG_CLOCK_REG      SIM->SCGC5          
-#define PORTG_CLOCK_MASK     SIM_SCGC5_PORTG_MASK
-#define PORTH_CLOCK_REG      SIM->SCGC5          
-#define PORTH_CLOCK_MASK     SIM_SCGC5_PORTH_MASK
-#define PORTI_CLOCK_REG      SIM->SCGC5          
-#define PORTI_CLOCK_MASK     SIM_SCGC5_PORTI_MASK
-#define RNGA_CLOCK_REG       SIM->SCGC6          
-#define RNGA_CLOCK_MASK      SIM_SCGC6_RNGA_MASK 
-#define SIM_HP_CLOCK_REG     SIM->SCGC6          
-#define SIM_HP_CLOCK_MASK    SIM_SCGC6_SIM_HP_MASK
-#define SIM_LP_CLOCK_REG     SIM->SCGC6          
-#define SIM_LP_CLOCK_MASK    SIM_SCGC6_SIM_LP_MASK
-#define SLCD_CLOCK_REG       SIM->SCGC5          
-#define SLCD_CLOCK_MASK      SIM_SCGC5_SLCD_MASK 
-#define SPI0_CLOCK_REG       SIM->SCGC4          
-#define SPI0_CLOCK_MASK      SIM_SCGC4_SPI0_MASK 
-#define SPI1_CLOCK_REG       SIM->SCGC4          
-#define SPI1_CLOCK_MASK      SIM_SCGC4_SPI1_MASK 
-#define TMR0_CLOCK_REG       SIM->SCGC5          
-#define TMR0_CLOCK_MASK      SIM_SCGC5_TMR0_MASK 
-#define TMR1_CLOCK_REG       SIM->SCGC5          
-#define TMR1_CLOCK_MASK      SIM_SCGC5_TMR1_MASK 
-#define TMR2_CLOCK_REG       SIM->SCGC5          
-#define TMR2_CLOCK_MASK      SIM_SCGC5_TMR2_MASK 
-#define TMR3_CLOCK_REG       SIM->SCGC5          
-#define TMR3_CLOCK_MASK      SIM_SCGC5_TMR3_MASK 
-#define UART0_CLOCK_REG      SIM->SCGC4          
-#define UART0_CLOCK_MASK     SIM_SCGC4_UART0_MASK
-#define UART1_CLOCK_REG      SIM->SCGC4          
-#define UART1_CLOCK_MASK     SIM_SCGC4_UART1_MASK
-#define UART2_CLOCK_REG      SIM->SCGC4          
-#define UART2_CLOCK_MASK     SIM_SCGC4_UART2_MASK
-#define UART3_CLOCK_REG      SIM->SCGC4          
-#define UART3_CLOCK_MASK     SIM_SCGC4_UART3_MASK
-#define VREF_CLOCK_REG       SIM->SCGC4          
-#define VREF_CLOCK_MASK      SIM_SCGC4_VREF_MASK 
-#define WDOG_CLOCK_REG       SIM->SCGC5          
-#define WDOG_CLOCK_MASK      SIM_SCGC5_WDOG_MASK 
-#define XBAR_CLOCK_REG       SIM->SCGC5          
-#define XBAR_CLOCK_MASK      SIM_SCGC5_XBAR_MASK 
-#define PORT_CLOCK_REG       SIM->SCGC5          
+// <h> GPIO Options
+
+// Inline port functions
+//
+//   <q> Force inline port functions 
+//   <i> This option forces some small GPIO functions to be inlined
+//   <i> This increases speed but may also increase code size
+//     <0=> Disabled
+//     <1=> Enabled
+#define DO_INLINE_GPIO   0
+
+// </h>
 
 // <h> Pin Peripheral mapping
 
-// ADC0_SE0 Pin Mapping
-//   <o> ADC0_SE0 Pin Selection [PTC5] <constant>
-//   <i> Selects which pin is used for ADC0_SE0
-//     <0=> Disabled
-//     <1=> PTC5
+// PTA0 Pin Mapping
+//   <o> PTA0  [GPIOA_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTA0 pin
+//     <1=> GPIOA_0
 //     <1=> Default
-#define ADC0_SE0_SEL         1                   
+#define PTA0_SEL             1                   
 
-// ADC0_SE1 Pin Mapping
-//   <o> ADC0_SE1 Pin Selection [PTC6] <constant>
-//   <i> Selects which pin is used for ADC0_SE1
-//     <0=> Disabled
-//     <1=> PTC6
+// PTA1 Pin Mapping
+//   <o> PTA1  [GPIOA_1] <constant>
+//   <i> Selects which peripheral function is mapped to PTA1 pin
+//     <1=> GPIOA_1
 //     <1=> Default
-#define ADC0_SE1_SEL         1                   
+#define PTA1_SEL             1                   
 
-// ADC0_SE2 Pin Mapping
-//   <o> ADC0_SE2 Pin Selection [PTC7] <constant>
-//   <i> Selects which pin is used for ADC0_SE2
-//     <0=> Disabled
-//     <1=> PTC7
+// PTA2 Pin Mapping
+//   <o> PTA2  [GPIOA_2] <constant>
+//   <i> Selects which peripheral function is mapped to PTA2 pin
+//     <1=> GPIOA_2
 //     <1=> Default
-#define ADC0_SE2_SEL         1                   
+#define PTA2_SEL             1                   
 
-// ADC0_SE3 Pin Mapping
-//   <o> ADC0_SE3 Pin Selection [PTD4] <constant>
-//   <i> Selects which pin is used for ADC0_SE3
-//     <0=> Disabled
-//     <1=> PTD4
+// PTA3 Pin Mapping
+//   <o> PTA3  [GPIOA_3] <constant>
+//   <i> Selects which peripheral function is mapped to PTA3 pin
+//     <1=> GPIOA_3
 //     <1=> Default
-#define ADC0_SE3_SEL         1                   
+#define PTA3_SEL             1                   
 
-// ADC0_SE4 Pin Mapping
-//   <o> ADC0_SE4 Pin Selection [PTD5] <constant>
-//   <i> Selects which pin is used for ADC0_SE4
-//     <0=> Disabled
-//     <1=> PTD5
+// PTA4 Pin Mapping
+//   <o> PTA4  [GPIOA_4] <constant>
+//   <i> Selects which peripheral function is mapped to PTA4 pin
+//     <1=> GPIOA_4
 //     <1=> Default
-#define ADC0_SE4_SEL         1                   
+#define PTA4_SEL             1                   
 
-// ADC0_SE5 Pin Mapping
-//   <o> ADC0_SE5 Pin Selection [PTD6] <constant>
-//   <i> Selects which pin is used for ADC0_SE5
-//     <0=> Disabled
-//     <1=> PTD6
+// PTA5 Pin Mapping
+//   <o> PTA5  [GPIOA_5] <constant>
+//   <i> Selects which peripheral function is mapped to PTA5 pin
+//     <1=> GPIOA_5
 //     <1=> Default
-#define ADC0_SE5_SEL         1                   
+#define PTA5_SEL             1                   
 
-// ADC0_SE6 Pin Mapping
-//   <o> ADC0_SE6 Pin Selection [PTE7] <constant>
-//   <i> Selects which pin is used for ADC0_SE6
-//     <0=> Disabled
-//     <1=> PTE7
+// PTA6 Pin Mapping
+//   <o> PTA6  [GPIOA_6] <constant>
+//   <i> Selects which peripheral function is mapped to PTA6 pin
+//     <1=> GPIOA_6
 //     <1=> Default
-#define ADC0_SE6_SEL         1                   
+#define PTA6_SEL             1                   
 
-// ADC0_SE7 Pin Mapping
-//   <o> ADC0_SE7 Pin Selection [PTF0] <constant>
-//   <i> Selects which pin is used for ADC0_SE7
-//     <0=> Disabled
-//     <1=> PTF0
+// PTA7 Pin Mapping
+//   <o> PTA7  [GPIOA_7] <constant>
+//   <i> Selects which peripheral function is mapped to PTA7 pin
+//     <1=> GPIOA_7
 //     <1=> Default
-#define ADC0_SE7_SEL         1                   
+#define PTA7_SEL             1                   
 
-// ADC0_SE8 Pin Mapping
-//   <o> ADC0_SE8 Pin Selection [PTF1] <constant>
-//   <i> Selects which pin is used for ADC0_SE8
-//     <0=> Disabled
-//     <1=> PTF1
+// PTB0 Pin Mapping
+//   <o> PTB0  [GPIOB_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTB0 pin
+//     <1=> GPIOB_0
 //     <1=> Default
-#define ADC0_SE8_SEL         1                   
+#define PTB0_SEL             1                   
 
-// ADC0_SE9 Pin Mapping
-//   <o> ADC0_SE9 Pin Selection [PTF2] <constant>
-//   <i> Selects which pin is used for ADC0_SE9
-//     <0=> Disabled
-//     <1=> PTF2
+// PTB1 Pin Mapping
+//   <o> PTB1  [GPIOB_1] <constant>
+//   <i> Selects which peripheral function is mapped to PTB1 pin
+//     <1=> GPIOB_1
 //     <1=> Default
-#define ADC0_SE9_SEL         1                   
+#define PTB1_SEL             1                   
 
-// ADC0_SE10 Pin Mapping
-//   <o> ADC0_SE10 Pin Selection [PTG1] <constant>
-//   <i> Selects which pin is used for ADC0_SE10
-//     <0=> Disabled
-//     <1=> PTG1
+// PTB2 Pin Mapping
+//   <o> PTB2  [GPIOB_2] <constant>
+//   <i> Selects which peripheral function is mapped to PTB2 pin
+//     <1=> GPIOB_2
 //     <1=> Default
-#define ADC0_SE10_SEL        1                   
+#define PTB2_SEL             1                   
 
-// ADC0_SE11 Pin Mapping
-//   <o> ADC0_SE11 Pin Selection [PTG2] <constant>
-//   <i> Selects which pin is used for ADC0_SE11
-//     <0=> Disabled
-//     <1=> PTG2
+// PTB3 Pin Mapping
+//   <o> PTB3  [GPIOB_3] <constant>
+//   <i> Selects which peripheral function is mapped to PTB3 pin
+//     <1=> GPIOB_3
 //     <1=> Default
-#define ADC0_SE11_SEL        1                   
+#define PTB3_SEL             1                   
 
-// I2C0_SCL Pin Mapping
-//   <o> I2C0_SCL Pin Selection [PTD7, PTE6, PTG3] 
-//   <i> Selects which pin is used for I2C0_SCL
-//     <0=> Disabled
-//     <1=> PTD7
-//     <2=> PTE6
-//     <3=> PTG3
-//     <0=> Default
-#define I2C0_SCL_SEL         0                   
+// PTB4 Pin Mapping
+//   <o> PTB4  [GPIOB_4] <constant>
+//   <i> Selects which peripheral function is mapped to PTB4 pin
+//     <1=> GPIOB_4
+//     <1=> Default
+#define PTB4_SEL             1                   
 
-// I2C0_SDA Pin Mapping
-//   <o> I2C0_SDA Pin Selection [PTE0, PTE7, PTG4] 
-//   <i> Selects which pin is used for I2C0_SDA
-//     <0=> Disabled
-//     <1=> PTE0
-//     <2=> PTE7
-//     <3=> PTG4
-//     <0=> Default
-#define I2C0_SDA_SEL         0                   
+// PTB5 Pin Mapping
+//   <o> PTB5  [GPIOB_5] <constant>
+//   <i> Selects which peripheral function is mapped to PTB5 pin
+//     <1=> GPIOB_5
+//     <1=> Default
+#define PTB5_SEL             1                   
 
-// I2C1_SDA Pin Mapping
-//   <o> I2C1_SDA Pin Selection [PTE2, PTF6] 
-//   <i> Selects which pin is used for I2C1_SDA
-//     <0=> Disabled
-//     <1=> PTE2
-//     <2=> PTF6
-//     <0=> Default
-#define I2C1_SDA_SEL         0                   
+// PTB6 Pin Mapping
+//   <o> PTB6  [GPIOB_6] <constant>
+//   <i> Selects which peripheral function is mapped to PTB6 pin
+//     <1=> GPIOB_6
+//     <1=> Default
+#define PTB6_SEL             1                   
 
-// I2C1_SCL Pin Mapping
-//   <o> I2C1_SCL Pin Selection [PTE3, PTF5] 
-//   <i> Selects which pin is used for I2C1_SCL
-//     <0=> Disabled
-//     <1=> PTE3
-//     <2=> PTF5
-//     <0=> Default
-#define I2C1_SCL_SEL         0                   
+// PTB7 Pin Mapping
+//   <o> PTB7  [GPIOB_7] <constant>
+//   <i> Selects which peripheral function is mapped to PTB7 pin
+//     <1=> GPIOB_7
+//     <1=> Default
+#define PTB7_SEL             1                   
 
-// SPI0_MISO Pin Mapping
-//   <o> SPI0_MISO Pin Selection [PTD4, PTG5] 
-//   <i> Selects which pin is used for SPI0_MISO
-//     <0=> Disabled
-//     <1=> PTD4
-//     <2=> PTG5
-//     <0=> Default
-#define SPI0_MISO_SEL        0                   
+// PTC0 Pin Mapping
+//   <o> PTC0  [GPIOC_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTC0 pin
+//     <1=> GPIOC_0
+//     <1=> Default
+#define PTC0_SEL             1                   
 
-// SPI0_MOSI Pin Mapping
-//   <o> SPI0_MOSI Pin Selection [PTD3, PTG4] 
-//   <i> Selects which pin is used for SPI0_MOSI
-//     <0=> Disabled
-//     <1=> PTD3
-//     <2=> PTG4
-//     <0=> Default
-#define SPI0_MOSI_SEL        0                   
+// PTC1 Pin Mapping
+//   <o> PTC1  [GPIOC_1] <constant>
+//   <i> Selects which peripheral function is mapped to PTC1 pin
+//     <1=> GPIOC_1
+//     <1=> Default
+#define PTC1_SEL             1                   
 
-// SPI0_SCK Pin Mapping
-//   <o> SPI0_SCK Pin Selection [PTD2, PTG3] 
-//   <i> Selects which pin is used for SPI0_SCK
-//     <0=> Disabled
-//     <1=> PTD2
-//     <2=> PTG3
-//     <0=> Default
-#define SPI0_SCK_SEL         0                   
+// PTC2 Pin Mapping
+//   <o> PTC2  [GPIOC_2] <constant>
+//   <i> Selects which peripheral function is mapped to PTC2 pin
+//     <1=> GPIOC_2
+//     <1=> Default
+#define PTC2_SEL             1                   
 
-// SPI0_SS_B Pin Mapping
-//   <o> SPI0_SS_B Pin Selection [PTD1, PTG2] 
-//   <i> Selects which pin is used for SPI0_SS_B
-//     <0=> Disabled
-//     <1=> PTD1
-//     <2=> PTG2
-//     <0=> Default
-#define SPI0_SS_B_SEL        0                   
+// PTC3 Pin Mapping
+//   <o> PTC3  [GPIOC_3] <constant>
+//   <i> Selects which peripheral function is mapped to PTC3 pin
+//     <1=> GPIOC_3
+//     <1=> Default
+#define PTC3_SEL             1                   
 
-// SPI1_MISO Pin Mapping
-//   <o> SPI1_MISO Pin Selection [PTF5, PTI0, PTI1] 
-//   <i> Selects which pin is used for SPI1_MISO
-//     <0=> Disabled
-//     <1=> PTF5
-//     <2=> PTI0
-//     <3=> PTI1
-//     <0=> Default
-#define SPI1_MISO_SEL        0                   
+// PTC4 Pin Mapping
+//   <o> PTC4  [GPIOC_4] <constant>
+//   <i> Selects which peripheral function is mapped to PTC4 pin
+//     <1=> GPIOC_4
+//     <1=> Default
+#define PTC4_SEL             1                   
 
-// SPI1_MOSI Pin Mapping
-//   <o> SPI1_MOSI Pin Selection [PTF6, PTI0, PTI1] 
-//   <i> Selects which pin is used for SPI1_MOSI
-//     <0=> Disabled
-//     <1=> PTF6
-//     <2=> PTI0
-//     <3=> PTI1
+// PTC5 Pin Mapping
+//   <o> PTC5  [ADC0_SE0, GPIOC_5] 
+//   <i> Selects which peripheral function is mapped to PTC5 pin
+//     <0=> ADC0_SE0
+//     <1=> GPIOC_5
 //     <0=> Default
-#define SPI1_MOSI_SEL        0                   
+#define PTC5_SEL             0                   
 
-// SPI1_SCK Pin Mapping
-//   <o> SPI1_SCK Pin Selection [PTF4, PTH7] 
-//   <i> Selects which pin is used for SPI1_SCK
-//     <0=> Disabled
-//     <1=> PTF4
-//     <2=> PTH7
+// PTC6 Pin Mapping
+//   <o> PTC6  [ADC0_SE1, GPIOC_6] 
+//   <i> Selects which peripheral function is mapped to PTC6 pin
+//     <0=> ADC0_SE1
+//     <1=> GPIOC_6
 //     <0=> Default
-#define SPI1_SCK_SEL         0                   
+#define PTC6_SEL             0                   
 
-// SPI1_SS_B Pin Mapping
-//   <o> SPI1_SS_B Pin Selection [PTF3, PTH6] 
-//   <i> Selects which pin is used for SPI1_SS_B
-//     <0=> Disabled
-//     <1=> PTF3
-//     <2=> PTH6
+// PTC7 Pin Mapping
+//   <o> PTC7  [ADC0_SE2, GPIOC_7] 
+//   <i> Selects which peripheral function is mapped to PTC7 pin
+//     <0=> ADC0_SE2
+//     <1=> GPIOC_7
 //     <0=> Default
-#define SPI1_SS_B_SEL        0                   
+#define PTC7_SEL             0                   
+
+// PTD0 Pin Mapping
+//   <o> PTD0  [GPIOD_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTD0 pin
+//     <1=> GPIOD_0
+//     <1=> Default
+#define PTD0_SEL             1                   
+
+// PTD1 Pin Mapping
+//   <o> PTD1  [GPIOD_1, SPI0_SS_B] 
+//   <i> Selects which peripheral function is mapped to PTD1 pin
+//     <1=> GPIOD_1
+//     <3=> SPI0_SS_B
+//     <1=> Default
+#define PTD1_SEL             1                   
+
+// PTD2 Pin Mapping
+//   <o> PTD2  [GPIOD_2, SPI0_SCK] 
+//   <i> Selects which peripheral function is mapped to PTD2 pin
+//     <1=> GPIOD_2
+//     <3=> SPI0_SCK
+//     <1=> Default
+#define PTD2_SEL             1                   
+
+// PTD3 Pin Mapping
+//   <o> PTD3  [GPIOD_3, SPI0_MOSI] 
+//   <i> Selects which peripheral function is mapped to PTD3 pin
+//     <1=> GPIOD_3
+//     <3=> SPI0_MOSI
+//     <1=> Default
+#define PTD3_SEL             1                   
+
+// PTD4 Pin Mapping
+//   <o> PTD4  [ADC0_SE3, GPIOD_4, SPI0_MISO] 
+//   <i> Selects which peripheral function is mapped to PTD4 pin
+//     <0=> ADC0_SE3
+//     <1=> GPIOD_4
+//     <3=> SPI0_MISO
+//     <0=> Default
+#define PTD4_SEL             0                   
+
+// PTD5 Pin Mapping
+//   <o> PTD5  [ADC0_SE4, GPIOD_5] 
+//   <i> Selects which peripheral function is mapped to PTD5 pin
+//     <0=> ADC0_SE4
+//     <1=> GPIOD_5
+//     <0=> Default
+#define PTD5_SEL             0                   
+
+// PTD6 Pin Mapping
+//   <o> PTD6  [ADC0_SE5, GPIOD_6] 
+//   <i> Selects which peripheral function is mapped to PTD6 pin
+//     <0=> ADC0_SE5
+//     <1=> GPIOD_6
+//     <0=> Default
+#define PTD6_SEL             0                   
+
+// PTD7 Pin Mapping
+//   <o> PTD7  [GPIOD_7, I2C0_SCL] 
+//   <i> Selects which peripheral function is mapped to PTD7 pin
+//     <1=> GPIOD_7
+//     <2=> I2C0_SCL
+//     <1=> Default
+#define PTD7_SEL             1                   
+
+// PTE0 Pin Mapping
+//   <o> PTE0  [GPIOE_0, I2C0_SDA] 
+//   <i> Selects which peripheral function is mapped to PTE0 pin
+//     <1=> GPIOE_0
+//     <2=> I2C0_SDA
+//     <1=> Default
+#define PTE0_SEL             1                   
+
+// PTE1 Pin Mapping
+//   <o> PTE1  [GPIOE_1] <constant>
+//   <i> Selects which peripheral function is mapped to PTE1 pin
+//     <1=> GPIOE_1
+//     <1=> Default
+#define PTE1_SEL             1                   
+
+// PTE2 Pin Mapping
+//   <o> PTE2  [GPIOE_2, I2C1_SDA] 
+//   <i> Selects which peripheral function is mapped to PTE2 pin
+//     <1=> GPIOE_2
+//     <4=> I2C1_SDA
+//     <1=> Default
+#define PTE2_SEL             1                   
+
+// PTE3 Pin Mapping
+//   <o> PTE3  [GPIOE_3, I2C1_SCL] 
+//   <i> Selects which peripheral function is mapped to PTE3 pin
+//     <1=> GPIOE_3
+//     <4=> I2C1_SCL
+//     <1=> Default
+#define PTE3_SEL             1                   
+
+// PTE4 Pin Mapping
+//   <o> PTE4  [GPIOE_4] <constant>
+//   <i> Selects which peripheral function is mapped to PTE4 pin
+//     <1=> GPIOE_4
+//     <1=> Default
+#define PTE4_SEL             1                   
+
+// PTE5 Pin Mapping
+//   <o> PTE5  [GPIOE_5] <constant>
+//   <i> Selects which peripheral function is mapped to PTE5 pin
+//     <1=> GPIOE_5
+//     <1=> Default
+#define PTE5_SEL             1                   
+
+// PTE6 Pin Mapping
+//   <o> PTE6  [GPIOE_6, I2C0_SCL] 
+//   <i> Selects which peripheral function is mapped to PTE6 pin
+//     <1=> GPIOE_6
+//     <5=> I2C0_SCL
+//     <1=> Default
+#define PTE6_SEL             1                   
+
+// PTE7 Pin Mapping
+//   <o> PTE7  [ADC0_SE6, GPIOE_7, I2C0_SDA] 
+//   <i> Selects which peripheral function is mapped to PTE7 pin
+//     <0=> ADC0_SE6
+//     <1=> GPIOE_7
+//     <5=> I2C0_SDA
+//     <0=> Default
+#define PTE7_SEL             0                   
+
+// PTF0 Pin Mapping
+//   <o> PTF0  [ADC0_SE7, GPIOF_0] 
+//   <i> Selects which peripheral function is mapped to PTF0 pin
+//     <0=> ADC0_SE7
+//     <1=> GPIOF_0
+//     <0=> Default
+#define PTF0_SEL             0                   
+
+// PTF1 Pin Mapping
+//   <o> PTF1  [ADC0_SE8, GPIOF_1] 
+//   <i> Selects which peripheral function is mapped to PTF1 pin
+//     <0=> ADC0_SE8
+//     <1=> GPIOF_1
+//     <0=> Default
+#define PTF1_SEL             0                   
+
+// PTF2 Pin Mapping
+//   <o> PTF2  [ADC0_SE9, GPIOF_2] 
+//   <i> Selects which peripheral function is mapped to PTF2 pin
+//     <0=> ADC0_SE9
+//     <1=> GPIOF_2
+//     <0=> Default
+#define PTF2_SEL             0                   
+
+// PTF3 Pin Mapping
+//   <o> PTF3  [GPIOF_3, SPI1_SS_B] 
+//   <i> Selects which peripheral function is mapped to PTF3 pin
+//     <1=> GPIOF_3
+//     <2=> SPI1_SS_B
+//     <1=> Default
+#define PTF3_SEL             1                   
+
+// PTF4 Pin Mapping
+//   <o> PTF4  [GPIOF_4, SPI1_SCK] 
+//   <i> Selects which peripheral function is mapped to PTF4 pin
+//     <1=> GPIOF_4
+//     <2=> SPI1_SCK
+//     <1=> Default
+#define PTF4_SEL             1                   
+
+// PTF5 Pin Mapping
+//   <o> PTF5  [GPIOF_5, SPI1_MISO, I2C1_SCL] 
+//   <i> Selects which peripheral function is mapped to PTF5 pin
+//     <1=> GPIOF_5
+//     <2=> SPI1_MISO
+//     <3=> I2C1_SCL
+//     <1=> Default
+#define PTF5_SEL             1                   
+
+// PTF6 Pin Mapping
+//   <o> PTF6  [GPIOF_6, SPI1_MOSI, I2C1_SDA] 
+//   <i> Selects which peripheral function is mapped to PTF6 pin
+//     <1=> GPIOF_6
+//     <2=> SPI1_MOSI
+//     <3=> I2C1_SDA
+//     <1=> Default
+#define PTF6_SEL             1                   
+
+// PTF7 Pin Mapping
+//   <o> PTF7  [GPIOF_7] <constant>
+//   <i> Selects which peripheral function is mapped to PTF7 pin
+//     <1=> GPIOF_7
+//     <1=> Default
+#define PTF7_SEL             1                   
+
+// PTG0 Pin Mapping
+//   <o> PTG0  [GPIOG_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTG0 pin
+//     <1=> GPIOG_0
+//     <1=> Default
+#define PTG0_SEL             1                   
+
+// PTG1 Pin Mapping
+//   <o> PTG1  [ADC0_SE10, GPIOG_1] 
+//   <i> Selects which peripheral function is mapped to PTG1 pin
+//     <0=> ADC0_SE10
+//     <1=> GPIOG_1
+//     <0=> Default
+#define PTG1_SEL             0                   
+
+// PTG2 Pin Mapping
+//   <o> PTG2  [ADC0_SE11, GPIOG_2, SPI0_SS_B] 
+//   <i> Selects which peripheral function is mapped to PTG2 pin
+//     <0=> ADC0_SE11
+//     <1=> GPIOG_2
+//     <2=> SPI0_SS_B
+//     <0=> Default
+#define PTG2_SEL             0                   
+
+// PTG3 Pin Mapping
+//   <o> PTG3  [GPIOG_3, SPI0_SCK, I2C0_SCL] 
+//   <i> Selects which peripheral function is mapped to PTG3 pin
+//     <1=> GPIOG_3
+//     <2=> SPI0_SCK
+//     <3=> I2C0_SCL
+//     <1=> Default
+#define PTG3_SEL             1                   
+
+// PTG4 Pin Mapping
+//   <o> PTG4  [GPIOG_4, SPI0_MOSI, I2C0_SDA] 
+//   <i> Selects which peripheral function is mapped to PTG4 pin
+//     <1=> GPIOG_4
+//     <2=> SPI0_MOSI
+//     <3=> I2C0_SDA
+//     <1=> Default
+#define PTG4_SEL             1                   
+
+// PTG5 Pin Mapping
+//   <o> PTG5  [GPIOG_5, SPI0_MISO] 
+//   <i> Selects which peripheral function is mapped to PTG5 pin
+//     <1=> GPIOG_5
+//     <2=> SPI0_MISO
+//     <1=> Default
+#define PTG5_SEL             1                   
+
+// PTG6 Pin Mapping
+//   <o> PTG6  [GPIOG_6] <constant>
+//   <i> Selects which peripheral function is mapped to PTG6 pin
+//     <1=> GPIOG_6
+//     <1=> Default
+#define PTG6_SEL             1                   
+
+// PTG7 Pin Mapping
+//   <o> PTG7  [GPIOG_7] <constant>
+//   <i> Selects which peripheral function is mapped to PTG7 pin
+//     <1=> GPIOG_7
+//     <1=> Default
+#define PTG7_SEL             1                   
+
+// PTH0 Pin Mapping
+//   <o> PTH0  [GPIOH_0] <constant>
+//   <i> Selects which peripheral function is mapped to PTH0 pin
+//     <1=> GPIOH_0
+//     <1=> Default
+#define PTH0_SEL             1                   
+
+// PTH1 Pin Mapping
+//   <o> PTH1  [GPIOH_1] <constant>
+//   <i> Selects which peripheral function is mapped to PTH1 pin
+//     <1=> GPIOH_1
+//     <1=> Default
+#define PTH1_SEL             1                   
+
+// PTH2 Pin Mapping
+//   <o> PTH2  [GPIOH_2] <constant>
+//   <i> Selects which peripheral function is mapped to PTH2 pin
+//     <1=> GPIOH_2
+//     <1=> Default
+#define PTH2_SEL             1                   
+
+// PTH3 Pin Mapping
+//   <o> PTH3  [GPIOH_3] <constant>
+//   <i> Selects which peripheral function is mapped to PTH3 pin
+//     <1=> GPIOH_3
+//     <1=> Default
+#define PTH3_SEL             1                   
+
+// PTH4 Pin Mapping
+//   <o> PTH4  [GPIOH_4] <constant>
+//   <i> Selects which peripheral function is mapped to PTH4 pin
+//     <1=> GPIOH_4
+//     <1=> Default
+#define PTH4_SEL             1                   
+
+// PTH5 Pin Mapping
+//   <o> PTH5  [GPIOH_5] <constant>
+//   <i> Selects which peripheral function is mapped to PTH5 pin
+//     <1=> GPIOH_5
+//     <1=> Default
+#define PTH5_SEL             1                   
+
+// PTH6 Pin Mapping
+//   <o> PTH6  [GPIOH_6, SPI1_SS_B] 
+//   <i> Selects which peripheral function is mapped to PTH6 pin
+//     <1=> GPIOH_6
+//     <3=> SPI1_SS_B
+//     <1=> Default
+#define PTH6_SEL             1                   
+
+// PTH7 Pin Mapping
+//   <o> PTH7  [GPIOH_7, SPI1_SCK] 
+//   <i> Selects which peripheral function is mapped to PTH7 pin
+//     <1=> GPIOH_7
+//     <3=> SPI1_SCK
+//     <1=> Default
+#define PTH7_SEL             1                   
+
+// PTI0 Pin Mapping
+//   <o> PTI0  [GPIOI_0, SPI1_MISO, SPI1_MOSI] 
+//   <i> Selects which peripheral function is mapped to PTI0 pin
+//     <1=> GPIOI_0
+//     <4=> SPI1_MISO
+//     <5=> SPI1_MOSI
+//     <1=> Default
+#define PTI0_SEL             1                   
+
+// PTI1 Pin Mapping
+//   <o> PTI1  [GPIOI_1, SPI1_MOSI, SPI1_MISO] 
+//   <i> Selects which peripheral function is mapped to PTI1 pin
+//     <1=> GPIOI_1
+//     <4=> SPI1_MOSI
+//     <5=> SPI1_MISO
+//     <1=> Default
+#define PTI1_SEL             1                   
+
+// PTI2 Pin Mapping
+//   <o> PTI2  [GPIOI_2] <constant>
+//   <i> Selects which peripheral function is mapped to PTI2 pin
+//     <1=> GPIOI_2
+//     <1=> Default
+#define PTI2_SEL             1                   
+
+// PTI3 Pin Mapping
+//   <o> PTI3  [GPIOI_3] <constant>
+//   <i> Selects which peripheral function is mapped to PTI3 pin
+//     <1=> GPIOI_3
+//     <1=> Default
+#define PTI3_SEL             1                   
 
 // </h>
 
 //-------- <<< end of configuration section >>> -----------------  
 
-// PTA0 = GPIOA_0
-#define PTA0_GPIO_NAME             A     //!< PTA0 GPIO name
-#define PTA0_GPIO_BIT              0     //!< PTA0 GPIO bit number
-#define PTA0_GPIO_FN               1     //!< PTA0 Pin multiplexor for GPIO
-
-// PTA1 = GPIOA_1
-#define PTA1_GPIO_NAME             A     //!< PTA1 GPIO name
-#define PTA1_GPIO_BIT              1     //!< PTA1 GPIO bit number
-#define PTA1_GPIO_FN               1     //!< PTA1 Pin multiplexor for GPIO
-
-// PTA2 = GPIOA_2
-#define PTA2_GPIO_NAME             A     //!< PTA2 GPIO name
-#define PTA2_GPIO_BIT              2     //!< PTA2 GPIO bit number
-#define PTA2_GPIO_FN               1     //!< PTA2 Pin multiplexor for GPIO
-
-// PTA3 = GPIOA_3
-#define PTA3_GPIO_NAME             A     //!< PTA3 GPIO name
-#define PTA3_GPIO_BIT              3     //!< PTA3 GPIO bit number
-#define PTA3_GPIO_FN               1     //!< PTA3 Pin multiplexor for GPIO
-
-// PTA4 = GPIOA_4
-#define PTA4_GPIO_NAME             A     //!< PTA4 GPIO name
-#define PTA4_GPIO_BIT              4     //!< PTA4 GPIO bit number
-#define PTA4_GPIO_FN               1     //!< PTA4 Pin multiplexor for GPIO
-
-// PTA5 = GPIOA_5
-#define PTA5_GPIO_NAME             A     //!< PTA5 GPIO name
-#define PTA5_GPIO_BIT              5     //!< PTA5 GPIO bit number
-#define PTA5_GPIO_FN               1     //!< PTA5 Pin multiplexor for GPIO
-
-// PTA6 = GPIOA_6
-#define PTA6_GPIO_NAME             A     //!< PTA6 GPIO name
-#define PTA6_GPIO_BIT              6     //!< PTA6 GPIO bit number
-#define PTA6_GPIO_FN               1     //!< PTA6 Pin multiplexor for GPIO
-
-// PTA7 = GPIOA_7
-#define PTA7_GPIO_NAME             A     //!< PTA7 GPIO name
-#define PTA7_GPIO_BIT              7     //!< PTA7 GPIO bit number
-#define PTA7_GPIO_FN               1     //!< PTA7 Pin multiplexor for GPIO
-
-// PTB0 = GPIOB_0
-#define PTB0_GPIO_NAME             B     //!< PTB0 GPIO name
-#define PTB0_GPIO_BIT              0     //!< PTB0 GPIO bit number
-#define PTB0_GPIO_FN               1     //!< PTB0 Pin multiplexor for GPIO
-
-// PTB1 = GPIOB_1
-#define PTB1_GPIO_NAME             B     //!< PTB1 GPIO name
-#define PTB1_GPIO_BIT              1     //!< PTB1 GPIO bit number
-#define PTB1_GPIO_FN               1     //!< PTB1 Pin multiplexor for GPIO
-
-// PTB2 = GPIOB_2
-#define PTB2_GPIO_NAME             B     //!< PTB2 GPIO name
-#define PTB2_GPIO_BIT              2     //!< PTB2 GPIO bit number
-#define PTB2_GPIO_FN               1     //!< PTB2 Pin multiplexor for GPIO
-
-// PTB3 = GPIOB_3
-#define PTB3_GPIO_NAME             B     //!< PTB3 GPIO name
-#define PTB3_GPIO_BIT              3     //!< PTB3 GPIO bit number
-#define PTB3_GPIO_FN               1     //!< PTB3 Pin multiplexor for GPIO
-
-// PTB4 = GPIOB_4
-#define PTB4_GPIO_NAME             B     //!< PTB4 GPIO name
-#define PTB4_GPIO_BIT              4     //!< PTB4 GPIO bit number
-#define PTB4_GPIO_FN               1     //!< PTB4 Pin multiplexor for GPIO
-
-// PTB5 = GPIOB_5
-#define PTB5_GPIO_NAME             B     //!< PTB5 GPIO name
-#define PTB5_GPIO_BIT              5     //!< PTB5 GPIO bit number
-#define PTB5_GPIO_FN               1     //!< PTB5 Pin multiplexor for GPIO
-
-// PTB6 = GPIOB_6
-#define PTB6_GPIO_NAME             B     //!< PTB6 GPIO name
-#define PTB6_GPIO_BIT              6     //!< PTB6 GPIO bit number
-#define PTB6_GPIO_FN               1     //!< PTB6 Pin multiplexor for GPIO
-
-// PTB7 = GPIOB_7
-#define PTB7_GPIO_NAME             B     //!< PTB7 GPIO name
-#define PTB7_GPIO_BIT              7     //!< PTB7 GPIO bit number
-#define PTB7_GPIO_FN               1     //!< PTB7 Pin multiplexor for GPIO
-
-// PTC0 = GPIOC_0
-#define PTC0_GPIO_NAME             C     //!< PTC0 GPIO name
-#define PTC0_GPIO_BIT              0     //!< PTC0 GPIO bit number
-#define PTC0_GPIO_FN               1     //!< PTC0 Pin multiplexor for GPIO
-
-// PTC1 = GPIOC_1
-#define PTC1_GPIO_NAME             C     //!< PTC1 GPIO name
-#define PTC1_GPIO_BIT              1     //!< PTC1 GPIO bit number
-#define PTC1_GPIO_FN               1     //!< PTC1 Pin multiplexor for GPIO
-
-// PTC2 = GPIOC_2
-#define PTC2_GPIO_NAME             C     //!< PTC2 GPIO name
-#define PTC2_GPIO_BIT              2     //!< PTC2 GPIO bit number
-#define PTC2_GPIO_FN               1     //!< PTC2 Pin multiplexor for GPIO
-
-// PTC3 = GPIOC_3
-#define PTC3_GPIO_NAME             C     //!< PTC3 GPIO name
-#define PTC3_GPIO_BIT              3     //!< PTC3 GPIO bit number
-#define PTC3_GPIO_FN               1     //!< PTC3 Pin multiplexor for GPIO
-
-// PTC4 = GPIOC_4
-#define PTC4_GPIO_NAME             C     //!< PTC4 GPIO name
-#define PTC4_GPIO_BIT              4     //!< PTC4 GPIO bit number
-#define PTC4_GPIO_FN               1     //!< PTC4 Pin multiplexor for GPIO
-
-// PTC5 = ADC0_SE0,GPIOC_5
-#define PTC5_GPIO_NAME             C     //!< PTC5 GPIO name
-#define PTC5_GPIO_BIT              5     //!< PTC5 GPIO bit number
-#define PTC5_GPIO_FN               1     //!< PTC5 Pin multiplexor for GPIO
-#define PTC5_ADC_NUM               0     //!< PTC5 ADC number
-#define PTC5_ADC_CH                0     //!< PTC5 ADC channel
-#define PTC5_ADC_FN                0     //!< PTC5 Pin multiplexor for ADC
-
-// PTC6 = ADC0_SE1,GPIOC_6
-#define PTC6_GPIO_NAME             C     //!< PTC6 GPIO name
-#define PTC6_GPIO_BIT              6     //!< PTC6 GPIO bit number
-#define PTC6_GPIO_FN               1     //!< PTC6 Pin multiplexor for GPIO
-#define PTC6_ADC_NUM               0     //!< PTC6 ADC number
-#define PTC6_ADC_CH                1     //!< PTC6 ADC channel
-#define PTC6_ADC_FN                0     //!< PTC6 Pin multiplexor for ADC
-
-// PTC7 = ADC0_SE2,GPIOC_7
-#define PTC7_GPIO_NAME             C     //!< PTC7 GPIO name
-#define PTC7_GPIO_BIT              7     //!< PTC7 GPIO bit number
-#define PTC7_GPIO_FN               1     //!< PTC7 Pin multiplexor for GPIO
-#define PTC7_ADC_NUM               0     //!< PTC7 ADC number
-#define PTC7_ADC_CH                2     //!< PTC7 ADC channel
-#define PTC7_ADC_FN                0     //!< PTC7 Pin multiplexor for ADC
-
-// PTD0 = GPIOD_0
-#define PTD0_GPIO_NAME             D     //!< PTD0 GPIO name
-#define PTD0_GPIO_BIT              0     //!< PTD0 GPIO bit number
-#define PTD0_GPIO_FN               1     //!< PTD0 Pin multiplexor for GPIO
-
-// PTD1 = GPIOD_1,SPI0_SS_B
-#define PTD1_GPIO_NAME             D     //!< PTD1 GPIO name
-#define PTD1_GPIO_BIT              1     //!< PTD1 GPIO bit number
-#define PTD1_GPIO_FN               1     //!< PTD1 Pin multiplexor for GPIO
-#if SPI0_SS_B_SEL == 1
-#define SPI0_SS_B_FN               3     //!< PTD1 Pin multiplexor for SPI
-#define SPI0_SS_B_GPIO             digitalIO_PTD1   //!< PTD1 SPI GPIO
-#endif
-
-// PTD2 = GPIOD_2,SPI0_SCK
-#define PTD2_GPIO_NAME             D     //!< PTD2 GPIO name
-#define PTD2_GPIO_BIT              2     //!< PTD2 GPIO bit number
-#define PTD2_GPIO_FN               1     //!< PTD2 Pin multiplexor for GPIO
-#if SPI0_SCK_SEL == 1
-#define SPI0_SCK_FN                3     //!< PTD2 Pin multiplexor for SPI
-#define SPI0_SCK_GPIO              digitalIO_PTD2   //!< PTD2 SPI GPIO
-#endif
-
-// PTD3 = GPIOD_3,SPI0_MOSI
-#define PTD3_GPIO_NAME             D     //!< PTD3 GPIO name
-#define PTD3_GPIO_BIT              3     //!< PTD3 GPIO bit number
-#define PTD3_GPIO_FN               1     //!< PTD3 Pin multiplexor for GPIO
-#if SPI0_MOSI_SEL == 1
-#define SPI0_MOSI_FN               3     //!< PTD3 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTD3   //!< PTD3 SPI GPIO
-#endif
-
-// PTD4 = ADC0_SE3,GPIOD_4,SPI0_MISO
-#define PTD4_GPIO_NAME             D     //!< PTD4 GPIO name
-#define PTD4_GPIO_BIT              4     //!< PTD4 GPIO bit number
-#define PTD4_GPIO_FN               1     //!< PTD4 Pin multiplexor for GPIO
-#define PTD4_ADC_NUM               0     //!< PTD4 ADC number
-#define PTD4_ADC_CH                3     //!< PTD4 ADC channel
-#define PTD4_ADC_FN                0     //!< PTD4 Pin multiplexor for ADC
-#if SPI0_MISO_SEL == 1
-#define SPI0_MISO_FN               3     //!< PTD4 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTD4   //!< PTD4 SPI GPIO
-#endif
-
-// PTD5 = ADC0_SE4,GPIOD_5
-#define PTD5_GPIO_NAME             D     //!< PTD5 GPIO name
-#define PTD5_GPIO_BIT              5     //!< PTD5 GPIO bit number
-#define PTD5_GPIO_FN               1     //!< PTD5 Pin multiplexor for GPIO
-#define PTD5_ADC_NUM               0     //!< PTD5 ADC number
-#define PTD5_ADC_CH                4     //!< PTD5 ADC channel
-#define PTD5_ADC_FN                0     //!< PTD5 Pin multiplexor for ADC
-
-// PTD6 = ADC0_SE5,GPIOD_6
-#define PTD6_GPIO_NAME             D     //!< PTD6 GPIO name
-#define PTD6_GPIO_BIT              6     //!< PTD6 GPIO bit number
-#define PTD6_GPIO_FN               1     //!< PTD6 Pin multiplexor for GPIO
-#define PTD6_ADC_NUM               0     //!< PTD6 ADC number
-#define PTD6_ADC_CH                5     //!< PTD6 ADC channel
-#define PTD6_ADC_FN                0     //!< PTD6 Pin multiplexor for ADC
-
-// PTD7 = GPIOD_7,I2C0_SCL
-#define PTD7_GPIO_NAME             D     //!< PTD7 GPIO name
-#define PTD7_GPIO_BIT              7     //!< PTD7 GPIO bit number
-#define PTD7_GPIO_FN               1     //!< PTD7 Pin multiplexor for GPIO
-#if I2C0_SCL_SEL == 1
-#define I2C0_SCL_FN                2     //!< PTD7 Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTD7   //!< PTD7 I2C GPIO
-#endif
-
-// PTE0 = GPIOE_0,I2C0_SDA
-#define PTE0_GPIO_NAME             E     //!< PTE0 GPIO name
-#define PTE0_GPIO_BIT              0     //!< PTE0 GPIO bit number
-#define PTE0_GPIO_FN               1     //!< PTE0 Pin multiplexor for GPIO
-#if I2C0_SDA_SEL == 1
-#define I2C0_SDA_FN                2     //!< PTE0 Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTE0   //!< PTE0 I2C GPIO
-#endif
-
-// PTE1 = GPIOE_1
-#define PTE1_GPIO_NAME             E     //!< PTE1 GPIO name
-#define PTE1_GPIO_BIT              1     //!< PTE1 GPIO bit number
-#define PTE1_GPIO_FN               1     //!< PTE1 Pin multiplexor for GPIO
-
-// PTE2 = GPIOE_2,I2C1_SDA
-#define PTE2_GPIO_NAME             E     //!< PTE2 GPIO name
-#define PTE2_GPIO_BIT              2     //!< PTE2 GPIO bit number
-#define PTE2_GPIO_FN               1     //!< PTE2 Pin multiplexor for GPIO
-#if I2C1_SDA_SEL == 1
-#define I2C1_SDA_FN                4     //!< PTE2 Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTE2   //!< PTE2 I2C GPIO
-#endif
-
-// PTE3 = GPIOE_3,I2C1_SCL
-#define PTE3_GPIO_NAME             E     //!< PTE3 GPIO name
-#define PTE3_GPIO_BIT              3     //!< PTE3 GPIO bit number
-#define PTE3_GPIO_FN               1     //!< PTE3 Pin multiplexor for GPIO
-#if I2C1_SCL_SEL == 1
-#define I2C1_SCL_FN                4     //!< PTE3 Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTE3   //!< PTE3 I2C GPIO
-#endif
-
-// PTE4 = GPIOE_4
-#define PTE4_GPIO_NAME             E     //!< PTE4 GPIO name
-#define PTE4_GPIO_BIT              4     //!< PTE4 GPIO bit number
-#define PTE4_GPIO_FN               1     //!< PTE4 Pin multiplexor for GPIO
-
-// PTE5 = GPIOE_5
-#define PTE5_GPIO_NAME             E     //!< PTE5 GPIO name
-#define PTE5_GPIO_BIT              5     //!< PTE5 GPIO bit number
-#define PTE5_GPIO_FN               1     //!< PTE5 Pin multiplexor for GPIO
-
-// PTE6 = GPIOE_6,I2C0_SCL
-#define PTE6_GPIO_NAME             E     //!< PTE6 GPIO name
-#define PTE6_GPIO_BIT              6     //!< PTE6 GPIO bit number
-#define PTE6_GPIO_FN               1     //!< PTE6 Pin multiplexor for GPIO
-#if I2C0_SCL_SEL == 2
-#define I2C0_SCL_FN                5     //!< PTE6 Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTE6   //!< PTE6 I2C GPIO
-#endif
-
-// PTE7 = ADC0_SE6,GPIOE_7,I2C0_SDA
-#define PTE7_GPIO_NAME             E     //!< PTE7 GPIO name
-#define PTE7_GPIO_BIT              7     //!< PTE7 GPIO bit number
-#define PTE7_GPIO_FN               1     //!< PTE7 Pin multiplexor for GPIO
-#define PTE7_ADC_NUM               0     //!< PTE7 ADC number
-#define PTE7_ADC_CH                6     //!< PTE7 ADC channel
-#define PTE7_ADC_FN                0     //!< PTE7 Pin multiplexor for ADC
-#if I2C0_SDA_SEL == 2
-#define I2C0_SDA_FN                5     //!< PTE7 Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTE7   //!< PTE7 I2C GPIO
-#endif
-
-// PTF0 = ADC0_SE7,GPIOF_0
-#define PTF0_GPIO_NAME             F     //!< PTF0 GPIO name
-#define PTF0_GPIO_BIT              0     //!< PTF0 GPIO bit number
-#define PTF0_GPIO_FN               1     //!< PTF0 Pin multiplexor for GPIO
-#define PTF0_ADC_NUM               0     //!< PTF0 ADC number
-#define PTF0_ADC_CH                7     //!< PTF0 ADC channel
-#define PTF0_ADC_FN                0     //!< PTF0 Pin multiplexor for ADC
-
-// PTF1 = ADC0_SE8,GPIOF_1
-#define PTF1_GPIO_NAME             F     //!< PTF1 GPIO name
-#define PTF1_GPIO_BIT              1     //!< PTF1 GPIO bit number
-#define PTF1_GPIO_FN               1     //!< PTF1 Pin multiplexor for GPIO
-#define PTF1_ADC_NUM               0     //!< PTF1 ADC number
-#define PTF1_ADC_CH                8     //!< PTF1 ADC channel
-#define PTF1_ADC_FN                0     //!< PTF1 Pin multiplexor for ADC
-
-// PTF2 = ADC0_SE9,GPIOF_2
-#define PTF2_GPIO_NAME             F     //!< PTF2 GPIO name
-#define PTF2_GPIO_BIT              2     //!< PTF2 GPIO bit number
-#define PTF2_GPIO_FN               1     //!< PTF2 Pin multiplexor for GPIO
-#define PTF2_ADC_NUM               0     //!< PTF2 ADC number
-#define PTF2_ADC_CH                9     //!< PTF2 ADC channel
-#define PTF2_ADC_FN                0     //!< PTF2 Pin multiplexor for ADC
-
-// PTF3 = GPIOF_3,SPI1_SS_B
-#define PTF3_GPIO_NAME             F     //!< PTF3 GPIO name
-#define PTF3_GPIO_BIT              3     //!< PTF3 GPIO bit number
-#define PTF3_GPIO_FN               1     //!< PTF3 Pin multiplexor for GPIO
-#if SPI1_SS_B_SEL == 1
-#define SPI1_SS_B_FN               2     //!< PTF3 Pin multiplexor for SPI
-#define SPI1_SS_B_GPIO             digitalIO_PTF3   //!< PTF3 SPI GPIO
-#endif
-
-// PTF4 = GPIOF_4,SPI1_SCK
-#define PTF4_GPIO_NAME             F     //!< PTF4 GPIO name
-#define PTF4_GPIO_BIT              4     //!< PTF4 GPIO bit number
-#define PTF4_GPIO_FN               1     //!< PTF4 Pin multiplexor for GPIO
-#if SPI1_SCK_SEL == 1
-#define SPI1_SCK_FN                2     //!< PTF4 Pin multiplexor for SPI
-#define SPI1_SCK_GPIO              digitalIO_PTF4   //!< PTF4 SPI GPIO
-#endif
-
-// PTF5 = GPIOF_5,SPI1_MISO,I2C1_SCL
-#define PTF5_GPIO_NAME             F     //!< PTF5 GPIO name
-#define PTF5_GPIO_BIT              5     //!< PTF5 GPIO bit number
-#define PTF5_GPIO_FN               1     //!< PTF5 Pin multiplexor for GPIO
-#if SPI1_MISO_SEL == 1
-#define SPI1_MISO_FN               2     //!< PTF5 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTF5   //!< PTF5 SPI GPIO
-#endif
-#if I2C1_SCL_SEL == 2
-#define I2C1_SCL_FN                3     //!< PTF5 Pin multiplexor for I2C
-#define I2C1_SCL_GPIO              digitalIO_PTF5   //!< PTF5 I2C GPIO
-#endif
-
-// PTF6 = GPIOF_6,SPI1_MOSI,I2C1_SDA
-#define PTF6_GPIO_NAME             F     //!< PTF6 GPIO name
-#define PTF6_GPIO_BIT              6     //!< PTF6 GPIO bit number
-#define PTF6_GPIO_FN               1     //!< PTF6 Pin multiplexor for GPIO
-#if SPI1_MOSI_SEL == 1
-#define SPI1_MOSI_FN               2     //!< PTF6 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTF6   //!< PTF6 SPI GPIO
-#endif
-#if I2C1_SDA_SEL == 2
-#define I2C1_SDA_FN                3     //!< PTF6 Pin multiplexor for I2C
-#define I2C1_SDA_GPIO              digitalIO_PTF6   //!< PTF6 I2C GPIO
-#endif
-
-// PTF7 = GPIOF_7
-#define PTF7_GPIO_NAME             F     //!< PTF7 GPIO name
-#define PTF7_GPIO_BIT              7     //!< PTF7 GPIO bit number
-#define PTF7_GPIO_FN               1     //!< PTF7 Pin multiplexor for GPIO
-
-// PTG0 = GPIOG_0
-#define PTG0_GPIO_NAME             G     //!< PTG0 GPIO name
-#define PTG0_GPIO_BIT              0     //!< PTG0 GPIO bit number
-#define PTG0_GPIO_FN               1     //!< PTG0 Pin multiplexor for GPIO
-
-// PTG1 = ADC0_SE10,GPIOG_1
-#define PTG1_GPIO_NAME             G     //!< PTG1 GPIO name
-#define PTG1_GPIO_BIT              1     //!< PTG1 GPIO bit number
-#define PTG1_GPIO_FN               1     //!< PTG1 Pin multiplexor for GPIO
-#define PTG1_ADC_NUM               0     //!< PTG1 ADC number
-#define PTG1_ADC_CH                10    //!< PTG1 ADC channel
-#define PTG1_ADC_FN                0     //!< PTG1 Pin multiplexor for ADC
-
-// PTG2 = ADC0_SE11,GPIOG_2,SPI0_SS_B
-#define PTG2_GPIO_NAME             G     //!< PTG2 GPIO name
-#define PTG2_GPIO_BIT              2     //!< PTG2 GPIO bit number
-#define PTG2_GPIO_FN               1     //!< PTG2 Pin multiplexor for GPIO
-#define PTG2_ADC_NUM               0     //!< PTG2 ADC number
-#define PTG2_ADC_CH                11    //!< PTG2 ADC channel
-#define PTG2_ADC_FN                0     //!< PTG2 Pin multiplexor for ADC
-#if SPI0_SS_B_SEL == 2
-#define SPI0_SS_B_FN               2     //!< PTG2 Pin multiplexor for SPI
-#define SPI0_SS_B_GPIO             digitalIO_PTG2   //!< PTG2 SPI GPIO
-#endif
-
-// PTG3 = GPIOG_3,SPI0_SCK,I2C0_SCL
-#define PTG3_GPIO_NAME             G     //!< PTG3 GPIO name
-#define PTG3_GPIO_BIT              3     //!< PTG3 GPIO bit number
-#define PTG3_GPIO_FN               1     //!< PTG3 Pin multiplexor for GPIO
-#if SPI0_SCK_SEL == 2
-#define SPI0_SCK_FN                2     //!< PTG3 Pin multiplexor for SPI
-#define SPI0_SCK_GPIO              digitalIO_PTG3   //!< PTG3 SPI GPIO
-#endif
-#if I2C0_SCL_SEL == 3
-#define I2C0_SCL_FN                3     //!< PTG3 Pin multiplexor for I2C
-#define I2C0_SCL_GPIO              digitalIO_PTG3   //!< PTG3 I2C GPIO
-#endif
-
-// PTG4 = GPIOG_4,SPI0_MOSI,I2C0_SDA
-#define PTG4_GPIO_NAME             G     //!< PTG4 GPIO name
-#define PTG4_GPIO_BIT              4     //!< PTG4 GPIO bit number
-#define PTG4_GPIO_FN               1     //!< PTG4 Pin multiplexor for GPIO
-#if SPI0_MOSI_SEL == 2
-#define SPI0_MOSI_FN               2     //!< PTG4 Pin multiplexor for SPI
-#define SPI0_MOSI_GPIO             digitalIO_PTG4   //!< PTG4 SPI GPIO
-#endif
-#if I2C0_SDA_SEL == 3
-#define I2C0_SDA_FN                3     //!< PTG4 Pin multiplexor for I2C
-#define I2C0_SDA_GPIO              digitalIO_PTG4   //!< PTG4 I2C GPIO
-#endif
-
-// PTG5 = GPIOG_5,SPI0_MISO
-#define PTG5_GPIO_NAME             G     //!< PTG5 GPIO name
-#define PTG5_GPIO_BIT              5     //!< PTG5 GPIO bit number
-#define PTG5_GPIO_FN               1     //!< PTG5 Pin multiplexor for GPIO
-#if SPI0_MISO_SEL == 2
-#define SPI0_MISO_FN               2     //!< PTG5 Pin multiplexor for SPI
-#define SPI0_MISO_GPIO             digitalIO_PTG5   //!< PTG5 SPI GPIO
-#endif
-
-// PTG6 = GPIOG_6
-#define PTG6_GPIO_NAME             G     //!< PTG6 GPIO name
-#define PTG6_GPIO_BIT              6     //!< PTG6 GPIO bit number
-#define PTG6_GPIO_FN               1     //!< PTG6 Pin multiplexor for GPIO
-
-// PTG7 = GPIOG_7
-#define PTG7_GPIO_NAME             G     //!< PTG7 GPIO name
-#define PTG7_GPIO_BIT              7     //!< PTG7 GPIO bit number
-#define PTG7_GPIO_FN               1     //!< PTG7 Pin multiplexor for GPIO
-
-// PTH0 = GPIOH_0
-#define PTH0_GPIO_NAME             H     //!< PTH0 GPIO name
-#define PTH0_GPIO_BIT              0     //!< PTH0 GPIO bit number
-#define PTH0_GPIO_FN               1     //!< PTH0 Pin multiplexor for GPIO
-
-// PTH1 = GPIOH_1
-#define PTH1_GPIO_NAME             H     //!< PTH1 GPIO name
-#define PTH1_GPIO_BIT              1     //!< PTH1 GPIO bit number
-#define PTH1_GPIO_FN               1     //!< PTH1 Pin multiplexor for GPIO
-
-// PTH2 = GPIOH_2
-#define PTH2_GPIO_NAME             H     //!< PTH2 GPIO name
-#define PTH2_GPIO_BIT              2     //!< PTH2 GPIO bit number
-#define PTH2_GPIO_FN               1     //!< PTH2 Pin multiplexor for GPIO
-
-// PTH3 = GPIOH_3
-#define PTH3_GPIO_NAME             H     //!< PTH3 GPIO name
-#define PTH3_GPIO_BIT              3     //!< PTH3 GPIO bit number
-#define PTH3_GPIO_FN               1     //!< PTH3 Pin multiplexor for GPIO
-
-// PTH4 = GPIOH_4
-#define PTH4_GPIO_NAME             H     //!< PTH4 GPIO name
-#define PTH4_GPIO_BIT              4     //!< PTH4 GPIO bit number
-#define PTH4_GPIO_FN               1     //!< PTH4 Pin multiplexor for GPIO
-
-// PTH5 = GPIOH_5
-#define PTH5_GPIO_NAME             H     //!< PTH5 GPIO name
-#define PTH5_GPIO_BIT              5     //!< PTH5 GPIO bit number
-#define PTH5_GPIO_FN               1     //!< PTH5 Pin multiplexor for GPIO
-
-// PTH6 = GPIOH_6,SPI1_SS_B
-#define PTH6_GPIO_NAME             H     //!< PTH6 GPIO name
-#define PTH6_GPIO_BIT              6     //!< PTH6 GPIO bit number
-#define PTH6_GPIO_FN               1     //!< PTH6 Pin multiplexor for GPIO
-#if SPI1_SS_B_SEL == 2
-#define SPI1_SS_B_FN               3     //!< PTH6 Pin multiplexor for SPI
-#define SPI1_SS_B_GPIO             digitalIO_PTH6   //!< PTH6 SPI GPIO
-#endif
-
-// PTH7 = GPIOH_7,SPI1_SCK
-#define PTH7_GPIO_NAME             H     //!< PTH7 GPIO name
-#define PTH7_GPIO_BIT              7     //!< PTH7 GPIO bit number
-#define PTH7_GPIO_FN               1     //!< PTH7 Pin multiplexor for GPIO
-#if SPI1_SCK_SEL == 2
-#define SPI1_SCK_FN                3     //!< PTH7 Pin multiplexor for SPI
-#define SPI1_SCK_GPIO              digitalIO_PTH7   //!< PTH7 SPI GPIO
-#endif
-
-// PTI0 = GPIOI_0,SPI1_MISO,SPI1_MOSI
-#define PTI0_GPIO_NAME             I     //!< PTI0 GPIO name
-#define PTI0_GPIO_BIT              0     //!< PTI0 GPIO bit number
-#define PTI0_GPIO_FN               1     //!< PTI0 Pin multiplexor for GPIO
-#if SPI1_MISO_SEL == 2
-#define SPI1_MISO_FN               4     //!< PTI0 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTI0   //!< PTI0 SPI GPIO
-#endif
-#if SPI1_MOSI_SEL == 2
-#define SPI1_MOSI_FN               5     //!< PTI0 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTI0   //!< PTI0 SPI GPIO
-#endif
-
-// PTI1 = GPIOI_1,SPI1_MOSI,SPI1_MISO
-#define PTI1_GPIO_NAME             I     //!< PTI1 GPIO name
-#define PTI1_GPIO_BIT              1     //!< PTI1 GPIO bit number
-#define PTI1_GPIO_FN               1     //!< PTI1 Pin multiplexor for GPIO
-#if SPI1_MOSI_SEL == 3
-#define SPI1_MOSI_FN               4     //!< PTI1 Pin multiplexor for SPI
-#define SPI1_MOSI_GPIO             digitalIO_PTI1   //!< PTI1 SPI GPIO
-#endif
-#if SPI1_MISO_SEL == 3
-#define SPI1_MISO_FN               5     //!< PTI1 Pin multiplexor for SPI
-#define SPI1_MISO_GPIO             digitalIO_PTI1   //!< PTI1 SPI GPIO
-#endif
-
-// PTI2 = GPIOI_2
-#define PTI2_GPIO_NAME             I     //!< PTI2 GPIO name
-#define PTI2_GPIO_BIT              2     //!< PTI2 GPIO bit number
-#define PTI2_GPIO_FN               1     //!< PTI2 Pin multiplexor for GPIO
-
-// PTI3 = GPIOI_3
-#define PTI3_GPIO_NAME             I     //!< PTI3 GPIO name
-#define PTI3_GPIO_BIT              3     //!< PTI3 GPIO bit number
-#define PTI3_GPIO_FN               1     //!< PTI3 Pin multiplexor for GPIO
-
-// SDADM0
-
-// SDADM1
-
-// SDADM2/ CMP1P3
-
-// SDADM3/ CMP1P5
-
-// SDADP0
-
-// SDADP1
-
-// SDADP2/ CMP1P2
-
-// SDADP3/ CMP1P4
-
-#define DEFAULT_ADC_FN   0 //!< Fixed ADC Multiplexing value for pins
-#define DEFAULT_GPIO_FN  1 //!< Fixed GPIO Multiplexing value for pins
-#define DEFAULT_PORT_CLOCK_REG  SIM->SCGC5 //!< Fixed PORT Clock varies with port
+#define FIXED_ADC_FN   0 //!< Fixed ADC Multiplexing value for pins
+#define FIXED_GPIO_FN  1 //!< Fixed GPIO Multiplexing value for pins
+#define FIXED_PORT_CLOCK_REG  SIM->SCGC5 //!< Fixed PORT Clock varies with port
 
 #endif /* PIN_MAPPING_H_ */
