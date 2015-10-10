@@ -504,7 +504,7 @@ OSBDM_API_JM60 OsbdmErrT	osbdm_write_8(unsigned char type, unsigned long address
 // read a single 32-bit value from target memory/register
 OSBDM_API_JM60 OsbdmErrT	osbdm_read_32(unsigned char type, unsigned long address, unsigned long *data) {
    LOGGING_Q;
-   unsigned char byteData[4];
+   unsigned char byteData[4] = {0};
    OsbdmErrT rc = osbdm_read_block(type, 32, address, byteData, 4);
    // ToDo check byte order
    *data = (byteData[3]<<24) + (byteData[2]<<16) + (byteData[1]<<8) + byteData[0];
@@ -515,7 +515,7 @@ OSBDM_API_JM60 OsbdmErrT	osbdm_read_32(unsigned char type, unsigned long address
 // read a single 16-bit value to target memory
 OSBDM_API_JM60 OsbdmErrT osbdm_read_16(unsigned char type, unsigned long address, unsigned short *data){
    LOGGING_Q;
-   unsigned char byteData[2];
+   unsigned char byteData[2] = {0};
    OsbdmErrT rc = osbdm_read_block(type, 16, address, byteData, 2);
    // ToDo check byte order
    *data = (byteData[1]<<8) + byteData[0];
@@ -526,7 +526,7 @@ OSBDM_API_JM60 OsbdmErrT osbdm_read_16(unsigned char type, unsigned long address
 // read a single 8-bit value to target memory
 OSBDM_API_JM60 OsbdmErrT	osbdm_read_8(unsigned char type, unsigned long address, unsigned char *data){
    LOGGING_Q;
-   unsigned char byteData[1];
+   unsigned char byteData[1] = {0};
    OsbdmErrT rc = osbdm_read_block(type, 8, address, byteData, 1);
    *data = byteData[0];
    log.print("t=%d, a=0x%08lX, v=%02X \n", type, address, *data);

@@ -21,25 +21,25 @@ osbdm-jm60:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@  MODULE=osbdm      CDEFS='$(DLL_DEFS)'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@  MODULE=osbdm      CDEFS='$(DLL_DEFS)'
 
 osbdm-jm60-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@  MODULE=osbdm      CDEFS='$(DLL_DEFS)'  DEBUG='Y'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@  MODULE=osbdm      CDEFS='$(DLL_DEFS)'  DEBUG='Y'
 
 usbdm-cff:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@  MODULE=cfflasher  CDEFS='$(DLL_DEFS)'  EXTRA_LINK_OPTS='-Wl,--kill-at' 
+	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@  MODULE=cfflasher  CDEFS='$(DLL_DEFS)'  EXTRA_LINK_OPTS='-Wl,--kill-at' 
 
 usbdm-cff-debug:
 	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@  MODULE=cfflasher  CDEFS='$(DLL_DEFS)'  EXTRA_LINK_OPTS='-Wl,--kill-at'  DEBUG='Y'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@  MODULE=cfflasher  CDEFS='$(DLL_DEFS)'  EXTRA_LINK_OPTS='-Wl,--kill-at'  DEBUG='Y'
 
 allCommon: $(TARGET) $(TARGET)-debug
 
