@@ -67,7 +67,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 	
 	public:
 		
-		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 489,865 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 581,865 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~MemoryDumpDialogueSkeleton();
 	
 };
