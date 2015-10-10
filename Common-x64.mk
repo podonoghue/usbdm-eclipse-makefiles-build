@@ -16,7 +16,7 @@ USBDM_LIBDIR64="/usr/lib/x86_64-linux-gnu/usbdm"
 #===========================================================
 # Shared directories - Relative to child directory
 SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/lib.x86_64
+SHARED_LIBDIRS := ../Shared_V4/x86_64-win-gnu
 
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
@@ -36,7 +36,7 @@ ifeq ($(UNAME_S),Windows)
    TARGET_BINDIR   ?= ../PackageFiles/bin/x86_64-win-gnu
    TARGET_LIBDIR   ?= ../PackageFiles/bin/x86_64-win-gnu
    BUILDDIR_SUFFIX ?= .x86_64
-   VSUFFIX         ?= .4
+   VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
@@ -58,8 +58,7 @@ ifeq ($(UNAME_S),Windows)
    LIB_PREFIX = 
    LIB_SUFFIX = .dll
    EXE_SUFFIX = .exe
-#   MINGWBIN := C:/Apps/mingw-w64/x86_64-4.9.2-posix-seh-rt_v4-rev2/mingw64/bin
-   MINGWBIN := C:/Apps/mingw-w64/x86_64-5.1.0-posix-seh-rt_v4-rev0/mingw64/bin
+   MINGWBIN := C:/Apps/mingw-w64/x86_64-5.2.0-posix-seh-rt_v4-rev0/mingw64/bin
    MSYSBIN  := C:/Apps/MinGW/msys/1.0/bin
    RM       := $(MSYSBIN)/rm -f
    RMDIR    := $(MSYSBIN)/rm -R -f
@@ -131,8 +130,8 @@ ifeq ($(UNAME_S),Windows)
    TCL_INC        := -IC:/Apps/Tcl/include
    TCL_LIBS       := -ltcl85
 else
-   TCL_INC        := -I/usr/include/tcl8.5
-   TCL_LIBS       := -ltcl8.5
+   TCL_INC        := -I/usr/include/tcl8.6
+   TCL_LIBS       := -ltcl8.6
 endif
 
 #===========================================================
@@ -320,11 +319,9 @@ else
    LIB_USB = -l$(_LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
    else
       USBDM_LIBS     := -lusbdm
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc 
    endif
 endif

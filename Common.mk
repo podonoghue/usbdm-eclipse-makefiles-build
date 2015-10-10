@@ -16,7 +16,7 @@ USBDM_LIBDIR64="/usr/lib/x86_64-linux-gnu/usbdm"
 #===========================================================
 # Shared directories - Relative to child directory
 SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/lib.i386
+SHARED_LIBDIRS := ../Shared_V4/i386-win-gnu
 
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
@@ -59,6 +59,7 @@ ifeq ($(UNAME_S),Windows)
    LIB_SUFFIX = .dll
    EXE_SUFFIX = .exe
    MINGWBIN := c:/Apps/MinGW/bin
+#   MINGWBIN := C:/Apps/mingw-w64/i686-5.2.0-posix-dwarf-rt_v4-rev0/mingw32/bin
    MSYSBIN  := C:/Apps/MinGW/msys/1.0/bin
    RM       := $(MSYSBIN)/rm -f
    RMDIR    := $(MSYSBIN)/rm -R -f
@@ -135,10 +136,10 @@ WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
    TCL_INC        := -IC:/Apps/Tcl/include
-   TCL_LIBS       := -ltcl85
+   TCL_LIBS       := -ltcl86
 else
-   TCL_INC        := -I/usr/include/tcl8.5
-   TCL_LIBS       := -ltcl8.5
+   TCL_INC        := -I/usr/include/tcl8.6
+   TCL_LIBS       := -ltcl8.6
 endif
 
 #===========================================================
@@ -326,11 +327,9 @@ else
    LIB_USB = -l$(_LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
    else
       USBDM_LIBS     := -lusbdm
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc 
    endif
 endif
