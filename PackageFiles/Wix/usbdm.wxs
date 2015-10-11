@@ -286,12 +286,8 @@
             <File Id='CommonMinGW1'      DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='CommonMinGW2'      DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='CommonMinGW3'      DiskId='1' Source='$(var.SrcDir)\bin\pthreadGC2.dll' />
-            <File Id='CommonMinGW4'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-make.exe' />
-            <File Id='CommonMinGW5'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-rm.exe' />
-            <File Id='CommonMinGW6'      DiskId='1' Source='$(var.SrcDir)\bin\libiconv2.dll' />
-            <File Id='CommonMinGW7'      DiskId='1' Source='$(var.SrcDir)\bin\libiconv-2.dll' />
-            <File Id='CommonMinGW8'      DiskId='1' Source='$(var.SrcDir)\bin\libintl3.dll' />
-            <File Id='CommonMinGW9'      DiskId='1' Source='$(var.SrcDir)\bin\libintl-8.dll' />  
+            <File Id='CommonMinGW4'      DiskId='1' Source='$(var.SrcDir)\bin\libiconv-2.dll' />
+            <File Id='CommonMinGW5'      DiskId='1' Source='$(var.SrcDir)\bin\libintl-8.dll' />  
             
             <File Id='CommonWx1'         DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
             <File Id='CommonWx2'         DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_net_gcc_custom.dll' />
@@ -299,8 +295,15 @@
             <File Id='CommonWx4'         DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
 
             <File Id='CommonXerces1'     DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
+
+            <File Id='CommonCoreUtils1'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-make.exe' />
+            <File Id='CommonCoreUtils2'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-rm.exe' />
+            <File Id='CommonCoreUtils3'  DiskId='1' Source='$(var.SrcDir)\bin\echo.exe' />
+            <File Id='CommonCoreUtils4'  DiskId='1' Source='$(var.SrcDir)\bin\libiconv2.dll' />
+            <File Id='CommonCoreUtils5'  DiskId='1' Source='$(var.SrcDir)\bin\libintl3.dll' />
             
-            <File Id='CommonTcl1'        DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
+            <File Id='CommonTcl1'        DiskId='1' Source='$(var.SrcDir)\bin\tcl86.dll' />
+            <File Id='CommonTcl2'        DiskId='1' Source='$(var.SrcDir)\bin\zlib1.dll' />
 
             <File Id='CommonUsbdm1'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll' KeyPath='yes' />
             <File Id='CommonUsbdm1d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
