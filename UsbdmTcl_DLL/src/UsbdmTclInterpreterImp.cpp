@@ -85,15 +85,17 @@ int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
 void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
    LOGGING;
    if (!Tcl_InterpDeleted(interp)) {
-      log.print("Deleting interp@%p\n", interp);
+      log.print("Tcl_DeleteInterp(@%p)\n", interp);
       Tcl_DeleteInterp(interp);
    }
+   log.print("Tcl_Finalize()\n");
+   Tcl_Finalize();
 }
 
 /**!
  * Create instance of the TCL interpreter
  *
- * @param doInit - Used to supproess initialisation. should be true if used with
+ * @param doInit - Used to suppress initialisation. should be true if used with
  *                 UsbdmTclInterpreterImp::main() for shell as it does its own initialisation
  */
 UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
@@ -194,7 +196,7 @@ UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
 #endif
 
 int UsbdmTclInterpreterImp::setTCLExecutable() {
-   LOGGING_Q;
+   LOGGING;
 
 #ifdef __WIN32
    // Not necessary in WIN32??
