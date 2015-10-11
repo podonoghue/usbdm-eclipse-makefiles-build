@@ -19,6 +19,7 @@ set JMxxCF_Files=pcb.png USBDM_CF_JMxxCLD_V3.pdf Flash_Images.sx.zip
 set JS16CF_Files=pcb.png USBDM_CF_JS16CWJ.pdf USBDM_CF_SER_JS16CWJ.pdf Flash_Images.sx.zip
 set Kinetis_Adapter_Files=pcb.png KinetisAdapter.pdf KinetisAdapter.zip Flash_Images.sx.zip
 set Programmer_Files=pcb.png
+set Toplevel_Files=pcb.png
 
 echo PCB dir : %PCB_DIR%
 rem echo PCB Dir contains : 
@@ -34,6 +35,8 @@ rem for %%f in (%JS16CF_Files%)   do copy %PCB_DIR%\%%f\%%f.pdf .
 
 echo.
 echo Copying Schematics to document directory
+echo Copying %Toplevel_Files%
+for %%f in (%Toplevel_Files%)          do copy %%f  %OUTPUT_DIR%\USBDM_FlashProgrammers\html 
 echo Copying %JB16_Files%
 for %%f in (%JB16_Files%)              do copy %%f  %OUTPUT_DIR%\USBDM_JB16\html 
 echo Copying %JMxx_Files%
@@ -47,6 +50,6 @@ for %%f in (%JS16CF_Files%)            do copy %%f  %OUTPUT_DIR%\USBDM_CF_JS16\h
 echo Copying %Kinetis_Adapter_Files%
 for %%f in (%Kinetis_Adapter_Files%)   do copy %%f  %OUTPUT_DIR%\USBDM_CF_JMxx\html 
 echo Copying %Programmer_Files%
-for %%f in (%Programmer_Files%)        do copy %%f  %OUTPUT_DIR%\USBDM_FlashProgrammers\html 
+for %%f in (%Programmer_Files%)        do copy %%f  %OUTPUT_DIR%\html 
 
 pause

@@ -62,11 +62,11 @@
             <Directory Id='MANUFACTURER_FOLDER' Name="$(var.Manufacturer)">
                <Directory Id="D.UpdateSite"       Name='UpdateSite' />
                <Directory Id='INSTALLDIR' Name="$(var.ProductName) $(var.ProductVersion)">
-                  <Directory Id="D.Stationery"       Name='Stationery' />
-                  <Directory Id="D.DeviceData"       Name='DeviceData' />
-                  <Directory Id="D.WizardPatchData"  Name='WizardPatches' />
-                  <Directory Id="D.FlashImages"      Name='FlashImages' />
-                  <Directory Id="D.Examples"         Name='Examples' />
+                  <Directory Id="D.Stationery"           Name='Stationery' />
+                  <Directory Id="D.DeviceData"           Name='DeviceData' />
+                  <Directory Id="D.WizardPatchData"      Name='WizardPatches' />
+                  <Directory Id="D.FlashImages"          Name='FlashImages' />
+                  <Directory Id="D.Examples"             Name='Examples' />
                   <Component Id='C.ApplicationDirectoryKey' Guid='*'>
                      <RegistryValue Root='HKLM' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                                     Type='string' Name='InstallationDirectory' Value="[INSTALLDIR]" KeyPath='yes' />
@@ -78,7 +78,6 @@
          <!-- Program menu folder -->
          <Directory Id="ProgramMenuFolder" Name="Programs">
             <Directory Id="D.UsbdmProgramMenuDir" Name="$(var.ProductName) $(var.ProductVersion)">
-               <Directory Id="D.ProgramMenuHelpDir"  Name="Manuals"/>
                <Directory Id="D.ProgramMenuPatchDir" Name="Codewarrior Wizard Patches"/>
             </Directory>
          </Directory>
@@ -126,6 +125,15 @@
          </Component>
       </DirectoryRef>
 
+      <!-- On-line help -->
+      <DirectoryRef Id="D.UsbdmProgramMenuDir">
+         <Component Id="C.InternetShortcut">
+         <util:InternetShortcut Id="OnlineDocumentationShortcut" Name="USBDM Online Documentation" Target="http://usbdm.sourceforge.net/USBDM_V4.12/html/index.html"/>
+         <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                        Type='string' Name='OnlineDocumentationShortcut' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+            
       <!-- Uninstall Menu shortcut -->
       <DirectoryRef Id="D.UsbdmProgramMenuDir">
          <Component Id="C.UninstallProductShortcut">
@@ -139,17 +147,7 @@
                            Type='string' Name='UninstallProductShortcut' Value="" KeyPath='yes' />
          </Component>
       </DirectoryRef>
-
-      <!-- Program Menu Help Folder -->
-      <DirectoryRef Id="D.UsbdmProgramMenuDir">
-         <Component Id="C.ProgramMenuHelpFolder" Guid="*">
-            <CreateFolder Directory="D.ProgramMenuHelpDir"/>
-            <RemoveFolder Directory="D.ProgramMenuHelpDir"        Id="RemoveMenuHelpDir"        On="uninstall" />
-            <RegistryValue Root='HKMU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='HelpFilesInstalled' Value="yes" KeyPath='yes' />
-         </Component>
-      </DirectoryRef>
-      
+            
       <!-- Program Menu Patch Codewarrior Folder -->
       <DirectoryRef Id="D.UsbdmProgramMenuDir">
          <Component Id='C.ProgramMenuPatchDir' Guid='*'>
@@ -379,63 +377,6 @@
          <ComponentRef Id='C.ApplicationDirectoryKey'/>
       </ComponentGroup>
 
-      <!-- Help manual files & shortcuts -->
-      <DirectoryRef Id="INSTALLDIR">
-         <Component Id='C.Manual1' Guid='*' >
-            <File Id='F.ProgrammerManualCHM' DiskId='1' Source='..\Documentation\USBDM_FlashProgrammers.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_110" Directory="D.ProgramMenuHelpDir" Name="Programmer Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual2' Guid='*' >
-            <File Id='F.CFJMxxCHM'           DiskId='1' Source='..\Documentation\USBDM_CF_JMxx.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_111" Directory="D.ProgramMenuHelpDir" Name="JMxx Deluxe Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual3' Guid='*' >
-            <File Id='F.CFJS16CHM'           DiskId='1' Source='..\Documentation\USBDM_CF_JS16.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_112" Directory="D.ProgramMenuHelpDir" Name="JS16 (Coldfire V2-4, DSC, Kinetis) Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual4' Guid='*' >
-            <File Id='F.JB16CHM'             DiskId='1' Source='..\Documentation\USBDM_JB16.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_113" Directory="D.ProgramMenuHelpDir" Name="JB16 (HCS08,HCS12,Coldfire V1) Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual5' Guid='*' >
-            <File Id='F.JMxxCHM'             DiskId='1' Source='..\Documentation\USBDM_JMxx.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_114" Directory="D.ProgramMenuHelpDir" Name="JMxx (HCS08,HCS12,Coldfire V1) Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual6' Guid='*' >
-            <File Id='F.JS16CHM'             DiskId='1' Source='..\Documentation\USBDM_JS16.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_115" Directory="D.ProgramMenuHelpDir" Name="JS16 (HCS08,HCS12,Coldfire V1) Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-         <Component Id='C.Manual7' Guid='*' >
-            <File Id='F.FRDMCHM'           DiskId='1' Source='..\Documentation\USBDM_Freedom.chm' KeyPath="yes">
-               <Shortcut Id="startmenuUSBDM_116" Directory="D.ProgramMenuHelpDir" Name="FRDM-KL25Z Manual"
-                  WorkingDirectory='INSTALLDIR' Advertise="yes"/>
-            </File>
-         </Component>
-      </DirectoryRef>
-
-      <ComponentGroup Id='Cg.Documentation'>
-         <ComponentRef Id="C.ProgramMenuHelpFolder" />
-         <ComponentRef Id='C.Manual1'/>
-         <ComponentRef Id='C.Manual2'/>
-         <ComponentRef Id='C.Manual3'/>
-         <ComponentRef Id='C.Manual4'/>
-         <ComponentRef Id='C.Manual5'/>
-         <ComponentRef Id='C.Manual6'/>
-         <ComponentRef Id='C.Manual7'/>
-      </ComponentGroup>
-
       <!--=================================================================================
            Features
       ==================================================================================-->
@@ -448,6 +389,7 @@
               ConfigurableDirectory='INSTALLDIR'>
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id="C.UninstallProductShortcut" />
+         <ComponentRef Id="C.InternetShortcut" />
          <ComponentRef Id='C.ApplicationDirectoryKey'/>
          <Feature Id='F.CodewarriorSupport'
                Title='CodeWarrior'
@@ -528,13 +470,6 @@
             <ComponentRef Id='C.CommonFiles' />
             <ComponentRef Id="C.FlashShortCut" />
             <ComponentGroupRef Id='Cg.FlashImages' />
-         </Feature>
-         <Feature Id='F.Documentation'
-               Title='Documentation'
-               Description='USBDM Manuals.'
-               AllowAdvertise="no"
-               Level='1'>
-            <ComponentGroupRef Id='Cg.Documentation' />
          </Feature>
          <Feature Id='F.Examples'
                Title='Examples'

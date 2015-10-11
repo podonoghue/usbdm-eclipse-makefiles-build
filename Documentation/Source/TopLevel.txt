@@ -356,7 +356,7 @@ The software may be used to "upgrade" the following devices to enable the on-boa
    Portions of this software is based on TBDML software
 
    USBDM
-   Copyright (C) 2007-12  Peter O'Donoghue
+   Copyright (C) 2007-15  Peter O'Donoghue
 
    Opensource BDM (OSBDM)
    Copyright (C) ?

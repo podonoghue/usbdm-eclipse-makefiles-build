@@ -3,6 +3,8 @@ cls
 set VERSION=4_12_1_40
 set VERSIONn=4.12.1.40
 
+cd
+
 set WXWIDGETS_VERSION=30u
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.9\bin"
