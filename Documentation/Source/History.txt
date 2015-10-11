@@ -2,6 +2,16 @@
 \page pageHistory History & Issues
 
 \section sectionHistory Revision History
+
+USBDM V4_12_1_40 (Oct 2015) 
+======================================================================================= 
+- Improved integration with Kinetis Design Studio New Project Wizard
+
+USBDM V4_12_1_30 (Sep 2015) 
+======================================================================================= 
+- Command line tools now return sensible error codes
+- Added/fixed device 9S12T64 
+
 USBDM V4.12.1.20 (Sep 2015) 
 ======================================================================================= 
 - Fixes for USBDM Eclipse plugin

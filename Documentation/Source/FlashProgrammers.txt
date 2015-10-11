@@ -42,6 +42,7 @@
      -  \b -speed                         \n Communication speed on some targets (kHz).
      -  \b -trim=trim_frequency           \n Trim internal clock to frequency (in kHz) e.g. 32.7.
      -  \b -target=target                 \n Type of target e.g. RS08,HCS08,HCS12,S12Z,CFV1,CFVX,ARM,MC56F
+     -  \b -useReset                      \n Use reset signal.
      -  \b -unsecure                      \n Leave device unsecured after programming.
      -  \b -vdd=vdd_value                 \n Supply Vdd to target (3V3 or 5V).
      -  \b -verify                        \n Verify flash contents.\n
@@ -156,17 +157,16 @@
    - Device selection\n
       The drop down box allows the selection of the device type of the chip to be programmed.  Selecting a
       device type will cause most of the dialogue to be automatically completed.  
-   - Detect SDID\n
+   - Detect Chip\n
       This causes the programmer to read the \b System \b Device \b Identification \b Register
       (\b SDID) from the target chip.  This may be used to partially identify the type of device
       that is being programmed. A single SDID may be used by more than one device in a related family,
       for example MC9S08QB4 and MC9S08QB8 have the same SDID. \n
       Because of this, it will usually be necessary to select a particular device with the 
       above Device Selection box.   
-   - Filter by SDID\n
+   - Filter by Chip ID\n
       Once the \b SDID has been read from the chip, this check box allows the list of devices to
       be restricted to those that have that SDID.
-      
  - <b>Options for secured devices without SYNC (HCS12 devices only)</b>\n
    Most devices support the BDM SYNC command that is used to determine the BDM communication speed. The
    communication speed is then used to determine the target processor bus speed which is needed for 
@@ -176,28 +176,39 @@
    This method is not usable with secured device so yet another method is used to estimate the
    communication speed and  hence target bus speed.  This is less accurate and the user will be
    prompted to check the value supplied here, and modify if necessary, before proceeding.  \n
-   In other circumstances this value is provided for information only.    
-
- - <b>Clock type and Parameters (RS08, HCS08 & CFV1 devices only)</b>\n
+   In other circumstances this value is provided for information only.          
+   </td>
+   <td>
+   \image html "TargetTab(CFV1).png" "RS08, HCS08, CFV1, DSC, ARM Dialogue."
+   \image html "TargetTab(HCS12).png" "HCS12 Dialogue."
+   </td>
+   </tr>
+   <tr>
+   <td colspan="2">
+ - <b>Clock Trim (RS08, HCS08 & CFV1 devices only)</b>\n
    The microcontrollers use a range of different clocks.  It is not necessary to know
    the clock type to program the Flash but this information is necessary to do 
    clock trimming.\n
    Note that it is possible to trim an already programmed chip providing the \e trim \e locations
    have not been previously programmed (i.e. contain 0xFF). \n
-   This information is normally filled in automatically for a known device.        
-   - Clock type \n
-     The clock type used by the target chip.
-   - Clock Module Address \n
-     The address of the 1st register of the clock module.
-   - Trim Frequency \n
-     If the check box is selected then the target chip's clock will be trimmed to
-     the given frequency and the trim parameters programmed to non-volatile memory.
-     The FTRIM value will be <b> combined</b> with the flash image value if not 0xFF.
-   - NVICSTRM\n
+   This information is normally determined automatically for a known device.        
+   - Flash Trim Address\n
      The address of the non-volatile flash locations to program the clock trim parameters
      to.  Freescale has nominated particular locations to be used.  It is (usually) the responsibility 
      of the reset code programmed in the chip to copy these values to the clock registers upon
      reset.
+   - Trim Frequency \n
+     The frequency to trim the internal clock to.
+   - Do trim checkbox \n
+     If the check box is selected then the target chip's clock will be trimmed and the trim parameters
+      programmed to non-volatile memory.
+   - Calculated Trim Value: (RS08,HCS08 & CFV1 only)\n
+      This reports the trim value calculated when programming the target device.\n
+      These values may be useful if you are using a debugger with the particular chip being programmed 
+      and need fixed trim values for the clock initialisation code.\n  
+      The value is given as two parts:
+      - An 8-bit hex value for the ICSTRM/ICGTRM/MCGTRM register
+      - A  1-bit FTRIM value for the lsb of the ICSSC/MCGSC register.
      
  - <b>Security </b>\n
    The target chip may be secured when programming.  This means that the Flash contents cannot
@@ -225,34 +236,26 @@
      contents i.e. only unoccupied security area locations will be programmed.  This is useful if the image contains
      values for part of the security area (e.g. Flash protection) but you still want to have control of the remaining 
      locations (e.g. securing the chip) through the programmer.       
-   </td>
-   <td>
-   \image html "TargetTab(CFV1).png" "RS08, HCS08, CFV1, DSC, ARM Dialogue."
-   \image html "TargetTab(HCS12).png" "HCS12 Dialogue."
+ - <b>Programming Erase Mode </b>\n
+   This option controls the erasing method used before programming:
+   - <b>EraseMass</b> - A device specific mass erase & unsecure operation is done.  This action varies between devices 
+   and may actually NOT leave the device fully erased.  For many devices it is necessary to program security bits
+   to a non-erased state to unsecure the device.  This may conflict with programming security options.  However, 
+   this option must sometimes be used when a device is originally secured.  
+   - <b>EraseAll</b> - All flash arrays are individually bulk erased.
+   - <b>EraseSelective</b> - Any flash blocks used in the flash image are erased.  Unprogrammed blocks are not erased.
+   - <b>EraseNone</b> -  No erasing is done. Any overlap between the image being programmed and the present contents
+   of the Flash will be reported although this may only be detected part-way through the programming.\n 
+   The last two options may allow the incremental programming of a device that has been programmed previously with
+   obvious limitations.  
+ - <b>Erase/Unlock </b>\n
+   This button allows the device to be Mass-erase or Unlocked.
+   The device will be entirely erased and then, if necessary, programmed to an unsecured state.
    </td>
    </tr>
    <tr>
    <td colspan="2">
  - <b>Device Operations </b>\n
-   - Erase Options\n
-      This option controls the erasing method used before programming:
-      - <b>EraseMass</b> - A device specific mass erase & unsecure operation is done.  This action varies between devices 
-      and may actually NOT leave the device fully erased.  For many devices it is necessary to program security bits
-      to a non-erased state to unsecure the device.  This may conflict with programming security options.  However, 
-      this option must sometimes be used when a device is originally secured.  
-      - <b>EraseAll</b> - All flash arrays are individually bulk erased.
-      - <b>EraseSelective</b> - Any flash blocks used in the flash image are erased.  Unprogrammed blocks are not erased.
-      - <b>EraseNone</b> -  No erasing is done. Any overlap between the image being programmed and the present contents
-      of the Flash will be reported although this may only be detected part-way through the programming.\n 
-      The last two options may allow the incremental programming of a device that has been programmed previously with
-      obvious limitations.  
-   - Trim Value: (RS08,HCS08 & CFV1 only)\n
-      This reports the trim value calculated when programming the target device.\n
-      These values may be useful if you are using a debugger with the particular chip being programmed 
-      and need fixed trim values for the clock initialisation code.\n  
-      The value is given as two parts:
-      - An 8-bit hex value for the ICSTRM/ICGTRM/MCGTRM register
-      - A  1-bit FTRIM value for the lsb of the ICSSC/MCGSC register.
    - Program Flash\n
       The Flash of the target device will be programmed.  This may include non-volatile Clock Trim locations
       and security bits according to selected options.\n
