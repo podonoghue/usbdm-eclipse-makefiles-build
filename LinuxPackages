@@ -31,6 +31,7 @@ sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-7-jdk
 sudo apt-get -y install libusb-1.0-0
+sudo apt-get -y install default-jdk
 
 elif [ "${BITNESS}" == "64" ]; then
 # 64-bit build
@@ -43,6 +44,7 @@ sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-7-jdk
 sudo apt-get -y install libusb-1.0-0
+sudo apt-get -y install default-jdk
 
 fi
 
