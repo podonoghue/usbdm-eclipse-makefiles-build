@@ -404,9 +404,10 @@
             <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
             <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
          </Feature>
-         <FeatureRef Id='F.KINETIS_DESIGN_STUDIO' />
-         <FeatureRef Id='F.ECLIPSE_INSTALL1_CDT' />
-         <FeatureRef Id='F.ECLIPSE_INSTALL2_CDT' />
+         <FeatureRef Id='F.KDS_3_0_0' />
+         <FeatureRef Id='F.S32DS_1_0_0' />
+         <FeatureRef Id='F.CDT_1' />
+         <FeatureRef Id='F.CDT_2' />
          <Feature Id='F.UsbdmProgrammers'
             Title='Programmers'
             Description='Stand-alone flash programmers.'

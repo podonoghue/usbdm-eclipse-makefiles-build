@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="KDS_3_0_0" ?> 
+   <?define ECLIPSE_VER="S32DS_1_0_0" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -62,7 +62,7 @@
          <RegistrySearch Id="Rs.$(var.ECLIPSE_VER)_INSTALL"
                     Root="HKLM"
                     Win64="no"
-                    Key="SOFTWARE\SOMNIUM Technologies\Kinetis Design Studio"
+                    Key="SOFTWARE\Freescale\S32DS\Product Versions\S32 Design Studio for ARM v1.0"
                     Name="Path"
                     Type="directory" />
       </Property>
@@ -161,7 +161,7 @@
            USBDM Marker
       -->
       <DirectoryRef Id="D.$(var.ECLIPSE_VER)_INSTALL">
-         <Component Id='C.$(var.ECLIPSE_VER)_CDT.Marker' Guid='dff40fe6-cdc9-4771-bcb5-b7f4a830d0df' >
+         <Component Id='C.$(var.ECLIPSE_VER)_CDT.Marker' Guid='492fba02-5f59-49c3-9417-01cf2682bc0c' >
             <File Id='F.$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
@@ -170,7 +170,7 @@
            Processor Expert plugin support 
       -->
       <DirectoryRef Id="D.$(var.ECLIPSE_VER)_PE_Config_Compiler">
-         <Component Id='C.$(var.ECLIPSE_VER)_PE_Config' Guid='db84fae4-f3a9-45a8-b503-c18ac8bd1724' >
+         <Component Id='C.$(var.ECLIPSE_VER)_PE_Config' Guid='37368caa-9131-4c0d-abe3-c68555b981df' >
             <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='$(var.SrcDir)\bin\net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
          </Component>
       </DirectoryRef>
@@ -179,7 +179,7 @@
            Missing eclipse.ini
       -->
       <DirectoryRef Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
-         <Component Id='C.$(var.ECLIPSE_VER)_Eclipse_ini' Guid='d575788f-8fc8-46d8-a2ca-c9be53c79496' >
+         <Component Id='C.$(var.ECLIPSE_VER)_Eclipse_ini' Guid='d5c8f1a5-587d-4383-8093-1a9d53ee4742' >
             <CopyFile Id='F.$(var.ECLIPSE_VER)_Eclipse_ini' 
               SourceProperty="D.$(var.ECLIPSE_VER)_ECLIPSE" 
               DestinationProperty="D.$(var.ECLIPSE_VER)_ECLIPSE" 
@@ -192,7 +192,7 @@
       Add launch config for usbdm 'launch_gdb_usbdm.xml'
       -->
       <DirectoryRef Id="D.$(var.ECLIPSE_VER)_PE_launchConfig">
-         <Component Id='C.$(var.ECLIPSE_VER)_launch_gdb_usbdm_xml' Guid='5d078bea-3698-4097-9bf0-a61d2aa86130' >
+         <Component Id='C.$(var.ECLIPSE_VER)_launch_gdb_usbdm_xml' Guid='753518aa-8f98-4ccc-9b0d-f5a0359e0afd' >
             <File Id='EclipseLaunchFiles1_$(var.ECLIPSE_VER)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\launch_gdb_usbdm.xml'     KeyPath='yes' />
          </Component>
       </DirectoryRef>
@@ -209,8 +209,8 @@
             Eclipse feature
       =======================================================-->
       <Feature Id='F.$(var.ECLIPSE_VER)'
-            Title='Kinetis Design Studio Plugins'
-            Description='Add USBDM support to KDS:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
+            Title='S32 Design Studio Plugins'
+            Description='Add USBDM support to S32DS:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
             ConfigurableDirectory="D.$(var.ECLIPSE_VER)_INSTALL"
             AllowAdvertise="no"
             Level='100'>

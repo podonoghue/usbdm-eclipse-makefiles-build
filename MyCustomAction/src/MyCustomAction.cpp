@@ -67,28 +67,31 @@ typedef struct  {
 //!
 extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
    bool found = true;
-   char path[MAX_PATH];
    DWORD filePathLength;
    DirectoryQuad pathsToCheck[] = {
-         // directory                         feature                            subdir               description
-         {"D.CW_FOR_MCU_V10.7",              "F.CW_FOR_MCU_V10_7",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.7"},
-         {"D.CW_FOR_MCU_V10.6.4",            "F.CW_FOR_MCU_V10.6.4",            "MCU",               "Codewarrior Interfaces\n     - MCU V10.6"},
-         {"D.CW_FOR_MCU_V10.6",              "F.CW_FOR_MCU_V10.6",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.6"},
-         {"D.CW_FOR_MCU_V10.5",              "F.CW_FOR_MCU_V10.5",              "MCU",               "Codewarrior Interfaces\n     - MCU V10.5"},
-         {"D.CODEWARRIOR_COLDFIRE_V7_2",     "F.CODEWARRIOR_COLDFIRE_V7_2",     "bin",               "Codewarrior Interfaces\n     - Coldfire V7.2"},
-         {"D.CODEWARRIOR_COLDFIRE_V7_1",     "F.CODEWARRIOR_COLDFIRE_V7_1",     "bin",               "Codewarrior Interfaces\n     - Coldfire V7.1"},
-         {"D.CODEWARRIOR_COLDFIRE_V7",       "F.CODEWARRIOR_COLDFIRE_V7",       "bin",               "Codewarrior Interfaces\n     - Coldfire V7.x"},
-         {"D.CODEWARRIOR_DSC_V8_3",          "F.CODEWARRIOR_DSC_V8_3",          "bin",               "Codewarrior Interfaces\n     - DSC56800E B8,3"},
-         {"D.CW_FOR_MICROCONTROLLERS_V6_3",  "F.CW_FOR_MICROCONTROLLERS_V6_3",  "bin",               "Codewarrior Interfaces\n     - Microcontrollers V6.3"},
-         {"D.CW_FOR_MICROCONTROLLERS_V6_2",  "F.CW_FOR_MICROCONTROLLERS_V6_2",  "bin",               "Codewarrior Interfaces\n     - Microcontrollers V6.2"},
-         {"D.CW_FOR_MICROCONTROLLERS_V6",    "F.CW_FOR_MICROCONTROLLERS_V6",    "bin",               "Codewarrior Interfaces\n     - Microcontrollers V6.x"},
-         {"D.CWS12_X_V5_1",                  "F.CWS12_X_V5_1",                  "bin",               "Codewarrior Interfaces\n     - S12(X) V5.1"},
-         {"D.FREEMASTER_V1_3",               "F.FREEMASTER_V1_3",               "plugins",           "FreeMASTER V1.3"},
-         {"D.CFFLASHER_V3_1",                "F.CFFLASHER_V3_1",                "BDM Protocol",      "CF Flasher V3.1"},
-         {"D.ECLIPSE_INSTALL2_CDT",          "F.ECLIPSE_INSTALL2_CDT",          "dropins",           "Eclipse Install 2\n          - Eclipse Plugin"},
-         {"D.ECLIPSE_INSTALL1_CDT",          "F.ECLIPSE_INSTALL1_CDT",          "dropins",           "Eclipse Install 1\n          - Eclipse Plugin"},
-         {"D.KINETIS_DESIGN_STUDIO",         "F.KINETIS_DESIGN_STUDIO",         "eclipse/dropins",   "Freescale Design Studio"},
-         {NULL,                              NULL,                              NULL,                NULL}
+         // directory                         feature                            subdir                   description
+         {"D.CW_FOR_MCU_V10.5",              "F.CW_FOR_MCU_V10.5",              "MCU",                    "Codewarrior - MCU V10.5"             },
+         {"D.CW_FOR_MCU_V10.6",              "F.CW_FOR_MCU_V10.6",              "MCU",                    "Codewarrior - MCU V10.6"             },
+         {"D.CW_FOR_MCU_V10.6.4",            "F.CW_FOR_MCU_V10.6.4",            "MCU",                    "Codewarrior - MCU V10.6.4"           },
+         {"D.CW_FOR_MCU_V10.7",              "F.CW_FOR_MCU_V10.7",              "MCU",                    "Codewarrior - MCU V10.7"             },
+
+         {"D.CW_FOR_MICROCONTROLLERS_V6_3",  "F.CW_FOR_MICROCONTROLLERS_V6_3",  "bin",                    "Codewarrior - Microcontrollers V6.3" },
+
+         {"D.CWS12_X_V5_1",                  "F.CWS12_X_V5_1",                  "bin",                    "Codewarrior - S12(X) V5.1"           },
+
+         {"D.CODEWARRIOR_COLDFIRE_V7_2",     "F.CODEWARRIOR_COLDFIRE_V7_2",     "bin",                    "Codewarrior - Coldfire V7.2"         },
+
+         {"D.CODEWARRIOR_DSC_V8_3",          "F.CODEWARRIOR_DSC_V8_3",          "bin",                    "Codewarrior - DSC56800E B8.3"        },
+
+         {"D.FREEMASTER_V1_3",               "F.FREEMASTER_V1_3",               "plugins",                "FreeMASTER V1.3"			            },
+
+         {"D.CFFLASHER_V3_1",                "F.CFFLASHER_V3_1",                "BDM Protocol",           "CF Flasher V3.1"			            },
+
+         {"D.KDS_3_0_0_INSTALL",             "F.KDS_3_0_0",                     "eclipse\\configuration", "Kinetis Design Studio Plugins"	      },
+         {"D.S32DS_1_0_0_INSTALL",           "F.S32DS_1_0_0",                   "eclipse\\configuration", "S32 Design Studio Plugins"		      },
+         {"D.CDT_1_ECLIPSE",                 "F.CDT_1",                         "configuration",          "Eclipse CDT Plugins #1"		         },
+         {"D.CDT_2_ECLIPSE",                 "F.CDT_2",                         "configuration",          "Eclipse CDT Plugins #2"		         },
+         {NULL,                              NULL,                              NULL,                     NULL                                  }
    };
    ::hInstall = hInstall;
    printLog("CheckInstallPaths()\n");
@@ -109,14 +112,17 @@ extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
       // Check if path exists
       found = false;
       // Get path & validate
-      rc = MsiGetTargetPath(hInstall, pathsToCheck[pathNum].directory, path, &filePathLength);
+      char directory[MAX_PATH];
+      char path[MAX_PATH];
+      rc = MsiGetTargetPath(hInstall, pathsToCheck[pathNum].directory, directory, &filePathLength);
       if (rc == ERROR_SUCCESS) {
-         strcat(path, pathsToCheck[pathNum].subdir);
+         strncpy(path, directory, MAX_PATH);
+         strncat(path, pathsToCheck[pathNum].subdir, MAX_PATH);
          found = directoryExists(path);
       }
       printLog("CheckInstallPaths(%s) => %s\n", path, found?"Found":"Not Found");
       if (!found) {
-         MsiSetProperty (hInstall, "CODEWARRIOR_MISSING_PATH", path);
+         MsiSetProperty (hInstall, "CODEWARRIOR_MISSING_PATH", directory);
          MsiSetProperty (hInstall, "CODEWARRIOR_MISSING_APP",  pathsToCheck[pathNum].description);
          break;
       }

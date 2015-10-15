@@ -1,16 +1,28 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Fragment>
       <UI>
-         <Dialog Id="NoSuchFileErrorDlg" Width="260" Height="105" Title="[ProductName] Setup" NoMinimize="yes">
+         <Dialog Id="NoSuchFileErrorDlg" Width="300" Height="160" Title="[ProductName] Setup" NoMinimize="yes">
 <!--
            <Control Id="Icon" Type="Icon" X="15" Y="15" Width="24" Height="24"
              ToolTip="Information icon" FixedSize="yes" IconSize="32" Text="Exclam.ico" />
 -->             
-           <Control Id="Return" Type="PushButton" X="100" Y="77" Width="56" Height="17" Default="yes" Cancel="yes" Text="&amp;Return">
-             <Publish Event="EndDialog" Value="Return">1</Publish>
+           <Control Id="Text1" Type="Text" X="20" Y="15" Width="260" Height="50" TabSkip="no">
+             <Text>The path for: "[CODEWARRIOR_MISSING_APP]" is invalid.</Text>
            </Control>
-           <Control Id="Text" Type="Text" X="20" Y="15" Width="220" Height="50" TabSkip="no">
-             <Text>The path for:&#xA;"[CODEWARRIOR_MISSING_APP]" is invalid. &#xA;&#xA;Please check that the path points at the main directory of an existing installation or disable the feature before proceeding. </Text>
+           <Control Id="Text2" Type="Text" X="20" Y="35" Width="260" Height="50" TabSkip="no">
+             <Text>Please check that the path:</Text>
+           </Control>
+           <Control Id="Text3" Type="Text" X="30" Y="55" Width="260" Height="50" TabSkip="no">
+             <Text>"[CODEWARRIOR_MISSING_PATH]"</Text>
+           </Control>
+           <Control Id="Text4" Type="Text" X="20" Y="75" Width="260" Height="50" TabSkip="no">
+             <Text>points at the main directory of an existing installation</Text>
+           </Control>
+           <Control Id="Text5" Type="Text" X="20" Y="95" Width="260" Height="50" TabSkip="no">
+             <Text>or disable the feature before proceeding. </Text>
+           </Control>
+           <Control Id="Return" Type="PushButton" X="150" Y="120" Width="56" Height="17" Default="yes" Cancel="yes" Text="&amp;Return">
+             <Publish Event="EndDialog" Value="Return">1</Publish>
            </Control>
          </Dialog>
          

@@ -80,7 +80,7 @@
 
 // </h>
 
-// <h> Pin Peripheral mapping
+// <h> Pin Peripheral Mapping
 
 // ADC0_DM0 Pin Mapping
 //   <o> ADC0_DM0  [ADC0_DM0] <constant>

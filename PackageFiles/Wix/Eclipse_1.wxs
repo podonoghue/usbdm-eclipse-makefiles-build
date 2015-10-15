@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="INSTALL2" ?> 
+   <?define ECLIPSE_VER="CDT_1" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -20,16 +20,17 @@
                Directory structure
       =======================================================-->
       <DirectoryRef Id='TARGETDIR'>
-         <Directory Id='D.$(var.ECLIPSE_VER)_APPS' Name="Apps">
-            <!-- Eclipse directory structure-->
-            <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT" Name="Eclipse_64">
-               <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_Dropins" Name="dropins"/>
-                  <!-- PE directory structure -->
-                  <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
-                     <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config" Name="Config">
-                        <Directory Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
-                     </Directory>
+         <!-- Eclipse directory structure -->
+         <Directory Id="D.$(var.ECLIPSE_VER)_APPS" Name="Apps">
+            <Directory Id="D.$(var.ECLIPSE_VER)_ECLIPSE" Name="eclipse">
+               <!-- Eclipse plugins -->
+               <Directory Id="D.$(var.ECLIPSE_VER)_Plugins" Name="plugins"/>
+               <!-- PE directory structure -->
+               <Directory Id="D.$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
+                  <Directory Id="D.$(var.ECLIPSE_VER)_PE_Config" Name="Config">
+                     <Directory Id="D.$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
                   </Directory>
+               </Directory>
             </Directory>
          </Directory>
       </DirectoryRef>
@@ -39,8 +40,8 @@
       =======================================================-->
      
       <!-- Check for presence of Eclipse -->
-      <Property Id="P.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
-         <RegistrySearch Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
+      <Property Id="P.$(var.ECLIPSE_VER)_ECLIPSE">
+         <RegistrySearch Id="Rs.$(var.ECLIPSE_VER)_ECLIPSE"
                     Root="HKLM"
                     Win64="no"
                     Key="SOFTWARE\Eclipse Foundation\Eclipse"
@@ -49,8 +50,8 @@
       </Property>
 
       <!-- Modify default install path for Eclipse -->
-      <Property Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
-         <RegistrySearchRef Id="Rs.ECLIPSE_$(var.ECLIPSE_VER)_CDT" />
+      <Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
+         <RegistrySearchRef Id="Rs.$(var.ECLIPSE_VER)_ECLIPSE" />
       </Property>
       
       <!--=================================================================================
@@ -60,24 +61,29 @@
       <CustomAction
          Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
+         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
+      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
          
+      <!-- Uninstall Eclipse plugins -->
       <CustomAction
          Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
-         Execute="immediate"/>
+         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
+         Execute="immediate"/>         
          
-      <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
       <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
-          <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
-          <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
-          
-          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   Before="InstallFinalize"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
-          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" Before="RemoveFiles"><![CDATA[$C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+          <!--
+              Install plugins
+          -->
+          <!-- These actions set Properties used by later actions -->
+          <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
+          <!-- These actions patch or restore the various XML files -->
+          <Custom Action="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"         Before="InstallFinalize"><![CDATA[$C.$(var.ECLIPSE_VER)_CDT.Marker>2]]></Custom>
+          <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"       Before="RemoveFiles"><![CDATA[$C.$(var.ECLIPSE_VER)_CDT.Marker=2]]></Custom>
       </InstallExecuteSequence>
       
       <!--======================================================
@@ -86,17 +92,17 @@
       <!-- 
            USBDM Marker
       -->
-      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT">
-         <Component Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' Guid='b9ce25ad-254b-4c05-bc89-de8afde8745c' >
-            <File Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+      <DirectoryRef Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
+         <Component Id='C.$(var.ECLIPSE_VER)_CDT.Marker' Guid='d191d010-32a5-40cb-ab67-4fcbd290b80c' >
+            <File Id='F.$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
       
       <!-- 
            Processor Expert plugin support 
       -->
-      <DirectoryRef Id="D.ECLIPSE_$(var.ECLIPSE_VER)_PE_Config_Compiler">
-         <Component Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' Guid='312fda54-8c5e-4a77-bc01-02eca7ddd878' >
+      <DirectoryRef Id="D.$(var.ECLIPSE_VER)_PE_Config_Compiler">
+         <Component Id='C.$(var.ECLIPSE_VER)_PE_Config' Guid='43413763-3fc8-44c4-9150-db08515bbb95' >
             <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='$(var.SrcDir)\bin\net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
          </Component>
       </DirectoryRef>
@@ -104,18 +110,18 @@
       <!--======================================================
             Eclipse feature
       =======================================================-->
-      <Feature Id='F.ECLIPSE_$(var.ECLIPSE_VER)_CDT'
-            Title='Eclipse CDT Plugins'
-            Description='Add USBDM CDT support to Eclipse:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
-            ConfigurableDirectory="D.ECLIPSE_$(var.ECLIPSE_VER)_CDT"
+      <Feature Id='F.$(var.ECLIPSE_VER)'
+            Title='Eclipse CDT Plugins #1'
+            Description='Add USBDM support to Eclipse CDT:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
+            ConfigurableDirectory="D.$(var.ECLIPSE_VER)_ECLIPSE"
             AllowAdvertise="no"
             Level='100'>
          <Condition Level='1'>
-            <![CDATA[Installed OR P.ECLIPSE_$(var.ECLIPSE_VER)_CDT]]>
+            <![CDATA[Installed OR P.$(var.ECLIPSE_VER)_ECLIPSE]]>
          </Condition>
          <ComponentRef Id='C.ProgramMenuFolder' />
-         <ComponentRef Id='C.ECLIPSE_$(var.ECLIPSE_VER)_CDT.Marker' />
-         <ComponentRef Id='C.Eclipse_$(var.ECLIPSE_VER)_PE_Config' />
+         <ComponentRef Id='C.$(var.ECLIPSE_VER)_CDT.Marker' />
+         <ComponentRef Id='C.$(var.ECLIPSE_VER)_PE_Config' />
          <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.UsbdmGdbServer' />
          <ComponentGroupRef Id='Cg.UpdateSite' />
