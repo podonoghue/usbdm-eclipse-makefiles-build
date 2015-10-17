@@ -108,7 +108,7 @@
          Execute="immediate"/>
       <CustomAction Id="Ca.UnMergeNewProjectWizardCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
-      <!-- Patch Launch Configuration XLM-->
+      <!-- Patch Launch Configuration XML -->
       <CustomAction
          Id="Ca.CreateMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
          Property="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
@@ -116,7 +116,7 @@
          Execute="immediate"/>
       <CustomAction Id="Ca.MergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
       
-      <!-- UnPatch Launch Configuration XLM-->
+      <!-- UnPatch Launch Configuration XML -->
       <CustomAction
          Id="Ca.CreateUnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnMergeLaunchConfigurationWizardCommand_$(var.ECLIPSE_VER)"
@@ -189,7 +189,7 @@
       </DirectoryRef>
       
       <!--
-      Add launch config for usbdm 'launch_gdb_usbdm.xml'
+      Add launch configuration for USBDM 'launch_gdb_usbdm.xml'
       -->
       <DirectoryRef Id="D.$(var.ECLIPSE_VER)_PE_launchConfig">
          <Component Id='C.$(var.ECLIPSE_VER)_launch_gdb_usbdm_xml' Guid='5d078bea-3698-4097-9bf0-a61d2aa86130' >
