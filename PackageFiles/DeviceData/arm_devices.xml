@@ -1202,7 +1202,7 @@ NOTES:
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
-         <sdid value="0x27150D80" mask="0xFFFF0FF0"/>
+         <sdid value="0x23150D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -1213,7 +1213,7 @@ NOTES:
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
-         <sdid value="0x27160D80" mask="0xFFFF0FF0"/>
+         <sdid value="0x23160D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
