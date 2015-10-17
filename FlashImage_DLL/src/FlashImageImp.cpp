@@ -431,7 +431,7 @@ bool FlashImageImp::isEmpty() const {
  */
 void FlashImageImp::printMemoryMap() {
    EnumeratorPtr enumerator(getEnumerator());
-   UsbdmSystem::Log::print("FlashImageImp::MemorySpace::printMemoryMap()\n");
+   UsbdmSystem::Log::print("Memory Map ===========>\n");
    while (enumerator->isValid()) {
       // Start address of block
       uint32_t startBlock = enumerator->getAddress();
@@ -530,14 +530,15 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
       // Try SREC Format if not recognized as ELF
       rc = loadS1S9File(filePath);
    }
-//   log.print("FlashImageImp::loadFile()\n"
-//         "Lowest used Address \t = 0x%4.4X\n"
-//         "Highest used Address\t = 0x%4.4X\n",
-//         FlashImageImpDescription->firstAddr,  // first non-0xFF address
-//         FlashImageImpDescription->lastAddr    // last non-0xFF address
-//         );
-//
+
    if (rc == SFILE_RC_OK) {
+
+      log.print(" Spans [0x%4.4X..0x%4.4X]\n",
+            firstAllocatedAddress,  // first non-0xFF address
+            lastAllocatedAddress    // last non-0xFF address
+      );
+//      printMemoryMap();
+
       sourcePath      = filePath;
       sourceFilename  = filePath; //!Todo Fix
    }
@@ -831,14 +832,15 @@ USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
                                              const uint8_t   data[],
                                              bool            dontOverwrite) {
    LOGGING_Q;
-//    log.print("FlashImageImp::loadData(0x%04X...0x%04X)\n", address, address+bufferSize-1);
+   log.print("load[0x%04X...0x%04X]\n", address, address+bufferSize-1);
    uint32_t bufferAddress = 0;
    while (bufferAddress < bufferSize) {
+//      log.print("image[0x%08X] <= 0x%04X\n", address, data[bufferAddress]);
       if (!this->isValid(address) || !dontOverwrite) {
-         this->setValue(address, data[bufferAddress++]);
+         this->setValue(address, data[bufferAddress]);
       }
-//         log.print("FlashImageImp::loadDataBytes() - image[0x%06X] <= 0x%04X\n", address, value);
       address++;
+      bufferAddress++;
    }
    return BDM_RC_OK;
 }

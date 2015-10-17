@@ -186,7 +186,7 @@ std::string SecurityInfo::getSecurityInfo() const {
    return securityInfo;
 }
 
-void           SecurityInfo::setSecurityInfo(const std::string &securityInfo) {
+void SecurityInfo::setSecurityInfo(const std::string &securityInfo) {
    this->securityInfo = securityInfo;
 }
 
@@ -531,6 +531,8 @@ bool MemoryRegion::isWritableMemory() const {
 //! Get security address (Flash location)
 //!
 uint32_t MemoryRegion::getSecurityAddress() const {
+   LOGGING_Q;
+   log.print(" A = 0x%08X\n", securityAddress);
    return securityAddress;
 }
 
@@ -600,7 +602,9 @@ bool MemoryRegion::valid() const {
 }
 
 void MemoryRegion::setSecurityAddress(uint32_t address) {
+   LOGGING_E;
    securityAddress = address;
+   log.print(" A = 0x%08X\n", securityAddress);
 }
 
 MemType_t MemoryRegion::getMemoryType() const {

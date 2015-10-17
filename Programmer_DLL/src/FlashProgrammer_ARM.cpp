@@ -2064,6 +2064,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
       log.print("No security area, not modifying flash image\n");
       return PROGRAMMING_RC_OK;
    }
+   log.print("Security area @0x%08X\n", securityAddress);
+
    SecurityInfoConstPtr securityInfo;
    bool dontOverwrite =  false;
    switch (device->getSecurity()) {
@@ -2126,7 +2128,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
       if ((device->getEraseOption() == DeviceData::eraseMass) ||
           (device->getEraseOption() == DeviceData::eraseNone)) {
          // Clear security area in image to prevent re-programming
-         log.print("Clearing security area as already valid and not being erased\n");
+         log.print("Removing security area from image as already valid and not being erased\n");
          for(int index=0; index<size; index++) {
             flashImage->remove(securityAddress+index);
          }
@@ -2590,6 +2592,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::doReadbackVerify(FlashImagePtr flashImage) 
    uint8_t buffer[MAX_BUFFER];
    int checkResult = TRUE;
    int blockResult;
+
+   flashImage->printMemoryMap();
 
    FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    //ToDo - handle linear addressing on HCS12
