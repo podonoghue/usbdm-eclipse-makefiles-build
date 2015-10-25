@@ -7,6 +7,7 @@
 \verbatim
 Change History
 -====================================================================================
+| 10 Oct 2015 | Added Tcl_Finalize() to deleteInterpreter()       - pgo - V4.11.1.40
 | 21 May 2015 | Removed closing stdio etc as hangs module unload  - pgo - V4.11.1.30
 | 21 May 2015 | Changes to module load & unload                   - pgo - V4.11.1.30
 | 16 May 2015 | Modified printfs etc go via TCL stdout/stderr     - pgo - V4.11.1.30
