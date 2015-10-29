@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="abstraction-systick" >
+   <projectActionList id="abstraction-simple-delay" >
       <applyWhen>
          <and>
             <or>
@@ -16,19 +16,19 @@
       </applyWhen>
       
       <projectActionList>
-         <variable id="projectOptionValue.abstraction-systick" 
-            name="SysTick Timer" 
-            description="Adds a simple timer using Systick interrupt" 
+         <variable id="projectOptionValue.abstraction-simple-delay" 
+            name="Timer" 
+            description="Adds a simple timer using DWT counter" 
             checkGroup="group-additional-options" >
          </variable>
          
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.abstraction-systick" />
+                  <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
                </applyWhen>
                <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" />
-               <copy source="Sources/Delay.cpp"            target="Sources/Delay.cpp" />
+               <copy source="Sources/Delay.c"              target="Sources/Delay.c" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

@@ -1,9 +1,9 @@
-/**
- * @file     delay.h
- * @brief    Simple delay routines using SysTick timer
+/*
+ * @file Delay.h
+ * @brief Very simple delay routine using DWT->CYCCNT counter
  *
- * @version  V4.11.1.70
- * @date     18 June 2015
+ *  Created on: 5 Oct 2015
+ *      Author: podonoghue
  */
 #ifndef SOURCES_DELAY_H_
 #define SOURCES_DELAY_H_
@@ -12,26 +12,21 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
+/**
+ * Simple delay routine
+ *
+ * @param usToWait How many microseconds to busy-wait
+ */
+void waitUS(uint32_t usToWait);
+
 /**
  * Simple delay routine
  *
  * @param msToWait How many milliseconds to busy-wait
  */
-void waitMS(unsigned msToWait);
-
-/**
- * Very approximate 10us delay routine
- */
-void wait10us();
-
-#ifndef __CMSIS_RTOS
-/**
- * Get count of timer ticks
- *
- * @return ticks since arbitrary epoch
- */
-unsigned getTicks();
-#endif
+void waitMS(uint32_t msToWait);
 
 #ifdef __cplusplus
 }

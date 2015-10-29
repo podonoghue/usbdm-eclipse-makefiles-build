@@ -9,8 +9,8 @@
 #include "Delay.h"
 
 #ifndef __CMSIS_RTOS
-static unsigned timer;
-static unsigned ticks;
+volatile static unsigned timer;
+volatile static unsigned ticks;
 
 /**
  * SysTick handler
