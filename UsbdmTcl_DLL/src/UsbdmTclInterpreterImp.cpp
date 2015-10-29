@@ -31,7 +31,6 @@ Change History
 #include <stdarg.h>
 
 #include "ArmDefinitions.h"
-#include "tcl.h"
 #include "Names.h"
 #include "Common.h"
 #include "WxPlugin.h"

@@ -12,10 +12,9 @@
 
 #include <stdio.h>
 #include <tr1/memory>
+#include <tcl.h>
 
 #include "BdmInterfaceFactory.h"
-
-#include "tcl.h"
 
 class UsbdmTclInterpreterImp: public UsbdmTclInterpreter {
 
