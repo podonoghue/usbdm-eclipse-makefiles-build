@@ -5,7 +5,7 @@
  *           Equivalent: MKL46Z128M4, MKL46Z256M4, FRDM_KL46Z
  *
  * @version  V0.0
- * @date     2015/07
+ * @date     2015/11
  *
  *******************************************************************************************************/
 
@@ -1732,26 +1732,12 @@ typedef struct {                                /*       LCD Structure          
    __IO uint32_t  AR;                           /**< 0004: LCD Auxiliary Register                                       */
    __IO uint32_t  FDCR;                         /**< 0008: LCD Fault Detect Control Register                            */
    __IO uint32_t  FDSR;                         /**< 000C: LCD Fault Detect Status Register                             */
-   __IO uint32_t  PENL;                         /**< 0010: LCD Pin Enable register                                      */
-   __IO uint32_t  PENH;                         /**< 0014: LCD Pin Enable register                                      */
-   __IO uint32_t  BPENL;                        /**< 0018: LCD Back Plane Enable register                               */
-   __IO uint32_t  BPENH;                        /**< 001C: LCD Back Plane Enable register                               */
-   __IO uint32_t  WF3TO0;                       /**< 0020: LCD Waveform register                                        */
-   __IO uint32_t  WF7TO4;                       /**< 0024: LCD Waveform register                                        */
-   __IO uint32_t  WF11TO8;                      /**< 0028: LCD Waveform register                                        */
-   __IO uint32_t  WF15TO12;                     /**< 002C: LCD Waveform register                                        */
-   __IO uint32_t  WF19TO16;                     /**< 0030: LCD Waveform register                                        */
-   __IO uint32_t  WF23TO20;                     /**< 0034: LCD Waveform register                                        */
-   __IO uint32_t  WF27TO24;                     /**< 0038: LCD Waveform register                                        */
-   __IO uint32_t  WF31TO28;                     /**< 003C: LCD Waveform register                                        */
-   __IO uint32_t  WF35TO32;                     /**< 0040: LCD Waveform register                                        */
-   __IO uint32_t  WF39TO36;                     /**< 0044: LCD Waveform register                                        */
-   __IO uint32_t  WF43TO40;                     /**< 0048: LCD Waveform register                                        */
-   __IO uint32_t  WF47TO44;                     /**< 004C: LCD Waveform register                                        */
-   __IO uint32_t  WF51TO48;                     /**< 0050: LCD Waveform register                                        */
-   __IO uint32_t  WF55TO52;                     /**< 0054: LCD Waveform register                                        */
-   __IO uint32_t  WF59TO56;                     /**< 0058: LCD Waveform register                                        */
-   __IO uint32_t  WF63TO60;                     /**< 005C: LCD Waveform register                                        */
+   __IO uint32_t  PEN[2];                       /**< 0010: LCD Pin Enable                                               */
+   __IO uint32_t  BPEN[2];                      /**< 0018: LCD Back Plane Enable register                               */
+   union {                                      /**< 0000: (size=0040)                                                  */
+      __IO uint32_t  WF[16];                    /**< 0020: LCD Waveform register                                        */
+      __IO uint8_t   WF8B[64];                  /**< 0020: LCD Waveform register, controls an LCD segment or phase      */
+   };
 } LCD_Type;
 
 /**
@@ -1837,230 +1823,31 @@ typedef struct {                                /*       LCD Structure          
 #define LCD_FDSR_FDCNT(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_FDSR_FDCNT_SHIFT))&LCD_FDSR_FDCNT_MASK) /*!< LCD_FDSR                                */
 #define LCD_FDSR_FDCF_MASK                       (0x01UL << LCD_FDSR_FDCF_SHIFT)                     /*!< LCD_FDSR: FDCF Mask                     */
 #define LCD_FDSR_FDCF_SHIFT                      15                                                  /*!< LCD_FDSR: FDCF Position                 */
-/* ------- PENL Bit Fields                          ------ */
-#define LCD_PENL_PEN_MASK                        (0xFFFFFFFFUL << LCD_PENL_PEN_SHIFT)                /*!< LCD_PENL: PEN Mask                      */
-#define LCD_PENL_PEN_SHIFT                       0                                                   /*!< LCD_PENL: PEN Position                  */
-#define LCD_PENL_PEN(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_PENL_PEN_SHIFT))&LCD_PENL_PEN_MASK) /*!< LCD_PENL                                */
-/* ------- PENH Bit Fields                          ------ */
-#define LCD_PENH_PEN_MASK                        (0xFFFFFFFFUL << LCD_PENH_PEN_SHIFT)                /*!< LCD_PENH: PEN Mask                      */
-#define LCD_PENH_PEN_SHIFT                       0                                                   /*!< LCD_PENH: PEN Position                  */
-#define LCD_PENH_PEN(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_PENH_PEN_SHIFT))&LCD_PENH_PEN_MASK) /*!< LCD_PENH                                */
-/* ------- BPENL Bit Fields                         ------ */
-#define LCD_BPENL_BPEN_MASK                      (0xFFFFFFFFUL << LCD_BPENL_BPEN_SHIFT)              /*!< LCD_BPENL: BPEN Mask                    */
-#define LCD_BPENL_BPEN_SHIFT                     0                                                   /*!< LCD_BPENL: BPEN Position                */
-#define LCD_BPENL_BPEN(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_BPENL_BPEN_SHIFT))&LCD_BPENL_BPEN_MASK) /*!< LCD_BPENL                               */
-/* ------- BPENH Bit Fields                         ------ */
-#define LCD_BPENH_BPEN_MASK                      (0xFFFFFFFFUL << LCD_BPENH_BPEN_SHIFT)              /*!< LCD_BPENH: BPEN Mask                    */
-#define LCD_BPENH_BPEN_SHIFT                     0                                                   /*!< LCD_BPENH: BPEN Position                */
-#define LCD_BPENH_BPEN(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_BPENH_BPEN_SHIFT))&LCD_BPENH_BPEN_MASK) /*!< LCD_BPENH                               */
-/* ------- WF3TO0 Bit Fields                        ------ */
-#define LCD_WF3TO0_WF0_MASK                      (0xFFUL << LCD_WF3TO0_WF0_SHIFT)                    /*!< LCD_WF3TO0: WF0 Mask                    */
-#define LCD_WF3TO0_WF0_SHIFT                     0                                                   /*!< LCD_WF3TO0: WF0 Position                */
-#define LCD_WF3TO0_WF0(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF3TO0_WF0_SHIFT))&LCD_WF3TO0_WF0_MASK) /*!< LCD_WF3TO0                              */
-#define LCD_WF3TO0_WF1_MASK                      (0xFFUL << LCD_WF3TO0_WF1_SHIFT)                    /*!< LCD_WF3TO0: WF1 Mask                    */
-#define LCD_WF3TO0_WF1_SHIFT                     8                                                   /*!< LCD_WF3TO0: WF1 Position                */
-#define LCD_WF3TO0_WF1(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF3TO0_WF1_SHIFT))&LCD_WF3TO0_WF1_MASK) /*!< LCD_WF3TO0                              */
-#define LCD_WF3TO0_WF2_MASK                      (0xFFUL << LCD_WF3TO0_WF2_SHIFT)                    /*!< LCD_WF3TO0: WF2 Mask                    */
-#define LCD_WF3TO0_WF2_SHIFT                     16                                                  /*!< LCD_WF3TO0: WF2 Position                */
-#define LCD_WF3TO0_WF2(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF3TO0_WF2_SHIFT))&LCD_WF3TO0_WF2_MASK) /*!< LCD_WF3TO0                              */
-#define LCD_WF3TO0_WF3_MASK                      (0xFFUL << LCD_WF3TO0_WF3_SHIFT)                    /*!< LCD_WF3TO0: WF3 Mask                    */
-#define LCD_WF3TO0_WF3_SHIFT                     24                                                  /*!< LCD_WF3TO0: WF3 Position                */
-#define LCD_WF3TO0_WF3(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF3TO0_WF3_SHIFT))&LCD_WF3TO0_WF3_MASK) /*!< LCD_WF3TO0                              */
-/* ------- WF7TO4 Bit Fields                        ------ */
-#define LCD_WF7TO4_WF4_MASK                      (0xFFUL << LCD_WF7TO4_WF4_SHIFT)                    /*!< LCD_WF7TO4: WF4 Mask                    */
-#define LCD_WF7TO4_WF4_SHIFT                     0                                                   /*!< LCD_WF7TO4: WF4 Position                */
-#define LCD_WF7TO4_WF4(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF7TO4_WF4_SHIFT))&LCD_WF7TO4_WF4_MASK) /*!< LCD_WF7TO4                              */
-#define LCD_WF7TO4_WF5_MASK                      (0xFFUL << LCD_WF7TO4_WF5_SHIFT)                    /*!< LCD_WF7TO4: WF5 Mask                    */
-#define LCD_WF7TO4_WF5_SHIFT                     8                                                   /*!< LCD_WF7TO4: WF5 Position                */
-#define LCD_WF7TO4_WF5(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF7TO4_WF5_SHIFT))&LCD_WF7TO4_WF5_MASK) /*!< LCD_WF7TO4                              */
-#define LCD_WF7TO4_WF6_MASK                      (0xFFUL << LCD_WF7TO4_WF6_SHIFT)                    /*!< LCD_WF7TO4: WF6 Mask                    */
-#define LCD_WF7TO4_WF6_SHIFT                     16                                                  /*!< LCD_WF7TO4: WF6 Position                */
-#define LCD_WF7TO4_WF6(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF7TO4_WF6_SHIFT))&LCD_WF7TO4_WF6_MASK) /*!< LCD_WF7TO4                              */
-#define LCD_WF7TO4_WF7_MASK                      (0xFFUL << LCD_WF7TO4_WF7_SHIFT)                    /*!< LCD_WF7TO4: WF7 Mask                    */
-#define LCD_WF7TO4_WF7_SHIFT                     24                                                  /*!< LCD_WF7TO4: WF7 Position                */
-#define LCD_WF7TO4_WF7(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_WF7TO4_WF7_SHIFT))&LCD_WF7TO4_WF7_MASK) /*!< LCD_WF7TO4                              */
-/* ------- WF11TO8 Bit Fields                       ------ */
-#define LCD_WF11TO8_WF8_MASK                     (0xFFUL << LCD_WF11TO8_WF8_SHIFT)                   /*!< LCD_WF11TO8: WF8 Mask                   */
-#define LCD_WF11TO8_WF8_SHIFT                    0                                                   /*!< LCD_WF11TO8: WF8 Position               */
-#define LCD_WF11TO8_WF8(x)                       (((uint32_t)(((uint32_t)(x))<<LCD_WF11TO8_WF8_SHIFT))&LCD_WF11TO8_WF8_MASK) /*!< LCD_WF11TO8                             */
-#define LCD_WF11TO8_WF9_MASK                     (0xFFUL << LCD_WF11TO8_WF9_SHIFT)                   /*!< LCD_WF11TO8: WF9 Mask                   */
-#define LCD_WF11TO8_WF9_SHIFT                    8                                                   /*!< LCD_WF11TO8: WF9 Position               */
-#define LCD_WF11TO8_WF9(x)                       (((uint32_t)(((uint32_t)(x))<<LCD_WF11TO8_WF9_SHIFT))&LCD_WF11TO8_WF9_MASK) /*!< LCD_WF11TO8                             */
-#define LCD_WF11TO8_WF10_MASK                    (0xFFUL << LCD_WF11TO8_WF10_SHIFT)                  /*!< LCD_WF11TO8: WF10 Mask                  */
-#define LCD_WF11TO8_WF10_SHIFT                   16                                                  /*!< LCD_WF11TO8: WF10 Position              */
-#define LCD_WF11TO8_WF10(x)                      (((uint32_t)(((uint32_t)(x))<<LCD_WF11TO8_WF10_SHIFT))&LCD_WF11TO8_WF10_MASK) /*!< LCD_WF11TO8                             */
-#define LCD_WF11TO8_WF11_MASK                    (0xFFUL << LCD_WF11TO8_WF11_SHIFT)                  /*!< LCD_WF11TO8: WF11 Mask                  */
-#define LCD_WF11TO8_WF11_SHIFT                   24                                                  /*!< LCD_WF11TO8: WF11 Position              */
-#define LCD_WF11TO8_WF11(x)                      (((uint32_t)(((uint32_t)(x))<<LCD_WF11TO8_WF11_SHIFT))&LCD_WF11TO8_WF11_MASK) /*!< LCD_WF11TO8                             */
-/* ------- WF15TO12 Bit Fields                      ------ */
-#define LCD_WF15TO12_WF12_MASK                   (0xFFUL << LCD_WF15TO12_WF12_SHIFT)                 /*!< LCD_WF15TO12: WF12 Mask                 */
-#define LCD_WF15TO12_WF12_SHIFT                  0                                                   /*!< LCD_WF15TO12: WF12 Position             */
-#define LCD_WF15TO12_WF12(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF15TO12_WF12_SHIFT))&LCD_WF15TO12_WF12_MASK) /*!< LCD_WF15TO12                            */
-#define LCD_WF15TO12_WF13_MASK                   (0xFFUL << LCD_WF15TO12_WF13_SHIFT)                 /*!< LCD_WF15TO12: WF13 Mask                 */
-#define LCD_WF15TO12_WF13_SHIFT                  8                                                   /*!< LCD_WF15TO12: WF13 Position             */
-#define LCD_WF15TO12_WF13(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF15TO12_WF13_SHIFT))&LCD_WF15TO12_WF13_MASK) /*!< LCD_WF15TO12                            */
-#define LCD_WF15TO12_WF14_MASK                   (0xFFUL << LCD_WF15TO12_WF14_SHIFT)                 /*!< LCD_WF15TO12: WF14 Mask                 */
-#define LCD_WF15TO12_WF14_SHIFT                  16                                                  /*!< LCD_WF15TO12: WF14 Position             */
-#define LCD_WF15TO12_WF14(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF15TO12_WF14_SHIFT))&LCD_WF15TO12_WF14_MASK) /*!< LCD_WF15TO12                            */
-#define LCD_WF15TO12_WF15_MASK                   (0xFFUL << LCD_WF15TO12_WF15_SHIFT)                 /*!< LCD_WF15TO12: WF15 Mask                 */
-#define LCD_WF15TO12_WF15_SHIFT                  24                                                  /*!< LCD_WF15TO12: WF15 Position             */
-#define LCD_WF15TO12_WF15(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF15TO12_WF15_SHIFT))&LCD_WF15TO12_WF15_MASK) /*!< LCD_WF15TO12                            */
-/* ------- WF19TO16 Bit Fields                      ------ */
-#define LCD_WF19TO16_WF16_MASK                   (0xFFUL << LCD_WF19TO16_WF16_SHIFT)                 /*!< LCD_WF19TO16: WF16 Mask                 */
-#define LCD_WF19TO16_WF16_SHIFT                  0                                                   /*!< LCD_WF19TO16: WF16 Position             */
-#define LCD_WF19TO16_WF16(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF19TO16_WF16_SHIFT))&LCD_WF19TO16_WF16_MASK) /*!< LCD_WF19TO16                            */
-#define LCD_WF19TO16_WF17_MASK                   (0xFFUL << LCD_WF19TO16_WF17_SHIFT)                 /*!< LCD_WF19TO16: WF17 Mask                 */
-#define LCD_WF19TO16_WF17_SHIFT                  8                                                   /*!< LCD_WF19TO16: WF17 Position             */
-#define LCD_WF19TO16_WF17(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF19TO16_WF17_SHIFT))&LCD_WF19TO16_WF17_MASK) /*!< LCD_WF19TO16                            */
-#define LCD_WF19TO16_WF18_MASK                   (0xFFUL << LCD_WF19TO16_WF18_SHIFT)                 /*!< LCD_WF19TO16: WF18 Mask                 */
-#define LCD_WF19TO16_WF18_SHIFT                  16                                                  /*!< LCD_WF19TO16: WF18 Position             */
-#define LCD_WF19TO16_WF18(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF19TO16_WF18_SHIFT))&LCD_WF19TO16_WF18_MASK) /*!< LCD_WF19TO16                            */
-#define LCD_WF19TO16_WF19_MASK                   (0xFFUL << LCD_WF19TO16_WF19_SHIFT)                 /*!< LCD_WF19TO16: WF19 Mask                 */
-#define LCD_WF19TO16_WF19_SHIFT                  24                                                  /*!< LCD_WF19TO16: WF19 Position             */
-#define LCD_WF19TO16_WF19(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF19TO16_WF19_SHIFT))&LCD_WF19TO16_WF19_MASK) /*!< LCD_WF19TO16                            */
-/* ------- WF23TO20 Bit Fields                      ------ */
-#define LCD_WF23TO20_WF20_MASK                   (0xFFUL << LCD_WF23TO20_WF20_SHIFT)                 /*!< LCD_WF23TO20: WF20 Mask                 */
-#define LCD_WF23TO20_WF20_SHIFT                  0                                                   /*!< LCD_WF23TO20: WF20 Position             */
-#define LCD_WF23TO20_WF20(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF23TO20_WF20_SHIFT))&LCD_WF23TO20_WF20_MASK) /*!< LCD_WF23TO20                            */
-#define LCD_WF23TO20_WF21_MASK                   (0xFFUL << LCD_WF23TO20_WF21_SHIFT)                 /*!< LCD_WF23TO20: WF21 Mask                 */
-#define LCD_WF23TO20_WF21_SHIFT                  8                                                   /*!< LCD_WF23TO20: WF21 Position             */
-#define LCD_WF23TO20_WF21(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF23TO20_WF21_SHIFT))&LCD_WF23TO20_WF21_MASK) /*!< LCD_WF23TO20                            */
-#define LCD_WF23TO20_WF22_MASK                   (0xFFUL << LCD_WF23TO20_WF22_SHIFT)                 /*!< LCD_WF23TO20: WF22 Mask                 */
-#define LCD_WF23TO20_WF22_SHIFT                  16                                                  /*!< LCD_WF23TO20: WF22 Position             */
-#define LCD_WF23TO20_WF22(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF23TO20_WF22_SHIFT))&LCD_WF23TO20_WF22_MASK) /*!< LCD_WF23TO20                            */
-#define LCD_WF23TO20_WF23_MASK                   (0xFFUL << LCD_WF23TO20_WF23_SHIFT)                 /*!< LCD_WF23TO20: WF23 Mask                 */
-#define LCD_WF23TO20_WF23_SHIFT                  24                                                  /*!< LCD_WF23TO20: WF23 Position             */
-#define LCD_WF23TO20_WF23(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF23TO20_WF23_SHIFT))&LCD_WF23TO20_WF23_MASK) /*!< LCD_WF23TO20                            */
-/* ------- WF27TO24 Bit Fields                      ------ */
-#define LCD_WF27TO24_WF24_MASK                   (0xFFUL << LCD_WF27TO24_WF24_SHIFT)                 /*!< LCD_WF27TO24: WF24 Mask                 */
-#define LCD_WF27TO24_WF24_SHIFT                  0                                                   /*!< LCD_WF27TO24: WF24 Position             */
-#define LCD_WF27TO24_WF24(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF27TO24_WF24_SHIFT))&LCD_WF27TO24_WF24_MASK) /*!< LCD_WF27TO24                            */
-#define LCD_WF27TO24_WF25_MASK                   (0xFFUL << LCD_WF27TO24_WF25_SHIFT)                 /*!< LCD_WF27TO24: WF25 Mask                 */
-#define LCD_WF27TO24_WF25_SHIFT                  8                                                   /*!< LCD_WF27TO24: WF25 Position             */
-#define LCD_WF27TO24_WF25(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF27TO24_WF25_SHIFT))&LCD_WF27TO24_WF25_MASK) /*!< LCD_WF27TO24                            */
-#define LCD_WF27TO24_WF26_MASK                   (0xFFUL << LCD_WF27TO24_WF26_SHIFT)                 /*!< LCD_WF27TO24: WF26 Mask                 */
-#define LCD_WF27TO24_WF26_SHIFT                  16                                                  /*!< LCD_WF27TO24: WF26 Position             */
-#define LCD_WF27TO24_WF26(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF27TO24_WF26_SHIFT))&LCD_WF27TO24_WF26_MASK) /*!< LCD_WF27TO24                            */
-#define LCD_WF27TO24_WF27_MASK                   (0xFFUL << LCD_WF27TO24_WF27_SHIFT)                 /*!< LCD_WF27TO24: WF27 Mask                 */
-#define LCD_WF27TO24_WF27_SHIFT                  24                                                  /*!< LCD_WF27TO24: WF27 Position             */
-#define LCD_WF27TO24_WF27(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF27TO24_WF27_SHIFT))&LCD_WF27TO24_WF27_MASK) /*!< LCD_WF27TO24                            */
-/* ------- WF31TO28 Bit Fields                      ------ */
-#define LCD_WF31TO28_WF28_MASK                   (0xFFUL << LCD_WF31TO28_WF28_SHIFT)                 /*!< LCD_WF31TO28: WF28 Mask                 */
-#define LCD_WF31TO28_WF28_SHIFT                  0                                                   /*!< LCD_WF31TO28: WF28 Position             */
-#define LCD_WF31TO28_WF28(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF31TO28_WF28_SHIFT))&LCD_WF31TO28_WF28_MASK) /*!< LCD_WF31TO28                            */
-#define LCD_WF31TO28_WF29_MASK                   (0xFFUL << LCD_WF31TO28_WF29_SHIFT)                 /*!< LCD_WF31TO28: WF29 Mask                 */
-#define LCD_WF31TO28_WF29_SHIFT                  8                                                   /*!< LCD_WF31TO28: WF29 Position             */
-#define LCD_WF31TO28_WF29(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF31TO28_WF29_SHIFT))&LCD_WF31TO28_WF29_MASK) /*!< LCD_WF31TO28                            */
-#define LCD_WF31TO28_WF30_MASK                   (0xFFUL << LCD_WF31TO28_WF30_SHIFT)                 /*!< LCD_WF31TO28: WF30 Mask                 */
-#define LCD_WF31TO28_WF30_SHIFT                  16                                                  /*!< LCD_WF31TO28: WF30 Position             */
-#define LCD_WF31TO28_WF30(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF31TO28_WF30_SHIFT))&LCD_WF31TO28_WF30_MASK) /*!< LCD_WF31TO28                            */
-#define LCD_WF31TO28_WF31_MASK                   (0xFFUL << LCD_WF31TO28_WF31_SHIFT)                 /*!< LCD_WF31TO28: WF31 Mask                 */
-#define LCD_WF31TO28_WF31_SHIFT                  24                                                  /*!< LCD_WF31TO28: WF31 Position             */
-#define LCD_WF31TO28_WF31(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF31TO28_WF31_SHIFT))&LCD_WF31TO28_WF31_MASK) /*!< LCD_WF31TO28                            */
-/* ------- WF35TO32 Bit Fields                      ------ */
-#define LCD_WF35TO32_WF32_MASK                   (0xFFUL << LCD_WF35TO32_WF32_SHIFT)                 /*!< LCD_WF35TO32: WF32 Mask                 */
-#define LCD_WF35TO32_WF32_SHIFT                  0                                                   /*!< LCD_WF35TO32: WF32 Position             */
-#define LCD_WF35TO32_WF32(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF35TO32_WF32_SHIFT))&LCD_WF35TO32_WF32_MASK) /*!< LCD_WF35TO32                            */
-#define LCD_WF35TO32_WF33_MASK                   (0xFFUL << LCD_WF35TO32_WF33_SHIFT)                 /*!< LCD_WF35TO32: WF33 Mask                 */
-#define LCD_WF35TO32_WF33_SHIFT                  8                                                   /*!< LCD_WF35TO32: WF33 Position             */
-#define LCD_WF35TO32_WF33(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF35TO32_WF33_SHIFT))&LCD_WF35TO32_WF33_MASK) /*!< LCD_WF35TO32                            */
-#define LCD_WF35TO32_WF34_MASK                   (0xFFUL << LCD_WF35TO32_WF34_SHIFT)                 /*!< LCD_WF35TO32: WF34 Mask                 */
-#define LCD_WF35TO32_WF34_SHIFT                  16                                                  /*!< LCD_WF35TO32: WF34 Position             */
-#define LCD_WF35TO32_WF34(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF35TO32_WF34_SHIFT))&LCD_WF35TO32_WF34_MASK) /*!< LCD_WF35TO32                            */
-#define LCD_WF35TO32_WF35_MASK                   (0xFFUL << LCD_WF35TO32_WF35_SHIFT)                 /*!< LCD_WF35TO32: WF35 Mask                 */
-#define LCD_WF35TO32_WF35_SHIFT                  24                                                  /*!< LCD_WF35TO32: WF35 Position             */
-#define LCD_WF35TO32_WF35(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF35TO32_WF35_SHIFT))&LCD_WF35TO32_WF35_MASK) /*!< LCD_WF35TO32                            */
-/* ------- WF39TO36 Bit Fields                      ------ */
-#define LCD_WF39TO36_WF36_MASK                   (0xFFUL << LCD_WF39TO36_WF36_SHIFT)                 /*!< LCD_WF39TO36: WF36 Mask                 */
-#define LCD_WF39TO36_WF36_SHIFT                  0                                                   /*!< LCD_WF39TO36: WF36 Position             */
-#define LCD_WF39TO36_WF36(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF39TO36_WF36_SHIFT))&LCD_WF39TO36_WF36_MASK) /*!< LCD_WF39TO36                            */
-#define LCD_WF39TO36_WF37_MASK                   (0xFFUL << LCD_WF39TO36_WF37_SHIFT)                 /*!< LCD_WF39TO36: WF37 Mask                 */
-#define LCD_WF39TO36_WF37_SHIFT                  8                                                   /*!< LCD_WF39TO36: WF37 Position             */
-#define LCD_WF39TO36_WF37(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF39TO36_WF37_SHIFT))&LCD_WF39TO36_WF37_MASK) /*!< LCD_WF39TO36                            */
-#define LCD_WF39TO36_WF38_MASK                   (0xFFUL << LCD_WF39TO36_WF38_SHIFT)                 /*!< LCD_WF39TO36: WF38 Mask                 */
-#define LCD_WF39TO36_WF38_SHIFT                  16                                                  /*!< LCD_WF39TO36: WF38 Position             */
-#define LCD_WF39TO36_WF38(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF39TO36_WF38_SHIFT))&LCD_WF39TO36_WF38_MASK) /*!< LCD_WF39TO36                            */
-#define LCD_WF39TO36_WF39_MASK                   (0xFFUL << LCD_WF39TO36_WF39_SHIFT)                 /*!< LCD_WF39TO36: WF39 Mask                 */
-#define LCD_WF39TO36_WF39_SHIFT                  24                                                  /*!< LCD_WF39TO36: WF39 Position             */
-#define LCD_WF39TO36_WF39(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF39TO36_WF39_SHIFT))&LCD_WF39TO36_WF39_MASK) /*!< LCD_WF39TO36                            */
-/* ------- WF43TO40 Bit Fields                      ------ */
-#define LCD_WF43TO40_WF40_MASK                   (0xFFUL << LCD_WF43TO40_WF40_SHIFT)                 /*!< LCD_WF43TO40: WF40 Mask                 */
-#define LCD_WF43TO40_WF40_SHIFT                  0                                                   /*!< LCD_WF43TO40: WF40 Position             */
-#define LCD_WF43TO40_WF40(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF43TO40_WF40_SHIFT))&LCD_WF43TO40_WF40_MASK) /*!< LCD_WF43TO40                            */
-#define LCD_WF43TO40_WF41_MASK                   (0xFFUL << LCD_WF43TO40_WF41_SHIFT)                 /*!< LCD_WF43TO40: WF41 Mask                 */
-#define LCD_WF43TO40_WF41_SHIFT                  8                                                   /*!< LCD_WF43TO40: WF41 Position             */
-#define LCD_WF43TO40_WF41(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF43TO40_WF41_SHIFT))&LCD_WF43TO40_WF41_MASK) /*!< LCD_WF43TO40                            */
-#define LCD_WF43TO40_WF42_MASK                   (0xFFUL << LCD_WF43TO40_WF42_SHIFT)                 /*!< LCD_WF43TO40: WF42 Mask                 */
-#define LCD_WF43TO40_WF42_SHIFT                  16                                                  /*!< LCD_WF43TO40: WF42 Position             */
-#define LCD_WF43TO40_WF42(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF43TO40_WF42_SHIFT))&LCD_WF43TO40_WF42_MASK) /*!< LCD_WF43TO40                            */
-#define LCD_WF43TO40_WF43_MASK                   (0xFFUL << LCD_WF43TO40_WF43_SHIFT)                 /*!< LCD_WF43TO40: WF43 Mask                 */
-#define LCD_WF43TO40_WF43_SHIFT                  24                                                  /*!< LCD_WF43TO40: WF43 Position             */
-#define LCD_WF43TO40_WF43(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF43TO40_WF43_SHIFT))&LCD_WF43TO40_WF43_MASK) /*!< LCD_WF43TO40                            */
-/* ------- WF47TO44 Bit Fields                      ------ */
-#define LCD_WF47TO44_WF44_MASK                   (0xFFUL << LCD_WF47TO44_WF44_SHIFT)                 /*!< LCD_WF47TO44: WF44 Mask                 */
-#define LCD_WF47TO44_WF44_SHIFT                  0                                                   /*!< LCD_WF47TO44: WF44 Position             */
-#define LCD_WF47TO44_WF44(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF47TO44_WF44_SHIFT))&LCD_WF47TO44_WF44_MASK) /*!< LCD_WF47TO44                            */
-#define LCD_WF47TO44_WF45_MASK                   (0xFFUL << LCD_WF47TO44_WF45_SHIFT)                 /*!< LCD_WF47TO44: WF45 Mask                 */
-#define LCD_WF47TO44_WF45_SHIFT                  8                                                   /*!< LCD_WF47TO44: WF45 Position             */
-#define LCD_WF47TO44_WF45(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF47TO44_WF45_SHIFT))&LCD_WF47TO44_WF45_MASK) /*!< LCD_WF47TO44                            */
-#define LCD_WF47TO44_WF46_MASK                   (0xFFUL << LCD_WF47TO44_WF46_SHIFT)                 /*!< LCD_WF47TO44: WF46 Mask                 */
-#define LCD_WF47TO44_WF46_SHIFT                  16                                                  /*!< LCD_WF47TO44: WF46 Position             */
-#define LCD_WF47TO44_WF46(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF47TO44_WF46_SHIFT))&LCD_WF47TO44_WF46_MASK) /*!< LCD_WF47TO44                            */
-#define LCD_WF47TO44_WF47_MASK                   (0xFFUL << LCD_WF47TO44_WF47_SHIFT)                 /*!< LCD_WF47TO44: WF47 Mask                 */
-#define LCD_WF47TO44_WF47_SHIFT                  24                                                  /*!< LCD_WF47TO44: WF47 Position             */
-#define LCD_WF47TO44_WF47(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF47TO44_WF47_SHIFT))&LCD_WF47TO44_WF47_MASK) /*!< LCD_WF47TO44                            */
-/* ------- WF51TO48 Bit Fields                      ------ */
-#define LCD_WF51TO48_WF48_MASK                   (0xFFUL << LCD_WF51TO48_WF48_SHIFT)                 /*!< LCD_WF51TO48: WF48 Mask                 */
-#define LCD_WF51TO48_WF48_SHIFT                  0                                                   /*!< LCD_WF51TO48: WF48 Position             */
-#define LCD_WF51TO48_WF48(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF51TO48_WF48_SHIFT))&LCD_WF51TO48_WF48_MASK) /*!< LCD_WF51TO48                            */
-#define LCD_WF51TO48_WF49_MASK                   (0xFFUL << LCD_WF51TO48_WF49_SHIFT)                 /*!< LCD_WF51TO48: WF49 Mask                 */
-#define LCD_WF51TO48_WF49_SHIFT                  8                                                   /*!< LCD_WF51TO48: WF49 Position             */
-#define LCD_WF51TO48_WF49(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF51TO48_WF49_SHIFT))&LCD_WF51TO48_WF49_MASK) /*!< LCD_WF51TO48                            */
-#define LCD_WF51TO48_WF50_MASK                   (0xFFUL << LCD_WF51TO48_WF50_SHIFT)                 /*!< LCD_WF51TO48: WF50 Mask                 */
-#define LCD_WF51TO48_WF50_SHIFT                  16                                                  /*!< LCD_WF51TO48: WF50 Position             */
-#define LCD_WF51TO48_WF50(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF51TO48_WF50_SHIFT))&LCD_WF51TO48_WF50_MASK) /*!< LCD_WF51TO48                            */
-#define LCD_WF51TO48_WF51_MASK                   (0xFFUL << LCD_WF51TO48_WF51_SHIFT)                 /*!< LCD_WF51TO48: WF51 Mask                 */
-#define LCD_WF51TO48_WF51_SHIFT                  24                                                  /*!< LCD_WF51TO48: WF51 Position             */
-#define LCD_WF51TO48_WF51(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF51TO48_WF51_SHIFT))&LCD_WF51TO48_WF51_MASK) /*!< LCD_WF51TO48                            */
-/* ------- WF55TO52 Bit Fields                      ------ */
-#define LCD_WF55TO52_WF52_MASK                   (0xFFUL << LCD_WF55TO52_WF52_SHIFT)                 /*!< LCD_WF55TO52: WF52 Mask                 */
-#define LCD_WF55TO52_WF52_SHIFT                  0                                                   /*!< LCD_WF55TO52: WF52 Position             */
-#define LCD_WF55TO52_WF52(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF55TO52_WF52_SHIFT))&LCD_WF55TO52_WF52_MASK) /*!< LCD_WF55TO52                            */
-#define LCD_WF55TO52_WF53_MASK                   (0xFFUL << LCD_WF55TO52_WF53_SHIFT)                 /*!< LCD_WF55TO52: WF53 Mask                 */
-#define LCD_WF55TO52_WF53_SHIFT                  8                                                   /*!< LCD_WF55TO52: WF53 Position             */
-#define LCD_WF55TO52_WF53(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF55TO52_WF53_SHIFT))&LCD_WF55TO52_WF53_MASK) /*!< LCD_WF55TO52                            */
-#define LCD_WF55TO52_WF54_MASK                   (0xFFUL << LCD_WF55TO52_WF54_SHIFT)                 /*!< LCD_WF55TO52: WF54 Mask                 */
-#define LCD_WF55TO52_WF54_SHIFT                  16                                                  /*!< LCD_WF55TO52: WF54 Position             */
-#define LCD_WF55TO52_WF54(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF55TO52_WF54_SHIFT))&LCD_WF55TO52_WF54_MASK) /*!< LCD_WF55TO52                            */
-#define LCD_WF55TO52_WF55_MASK                   (0xFFUL << LCD_WF55TO52_WF55_SHIFT)                 /*!< LCD_WF55TO52: WF55 Mask                 */
-#define LCD_WF55TO52_WF55_SHIFT                  24                                                  /*!< LCD_WF55TO52: WF55 Position             */
-#define LCD_WF55TO52_WF55(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF55TO52_WF55_SHIFT))&LCD_WF55TO52_WF55_MASK) /*!< LCD_WF55TO52                            */
-/* ------- WF59TO56 Bit Fields                      ------ */
-#define LCD_WF59TO56_WF56_MASK                   (0xFFUL << LCD_WF59TO56_WF56_SHIFT)                 /*!< LCD_WF59TO56: WF56 Mask                 */
-#define LCD_WF59TO56_WF56_SHIFT                  0                                                   /*!< LCD_WF59TO56: WF56 Position             */
-#define LCD_WF59TO56_WF56(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF59TO56_WF56_SHIFT))&LCD_WF59TO56_WF56_MASK) /*!< LCD_WF59TO56                            */
-#define LCD_WF59TO56_WF57_MASK                   (0xFFUL << LCD_WF59TO56_WF57_SHIFT)                 /*!< LCD_WF59TO56: WF57 Mask                 */
-#define LCD_WF59TO56_WF57_SHIFT                  8                                                   /*!< LCD_WF59TO56: WF57 Position             */
-#define LCD_WF59TO56_WF57(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF59TO56_WF57_SHIFT))&LCD_WF59TO56_WF57_MASK) /*!< LCD_WF59TO56                            */
-#define LCD_WF59TO56_WF58_MASK                   (0xFFUL << LCD_WF59TO56_WF58_SHIFT)                 /*!< LCD_WF59TO56: WF58 Mask                 */
-#define LCD_WF59TO56_WF58_SHIFT                  16                                                  /*!< LCD_WF59TO56: WF58 Position             */
-#define LCD_WF59TO56_WF58(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF59TO56_WF58_SHIFT))&LCD_WF59TO56_WF58_MASK) /*!< LCD_WF59TO56                            */
-#define LCD_WF59TO56_WF59_MASK                   (0xFFUL << LCD_WF59TO56_WF59_SHIFT)                 /*!< LCD_WF59TO56: WF59 Mask                 */
-#define LCD_WF59TO56_WF59_SHIFT                  24                                                  /*!< LCD_WF59TO56: WF59 Position             */
-#define LCD_WF59TO56_WF59(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF59TO56_WF59_SHIFT))&LCD_WF59TO56_WF59_MASK) /*!< LCD_WF59TO56                            */
-/* ------- WF63TO60 Bit Fields                      ------ */
-#define LCD_WF63TO60_WF60_MASK                   (0xFFUL << LCD_WF63TO60_WF60_SHIFT)                 /*!< LCD_WF63TO60: WF60 Mask                 */
-#define LCD_WF63TO60_WF60_SHIFT                  0                                                   /*!< LCD_WF63TO60: WF60 Position             */
-#define LCD_WF63TO60_WF60(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF63TO60_WF60_SHIFT))&LCD_WF63TO60_WF60_MASK) /*!< LCD_WF63TO60                            */
-#define LCD_WF63TO60_WF61_MASK                   (0xFFUL << LCD_WF63TO60_WF61_SHIFT)                 /*!< LCD_WF63TO60: WF61 Mask                 */
-#define LCD_WF63TO60_WF61_SHIFT                  8                                                   /*!< LCD_WF63TO60: WF61 Position             */
-#define LCD_WF63TO60_WF61(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF63TO60_WF61_SHIFT))&LCD_WF63TO60_WF61_MASK) /*!< LCD_WF63TO60                            */
-#define LCD_WF63TO60_WF62_MASK                   (0xFFUL << LCD_WF63TO60_WF62_SHIFT)                 /*!< LCD_WF63TO60: WF62 Mask                 */
-#define LCD_WF63TO60_WF62_SHIFT                  16                                                  /*!< LCD_WF63TO60: WF62 Position             */
-#define LCD_WF63TO60_WF62(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF63TO60_WF62_SHIFT))&LCD_WF63TO60_WF62_MASK) /*!< LCD_WF63TO60                            */
-#define LCD_WF63TO60_WF63_MASK                   (0xFFUL << LCD_WF63TO60_WF63_SHIFT)                 /*!< LCD_WF63TO60: WF63 Mask                 */
-#define LCD_WF63TO60_WF63_SHIFT                  24                                                  /*!< LCD_WF63TO60: WF63 Position             */
-#define LCD_WF63TO60_WF63(x)                     (((uint32_t)(((uint32_t)(x))<<LCD_WF63TO60_WF63_SHIFT))&LCD_WF63TO60_WF63_MASK) /*!< LCD_WF63TO60                            */
+/* ------- PEN Bit Fields                           ------ */
+#define LCD_PEN_PEN_MASK                         (0xFFFFFFFFUL << LCD_PEN_PEN_SHIFT)                 /*!< LCD_PEN: PEN Mask                       */
+#define LCD_PEN_PEN_SHIFT                        0                                                   /*!< LCD_PEN: PEN Position                   */
+#define LCD_PEN_PEN(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_PEN_PEN_SHIFT))&LCD_PEN_PEN_MASK) /*!< LCD_PEN                                 */
+/* ------- BPEN Bit Fields                          ------ */
+#define LCD_BPEN_BPEN_MASK                       (0xFFFFFFFFUL << LCD_BPEN_BPEN_SHIFT)               /*!< LCD_BPEN: BPEN Mask                     */
+#define LCD_BPEN_BPEN_SHIFT                      0                                                   /*!< LCD_BPEN: BPEN Position                 */
+#define LCD_BPEN_BPEN(x)                         (((uint32_t)(((uint32_t)(x))<<LCD_BPEN_BPEN_SHIFT))&LCD_BPEN_BPEN_MASK) /*!< LCD_BPEN                                */
+/* ------- WF Bit Fields                            ------ */
+#define LCD_WF_WF0_MASK                          (0xFFUL << LCD_WF_WF0_SHIFT)                        /*!< LCD_WF: WF0 Mask                        */
+#define LCD_WF_WF0_SHIFT                         0                                                   /*!< LCD_WF: WF0 Position                    */
+#define LCD_WF_WF0(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF0_SHIFT))&LCD_WF_WF0_MASK) /*!< LCD_WF                                  */
+#define LCD_WF_WF1_MASK                          (0xFFUL << LCD_WF_WF1_SHIFT)                        /*!< LCD_WF: WF1 Mask                        */
+#define LCD_WF_WF1_SHIFT                         8                                                   /*!< LCD_WF: WF1 Position                    */
+#define LCD_WF_WF1(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF1_SHIFT))&LCD_WF_WF1_MASK) /*!< LCD_WF                                  */
+#define LCD_WF_WF2_MASK                          (0xFFUL << LCD_WF_WF2_SHIFT)                        /*!< LCD_WF: WF2 Mask                        */
+#define LCD_WF_WF2_SHIFT                         16                                                  /*!< LCD_WF: WF2 Position                    */
+#define LCD_WF_WF2(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF2_SHIFT))&LCD_WF_WF2_MASK) /*!< LCD_WF                                  */
+#define LCD_WF_WF3_MASK                          (0xFFUL << LCD_WF_WF3_SHIFT)                        /*!< LCD_WF: WF3 Mask                        */
+#define LCD_WF_WF3_SHIFT                         24                                                  /*!< LCD_WF: WF3 Position                    */
+#define LCD_WF_WF3(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF3_SHIFT))&LCD_WF_WF3_MASK) /*!< LCD_WF                                  */
+/* ------- WF8B Bit Fields                          ------ */
+#define LCD_WF8B_WF_MASK                         (0xFFUL << LCD_WF8B_WF_SHIFT)                       /*!< LCD_WF8B: WF Mask                       */
+#define LCD_WF8B_WF_SHIFT                        0                                                   /*!< LCD_WF8B: WF Position                   */
+#define LCD_WF8B_WF(x)                           (((uint8_t)(((uint8_t)(x))<<LCD_WF8B_WF_SHIFT))&LCD_WF8B_WF_MASK) /*!< LCD_WF8B                                */
 /**
  * @} */ /* End group LCD_Register_Masks_GROUP 
  */

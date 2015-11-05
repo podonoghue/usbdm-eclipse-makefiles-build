@@ -29,9 +29,9 @@
          </applyWhen>
 
          <!-- Definitions used by example program -->
-         <constant id="demo.cpp.red.led"            value="PTE29" />
-         <constant id="demo.cpp.green.led"          value="PTD5" />
-         <constant id="demo.cpp.blue.led"           value="PTD1" />
+         <constant id="demo.cpp.red.led"            value="LED_RED" />
+         <constant id="demo.cpp.green.led"          value="LED_GREEN" />
+         <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
          <constant id="demo.cpp.joystick.x"         value="A2" />
          <constant id="demo.cpp.joystick.y"         value="A1" />
          <constant id="demo.cpp.joystick.z"         value="A0" />

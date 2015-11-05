@@ -30,9 +30,9 @@
          </applyWhen>
 
          <!-- Definitions used by example program -->
-         <constant id="demo.cpp.red.led"            value="PTA0" />
-         <constant id="demo.cpp.green.led"          value="PTA1" />
-         <constant id="demo.cpp.blue.led"           value="PTD1" />
+         <constant id="demo.cpp.red.led"            value="LED_RED" />
+         <constant id="demo.cpp.green.led"          value="LED_GREEN" />
+         <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
          <constant id="demo.cpp.joystick.x"         value="PTC5" />
          <constant id="demo.cpp.joystick.y"         value="PTC6" />
          <constant id="demo.cpp.joystick.z"         value="PTB0" />

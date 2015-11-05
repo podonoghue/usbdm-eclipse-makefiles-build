@@ -281,3 +281,48 @@ int main() {
 }
 #endif
 
+#if EXAMPLE == 8
+/*
+ * You may need to change the pin-mapping of the I2C interface
+ */
+#include "I2C.h"
+#include "HMC5883L.h"
+
+int main() {
+	// Instantiate interface
+	I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
+	HMC5883L *compass = new HMC5883L(i2c);
+	uint32_t id = compass->readID();
+	printf("Compass ID = 0x%6lX (should be 0x483433)\n", id);
+	compass->setGain(1);
+	int16_t compassX,compassY,compassZ;
+	for(;;) {
+		compass->doMeasurement(&compassX, &compassY, &compassZ);
+		printf("X=%10d, Y=%10d, Z=%10d\n", compassX, compassY, compassZ);
+		delay();
+	}
+}
+#endif
+
+#if EXAMPLE == 9
+/*
+ * You may need to change the pin-mapping of the I2C interface
+ */
+#include "I2C.h"
+#include "MMA845x.h"
+
+int main() {
+	// Instantiate interface
+	I2C *i2c = new $(demo.cpp.accelerometer.i2c)();
+	MMA845x *accelerometer = new MMA845x(i2c, MMA845x::MMA45x_2Gmode);
+	uint8_t id = accelerometer->readID();
+	printf("Accelerometer ID = 0x%02X (should be 0x1A)\n", id);
+	int status;
+	int16_t accelX,accelY,accelZ;
+	for(;;) {
+		accelerometer->readXYZ(&status, &accelX, &accelY, &accelZ);
+		printf("X=%10d, Y=%10d, Z=%10d\n", accelX, accelY, accelZ);
+		delay();
+	}
+}
+#endif

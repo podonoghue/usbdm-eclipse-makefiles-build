@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd">
 
-<root version="1.0" >
-   <projectActionList id="abstraction-simple-delay" >
+<root version="1.0">
+   <projectActionList id="abstraction-simple-delay">
       <applyWhen>
-         <and>
-            <or>
-               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
-            </or>
-            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
-         </and>
+         <variableRef idRef="outputType" condition="matches"
+            value=".*ProjectType\.exe$" />
       </applyWhen>
-      
+
+      <variable id="projectOptionValue.abstraction-simple-delay"
+         name="Timer" description="Adds a simple timer" checkGroup="group-peripheral-options" />
+
       <projectActionList>
-         <variable id="projectOptionValue.abstraction-simple-delay" 
-            name="Timer" 
-            description="Adds a simple timer using DWT counter" 
-            checkGroup="group-additional-options" >
-         </variable>
-         
-         <projectActionList>
-            <projectActionList>
-               <applyWhen >
-                  <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
-               </applyWhen>
-               <copy source="Project_Headers/Delay.h"      target="Project_Headers/Delay.h" />
-               <copy source="Sources/Delay.c"              target="Sources/Delay.c" />
-            </projectActionList>
-         </projectActionList>
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               </or>
+               <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
+            </and>
+         </applyWhen>
+         <copy source="Project_Headers/delay.h" target="Project_Headers/delay.h" />
+         <copy source="Sources/delay-systick.c" target="Sources/delay.c" />
       </projectActionList>
-    </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <or>
+                  <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+               </or>
+               <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
+            </and>
+         </applyWhen>
+         <copy source="Project_Headers/delay.h" target="Project_Headers/delay.h" />
+         <copy source="Sources/delay-dwt.c"     target="Sources/delay.c" />
+      </projectActionList>
+   </projectActionList>
 </root>

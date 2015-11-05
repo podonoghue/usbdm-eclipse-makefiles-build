@@ -28,6 +28,7 @@
             <enableWhen>
                <and>
                   <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
+                  <requirement idRef="projectOptionValue.abstraction-simple-delay"/>
                </and>
             </enableWhen>
          </variable>
@@ -43,8 +44,6 @@
                <copy source="Project_Headers/Fonts.h"        target="Project_Headers/Fonts.h" replace="true"/>
                <copy source="Sources/LCD.cpp"                target="Sources/LCD.cpp" />
                <copy source="Sources/Fonts.cpp"              target="Sources/Fonts.cpp" replace="true"/>
-               <copy source="Project_Headers/Delay.h"        target="Project_Headers/Delay.h" replace="true"/>
-               <copy source="Sources/Delay.c"                target="Sources/Delay.c" replace="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>LCD_AVAILABLE</value>
                </projectOption>

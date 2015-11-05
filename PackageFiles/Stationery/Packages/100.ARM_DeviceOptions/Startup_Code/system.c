@@ -95,7 +95,7 @@ void SystemInit(void) {
 
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
    /* Initialise FPU if present & in use */
-   asm (
+   __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"
          "                             \n"
          "  LDR.W R0, =CPACR           \n"  // CPACR address

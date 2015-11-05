@@ -1,8 +1,9 @@
 /*
- * @file Delay.c
- * @brief Very simple delay routine using DWT->CYCCNT counter
+ * @file delay.c generated from delay-systick.c
  *
- *  Created on: 5 Oct 2015
+ * @brief Delay routines using Systick Counter
+ *
+ *  Created on: 5 Nov 2015
  *      Author: podonoghue
  */
 #include "derivative.h"
@@ -16,30 +17,30 @@
  * @param delayct How many ticks to busy-wait
  *
  */
-static void waitTicks(int64_t delayct) {
+static void waitTicks(int64_t delay) {
 
-   CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+   // No interrupts
+   NVIC_DisableIRQ(SysTick_IRQn);
 
-#ifdef DEBUG_BUILD
-   if ((DWT->CTRL&DWT_CTRL_NOCYCCNT_Msk) != 0) {
-      // No CYCCNT
-      __asm__("bkpt");
-   }
-#endif
+   // Reload with maximum value 2^24
+   SYST->RVR = -1;
 
-   // Enable counter
-   DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+   // Enable without interrupts
+   SYST->CSR = SYST_CSR_CLKSOURCE_MASK| // Processor clock
+               SYST_CSR_ENABLE_MASK;    // Enabled
 
    // Get current tick
-   uint32_t last = DWT->CYCCNT;
+   uint32_t last = SYST->CVR;
 
-   while(delayct > 0) {
+   while(delay > 0) {
       // Now
-      uint32_t now = DWT->CYCCNT;
+      uint32_t now = SYST->CVR;
+
       // Decrement time elapsed
-      // Note: This relies on the loop executing in less than the rollover time
-      // of the counter i.e. (2^32)/SystemCoreClock
-      delayct -= (uint32_t)(now-last);
+      // Note: This relies on the loop executing in less than the roll-over time
+      // of the counter i.e. (2^24)/SystemCoreClock
+      delay -= ((1UL<<24)-1UL)&(uint32_t)(last-now);
+
       // Save for next increment
       last = now;
    }
@@ -51,7 +52,7 @@ static void waitTicks(int64_t delayct) {
  * @param usToWait How many microseconds to busy-wait
  *
  * @note Limited to 2^32 us (4,294 s)
- * @note Uses busy-waiting
+ * @note Uses busy-waiting based on Systick timer
  */
 void waitUS(uint32_t usToWait) {
    // Convert duration to DWT ticks
@@ -64,7 +65,7 @@ void waitUS(uint32_t usToWait) {
  * @param msToWait How many milliseconds to busy-wait
  *
  * @note Limited to 2^32 ms (71,582 minutes)
- * @note Uses busy-waiting
+ * @note Uses busy-waiting based on Systick timer
  */
 void waitMS(uint32_t msToWait) {
    // Convert duration to DWT ticks

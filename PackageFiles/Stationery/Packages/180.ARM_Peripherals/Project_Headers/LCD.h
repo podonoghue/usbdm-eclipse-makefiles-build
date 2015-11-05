@@ -1,7 +1,7 @@
 /****************************************************************************************************//**
  * @file     LCD.h
  *
- * @brief    Abstraction layer for I2C interface
+ * @brief    Abstraction layer for LCD interface
  *
  * @version  V0.0
  * @date     2015/06

@@ -86,8 +86,8 @@ void I2C::init() {
    i2c->FLT = I2C_FLT_FLT(2);
 
    // Configure I2C pins
-   sda->setPCR(PORT_PCR_MUX(I2C0_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   scl->setPCR(PORT_PCR_MUX(I2C0_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   sda->pcr.setPCR(PORT_PCR_MUX(I2C0_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   scl->pcr.setPCR(PORT_PCR_MUX(I2C0_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 }
 
 /**
@@ -373,7 +373,7 @@ void I2C_0::init() {
    }
 }
 
-#ifdef I2C1
+#if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
 /*
  * =========================================================================================
  * I2C_1
@@ -408,7 +408,7 @@ void I2C_1::init() {
 
 #endif
 
-#ifdef I2C2
+#if defined(I2C2) && defined(I2C2_SCL_GPIO) && defined(I2C2_SDA_GPIO)
 /*
  * =========================================================================================
  * I2C_2

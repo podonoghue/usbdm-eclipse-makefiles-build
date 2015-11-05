@@ -9,22 +9,55 @@
 #define HEADER_GPIO_DEFS_H
 
 #include "derivative.h"
+#include "pin_mapping.h"
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
-
-// Inline port functions
-//   <q> Force inline port functions
-//   <i> This option forces some small GPIO functions to be inlined
-//   <i> This increases speed but may also increase code size
-//     <0=> Disabled
-//     <1=> Enabled
-#define DO_INLINE   0
-
-#if DO_INLINE != 0
+#if DO_INLINE_GPIO != 0
 #define OPTIONAL_INLINE __attribute__((always_inline))
 #else
 #define OPTIONAL_INLINE
 #endif
+
+
+/*!
+ * @brief struct representing a PCR register
+ *
+ * <b>Example</b>
+ * @code
+ * // Set pin to boolean value
+ * pcr.enableClock();
+ * pcr.setPCR(GPIO_DEFAULT_PCR);
+ *
+ * @endcode
+ */
+struct PCRInit {
+   volatile uint32_t   *pcrReg;     //!< Pointer to PCR for pin
+   const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
+
+   /**
+    * Set pin PCR value
+    *
+    * @param pcrValue PCR value made up of PORT_PCR_ masks
+    */
+   void setPCR(uint32_t pcrValue) const  {
+      if (pcrReg != 0) {
+         enableClock();
+         *pcrReg = pcrValue;
+      }
+   }
+
+   /**
+    * Enable clock to port
+    */
+   void enableClock() const {
+	   FIXED_PORT_CLOCK_REG |= clockMask;
+   }
+   /**
+    * Enable clock to port
+    */
+   void disableClock() const {
+	   FIXED_PORT_CLOCK_REG &= ~clockMask;
+   }
+};
 
 /**
  * @addtogroup DigitalIO_Group Digital Input/Output
@@ -52,9 +85,8 @@
  * @endcode
  */
 struct DigitalIO {
-   volatile uint32_t   *pcr;        //!< Pointer to PCR for pin
+   const    PCRInit     pcr;        //!< PCR information
    volatile GPIO_Type  *gpio;       //!< Pointer to hardware registers
-   const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
    const    uint32_t    bitMask;    //!< Bit-mask to use when manipulating individual bit
 
    /**
@@ -94,27 +126,12 @@ struct DigitalIO {
       gpio->PCOR = bitMask;
    }
    /**
-    * Enable clock to port
-    */
-   void enableClock() const {
-	   FIXED_PORT_CLOCK_REG |= clockMask;
-   }
-   /**
-    * Set pin PCR value
-    *
-    * @param pcrValue PCR value made up of PORT_PCR_ masks
-    */
-   void setPCR(uint32_t pcrValue) const  {
-      enableClock();
-      *pcr = pcrValue;
-   }
-   /**
     * Set pin as digital output
     *
     * @param pcrValue PCR value to use in configuring port
     */
    void setDigitalOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
-      setPCR(pcrValue);
+      pcr.setPCR(pcrValue);
       gpio->PDDR |= bitMask;
    }
    /**
@@ -123,7 +140,7 @@ struct DigitalIO {
     * @param pcrValue PCR value to use in configuring port
     */
    void setDigitalInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
-      setPCR(pcrValue);
+      pcr.setPCR(pcrValue);
       gpio->PDDR &= ~bitMask;
    }
    /**
@@ -172,7 +189,7 @@ struct DigitalIO {
  *  @endcode
  */
 struct AnalogueIO {
-   const    DigitalIO  *digitalIO;  //!< Associated GPIO
+   const    PCRInit     pcr;        //!< Associated PCR
    volatile ADC_Type   *adc;        //!< ADC Hardware pointer
    volatile uint32_t   *simscgc;    //!< Associated SIM_SCGC register
    const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
@@ -195,9 +212,7 @@ struct AnalogueIO {
     * @note This initialises the ADC
     */
    void setAnalogueInput(uint32_t mode = resolution_16bit_se) const {
-      if (digitalIO != 0) {
-         digitalIO->setPCR(DigitalIO::GPIO_ANALOGUE_FN);
-      }
+      pcr.setPCR(DigitalIO::GPIO_ANALOGUE_FN);
       initialiseADC(mode);
    }
    /**
@@ -287,7 +302,7 @@ struct PwmIO {
       ftm_centreAlign = TPM_SC_CPWMS_MASK,
    } Pwm_Mode;
 
-   const    DigitalIO  *digitalIO;  //!< Digital I/O
+   const    PCRInit     pcr;        //!< Digital I/O
    volatile TPM_Type   *ftm;        //!< FTM hardware pointer
    const    uint8_t     ftmChannel; //!< FTM channel number
    const    uint32_t    portMux;    //!< Port multiplexor value for PWM operation
@@ -302,7 +317,7 @@ struct PwmIO {
     * @param mode    Mode of operation see @ref Pwm_Mode
     */
    void setPwmOutput(int period /* ticks */, Pwm_Mode mode) const {
-      digitalIO->setPCR(portMux|DigitalIO::DEFAULT_PCR);
+      pcr.setPCR(portMux|DigitalIO::DEFAULT_PCR);
 
       // Enable clock to timer
       *simscgc  |= clockMask;

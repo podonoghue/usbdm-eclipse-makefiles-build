@@ -1,6 +1,6 @@
 /*
- * @file Delay.h
- * @brief Very simple delay routine using DWT->CYCCNT counter
+ * @file delay.h
+ * @brief Simple busy-waiting delay routines using DWT->CYCCNT counter
  *
  *  Created on: 5 Oct 2015
  *      Author: podonoghue

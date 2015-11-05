@@ -302,7 +302,7 @@ struct PwmIO {
       ftm_centreAlign = FTM_SC_CPWMS_MASK,
    } Pwm_Mode;
 
-   const    PCRInit     pcr;  //!< Digital I/O
+   const    PCRInit     pcr;        //!< Digital I/O
    volatile FTM_Type   *ftm;        //!< FTM hardware pointer
    const    uint8_t     ftmChannel; //!< FTM channel number
    const    uint32_t    portMux;    //!< Port multiplexor value for PWM operation

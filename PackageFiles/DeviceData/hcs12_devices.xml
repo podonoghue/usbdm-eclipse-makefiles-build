@@ -2090,7 +2090,7 @@
       <device family="HCS12" name="MM912G634">
          <clock type="External" />
          <memory type="ram">
-            <memoryRange start="0x2800" size="2k" />
+            <memoryRange end="0x4000" size="2k" />
          </memory>
          <memory registerAddress="0x0100" type="eeprom" sectorSize="256" alignment="2">
             <memoryRange start="0x000400" end="0x000BFF" />
@@ -2107,11 +2107,12 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
+         <note>Ref MM912_634D1</note>
       </device>
       <device family="HCS12" name="MM912H634">
          <clock type="External" />
          <memory type="ram">
-            <memoryRange start="0x2800"  size="6k"/>
+            <memoryRange end="0x4000"  size="6k"/>
          </memory>
          <memory registerAddress="0x0100" type="eeprom" sectorSize="256" alignment="2">
             <memoryRange start="0x000400" end="0x0013FF" />
@@ -2129,7 +2130,54 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
+         <note>Ref MM912_634D1</note>
       </device>
+      
+      <device family="HCS12" name="MM912I637">
+         <clock type="External" />
+         <memory type="ram">
+            <memoryRange end="0x4000"  size="4k"/>
+         </memory>
+         <memory registerAddress="0x0100" type="eeprom" sectorSize="256" alignment="2">
+            <memoryRange start="0x000400" end="0x0013FF" />
+         </memory>
+         <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange start="0x1400" end="0x27FF" /> <!-- =Page 0x0C -->
+            <memoryRange start="0x4000" end="0x7FFF" /> <!-- =Page 0x0D -->
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0x0E" pages="6"  pageEnd="0x0F" />
+            <memoryRange start="0xC000" end="0xFFFF" /> <!-- =Page 0x0F -->
+         </memory>
+         <sdid value="0x3880" />
+         <flashScripts>
+            <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
+         <note>Ref MM912_637D1</note>
+      </device>
+      <device family="HCS12" name="MM912J637">
+         <clock type="External" />
+         <memory type="ram">
+            <memoryRange end="0x4000"  size="6k"/>
+         </memory>
+         <memory registerAddress="0x0100" type="eeprom" sectorSize="256" alignment="2">
+            <memoryRange start="0x000400" end="0x0013FF" />
+         </memory>
+         <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange start="0x1400" end="0x27FF" /> <!-- =Page 0x0C -->
+            <memoryRange start="0x4000" end="0x7FFF" /> <!-- =Page 0x0D -->
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0x0E" pages="8"  pageEnd="0x0F" />
+            <memoryRange start="0xC000" end="0xFFFF" /> <!-- =Page 0x0F -->
+         </memory>
+         <sdid value="0x3880" />
+         <flashScripts>
+            <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
+         <note>Ref MM912_637D1</note>
+      </device>
+
       <device family="HCS12" name="MM912F634">
          <clock type="External" />
          <memory type="ram">
@@ -2145,7 +2193,7 @@
          <sdid value="0x3800" />
          <sdid value="0x3801" />
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
-         <note>Untested</note>
+         <note>Ref MM912F634</note>
       </device>
    </deviceList>
 </root>
