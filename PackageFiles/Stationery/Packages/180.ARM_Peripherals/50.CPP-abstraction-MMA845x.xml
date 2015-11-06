@@ -33,6 +33,7 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-MMA845x" />
                </applyWhen>
+               <copy source="Snippets/MMA845x-example.cpp"     target="Snippets/MMA845x-example.cpp" />
                <copy source="Project_Headers/MMA845x.h"        target="Project_Headers/MMA845x.h" />
                <copy source="Sources/MMA845x.cpp"              target="Sources/MMA845x.cpp" />
             </projectActionList>

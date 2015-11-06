@@ -25,10 +25,10 @@
             </and>
          </applyWhen>
          <createFolder target="Snippets" />
-         <copy source="Snippets/segment-lcd.cpp"       target="Snippets/segment-lcd.cpp" />
-         <copy source="Project_Headers/Segment_LCD.h"  target="Project_Headers/Segment_LCD.h" />
-         <copy source="Sources/Segment_LCD-MKL43Z4.c"  target="Sources/Segment_LCD.c" />
          <excludeSourceFolder target="Snippets" />
+         <copy source="Snippets/segment-lcd-example.cpp"   target="Snippets/segment-lcd-example.cpp" />
+         <copy source="Project_Headers/Segment_LCD.h"      target="Project_Headers/Segment_LCD.h" />
+         <copy source="Sources/Segment_LCD-MKL43Z4.c"      target="Sources/Segment_LCD.c" />
       </projectActionList>
 
       <projectActionList>
@@ -39,10 +39,10 @@
             </and>
          </applyWhen>
          <createFolder target="Snippets" />
-         <copy source="Snippets/segment-lcd.cpp"       target="Snippets/segment-lcd.cpp" />
-         <copy source="Project_Headers/Segment_LCD.h"  target="Project_Headers/Segment_LCD.h" />
-         <copy source="Sources/Segment_LCD-MKL46Z4.c"  target="Sources/Segment_LCD.c" />
          <excludeSourceFolder target="Snippets" />
+         <copy source="Snippets/segment-lcd-example.cpp"  target="Snippets/segment-lcd-example.cpp" />
+         <copy source="Project_Headers/Segment_LCD.h"     target="Project_Headers/Segment_LCD.h" />
+         <copy source="Sources/Segment_LCD-MKL46Z4.c"     target="Sources/Segment_LCD.c" />
       </projectActionList>
    </projectActionList>
 </root>

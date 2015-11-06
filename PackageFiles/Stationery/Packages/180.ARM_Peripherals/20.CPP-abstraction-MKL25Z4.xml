@@ -45,12 +45,17 @@
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
-         <copy source="Project_Headers/examples.h"                         target="Project_Headers/examples.h" />
+         <createFolder        target="Snippets" />
+         <copy source="Snippets/analogueIO-example.cpp"                    target="Snippets/analogueIO-example.cpp" />
+         <copy source="Snippets/digitalIO-example1.cpp"                    target="Snippets/digitalIO-example1.cpp" />
+         <copy source="Snippets/digitalIO-example2.cpp"                    target="Snippets/digitalIO-example2.cpp" />
+         <copy source="Snippets/pwmIO-example.cpp"                         target="Snippets/pwmIO-example.cpp" />
          <copy source="Project_Headers/gpio-&DEVICE_SUB_FAMILY;.h"         target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
          <copy source="Project_Headers/pin_mapping-&DEVICE_SUB_FAMILY;.h"  target="Project_Headers/pin_mapping.h" />
          <copy source="Sources/gpio-&DEVICE_SUB_FAMILY;.cpp"               target="Sources/gpio.cpp" />
-         <copy source="Sources/main-MKL.cpp"                               target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
+         <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>
 </root>

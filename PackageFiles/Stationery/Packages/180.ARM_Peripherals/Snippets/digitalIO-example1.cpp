@@ -1,18 +1,10 @@
-/*
- ============================================================================
- * main-MK.c
- *
- *  Created on: 04/12/2012
- *      Author: podonoghue
- ============================================================================
- */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
 
-/**
- * See examples in Snippets directory
+/*
+ * Simple example flashing LEDs on digital outputs
  */
 
 // Simple delay - not for real programs!

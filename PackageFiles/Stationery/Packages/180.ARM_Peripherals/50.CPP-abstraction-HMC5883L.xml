@@ -33,6 +33,7 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-HMC5883L" />
                </applyWhen>
+               <copy source="Snippets/HMC5883L-example.cpp"     target="Snippets/HMC5883L-example.cpp" />
                <copy source="Project_Headers/HMC5883L.h"        target="Project_Headers/HMC5883L.h" />
                <copy source="Sources/HMC5883L.cpp"              target="Sources/HMC5883L.cpp" />
             </projectActionList>

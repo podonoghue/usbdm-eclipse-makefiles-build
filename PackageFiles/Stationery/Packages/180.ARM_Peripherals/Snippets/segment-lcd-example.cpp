@@ -1,20 +1,18 @@
-/*
- ============================================================================
- * main-MKL.c
- *
- *  Created on: 04/12/2012
- *      Author: podonoghue
- ============================================================================
- */
 #include <stdio.h>
+#include <stdbool.h>
 #include "system.h"
 #include "derivative.h"
 #include "Segment_LCD.h"
 
+/**
+ * Demonstration of Segment-LCD on FRDM-KL43 and and FRDM-KL46 boards
+ *
+ * Displays various numbers on LCD
+ */
 
 // Simple delay - not for real programs!
 void delay(void) {
-   for(int i=0; i<400000; i++) {
+   for(int i=0; i<4000000; i++) {
       __asm__("nop");
    }
 }
@@ -41,6 +39,7 @@ int main(void) {
       delay();
 
       SegLCD_DisplayError(5);
+      delay();
 
       SegLCD_DisplayDecimal(4321);
       SegLCD_SetDPs(0, true);

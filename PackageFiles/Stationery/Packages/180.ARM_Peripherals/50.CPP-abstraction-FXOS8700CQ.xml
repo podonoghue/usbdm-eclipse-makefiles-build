@@ -33,6 +33,7 @@
                <applyWhen>
                   <variableRef idRef="projectOptionValue.CPP-abstraction-FXOS8700CQ" />
                </applyWhen>
+               <copy source="Snippets/FXOS8700CQ-example.cpp"     target="Snippets/FXOS8700CQ-example.cpp" />
                <copy source="Project_Headers/FXOS8700CQ.h"        target="Project_Headers/FXOS8700CQ.h" />
                <copy source="Sources/FXOS8700CQ.cpp"              target="Sources/FXOS8700CQ.cpp" />
             </projectActionList>

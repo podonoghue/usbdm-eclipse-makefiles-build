@@ -39,11 +39,12 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-LCD" />
                </applyWhen>
-               <copy source="Project_Headers/LCD.h"          target="Project_Headers/LCD.h" />
-               <copy source="Project_Headers/LCD_private.h"  target="Project_Headers/LCD_private.h" />
-               <copy source="Project_Headers/Fonts.h"        target="Project_Headers/Fonts.h" replace="true"/>
-               <copy source="Sources/LCD.cpp"                target="Sources/LCD.cpp" />
-               <copy source="Sources/Fonts.cpp"              target="Sources/Fonts.cpp" replace="true"/>
+               <copy source="Snippets/Elecfreaks-lcd-example.cpp"   target="Snippets/Elecfreaks-lcd-example.cpp" />
+               <copy source="Project_Headers/LCD.h"                 target="Project_Headers/LCD.h" />
+               <copy source="Project_Headers/LCD_private.h"         target="Project_Headers/LCD_private.h" />
+               <copy source="Project_Headers/Fonts.h"               target="Project_Headers/Fonts.h" replace="true"/>
+               <copy source="Sources/LCD.cpp"                       target="Sources/LCD.cpp" />
+               <copy source="Sources/Fonts.cpp"                     target="Sources/Fonts.cpp" replace="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>LCD_AVAILABLE</value>
                </projectOption>

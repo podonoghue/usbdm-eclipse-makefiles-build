@@ -292,3 +292,15 @@ void FXOS8700CQ::readAll(Data &data) {
    data.magnetometer_Y      = ((dataXYZ[9]<<8)+dataXYZ[10]);
    data.magnetometer_Z      = ((dataXYZ[10]<<8)+dataXYZ[11]);
 }
+
+/*!
+ * Read ID from accelerometer
+ *
+ * @return ID value as 8-bit number (0x1A for MMA8451Q)
+ */
+uint32_t FXOS8700CQ::readID(void) {
+   uint8_t values[] = {WHO_AM_I};
+   i2c->receive(DEVICE_ADDRESS, values, sizeof(values));
+   return values[0];
+}
+

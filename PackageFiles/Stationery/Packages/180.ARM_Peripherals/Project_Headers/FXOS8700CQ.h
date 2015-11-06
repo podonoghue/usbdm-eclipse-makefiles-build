@@ -193,6 +193,13 @@ public:
     * @param data  Reference to structure to contain values read
     */
    void readAll(Data &data);
+
+   /*!
+    * Read ID from accelerometer
+    *
+    * @return ID value as 8-bit number (0x1A for MMA8451Q)
+    */
+   uint32_t readID();
 };
 
 /**

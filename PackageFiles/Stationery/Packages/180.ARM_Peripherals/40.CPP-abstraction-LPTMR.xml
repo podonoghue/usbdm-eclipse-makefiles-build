@@ -31,6 +31,7 @@
                <applyWhen >
                      <variableRef idRef="projectOptionValue.CPP-abstraction-LPTMR" />
                </applyWhen>
+               <copy source="Snippets/lptmr-example.cpp"     target="Snippets/lptmr-example.cpp" />
                <copy source="Project_Headers/LPTMR.h"        target="Project_Headers/LPTMR.h" />
                <copy source="Sources/LPTMR.cpp"              target="Sources/LPTMR.cpp" />
             </projectActionList>
