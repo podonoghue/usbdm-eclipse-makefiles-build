@@ -113,13 +113,13 @@
          <deleteResource target="Startup_Code" />
          <!-- Remove unused Linker -->
          <!-- deleteResource target="Project_Settings/Linker_Files" / -->
-         <createFolder type="" target="doc" />
+         <createFolder target="doc" />
          <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_API_Reference_Manual.html"                             target="doc/Kinetis SDK API Reference Manual.html"                                  type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_Demo_Applications_User_s_Guide.html"                   target="doc/Kinetis SDK Demo Applications User's Guide.html"                        type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Integration of the USB Stack and Kinetis SDK.pdf"                      target="doc/Integration of the USB Stack and Kinetis SDK.pdf"                       type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"  target="doc/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"   type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"        target="doc/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"         type="link" sourcePathType="absolute" />
-         <createFolder type="" target="utilities" />
+         <createFolder target="utilities" />
          <copy source="usbdm_kds_path/platform/utilities/src/fsl_debug_console.c"  target="utilities/fsl_debug_console.c"  type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/utilities/inc/fsl_debug_console.h"  target="utilities/fsl_debug_console.h"  type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/utilities/src/fsl_misc_utilities.c" target="utilities/fsl_misc_utilities.c" type="link" sourcePathType="absolute" />

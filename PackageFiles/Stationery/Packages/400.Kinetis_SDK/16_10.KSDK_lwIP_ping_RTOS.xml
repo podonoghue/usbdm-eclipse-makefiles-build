@@ -37,7 +37,7 @@ The lwIP stack sends the ICMP echo reply back to the PC."
             </applyWhen>
             <deleteResource target="Sources/main.c" />
             
-            <createFolder type="" target="lwip" />
+            <createFolder target="lwip" />
             <copy source="usbdm_kds_path/platform/system/src/hwtimer/fsl_hwtimer_pit_irq.c" target="lwip/port/fsl_hwtimer_pit_irq.c"   type="link"  sourcePathType="absolute" />
                                                                                                                                        
             <copy source="usbdm_kds_path/middleware/tcpip/lwip/port/ethernetif.c"           target="lwip/port/ethernetif.c"            type="link"  sourcePathType="absolute" />

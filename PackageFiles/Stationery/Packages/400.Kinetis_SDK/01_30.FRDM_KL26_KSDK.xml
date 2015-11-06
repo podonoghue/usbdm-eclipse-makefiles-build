@@ -93,7 +93,7 @@
             <value>FREEDOM</value>
             <value>&BOARD_NAME;</value>
          </projectOption>
-         <createFolder type="" target="board" />
+         <createFolder target="board" />
          <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/board.c"       target="board/board.c"     sourcePathType="absolute" />
          <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/board.h"       target="board/board.h"     sourcePathType="absolute" />
          <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/gpio_pins.c"   target="board/gpio_pins.c" sourcePathType="absolute" />

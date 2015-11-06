@@ -71,7 +71,7 @@
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
             <value>&CPU_NAME;</value>
          </projectOption>
-         <createFolder type="" target="startup" />
+         <createFolder target="startup" />
          <copy source="startup/newlib_stubs.c" target="startup/newlib_stubs.c" />
          <copy source="usbdm_kds_path/platform/devices/startup.c"                                    target="startup/startup.c"                 type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/devices/startup.h"                                    target="startup/startup.h"                 type="link" sourcePathType="absolute" />

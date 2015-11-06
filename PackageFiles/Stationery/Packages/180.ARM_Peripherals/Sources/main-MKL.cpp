@@ -326,3 +326,43 @@ int main() {
 	}
 }
 #endif
+
+#if EXAMPLE == 10
+
+#include "Segment_LCD.h"
+#include "Delay.h"
+
+int main(void) {
+
+   SegLCD_Init();
+
+   for(;;) {
+      SegLCD_DisplayHex(0x1234);
+      SegLCD_SetDPs(0, true);
+      delay();
+
+      SegLCD_DisplayHex(0x5678);
+      SegLCD_SetDPs(1, true);
+      delay();
+
+      SegLCD_DisplayHex(0x9ABC);
+      SegLCD_SetDPs(2, true);
+      delay();
+
+      SegLCD_DisplayHex(0xDEF0);
+      SegLCD_SetDPs(3, true);
+      delay();
+
+      SegLCD_DisplayError(5);
+
+      SegLCD_DisplayDecimal(4321);
+      SegLCD_SetDPs(0, true);
+      delay();
+
+      SegLCD_DisplayDecimal(8765);
+      SegLCD_SetDPs(1, true);
+      delay();
+   }
+   return 0;
+}
+#endif

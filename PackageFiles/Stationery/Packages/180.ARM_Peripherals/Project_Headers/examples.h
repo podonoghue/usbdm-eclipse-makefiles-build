@@ -24,6 +24,7 @@
 //     <7=> Elecfreaks LCD (SPI)
 //     <8=> External Magnetometer HMC5883L (I2C)
 //     <9=> External Accelerometer MMA845x (I2C)
+//     <9=> Segment LCD (MKL43 and MKL46 only)
 #define EXAMPLE 0
 
 #endif /* PROJECT_HEADERS_EXAMPLES_H_ */

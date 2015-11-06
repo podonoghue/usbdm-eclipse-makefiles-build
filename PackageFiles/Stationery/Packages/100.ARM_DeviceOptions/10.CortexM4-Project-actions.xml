@@ -14,10 +14,10 @@
             <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
-      <createFolder target="Sources"                              type="" />
-      <createFolder target="Startup_Code"                         type="" />
+      <createFolder target="Sources"                              />
+      <createFolder target="Startup_Code"                         />
       <createFolder target="Project_Headers"                      type="include" />
-      <createFolder target="Project_Settings/Linker_Files"        type="" />
+      <createFolder target="Project_Settings/Linker_Files"        />
    
       <copy source="Startup_Code/system-mk.c"                                 target="Startup_Code/system.c" />
       <copy source="Startup_Code/vectors-mk.c"                                target="Startup_Code/vectors.c" />

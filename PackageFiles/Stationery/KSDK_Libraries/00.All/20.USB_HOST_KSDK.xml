@@ -44,54 +44,54 @@
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/controller/khci&quot;</value>
       </projectOption>
 
-      <createFolder type="" target="usb_core/host" />
+      <createFolder target="usb_core/host" />
       
-      <createFolder type="" target="usb_core/host/include" />
+      <createFolder target="usb_core/host/include" />
       <copy source="usbdm_kds_path/usb/usb_core/host/include/$(usbDeviceName)/usb_host_config.h"    target="usb_core/host/include/usb_host_config.h"          type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/include/usb_host_stack_interface.h"            target="usb_core/host/include/usb_host_stack_interface.h" type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources" />
-      <createFolder type="" target="usb_core/host/sources/bsp" />
+      <createFolder target="usb_core/host/sources" />
+      <createFolder target="usb_core/host/sources/bsp" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/bsp/$(usbDeviceName)/usb_host_bsp.c"   target="usb_core/host/sources/bsp/usb_host_bsp.c"          type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver" />
+      <createFolder target="usb_core/host/sources/class_driver" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/audio" />
+      <createFolder target="usb_core/host/sources/class_driver/audio" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/audio/usb_host_audio_intf.c"   target="usb_core/host/sources/class_driver/audio/usb_host_audio_intf.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/audio/usb_host_audio.c"        target="usb_core/host/sources/class_driver/audio/usb_host_audio.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/audio/usb_host_audio.h"        target="usb_core/host/sources/class_driver/audio/usb_host_audio.h" type="link" sourcePathType="absolute" />
 
-      <createFolder type="" target="usb_core/host/sources/class_driver/cdc" />
+      <createFolder target="usb_core/host/sources/class_driver/cdc" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc_intf.c"  target="usb_core/host/sources/class_driver/cdc/usb_host_cdc_intf.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc.c"       target="usb_core/host/sources/class_driver/cdc/usb_host_cdc.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/cdc/usb_host_cdc.h"       target="usb_core/host/sources/class_driver/cdc/usb_host_cdc.h"      type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/common" />
+      <createFolder target="usb_core/host/sources/class_driver/common" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/common/usb_classes.c"     target="usb_core/host/sources/class_driver/common/usb_classes.c" type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/hid" />
+      <createFolder target="usb_core/host/sources/class_driver/hid" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hid/usb_host_hid.c"       target="usb_core/host/sources/class_driver/hid/usb_host_hid.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hid/usb_host_hid.h"       target="usb_core/host/sources/class_driver/hid/usb_host_hid.h" type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/hub" />
+      <createFolder target="usb_core/host/sources/class_driver/hub" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hub/usb_host_hub_prv.h"   target="usb_core/host/sources/class_driver/hub/usb_host_hub_prv.h" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hub/usb_host_hub_sm.c"    target="usb_core/host/sources/class_driver/hub/usb_host_hub_sm.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hub/usb_host_hub_sm.h"    target="usb_core/host/sources/class_driver/hub/usb_host_hub_sm.h" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hub/usb_host_hub.c"       target="usb_core/host/sources/class_driver/hub/usb_host_hub.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/hub/usb_host_hub.h"       target="usb_core/host/sources/class_driver/hub/usb_host_hub.h" type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/msd" />
+      <createFolder target="usb_core/host/sources/class_driver/msd" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/msd/usb_host_msd_bo.c"      target="usb_core/host/sources/class_driver/msd/usb_host_msd_bo.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/msd/usb_host_msd_bo.h"      target="usb_core/host/sources/class_driver/msd/usb_host_msd_bo.h"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/msd/usb_host_msd_queue.c"   target="usb_core/host/sources/class_driver/msd/usb_host_msd_queue.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/msd/usb_host_msd_ufi.c"     target="usb_core/host/sources/class_driver/msd/usb_host_msd_ufi.c"      type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/msd/usb_host_msd_ufi.h"     target="usb_core/host/sources/class_driver/msd/usb_host_msd_ufi.h"      type="link" sourcePathType="absolute" />
       
-      <createFolder type="" target="usb_core/host/sources/class_driver/phdc" />
+      <createFolder target="usb_core/host/sources/class_driver/phdc" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/phdc/usb_host_phdc.c"      target="usb_core/host/sources/class_driver/phdc/usb_host_phdc.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/classes/phdc/usb_host_phdc.h"      target="usb_core/host/sources/class_driver/phdc/usb_host_phdc.h" type="link" sourcePathType="absolute" />
 
-      <createFolder type="" target="usb_core/host/sources/controller/khci" />
+      <createFolder target="usb_core/host/sources/controller/khci" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/controller/khci/host_khci_interface.c" target="usb_core/host/sources/controller/khci/host_khci_interface.c" type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/controller/khci/khci_prv.h"            target="usb_core/host/sources/controller/khci/khci_prv.h"            type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/sources/controller/khci/khci.h"                target="usb_core/host/sources/controller/khci/khci.h"                type="link" sourcePathType="absolute" />

@@ -78,7 +78,6 @@ Control extended Boot features on these devices
       <128=> 2: Boot from ROM
       <192=> 3: Boot from ROM
    <q2.1> External pin selects boot options (FOPT.BOOTPIN_OPT)
-      <i> Enables or disables the RESET pin dedicated operation
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
       <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted. 
       <1=> Boot source controlled by BOOTSRC_SEL
@@ -106,8 +105,8 @@ Control extended Boot features on these devices
       <17=> OUTDIV1 = /1, RUNM = RUN
 </h>
  */
-#define BOOT_ENABLE  (0)
-#define FOPT_BOOTSRC (0xC0)
+#define BOOT_ENABLE  (1)
+#define FOPT_BOOTSRC (0x0)
 #define FOPT_MISC    (0x2E)
 #define FOPT_LPBOOT  (0x11)
 

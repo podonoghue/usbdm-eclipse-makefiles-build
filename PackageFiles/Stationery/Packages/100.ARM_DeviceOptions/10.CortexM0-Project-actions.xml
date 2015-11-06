@@ -22,10 +22,10 @@ Cortex-M0
       </applyWhen>
       
       <!--  Common Cortex-M0/+ files -->
-      <createFolder target="Sources"                         type="" />
-      <createFolder target="Startup_Code"                    type="" />
+      <createFolder target="Sources"                         />
+      <createFolder target="Startup_Code"                    />
       <createFolder target="Project_Headers"                 type="include" />
-      <createFolder target="Project_Settings/Linker_Files"   type="" />
+      <createFolder target="Project_Settings/Linker_Files"   />
    
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM0.S"                target="Startup_Code/startup_ARMLtdGCC.S" />

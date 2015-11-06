@@ -321,3 +321,52 @@ int main() {
 }
 #endif
 
+#if EXAMPLE == 10
+
+#include "Segment_LCD.h"
+#include "Delay.h"
+
+int main(void) {
+
+   printf("SystemCoreClock = %d\n", SystemCoreClock);
+   printf("SystemBusClock  = %d\n", SystemBusClock);
+
+   SegLCD_Init();
+
+   waitMS(2000);
+   for(;;) {
+//      SegLCD_SetDPs(3, false);
+      SegLCD_DisplayHex(0x1234);
+//      SegLCD_SetDPs(0, true);
+      waitMS(2000);
+
+      SegLCD_SetDPs(0, false);
+      SegLCD_DisplayHex(0x5678);
+      SegLCD_SetDPs(1, true);
+      waitMS(2000);
+
+      SegLCD_SetDPs(1, false);
+      SegLCD_DisplayHex(0x9ABC);
+      SegLCD_SetDPs(2, true);
+      waitMS(2000);
+
+      SegLCD_SetDPs(2, false);
+      SegLCD_DisplayHex(0xDEF0);
+      SegLCD_SetDPs(3, true);
+      waitMS(2000);
+
+      SegLCD_DisplayError(5);
+
+//      SegLCD_SetDPs(3, false);
+//      SegLCD_DisplayDecimal(4321);
+//      SegLCD_SetDPs(0, true);
+//      waitMS(2000);
+
+//      SegLCD_SetDPs(0, false);
+//      SegLCD_DisplayDecimal(8765);
+//      SegLCD_SetDPs(1, true);
+//      waitMS(2000);
+   }
+   return 0;
+}
+#endif

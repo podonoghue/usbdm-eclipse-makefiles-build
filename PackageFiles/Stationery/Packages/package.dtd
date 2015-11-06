@@ -91,7 +91,7 @@
 
  <!ELEMENT createFolder EMPTY >
    <!ATTLIST createFolder target  CDATA #REQUIRED>
-   <!ATTLIST createFolder type    CDATA #REQUIRED>
+   <!ATTLIST createFolder type    (source|include|normal) "normal">
 
 <!-- File to be copied to a project -->
 <!ELEMENT copy EMPTY >

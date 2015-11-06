@@ -25,10 +25,10 @@
          <applyWhen>
             <deviceSubfamilyMatches>^STM32.*</deviceSubfamilyMatches>
          </applyWhen>
-         <createFolder target="Sources"                         type="" />
-         <createFolder target="Startup_Code"                    type="" />
+         <createFolder target="Sources"                         />
+         <createFolder target="Startup_Code"                    />
          <createFolder target="Project_Headers"                 type="include" />
-         <createFolder target="Project_Settings/Linker_Files"   type="" />
+         <createFolder target="Project_Settings/Linker_Files"   />
       
          <copy source="Startup_Code/system-stm32f10x.c"                          target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-stm32.c"                             target="Startup_Code/vectors.c" />
@@ -61,10 +61,10 @@
          <applyWhen>
             <deviceSubfamilyMatches>^LPC\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <createFolder target="Sources"                         type="" />
-         <createFolder target="Startup_Code"                    type="" />
+         <createFolder target="Sources"                         />
+         <createFolder target="Startup_Code"                    />
          <createFolder target="Project_Headers"                 type="include" />
-         <createFolder target="Project_Settings/Linker_Files"   type="" />
+         <createFolder target="Project_Settings/Linker_Files"   />
       
          <copy source="Startup_Code/system-lpc.c"                                target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-lpc.c"                               target="Startup_Code/vectors.c" />
