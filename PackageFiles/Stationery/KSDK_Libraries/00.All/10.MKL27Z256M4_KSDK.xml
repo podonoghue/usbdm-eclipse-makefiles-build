@@ -29,6 +29,7 @@
          <constant id="targetDeviceName"     value="&USBDM_DEVICE;" />
          <constant id="linkerRamSize"        value="0x2000" />
          <constant id="linkerFlashSize"      value="0x2000" />
+         
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/devices/M&KDS_DEVICE;/startup&quot;</value>

@@ -5,7 +5,6 @@
 <!ENTITY KDS_DEVICE        "KL25Z4">               <!-- KDS device name -->           
 <!ENTITY CPU_NAME          "CPU_MKL25Z128VLK4">    <!-- Name used in header files -->           
 <!ENTITY MQX_DEVICE        "mkl25z128m">           <!-- Name used by MQX --> 
-<!ENTITY HARDWARE_NAME     "frdmkl25z">             <!-- Hardware EVB -->
 ]
 >
 
@@ -30,9 +29,12 @@
          <constant id="targetDeviceName"     value="&USBDM_DEVICE;" />
          <constant id="linkerRamSize"        value="0x2000" />
          <constant id="linkerFlashSize"      value="0x2000" />
-         <constant id="usbDeviceName"        value="&HARDWARE_NAME;" /> <!-- enables USB library -->
-         <constant id="usbHostName"          value="&HARDWARE_NAME;" /> <!-- enables USB library -->
-	 	 
+         
+         <!-- Name of USB device mode header file directory - Enables USB device library -->
+         <constant id="usbDeviceName" value="M&KDS_DEVICE;" />
+         <!-- Name of USB host mode header file directory - Enables USB host library -->
+         <constant id="usbHostName"   value="M&KDS_DEVICE;" />
+         
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/devices/M&KDS_DEVICE;/startup&quot;</value>

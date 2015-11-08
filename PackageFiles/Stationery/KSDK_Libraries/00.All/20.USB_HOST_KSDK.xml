@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE root SYSTEM "../libraries.dtd"
-[
-<!ENTITY KDS_DEVICE        "K22F51212">          <!-- KDS device name -->
-]
->
+<!DOCTYPE root SYSTEM "../libraries.dtd">
 
 <root version="1.0">
    <!-- Freescale Kinetis SDK for -->
-   <projectActionList id="&KDS_DEVICE;-KSDK-usb-library" root="">
+   <projectActionList id="USB-HOST-KSDK-usb-library" root="">
    <projectActionList>
       <applyWhen>
          <variableRef idRef="usbHostName" condition="isDefined" />
@@ -16,7 +12,7 @@
       <!-- C Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
-         <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(usbDeviceName)&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(usbHostName)&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/common&quot;</value>
@@ -31,7 +27,7 @@
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include&quot;</value>
-         <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(usbDeviceName)&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/host/include/$(usbHostName)&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/audio&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/cdc&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/host/sources/classes/common&quot;</value>
@@ -47,12 +43,12 @@
       <createFolder target="usb_core/host" />
       
       <createFolder target="usb_core/host/include" />
-      <copy source="usbdm_kds_path/usb/usb_core/host/include/$(usbDeviceName)/usb_host_config.h"    target="usb_core/host/include/usb_host_config.h"          type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/host/include/$(usbHostName)/usb_host_config.h"    target="usb_core/host/include/usb_host_config.h"          type="link" sourcePathType="absolute" />
       <copy source="usbdm_kds_path/usb/usb_core/host/include/usb_host_stack_interface.h"            target="usb_core/host/include/usb_host_stack_interface.h" type="link" sourcePathType="absolute" />
       
       <createFolder target="usb_core/host/sources" />
       <createFolder target="usb_core/host/sources/bsp" />
-      <copy source="usbdm_kds_path/usb/usb_core/host/sources/bsp/$(usbDeviceName)/usb_host_bsp.c"   target="usb_core/host/sources/bsp/usb_host_bsp.c"          type="link" sourcePathType="absolute" />
+      <copy source="usbdm_kds_path/usb/usb_core/host/sources/bsp/$(usbHostName)/usb_host_bsp.c"   target="usb_core/host/sources/bsp/usb_host_bsp.c"          type="link" sourcePathType="absolute" />
       
       <createFolder target="usb_core/host/sources/class_driver" />
       

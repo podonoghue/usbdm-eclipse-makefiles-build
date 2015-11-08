@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE root SYSTEM "../libraries.dtd"
-[
-<!ENTITY KDS_DEVICE        "K22F51212">          <!-- KDS device name -->
-]
->
+<!DOCTYPE root SYSTEM "../libraries.dtd">
 
 <root version="1.0">
    <!-- Freescale Kinetis SDK for -->
-   <projectActionList id="&KDS_DEVICE;-KSDK-usb-library" root="">
+   <projectActionList id="USB-OTG-KSDK-usb-library" root="">
    <projectActionList>
       <applyWhen>
          <variableRef idRef="usbOtgName" condition="isDefined" />
@@ -15,14 +11,17 @@
       <!-- usb -->
       <!-- C Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-         <value>&quot;${usbdm_kds_path}/usb/usb_core/include&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
-         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/include&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/bsp/$(usbOtgName)&quot;</value>
          <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>         
       </projectOption>
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/khci&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/driver/max3353/sdk&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/bsp/$(usbOtgName)&quot;</value>
+         <value>&quot;${usbdm_kds_path}/usb/usb_core/otg/sources/otg&quot;</value>         
       </projectOption>
 
    </projectActionList>

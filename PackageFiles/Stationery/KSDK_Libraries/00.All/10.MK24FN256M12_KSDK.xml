@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../libraries.dtd"
 [
-<!ENTITY USBDM_DEVICE      "MK24FN256M12">         <!-- USBDM device name -->         
-<!ENTITY KDS_DEVICE        "K24F25612">            <!-- KDS device name -->           
-<!ENTITY CPU_NAME          "CPU_MK24FN256VDC12">   <!-- Name used in header files --> 
-<!ENTITY MQX_DEVICE        "mk24f120m">            <!-- Name used by MQX -->           
+<!ENTITY USBDM_DEVICE      "MK24FN256M12">          <!-- USBDM device name -->         
+<!ENTITY KDS_DEVICE        "K24F25612">             <!-- KDS device name -->           
+<!ENTITY CPU_NAME          "CPU_MK24FN256VDC12">    <!-- Name used in header files --> 
+<!ENTITY MQX_DEVICE        "mk24f120m">             <!-- Name used by MQX -->           
 ]
 >
 
@@ -29,6 +29,14 @@
          <constant id="targetDeviceName"     value="&USBDM_DEVICE;" />
          <constant id="linkerRamSize"        value="0x2000" />
          <constant id="linkerFlashSize"      value="0x2000" />
+         
+         <!-- Name of USB device mode header file directory - Enables USB device library -->
+         <constant id="usbDeviceName" value="M&KDS_DEVICE;" />
+         <!-- Name of USB host mode header file directory - Enables USB host library -->
+         <constant id="usbHostName"   value="M&KDS_DEVICE;" />
+         <!-- Name of USB OTG mode header file directory - Enables USB otg library -->
+         <constant id="usbOtgName"    value="M&KDS_DEVICE;" />
+         
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/devices/M&KDS_DEVICE;/startup&quot;</value>
@@ -193,7 +201,7 @@
          <!-- sim -->
          <copy source="usbdm_kds_path/platform/hal/src/sim/M&KDS_DEVICE;/fsl_sim_hal_M&KDS_DEVICE;.c" target="platform/sim/hal/fsl_sim_hal_M&KDS_DEVICE;.c" type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/hal/src/sim/M&KDS_DEVICE;/fsl_sim_hal_M&KDS_DEVICE;.h" target="platform/sim/hal/fsl_sim_hal_M&KDS_DEVICE;.h" type="link" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/platform/hal/inc/fsl_sim_hal.h"                                   target="platform/sim/hal/fsl_sim_hal.h"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/hal/inc/fsl_sim_hal.h"                                 target="platform/sim/hal/fsl_sim_hal.h"               type="link" sourcePathType="absolute" />
          <!-- smc -->
          <copy source="usbdm_kds_path/platform/hal/src/smc/fsl_smc_hal.c"               target="platform/smc/hal/fsl_smc_hal.c" type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/hal/inc/fsl_smc_hal.h"                   target="platform/smc/hal/fsl_smc_hal.h" type="link" sourcePathType="absolute" />
