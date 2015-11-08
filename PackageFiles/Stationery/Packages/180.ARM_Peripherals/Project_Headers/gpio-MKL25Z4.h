@@ -131,7 +131,9 @@ extern const DigitalIO digitalIO_PTE22;         //!< DigitalIO on pin PTE22
 extern const DigitalIO digitalIO_PTE23;         //!< DigitalIO on pin PTE23
 #define digitalIO_A8         digitalIO_PTE23
 extern const DigitalIO digitalIO_PTE24;         //!< DigitalIO on pin PTE24
+#define digitalIO_ACCEL_SCL  digitalIO_PTE24
 extern const DigitalIO digitalIO_PTE25;         //!< DigitalIO on pin PTE25
+#define digitalIO_ACCEL_SDA  digitalIO_PTE25
 extern const DigitalIO digitalIO_PTE29;         //!< DigitalIO on pin PTE29
 #define digitalIO_A7         digitalIO_PTE29
 extern const DigitalIO digitalIO_PTE30;         //!< DigitalIO on pin PTE30
@@ -340,9 +342,11 @@ extern const PwmIO pwmIO_TPM2_CH1;          //!< PwmIO on pin PTE23
 #endif
 #if (PTE24_SIG_SEL == 3)
 extern const PwmIO pwmIO_TPM0_CH0;          //!< PwmIO on pin PTE24
+#define pwmIO_ACCEL_SCL      pwmIO_TPM0_CH0
 #endif
 #if (PTE25_SIG_SEL == 3)
 extern const PwmIO pwmIO_TPM0_CH1;          //!< PwmIO on pin PTE25
+#define pwmIO_ACCEL_SDA      pwmIO_TPM0_CH1
 #endif
 #if (PTE29_SIG_SEL == 3)
 extern const PwmIO pwmIO_TPM0_CH2;          //!< PwmIO on pin PTE29

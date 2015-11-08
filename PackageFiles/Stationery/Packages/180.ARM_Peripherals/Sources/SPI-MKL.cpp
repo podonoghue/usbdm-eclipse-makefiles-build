@@ -38,6 +38,11 @@ SPI::SPI(volatile SPI_Type *baseAddress, DMAChannel *dmaTxChannel, DMAChannel *d
    }
 }
 
+#ifdef SPI0
+#if !defined(SPI0_SCK_GPIO) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
+#warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
+
 /**
  * Constructor
  *
@@ -52,13 +57,9 @@ SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
-#if !defined(SPI0_SCK_GPIO)  || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
-#error "Please check pin mappings for SCK, MOSI & MISO in pin_mapping.h"
-#else
    SPI0_SCK_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_MOSI_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_MISO_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#endif
 
 #ifdef SPI0_PCS0_GPIO
    SPI0_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -80,7 +81,20 @@ SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
    spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI0_C1_SSOE_VALUE;//|SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK;
 }
 
+SPI_0 *SPI_0::thisPtr = NULL;
+
+extern "C"
+void SPI0_IRQHandler(void) {
+   SPI_0::thisPtr->poll();
+}
+
+#endif // !defined(SPI0_SCK_GPIO) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
+#endif // SPI0
+
 #ifdef SPI1
+#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
+#warning "SPI1 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
 
 /**
  * Constructor
@@ -96,13 +110,9 @@ SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
-#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
-#error "Please check pin mappings for SCK, MOSI & MISO in pin_mapping.h"
-#else
    SPI1_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_MOSI_GPIO.setPCR(PORT_PCR_MUX(SPI1_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_MISO_GPIO.setPCR(PORT_PCR_MUX(SPI1_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#endif
 
 #ifdef SPI1_PCS0_GPIO
    SPI1_PCS1_GPIO.setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -122,7 +132,16 @@ SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
    spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI1_C1_SSOE_VALUE;
    spi->C2 = 0;
 }
-#endif
+
+SPI_1 *SPI_1::thisPtr = NULL;
+
+extern "C"
+void SPI1_IRQHandler(void) {
+   SPI_1::thisPtr->poll();
+}
+
+#endif // !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
+#endif // SPI1
 
 static const uint16_t spprFactors[] = {1,2,3,4,5,6,7,8};
 static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
@@ -280,18 +299,4 @@ void SPI::poll() {
 //         spi->C1 &= ~SPI_C1_SPIE_MASK;
 //      }
 //   }
-}
-
-SPI_0 *SPI_0::thisPtr = NULL;
-
-extern "C"
-void SPI0_IRQHandler(void) {
-   SPI_0::thisPtr->poll();
-}
-
-SPI_1 *SPI_1::thisPtr = NULL;
-
-extern "C"
-void SPI1_IRQHandler(void) {
-   SPI_1::thisPtr->poll();
 }

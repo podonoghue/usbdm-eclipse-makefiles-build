@@ -812,24 +812,24 @@
 #define PTE23_SIG_SEL        -2
 
 // Signal mapping for PTE24 pin
-//   <o> PTE24 [GPIOE_24, TPM0_CH0, I2C0_SCL]<name=PTE24_SIG_SEL>
+//   <o> PTE24 (Alias:ACCEL_SCL) [GPIOE_24, TPM0_CH0, I2C0_SCL]<name=PTE24_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTE24 pin
 //     <-2=> Disabled (reset default)
 //     <1=> GPIOE_24<selection=GPIOE_24_PIN_SEL,PTE24>
 //     <3=> TPM0_CH0<selection=TPM0_CH0_PIN_SEL,PTE24>
 //     <5=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTE24>
-//     <-2=> Default
-#define PTE24_SIG_SEL        -2
+//     <5=> Default
+#define PTE24_SIG_SEL        5
 
 // Signal mapping for PTE25 pin
-//   <o> PTE25 [GPIOE_25, TPM0_CH1, I2C0_SDA]<name=PTE25_SIG_SEL>
+//   <o> PTE25 (Alias:ACCEL_SDA) [GPIOE_25, TPM0_CH1, I2C0_SDA]<name=PTE25_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTE25 pin
 //     <-2=> Disabled (reset default)
 //     <1=> GPIOE_25<selection=GPIOE_25_PIN_SEL,PTE25>
 //     <3=> TPM0_CH1<selection=TPM0_CH1_PIN_SEL,PTE25>
 //     <5=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTE25>
-//     <-2=> Default
-#define PTE25_SIG_SEL        -2
+//     <5=> Default
+#define PTE25_SIG_SEL        5
 
 // Signal mapping for PTE29 pin
 //   <o> PTE29 (Alias:A7) [CMP0_IN5/ADC0_SE4b, GPIOE_29, TPM0_CH2, TPM_CLKIN0]<name=PTE29_SIG_SEL>
@@ -2214,8 +2214,8 @@
 //     <2=> PTB2<selection=PTB2_SIG_SEL,I2C0_SCL>
 //     <3=> PTC8<selection=PTC8_SIG_SEL,I2C0_SCL>
 //     <4=> PTE24<selection=PTE24_SIG_SEL,I2C0_SCL>
-//     <0=> Default
-#define I2C0_SCL_PIN_SEL     0
+//     <4=> Default
+#define I2C0_SCL_PIN_SEL     4
 #if I2C0_SCL_PIN_SEL == 1
 #define I2C0_SCL_GPIO        digitalIO_PTB0
 #define I2C0_SCL_FN          2
@@ -2238,8 +2238,8 @@
 //     <2=> PTB3<selection=PTB3_SIG_SEL,I2C0_SDA>
 //     <3=> PTC9<selection=PTC9_SIG_SEL,I2C0_SDA>
 //     <4=> PTE25<selection=PTE25_SIG_SEL,I2C0_SDA>
-//     <0=> Default
-#define I2C0_SDA_PIN_SEL     0
+//     <4=> Default
+#define I2C0_SDA_PIN_SEL     4
 #if I2C0_SDA_PIN_SEL == 1
 #define I2C0_SDA_GPIO        digitalIO_PTB1
 #define I2C0_SDA_FN          2
@@ -3284,7 +3284,7 @@
 
 // </h>
 
-// <h> Universal Serial Bus (USB)
+// <h> Universal Serial Bus
 
 // Pin Mapping for USB_CLKIN signal
 //   <o> USB_CLKIN [PTA5]<name=USB_CLKIN_PIN_SEL>

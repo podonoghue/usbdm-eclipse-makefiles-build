@@ -104,6 +104,7 @@ public:
    uint32_t txRx(uint32_t data);
 };
 
+#if defined(SPI0) && defined(SPI0_SCK_GPIO) && defined(SPI0_MOSI_GPIO) && defined(SPI0_MISO_GPIO)
 /**
  * Class representing SPI0
  */
@@ -124,8 +125,9 @@ private:
     */
    friend void SPI0_IRQHandler(void);
 };
+#endif
 
-#ifdef SPI1
+#if defined(SPI1) && defined(SPI1_SCK_GPIO) && defined(SPI1_MOSI_GPIO) && defined(SPI1_MISO_GPIO)
 /**
  * Class representing SPI1
  */
@@ -146,7 +148,6 @@ private:
     */
    friend void SPI1_IRQHandler(void);
 };
-
 #endif
 
 /**

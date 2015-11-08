@@ -144,6 +144,7 @@ public:
    }
 };
 
+#if defined(SPI0) && defined(SPI0_SCK_GPIO) && defined(SPI0_SIN_GPIO) && defined(SPI0_SOUT_GPIO)
 /**
  * Class representing SPI0
  */
@@ -154,8 +155,9 @@ public:
     */
    SPI_0();
 };
+#endif
 
-#ifdef SPI1
+#if defined(SPI1) && defined(SPI1_SCK_GPIO) && defined(SPI1_SIN_GPIO) && defined(SPI1_SOUT_GPIO)
 /**
  * Class representing SPI1
  */

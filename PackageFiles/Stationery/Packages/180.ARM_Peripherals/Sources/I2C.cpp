@@ -84,10 +84,6 @@ void I2C::init() {
    i2c->C2  = I2C_C2_AD(myAddress>>8);
    i2c->A1  = myAddress&~1;
    i2c->FLT = I2C_FLT_FLT(2);
-
-   // Configure I2C pins
-   sda->pcr.setPCR(PORT_PCR_MUX(I2C0_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   scl->pcr.setPCR(PORT_PCR_MUX(I2C0_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 }
 
 /**
@@ -341,6 +337,7 @@ void I2C::busHangReset() {
    }
 }
 
+#if defined(I2C0) && defined(I2C0_SCL_GPIO) && defined(I2C0_SDA_GPIO)
 /*
  * =========================================================================================
  * I2C_0
@@ -368,10 +365,15 @@ void I2C_0::init() {
 
    thisPtr = this;
 
+   // Configure I2C pins
+   sda->pcr.setPCR(PORT_PCR_MUX(I2C0_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   scl->pcr.setPCR(PORT_PCR_MUX(I2C0_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+
    if (mode&I2C_C1_IICIE_MASK) {
       NVIC_EnableIRQ(I2C0_IRQn);
    }
 }
+#endif
 
 #if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
 /*
@@ -401,6 +403,10 @@ void I2C_1::init() {
 
    thisPtr = this;
 
+   // Configure I2C pins
+   sda->pcr.setPCR(PORT_PCR_MUX(I2C1_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   scl->pcr.setPCR(PORT_PCR_MUX(I2C1_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+
    if (mode&I2C_C1_IICIE_MASK) {
       NVIC_EnableIRQ(I2C1_IRQn);
    }
@@ -426,6 +432,10 @@ void I2C_2::init() {
    I2C::init();
 
    thisPtr = this;
+
+   // Configure I2C pins
+   sda->pcr.setPCR(PORT_PCR_MUX(I2C2_SDA_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   scl->pcr.setPCR(PORT_PCR_MUX(I2C2_SCL_FN)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 
    if (mode&I2C_C1_IICIE_MASK) {
       NVIC_EnableIRQ(I2C2_IRQn);

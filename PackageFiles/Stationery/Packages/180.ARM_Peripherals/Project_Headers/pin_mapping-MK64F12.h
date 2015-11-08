@@ -7433,7 +7433,7 @@
 
 // </h>
 
-// <h> Universal Serial Bus (USB)
+// <h> Universal Serial Bus
 
 // Pin Mapping for USB_CLKIN signal
 //   <o> USB_CLKIN [PTA5, PTE26]<name=USB_CLKIN_PIN_SEL>

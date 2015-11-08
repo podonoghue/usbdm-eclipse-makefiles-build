@@ -83,25 +83,28 @@ public:
    /**
     * Set compass gain on all channels
     *
-    * @param gain                                     \n
-    * G    Recommended    Gain        Resolution       \n
-    * 321  Sensor Range   (LSB/Gauss) (mGauss/LSB)     \n
-    * 000   +/- 0.88 Ga    1370        0.73             \n
-    * 001   +/- 1.3  Ga    1090        0.92 (default)   \n
-    * 010   +/- 1.9  Ga     820        1.22             \n
-    * 011   +/- 2.5  Ga     660        1.52             \n
-    * 100   +/- 4.0  Ga     440        2.27             \n
-    * 101   +/- 4.7  Ga     390        2.56             \n
-    * 110   +/- 5.6  Ga     330        3.03             \n
+    * @param gain
+    *
+    * <pre>
+    * G    Recommended    Gain        Resolution
+    * 321  Sensor Range   (LSB/Gauss) (mGauss/LSB)
+    * 000   +/- 0.88 Ga    1370        0.73
+    * 001   +/- 1.3  Ga    1090        0.92 (default)
+    * 010   +/- 1.9  Ga     820        1.22
+    * 011   +/- 2.5  Ga     660        1.52
+    * 100   +/- 4.0  Ga     440        2.27
+    * 101   +/- 4.7  Ga     390        2.56
+    * 110   +/- 5.6  Ga     330        3.03
     * 111   +/- 8.1  Ga     230        4.35
+    * </pre>
     */
    void setGain(uint8_t gain);
 
    /**
     * Set Control register values
     *
-    * @param cra - Use HMC5883L_CRA_MA(), HMC5883L_CRA_DO(), HMC5883L_CRA_MS() macros to construct value
-    * @param crb - Use HMC5883L_CRB_GN() macro to construct value
+    * @param cra - Use HMC5883L_CRA_MA(), HMC5883L_CRA_DO(), HMC5883L_CRA_MS() macros to construct
+    * @param crb - Use HMC5883L_CRB_GN() macro to construct
     */
    void setConfiguration(uint8_t cra, uint8_t crb);
 

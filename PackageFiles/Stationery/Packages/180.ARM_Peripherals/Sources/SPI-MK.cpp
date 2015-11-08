@@ -16,18 +16,30 @@
 
 /**
  * Constructor
+ *
+ * @param baseAddress - Base address of SPI
+ */
+SPI::SPI(volatile SPI_Type *baseAddress) :
+   spi(baseAddress) {
+   spiBaudValue = 0;
+   setSpeed(0);   // Use default speed
+}
+
+#ifdef SPI0
+#if !defined(SPI0_SCK_GPIO) || !defined(SPI0_SIN_GPIO) || !defined(SPI0_SOUT_GPIO)
+#warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
+
+/**
+ * Constructor
  */
 SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
 
    // Enable SPI port pin clocks & configure PCS register
    // SIN,SOUT,SCLK,PCS
-#if !defined(SPI0_SCK_GPIO)  || !defined(SPI0_SIN_GPIO) || !defined(SPI0_SOUT_GPIO)
-#error "Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
-#else
    SPI0_SCK_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_SIN_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_SIN_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI0_SOUT_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_SOUT_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#endif
 
 #ifdef SPI0_PCS0_GPIO
    SPI0_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -69,8 +81,13 @@ SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
    setCTAR0Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
    setCTAR1Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
 }
+#endif // !defined(SPI0_SCK_GPIO) || !defined(SPI0_SIN_GPIO) || !defined(SPI0_SOUT_GPIO)
+#endif // SPI0
 
 #ifdef SPI1
+#if !defined(SPI1_SCK_GPIO) || !defined(SPI1_SIN_GPIO) || !defined(SPI1_SOUT_GPIO)
+#warning "SPI1 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#else
 
 /**
  * Constructor
@@ -79,13 +96,9 @@ SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
 
    // Enable SPI port pin clocks
    // SIN,SOUT,SCLK,PCS
-#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_SIN_GPIO) || !defined(SPI1_SOUT_GPIO)
-#error "Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
-#else
    SPI1_SCK_GPIO.setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_SIN_GPIO.setPCR(PORT_PCR_MUX(SPI1_SIN_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
    SPI1_SOUT_GPIO.setPCR(PORT_PCR_MUX(SPI1_SOUT_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#endif
 
 #ifdef SPI1_PCS0_GPIO
    SPI1_PCS0_GPIO.setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -127,18 +140,12 @@ SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
    setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)); // 8-bit transfers
    setCTAR1Value(SPI_CTAR_SLAVE_FMSZ(8-1)); // 8-bit transfers
 }
-#endif
 
-/**
- * Constructor
- *
- * @param baseAddress - Base address of SPI
- */
-SPI::SPI(volatile SPI_Type *baseAddress) {
-   spi          = baseAddress;
-   spiBaudValue = 0;
-   setSpeed(0);   // Use default speed
-}
+#endif // !defined(SPI1_SCK_GPIO)  || !defined(SPI1_SIN_GPIO) || !defined(SPI1_SOUT_GPIO)
+#endif // SPI1
+
+   static const uint16_t pbrFactors[] = {2,3,5,7};
+   static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
 
 /**
  * Sets Communication speed for SPI
@@ -149,8 +156,6 @@ SPI::SPI(volatile SPI_Type *baseAddress) {
  * Note: Only has effect from when the CTAR value is next changed
  */
 void SPI::setSpeed(uint32_t targetFrequency) {
-   static const uint16_t pbrFactors[] = {2,3,5,7};
-   static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
 
    if (targetFrequency == 0) {
       targetFrequency = DEFAULT_SPI_FREQUENCY;
