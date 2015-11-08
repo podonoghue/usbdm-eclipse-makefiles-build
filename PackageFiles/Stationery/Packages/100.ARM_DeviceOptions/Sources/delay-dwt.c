@@ -79,7 +79,7 @@ void waitMS(uint32_t msToWait) {
  *
  * @param msToWait How many milliseconds to wait
  */
-void waitMS(unsigned msToWait) {
+void waitMS(uint32_t msToWait) {
    osDelay(msToWait);
 }
 #endif

@@ -18,7 +18,9 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-
+      <createFolder target="Documentation"/>
+      <createFolder target="Documentation/html"/>
+      <copy source="Documentation/html/index.html" target="Documentation/html/index.html"/>
       <copy source="Documentation.doxyfile"        target="Documentation.doxyfile" />
       <copy source="PROJECT_LOC/Documentation/html/index.html" target="Documentation.html" type="link" sourcePathType="absolute"/>
 

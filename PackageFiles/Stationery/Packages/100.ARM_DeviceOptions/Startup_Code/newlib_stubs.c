@@ -173,9 +173,12 @@ caddr_t _sbrk(int incr) {
    next_heap_end = (caddr_t)(((int)prev_heap_end + incr + 7) & ~7);
    if (next_heap_end > &__HeapLimit) {
       /* Heap and stack collision */
-//      __asm__("bkpt");
+#ifdef DEBUG_BUILD
+      __asm__("bkpt");
+#else
       errno = ENOMEM;
       return (caddr_t)-1;
+#endif
    }
    heap_end = next_heap_end;
    return prev_heap_end;
