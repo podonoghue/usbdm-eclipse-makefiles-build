@@ -1284,7 +1284,7 @@ typedef struct {                                /*       FTFA Structure         
 */
 
 /* ================================================================================ */
-/* ================           I2C0 (file:I2C0_MKL_SMB)             ================ */
+/* ================           I2C0 (file:I2C0_MKL_SMB_S2)          ================ */
 /* ================================================================================ */
 
 /**
@@ -1308,6 +1308,7 @@ typedef struct {                                /*       I2C0 Structure         
    __IO uint8_t   A2;                           /**< 0009: Address Register 2                                           */
    __IO uint8_t   SLTH;                         /**< 000A: SCL Low Timeout Register High                                */
    __IO uint8_t   SLTL;                         /**< 000B: SCL Low Timeout Register Low                                 */
+   __IO uint8_t   S2;                           /**< 000C: Status register 2                                            */
 } I2C_Type;
 
 /**
@@ -1429,6 +1430,11 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C_SLTL_SSLT_MASK                       (0xFFUL << I2C_SLTL_SSLT_SHIFT)                     /*!< I2C0_SLTL: SSLT Mask                    */
 #define I2C_SLTL_SSLT_SHIFT                      0                                                   /*!< I2C0_SLTL: SSLT Position                */
 #define I2C_SLTL_SSLT(x)                         (((uint8_t)(((uint8_t)(x))<<I2C_SLTL_SSLT_SHIFT))&I2C_SLTL_SSLT_MASK) /*!< I2C0_SLTL                               */
+/* ------- S2 Bit Fields                            ------ */
+#define I2C_S2_EMPTY_MASK                        (0x01UL << I2C_S2_EMPTY_SHIFT)                      /*!< I2C0_S2: EMPTY Mask                     */
+#define I2C_S2_EMPTY_SHIFT                       0                                                   /*!< I2C0_S2: EMPTY Position                 */
+#define I2C_S2_ERROR_MASK                        (0x01UL << I2C_S2_ERROR_SHIFT)                      /*!< I2C0_S2: ERROR Mask                     */
+#define I2C_S2_ERROR_SHIFT                       1                                                   /*!< I2C0_S2: ERROR Position                 */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */
