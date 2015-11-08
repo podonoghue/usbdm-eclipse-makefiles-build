@@ -75,8 +75,8 @@
          </projectOption>
          <createFolder target="startup" />
          <copy source="startup/newlib_stubs.c" target="startup/newlib_stubs.c" />
-         <copy source="usbdm_kds_path/platform/devices/startup.c"                                    target="startup/startup.c"                 type="link" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/platform/devices/startup.h"                                    target="startup/startup.h"                 type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/startup.c"                                            target="startup/startup.c"                 type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/platform/devices/startup.h"                                            target="startup/startup.h"                 type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/gcc/startup_&MDEVICE_NAME;.S"  target="startup/startup_&MDEVICE_NAME;.S"  type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/system_&MDEVICE_NAME;.c"       target="startup/system_&MDEVICE_NAME;.c"   type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/platform/devices/&MDEVICE_NAME;/startup/system_&MDEVICE_NAME;.h"       target="startup/system_&MDEVICE_NAME;.h"   type="link" sourcePathType="absolute" />
