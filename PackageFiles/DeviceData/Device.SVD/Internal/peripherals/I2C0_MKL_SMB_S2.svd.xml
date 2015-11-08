@@ -1,23 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKL03Z4
-      MKL04Z4
-      MKL05Z4
-      MKL14Z4
-      MKL15Z4
-      MKL16Z4
-      MKL24Z4
-      MKL25Z4
-      MKL26Z4
-      MKL27Z4
-      MKL27Z256M4
-      MKL34Z4
-      MKL36Z4
-      MKL46Z4
-      MKV10Z7
+      MKL43Z4
 -->
       <peripheral>
-         <?sourceFile "I2C0_MKL_SMB" ?>
+         <?sourceFile "I2C0_MKL_SMB_S2" ?>
          <name>I2C0</name>
          <description>Inter-Integrated Circuit</description>
          <groupName>I2C</groupName>
@@ -31,7 +17,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0xC</size>
+            <size>0xD</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -844,6 +830,51 @@ This field is used on the device default address or other related addresses</des
                      <name>SSLT</name>
                      <description>Least significant byte of SCL low timeout value that determines the timeout period of SCL low</description>
                      <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>S2</name>
+               <description>Status register 2</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EMPTY</name>
+                     <description>Indicates if the Tx or Rx buffer is empty</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not Empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERROR</name>
+                     <description>Indicates if there are read or write errors with the Tx and Rx buffers</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Errors</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Errors</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
