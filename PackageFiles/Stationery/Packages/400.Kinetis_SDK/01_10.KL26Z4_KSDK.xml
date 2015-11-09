@@ -3,7 +3,6 @@
 [
 <!ENTITY DEVICE_NAME       "KL26Z4">
 <!ENTITY MQX_DEVICE        "mkl26z128m">
-<!ENTITY LINKER_FILE_NAME  "MKL26Z128xxx4_flash.ld">
 <!ENTITY CPU_NAME          "CPU_MKL26Z128VLH4">
 
 <!-- Derived -->
@@ -29,6 +28,19 @@
          </applyWhen>
          <constant id="kdsTargetName"  value="&DEVICE_NAME;"/>
          <constant id="mqxTargetName"  value="&MQX_DEVICE;" />
+         
+         <!-- linker setup for each OS -->
+         <constant id="bmStackSize"       value="0x1000" />
+         <constant id="bmHeapSize"        value="0x1A00" />
+         <constant id="freertosStackSize" value="0x1000" />
+         <constant id="freertosHeapSize"  value="0x1A00" />
+         <constant id="mqxStackSize"      value="0x1000" />
+         <constant id="mqxHeapSize"       value="0x1A00" />
+         <constant id="ucosiiStackSize"   value="0x1000" />
+         <constant id="ucosiiHeapSize"    value="0x0400" />
+         <constant id="ucosiiiStackSize"  value="0x1000" />
+         <constant id="ucosiiiHeapSize"   value="0x0400" />
+
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${usbdm_kds_path}/platform/devices/&MDEVICE_NAME;/startup&quot;</value>
@@ -52,16 +64,6 @@
          <!-- CPP Linker User objects -->
          <projectOption id="gnu.cpp.link.option.userobjs" config="release">
             <value>&quot;${workspace_loc:/ksdk_lib_&DEVICE_NAME;_$(kdsOperatingSystem)_usbdm/Release/libksdk_&DEVICE_NAME;.a}&quot;</value>
-         </projectOption>
-         <!-- C Link options -->
-         <projectOption id="gnu.c.link.option.other">
-            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
-            <value>&quot;--defsym=__heap_size__=0x2000&quot;</value>
-         </projectOption>
-         <!-- C++ Link options -->
-         <projectOption id="gnu.cpp.link.option.other">
-            <value>&quot;--defsym=__stack_size__=0x2000&quot;</value>
-            <value>&quot;--defsym=__heap_size__=0x2000&quot;</value>
          </projectOption>
          <!-- C Defines -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">

@@ -5,17 +5,17 @@
 This file lists all the devices KSDK supports 
 -->
 <root version="1.0">
-   <!-- Freescale Kinetis SDK - CPU name, also enable KDS options -->
+   <!-- Freescale Kinetis SDK - CPU name, also enables KDS options -->
    <projectActionList id="Kinetis-KSDK-devices" >
       <projectActionList><applyWhen><deviceNameIs>MKL02Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z8VFG4" />    </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL02Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z16VFG4" />   </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL02Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z32VFG4" />   </projectActionList>
-      <projectActionList><applyWhen><deviceNameIs>FRDM_KL02Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z32VFM4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL02Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL02Z32VFM4" />   </projectActionList>
                                                                                          
       <projectActionList><applyWhen><deviceNameIs>MKL03Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z8VFG4" />    </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL03Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z16VFG4" />   </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL03Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z32CAF4" />   </projectActionList>
-      <projectActionList><applyWhen><deviceNameIs>FRDM_KL03Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z32VFK4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL03Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL03Z32VFK4" />   </projectActionList>
                                                                                          
       <projectActionList><applyWhen><deviceNameIs>MKL04Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL04Z8VFK4" />    </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL04Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL04Z16VFK4" />   </projectActionList>
@@ -24,7 +24,7 @@ This file lists all the devices KSDK supports
       <projectActionList><applyWhen><deviceNameIs>MKL05Z8M4</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z8VFK4" />    </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL05Z16M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z16VFK4" />   </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL05Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z32VFK4" />   </projectActionList>
-      <projectActionList><applyWhen><deviceNameIs>FRDM_KL05Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z32VFK4" />  </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_KL05Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL05Z32VFK4" />   </projectActionList>
                                                                                          
       <projectActionList><applyWhen><deviceNameIs>MKL25Z32M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z32VFM4" />   </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>MKL25Z64M4</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL25Z64VFM4" />   </projectActionList>

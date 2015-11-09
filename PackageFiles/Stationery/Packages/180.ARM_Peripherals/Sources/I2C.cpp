@@ -337,7 +337,10 @@ void I2C::busHangReset() {
    }
 }
 
-#if defined(I2C0) && defined(I2C0_SCL_GPIO) && defined(I2C0_SDA_GPIO)
+#ifdef I2C0
+#if !defined(I2C0_SCL_GPIO) || !defined(I2C0_SDA_GPIO)
+#warning "Warning I2C0 present but disabled. Check pin mapping for I2C0_SCL & I2C0_SDA in pin_mapping.h"
+#else
 /*
  * =========================================================================================
  * I2C_0
@@ -373,9 +376,13 @@ void I2C_0::init() {
       NVIC_EnableIRQ(I2C0_IRQn);
    }
 }
-#endif
+#endif // !defined(I2C0_SCL_GPIO) || !defined(I2C0_SDA_GPIO)
+#endif // I2C0
 
-#if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
+#ifdef I2C1
+#if !defined(I2C1_SCL_GPIO) || !defined(I2C1_SDA_GPIO)
+#warning "Warning I2C1 present but disabled. Check pin mapping for I2C1_SCL & I2C1_SDA in pin_mapping.h"
+#else
 /*
  * =========================================================================================
  * I2C_1
@@ -411,10 +418,13 @@ void I2C_1::init() {
       NVIC_EnableIRQ(I2C1_IRQn);
    }
 }
+#endif // !defined(I2C1_SCL_GPIO) || !defined(I2C1_SDA_GPIO)
+#endif // I2C1
 
-#endif
-
-#if defined(I2C2) && defined(I2C2_SCL_GPIO) && defined(I2C2_SDA_GPIO)
+#ifdef I2C2
+#if !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
+#warning "Warning I2C2 present but disabled. Check pin mapping for I2C2_SCL & I2C2_SDA in pin_mapping.h"
+#else
 /*
  * =========================================================================================
  * I2C_2
@@ -441,5 +451,5 @@ void I2C_2::init() {
       NVIC_EnableIRQ(I2C2_IRQn);
    }
 }
-
-#endif
+#endif // !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
+#endif // I2C2

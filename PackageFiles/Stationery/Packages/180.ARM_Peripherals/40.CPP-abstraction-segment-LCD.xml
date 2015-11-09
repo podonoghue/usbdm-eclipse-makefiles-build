@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+>
+
+<root version="1.0">
+   <projectActionList id="CPP-abstraction-segment-lcd">
+      <applyWhen>
+         <and>
+            <variableRef idRef="demo.cpp.peripheral.segment-lcd" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-segment-lcd"
+            name="Segment LCD" 
+            description="Adds an CPP interface for the onboard segment LCD" 
+            checkGroup="group-peripheral-options" >
+         </variable>
+   
+         <!-- MKL43Z4 segment LCD CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <and>
+                     <deviceSubfamilyIs>MKL43Z4</deviceSubfamilyIs>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-segment-lcd" />
+                  </and>
+               </applyWhen>
+               <createFolder target="Snippets" />
+               <excludeSourceFolder target="Snippets" />
+               <copy source="Snippets/segment-lcd-example.cpp"   target="Snippets/segment-lcd-example.cpp" />
+               <copy source="Project_Headers/Segment_LCD.h"      target="Project_Headers/Segment_LCD.h" />
+               <copy source="Sources/Segment_LCD-MKL43Z4.c"      target="Sources/Segment_LCD.c" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MKL46Z4 segment LCD CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <and>
+                     <deviceSubfamilyIs>MKL46Z4</deviceSubfamilyIs>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-segment-lcd" />
+                  </and>
+               </applyWhen>
+               <createFolder target="Snippets" />
+               <excludeSourceFolder target="Snippets" />
+               <copy source="Snippets/segment-lcd-example.cpp"   target="Snippets/segment-lcd-example.cpp" />
+               <copy source="Project_Headers/Segment_LCD.h"      target="Project_Headers/Segment_LCD.h" />
+               <copy source="Sources/Segment_LCD-MKL46Z4.c"      target="Sources/Segment_LCD.c" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+   </projectActionList>
+</root>

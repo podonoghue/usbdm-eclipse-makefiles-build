@@ -5,16 +5,11 @@
    <projectActionList id="CPP-abstraction-PIT" >
       <applyWhen>
          <and>
-            <or>
-               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
-               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
-            </or>
             <variableRef idRef="demo.cpp.peripheral.pit" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
+
       <projectActionList>
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
@@ -28,7 +23,7 @@
          <!-- MK PIT CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
-               <applyWhen >
+               <applyWhen>
                   <and>
                      <or>
                         <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
@@ -50,7 +45,7 @@
          <!-- MKL PIT CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
-               <applyWhen >
+               <applyWhen>
                   <and>
                      <or>
                         <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
@@ -92,5 +87,5 @@
             </projectActionList>
          </projectActionList>
       </projectActionList>
-    </projectActionList>
+   </projectActionList>
 </root>

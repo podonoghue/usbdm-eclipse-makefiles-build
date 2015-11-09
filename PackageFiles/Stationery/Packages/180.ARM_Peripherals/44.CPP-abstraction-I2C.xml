@@ -15,20 +15,21 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
+
       <projectActionList>
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
          <variable id="projectOptionValue.CPP-abstraction-I2C" 
             name="I2C interface" 
-            description="Adds a CPP abstraction layer for I2C hardware" 
+            description="Adds a CPP interface for the I2C hardware" 
             checkGroup="group-peripheral-options" >
          </variable>
    
          <!-- I2C CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
-               <applyWhen >
+               <applyWhen>
                   <variableRef idRef="projectOptionValue.CPP-abstraction-I2C" />
                </applyWhen>
                <copy source="Project_Headers/I2C.h"        target="Project_Headers/I2C.h" />
@@ -36,5 +37,5 @@
             </projectActionList>
          </projectActionList>
       </projectActionList>
-    </projectActionList>
+   </projectActionList>
 </root>

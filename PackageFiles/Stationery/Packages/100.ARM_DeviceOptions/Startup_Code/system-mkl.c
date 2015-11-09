@@ -21,7 +21,9 @@ void SystemCoreClockUpdate(void) {
 
 /* This is overridden if actual clock code is provided */
 __attribute__((__weak__))
-uint32_t SystemBusClock = 8000000;
+uint32_t SystemBusClock  = 8000000;
+__attribute__((__weak__))
+uint32_t SystemCoreClock = 4000000;
 
 /* Actual Vector table */
 extern int const __vector_table[];

@@ -4,13 +4,15 @@
 <root version="1.0">
    <projectActionList id="abstraction-simple-delay">
       <applyWhen>
-         <variableRef idRef="outputType" condition="matches"
-            value=".*ProjectType\.exe$" />
+         <and>
+            <variableRef idRef="outputType" condition="matches"  value=".*ProjectType\.exe$" />
+            <not><variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue"/></not>
+            <not><variableRef idRef="projectOptionValue.Kinetis-PE"         condition="isTrue"/></not>
+         </and>
       </applyWhen>
 
       <variable id="projectOptionValue.abstraction-simple-delay"
-         name="Timer" description="Adds a simple timer" checkGroup="group-peripheral-options" />
-
+         name="Timer" description="Adds a simple delay timer" checkGroup="group-peripheral-options" />
       <projectActionList>
          <applyWhen>
             <and>

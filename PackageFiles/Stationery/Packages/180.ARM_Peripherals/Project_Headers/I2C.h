@@ -176,11 +176,7 @@ protected:
    friend void I2C3_IRQHandler(void);
 };
 
-#ifdef I2C0
-#if !defined(I2C0_SCL_GPIO) || !defined(I2C0_SDA_GPIO)
-#warning "Warning I2C0 disabled. Check pin mapping for I2C0_SCL & I2C0_SDA in pin_mapping.h"
-#else
-
+#if defined(I2C0) && defined(I2C0_SCL_GPIO) && defined(I2C0_SDA_GPIO)
 /**
  * I2C0 interface
  */
@@ -208,14 +204,9 @@ private:
    friend void I2C0_IRQHandler(void);
    static I2C* thisPtr;      // This pointer for class instance associated with I2C0
 };
-#endif // !defined(I2C0_SCL_GPIO) ||!defined(I2C0_SDA_GPIO)
-#endif // I2C0
+#endif // defined(I2C0) && defined(I2C0_SCL_GPIO) && defined(I2C0_SDA_GPIO)
 
-#ifdef I2C1
-#if !defined(I2C1_SCL_GPIO) ||!defined(I2C1_SDA_GPIO)
-#warning "Warning I2C1 disabled. Check pin mapping for I2C1_SCL & I2C1_SDA in pin_mapping.h"
-#else
-
+#if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
 /**
  * I2C1 interface
  */
@@ -243,13 +234,9 @@ private:
    static I2C* thisPtr;      // This pointer for class instance associated with I2S1
    friend void I2C1_IRQHandler(void);
 };
-#endif // !defined(I2C1_SCL_GPIO) ||!defined(I2C1_SDA_GPIO)
-#endif // I2C1
+#endif // defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
 
-#ifdef I2C2
-#if !defined(I2C2_SCL_GPIO) ||!defined(I2C2_SDA_GPIO)
-#warning "Warning I2C2 disabled. Check pin mapping for I2C1_SCL & I2C1_SDA in pin_mapping.h"
-#else
+#if defined(I2C2) && defined(I2C2_SCL_GPIO) && defined(I2C2_SDA_GPIO)
 /**
  * I2C2 interface
  */
@@ -275,8 +262,7 @@ private:
    static I2C* thisPtr;      // This pointer for class instance associated with I2S2
    friend void I2C2_IRQHandler(void);
 };
-#endif // !defined(I2C2_SCL_GPIO) ||!defined(I2C2_SDA_GPIO)
-#endif // I2C2
+#endif // defined(I2C2) && defined(I2C2_SCL_GPIO) || defined(I2C2_SDA_GPIO)
 
 /**
  * @}
