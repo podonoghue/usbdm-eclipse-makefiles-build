@@ -1,6 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MKL27Z4
+      MKL27Z644
 -->
       <peripheral>
          <?sourceFile "USB0_CLK_RECOVER_2" ?>

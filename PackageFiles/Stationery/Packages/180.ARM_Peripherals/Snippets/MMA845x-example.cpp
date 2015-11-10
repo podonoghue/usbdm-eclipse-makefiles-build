@@ -12,11 +12,15 @@
  */
 
 int main() {
+   printf("Starting\n");
+
    // Instantiate interface
    I2C *i2c = new $(demo.cpp.accelerometer.i2c)();
    MMA845x *accelerometer = new MMA845x(i2c, MMA845x::MMA45x_2Gmode);
+
    uint8_t id = accelerometer->readID();
    printf("Accelerometer ID = 0x%02X (should be 0x1A)\n", id);
+
    int status;
    int16_t accelX,accelY,accelZ;
    for(;;) {

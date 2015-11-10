@@ -69,6 +69,14 @@
          Execute="immediate"/>
       <CustomAction Id="Ca.MergeHCS12Command_V5_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
+      <!-- Patch HCS12 Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateHCS12MergeCommand_V5_a_$(var.CW_Ver)"
+         Property="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MM912*.xml &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "
+         Execute="immediate"/>
+      <CustomAction Id="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
       <!-- Unpatch HCS12 Wizard XLM-->
       <CustomAction
          Id="Ca.CreateHCS12UnMergeCommand_V5_$(var.CW_Ver)"
@@ -77,14 +85,26 @@
          Execute="immediate"/>
       <CustomAction Id="Ca.UnMergeHCS12Command_V5_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
+      <!-- Unpatch HCS12 Wizard XLM-->
+      <CustomAction
+         Id="Ca.CreateHCS12UnMergeCommand_V5_a_$(var.CW_Ver)"
+         Property="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MM912*.xml.original"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
       <InstallExecuteSequence>
           <!-- These actions set Properties used by later actions -->
           <Custom Action="Ca.CreateHCS12MergeCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
           <Custom Action="Ca.CreateHCS12UnMergeCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.CreateHCS12MergeCommand_V5_a_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.CreateHCS12UnMergeCommand_V5_a_$(var.CW_Ver)" After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
 
           <!-- These actions patch or restore the various Codewarrior XML files -->
           <Custom Action="Ca.MergeHCS12Command_V5_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
           <Custom Action="Ca.UnMergeHCS12Command_V5_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"         After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)"       Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
       </InstallExecuteSequence>
 
       <!--======================================================
@@ -133,6 +153,20 @@
          </Component>
       </DirectoryRef>
 
+      <!-- Patch HCS12 Codewarrior shortcut -->
+      <DirectoryRef Id="D.ProgramMenuPatchDir">
+         <Component Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' Guid='*'>
+            <Shortcut Id="Sc.PatchCW_HCS12_V5_a_$(var.CW_Ver)" 
+               Name = "Modify CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (MM912)"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Adds TBDML targets to CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (9S12 targets)"
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MM912*.xml&quot; &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "/>
+            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' Value="" KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+
       <!--======================================================
             Features
       =======================================================-->
@@ -149,6 +183,7 @@
          <ComponentRef Id='C.CWS12_X_V5_$(var.CW_Ver).Files' />
          <ComponentGroupRef Id='Cg.PatchCodewarriorWizardsCommon' />
          <ComponentRef Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_$(var.CW_Ver)' />
+         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' />
       </Feature>
 
    </Fragment>

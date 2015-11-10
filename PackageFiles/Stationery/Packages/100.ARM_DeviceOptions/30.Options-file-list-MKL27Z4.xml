@@ -7,8 +7,8 @@
       <applyWhen>
          <and>
             <or>
+               <deviceSubfamilyIs>MKL27Z644</deviceSubfamilyIs>
                <deviceSubfamilyIs>MKL27Z4</deviceSubfamilyIs>
-               <deviceSubfamilyIs>MKL27Z256M4</deviceSubfamilyIs>
             </or>
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>

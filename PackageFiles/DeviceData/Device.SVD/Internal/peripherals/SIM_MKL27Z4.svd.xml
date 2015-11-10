@@ -16,7 +16,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -126,6 +126,121 @@ Selects the 32 kHz clock source (ERCLK32K) for Segment LCD, RTC and LPTMR</descr
                            <name>0b11</name>
                            <description>Internal 1kHz Low power oscillator (LPO)</description>
                            <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USBVSTBY</name>
+                     <description>USB voltage regulator in standby mode during VLPR and VLPW modes</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>USB voltage regulator not in standby during VLPR and VLPW modes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>USB voltage regulator in standby during VLPR and VLPW modes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USBSSTBY</name>
+                     <description>USB voltage regulator in standby mode during Stop, VLPS, LLS and VLLS modes</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>USB voltage regulator not in standby during Stop, VLPS, LLS and VLLS modes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>USB voltage regulator in standby during Stop, VLPS, LLS and VLLS modes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USBREGEN</name>
+                     <description>USB voltage regulator enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>USB voltage regulator is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>USB voltage regulator is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOPT1CFG</name>
+               <description>SOPT1 Configuration Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>URWE</name>
+                     <description>USB voltage regulator enable write enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SOPT1 USBREGEN cannot be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SOPT1 USBREGEN can be written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UVSWE</name>
+                     <description>USB voltage regulator VLP standby write enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SOPT1 USBVSTB cannot be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SOPT1 USBVSTB can be written</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USSWE</name>
+                     <description>USB voltage regulator stop standby write enable</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SOPT1 USBSSTB cannot be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SOPT1 USBSSTB can be written</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1354,6 +1469,25 @@ Controls the clock gate to the DMA Mux module</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>I2S</name>
+                     <description>I2S Clock Gate Control
+This bit controls the clock gate to the I2S module</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>PIT</name>
                      <description>PIT Clock Gate Control
 This bit controls the clock gate to the PIT module</description>
@@ -1463,6 +1597,25 @@ Controls software access and interrupts to the RTC module</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Access and interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DAC0</name>
+                     <description>DAC0 Clock Gate Control
+This bit controls the clock gate to the DAC0 module</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

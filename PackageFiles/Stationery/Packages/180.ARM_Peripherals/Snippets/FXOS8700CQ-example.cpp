@@ -12,6 +12,8 @@
  */
 
 int main() {
+   printf("Starting\n");
+
    // Instantiate interface
    I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
    FXOS8700CQ *accelerometer = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);

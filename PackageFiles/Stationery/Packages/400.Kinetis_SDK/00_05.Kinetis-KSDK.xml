@@ -114,8 +114,8 @@
          <!-- Remove unused Linker -->
          <!-- deleteResource target="Project_Settings/Linker_Files" / -->
          <createFolder target="doc" />
-         <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_API_Reference_Manual.html"                             target="doc/Kinetis SDK API Reference Manual.html"                                  type="link" sourcePathType="absolute" />
-         <copy source="usbdm_kds_path/doc/Kinetis_SDK_v.1.2.0_Demo_Applications_User_s_Guide.html"                   target="doc/Kinetis SDK Demo Applications User's Guide.html"                        type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/Kinetis SDK v.1.3.0 API Reference Manual/index.html"                       target="doc/Kinetis SDK API Reference Manual.html"                                  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/doc/Kinetis SDK v.1.3.0 Demo Applications User's Guide.html"                   target="doc/Kinetis SDK Demo Applications User's Guide.html"                        type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Integration of the USB Stack and Kinetis SDK.pdf"                      target="doc/Integration of the USB Stack and Kinetis SDK.pdf"                       type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"  target="doc/Freescale KSDK USB Stack Developing New Application User's Guide.pdf"   type="link" sourcePathType="absolute" />
          <copy source="usbdm_kds_path/doc/usb/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"        target="doc/Freescale KSDK USB Stack Porting New Platform User's Guide.pdf"         type="link" sourcePathType="absolute" />

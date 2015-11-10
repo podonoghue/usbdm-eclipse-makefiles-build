@@ -12,12 +12,16 @@
  */
 
 int main() {
+   printf("Starting\n");
+
    // Instantiate interface
    I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
    HMC5883L *compass = new HMC5883L(i2c);
+   compass->setGain(1);
+
    uint32_t id = compass->readID();
    printf("Compass ID = 0x%6lX (should be 0x483433)\n", id);
-   compass->setGain(1);
+
    int16_t compassX,compassY,compassZ;
    for(;;) {
       compass->doMeasurement(&compassX, &compassY, &compassZ);

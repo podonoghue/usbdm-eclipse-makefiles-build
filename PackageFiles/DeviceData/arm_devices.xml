@@ -29,6 +29,7 @@ FTMRE - MKE04, MKE06
  -->
 <!-- 
 ToDo - review flash block sizes for MK20-MK70
+      V4.12.1.40   - Renames families (to MKL27Z4, MKL27Z644)
       V4.11.1.70   - Added disable NMI to FTMRH, FTMRE, MKM-FTFA (MKE, MKM family)
       V4.11.1.20   - Added MK22FN128M10
       V4.10.6.260  - Added MK24, various corrections
@@ -1176,7 +1177,7 @@ NOTES:
       </device>
       
 <!-- MKL27Z4 -->
-      <device name="MKL27Z32M4"  family="CortexM0plus" subfamily="MKL27Z4">
+      <device name="MKL27Z32M4"  family="CortexM0plus" subfamily="MKL27Z644">
          <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1186,7 +1187,7 @@ NOTES:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KL27P64M48SF2RM</note>
       </device>
-      <device name="MKL27Z64M4"  family="CortexM0plus" subfamily="MKL27Z4">
+      <device name="MKL27Z64M4"  family="CortexM0plus" subfamily="MKL27Z644">
          <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1197,7 +1198,7 @@ NOTES:
          <note>KL27P64M48SF2RM</note>
       </device>
 <!-- MKL27Z256M4 -->
-      <device name="MKL27Z128M4" family="CortexM0plus" subfamily="MKL27Z256M4">
+      <device name="MKL27Z128M4" family="CortexM0plus" subfamily="MKL27Z4">
          <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
@@ -1208,7 +1209,7 @@ NOTES:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KL27P64M48SF6RM</note>
       </device>
-      <device name="MKL27Z256M4" family="CortexM0plus" subfamily="MKL27Z256M4">
+      <device name="MKL27Z256M4" family="CortexM0plus" subfamily="MKL27Z4">
          <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />

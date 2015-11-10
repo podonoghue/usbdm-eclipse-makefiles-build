@@ -268,6 +268,13 @@ void I2C::poll() {
          }
 #endif
          // Send device address again with READ bit set
+#if defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL43Z4)
+         // This is a nasty hack
+         // It seems these chips need a delay after asserting repeated start
+         for (int i=0; i<20; i++) {
+            __asm__ volatile("nop");
+         }
+#endif
          i2c->D = addressedDevice|1;
          break;
 
