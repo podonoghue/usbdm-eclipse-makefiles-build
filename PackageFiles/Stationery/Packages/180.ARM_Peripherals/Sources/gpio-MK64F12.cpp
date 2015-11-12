@@ -270,17 +270,17 @@ const PwmIO  pwmIO_FTM1_CH0  = {{&PORTB->PCR[0],   PORTB_CLOCK_MASK},(volatile F
 #if (PTB1_SIG_SEL == 3)
 const PwmIO  pwmIO_FTM1_CH1  = {{&PORTB->PCR[1],   PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM1,   1,    PORT_PCR_MUX(3),&FTM1_CLOCK_REG,    FTM1_CLOCK_MASK, FTM1_SC};
 #endif
-#if (PTB12_SIG_SEL == 4)
-const PwmIO  pwmIO_FTM0_CH4  = {{&PORTB->PCR[12],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM0,   4,    PORT_PCR_MUX(4),&FTM0_CLOCK_REG,    FTM0_CLOCK_MASK, FTM0_SC};
-#endif
 #if (PTB12_SIG_SEL == 3)
 const PwmIO  pwmIO_FTM1_CH0  = {{&PORTB->PCR[12],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM1,   0,    PORT_PCR_MUX(3),&FTM1_CLOCK_REG,    FTM1_CLOCK_MASK, FTM1_SC};
 #endif
-#if (PTB13_SIG_SEL == 4)
-const PwmIO  pwmIO_FTM0_CH5  = {{&PORTB->PCR[13],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM0,   5,    PORT_PCR_MUX(4),&FTM0_CLOCK_REG,    FTM0_CLOCK_MASK, FTM0_SC};
+#if (PTB12_SIG_SEL == 4)
+const PwmIO  pwmIO_FTM0_CH4  = {{&PORTB->PCR[12],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM0,   4,    PORT_PCR_MUX(4),&FTM0_CLOCK_REG,    FTM0_CLOCK_MASK, FTM0_SC};
 #endif
 #if (PTB13_SIG_SEL == 3)
 const PwmIO  pwmIO_FTM1_CH1  = {{&PORTB->PCR[13],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM1,   1,    PORT_PCR_MUX(3),&FTM1_CLOCK_REG,    FTM1_CLOCK_MASK, FTM1_SC};
+#endif
+#if (PTB13_SIG_SEL == 4)
+const PwmIO  pwmIO_FTM0_CH5  = {{&PORTB->PCR[13],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM0,   5,    PORT_PCR_MUX(4),&FTM0_CLOCK_REG,    FTM0_CLOCK_MASK, FTM0_SC};
 #endif
 #if (PTB18_SIG_SEL == 3)
 const PwmIO  pwmIO_FTM2_CH0  = {{&PORTB->PCR[18],  PORTB_CLOCK_MASK},(volatile FTM_Type*)FTM2,   0,    PORT_PCR_MUX(3),&FTM2_CLOCK_REG,    FTM2_CLOCK_MASK, FTM2_SC};

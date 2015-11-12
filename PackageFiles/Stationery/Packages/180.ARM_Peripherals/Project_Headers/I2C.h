@@ -27,15 +27,25 @@
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  I2C *i2c0 = new I2C_0();
+ *  I2C *i2c = new I2C_1();
  *
- *  // Transmit message
- *  uint8_t command[] = {1,2,3,4};
- *  i2c0->transmit(deviceAddress, command, sizeof(command));
+ *  // Transmit data
+ *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
+ *  // Reception buffer
+ *  uint8_t rxDataBuffer[5];
  *
- *  // Receive message
- *  uint8_t buffer[20];
- *  i2c0->receive(deviceAddress, buffer, sizeof(buffer));
+ *  for(;;) {
+ *     // Transmit block
+ *     i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
+ *     waitUS(40);
+ *     // Receive block
+ *     i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
+ *     waitUS(40);
+ *     // Transmit block followed by read block (using repeated-start)
+ *     // Note rxDataBuffer may be the same as txDataBuffer
+ *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
+ *     waitMS(5);
+ *  }
  *
  *  @endcode
  */
@@ -53,26 +63,51 @@ public:
    /**
     * States for the I2C state machine
     */
-   enum i2cState { i2c_idle, i2c_txAddr, i2c_rxAddr, i2c_rxAddr2, i2c_txRegAddr, i2c_rxRegAddr, i2c_txData, i2c_rxData };
+   enum i2cState { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
 
    /**
     * Transmit message
     *
-    * @param address  Address to transmit to
-    * @param data     Date to transmit
-    * @param size     Size of data
-    *
+    * @param address  Address of slave to communicate with
+    * @param data     Data to transmit, 0th byte is often register address
+    * @param size     Size of transmission data
     */
    int transmit(uint8_t address, const uint8_t data[], int size);
+
    /**
     * Receive message
     *
-    * @param address  Address to receive from
-    * @param data     Date buffer for reception
-    * @param size     Size of data buffer
-    *
+    * @param address  Address of slave to communicate with
+    * @param data     Data buffer for reception
+    * @param size     Size of reception data
     */
    int receive(uint8_t address,  uint8_t data[], int size);
+
+   /**
+    * Transmit message followed by receive message.
+    * Uses repeated-start.
+    *
+    * @param address  Address of slave to communicate with
+    * @param txData   Data for transmission
+    * @param txSize   Size of transmission data
+    * @param rxData   Date buffer for reception
+    * @param txSize   Size of reception data
+    */
+   int txRx(uint8_t address, const uint8_t txData[], int txSize, uint8_t rxData[], int rxSize );
+
+   /**
+    * Transmit message followed by receive message.
+    * Uses repeated-start.
+    * Uses shared transmit and receive buffer
+    *
+    * @param address  Address of slave to communicate with
+    * @param data     Data for transmission and reception
+    * @param txSize   Size of transmission data
+    * @param txSize   Size of reception data
+    */
+   int txRx(uint8_t address, uint8_t data[], int txSize, int rxSize ) {
+      return txRx(address, data, txSize, data, rxSize);
+   }
 
 protected:
    uint8_t             myAddress;           //!< Address of this device (operating as slave)
@@ -81,8 +116,10 @@ protected:
    const DigitalIO    *scl;                 //!< I2C Clock port
    const DigitalIO    *sda;                 //!< I2C Data port
    i2cState            state;               //!< State of current transaction
-   int                 dataBytesRemaining;  //!< Number of bytes remaining in current transaction
-   uint8_t            *dataPtr;             //!< Pointer to data for current transaction
+   int                 rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
+   int                 txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
+   uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
+   const uint8_t      *txDataPtr;           //!< Pointer to transmit data for current transaction
    uint8_t             addressedDevice;     //!< Address of device being communicated with
    int                 errorCode;           //!< Error code from last transaction
 
@@ -105,41 +142,14 @@ protected:
     * Wait for current sequence to complete
     */
    void waitWhileBusy(void);
+
    /**
-    * Start TxRx sequence
-    *
-    * Sets up data pointer and size
-    * Starts transmission of the address byte
+    * Start Rx/Tx sequence by sending address byte
     *
     * @param address - address of slave to access
-    * @param data    - data in/out buffer
-    * @param size    - size of buffer to transfer
     */
-   void startTxRx(uint8_t address, uint8_t data[], int size);
-   /**
-    * Start Tx sequence
-    *
-    * Sets mode = i2c_txAddr
-    * Sets up data pointer and size
-    * Starts transmission of the address byte
-    *
-    * @param address - address of slave to access
-    * @param data    - data in/out buffer
-    * @param size    - size of buffer to transfer
-    */
-   void startTransmit(uint8_t address, const uint8_t data[], int size);
-    /**
-     * Start Rx sequence
-     *
-     * Sets mode = i2c_rxAddr
-     * Sets up data pointer and size
-     * Starts transmission of the address byte
-     *
-     * @param address - address of slave to access
-     * @param data    - data in/out buffer
-     * @param size    - size of buffer to transfer
-     */
-   void startReceive(uint8_t address, uint8_t data[], int size);
+   void sendAddress(uint8_t address);
+
    /**
     * Set baud factor value for interface
     * This is calculated from processor bus frequency and given bps

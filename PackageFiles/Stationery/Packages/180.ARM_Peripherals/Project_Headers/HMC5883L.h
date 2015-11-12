@@ -39,14 +39,14 @@
  */
 class HMC5883L {
 
-#define HMC5883L_CRA_MA(x) (((x)&0x3)<<5)    // # averages - 00=>1, 01=>2, 10=>4, 11=>8
-#define HMC5883L_CRA_DO(x) (((x)&0x7)<<2)    // Data output rate (0.75, 1.5, 3, 7.5, 15, 30, 75) Hz
-#define HMC5883L_CRA_MS(x) (((x)&0x3)<<0)    // Measurement configuration bits (Normal, +ve bias, -ve bias)
+#define HMC5883L_CRA_MA(x)    (((x)&0x3)<<5)    // # averages - 00=>1, 01=>2, 10=>4, 11=>8
+#define HMC5883L_CRA_DO(x)    (((x)&0x7)<<2)    // Data output rate (0.75, 1.5, 3, 7.5, 15, 30, 75) Hz
+#define HMC5883L_CRA_MS(x)    (((x)&0x3)<<0)    // Measurement configuration bits (Normal, +ve bias, -ve bias)
 
-#define HMC5883L_CRB_GN(x) (((x)&0x7)<<5)    // Gain (0.88, 1.3, 1.9, 2.5, 4.0, 4.7, 5.6, 8.1) Gauss
+#define HMC5883L_CRB_GN(x)    (((x)&0x7)<<5)    // Gain (0.88, 1.3, 1.9, 2.5, 4.0, 4.7, 5.6, 8.1) Gauss
 
-#define HMC5883L_MR_MD(x)  (((x)&0x3)<<0)    // Mode (00=>continuous, 01=>single, 10,11=>idle)
-#define HMC5883L_MR_DONE   (1<<7)            // Set to 1 internally after each single-measurement operation. Set to 0 when configuring mode register.
+#define HMC5883L_MR_MD(x)     (((x)&0x3)<<0)    // Mode (00=>continuous, 01=>single, 10, 11=>idle)
+#define HMC5883L_MR_HS_MASK   (1<<7)            // Set this pin to enable High Speed I2C, 3400kHz..
 
 #define HMC5883L_SR_LOCK   (1<<1)   // Register values are locked when:
    //                               //  1. some, but not all of, the six data output registers have been read,
@@ -116,6 +116,8 @@ public:
     * @param z - Z intensity
     */
    void doMeasurement(int16_t *x, int16_t *y, int16_t *z);
+
+   void calibrate();
 
 };
 

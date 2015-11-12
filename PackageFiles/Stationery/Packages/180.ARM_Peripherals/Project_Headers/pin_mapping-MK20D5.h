@@ -130,6 +130,24 @@
 //     <-3=> ADC0_SE23/CMP1_IN3 (fixed)<selection=ADC0_SE23_PIN_SEL,ADC0_SE23><selection=CMP1_IN3_PIN_SEL,ADC0_SE23>
 #define ADC0_SE23_SIG_SEL    -3
 
+// Signal mapping for EXTAL32 pin
+//   <o> EXTAL32 [EXTAL32]<name=EXTAL32_SIG_SEL><constant>
+//   <i> EXTAL32 has no pin-mapping hardware
+//     <-3=> EXTAL32 (fixed)<selection=EXTAL32_PIN_SEL,EXTAL32>
+#define EXTAL32_SIG_SEL      -3
+
+// Signal mapping for RESET_b pin
+//   <o> RESET_b [Disabled]<name=RESET_b_SIG_SEL><constant>
+//   <i> RESET_b has no pin-mapping hardware
+//     <-2=> Disabled (fixed)
+#define RESET_b_SIG_SEL      -2
+
+// Signal mapping for VREF_OUT pin
+//   <o> VREF_OUT [VREF_OUT/CMP1_IN5/CMP0_IN5]<name=VREF_OUT_SIG_SEL><constant>
+//   <i> VREF_OUT has no pin-mapping hardware
+//     <-3=> VREF_OUT/CMP1_IN5/CMP0_IN5 (fixed)<selection=VREF_OUT_PIN_SEL,VREF_OUT><selection=CMP1_IN5_PIN_SEL,VREF_OUT><selection=CMP0_IN5_PIN_SEL,VREF_OUT>
+#define VREF_OUT_SIG_SEL     -3
+
 // </h>
 
 // <h> Port A Pins
@@ -305,7 +323,7 @@
 // Signal mapping for PTB16 pin
 //   <o> PTB16 [TSI0_CH9, GPIOB_16, UART0_RX, EWM_IN]<name=PTB16_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB16 pin
-//     <-2=> GPIOB_16 (reset default)<selection=GPIOB_16_PIN_SEL,PTB16 (reset default)>
+//     <-2=> TSI0_CH9 (reset default)<selection=TSI0_CH9_PIN_SEL,PTB16 (reset default)>
 //     <0=> TSI0_CH9<selection=TSI0_CH9_PIN_SEL,PTB16>
 //     <1=> GPIOB_16<selection=GPIOB_16_PIN_SEL,PTB16>
 //     <3=> UART0_RX<selection=UART0_RX_PIN_SEL,PTB16>
@@ -316,7 +334,7 @@
 // Signal mapping for PTB17 pin
 //   <o> PTB17 [TSI0_CH10, GPIOB_17, UART0_TX, EWM_OUT_b]<name=PTB17_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB17 pin
-//     <-2=> GPIOB_17 (reset default)<selection=GPIOB_17_PIN_SEL,PTB17 (reset default)>
+//     <-2=> TSI0_CH10 (reset default)<selection=TSI0_CH10_PIN_SEL,PTB17 (reset default)>
 //     <0=> TSI0_CH10<selection=TSI0_CH10_PIN_SEL,PTB17>
 //     <1=> GPIOB_17<selection=GPIOB_17_PIN_SEL,PTB17>
 //     <3=> UART0_TX<selection=UART0_TX_PIN_SEL,PTB17>
@@ -327,7 +345,7 @@
 // Signal mapping for PTB18 pin
 //   <o> PTB18 [TSI0_CH11, GPIOB_18, I2S0_TX_BCLK]<name=PTB18_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB18 pin
-//     <-2=> GPIOB_18 (reset default)<selection=GPIOB_18_PIN_SEL,PTB18 (reset default)>
+//     <-2=> TSI0_CH11 (reset default)<selection=TSI0_CH11_PIN_SEL,PTB18 (reset default)>
 //     <0=> TSI0_CH11<selection=TSI0_CH11_PIN_SEL,PTB18>
 //     <1=> GPIOB_18<selection=GPIOB_18_PIN_SEL,PTB18>
 //     <4=> I2S0_TX_BCLK<selection=I2S0_TX_BCLK_PIN_SEL,PTB18>
@@ -337,7 +355,7 @@
 // Signal mapping for PTB19 pin
 //   <o> PTB19 [TSI0_CH12, GPIOB_19, I2S0_TX_FS]<name=PTB19_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB19 pin
-//     <-2=> GPIOB_19 (reset default)<selection=GPIOB_19_PIN_SEL,PTB19 (reset default)>
+//     <-2=> TSI0_CH12 (reset default)<selection=TSI0_CH12_PIN_SEL,PTB19 (reset default)>
 //     <0=> TSI0_CH12<selection=TSI0_CH12_PIN_SEL,PTB19>
 //     <1=> GPIOB_19<selection=GPIOB_19_PIN_SEL,PTB19>
 //     <4=> I2S0_TX_FS<selection=I2S0_TX_FS_PIN_SEL,PTB19>
@@ -884,6 +902,15 @@
 #define CMP0_IN3_FN          0
 #endif
 
+// Pin Mapping for CMP0_IN5 signal
+//   <o> CMP0_IN5 [VREF_OUT]<name=CMP0_IN5_PIN_SEL><constant>
+//   <i> Shows which pin CMP0_IN5 is mapped to
+//     <0=> VREF_OUT<selection=VREF_OUT_SIG_SEL,VREF_OUT/CMP1_IN5/CMP0_IN5>
+//     <0=> Default
+#define CMP0_IN5_PIN_SEL     0
+#define CMP0_IN5_GPIO        0
+#define CMP0_IN5_FN          0
+
 // Pin Mapping for CMP0_OUT signal
 //   <o> CMP0_OUT [PTC5]<name=CMP0_OUT_PIN_SEL>
 //   <i> Shows which pin CMP0_OUT is mapped to
@@ -934,6 +961,15 @@
 #define CMP1_IN3_PIN_SEL     0
 #define CMP1_IN3_GPIO        0
 #define CMP1_IN3_FN          0
+
+// Pin Mapping for CMP1_IN5 signal
+//   <o> CMP1_IN5 [VREF_OUT]<name=CMP1_IN5_PIN_SEL><constant>
+//   <i> Shows which pin CMP1_IN5 is mapped to
+//     <0=> VREF_OUT<selection=VREF_OUT_SIG_SEL,VREF_OUT/CMP1_IN5/CMP0_IN5>
+//     <0=> Default
+#define CMP1_IN5_PIN_SEL     0
+#define CMP1_IN5_GPIO        0
+#define CMP1_IN5_FN          0
 
 // Pin Mapping for CMP1_OUT signal
 //   <o> CMP1_OUT [PTC4]<name=CMP1_OUT_PIN_SEL>
@@ -1015,6 +1051,15 @@
 #define EXTAL0_GPIO          digitalIO_PTA18
 #define EXTAL0_FN            0
 #endif
+
+// Pin Mapping for EXTAL32 signal
+//   <o> EXTAL32 [EXTAL32]<name=EXTAL32_PIN_SEL><constant>
+//   <i> Shows which pin EXTAL32 is mapped to
+//     <0=> EXTAL32<selection=EXTAL32_SIG_SEL,EXTAL32>
+//     <0=> Default
+#define EXTAL32_PIN_SEL      0
+#define EXTAL32_GPIO         0
+#define EXTAL32_FN           0
 
 // Pin Mapping for RTC_CLKOUT signal
 //   <o> RTC_CLKOUT [PTE0]<name=RTC_CLKOUT_PIN_SEL>
@@ -1525,11 +1570,10 @@
 //   <o> GPIOB_16 [PTB16]<name=GPIOB_16_PIN_SEL>
 //   <i> Shows which pin GPIOB_16 is mapped to
 //     <0=> Disabled
-//     <1=> PTB16 (reset default)<selection=PTB16_SIG_SEL,GPIOB_16 (reset default)>
-//     <2=> PTB16<selection=PTB16_SIG_SEL,GPIOB_16>
+//     <1=> PTB16<selection=PTB16_SIG_SEL,GPIOB_16>
 //     <0=> Default
 #define GPIOB_16_PIN_SEL     0
-#if GPIOB_16_PIN_SEL == 2
+#if GPIOB_16_PIN_SEL == 1
 #define GPIOB_16_GPIO        digitalIO_PTB16
 #define GPIOB_16_FN          1
 #endif
@@ -1538,11 +1582,10 @@
 //   <o> GPIOB_17 [PTB17]<name=GPIOB_17_PIN_SEL>
 //   <i> Shows which pin GPIOB_17 is mapped to
 //     <0=> Disabled
-//     <1=> PTB17 (reset default)<selection=PTB17_SIG_SEL,GPIOB_17 (reset default)>
-//     <2=> PTB17<selection=PTB17_SIG_SEL,GPIOB_17>
+//     <1=> PTB17<selection=PTB17_SIG_SEL,GPIOB_17>
 //     <0=> Default
 #define GPIOB_17_PIN_SEL     0
-#if GPIOB_17_PIN_SEL == 2
+#if GPIOB_17_PIN_SEL == 1
 #define GPIOB_17_GPIO        digitalIO_PTB17
 #define GPIOB_17_FN          1
 #endif
@@ -1551,11 +1594,10 @@
 //   <o> GPIOB_18 [PTB18]<name=GPIOB_18_PIN_SEL>
 //   <i> Shows which pin GPIOB_18 is mapped to
 //     <0=> Disabled
-//     <1=> PTB18 (reset default)<selection=PTB18_SIG_SEL,GPIOB_18 (reset default)>
-//     <2=> PTB18<selection=PTB18_SIG_SEL,GPIOB_18>
-//     <2=> Default
-#define GPIOB_18_PIN_SEL     2
-#if GPIOB_18_PIN_SEL == 2
+//     <1=> PTB18<selection=PTB18_SIG_SEL,GPIOB_18>
+//     <1=> Default
+#define GPIOB_18_PIN_SEL     1
+#if GPIOB_18_PIN_SEL == 1
 #define GPIOB_18_GPIO        digitalIO_PTB18
 #define GPIOB_18_FN          1
 #endif
@@ -1564,11 +1606,10 @@
 //   <o> GPIOB_19 [PTB19]<name=GPIOB_19_PIN_SEL>
 //   <i> Shows which pin GPIOB_19 is mapped to
 //     <0=> Disabled
-//     <1=> PTB19 (reset default)<selection=PTB19_SIG_SEL,GPIOB_19 (reset default)>
-//     <2=> PTB19<selection=PTB19_SIG_SEL,GPIOB_19>
-//     <2=> Default
-#define GPIOB_19_PIN_SEL     2
-#if GPIOB_19_PIN_SEL == 2
+//     <1=> PTB19<selection=PTB19_SIG_SEL,GPIOB_19>
+//     <1=> Default
+#define GPIOB_19_PIN_SEL     1
+#if GPIOB_19_PIN_SEL == 1
 #define GPIOB_19_GPIO        digitalIO_PTB19
 #define GPIOB_19_FN          1
 #endif
@@ -2593,10 +2634,11 @@
 //   <o> TSI0_CH9 [PTB16]<name=TSI0_CH9_PIN_SEL>
 //   <i> Shows which pin TSI0_CH9 is mapped to
 //     <0=> Disabled
-//     <1=> PTB16<selection=PTB16_SIG_SEL,TSI0_CH9>
+//     <1=> PTB16 (reset default)<selection=PTB16_SIG_SEL,TSI0_CH9 (reset default)>
+//     <2=> PTB16<selection=PTB16_SIG_SEL,TSI0_CH9>
 //     <0=> Default
 #define TSI0_CH9_PIN_SEL     0
-#if TSI0_CH9_PIN_SEL == 1
+#if TSI0_CH9_PIN_SEL == 2
 #define TSI0_CH9_GPIO        digitalIO_PTB16
 #define TSI0_CH9_FN          0
 #endif
@@ -2605,10 +2647,11 @@
 //   <o> TSI0_CH10 [PTB17]<name=TSI0_CH10_PIN_SEL>
 //   <i> Shows which pin TSI0_CH10 is mapped to
 //     <0=> Disabled
-//     <1=> PTB17<selection=PTB17_SIG_SEL,TSI0_CH10>
+//     <1=> PTB17 (reset default)<selection=PTB17_SIG_SEL,TSI0_CH10 (reset default)>
+//     <2=> PTB17<selection=PTB17_SIG_SEL,TSI0_CH10>
 //     <0=> Default
 #define TSI0_CH10_PIN_SEL    0
-#if TSI0_CH10_PIN_SEL == 1
+#if TSI0_CH10_PIN_SEL == 2
 #define TSI0_CH10_GPIO       digitalIO_PTB17
 #define TSI0_CH10_FN         0
 #endif
@@ -2617,10 +2660,11 @@
 //   <o> TSI0_CH11 [PTB18]<name=TSI0_CH11_PIN_SEL>
 //   <i> Shows which pin TSI0_CH11 is mapped to
 //     <0=> Disabled
-//     <1=> PTB18<selection=PTB18_SIG_SEL,TSI0_CH11>
+//     <1=> PTB18 (reset default)<selection=PTB18_SIG_SEL,TSI0_CH11 (reset default)>
+//     <2=> PTB18<selection=PTB18_SIG_SEL,TSI0_CH11>
 //     <0=> Default
 #define TSI0_CH11_PIN_SEL    0
-#if TSI0_CH11_PIN_SEL == 1
+#if TSI0_CH11_PIN_SEL == 2
 #define TSI0_CH11_GPIO       digitalIO_PTB18
 #define TSI0_CH11_FN         0
 #endif
@@ -2629,10 +2673,11 @@
 //   <o> TSI0_CH12 [PTB19]<name=TSI0_CH12_PIN_SEL>
 //   <i> Shows which pin TSI0_CH12 is mapped to
 //     <0=> Disabled
-//     <1=> PTB19<selection=PTB19_SIG_SEL,TSI0_CH12>
+//     <1=> PTB19 (reset default)<selection=PTB19_SIG_SEL,TSI0_CH12 (reset default)>
+//     <2=> PTB19<selection=PTB19_SIG_SEL,TSI0_CH12>
 //     <0=> Default
 #define TSI0_CH12_PIN_SEL    0
-#if TSI0_CH12_PIN_SEL == 1
+#if TSI0_CH12_PIN_SEL == 2
 #define TSI0_CH12_GPIO       digitalIO_PTB19
 #define TSI0_CH12_FN         0
 #endif
@@ -2919,6 +2964,19 @@
 #define USB_SOF_OUT_GPIO     digitalIO_PTC7
 #define USB_SOF_OUT_FN       3
 #endif
+
+// </h>
+
+// <h> Voltage Reference (VREF)
+
+// Pin Mapping for VREF_OUT signal
+//   <o> VREF_OUT [VREF_OUT]<name=VREF_OUT_PIN_SEL><constant>
+//   <i> Shows which pin VREF_OUT is mapped to
+//     <0=> VREF_OUT<selection=VREF_OUT_SIG_SEL,VREF_OUT/CMP1_IN5/CMP0_IN5>
+//     <0=> Default
+#define VREF_OUT_PIN_SEL     0
+#define VREF_OUT_GPIO        0
+#define VREF_OUT_FN          0
 
 // </h>
 

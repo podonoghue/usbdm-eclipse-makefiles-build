@@ -14,7 +14,7 @@
 
 /**
  * @addtogroup FXOS8700CQ_Group FXOS8700CQ 3-axis accelerometer and magnetometer
- * @brief C++ Class allowing interface to FXOS8700CQ
+ * @brief C++ Class providing interface to FXOS8700CQ
  * @{
  */
 
@@ -22,19 +22,19 @@
 #define FXOS8700CQ_CTRL_REG1_F_READ_MASK         (1<<1)
 #define FXOS8700CQ_CTRL_REG1_LNOISE_MASK         (1<<2)
 #define FXOS8700CQ_CTRL_REG1_DR_OFF              (3)
-#define FXOS8700CQ_CTRL_REG1_DR_MASK             (0x7<<FXOS8700CQ__CTRL_REG1_DR_OFF)
-#define FXOS8700CQ_CTRL_REG1_DR(x)               (((x)<<FXOS8700CQ__CTRL_REG1_DR_OFF)&FXOS8700CQ__CTRL_REG1_DR_MASK)
+#define FXOS8700CQ_CTRL_REG1_DR_MASK             (0x7<<FXOS8700CQ_CTRL_REG1_DR_OFF)
+#define FXOS8700CQ_CTRL_REG1_DR(x)               (((x)<<FXOS8700CQ_CTRL_REG1_DR_OFF)&FXOS8700CQ_CTRL_REG1_DR_MASK)
 #define FXOS8700CQ_CTRL_REG1_ASLP_RATE_OFF       (6)
-#define FXOS8700CQ_CTRL_REG1_ASLP_RATE_MASK      (0x3FXOS8700CQ__CTRL_REG1_ASLP_RATE_OFF)
-#define FXOS8700CQ_CTRL_REG1_ASLP_RATE(x)        (((x)<<FXOS8700CQ__CTRL_REG1_ASLP_RATE_OFF)&FXOS8700CQ__CTRL_REG1_ASLP_RATE_MASK)
+#define FXOS8700CQ_CTRL_REG1_ASLP_RATE_MASK      (0x3F<<FXOS8700CQ_CTRL_REG1_ASLP_RATE_OFF)
+#define FXOS8700CQ_CTRL_REG1_ASLP_RATE(x)        (((x)<<FXOS8700CQ_CTRL_REG1_ASLP_RATE_OFF)&FXOS8700CQ_CTRL_REG1_ASLP_RATE_MASK)
 
 #define FXOS8700CQ_CTRL_REG2_MODS_OFF            (0)
-#define FXOS8700CQ_CTRL_REG2_MODS_MASK           (0x3<<FXOS8700CQ__CTRL_REG1_DR_OFF)
-#define FXOS8700CQ_CTRL_REG2_MODS(x)             (((x)<<FXOS8700CQ__CTRL_REG1_DR_OFF)&FXOS8700CQ__CTRL_REG1_DR_MASK)
+#define FXOS8700CQ_CTRL_REG2_MODS_MASK           (0x3<<FXOS8700CQ_CTRL_REG1_DR_OFF)
+#define FXOS8700CQ_CTRL_REG2_MODS(x)             (((x)<<FXOS8700CQ_CTRL_REG1_DR_OFF)&FXOS8700CQ_CTRL_REG1_DR_MASK)
 #define FXOS8700CQ_CTRL_REG2_SLPE_MASK           (1<<2)
 #define FXOS8700CQ_CTRL_REG2_SMODS_OFF           (3)
-#define FXOS8700CQ_CTRL_REG2_SMODS_MASK          (0x3<<FXOS8700CQ__CTRL_REG1_DR_OFF)
-#define FXOS8700CQ_CTRL_REG2_SMODS(x)            (((x)<<FXOS8700CQ__CTRL_REG1_DR_OFF)&FXOS8700CQ__CTRL_REG1_DR_MASK)
+#define FXOS8700CQ_CTRL_REG2_SMODS_MASK          (0x3<<FXOS8700CQ_CTRL_REG1_DR_OFF)
+#define FXOS8700CQ_CTRL_REG2_SMODS(x)            (((x)<<FXOS8700CQ_CTRL_REG1_DR_OFF)&FXOS8700CQ_CTRL_REG1_DR_MASK)
 #define FXOS8700CQ_CTRL_REG2_RST_MASK            (1<<6)
 #define FXOS8700CQ_CTRL_REG2_ST_MASK             (1<<7)
 
@@ -47,46 +47,89 @@
 #define FXOS8700CQ_CTRL_REG3_WAKE_TRANS_MASK     (1<<6)
 #define FXOS8700CQ_CTRL_REG3_FIFO_GATE_MASK      (1<<7)
 
-#define FXOS8700CQ_CTRL_REG3_INT_EN_DRDY_MASK    (1<<0)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_A_VECM_MASK  (1<<1)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_EN_FFMT_MASK (1<<2)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_PULSE_MASK   (1<<3)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_INDPRT_MASK  (1<<4)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_TRANS_MASK   (1<<5)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_FIFO_MASK    (1<<6)
-#define FXOS8700CQ_CTRL_REG3_INT_EN_ASLP_MASK    (1<<7)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_DRDY_MASK    (1<<0)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_A_VECM_MASK  (1<<1)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_EN_FFMT_MASK (1<<2)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_PULSE_MASK   (1<<3)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_INDPRT_MASK  (1<<4)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_TRANS_MASK   (1<<5)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_FIFO_MASK    (1<<6)
+#define FXOS8700CQ_CTRL_REG4_INT_EN_ASLP_MASK    (1<<7)
+
+#define FXOS8700CQ_XYZ_DATA_CFG_FS_OFF         (0)
+#define FXOS8700CQ_XYZ_DATA_CFG_FS_MASK        (0x03<<FXOS8700CQ_XYZ_DATA_CFG_FS_OFF)
+#define FXOS8700CQ_XYZ_DATA_CFG_FS(x)          (((x)<<FXOS8700CQ_XYZ_DATA_CFG_FS_OFF)&FXOS8700CQ_XYZ_DATA_CFG_FS_MASK)
+#define FXOS8700CQ_XYZ_DATA_CFG_HPF_OUT_MASK   (1<<4)
+
+#define FXOS8700CQ_STATUS_ZYXDR_MASK 	(1<<3)
+
+#define FXOS8700CQ_M_CTRL_REG1_M_HMS_OFF         (0)
+#define FXOS8700CQ_M_CTRL_REG1_M_HMS_MASK        (0x3<<FXOS8700CQ_M_CTRL_REG1_M_HMS_OFF)
+#define FXOS8700CQ_M_CTRL_REG1_M_HMS(x)          (((x)<<FXOS8700CQ_M_CTRL_REG1_M_HMS_OFF)&FXOS8700CQ_M_CTRL_REG1_M_HMS_MASK)
+#define FXOS8700CQ_M_CTRL_REG1_M_OS_OFF          (2)
+#define FXOS8700CQ_M_CTRL_REG1_M_OS_MASK         (0x7<<FXOS8700CQ_M_CTRL_REG1_M_OS_OFF)
+#define FXOS8700CQ_M_CTRL_REG1_M_OS(x)           (((x)<<FXOS8700CQ_M_CTRL_ROS_M_OS_OFF)&FXOS8700CQ_M_CTRL_REG1_M_OS_MASK)
+#define FXOS8700CQ_M_CTRL_REG1_M_OST_MASK        (1<<5)
+#define FXOS8700CQ_M_CTRL_REG1_M_RST_MASK        (1<<6)
+#define FXOS8700CQ_M_CTRL_REG1_M_ACAL_MASK       (1<<7)
+
+#define FXOS8700CQ_M_CTRL_REG2_M_CNT_OFF                 (0)
+#define FXOS8700CQ_M_CTRL_REG2_M_CNT_MASK                (0x3<<FXOS8700CQ_M_CTRL_REG2_M_CNT_OFF)
+#define FXOS8700CQ_M_CTRL_REG2_M_CNT(x)                  (((x)<<FXOS8700CQ_M_CTRL_REG2_M_CNT_OFF)&FXOS8700CQ_M_CTRL_REG2_M_CNT_MASK)
+#define FXOS8700CQ_M_CTRL_REG2_M_MAXMIN_RST_MASK         (1<<2)
+#define FXOS8700CQ_M_CTRL_REG2_M_MAXMIN_DIS_THS_MASK     (1<<3)
+#define FXOS8700CQ_M_CTRL_REG2_M_MAXMIN_DIS_MASK         (1<<4)
+#define FXOS8700CQ_M_CTRL_REG2_M_HYB_AUTOINC_MODE_MASK   (1<<5)
+
+#define FXOS8700CQ_M_CTRL_REG3_M_ST_XY_OFF            (0)
+#define FXOS8700CQ_M_CTRL_REG3_M_ST_XY_MASK           (0x3<<FXOS8700CQ_M_CTRL_REG3_M_ST_XY_OFF)
+#define FXOS8700CQ_M_CTRL_REG3_M_ST_XY(x)             (((x)<<FXOS8700CQ_M_CTRL_REG3_M_ST_XY_OFF)&FXOS8700CQ_M_CTRL_REG3_M_ST_XY_MASK)
+#define FXOS8700CQ_M_CTRL_REG3_M_ST_Z_MASK            (1<<2)
+#define FXOS8700CQ_M_CTRL_REG3_M_THS_XYZ_UPDATE_MASK  (1<<3)
+#define FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS_OFF          (4)
+#define FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS_MASK         (0x7<<FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS_OFF)
+#define FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS(x)           (((x)<<FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS_OFF)&FXOS8700CQ_M_CTRL_REG3_M_ASLP_OS_MASK)
+#define FXOS8700CQ_M_CTRL_REG3_M_RAW_MASK             (1<<7)
+
 /**
  * @brief Class representing an interface for FXOS8700CQ 3-axis accelerometer and magnetometer over I2C
  *
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  I2C     *i2c   = new I2C_0();
- *  FXOS8700CQ *accelMag = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
+ *  I2C *i2c = new I2C_0();
+ *  FXOS8700CQ *accelerometer = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
  *
- *  int      status;
- *  int16_t  x, y, z;
+ *  uint8_t id = accelerometer->readID();
+ *  printf("Device ID = 0x%02X\n", id);
  *
- *  accelMag->setAccelerometerMode(FXOS8700CQ::ACCEL_2Gmode);
- *  accelMag->readAccelerometerXYZ(&status, &x, &y, &z);
- *  accelMag->readMagnetometerXYZ(&status, &x, &y, &z);
+ *  printf("Before simple calibration (make sure the device is level!)\n");
+ *  accelerometer->calibrateAccelerometer();
  *
- *  FXOS8700CQ::Data data;
- *  accelMag->readAll(data);
+ *  printf("After calibration\n");
+ *  for(;;) {
+ *     int accelStatus, magStatus;
+ *     int16_t accelX,accelY,accelZ;
+ *     int16_t magX,magY,magZ;
+ *
+ *     accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+ *     accelerometer->readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
+ *     printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d, ", accelStatus, accelX, accelY, accelZ);
+ *     printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
+ *     printf("a=%d\n", (int)(360*atan2l(magX, magY)/(2*M_PI)));
+ *     waitMS(400);
+ *  }
  *
  * @endcode
  */
 class FXOS8700CQ {
 
-#define FXOS8700CQ_XYZ_DATA_CFG_FS(x)          (((x)<<0)&0x03)
-#define FXOS8700CQ_XYZ_DATA_CFG_HPF_OUT_MASK   (1<<4)
-
 private:
    I2C *i2c;
 #ifdef MCU_MK22F51212
-   static const uint8_t  DEVICE_ADDRESS = 0x1C<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
+   static const uint8_t DEVICE_ADDRESS = 0x1C<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #else
-   static const uint8_t  DEVICE_ADDRESS = 0x1D<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
+   static const uint8_t DEVICE_ADDRESS = 0x1D<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #endif
    static const uint8_t  WHO_AM_I_VALUE = 0xC7;
 
@@ -142,6 +185,12 @@ public:
       uint8_t magnetometer_Z;
    };
 
+   enum Mode {
+      ACCEL_ONLY = 0,
+      MAG_ONLY   = 1,
+      ACCEL_MAG  = 3,
+   };
+
    /**
     * Constructor
     *
@@ -149,6 +198,12 @@ public:
     * @param mode - Mode of operation (gain and filtering)
     */
    FXOS8700CQ(I2C *i2c, AccelerometerMode mode);
+   /**
+    * Enable accelerometer and/or magnetometer
+    *
+    * @param mode ACCEL_ONLY, MAG_ONLY or ACCEL_MAG
+    */
+   void enable(Mode mode);
    /**
     * Put accelerometer into Standby mode
     */
@@ -169,7 +224,7 @@ public:
    /**
     * Set accelerometer mode (gain and filtering)
     *
-    * @param mode - one of 2Gmode etc.
+    * @param mode - one of ACCEL_2Gmode etc.
     */
    void setAccelerometerMode(AccelerometerMode mode);
    /**
@@ -200,6 +255,12 @@ public:
     * @return ID value as 8-bit number (0x1A for MMA8451Q)
     */
    uint32_t readID();
+   /**
+    * Calibrate accelerometer
+    * Assumes accelerometer is on a flat surface
+    * The accelerometer mode will need to be reset after this operation
+    */
+   void calibrateAccelerometer();
 };
 
 /**

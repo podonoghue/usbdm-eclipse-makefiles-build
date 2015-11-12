@@ -33,11 +33,18 @@ enum {
       // Set default settings
       static const uint8_t settings[] = {
          CRA,
-         HMC5883L_CRA_MA(0)|HMC5883L_CRA_DO(2)|HMC5883L_CRA_MS(0), // Averaging, Data rate (not relevant to single measurement?), Idle,
-         HMC5883L_CRB_GN(1),                                       // Gain : Range = +/- 1.3Ga, Resolution=0.92 (default)
-         HMC5883L_MR_MD(1),                                        // Mode = Single-Measurement Mode
+
+         HMC5883L_CRA_MA(3)|  // 8 averages
+         HMC5883L_CRA_DO(4)|  // Data rate 15Hz (not relevant)
+         HMC5883L_CRA_MS(0),  // Measurement configuration = normal
+
+         HMC5883L_CRB_GN(5),  // Gain : Range = +/- 4.7, Resolution=2.56
+
+         HMC5883L_MR_MD(3),   // Mode = Idle
       };
       i2c->transmit(deviceAddress, settings, sizeof(settings));
+//      uint8_t confirm[3];
+//      i2c->txRx(deviceAddress, settings, 1, confirm, sizeof(confirm));
    }
 
    /*!
@@ -46,8 +53,8 @@ enum {
     * @return ID value as 24-bit number (0x483433 for HMC5883L)
     */
    uint32_t HMC5883L::readID(void) {
-      uint8_t values[] = {IRA, 0x00, 0x00, 0x00};
-      i2c->receive(deviceAddress, values, sizeof(values)-1);
+      uint8_t values[] = {IRA, 0x00, 0x00};
+      i2c->txRx(deviceAddress, values, 1, sizeof(values));
       return (values[0]<<16)|(values[1]<<8)|values[2];
    }
 
@@ -94,16 +101,44 @@ enum {
     * @param z - Z intensity
     */
    void HMC5883L::doMeasurement(int16_t *x, int16_t *y, int16_t *z) {
-      uint8_t modeReg_Setting[] = {MR, HMC5883L_MR_MD(1)};
+      static const uint8_t modeReg_Setting[] = {MR, HMC5883L_MR_HS_MASK|HMC5883L_MR_MD(1)};
       i2c->transmit(deviceAddress, modeReg_Setting, sizeof(modeReg_Setting));
-      uint8_t dataOutIn[] = {SR};
+
+      static const uint8_t statusRegAddress[] = {SR};
+      uint8_t status[1];
       do {
-         dataOutIn[0] = SR;
-         i2c->receive(deviceAddress, dataOutIn, sizeof(dataOutIn));
-      } while ((dataOutIn[0]&HMC5883L_SR_RDY) == 0);
-      uint8_t values[] = {XMSB, 0x00, 0x00, 0x00, 0x00, 0x00};
-      i2c->receive(deviceAddress, values, sizeof(values));
+         i2c->txRx(deviceAddress, statusRegAddress, sizeof(statusRegAddress), status, sizeof(status));
+      } while ((status[0]&HMC5883L_SR_RDY) == 0);
+
+      static const uint8_t resultRegAddress[] = {XMSB};
+      uint8_t values[6];
+      i2c->txRx(deviceAddress, resultRegAddress, sizeof(resultRegAddress), values, sizeof(values));
+
       *x = (values[0]<<8)+values[1];
       *z = (values[2]<<8)+values[3];
       *y = (values[4]<<8)+values[5];
    }
+
+//   void HMC5883L::calibrate() {
+//      const uint8_t cra[]     = {CRA,  0x71};
+//      i2c->transmit(deviceAddress, cra,  sizeof(cra));
+//      const uint8_t crb[]     = {CRB,  0xA0};
+//      i2c->transmit(deviceAddress, crb,  sizeof(cra));
+//      const uint8_t mode[]    = {MR,   0x00};
+//      i2c->transmit(deviceAddress, mode, sizeof(cra));
+//
+//      uint8_t status[1];
+//      static const uint8_t statusRegAddress[] = {SR};
+//      do {
+//         i2c->txRx(deviceAddress, statusRegAddress, sizeof(statusRegAddress), status, sizeof(status));
+//      } while ((status[0]&HMC5883L_SR_RDY) == 0);
+//
+//      static const uint8_t resultRegAddress[] = {XMSB};
+//      uint8_t values[6];
+//      i2c->txRx(deviceAddress, resultRegAddress, sizeof(resultRegAddress), values, sizeof(values));
+//
+//      int x = (int16_t)((values[0]<<8)+values[1]);
+//      int z = (int16_t)((values[2]<<8)+values[3]);
+//      int y = (int16_t)((values[4]<<8)+values[5]);
+//
+//   }

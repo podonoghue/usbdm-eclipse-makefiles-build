@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
 #include "I2C.h"
 #include "MMA845x.h"
+#include "delay.h"
 
 /**
  * Demonstrates use of MMA845x Accelerometer over I2C
@@ -11,20 +13,37 @@
  * You may need to change the pin-mapping of the I2C interface
  */
 
+void report(MMA845x *accelerometer) {
+   int accelStatus;
+   int16_t accelX,accelY,accelZ;
+
+   accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
+   waitMS(400);
+}
+
 int main() {
    printf("Starting\n");
 
    // Instantiate interface
    I2C *i2c = new $(demo.cpp.accelerometer.i2c)();
-   MMA845x *accelerometer = new MMA845x(i2c, MMA845x::MMA45x_2Gmode);
+   MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
 
    uint8_t id = accelerometer->readID();
-   printf("Accelerometer ID = 0x%02X (should be 0x1A)\n", id);
+   printf("Device ID = 0x%02X (should be 0x1A)\n", id);
 
-   int status;
-   int16_t accelX,accelY,accelZ;
+   printf("Before simple calibration (make sure the device is level!)\n");
+   report(accelerometer);
+   report(accelerometer);
+   report(accelerometer);
+
+   accelerometer->calibrateAccelerometer();
+   // Make sure we have new values
+   waitMS(100);
+
+   printf("After calibration\n");
    for(;;) {
-      accelerometer->readXYZ(&status, &accelX, &accelY, &accelZ);
-      printf("X=%10d, Y=%10d, Z=%10d\n", accelX, accelY, accelZ);
+      report(accelerometer);
    }
 }
+

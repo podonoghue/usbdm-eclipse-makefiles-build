@@ -17,6 +17,11 @@
 #define PORT_PCR_ODE_MASK 0
 #endif
 
+#if defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644)
+#define I2C_CLOCK_FREQ SystemCoreClock
+#else
+#define I2C_CLOCK_FREQ SystemBusClock
+#endif
 /*
  * Constructor for generic I2C interface
  *
@@ -26,7 +31,7 @@
  */
 I2C::I2C(uint8_t myAddress, Mode mode, volatile I2C_Type *i2c, const DigitalIO *scl, const DigitalIO *sda) :
    myAddress(myAddress), mode(mode), i2c(i2c), scl(scl), sda(sda),
-   state(i2c_idle), dataBytesRemaining(0), dataPtr(0), addressedDevice(0), errorCode(0)
+   state(i2c_idle), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0)
 {
 }
 
@@ -51,7 +56,7 @@ void I2C::setbps(uint32_t bps) {
    uint16_t best_error = (uint16_t)-1u;
 
    for (uint8_t mul=0; mul<=2; mul++) {
-      uint32_t divisor = (SystemBusClock>>mul)/bps;
+      uint32_t divisor = (I2C_CLOCK_FREQ>>mul)/bps;
       for(uint8_t icr=0; icr<(sizeof(i2cDivisors)/sizeof(i2cDivisors[0])); icr++) {
          if (divisor>i2cDivisors[icr]) {
             // Not suitable - try next
@@ -87,64 +92,27 @@ void I2C::init() {
 }
 
 /**
- * Start TxRx sequence
+ * Start Rx/Tx sequence by sending address byte
  *
- * Sets up data pointer and size
- * Starts transmission of the address byte
- *
- * @param address - address of slave to access
- * @param data    - data in/out buffer
- * @param size    - size of buffer to transfer
+ * @param address - address of slave to access.  Should include R/W bit
  */
-void I2C::startTxRx(uint8_t address, uint8_t data[], int size) {
+void I2C::sendAddress(uint8_t address) {
 
-   // Set up transmit or receive data
-   dataPtr            = data;
-   dataBytesRemaining = size;
-
-   // Configure for Tx of address
-   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK;
-   // Generate START
-   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK|I2C_C1_MST_MASK;
+   // Wait for bus idle
+   while ((i2c->S & I2C_S_BUSY_MASK) != 0) {
+      __asm("nop");
+   }
 
    addressedDevice = address;
 
+   // Configure for Tx of address
+   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK;
+
+   // Generate START
+   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK|I2C_C1_MST_MASK;
+
    // Tx address (starts interrupt process)
    i2c->D  = I2C_D_DATA(address);
-}
-
-/**
- * Start Tx sequence
- *
- * Sets mode = i2c_txAddr
- * Sets up data pointer and size
- * Starts transmission of the address byte
- *
- * @param address - address of slave to access
- * @param data    - data in/out buffer
- * @param size    - size of buffer to transfer
- */
-void I2C::startTransmit(uint8_t address, const uint8_t data[], int size) {
-   // Sending address byte of data transmission
-   state = i2c_txAddr;
-   startTxRx(address, (uint8_t *)data, size);
-}
-
-/**
- * Start Rx sequence
- *
- * Sets mode = i2c_rxAddr
- * Sets up data pointer and size
- * Starts transmission of the address byte
- *
- * @param address - address of slave to access
- * @param data    - data in/out buffer
- * @param size    - size of buffer to transfer
- */
-void I2C::startReceive(uint8_t address, uint8_t data[], int size) {
-   // Sending address byte of data reception
-   state = i2c_rxAddr;
-   startTxRx(address, data, size);
 }
 
 /**
@@ -159,41 +127,79 @@ void I2C::waitWhileBusy() {
 }
 
 /**
- * Transmit data to slave and wait for completion
+ * Transmit message
  *
- * @param address - address of slave to access
- * @param data    - data out buffer, 0th byte is (usually) register address
- *                  0..size-1: data to transmit
- * @param size    - size of buffer to transfer
+ * @param address  Address of slave to communicate with
+ * @param data     Data to transmit, 0th byte is often register address
+ * @param size     Size of transmission data
  */
 int I2C::transmit(uint8_t address, const uint8_t data[], int size) {
    errorCode = 0;
 
-   // Wait for bus idle
-   while ((i2c->S & I2C_S_BUSY_MASK) != 0) {
-      __asm("nop");
-   }
-   startTransmit(address, data, size);
+   rxBytesRemaining = 0;
+
+   // Send address byte at start and move to data transmission
+   state = i2c_txData;
+
+   // Set up transmit data
+   txDataPtr        = data;
+   txBytesRemaining = size;
+
+   sendAddress(address);
    waitWhileBusy();
+
    return errorCode;
 }
 
 /**
- * Receive data from slave and wait for completion
+ * Receive message
  *
- * @param address - address of slave to access
- * @param data    - data in/out buffer, 0th byte is register address
- *                  Tx - 0th byte is register address
- *                  Rx - 0..size-1: data received (NOTE: overwrites address byte)
- * @param size    - size of buffer to transfer
+ * @param address  Address of slave to communicate with
+ * @param data     Data buffer for reception
+ * @param size     Size of reception data
  */
 int I2C::receive(uint8_t address, uint8_t data[], int size) {
    errorCode = 0;
-   // Wait for bus idle
-   while ((i2c->S & I2C_S_BUSY_MASK) != 0) {
-      __asm("nop");
-   }
-   startReceive(address, data, size);
+
+   txBytesRemaining = 0;
+
+   // Send address byte at start and move to data reception
+   state = i2c_rxAddress;
+
+   // Set up receive data
+   rxDataPtr        = data;
+   rxBytesRemaining = size;
+
+   sendAddress(address|1);
+   waitWhileBusy();
+
+   return errorCode;
+}
+
+/**
+ * Transmit message followed by receive message.
+ * Uses repeated-start.
+ *
+ * @param address  Address of slave to communicate with
+ * @param txData   Data for transmission
+ * @param txSize   Size of transmission data
+ * @param rxData   Date buffer for reception
+ * @param txSize   Size of reception data
+ */
+int I2C::txRx(uint8_t address, const uint8_t txData[], int txSize, uint8_t rxData[], int rxSize ) {
+   errorCode = 0;
+
+   // Send address byte at start and move to data transmission
+   state = i2c_txData;
+
+   // Set up transmit and receive data
+   rxDataPtr        = rxData;
+   rxBytesRemaining = rxSize;
+   txDataPtr        = txData;
+   txBytesRemaining = txSize;
+
+   sendAddress(address);
+
    waitWhileBusy();
    return errorCode;
 }
@@ -214,75 +220,67 @@ void I2C::poll() {
    // Clear interrupt flag
    i2c->S = I2C_S_IICIF_MASK;
 
+   // i2c_txData* +-> i2c_idle
+   //             +-> i2c_rxAddress -> i2c_rxData* +-> i2c_idle
+   //                                              *-> i2c_txData
+
    switch (state) {
       case i2c_idle:
       default:
          state = i2c_idle;
          break;
 
-      case i2c_txAddr:
-         // Just sent address byte at start of Tx transaction
-         // Transmit register address byte
-         state = i2c_txRegAddr;
-         i2c->D = *dataPtr++;
-         break;
-
-      case i2c_txRegAddr:
-         // Just sent register address byte at start of Tx data
       case i2c_txData:
-         // Just sent data byte
-         if (--dataBytesRemaining == 0) {
-            // Complete
-            state = i2c_idle;
-            // Generate stop signal
-            i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TXAK_MASK;
-            return;
+         // Just send data bytes until none left
+         if (txBytesRemaining-- == 0) {
+            if (rxBytesRemaining > 0) {
+               // Reception after transmission
+               state = i2c_rxAddress;
+
+#if defined(MCU_MKL25Z4)
+               {
+                  // Temporarily clear MULT - see KL25 errata e6070
+                  uint8_t temp = i2c->F;
+                  i2c->F&=~I2C_F_MULT(3);
+#endif
+                  // Generate REPEATED-START
+                  i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TX_MASK|I2C_C1_RSTA_MASK;
+#if defined(MCU_MKL25Z4)
+                  // Restore MULT
+                  i2c->F = temp;
+               }
+#endif
+#if defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL43Z4)
+               // This is a nasty hack
+               // It seems these chips need a delay after asserting repeated start
+               for (int i=0; i<20; i++) {
+                  __asm__ volatile("nop");
+               }
+#endif
+               // Send device address again with READ bit set
+               i2c->D = addressedDevice|1;
+            }
+            else {
+               // Complete
+               state = i2c_idle;
+
+               // Generate stop signal
+               i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TXAK_MASK;
+               return;
+            }
          }
          else {
             // Transmit next byte
-            state = i2c_txData;
-            i2c->D = *dataPtr++;
+            i2c->D = *txDataPtr++;
          }
          break;
 
-      case i2c_rxAddr:
-         // Just sent device address byte at start of Rx transaction
-         // Transmit register address byte
-         state = i2c_rxRegAddr;
-         i2c->D = *dataPtr;
-         break;
-
-      case i2c_rxRegAddr:
-         // Just sent register address byte at start of Rx transaction
-         state = i2c_rxAddr2;
-         // Send repeated start
-#if defined(MCU_MKL25Z4)
-         {
-         // Temporarily clear MULT - see KL25 errata e6070
-         uint8_t temp = i2c->F;
-         i2c->F&=~I2C_F_MULT(3);
-#endif
-         i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TX_MASK|I2C_C1_RSTA_MASK;
-#if defined(MCU_MKL25Z4)
-         i2c->F = temp;
-         }
-#endif
-         // Send device address again with READ bit set
-#if defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL43Z4)
-         // This is a nasty hack
-         // It seems these chips need a delay after asserting repeated start
-         for (int i=0; i<20; i++) {
-            __asm__ volatile("nop");
-         }
-#endif
-         i2c->D = addressedDevice|1;
-         break;
-
-      case i2c_rxAddr2:
-         // Just sent device address byte at start of Rx data phase
+      case i2c_rxAddress:
+         // Just sent address for reception phase
+         // Switch to data reception & trigger reception
          state = i2c_rxData;
          // Change to reception
-         if (dataBytesRemaining == 1) {
+         if (rxBytesRemaining == 1) {
             // Receiving only single byte (don't acknowledge the byte)
             i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
          }
@@ -295,19 +293,34 @@ void I2C::poll() {
          break;
 
       case i2c_rxData:
-         // Just received a data byte
-         if (--dataBytesRemaining == 0) {
-            // Received last byte - complete
-            state = i2c_idle;
-            // Generate STOP
-            i2c->C1 = mode|I2C_C1_IICEN_MASK;
+         // Just receive data bytes until complete
+         if (--rxBytesRemaining == 0) {
+            if (txBytesRemaining > 0) {
+               // Transmission after reception
+               state = i2c_txData;
+
+               // Generate REPEATED-START
+               i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TX_MASK|I2C_C1_RSTA_MASK;
+
+               // Tx address (starts interrupt process)
+               i2c->D  = I2C_D_DATA(addressedDevice);
+            }
+            else {
+               // Received last byte - complete
+               state = i2c_idle;
+               // Generate STOP
+               i2c->C1 = mode|I2C_C1_IICEN_MASK;
+            }
          }
-         else if (dataBytesRemaining == 1) {
+         else if (rxBytesRemaining == 1) {
             // Received 2nd last byte (don't acknowledge the last byte to follow)
             i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
          }
+         else {
+            i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK;
+         }
          // Save receive data
-         *dataPtr++ = i2c->D;
+         *rxDataPtr++ = i2c->D;
          break;
    }
 }
@@ -319,7 +332,7 @@ void I2C::poll() {
  */
 void I2C::busHangReset() {
 
-   sda->setDigitalOutput(DigitalIO::GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+   sda->setDigitalInput(DigitalIO::GPIO_PORT_FN|PORT_PCR_ODE_MASK);
    /*
     * Set SCL initially high before enabling to minimise disturbance to bus
     */
@@ -333,7 +346,7 @@ void I2C::busHangReset() {
          __asm__("nop");
       }
       // If data is high bus is OK
-      if (scl->read()) {
+      if (sda->read()) {
          break;
       }
       // Set clock low
@@ -460,3 +473,27 @@ void I2C_2::init() {
 }
 #endif // !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
 #endif // I2C2
+
+#if defined(DEBUG_BUILD) && (DEBUG_I2C)
+// Test code
+int main() {
+   printf("Starting\n");
+
+   // Instantiate interface
+   I2C *i2c = new I2C_1();
+
+   // Transmit data
+   const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
+   // Reception buffer
+   uint8_t rxDataBuffer[5];
+
+   for(;;) {
+      waitUS(40);
+      i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
+      waitUS(40);
+      i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
+      waitUS(40);
+      i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
+      waitMS(5);
+   }
+#endif

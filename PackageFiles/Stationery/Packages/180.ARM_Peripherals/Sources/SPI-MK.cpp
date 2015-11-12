@@ -27,7 +27,7 @@ SPI::SPI(volatile SPI_Type *baseAddress) :
 
 #ifdef SPI0
 #if !defined(SPI0_SCK_GPIO) || !defined(SPI0_SIN_GPIO) || !defined(SPI0_SOUT_GPIO)
-#warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#warning "Warning SPI0 present but disabled. Check pin mappings for SPI0_SCK, SPI0_SIN & SPI0_SOUT in pin_mapping.h"
 #else
 
 /**
@@ -86,7 +86,7 @@ SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
 
 #ifdef SPI1
 #if !defined(SPI1_SCK_GPIO) || !defined(SPI1_SIN_GPIO) || !defined(SPI1_SOUT_GPIO)
-#warning "SPI1 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
+#warning "Warning SPI1 present but disabled. Check pin mappings for SPI1_SCK, SPI1_SIN & SPI1_SOUT in pin_mapping.h"
 #else
 
 /**

@@ -5,8 +5,7 @@
  *      Author: podonoghue
  */
 #include "MMA845x.h"
-
-#define MMA45x_CTRL_REG1_ACTIVE_MASK (1<<0)
+#include "delay.h"
 
 // Accelerometer registers
 enum {
@@ -69,9 +68,14 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-MMA845x::MMA845x(I2C *i2c, Mode mode) : i2c(i2c) {
+MMA845x::MMA845x(I2C *i2c, AccelerometerMode mode) : i2c(i2c) {
+   if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
+      failedInit = true;
+      return;
+   }
    reset();
-   setMode(mode);
+   setAccelerometerMode(mode);
+   failedInit = false;
 }
 
 /**
@@ -80,9 +84,8 @@ MMA845x::MMA845x(I2C *i2c, Mode mode) : i2c(i2c) {
  * @param regNum  - Register number
  */
 uint8_t MMA845x::readReg(uint8_t regNum) {
-   uint8_t command[] = {regNum};
-
-   i2c->receive(deviceAddress, command, sizeof(command));
+   uint8_t command[1];
+   i2c->txRx(DEVICE_ADDRESS, &regNum, 1, command, sizeof(command));
    return command[0];
 }
 
@@ -95,23 +98,19 @@ uint8_t MMA845x::readReg(uint8_t regNum) {
 void MMA845x::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(deviceAddress, command, sizeof(command));
+   i2c->transmit(DEVICE_ADDRESS, command, sizeof(command));
 }
-
-#define CTRL_REG2_RESET_MASK (1<<6) // Reset accelerometer
 
 /**
  * Reset Accelerometer
  */
 void MMA845x::reset(void) {
 
-   writeReg(CTRL_REG2, CTRL_REG2_RESET_MASK);
+   writeReg(CTRL_REG2, MMA845x_CTRL_REG2_RST_MASK);
+
    // Device is not accessible after RESET
-   // Wait a while
-   int i;
-   for(i=0; i<20000; i++) {
-      __asm__("nop");
-   }
+   // Wait 1 ms
+   waitUS(1000);
 }
 
 /**
@@ -119,7 +118,7 @@ void MMA845x::reset(void) {
  */
 void MMA845x::standby() {
 
-   writeReg(CTRL_REG1, readReg(CTRL_REG1)&~MMA45x_CTRL_REG1_ACTIVE_MASK);
+   writeReg(CTRL_REG1, readReg(CTRL_REG1)&~MMA845x_CTRL_REG1_ACTIVE_MASK);
 }
 
 /**
@@ -127,7 +126,7 @@ void MMA845x::standby() {
  */
 void MMA845x::active() {
 
-   writeReg(CTRL_REG1, readReg(CTRL_REG1)|MMA45x_CTRL_REG1_ACTIVE_MASK);
+   writeReg(CTRL_REG1, readReg(CTRL_REG1)|MMA845x_CTRL_REG1_ACTIVE_MASK);
 }
 
 /**
@@ -138,28 +137,33 @@ void MMA845x::active() {
  * @param y       - Y axis value
  * @param z       - Z axis value
  */
-void MMA845x::readXYZ(int *status, int16_t *x, int16_t *y, int16_t *z) {
+void MMA845x::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z) {
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->receive(deviceAddress, dataXYZ, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
 
-   // Unpack data and return (data is sign extended)
+   // Unpack data and return
    *status = dataXYZ[0];
-   *x = ((dataXYZ[1]<<8)+dataXYZ[2]);
-   *y = ((dataXYZ[3]<<8)+dataXYZ[4]);
-   *z = ((dataXYZ[5]<<8)+dataXYZ[6]);
+   *x = ((int16_t)((dataXYZ[1]<<8)+dataXYZ[2]))>>2;
+   *y = ((int16_t)((dataXYZ[3]<<8)+dataXYZ[4]))>>2;
+   *z = ((int16_t)((dataXYZ[5]<<8)+dataXYZ[6]))>>2;
 }
 
 /**
- * Set device mode (gain and filtering)
+ * Set accelerometer mode (gain and filtering)
  *
- * @param mode - one of MMA45x_2Gmode etc.
+ * @param mode - one of ACCEL_2Gmode etc.
  */
-void MMA845x::setMode(Mode mode) {
-   standby();
-   writeReg(XYZ_DATA_CFG, mode);
-   active();
+void MMA845x::setAccelerometerMode(AccelerometerMode mode) {
+   writeReg(CTRL_REG1, 0x00);
+
+   writeReg(XYZ_DATA_CFG, MMA845x_XYZ_DATA_CFG_FS(mode));
+
+   writeReg(CTRL_REG1,
+         MMA845x_CTRL_REG1_ASLP_RATE(0) | /* 50 Hz auto-sleep rate */
+         MMA845x_CTRL_REG1_DR(2) |        /* 200 Hz update rate    */
+         MMA845x_CTRL_REG1_ACTIVE_MASK);  /* Active     */
 }
 
 /*!
@@ -169,7 +173,65 @@ void MMA845x::setMode(Mode mode) {
  */
 uint32_t MMA845x::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->receive(deviceAddress, values, sizeof(values));
+   i2c->txRx(DEVICE_ADDRESS, values, 1, sizeof(values));
    return values[0];
 }
 
+/**
+ * Calibrate accelerometer
+ * (2g mode)
+ */
+void MMA845x::calibrateAccelerometer() {
+
+   uint8_t originalControlReg1Value = readReg(CTRL_REG1);
+   uint8_t originalXYXDataConfigValue = readReg(XYZ_DATA_CFG);
+
+   // Make inactive so setting can be modified
+   writeReg(CTRL_REG1, 0x00);
+
+   // Clear existing offsets
+   writeReg(OFF_X, 0);
+   writeReg(OFF_Y, 0);
+   writeReg(OFF_Z, 0);
+
+   int mode = (originalXYXDataConfigValue&MMA845x_XYZ_DATA_CFG_FS_MASK)>>MMA845x_XYZ_DATA_CFG_FS_OFF;
+
+   static const int calibration2Gs[]     = {4096*8, 2048*8, 1024*8};
+   static const int calibrationFactors[] = {8*8, 4*8, 2*8};
+
+   int calibration2G     = calibration2Gs[mode];
+   int calibrationFactor = calibrationFactors[mode];
+
+   writeReg(CTRL_REG1,
+         MMA845x_CTRL_REG1_ASLP_RATE(0) | /* 50 Hz auto-sleep rate */
+         MMA845x_CTRL_REG1_DR(2) |        /* 200 Hz update rate    */
+         MMA845x_CTRL_REG1_ACTIVE_MASK);  /* Active     */
+
+   int16_t Xout_Accel_14_bit, Yout_Accel_14_bit, Zout_Accel_14_bit;
+   int     Xout_Accel=0, Yout_Accel=0, Zout_Accel=0;
+
+   // Average 8 samples to reduce noise
+   for (int i=0; i<8; i++) {
+      int status;
+      do {
+         readAccelerometerXYZ(&status, &Xout_Accel_14_bit, &Yout_Accel_14_bit, &Zout_Accel_14_bit);
+      } while ((status & MMA845x_STATUS_ZYXDR_MASK) == 0);
+      Xout_Accel += Xout_Accel_14_bit;
+      Yout_Accel += Yout_Accel_14_bit;
+      Zout_Accel += Zout_Accel_14_bit;
+   }
+
+   // Make inactive so setting can be modified
+   writeReg(CTRL_REG1, 0x00);
+
+   char X_Accel_offset = -(Xout_Accel / calibrationFactor);                    // Compute X-axis offset correction value
+   char Y_Accel_offset = -(Yout_Accel / calibrationFactor);                    // Compute Y-axis offset correction value
+   char Z_Accel_offset = -((Zout_Accel - calibration2G) / calibrationFactor);  // Compute Z-axis offset correction value
+
+   writeReg(OFF_X, X_Accel_offset);
+   writeReg(OFF_Y, Y_Accel_offset);
+   writeReg(OFF_Z, Z_Accel_offset);
+
+   // Restore original settings
+   writeReg(CTRL_REG1, originalControlReg1Value);
+}

@@ -338,17 +338,17 @@ extern const PwmIO pwmIO_FTM1_CH0;          //!< PwmIO on pin PTB0
 #if (PTB1_SIG_SEL == 3)
 extern const PwmIO pwmIO_FTM1_CH1;          //!< PwmIO on pin PTB1
 #endif
-#if (PTB12_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH4;          //!< PwmIO on pin PTB12
-#endif
 #if (PTB12_SIG_SEL == 3)
 extern const PwmIO pwmIO_FTM1_CH0;          //!< PwmIO on pin PTB12
 #endif
-#if (PTB13_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH5;          //!< PwmIO on pin PTB13
+#if (PTB12_SIG_SEL == 4)
+extern const PwmIO pwmIO_FTM0_CH4;          //!< PwmIO on pin PTB12
 #endif
 #if (PTB13_SIG_SEL == 3)
 extern const PwmIO pwmIO_FTM1_CH1;          //!< PwmIO on pin PTB13
+#endif
+#if (PTB13_SIG_SEL == 4)
+extern const PwmIO pwmIO_FTM0_CH5;          //!< PwmIO on pin PTB13
 #endif
 #if (PTB18_SIG_SEL == 3)
 extern const PwmIO pwmIO_FTM2_CH0;          //!< PwmIO on pin PTB18
