@@ -4,7 +4,9 @@
  *  Created on: 22/11/2013
  *      Author: podonoghue
  */
+//#include <stdio.h>
 #include "FXOS8700CQ.h"
+#include "delay.h"
 
 // Accelerometer registers
 enum {
@@ -142,13 +144,24 @@ enum {
  * @param mode - Mode of operation (gain and filtering)
  */
 FXOS8700CQ::FXOS8700CQ(I2C *i2c, AccelerometerMode mode) : i2c(i2c) {
+   failedInit = false;
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;
       return;
    }
-//   reset();
+   reset();
+
+   writeReg(CTRL_REG3, 0x00);                                   // INT0/1 active low, open drain
+   writeReg(CTRL_REG4, FXOS8700CQ_CTRL_REG4_INT_EN_DRDY_MASK);  // Enable DRDY Interrupt
+   writeReg(CTRL_REG5, FXOS8700CQ_CTRL_REG5_INT_CFG_DRDY_MASK); // Route DRDY to INT1 pin (0=> INT2, 1=> INT1)
+
+   writeReg(M_CTRL_REG2, FXOS8700CQ_M_CTRL_REG2_M_HYB_AUTOINC_MODE_MASK); // Hybrid auto-increment
+
    setAccelerometerMode(mode);
-   failedInit = false;
+
+//   uint8_t buff[5] = {CTRL_REG1};
+//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   printf("FXOS8700CQ, ctrl = 0x%x,0x%x,0x%x,0x%x,0x%x\n", buff[0], buff[1], buff[2], buff[3], buff[4] );
 }
 
 /**
@@ -157,7 +170,7 @@ FXOS8700CQ::FXOS8700CQ(I2C *i2c, AccelerometerMode mode) : i2c(i2c) {
  * @param mode ACCEL_ONLY, MAG_ONLY or ACCEL_MAG
  */
 void FXOS8700CQ::enable(Mode mode) {
-   writeReg(M_CTRL_REG1, FXOS8700CQ_M_CTRL_REG1_M_HMS(mode));
+   writeReg(M_CTRL_REG1, FXOS8700CQ_M_CTRL_REG1_M_OS(7)|FXOS8700CQ_M_CTRL_REG1_M_HMS(mode));
 }
 
 /**
@@ -190,12 +203,9 @@ void FXOS8700CQ::writeReg(uint8_t regNum, uint8_t value) {
 void FXOS8700CQ::reset(void) {
 
    writeReg(CTRL_REG2, FXOS8700CQ_CTRL_REG2_RST_MASK);
+
    // Device is not accessible after RESET
-   // Wait a while
-   int i;
-   for(i=0; i<20000; i++) {
-      __asm__("nop");
-   }
+   waitUS(1000);
 }
 
 /**
@@ -241,12 +251,13 @@ void FXOS8700CQ::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16
  * @param mode - one of ACCEL_2Gmode etc.
  */
 void FXOS8700CQ::setAccelerometerMode(AccelerometerMode mode) {
+   // Make inactive
    writeReg(CTRL_REG1, 0x00);
 
+   // Change mode
    writeReg(XYZ_DATA_CFG, FXOS8700CQ_XYZ_DATA_CFG_FS(mode));
 
-   writeReg(M_CTRL_REG2, FXOS8700CQ_M_CTRL_REG2_M_HYB_AUTOINC_MODE_MASK);
-
+   // Make active etc
    writeReg(CTRL_REG1,
          FXOS8700CQ_CTRL_REG1_ASLP_RATE(0) | /* 50 Hz auto-sleep rate */
          FXOS8700CQ_CTRL_REG1_DR(2) |        /* 200 Hz update rate    */
@@ -280,7 +291,7 @@ void FXOS8700CQ::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_
  * @param mode - one of 2Gmode etc.
  */
 void FXOS8700CQ::setMagnetometerMode(ControlReg2Mode mode) {
-   writeReg(M_CTRL_REG2, mode);
+   writeReg(M_CTRL_REG2, mode|FXOS8700CQ_M_CTRL_REG2_M_HYB_AUTOINC_MODE_MASK);
 }
 
 /*
@@ -317,7 +328,6 @@ uint32_t FXOS8700CQ::readID(void) {
 
 /**
  * Calibrate accelerometer
- * (2g mode)
  */
 void FXOS8700CQ::calibrateAccelerometer() {
 
@@ -353,7 +363,7 @@ void FXOS8700CQ::calibrateAccelerometer() {
       int status;
       do {
          readAccelerometerXYZ(&status, &Xout_Accel_14_bit, &Yout_Accel_14_bit, &Zout_Accel_14_bit);
-      } while ((status & FXOS8700CQ_STATUS_ZYXDR_MASK) == 0);
+      } while ((status & FXOS8700CQ_STATUS_XYZDR_MASK) == 0);
       Xout_Accel += Xout_Accel_14_bit;
       Yout_Accel += Yout_Accel_14_bit;
       Zout_Accel += Zout_Accel_14_bit;
@@ -371,5 +381,43 @@ void FXOS8700CQ::calibrateAccelerometer() {
    writeReg(OFF_Z, Z_Accel_offset);
 
    // Restore original settings
+   writeReg(CTRL_REG1, originalControlReg1Value);
+}
+
+/**
+ * Simple calibration of magnetometer
+ * Requires user to rotate the board in all dimensions
+ */
+void FXOS8700CQ::calibrateMagnetometer() {
+
+   uint8_t originalMControlReg1Value = readReg(M_CTRL_REG1);
+   uint8_t originalControlReg1Value  = readReg(CTRL_REG1);
+
+//   uint8_t buff[6] = {M_OFF_X_MSB};
+//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   printf("FXOS8700CQ, m_offset = 0x%02x%02x, 0x%02x%02x, 0x%02x%02x,\n", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5] );
+
+   // Make inactive so setting can be changed
+   writeReg(CTRL_REG1, 0x00);
+   writeReg(CTRL_REG1,
+         FXOS8700CQ_CTRL_REG1_ASLP_RATE(0) | // 50 Hz auto-sleep rate
+         FXOS8700CQ_CTRL_REG1_DR(6) |        // 6.25 Hz update rate (assuming mag only)
+         FXOS8700CQ_CTRL_REG1_ACTIVE_MASK);  // Active
+   writeReg(M_CTRL_REG1,
+         FXOS8700CQ_M_CTRL_REG1_M_ACAL_MASK|       // Magnetic hard-iron offset auto-calibration enabled
+         FXOS8700CQ_M_CTRL_REG1_M_OS(7)|           // Maximum over-sample
+         FXOS8700CQ_M_CTRL_REG1_M_HMS(MAG_ONLY));  // Magnetometer only
+
+   // ~200 samples @ 6.35 Hz
+   waitMS(30000);
+
+//   buff[0] = M_OFF_X_MSB;
+//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   printf("FXOS8700CQ, m_offset = 0x%02x%02x, 0x%02x%02x, 0x%02x%02x,\n", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5] );
+
+   // Make inactive so setting can be changed
+   writeReg(CTRL_REG1, 0x00);
+   // Restore original settings
+   writeReg(M_CTRL_REG1, originalMControlReg1Value);
    writeReg(CTRL_REG1, originalControlReg1Value);
 }

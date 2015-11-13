@@ -26,7 +26,6 @@ void report(FXOS8700CQ *accelerometer) {
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d, ", accelStatus, accelX, accelY, accelZ);
    printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
    printf("a=%d\n", (int)(180*atan2(magX, magY)/M_PI));
-   waitMS(400);
 }
 
 int main() {
@@ -34,22 +33,36 @@ int main() {
 
    // Instantiate interface
    I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
-   FXOS8700CQ *accelerometer = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
+   FXOS8700CQ *accelmag = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
 
-   uint8_t id = accelerometer->readID();
-   printf("Device ID = 0x%02X (should be 0x0D)\n", id);
+   uint8_t id = accelmag->readID();
+   printf("Device ID = 0x%02X (should be 0xC7)\n", id);
+
+   // Enable both Accelerometer and magnetometer
+   accelmag->enable(FXOS8700CQ::ACCEL_MAG);
 
    printf("Before simple calibration (make sure the device is level!)\n");
-   report(accelerometer);
-   report(accelerometer);
-   report(accelerometer);
+   report(accelmag);
+   report(accelmag);
+   report(accelmag);
 
-   accelerometer->calibrateAccelerometer();
+   accelmag->calibrateAccelerometer();
    // Make sure we have new values
    waitMS(100);
 
    printf("After calibration\n");
+   report(accelmag);
+
+   printf("Calibrating magnetometer\nPlease rotate the board in all dimensions until complete (~30 s)\n");
+   accelmag->calibrateMagnetometer();
+
    for(;;) {
-      report(accelerometer);
+      report(accelmag);
+      waitMS(400);
    }
+
+
+
+
+
 }
