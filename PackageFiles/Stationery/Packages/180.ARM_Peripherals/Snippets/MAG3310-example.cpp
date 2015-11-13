@@ -25,15 +25,17 @@ int main() {
    uint8_t id = magnetometer->readID();
    printf("Device ID = 0x%02X (should be 0xC4)\n", id);
 
-   printf("Calibrating magnetometer\nPlease rotate the board in all dimensions until complete (~30 s)\n");
+   printf("Calibrating magnetometer\n"
+          "Please rotate the board in all dimensions until complete (~20 s)\n");
    magnetometer->calibrateMagnetometer();
 
    for(;;) {
+      waitMS(120);
       int magStatus;
       int16_t magX,magY,magZ;
       magnetometer->readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
       printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
+      // Assumes the sensor is level
       printf("a=%d\n", (int)(180*atan2(magX, magY)/M_PI));
-      waitMS(400);
    }
 }

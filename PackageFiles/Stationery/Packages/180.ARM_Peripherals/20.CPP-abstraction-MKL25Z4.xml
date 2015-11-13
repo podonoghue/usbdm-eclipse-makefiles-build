@@ -19,6 +19,7 @@
       <constant id="demo.cpp.peripheral.lptmr"  value="true" />
       <constant id="demo.cpp.peripheral.pit"    value="true" />
       <constant id="demo.cpp.peripheral.spi"    value="true" />
+      <constant id="demo.cpp.peripheral.lcd"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
          name="CPP Hardware abstraction" 
@@ -38,7 +39,8 @@
          <constant id="demo.cpp.joystick.z"         value="A0" />
          <constant id="demo.cpp.external.switch"    value="D12" />
          <constant id="demo.cpp.external.led"       value="D13" />
-         <constant id="demo.cpp.magnetometer.i2c"   value="I2C_0" />
+         <constant id="demo.cpp.lcd.spi"            value="SPI_0" />
+         <constant id="demo.cpp.magnetometer.i2c"   value="I2C_1" />
          <constant id="demo.cpp.accelerometer.i2c"  value="I2C_0" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
