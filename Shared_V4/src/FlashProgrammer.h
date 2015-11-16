@@ -33,6 +33,7 @@
 #include "DeviceData.h"
 #include "FlashImage.h"
 #include "BdmInterface.h"
+#include "UsbdmTclInterpreter.h"
 
 #if !defined(CPP_DLL_LOCAL)
    //! Functions exported from a library
@@ -80,6 +81,15 @@ public:
     * @return error code
     */
    virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device) = 0;
+   /**
+    * Set device data for flash operations
+    *
+    * @param theParameters   -  data describing the device
+    * @param tclInterpreter  -  TCL interpreter to use
+    *
+    * @return error code see \ref USBDM_ErrorCode
+    */
+   virtual USBDM_ErrorCode setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter) = 0;
    /**
     * Get data for current set device
     *

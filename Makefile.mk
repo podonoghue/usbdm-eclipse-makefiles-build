@@ -10,8 +10,8 @@ DIRS = \
   UsbdmWx_DLL          \
   UsbdmDsc_DLL         \
   BdmInterface_DLL     \
-  UsbdmTcl_DLL         \
   DeviceDatabase_DLL   \
+  UsbdmTcl_DLL         \
   FlashImage_DLL       \
   Programmer_DLL       \
   GDI_DLL              \

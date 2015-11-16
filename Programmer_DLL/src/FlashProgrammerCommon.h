@@ -22,8 +22,10 @@ public:
    virtual ~FlashProgrammerCommon();
 
    virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device);
+   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter);
    virtual DeviceDataConstPtr getDeviceData();
    virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface);
+
    virtual USBDM_ErrorCode    massEraseTarget() { return massEraseTarget(true); };
    virtual uint16_t           getCalculatedTrimValue() { return calculatedClockTrimValue; };
 
@@ -98,9 +100,26 @@ protected:
    static const char *getFlashOperationName(FlashOperation flashOperation);
 
    virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) = 0;
+
+   //=======================================================================
+   // Initialises TCL support for current target
+   //
    USBDM_ErrorCode initTCL(void);
+   //=======================================================================
+   // Sets and initialises the TCL interpreter
+   //
+   USBDM_ErrorCode setTCLInterpreter(UsbdmTclInterperPtr ti);
+   //=======================================================================
+   //  Release the current TCL interpreter
+   //
    USBDM_ErrorCode releaseTCL(void);
+   //=======================================================================
+   // Executes a TCL script in the current TCL interpreter
+   //
    USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
+   //=======================================================================
+   // Executes a TCL command previously loaded in the TCL interpreter
+   //
    USBDM_ErrorCode runTCLCommand(const char *command);
 
    USBDM_ErrorCode probeMemory(MemorySpace_t memorySpace, uint32_t address);

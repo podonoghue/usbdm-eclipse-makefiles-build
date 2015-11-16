@@ -18,7 +18,6 @@ Change History
 \endverbatim
 
  */
-#include "UsbdmTclInterpreterImp.h"
 
 #include <stdint.h>
 #include <limits.h>
@@ -39,6 +38,13 @@ Change History
 #include "BdmInterfaceFactory.h"
 #include "DSC_Utilities.h"
 #include "PluginHelper.h"
+
+#include "UsbdmTclInterpreterFactory.h"
+#include "UsbdmTclInterpreterImp.h"
+
+#include "FlashImageFactory.h"
+#include "DeviceInterface.h"
+#include "FlashProgrammerFactory.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -66,6 +72,8 @@ size_t CPP_DLL_EXPORT createInteractivePluginInstance(void *pp) {
    return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
 }
 
+UsbdmTclInterperPtr UsbdmTclInterpreterImp::interactiveInterpreter;
+
 static WxPluginPtr                 wxPlugin;
 static BdmInterfacePtr             bdmInterface;
 static MemorySpace_t               defaultMemorySpace   = MS_None;
@@ -73,10 +81,20 @@ static USBDM_ErrorCode             lastError            = BDM_RC_OK;
 static int                         bigEndian            = true;
 static std::vector<BdmInformation> bdmList;
 
+static void checkRC(USBDM_ErrorCode rc) {
+   static char buff[40];
+   if (rc != BDM_RC_OK) {
+      if (bdmInterface == 0) {
+         snprintf(buff, sizeof(buff), "Error #%d", rc);
+         throw MyException(buff);
+      }
+      throw MyException(bdmInterface->getErrorString(rc));
+   }
+}
+
 /*
  * ===========================================================
  */
-
 int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
    Tcl_Main(argc, argv, appInitProc);
    return EXIT_SUCCESS;
@@ -186,8 +204,10 @@ UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
    Tcl_SetStdChannel(0, TCL_STDOUT);
    Tcl_SetStdChannel(0, TCL_STDERR);
    log.print("After Tcl_SetStdChannel()\n");
-   Tcl_UnregisterChannel(interp.get(), tclChannel);
-   log.print("After Tcl_UnregisterChannel()\n");
+   if (tclChannel != 0) {
+      Tcl_UnregisterChannel(interp.get(), tclChannel);
+      log.print("After Tcl_UnregisterChannel()\n");
+   }
    interp.reset();
    log.print("After interp.reset()\n");
 }
@@ -2109,6 +2129,194 @@ static int cmd_readLong(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
+static int listDevices() {
+   DeviceInterfacePtr deviceInterface(new DeviceInterface(bdmInterface->getBdmOptions().targetType));
+
+   int deviceIndex;
+   vector<DeviceDataPtr>::const_iterator it;
+   int col = 0;
+   const int nameWidth = 14;
+   for ( it=deviceInterface->getDeviceDatabase()->begin(), deviceIndex=0;
+         it < deviceInterface->getDeviceDatabase()->end(); it++, deviceIndex++ ) {
+      if (((*it)->getTargetName().length() != 0) && !((*it)->isHidden())) {
+         const char *name = (const char *)((*it)->getTargetName().c_str());
+         int length = strlen(name)+1;
+         if (col+length > 75) {
+            PRINT("\n");
+            col = 0;
+         }
+         int width = nameWidth;
+         while (width < length) {
+            width += nameWidth;
+         }
+         PRINT("%*s", -width, name);
+         col += width;
+      }
+   }
+   PRINT("\n");
+   return TCL_OK;
+}
+
+//DeviceInterfacePtr deviceInterface(new DeviceInterface(bdmOptions.targetType));
+//FlashProgrammerPtr flashProgrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
+
+DeviceInterfacePtr deviceInterface;
+FlashImagePtr flashImage;
+
+//! Set a device to me manipulated
+static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   LOGGING;
+   // setdevice <deviceName>
+   if ((argc == 1)) {
+      const char *name = "No device selected";
+      if (deviceInterface != 0) {
+         name = deviceInterface->getCurrentDevice()->getTargetName().c_str();
+      }
+      PRINT("%s\n", name);
+      return TCL_OK;
+   }
+   if ((argc != 2)) {
+      Tcl_WrongNumArgs(interp, 1, argv, "<deviceName>");
+      return TCL_ERROR;
+   }
+
+   if (bdmInterface == 0) {
+      PRINT("Set interface first\n");
+      return TCL_ERROR;
+   }
+
+   const char *deviceName = Tcl_GetString(argv[1]);
+   PRINT("setdevice \'%s\'\n", deviceName);
+
+   try {
+      if (strcmp(deviceName, "-list") == 0) {
+         return listDevices();
+      }
+      PRINT("Changing interface options\n");
+      USBDM_ExtendedOptions_t &bdmOptions(bdmInterface->getBdmOptions());
+      bdmOptions.targetVdd          = BDM_TARGET_VDD_3V3;
+      bdmOptions.leaveTargetPowered = true;
+
+      PRINT("Creating device database\n");
+      deviceInterface.reset(new DeviceInterface(bdmOptions.targetType));
+
+      PRINT("Selecting device \'%s\'\n", deviceName);
+      checkRC(deviceInterface->setCurrentDeviceByName(deviceName));
+
+   } catch(MyException &e) {
+      PRINT("Failed, rc = %s\n", e.what());
+      return TCL_ERROR;
+   }
+   return TCL_OK;
+}
+
+//! Load a memory image
+static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   LOGGING;
+
+   // loadfile <fileName>
+   if ((argc != 2)) {
+      Tcl_WrongNumArgs(interp, 1, argv, "<fileName>");
+      return TCL_ERROR;
+   }
+   if (bdmInterface == 0) {
+      PRINT("Set interface first\n");
+      return TCL_ERROR;
+   }
+   try {
+      PRINT("Loading file\n");
+      flashImage = FlashImageFactory::createFlashImage(bdmInterface->getBdmOptions().targetType);
+      checkRC(flashImage->loadFile(Tcl_GetString(argv[1])));
+
+   } catch(MyException &e) {
+      PRINT("Failed, rc = %s\n", e.what());
+      return TCL_ERROR;
+   }
+   return TCL_OK;
+}
+
+//! Load a memory image
+static int cmd_program(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   LOGGING;
+   // program
+   if (argc != 1) {
+      Tcl_WrongNumArgs(interp, 1, argv, "");
+      return TCL_ERROR;
+   }
+   if (bdmInterface == 0) {
+      PRINT("Set interface first\n");
+      return TCL_ERROR;
+   }
+   if (flashImage == 0) {
+      PRINT("Load file first\n");
+      return TCL_ERROR;
+   }
+   UsbdmTclInterperPtr ti = UsbdmTclInterpreterImp::getInteractiveInterpreter();
+   log.print("interp = %p\n", interp);
+   log.print("getInteractiveUsbdmTclInterpreter = %p\n", UsbdmTclInterpreterImp::getInteractiveInterpreter().get());
+
+   try {
+      PRINT("Creating programmer\n");
+      FlashProgrammerPtr flashProgrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
+
+      PRINT("Setting programmer device data \'%s\'\n", deviceInterface->getCurrentDevice()->getTargetName().c_str());
+      checkRC(flashProgrammer->setDeviceData(deviceInterface->getCurrentDevice(), UsbdmTclInterpreterImp::getInteractiveInterpreter()));
+
+      PRINT("Initialising BDM interface\n");
+      checkRC(bdmInterface->initBdm());
+
+      PRINT("Programming\n");
+      checkRC(flashProgrammer->programFlash(flashImage));
+
+   } catch(MyException &e) {
+      PRINT("Failed, rc = %s\n", e.what());
+      return TCL_ERROR;
+   }
+   PRINT("Success \n");
+   return TCL_OK;
+}
+
+//! Load a memory image
+static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   LOGGING;
+   // program
+   if (argc != 1) {
+      Tcl_WrongNumArgs(interp, 1, argv, "");
+      return TCL_ERROR;
+   }
+   if (bdmInterface == 0) {
+      PRINT("Set interface first\n");
+      return TCL_ERROR;
+   }
+   if (flashImage == 0) {
+      PRINT("Load file first\n");
+      return TCL_ERROR;
+   }
+   UsbdmTclInterperPtr ti = UsbdmTclInterpreterImp::getInteractiveInterpreter();
+   log.print("interp = %p\n", interp);
+   log.print("getInteractiveUsbdmTclInterpreter = %p\n", UsbdmTclInterpreterImp::getInteractiveInterpreter().get());
+
+   try {
+      PRINT("Creating programmer\n");
+      FlashProgrammerPtr flashProgrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
+
+      PRINT("Setting programmer device data \'%s\'\n", deviceInterface->getCurrentDevice()->getTargetName().c_str());
+      checkRC(flashProgrammer->setDeviceData(deviceInterface->getCurrentDevice(), UsbdmTclInterpreterImp::getInteractiveInterpreter()));
+
+      PRINT("Initialising BDM interface\n");
+      checkRC(bdmInterface->initBdm());
+
+      PRINT("Verifying\n");
+      checkRC(flashProgrammer->verifyFlash(flashImage));
+
+   } catch(MyException &e) {
+      PRINT("Failed, rc = %s\n", e.what());
+      return TCL_ERROR;
+   }
+   PRINT("Success \n");
+   return TCL_OK;
+}
+
 //! Test a block of target memory
 static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
 // tBlock <addr> <size> <repeatcount>
@@ -3029,7 +3237,7 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 
     bdmInterface->closeBdm();
     bdmInterface.reset();
-    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, nullCallback);
+//    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, nullCallback);
 
     wxPlugin.reset();
 
@@ -3048,6 +3256,7 @@ static const char usageText[] =
    "connect                      - Connect to target\n"
    "closeBDM                     - Close BDM connection\n"
    "debug <value>                - Debug commands\n"
+   "defaultMemorySpace N,X,P     - Set default memory space (N:None,X:Data,P:Program)\n"
    "dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err\n"
    "       returns 0=>cancel, 1=yes, 2=no, 3=ok\n"
    "                             - display dialogue\n"
@@ -3066,11 +3275,13 @@ static const char usageText[] =
    "jtag-shift-dr                - Set up for DR chain shift\n"
    "jtag-shift-ir                - Set up for IR chain shift\n"
    "jtag-idcode                  - Read IDCODE from JTAG\n"
+   "load <filename>              - Load file image into buffer\n"
    "log 0|1                      - setting ARM loggin OFF/ON\n"
    "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
    "openbdm [<bdmNumber>]        - Open given BDM\n"
    "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n"
    "                                level=H|L|3|-\n"
+   "program                      - Program image to target\n"
    "regs                         - PRINT out registers\n"
    "reset <N|S><H|S|P|A>         - Reset to bdm mode\n"
    "rblock <addr> <size>         - Read block\n"
@@ -3081,8 +3292,8 @@ static const char usageText[] =
    "rdreg <regNo>                - Read debug register\n"
    "rcreg <regNo>                - Read control register\n"
    "setboot                      - Set USBDM module to ICP mode\n"
+   "setdevice <deviceName|-list> - Set targetdevice (e.g. MK20DX128M5)\n"
    "setbytesex <big|little>      - Set big/little endian target\n"
-   "defaultMemorySpace N,X,P     - Set default memory space (N:None,X:Data,P:Program)"
    "settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM\n"
    "settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)\n"
    "settargetvpp <standby|on|off>- Set target Vpp\n"
@@ -3092,6 +3303,7 @@ static const char usageText[] =
    "tblock <start> <end> <count> - Random RAM write/read block test\n"
    "testcreg                     - Test control register\n"
    "testStatus                   - Read target status in an infinite loop\n"
+   "verify                       - Verify image against target\n"
    "wc <value>                   - Write control register\n"
    "wpc <value>                  - Write to PC\n"
    "wblock <addr> <size> <data>  - Write block\n"
@@ -3147,6 +3359,7 @@ const char *name;
 } myCommands[] = {
       { cmd_connect,              "connect" },
 //    { initialiseCommand,        "initialise" },
+      { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_pinSet,               "pinSet" },
 //    { debugCommand,             "debug"},
       { cmd_go,                   "go"},
@@ -3173,7 +3386,6 @@ const char *name;
 //      { cmd_setBoot,              "setboot" },
       { cmd_setSpeed,             "speed" },
       { cmd_sync,                 "sync" },
-      { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_setByteSex,           "setbytesex" },
       { cmd_step,                 "step"},
       { cmd_registers,            "regs"},
@@ -3200,6 +3412,10 @@ const char *name;
       { cmd_help,                 "help"},
       { cmd_help,                 "?"},
       { cmd_testBlock,            "tblock"},
+      { cmd_setDevice,            "setdevice"},
+      { cmd_loadFile,             "load"},
+      { cmd_program,              "program"},
+      { cmd_verify,               "verify"},
 //      { cmd_testCReg,           "testcreg"},
       { NULL, NULL }
 };

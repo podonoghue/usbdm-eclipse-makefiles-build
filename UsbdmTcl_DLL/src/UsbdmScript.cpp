@@ -31,7 +31,7 @@ public:
 int main(int argc, char *argv[]) {
    OpenLog ol;
 
-   UsbdmTclInterperPtr ti = UsbdmTclInterperFactory::createInteractiveTclInterper(BdmInterfaceFactory::createInterface(T_OFF));
+   UsbdmTclInterperPtr ti = UsbdmTclInterperFactory::createInteractiveUsbdmTclInterpreter(BdmInterfaceFactory::createInterface(T_OFF));
    ti->main(argc, argv);
 }
 #endif

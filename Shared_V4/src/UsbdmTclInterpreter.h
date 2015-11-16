@@ -25,8 +25,8 @@
     \endverbatim
 */
 
-#ifndef USBDMTCLINTERPRETER_H_
-#define USBDMTCLINTERPRETER_H_
+#ifndef USBDM_TCL_INTERPRETER_H_
+#define USBDM_TCL_INTERPRETER_H_
 
 #include <stdbool.h>
 #include "USBDM_API.h"
@@ -78,10 +78,22 @@ public:
 
    virtual ~UsbdmTclInterpreter() {};
 
+   /**
+    * Indicates if this is the single interactive interpreter
+    */
+   virtual bool isInteractive(void) {
+      return false;
+   }
+
+   /**
+    * Sets this interpreter as the single interactive interpreter
+    */
+   virtual void setInteractive(bool isInteractive = true) = 0;
+
 protected:
    UsbdmTclInterpreter(bool doInit=false) {};
 };
 
 typedef std::tr1::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
 
-#endif /* USBDMTCLINTERPRETER_H_ */
+#endif /* USBDM_TCL_INTERPRETER_H_ */

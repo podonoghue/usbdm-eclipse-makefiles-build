@@ -59,16 +59,15 @@ USBDM_ErrorCode FlashProgrammerCommon::setTargetInterface(BdmInterfacePtr bdmInt
 }
 
 //=======================================================================
-// Initialises TCL support for current target
+// Sets and initialises the TCL interpreter
 //
-USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
+USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti) {
    LOGGING;
 
-   // Set up TCL interpreter only once
-   if (tclInterpreter != NULL) {
-      return PROGRAMMING_RC_OK;
-   }
-   tclInterpreter = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+   releaseTCL();
+
+   tclInterpreter = ti;
+
    if (tclInterpreter == NULL) {
       log.error("No TCL interpreter\n");
       return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
@@ -88,6 +87,19 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
       return rc;
    }
    return PROGRAMMING_RC_OK;
+}
+
+//=======================================================================
+// Initialises TCL support for current target
+//
+USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
+   LOGGING;
+
+   // Set up TCL interpreter only once
+   if (tclInterpreter != NULL) {
+      return PROGRAMMING_RC_OK;
+   }
+   return setTCLInterpreter(UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface));
 }
 
 //=======================================================================
@@ -130,6 +142,7 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
 USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    LOGGING;
    log.print("Command = '%s'\n", command);
+   log.print("tclInterpreter = %p\n", tclInterpreter.get());
    if (tclInterpreter == NULL) {
       log.error("No TCL Interpreter\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
@@ -155,6 +168,23 @@ USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr de
    log.print("Target=%s\n", device->getTargetName().c_str());
    releaseTCL();
    initTCL();
+   return PROGRAMMING_RC_OK;
+}
+
+/*======================================================================
+ * Set device data for flash operations
+ *
+ * @param theParameters   -  data describing the device
+ * @param tclInterpreter  -  TCL interpreter to use
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ */
+USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter) {
+   LOGGING_Q;
+   currentFlashProgram.reset();
+   this->device = device;
+   log.print("Target=%s\n", device->getTargetName().c_str());
+   setTCLInterpreter(tclInterpreter);
    return PROGRAMMING_RC_OK;
 }
 

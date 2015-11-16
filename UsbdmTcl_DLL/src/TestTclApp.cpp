@@ -105,7 +105,7 @@ int main(void) {
 //   log.print("getTclResult - \n[%s]\n", p->getTclResult());
 
    log.print("Creating UsbdmTclInterperPtr\n");
-   UsbdmTclInterperPtr p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+   UsbdmTclInterperPtr p = UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface);
    log.print("evalTclScript - \n[puts \"hello\"\n]\n");
    p->evalTclScript("puts \"hello\"\n");
    log.print("getTclResult - \n[%s]\n", p->getTclResult());
@@ -113,7 +113,7 @@ int main(void) {
    p.reset();
 
    log.print("Creating UsbdmTclInterperPtr\n");
-   p = UsbdmTclInterperFactory::createUsbdmTclInterper(bdmInterface);
+   p = UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface);
    log.print("evalTclScript - \n[puts \"hello\"\n]\n");
    p->evalTclScript("puts \"hello\"\n");
    log.print("getTclResult - \n[%s]\n", p->getTclResult());

@@ -126,7 +126,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
          throw MyException("Module failed to load\n");
       }
    }
-   log.print("Module \'%s\' loaded @0x%p\n", moduleName, moduleHandle);
+   log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
    newInstance  = (size_t (*)(...))dlsym(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
@@ -143,7 +143,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
 template <class T>
 void PluginFactory<T>::unloadClass() {
    LOGGING;
-   log.print("Unloading module @0x%p\n", moduleHandle);
+   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (dlclose(moduleHandle) != 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
       printSystemErrorMessage();

@@ -25,8 +25,8 @@
     \endverbatim
 */
 
-#ifndef SRC_UsbdmTclInterperFACTORY_H_
-#define SRC_UsbdmTclInterperFACTORY_H_
+#ifndef SRC_USBDM_TCL_INTERPRETER_FACTORY_H_
+#define SRC_USBDM_TCL_INTERPRETER_FACTORY_H_
 
 #include "PluginFactory.h"
 #include "UsbdmTclInterpreter.h"
@@ -35,39 +35,44 @@
  * Factory for creating USBDM TCL interpreters
  * This uses a plug-in approach to loading the required module
  */
-class UsbdmTclInterperFactory: public PluginFactory<UsbdmTclInterpreter> {
+class UsbdmTclInterperFactory : public PluginFactory<UsbdmTclInterpreter> {
 
 public:
    /**
     * Create a TCL interpreter for running scripts
     *
     * @param bdmInterface Interface to use to communicate with target
+    *
+    * @return The interpreter created
     */
-   static UsbdmTclInterperPtr createUsbdmTclInterper(BdmInterfacePtr bdmInterface) {
+   static UsbdmTclInterperPtr createUsbdmTclInterpreter(BdmInterfacePtr bdmInterface) {
       LOGGING;
-      UsbdmTclInterperPtr pp = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
-      pp->setBdmInterface(bdmInterface, true);
-      return pp;
+      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
+      interpreter->setBdmInterface(bdmInterface, true);
+      return interpreter;
    }
 
    /**
-    * Create a TCL interpreter for interactive use
+    * Create the TCL interpreter for interactive use (singleton)
     *
     * @param bdmInterface Interface to use to communicate with target
+    *
+    * @return The interpreter created
     */
-   static UsbdmTclInterperPtr createInteractiveTclInterper(BdmInterfacePtr bdmInterface) {
+   static UsbdmTclInterperPtr createInteractiveUsbdmTclInterpreter(BdmInterfacePtr bdmInterface) {
       LOGGING;
-      UsbdmTclInterperPtr pp = createPlugin(DLL_NAME("usbdm-tcl"), "createInteractivePluginInstance");
-      pp->setBdmInterface(bdmInterface, false);
-      return pp;
+      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
+      interpreter->setBdmInterface(bdmInterface, false);
+      interpreter->setInteractive();
+      return interpreter;
    }
 
 private:
-   /**
-    * Not used
-    */
+
    UsbdmTclInterperFactory();
    virtual ~UsbdmTclInterperFactory() {};
    };
 
-#endif /* SRC_UsbdmTclInterperFACTORY_H_ */
+//UsbdmTclInterperPtr UsbdmTclInterperFactory::interactiveInterpreter;
+
+#endif /* SRC_USBDM_TCL_INTERPRETER_FACTORY_H_ */
