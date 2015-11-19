@@ -112,8 +112,8 @@
 //   <o> PTA0 (Alias:LED_RED) [LCD23, GPIOA_0]<name=PTA0_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTA0 pin
 //     <-2=> Disabled (reset default)
-//     <0=> LCD23<selection=LCD23_PIN_SEL,PTA0>
-//     <1=> GPIOA_0<selection=GPIOA_0_PIN_SEL,PTA0>
+//     <0=> LCD23<selection=LCD23_PIN_SEL,PTA0 (Alias:LED_RED)>
+//     <1=> GPIOA_0<selection=GPIOA_0_PIN_SEL,PTA0 (Alias:LED_RED)>
 //     <1=> Default
 #define PTA0_SIG_SEL         1
 
@@ -121,8 +121,8 @@
 //   <o> PTA1 (Alias:LED_GREEN) [LCD24, GPIOA_1]<name=PTA1_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTA1 pin
 //     <-2=> Disabled (reset default)
-//     <0=> LCD24<selection=LCD24_PIN_SEL,PTA1>
-//     <1=> GPIOA_1<selection=GPIOA_1_PIN_SEL,PTA1>
+//     <0=> LCD24<selection=LCD24_PIN_SEL,PTA1 (Alias:LED_GREEN)>
+//     <1=> GPIOA_1<selection=GPIOA_1_PIN_SEL,PTA1 (Alias:LED_GREEN)>
 //     <1=> Default
 #define PTA1_SIG_SEL         1
 
@@ -372,11 +372,11 @@
 //   <o> PTD1 (Alias:LED_BLUE) [GPIOD_1, SCI1_TxD, SPI0_SS_B, PXBAR_OUT3, QT3]<name=PTD1_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD1 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_1<selection=GPIOD_1_PIN_SEL,PTD1>
-//     <2=> SCI1_TxD<selection=SCI1_TxD_PIN_SEL,PTD1>
-//     <3=> SPI0_SS_B<selection=SPI0_SS_B_PIN_SEL,PTD1>
-//     <4=> PXBAR_OUT3<selection=PXBAR_OUT3_PIN_SEL,PTD1>
-//     <5=> QT3<selection=QT3_PIN_SEL,PTD1>
+//     <1=> GPIOD_1<selection=GPIOD_1_PIN_SEL,PTD1 (Alias:LED_BLUE)>
+//     <2=> SCI1_TxD<selection=SCI1_TxD_PIN_SEL,PTD1 (Alias:LED_BLUE)>
+//     <3=> SPI0_SS_B<selection=SPI0_SS_B_PIN_SEL,PTD1 (Alias:LED_BLUE)>
+//     <4=> PXBAR_OUT3<selection=PXBAR_OUT3_PIN_SEL,PTD1 (Alias:LED_BLUE)>
+//     <5=> QT3<selection=QT3_PIN_SEL,PTD1 (Alias:LED_BLUE)>
 //     <1=> Default
 #define PTD1_SIG_SEL         1
 
@@ -1161,7 +1161,7 @@
 //   <o> LCD23 [PTA0]<name=LCD23_PIN_SEL>
 //   <i> Shows which pin LCD23 is mapped to
 //     <0=> Disabled
-//     <1=> PTA0<selection=PTA0_SIG_SEL,LCD23>
+//     <1=> PTA0 (Alias:LED_RED)<selection=PTA0_SIG_SEL,LCD23>
 //     <0=> Default
 #define LCD23_PIN_SEL        0
 #if LCD23_PIN_SEL == 1
@@ -1173,7 +1173,7 @@
 //   <o> LCD24 [PTA1]<name=LCD24_PIN_SEL>
 //   <i> Shows which pin LCD24 is mapped to
 //     <0=> Disabled
-//     <1=> PTA1<selection=PTA1_SIG_SEL,LCD24>
+//     <1=> PTA1 (Alias:LED_GREEN)<selection=PTA1_SIG_SEL,LCD24>
 //     <0=> Default
 #define LCD24_PIN_SEL        0
 #if LCD24_PIN_SEL == 1
@@ -1869,7 +1869,7 @@
 //   <o> GPIOA_0 [PTA0]<name=GPIOA_0_PIN_SEL>
 //   <i> Shows which pin GPIOA_0 is mapped to
 //     <0=> Disabled
-//     <1=> PTA0<selection=PTA0_SIG_SEL,GPIOA_0>
+//     <1=> PTA0 (Alias:LED_RED)<selection=PTA0_SIG_SEL,GPIOA_0>
 //     <1=> Default
 #define GPIOA_0_PIN_SEL      1
 #if GPIOA_0_PIN_SEL == 1
@@ -1881,7 +1881,7 @@
 //   <o> GPIOA_1 [PTA1]<name=GPIOA_1_PIN_SEL>
 //   <i> Shows which pin GPIOA_1 is mapped to
 //     <0=> Disabled
-//     <1=> PTA1<selection=PTA1_SIG_SEL,GPIOA_1>
+//     <1=> PTA1 (Alias:LED_GREEN)<selection=PTA1_SIG_SEL,GPIOA_1>
 //     <1=> Default
 #define GPIOA_1_PIN_SEL      1
 #if GPIOA_1_PIN_SEL == 1
@@ -2181,7 +2181,7 @@
 //   <o> GPIOD_1 [PTD1]<name=GPIOD_1_PIN_SEL>
 //   <i> Shows which pin GPIOD_1 is mapped to
 //     <0=> Disabled
-//     <1=> PTD1<selection=PTD1_SIG_SEL,GPIOD_1>
+//     <1=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,GPIOD_1>
 //     <1=> Default
 #define GPIOD_1_PIN_SEL      1
 #if GPIOD_1_PIN_SEL == 1
@@ -3261,7 +3261,7 @@
 //   <o> PXBAR_OUT3 [PTD1]<name=PXBAR_OUT3_PIN_SEL>
 //   <i> Shows which pin PXBAR_OUT3 is mapped to
 //     <0=> Disabled
-//     <1=> PTD1<selection=PTD1_SIG_SEL,PXBAR_OUT3>
+//     <1=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,PXBAR_OUT3>
 //     <0=> Default
 #define PXBAR_OUT3_PIN_SEL   0
 #if PXBAR_OUT3_PIN_SEL == 1
@@ -3386,7 +3386,7 @@
 //   <i> Shows which pin QT3 is mapped to
 //     <0=> Disabled
 //     <1=> PTE5<selection=PTE5_SIG_SEL,QT3>
-//     <2=> PTD1<selection=PTD1_SIG_SEL,QT3>
+//     <2=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,QT3>
 //     <0=> Default
 #define QT3_PIN_SEL          0
 #if QT3_PIN_SEL == 1
@@ -3513,7 +3513,7 @@
 //   <o> SCI1_TxD [PTD1, PTI1]<name=SCI1_TxD_PIN_SEL>
 //   <i> Shows which pin SCI1_TxD is mapped to
 //     <0=> Disabled
-//     <1=> PTD1<selection=PTD1_SIG_SEL,SCI1_TxD>
+//     <1=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,SCI1_TxD>
 //     <2=> PTI1<selection=PTI1_SIG_SEL,SCI1_TxD>
 //     <0=> Default
 #define SCI1_TxD_PIN_SEL     0
@@ -3778,7 +3778,7 @@
 //   <i> Shows which pin SPI0_SS_B is mapped to
 //     <0=> Disabled
 //     <1=> PTG2<selection=PTG2_SIG_SEL,SPI0_SS_B>
-//     <2=> PTD1<selection=PTD1_SIG_SEL,SPI0_SS_B>
+//     <2=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,SPI0_SS_B>
 //     <0=> Default
 #define SPI0_SS_B_PIN_SEL    0
 #if SPI0_SS_B_PIN_SEL == 1

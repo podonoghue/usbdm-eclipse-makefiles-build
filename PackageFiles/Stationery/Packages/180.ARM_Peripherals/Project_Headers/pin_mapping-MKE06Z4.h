@@ -726,10 +726,10 @@
 //   <o> PTG5 (Alias:LED_RED) [GPIOB_21, KBI1_P21, FTM2_CH3, SPI1_MOSI]<name=PTG5_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTG5 pin
 //     <-2=> Disabled (reset default)
-//     <0=> GPIOB_21<selection=GPIOB_21_PIN_SEL,PTG5>
-//     <1=> KBI1_P21<selection=KBI1_P21_PIN_SEL,PTG5>
-//     <2=> FTM2_CH3<selection=FTM2_CH3_PIN_SEL,PTG5>
-//     <3=> SPI1_MOSI<selection=SPI1_MOSI_PIN_SEL,PTG5>
+//     <0=> GPIOB_21<selection=GPIOB_21_PIN_SEL,PTG5 (Alias:LED_RED)>
+//     <1=> KBI1_P21<selection=KBI1_P21_PIN_SEL,PTG5 (Alias:LED_RED)>
+//     <2=> FTM2_CH3<selection=FTM2_CH3_PIN_SEL,PTG5 (Alias:LED_RED)>
+//     <3=> SPI1_MOSI<selection=SPI1_MOSI_PIN_SEL,PTG5 (Alias:LED_RED)>
 //     <0=> Default
 #define PTG5_SIG_SEL         0
 
@@ -737,10 +737,10 @@
 //   <o> PTG6 (Alias:LED_GREEN) [GPIOB_22, KBI1_P22, FTM2_CH4, SPI1_MISO]<name=PTG6_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTG6 pin
 //     <-2=> Disabled (reset default)
-//     <0=> GPIOB_22<selection=GPIOB_22_PIN_SEL,PTG6>
-//     <1=> KBI1_P22<selection=KBI1_P22_PIN_SEL,PTG6>
-//     <2=> FTM2_CH4<selection=FTM2_CH4_PIN_SEL,PTG6>
-//     <3=> SPI1_MISO<selection=SPI1_MISO_PIN_SEL,PTG6>
+//     <0=> GPIOB_22<selection=GPIOB_22_PIN_SEL,PTG6 (Alias:LED_GREEN)>
+//     <1=> KBI1_P22<selection=KBI1_P22_PIN_SEL,PTG6 (Alias:LED_GREEN)>
+//     <2=> FTM2_CH4<selection=FTM2_CH4_PIN_SEL,PTG6 (Alias:LED_GREEN)>
+//     <3=> SPI1_MISO<selection=SPI1_MISO_PIN_SEL,PTG6 (Alias:LED_GREEN)>
 //     <0=> Default
 #define PTG6_SIG_SEL         0
 
@@ -748,10 +748,10 @@
 //   <o> PTG7 (Alias:LED_BLUE) [GPIOB_23, KBI1_P23, FTM2_CH5, SPI1_PCS]<name=PTG7_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTG7 pin
 //     <-2=> Disabled (reset default)
-//     <0=> GPIOB_23<selection=GPIOB_23_PIN_SEL,PTG7>
-//     <1=> KBI1_P23<selection=KBI1_P23_PIN_SEL,PTG7>
-//     <2=> FTM2_CH5<selection=FTM2_CH5_PIN_SEL,PTG7>
-//     <3=> SPI1_PCS<selection=SPI1_PCS_PIN_SEL,PTG7>
+//     <0=> GPIOB_23<selection=GPIOB_23_PIN_SEL,PTG7 (Alias:LED_BLUE)>
+//     <1=> KBI1_P23<selection=KBI1_P23_PIN_SEL,PTG7 (Alias:LED_BLUE)>
+//     <2=> FTM2_CH5<selection=FTM2_CH5_PIN_SEL,PTG7 (Alias:LED_BLUE)>
+//     <3=> SPI1_PCS<selection=SPI1_PCS_PIN_SEL,PTG7 (Alias:LED_BLUE)>
 //     <0=> Default
 #define PTG7_SIG_SEL         0
 
@@ -1615,7 +1615,7 @@
 //   <o> KBI1_P21 [PTG5]<name=KBI1_P21_PIN_SEL>
 //   <i> Shows which pin KBI1_P21 is mapped to
 //     <0=> Disabled
-//     <1=> PTG5<selection=PTG5_SIG_SEL,KBI1_P21>
+//     <1=> PTG5 (Alias:LED_RED)<selection=PTG5_SIG_SEL,KBI1_P21>
 //     <0=> Default
 #define KBI1_P21_PIN_SEL     0
 #if KBI1_P21_PIN_SEL == 1
@@ -1627,7 +1627,7 @@
 //   <o> KBI1_P22 [PTG6]<name=KBI1_P22_PIN_SEL>
 //   <i> Shows which pin KBI1_P22 is mapped to
 //     <0=> Disabled
-//     <1=> PTG6<selection=PTG6_SIG_SEL,KBI1_P22>
+//     <1=> PTG6 (Alias:LED_GREEN)<selection=PTG6_SIG_SEL,KBI1_P22>
 //     <0=> Default
 #define KBI1_P22_PIN_SEL     0
 #if KBI1_P22_PIN_SEL == 1
@@ -1639,7 +1639,7 @@
 //   <o> KBI1_P23 [PTG7]<name=KBI1_P23_PIN_SEL>
 //   <i> Shows which pin KBI1_P23 is mapped to
 //     <0=> Disabled
-//     <1=> PTG7<selection=PTG7_SIG_SEL,KBI1_P23>
+//     <1=> PTG7 (Alias:LED_BLUE)<selection=PTG7_SIG_SEL,KBI1_P23>
 //     <0=> Default
 #define KBI1_P23_PIN_SEL     0
 #if KBI1_P23_PIN_SEL == 1
@@ -2351,7 +2351,7 @@
 //     <0=> Disabled
 //     <1=> PTC3<selection=PTC3_SIG_SEL,FTM2_CH3>
 //     <2=> PTD1<selection=PTD1_SIG_SEL,FTM2_CH3>
-//     <3=> PTG5<selection=PTG5_SIG_SEL,FTM2_CH3>
+//     <3=> PTG5 (Alias:LED_RED)<selection=PTG5_SIG_SEL,FTM2_CH3>
 //     <0=> Default
 #define FTM2_CH3_PIN_SEL     0
 #if FTM2_CH3_PIN_SEL == 1
@@ -2370,7 +2370,7 @@
 //   <i> Shows which pin FTM2_CH4 is mapped to
 //     <0=> Disabled
 //     <1=> PTB4<selection=PTB4_SIG_SEL,FTM2_CH4>
-//     <2=> PTG6<selection=PTG6_SIG_SEL,FTM2_CH4>
+//     <2=> PTG6 (Alias:LED_GREEN)<selection=PTG6_SIG_SEL,FTM2_CH4>
 //     <0=> Default
 #define FTM2_CH4_PIN_SEL     0
 #if FTM2_CH4_PIN_SEL == 1
@@ -2386,7 +2386,7 @@
 //   <i> Shows which pin FTM2_CH5 is mapped to
 //     <0=> Disabled
 //     <1=> PTB5<selection=PTB5_SIG_SEL,FTM2_CH5>
-//     <2=> PTG7<selection=PTG7_SIG_SEL,FTM2_CH5>
+//     <2=> PTG7 (Alias:LED_BLUE)<selection=PTG7_SIG_SEL,FTM2_CH5>
 //     <0=> Default
 #define FTM2_CH5_PIN_SEL     0
 #if FTM2_CH5_PIN_SEL == 1
@@ -3069,7 +3069,7 @@
 //   <o> GPIOB_21 [PTG5]<name=GPIOB_21_PIN_SEL>
 //   <i> Shows which pin GPIOB_21 is mapped to
 //     <0=> Disabled
-//     <1=> PTG5<selection=PTG5_SIG_SEL,GPIOB_21>
+//     <1=> PTG5 (Alias:LED_RED)<selection=PTG5_SIG_SEL,GPIOB_21>
 //     <1=> Default
 #define GPIOB_21_PIN_SEL     1
 #if GPIOB_21_PIN_SEL == 1
@@ -3081,7 +3081,7 @@
 //   <o> GPIOB_22 [PTG6]<name=GPIOB_22_PIN_SEL>
 //   <i> Shows which pin GPIOB_22 is mapped to
 //     <0=> Disabled
-//     <1=> PTG6<selection=PTG6_SIG_SEL,GPIOB_22>
+//     <1=> PTG6 (Alias:LED_GREEN)<selection=PTG6_SIG_SEL,GPIOB_22>
 //     <1=> Default
 #define GPIOB_22_PIN_SEL     1
 #if GPIOB_22_PIN_SEL == 1
@@ -3093,7 +3093,7 @@
 //   <o> GPIOB_23 [PTG7]<name=GPIOB_23_PIN_SEL>
 //   <i> Shows which pin GPIOB_23 is mapped to
 //     <0=> Disabled
-//     <1=> PTG7<selection=PTG7_SIG_SEL,GPIOB_23>
+//     <1=> PTG7 (Alias:LED_BLUE)<selection=PTG7_SIG_SEL,GPIOB_23>
 //     <1=> Default
 #define GPIOB_23_PIN_SEL     1
 #if GPIOB_23_PIN_SEL == 1
@@ -3514,7 +3514,7 @@
 //   <i> Shows which pin SPI1_MISO is mapped to
 //     <0=> Disabled
 //     <1=> PTD2<selection=PTD2_SIG_SEL,SPI1_MISO>
-//     <2=> PTG6<selection=PTG6_SIG_SEL,SPI1_MISO>
+//     <2=> PTG6 (Alias:LED_GREEN)<selection=PTG6_SIG_SEL,SPI1_MISO>
 //     <0=> Default
 #define SPI1_MISO_PIN_SEL    0
 #if SPI1_MISO_PIN_SEL == 1
@@ -3530,7 +3530,7 @@
 //   <i> Shows which pin SPI1_MOSI is mapped to
 //     <0=> Disabled
 //     <1=> PTD1<selection=PTD1_SIG_SEL,SPI1_MOSI>
-//     <2=> PTG5<selection=PTG5_SIG_SEL,SPI1_MOSI>
+//     <2=> PTG5 (Alias:LED_RED)<selection=PTG5_SIG_SEL,SPI1_MOSI>
 //     <0=> Default
 #define SPI1_MOSI_PIN_SEL    0
 #if SPI1_MOSI_PIN_SEL == 1
@@ -3546,7 +3546,7 @@
 //   <i> Shows which pin SPI1_PCS is mapped to
 //     <0=> Disabled
 //     <1=> PTD3<selection=PTD3_SIG_SEL,SPI1_PCS>
-//     <2=> PTG7<selection=PTG7_SIG_SEL,SPI1_PCS>
+//     <2=> PTG7 (Alias:LED_BLUE)<selection=PTG7_SIG_SEL,SPI1_PCS>
 //     <0=> Default
 #define SPI1_PCS_PIN_SEL     0
 #if SPI1_PCS_PIN_SEL == 1
