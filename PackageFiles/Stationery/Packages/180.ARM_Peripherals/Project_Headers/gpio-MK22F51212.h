@@ -41,8 +41,10 @@ extern const DigitalIO digitalIO_PTB1;          //!< DigitalIO on pin PTB1
 #define digitalIO_A1         digitalIO_PTB1
 extern const DigitalIO digitalIO_PTB2;          //!< DigitalIO on pin PTB2
 #define digitalIO_A5         digitalIO_PTB2
+#define digitalIO_ONBOARD_SCL digitalIO_PTB2
 extern const DigitalIO digitalIO_PTB3;          //!< DigitalIO on pin PTB3
 #define digitalIO_A4         digitalIO_PTB3
+#define digitalIO_ONBOARD_SDA digitalIO_PTB3
 extern const DigitalIO digitalIO_PTB6;          //!< DigitalIO on pin PTB6
 extern const DigitalIO digitalIO_PTB7;          //!< DigitalIO on pin PTB7
 extern const DigitalIO digitalIO_PTB8;          //!< DigitalIO on pin PTB8
@@ -154,10 +156,12 @@ extern const AnalogueIO analogueIO_ADC1_SE9;     //!< AnalogueIO on pin PTB1
 #if (PTB2_SIG_SEL == 0)
 extern const AnalogueIO analogueIO_ADC0_SE12;    //!< AnalogueIO on pin PTB2
 #define analogueIO_A5        analogueIO_ADC0_SE12
+#define analogueIO_ONBOARD_SCL analogueIO_ADC0_SE12
 #endif
 #if (PTB3_SIG_SEL == 0)
 extern const AnalogueIO analogueIO_ADC0_SE13;    //!< AnalogueIO on pin PTB3
 #define analogueIO_A4        analogueIO_ADC0_SE13
+#define analogueIO_ONBOARD_SDA analogueIO_ADC0_SE13
 #endif
 #if (PTB6_SIG_SEL == 0)
 extern const AnalogueIO analogueIO_ADC1_SE12;    //!< AnalogueIO on pin PTB6
