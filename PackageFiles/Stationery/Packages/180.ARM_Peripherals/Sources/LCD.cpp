@@ -90,7 +90,7 @@
 // PWM Control for back-light
 #define LCD_PWM pwmIO_D10 // = D10 on Arduino
 #else
-#define LCD_PWM digitalIO_PTC2 // = D10 on Arduino
+#define LCD_PWM digitalIO_D10 // = D10 on Arduino
 #endif
 #endif
 
