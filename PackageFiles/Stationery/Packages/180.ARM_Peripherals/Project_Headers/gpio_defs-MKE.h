@@ -75,16 +75,12 @@ struct DigitalIO {
    }
    /**
     * Set pin as digital output
-    *
-    * @param pcrValue PCR value to use in configuring port
     */
    void setDigitalOutput() const  {
       gpio->PDDR |= bitMask;
    }
    /**
     * Set pin as digital input
-    *
-    * @param pcrValue PCR value to use in configuring port
     */
    void setDigitalInput() const  {
       gpio->PDDR &= ~bitMask;

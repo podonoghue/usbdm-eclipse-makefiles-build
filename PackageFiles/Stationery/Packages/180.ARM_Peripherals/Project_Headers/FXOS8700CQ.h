@@ -242,7 +242,7 @@ public:
     * @param mode - one of 2Gmode etc.
     */
    void setMagnetometerMode(ControlReg2Mode mode);
-   /*
+   /**
     * Obtains measurements from the Magnetometer
     *
     * @param status  - Indicates status of x, y & z measurements
@@ -251,14 +251,14 @@ public:
     * @param z       - Z axis value
     */
    void readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z);
-   /*
+   /**
     * Obtains measurements from the Accelerometer & Magnetometer
     *
     * @param data  Reference to structure to contain values read
     */
    void readAll(Data &data);
 
-   /*!
+   /**
     * Read ID from accelerometer
     *
     * @return ID value as 8-bit number (0x1A for MMA8451Q)

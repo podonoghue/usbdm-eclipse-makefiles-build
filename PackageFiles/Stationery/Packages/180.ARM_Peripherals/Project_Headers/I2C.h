@@ -91,7 +91,7 @@ public:
     * @param txData   Data for transmission
     * @param txSize   Size of transmission data
     * @param rxData   Date buffer for reception
-    * @param txSize   Size of reception data
+    * @param rxSize   Size of reception data
     */
    int txRx(uint8_t address, const uint8_t txData[], int txSize, uint8_t rxData[], int rxSize );
 
@@ -103,7 +103,7 @@ public:
     * @param address  Address of slave to communicate with
     * @param data     Data for transmission and reception
     * @param txSize   Size of transmission data
-    * @param txSize   Size of reception data
+    * @param rxSize   Size of reception data
     */
    int txRx(uint8_t address, uint8_t data[], int txSize, int rxSize ) {
       return txRx(address, data, txSize, data, rxSize);
