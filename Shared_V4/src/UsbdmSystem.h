@@ -212,7 +212,7 @@ public:
                                unsigned int size,
                                unsigned int startAddress=0x0000,
                                unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY);
-      static void setLogFileHandle(FILE *logFile);
+      static void    setLogFileHandle(FILE *logFile);
       static FILE*   getLogFileHandle();
    };
 
