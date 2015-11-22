@@ -171,7 +171,7 @@ static USBDM_ErrorCode updateBdmInfo(void);
 //!
 USBDM_API
 USBDM_ErrorCode USBDM_Init(void) {
-   UsbdmSystem::Log::openLogFile("usbdm.log", "USBDM Low level intrerface");
+   UsbdmSystem::Log::openLogFile("usbdm.log", "USBDM Low level interface");
 //   log.enableTimestamping();
 
    LOGGING_E;
@@ -3620,11 +3620,14 @@ void
 __attribute__ ((destructor))
 #endif
 usbdm_dll_uninitialize(void) {
+   UsbdmSystem::Log::printq("usbdm_dll_uninitialize()");
 //   fprintf(stderr, "usbdm_dll_uninitialize()\n");
-   bdm_usb_exit(); // Just in case BDM hasn't been closed etc.
+//   bdm_usb_exit(); // Just in case BDM hasn't been closed etc.
+//   USBDM_Exit();  // Just in case BDM hasn't been closed etc.
 }
 
 #if defined(USBDM_DLL_EXPORTS) && defined(WIN32)
+extern "C" __attribute__((dllexport)) // __attribute__((__stdcall__))
 BOOL WINAPI DllMain(HINSTANCE hDLLInst,
                     DWORD    fdwReason,
                     LPVOID   lpvReserved) {
