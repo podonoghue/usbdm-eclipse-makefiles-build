@@ -27,6 +27,11 @@
  * BIT_BAND_SET(0x20000000, 1); // Set bit 1 of fixed location
  * @endcode
  *
+ * Set bit of register
+ * @code{.c}
+ * BIT_BAND_SET(&SIM->SCGC5, SIM_SCGC5_PORTA_SHIFT); // Enable clock to PORTA
+ * @endcode
+ *
  * Assuming a local variable 'local'
  * @code{.c}
  * BIT_BAND_CLEAR(&local, 3); // Clear bit 3 of local

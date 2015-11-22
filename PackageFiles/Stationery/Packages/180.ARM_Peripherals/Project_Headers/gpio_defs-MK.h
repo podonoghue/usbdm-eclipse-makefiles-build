@@ -44,18 +44,17 @@ struct PCRInit {
          *pcrReg = pcrValue;
       }
    }
-
    /**
     * Enable clock to port
     */
    void enableClock() const {
-	   FIXED_PORT_CLOCK_REG |= clockMask;
+      FIXED_PORT_CLOCK_REG |= clockMask;
    }
    /**
     * Enable clock to port
     */
    void disableClock() const {
-	   FIXED_PORT_CLOCK_REG &= ~clockMask;
+      FIXED_PORT_CLOCK_REG &= ~clockMask;
    }
 };
 

@@ -53,8 +53,11 @@ int main() {
    printf("After calibration\n");
    report(accelmag);
 
-   printf("Calibrating magnetometer\nPlease rotate the board in all dimensions until complete (~30 s)\n");
-   accelmag->calibrateMagnetometer();
+   printf("Calibrating magnetometer\nPlease rotate the board in all dimensions until complete\n");
+   for (int time=5; time>0; time--) {
+      printf("Calibrating for %2d seconds", time);
+      accelmag->calibrateMagnetometer(1);
+   }
 
    for(;;) {
       report(accelmag);

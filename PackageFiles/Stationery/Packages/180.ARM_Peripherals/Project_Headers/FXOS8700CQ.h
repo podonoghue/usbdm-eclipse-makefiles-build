@@ -183,6 +183,9 @@ public:
       M_RST_CNT_NEVER  = (3),
    };
 
+   /**
+    * Data structure to return all measurements
+    */
    struct Data {
       uint8_t accelerometerStatus;
       uint8_t accelerometer_X;
@@ -265,16 +268,18 @@ public:
     */
    uint32_t readID();
    /**
-    * Calibrate accelerometer
+    * Calibrate accelerometer\n
     * Assumes accelerometer is on a flat surface
-    * The accelerometer mode will need to be reset after this operation
     */
    void calibrateAccelerometer();
    /**
-    * Simple calibration of magnetometer
-    * Requires user to rotate the board in all dimensions
+    * Simple calibration of magnetometer\n
+    * Requires user to rotate the board in all dimensions\n
+    * May be used in cumulative fashion
+    *
+    * @param time How long to run calibration for in seconds
     */
-   void calibrateMagnetometer();
+   void calibrateMagnetometer(int time);
 };
 
 /**

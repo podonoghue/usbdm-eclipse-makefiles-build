@@ -387,8 +387,10 @@ void FXOS8700CQ::calibrateAccelerometer() {
 /**
  * Simple calibration of magnetometer
  * Requires user to rotate the board in all dimensions
+ *
+ * @param time How long to run calibration in seconds
  */
-void FXOS8700CQ::calibrateMagnetometer() {
+void FXOS8700CQ::calibrateMagnetometer(int time) {
 
    uint8_t originalMControlReg1Value = readReg(M_CTRL_REG1);
    uint8_t originalControlReg1Value  = readReg(CTRL_REG1);
@@ -408,8 +410,8 @@ void FXOS8700CQ::calibrateMagnetometer() {
          FXOS8700CQ_M_CTRL_REG1_M_OS(7)|           // Maximum over-sample
          FXOS8700CQ_M_CTRL_REG1_M_HMS(MAG_ONLY));  // Magnetometer only
 
-   // ~200 samples @ 6.35 Hz
-   waitMS(30000);
+   // Samples @ 6.35 Hz
+   waitMS(time*1000);
 
 //   buff[0] = M_OFF_X_MSB;
 //   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
