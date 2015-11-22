@@ -38,9 +38,21 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetUsbdmResourcePath(JNIEnv *env, jcla
       // Buff not big enough
       return BDM_RC_ILLEGAL_PARAMS;
    }
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 0, 1, &jlenMSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 1, 1, &jlenLSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 2, jlen, (const jbyte *)installationPath.c_str());
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    return BDM_RC_OK;
 }
 
@@ -64,8 +76,17 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetUsbdmApplicationPath(JNIEnv *env, j
       return BDM_RC_ILLEGAL_PARAMS;
    }
    env->SetByteArrayRegion(jString, 0, 1, &jlenMSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 1, 1, &jlenLSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 2, jlen, (const jbyte *)installationPath.c_str());
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    return BDM_RC_OK;
 }
 
@@ -89,8 +110,17 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetUsbdmDataPath(JNIEnv *env, jclass, 
       return BDM_RC_ILLEGAL_PARAMS;
    }
    env->SetByteArrayRegion(jString, 0, 1, &jlenMSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 1, 1, &jlenLSB);
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    env->SetByteArrayRegion(jString, 2, jlen, (const jbyte *)dataPath.c_str());
+   if(env->ExceptionOccurred()) {
+      return BDM_RC_FAIL;
+   }
    return BDM_RC_OK;
 }
 
@@ -190,6 +220,9 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetBDMInformation(JNIEnv *env, jclass 
             return BDM_RC_ILLEGAL_PARAMS;
          }
          env->SetIntField(jbdmInfo, fieldID, values[indx]);
+         if(env->ExceptionOccurred()) {
+            return BDM_RC_FAIL;
+         }
       }
    }
    return rc;
@@ -221,6 +254,9 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmFindDevices(JNIEnv *env, jclass, jintA
 	if (rc == BDM_RC_OK) {
 		jint jDeviceCount = deviceCount;
 		env->SetIntArrayRegion(countOfDevices, 0, 1, &jDeviceCount);
+	   if(env->ExceptionOccurred()) {
+	      return BDM_RC_FAIL;
+	   }
 	}
 	return rc;
 }
@@ -290,8 +326,17 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetBDMDescription(JNIEnv *env, jclass,
          return BDM_RC_ILLEGAL_PARAMS;
       }
       env->SetByteArrayRegion(jString, 0, 1, &jlenMSB);
+      if(env->ExceptionOccurred()) {
+         return BDM_RC_FAIL;
+      }
       env->SetByteArrayRegion(jString, 1, 1, &jlenLSB);
+      if(env->ExceptionOccurred()) {
+         return BDM_RC_FAIL;
+      }
       env->SetByteArrayRegion(jString, 2, jlen, (const jbyte *)stringUTF16LE);
+      if(env->ExceptionOccurred()) {
+         return BDM_RC_FAIL;
+      }
    }
    return rc;
 }
@@ -375,6 +420,9 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetDefaultExtendedOptions(JNIEnv *env,
             return BDM_RC_ILLEGAL_PARAMS;
          }
          env->SetIntField(jbdmInfo, fieldID, values[indx]);
+         if(env->ExceptionOccurred()) {
+            return BDM_RC_FAIL;
+         }
       }
    }
    return rc;
@@ -399,6 +447,7 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmSetExtendedOptions(JNIEnv *env, jclass
    if (cls == NULL) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
+   // TODO - check exceptions
    USBDM_ExtendedOptions_t bdmOptions = {sizeof(USBDM_ExtendedOptions_t)};
    bdmOptions.targetType               = (TargetType_t)     env->GetIntField(jbdmInfo, env->GetFieldID(cls, "targetType",              "I"));
    bdmOptions.targetVdd                = (TargetVddSelect_t)env->GetIntField(jbdmInfo, env->GetFieldID(cls, "targetVdd",               "I"));
