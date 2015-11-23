@@ -7,6 +7,233 @@
 #include "gpio.h"
 #include "pin_mapping.h"
 
+const USBDM::PortA_T<0>   digitalIO_PTA0;      //!< See @ref DigitalIO
+const USBDM::PortA_T<1>   digitalIO_PTA1;      //!< See @ref DigitalIO
+const USBDM::PortA_T<2>   digitalIO_PTA2;      //!< See @ref DigitalIO
+const USBDM::PortA_T<3>   digitalIO_PTA3;      //!< See @ref DigitalIO
+const USBDM::PortA_T<4>   digitalIO_PTA4;      //!< See @ref DigitalIO
+const USBDM::PortA_T<5>   digitalIO_PTA5;      //!< See @ref DigitalIO
+const USBDM::PortA_T<12>  digitalIO_PTA12;     //!< See @ref DigitalIO
+const USBDM::PortA_T<13>  digitalIO_PTA13;     //!< See @ref DigitalIO
+const USBDM::PortA_T<14>  digitalIO_PTA14;     //!< See @ref DigitalIO
+const USBDM::PortA_T<15>  digitalIO_PTA15;     //!< See @ref DigitalIO
+const USBDM::PortA_T<16>  digitalIO_PTA16;     //!< See @ref DigitalIO
+const USBDM::PortA_T<17>  digitalIO_PTA17;     //!< See @ref DigitalIO
+const USBDM::PortA_T<18>  digitalIO_PTA18;     //!< See @ref DigitalIO
+const USBDM::PortA_T<19>  digitalIO_PTA19;     //!< See @ref DigitalIO
+const USBDM::PortB_T<0>   digitalIO_PTB0;      //!< See @ref DigitalIO
+const USBDM::PortB_T<1>   digitalIO_PTB1;      //!< See @ref DigitalIO
+const USBDM::PortB_T<2>   digitalIO_PTB2;      //!< See @ref DigitalIO
+const USBDM::PortB_T<3>   digitalIO_PTB3;      //!< See @ref DigitalIO
+const USBDM::PortB_T<6>   digitalIO_PTB6;      //!< See @ref DigitalIO
+const USBDM::PortB_T<7>   digitalIO_PTB7;      //!< See @ref DigitalIO
+const USBDM::PortB_T<8>   digitalIO_PTB8;      //!< See @ref DigitalIO
+const USBDM::PortB_T<9>   digitalIO_PTB9;      //!< See @ref DigitalIO
+const USBDM::PortB_T<10>  digitalIO_PTB10;     //!< See @ref DigitalIO
+const USBDM::PortB_T<11>  digitalIO_PTB11;     //!< See @ref DigitalIO
+const USBDM::PortB_T<16>  digitalIO_PTB16;     //!< See @ref DigitalIO
+const USBDM::PortB_T<17>  digitalIO_PTB17;     //!< See @ref DigitalIO
+const USBDM::PortB_T<18>  digitalIO_PTB18;     //!< See @ref DigitalIO
+const USBDM::PortB_T<19>  digitalIO_PTB19;     //!< See @ref DigitalIO
+const USBDM::PortB_T<20>  digitalIO_PTB20;     //!< See @ref DigitalIO
+const USBDM::PortB_T<21>  digitalIO_PTB21;     //!< See @ref DigitalIO
+const USBDM::PortB_T<22>  digitalIO_PTB22;     //!< See @ref DigitalIO
+const USBDM::PortB_T<23>  digitalIO_PTB23;     //!< See @ref DigitalIO
+const USBDM::PortC_T<0>   digitalIO_PTC0;      //!< See @ref DigitalIO
+const USBDM::PortC_T<1>   digitalIO_PTC1;      //!< See @ref DigitalIO
+const USBDM::PortC_T<2>   digitalIO_PTC2;      //!< See @ref DigitalIO
+const USBDM::PortC_T<3>   digitalIO_PTC3;      //!< See @ref DigitalIO
+const USBDM::PortC_T<4>   digitalIO_PTC4;      //!< See @ref DigitalIO
+const USBDM::PortC_T<5>   digitalIO_PTC5;      //!< See @ref DigitalIO
+const USBDM::PortC_T<6>   digitalIO_PTC6;      //!< See @ref DigitalIO
+const USBDM::PortC_T<7>   digitalIO_PTC7;      //!< See @ref DigitalIO
+const USBDM::PortC_T<8>   digitalIO_PTC8;      //!< See @ref DigitalIO
+const USBDM::PortC_T<9>   digitalIO_PTC9;      //!< See @ref DigitalIO
+const USBDM::PortC_T<10>  digitalIO_PTC10;     //!< See @ref DigitalIO
+const USBDM::PortC_T<11>  digitalIO_PTC11;     //!< See @ref DigitalIO
+const USBDM::PortC_T<12>  digitalIO_PTC12;     //!< See @ref DigitalIO
+const USBDM::PortC_T<13>  digitalIO_PTC13;     //!< See @ref DigitalIO
+const USBDM::PortC_T<14>  digitalIO_PTC14;     //!< See @ref DigitalIO
+const USBDM::PortC_T<15>  digitalIO_PTC15;     //!< See @ref DigitalIO
+const USBDM::PortC_T<16>  digitalIO_PTC16;     //!< See @ref DigitalIO
+const USBDM::PortC_T<17>  digitalIO_PTC17;     //!< See @ref DigitalIO
+const USBDM::PortC_T<18>  digitalIO_PTC18;     //!< See @ref DigitalIO
+const USBDM::PortC_T<19>  digitalIO_PTC19;     //!< See @ref DigitalIO
+const USBDM::PortD_T<0>   digitalIO_PTD0;      //!< See @ref DigitalIO
+const USBDM::PortD_T<1>   digitalIO_PTD1;      //!< See @ref DigitalIO
+const USBDM::PortD_T<2>   digitalIO_PTD2;      //!< See @ref DigitalIO
+const USBDM::PortD_T<3>   digitalIO_PTD3;      //!< See @ref DigitalIO
+const USBDM::PortD_T<4>   digitalIO_PTD4;      //!< See @ref DigitalIO
+const USBDM::PortD_T<5>   digitalIO_PTD5;      //!< See @ref DigitalIO
+const USBDM::PortD_T<6>   digitalIO_PTD6;      //!< See @ref DigitalIO
+const USBDM::PortD_T<7>   digitalIO_PTD7;      //!< See @ref DigitalIO
+const USBDM::PortE_T<0>   digitalIO_PTE0;      //!< See @ref DigitalIO
+const USBDM::PortE_T<1>   digitalIO_PTE1;      //!< See @ref DigitalIO
+const USBDM::PortE_T<2>   digitalIO_PTE2;      //!< See @ref DigitalIO
+const USBDM::PortE_T<3>   digitalIO_PTE3;      //!< See @ref DigitalIO
+const USBDM::PortE_T<4>   digitalIO_PTE4;      //!< See @ref DigitalIO
+const USBDM::PortE_T<5>   digitalIO_PTE5;      //!< See @ref DigitalIO
+const USBDM::PortE_T<6>   digitalIO_PTE6;      //!< See @ref DigitalIO
+const USBDM::PortE_T<24>  digitalIO_PTE24;     //!< See @ref DigitalIO
+const USBDM::PortE_T<25>  digitalIO_PTE25;     //!< See @ref DigitalIO
+const USBDM::PortE_T<26>  digitalIO_PTE26;     //!< See @ref DigitalIO
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,19> analogueIO_ADC0_SE19;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,20> analogueIO_ADC0_SE20;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,19> analogueIO_ADC1_SE19;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 0> analogueIO_ADC0_SE0;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 1> analogueIO_ADC0_SE1;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 0> analogueIO_ADC1_SE0;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 3> analogueIO_ADC0_SE3;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,23> analogueIO_ADC0_SE23;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,20> analogueIO_ADC1_SE20;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 1> analogueIO_ADC1_SE1;
+const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 2> analogueIO_ADC0_SE2;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,18> analogueIO_ADC1_SE18;
+const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,23> analogueIO_ADC1_SE23;
+#if (PTA17_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[17]), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,17> analogueIO_ADC1_SE17;
+#endif
+#if (PTB0_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 8> analogueIO_ADC0_SE8;
+#endif
+#if (PTB0_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 8> analogueIO_ADC1_SE8;
+#endif
+#if (PTB1_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 9> analogueIO_ADC0_SE9;
+#endif
+#if (PTB1_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 9> analogueIO_ADC1_SE9;
+#endif
+#if (PTB2_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,12> analogueIO_ADC0_SE12;
+#endif
+#if (PTB3_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[3]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,13> analogueIO_ADC0_SE13;
+#endif
+#if (PTB6_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[6]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,12> analogueIO_ADC1_SE12;
+#endif
+#if (PTB7_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[7]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,13> analogueIO_ADC1_SE13;
+#endif
+#if (PTB10_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[10]), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,14> analogueIO_ADC1_SE14;
+#endif
+#if (PTB11_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[11]), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,15> analogueIO_ADC1_SE15;
+#endif
+#if (PTC0_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,14> analogueIO_ADC0_SE14;
+#endif
+#if (PTC1_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,15> analogueIO_ADC0_SE15;
+#endif
+#if (PTC2_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 4> analogueIO_ADC0_SE4b;
+#endif
+#if (PTC8_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[8]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 4> analogueIO_ADC1_SE4b;
+#endif
+#if (PTC9_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[9]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 5> analogueIO_ADC1_SE5b;
+#endif
+#if (PTC10_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[10]), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 6> analogueIO_ADC1_SE6b;
+#endif
+#if (PTC11_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[11]), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 7> analogueIO_ADC1_SE7b;
+#endif
+#if (PTD1_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 5> analogueIO_ADC0_SE5b;
+#endif
+#if (PTD5_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 6> analogueIO_ADC0_SE6b;
+#endif
+#if (PTD6_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 7> analogueIO_ADC0_SE7b;
+#endif
+#if (PTE0_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 4> analogueIO_ADC1_SE4a;
+#endif
+#if (PTE1_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 5> analogueIO_ADC1_SE5a;
+#endif
+#if (PTE2_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 6> analogueIO_ADC1_SE6a;
+#endif
+#if (PTE3_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[3]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 7> analogueIO_ADC1_SE7a;
+#endif
+#if (PTE24_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[24]), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,17> analogueIO_ADC0_SE17;
+#endif
+#if (PTE25_SIG_SEL == 0)
+const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[25]), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,18> analogueIO_ADC0_SE18;
+#endif
+#if (PTA0_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[0]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 5,  3> pwmIO_FTM0_CH5;
+#endif
+#if (PTA1_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 6,  3> pwmIO_FTM0_CH6;
+#endif
+#if (PTA2_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[2]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 7,  3> pwmIO_FTM0_CH7;
+#endif
+#if (PTA3_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[3]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 0,  3> pwmIO_FTM0_CH0;
+#endif
+#if (PTA4_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 1,  3> pwmIO_FTM0_CH1;
+#endif
+#if (PTA5_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[5]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 2,  3> pwmIO_FTM0_CH2;
+#endif
+#if (PTA12_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[12]), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 0,  3> pwmIO_FTM1_CH0;
+#endif
+#if (PTA13_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[13]), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 1,  3> pwmIO_FTM1_CH1;
+#endif
+#if (PTB0_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 0,  3> pwmIO_FTM1_CH0;
+#endif
+#if (PTB1_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 1,  3> pwmIO_FTM1_CH1;
+#endif
+#if (PTB18_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[18]), FTM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM2_CLOCK_REG), FTM2_CLOCK_MASK, 0,  3> pwmIO_FTM2_CH0;
+#endif
+#if (PTB19_SIG_SEL == 3)
+const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[19]), FTM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM2_CLOCK_REG), FTM2_CLOCK_MASK, 1,  3> pwmIO_FTM2_CH1;
+#endif
+#if (PTC1_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 0,  4> pwmIO_FTM0_CH0;
+#endif
+#if (PTC2_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 1,  4> pwmIO_FTM0_CH1;
+#endif
+#if (PTC3_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[3]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 2,  4> pwmIO_FTM0_CH2;
+#endif
+#if (PTC4_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 3,  4> pwmIO_FTM0_CH3;
+#endif
+#if (PTC5_SIG_SEL == 7)
+const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 2,  7> pwmIO_FTM0_CH2;
+#endif
+#if (PTD4_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 4,  4> pwmIO_FTM0_CH4;
+#endif
+#if (PTD5_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 5,  4> pwmIO_FTM0_CH5;
+#endif
+#if (PTD6_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 6,  4> pwmIO_FTM0_CH6;
+#endif
+#if (PTD7_SIG_SEL == 4)
+const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 7,  4> pwmIO_FTM0_CH7;
+#endif
 
 #if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
 struct PinInit {

@@ -127,14 +127,13 @@
 
 // </h>
 
-// Inline port functions
+// Use USBDM namespace
 //
-//   <q> Force inline port functions 
-//   <i> Forces some small GPIO functions to be inlined
-//   <i> This increases speed but may also increase code size
+//   <q> Place CPP objects in the USBDM namespace 
+//   <i> This will require us of "using namespace USBDM" directive
 //     <0=> Disabled
 //     <1=> Enabled
-#define DO_INLINE_GPIO       0
+#define USBDM_USE_NAMESPACES 0
 
 // Pin mapping Options
 //

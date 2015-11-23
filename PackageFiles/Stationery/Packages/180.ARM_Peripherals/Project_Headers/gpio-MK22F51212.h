@@ -12,7 +12,7 @@
 #include "pin_mapping.h"
 #include "gpio_defs.h"
 
-#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+#if USBDM_USE_NAMESPACES
 namespace USBDM {
 #endif
 /**
@@ -167,7 +167,7 @@ extern const USBDM::AnalogueIOT<0,                0,                            
 extern const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 0> analogueIO_ADC1_SE0;
 #define analogueIO_J24_5         analogueIO_ADC1_SE0  //!< Alias for @ref USBDM::analogueIO_ADC1_SE0
 extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 3> analogueIO_ADC0_SE3;
-#define analogueIO_J24_5         analogueIO_ADC0_SE3  //!< Alias for @ref USBDM::analogueIO_ADC0_SE3
+//#define analogueIO_J24_5         analogueIO_ADC0_SE3  //!< Alias for @ref USBDM::analogueIO_ADC0_SE3
 extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,23> analogueIO_ADC0_SE23;
 #define analogueIO_J24_11        analogueIO_ADC0_SE23 //!< Alias for @ref USBDM::analogueIO_ADC0_SE23
 extern const USBDM::AnalogueIOT<0,                0,                                         ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK,20> analogueIO_ADC1_SE20;
@@ -185,8 +185,8 @@ extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Ty
 #endif
 #if (PTB0_SIG_SEL == 0)
 extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 8> analogueIO_ADC1_SE8;
-#define analogueIO_A0            analogueIO_ADC1_SE8  //!< Alias for @ref USBDM::analogueIO_ADC1_SE8
-#define analogueIO_J24_2         analogueIO_ADC1_SE8  //!< Alias for @ref USBDM::analogueIO_ADC1_SE8
+//#define analogueIO_A0            analogueIO_ADC1_SE8  //!< Alias for @ref USBDM::analogueIO_ADC1_SE8
+//#define analogueIO_J24_2         analogueIO_ADC1_SE8  //!< Alias for @ref USBDM::analogueIO_ADC1_SE8
 #endif
 #if (PTB1_SIG_SEL == 0)
 extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 9> analogueIO_ADC0_SE9;
@@ -195,8 +195,8 @@ extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Ty
 #endif
 #if (PTB1_SIG_SEL == 0)
 extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG),ADC1_CLOCK_MASK, 9> analogueIO_ADC1_SE9;
-#define analogueIO_A1            analogueIO_ADC1_SE9  //!< Alias for @ref USBDM::analogueIO_ADC1_SE9
-#define analogueIO_J24_4         analogueIO_ADC1_SE9  //!< Alias for @ref USBDM::analogueIO_ADC1_SE9
+//#define analogueIO_A1            analogueIO_ADC1_SE9  //!< Alias for @ref USBDM::analogueIO_ADC1_SE9
+//#define analogueIO_J24_4         analogueIO_ADC1_SE9  //!< Alias for @ref USBDM::analogueIO_ADC1_SE9
 #endif
 #if (PTB2_SIG_SEL == 0)
 extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,12> analogueIO_ADC0_SE12;
@@ -438,7 +438,7 @@ USBOTG     SCGC4        SIM_SCGC4_USBOTG_MASK
 VREF       SCGC4        SIM_SCGC4_VREF_MASK
 */
 
-#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+#if USBDM_USE_NAMESPACES
 } // End namespace USBDM
 #endif
 

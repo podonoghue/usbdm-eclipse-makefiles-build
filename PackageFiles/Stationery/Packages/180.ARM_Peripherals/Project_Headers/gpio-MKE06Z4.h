@@ -12,7 +12,7 @@
 #include "pin_mapping.h"
 #include "gpio_defs.h"
 
-#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+#if USBDM_USE_NAMESPACES
 namespace USBDM {
 #endif
 /**
@@ -130,7 +130,7 @@ UART1      SCGC         SIM_SCGC_UART1_MASK
 UART2      SCGC         SIM_SCGC_UART2_MASK
 */
 
-#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+#if USBDM_USE_NAMESPACES
 } // End namespace USBDM
 #endif
 

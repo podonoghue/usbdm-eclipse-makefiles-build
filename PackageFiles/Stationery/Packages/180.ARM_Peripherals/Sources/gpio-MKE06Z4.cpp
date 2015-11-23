@@ -7,6 +7,77 @@
 #include "gpio.h"
 #include "pin_mapping.h"
 
+const USBDM::PortA_T<0>   digitalIO_PTA0;      //!< See @ref DigitalIO
+const USBDM::PortA_T<1>   digitalIO_PTA1;      //!< See @ref DigitalIO
+const USBDM::PortA_T<2>   digitalIO_PTA2;      //!< See @ref DigitalIO
+const USBDM::PortA_T<3>   digitalIO_PTA3;      //!< See @ref DigitalIO
+const USBDM::PortA_T<4>   digitalIO_PTA4;      //!< See @ref DigitalIO
+const USBDM::PortA_T<5>   digitalIO_PTA5;      //!< See @ref DigitalIO
+const USBDM::PortA_T<6>   digitalIO_PTA6;      //!< See @ref DigitalIO
+const USBDM::PortA_T<7>   digitalIO_PTA7;      //!< See @ref DigitalIO
+const USBDM::PortA_T<8>   digitalIO_PTA8;      //!< See @ref DigitalIO
+const USBDM::PortA_T<9>   digitalIO_PTA9;      //!< See @ref DigitalIO
+const USBDM::PortA_T<10>  digitalIO_PTA10;     //!< See @ref DigitalIO
+const USBDM::PortA_T<11>  digitalIO_PTA11;     //!< See @ref DigitalIO
+const USBDM::PortA_T<12>  digitalIO_PTA12;     //!< See @ref DigitalIO
+const USBDM::PortA_T<13>  digitalIO_PTA13;     //!< See @ref DigitalIO
+const USBDM::PortA_T<14>  digitalIO_PTA14;     //!< See @ref DigitalIO
+const USBDM::PortA_T<15>  digitalIO_PTA15;     //!< See @ref DigitalIO
+const USBDM::PortA_T<16>  digitalIO_PTA16;     //!< See @ref DigitalIO
+const USBDM::PortA_T<17>  digitalIO_PTA17;     //!< See @ref DigitalIO
+const USBDM::PortA_T<18>  digitalIO_PTA18;     //!< See @ref DigitalIO
+const USBDM::PortA_T<19>  digitalIO_PTA19;     //!< See @ref DigitalIO
+const USBDM::PortA_T<20>  digitalIO_PTA20;     //!< See @ref DigitalIO
+const USBDM::PortA_T<21>  digitalIO_PTA21;     //!< See @ref DigitalIO
+const USBDM::PortA_T<22>  digitalIO_PTA22;     //!< See @ref DigitalIO
+const USBDM::PortA_T<23>  digitalIO_PTA23;     //!< See @ref DigitalIO
+const USBDM::PortA_T<24>  digitalIO_PTA24;     //!< See @ref DigitalIO
+const USBDM::PortA_T<25>  digitalIO_PTA25;     //!< See @ref DigitalIO
+const USBDM::PortA_T<26>  digitalIO_PTA26;     //!< See @ref DigitalIO
+const USBDM::PortA_T<27>  digitalIO_PTA27;     //!< See @ref DigitalIO
+const USBDM::PortA_T<28>  digitalIO_PTA28;     //!< See @ref DigitalIO
+const USBDM::PortA_T<29>  digitalIO_PTA29;     //!< See @ref DigitalIO
+const USBDM::PortA_T<30>  digitalIO_PTA30;     //!< See @ref DigitalIO
+const USBDM::PortA_T<31>  digitalIO_PTA31;     //!< See @ref DigitalIO
+const USBDM::PortB_T<0>   digitalIO_PTB0;      //!< See @ref DigitalIO
+const USBDM::PortB_T<1>   digitalIO_PTB1;      //!< See @ref DigitalIO
+const USBDM::PortB_T<2>   digitalIO_PTB2;      //!< See @ref DigitalIO
+const USBDM::PortB_T<3>   digitalIO_PTB3;      //!< See @ref DigitalIO
+const USBDM::PortB_T<4>   digitalIO_PTB4;      //!< See @ref DigitalIO
+const USBDM::PortB_T<5>   digitalIO_PTB5;      //!< See @ref DigitalIO
+const USBDM::PortB_T<6>   digitalIO_PTB6;      //!< See @ref DigitalIO
+const USBDM::PortB_T<7>   digitalIO_PTB7;      //!< See @ref DigitalIO
+const USBDM::PortB_T<8>   digitalIO_PTB8;      //!< See @ref DigitalIO
+const USBDM::PortB_T<9>   digitalIO_PTB9;      //!< See @ref DigitalIO
+const USBDM::PortB_T<10>  digitalIO_PTB10;     //!< See @ref DigitalIO
+const USBDM::PortB_T<11>  digitalIO_PTB11;     //!< See @ref DigitalIO
+const USBDM::PortB_T<12>  digitalIO_PTB12;     //!< See @ref DigitalIO
+const USBDM::PortB_T<13>  digitalIO_PTB13;     //!< See @ref DigitalIO
+const USBDM::PortB_T<14>  digitalIO_PTB14;     //!< See @ref DigitalIO
+const USBDM::PortB_T<15>  digitalIO_PTB15;     //!< See @ref DigitalIO
+const USBDM::PortB_T<16>  digitalIO_PTB16;     //!< See @ref DigitalIO
+const USBDM::PortB_T<17>  digitalIO_PTB17;     //!< See @ref DigitalIO
+const USBDM::PortB_T<18>  digitalIO_PTB18;     //!< See @ref DigitalIO
+const USBDM::PortB_T<19>  digitalIO_PTB19;     //!< See @ref DigitalIO
+const USBDM::PortB_T<20>  digitalIO_PTB20;     //!< See @ref DigitalIO
+const USBDM::PortB_T<21>  digitalIO_PTB21;     //!< See @ref DigitalIO
+const USBDM::PortB_T<22>  digitalIO_PTB22;     //!< See @ref DigitalIO
+const USBDM::PortB_T<23>  digitalIO_PTB23;     //!< See @ref DigitalIO
+const USBDM::PortB_T<24>  digitalIO_PTB24;     //!< See @ref DigitalIO
+const USBDM::PortB_T<25>  digitalIO_PTB25;     //!< See @ref DigitalIO
+const USBDM::PortB_T<26>  digitalIO_PTB26;     //!< See @ref DigitalIO
+const USBDM::PortB_T<27>  digitalIO_PTB27;     //!< See @ref DigitalIO
+const USBDM::PortB_T<28>  digitalIO_PTB28;     //!< See @ref DigitalIO
+const USBDM::PortB_T<29>  digitalIO_PTB29;     //!< See @ref DigitalIO
+const USBDM::PortB_T<30>  digitalIO_PTB30;     //!< See @ref DigitalIO
+const USBDM::PortB_T<31>  digitalIO_PTB31;     //!< See @ref DigitalIO
+const USBDM::PortC_T<0>   digitalIO_PTC0;      //!< See @ref DigitalIO
+const USBDM::PortC_T<1>   digitalIO_PTC1;      //!< See @ref DigitalIO
+const USBDM::PortC_T<2>   digitalIO_PTC2;      //!< See @ref DigitalIO
+const USBDM::PortC_T<3>   digitalIO_PTC3;      //!< See @ref DigitalIO
+const USBDM::PortC_T<4>   digitalIO_PTC4;      //!< See @ref DigitalIO
+const USBDM::PortC_T<5>   digitalIO_PTC5;      //!< See @ref DigitalIO
+const USBDM::PortC_T<6>   digitalIO_PTC6;      //!< See @ref DigitalIO
 
 #if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
 struct PinInit {
