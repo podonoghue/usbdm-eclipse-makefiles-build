@@ -1,6 +1,6 @@
 /**
  * @file      pin_mapping.h (derived from pin_mapping-MKE06Z4.h)
- * @version   1.0.0
+ * @version   1.1.0
  * @brief     Pin declarations for MKE06Z4
  */
 
@@ -3687,54 +3687,54 @@
 
 //-------- <<< end of configuration section >>> -----------------  
 
-#define FIXED_ADC_FN         0                    // Fixed ADC Multiplexing value
-#define FIXED_GPIO_FN        1                    // Fixed GPIO Multiplexing value
-#define FIXED_PORT_CLOCK_REG SIM->SCGC5           // Fixed PORT Clock
-#define ACMP0_CLOCK_REG      SIM->SCGC
+#define FIXED_ADC_FN             0                    // Fixed ADC Multiplexing value
+#define FIXED_GPIO_FN            1                    // Fixed GPIO Multiplexing value
+#define FIXED_PORT_CLOCK_REG     SCGC5                // Fixed PORT Clock
+#define ACMP0_CLOCK_REG      SCGC
 #define ACMP0_CLOCK_MASK     SIM_SCGC_ACMP0_MASK
-#define ACMP1_CLOCK_REG      SIM->SCGC
+#define ACMP1_CLOCK_REG      SCGC
 #define ACMP1_CLOCK_MASK     SIM_SCGC_ACMP1_MASK
-#define ADC0_CLOCK_REG       SIM->SCGC
+#define ADC0_CLOCK_REG       SCGC
 #define ADC0_CLOCK_MASK      SIM_SCGC_ADC0_MASK
-#define CRC_CLOCK_REG        SIM->SCGC
+#define CRC_CLOCK_REG        SCGC
 #define CRC_CLOCK_MASK       SIM_SCGC_CRC_MASK
-#define FTM0_CLOCK_REG       SIM->SCGC
+#define FTM0_CLOCK_REG       SCGC
 #define FTM0_CLOCK_MASK      SIM_SCGC_FTM0_MASK
-#define FTM1_CLOCK_REG       SIM->SCGC
+#define FTM1_CLOCK_REG       SCGC
 #define FTM1_CLOCK_MASK      SIM_SCGC_FTM1_MASK
-#define FTM2_CLOCK_REG       SIM->SCGC
+#define FTM2_CLOCK_REG       SCGC
 #define FTM2_CLOCK_MASK      SIM_SCGC_FTM2_MASK
-#define I2C0_CLOCK_REG       SIM->SCGC
+#define I2C0_CLOCK_REG       SCGC
 #define I2C0_CLOCK_MASK      SIM_SCGC_I2C0_MASK
-#define I2C1_CLOCK_REG       SIM->SCGC
+#define I2C1_CLOCK_REG       SCGC
 #define I2C1_CLOCK_MASK      SIM_SCGC_I2C1_MASK
-#define IRQ_CLOCK_REG        SIM->SCGC
+#define IRQ_CLOCK_REG        SCGC
 #define IRQ_CLOCK_MASK       SIM_SCGC_IRQ_MASK
-#define KBI0_CLOCK_REG       SIM->SCGC
+#define KBI0_CLOCK_REG       SCGC
 #define KBI0_CLOCK_MASK      SIM_SCGC_KBI0_MASK
-#define KBI1_CLOCK_REG       SIM->SCGC
+#define KBI1_CLOCK_REG       SCGC
 #define KBI1_CLOCK_MASK      SIM_SCGC_KBI1_MASK
-#define MSCAN_CLOCK_REG      SIM->SCGC
+#define MSCAN_CLOCK_REG      SCGC
 #define MSCAN_CLOCK_MASK     SIM_SCGC_MSCAN_MASK
-#define PIT_CLOCK_REG        SIM->SCGC
+#define PIT_CLOCK_REG        SCGC
 #define PIT_CLOCK_MASK       SIM_SCGC_PIT_MASK
-#define PWT_CLOCK_REG        SIM->SCGC
+#define PWT_CLOCK_REG        SCGC
 #define PWT_CLOCK_MASK       SIM_SCGC_PWT_MASK
-#define RTC_CLOCK_REG        SIM->SCGC
+#define RTC_CLOCK_REG        SCGC
 #define RTC_CLOCK_MASK       SIM_SCGC_RTC_MASK
-#define SPI0_CLOCK_REG       SIM->SCGC
+#define SPI0_CLOCK_REG       SCGC
 #define SPI0_CLOCK_MASK      SIM_SCGC_SPI0_MASK
-#define SPI1_CLOCK_REG       SIM->SCGC
+#define SPI1_CLOCK_REG       SCGC
 #define SPI1_CLOCK_MASK      SIM_SCGC_SPI1_MASK
-#define SWD_CLOCK_REG        SIM->SCGC
+#define SWD_CLOCK_REG        SCGC
 #define SWD_CLOCK_MASK       SIM_SCGC_SWD_MASK
-#define UART0_CLOCK_REG      SIM->SCGC
+#define UART0_CLOCK_REG      SCGC
 #define UART0_CLOCK_MASK     SIM_SCGC_UART0_MASK
-#define UART1_CLOCK_REG      SIM->SCGC
+#define UART1_CLOCK_REG      SCGC
 #define UART1_CLOCK_MASK     SIM_SCGC_UART1_MASK
-#define UART2_CLOCK_REG      SIM->SCGC
+#define UART2_CLOCK_REG      SCGC
 #define UART2_CLOCK_MASK     SIM_SCGC_UART2_MASK
-#define PORT_CLOCK_REG       SIM->SCGC5
+#define PORT_CLOCK_REG       SCGC5
 
 
 #endif /* PIN_MAPPING_H_ */

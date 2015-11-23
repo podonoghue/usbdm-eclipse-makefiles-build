@@ -1,100 +1,104 @@
 /**
  * @file      gpio.h (derived from gpio-MK20D5.h)
- * @version   1.0.0
+ * @version   1.1.0
  * @brief     Pin declarations for MK20D5
  */
 
 #ifndef GPIO_H_
 #define GPIO_H_
 
+#include <stddef.h>
 #include "derivative.h"
 #include "pin_mapping.h"
 #include "gpio_defs.h"
 
+#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+namespace USBDM {
+#endif
 /**
 * @addtogroup DigitalIO_Group Digital Input/Output
 * @brief Allows use of port pins as simple digital inputs or outputs
 * @{
 */
-extern const DigitalIO digitalIO_PTA0;          //!< DigitalIO on pin PTA0
-extern const DigitalIO digitalIO_PTA1;          //!< DigitalIO on pin PTA1
-#define digitalIO_D5         digitalIO_PTA1
-extern const DigitalIO digitalIO_PTA2;          //!< DigitalIO on pin PTA2
-#define digitalIO_D9         digitalIO_PTA2
-#define digitalIO_LED_BLUE   digitalIO_PTA2
-extern const DigitalIO digitalIO_PTA3;          //!< DigitalIO on pin PTA3
-extern const DigitalIO digitalIO_PTA4;          //!< DigitalIO on pin PTA4
-#define digitalIO_D21        digitalIO_PTA4
-extern const DigitalIO digitalIO_PTA5;          //!< DigitalIO on pin PTA5
-#define digitalIO_D2         digitalIO_PTA5
-extern const DigitalIO digitalIO_PTA12;         //!< DigitalIO on pin PTA12
-#define digitalIO_D8         digitalIO_PTA12
-extern const DigitalIO digitalIO_PTA13;         //!< DigitalIO on pin PTA13
-#define digitalIO_D24        digitalIO_PTA13
-extern const DigitalIO digitalIO_PTA18;         //!< DigitalIO on pin PTA18
-extern const DigitalIO digitalIO_PTA19;         //!< DigitalIO on pin PTA19
-extern const DigitalIO digitalIO_PTB0;          //!< DigitalIO on pin PTB0
-#define digitalIO_A5         digitalIO_PTB0
-#define digitalIO_ACC_SCL    digitalIO_PTB0
-extern const DigitalIO digitalIO_PTB1;          //!< DigitalIO on pin PTB1
-#define digitalIO_A4         digitalIO_PTB1
-#define digitalIO_ACC_SDA    digitalIO_PTB1
-extern const DigitalIO digitalIO_PTB2;          //!< DigitalIO on pin PTB2
-#define digitalIO_D15        digitalIO_PTB2
-extern const DigitalIO digitalIO_PTB3;          //!< DigitalIO on pin PTB3
-#define digitalIO_D14        digitalIO_PTB3
-extern const DigitalIO digitalIO_PTB16;         //!< DigitalIO on pin PTB16
-extern const DigitalIO digitalIO_PTB17;         //!< DigitalIO on pin PTB17
-extern const DigitalIO digitalIO_PTB18;         //!< DigitalIO on pin PTB18
-extern const DigitalIO digitalIO_PTB19;         //!< DigitalIO on pin PTB19
-extern const DigitalIO digitalIO_PTC0;          //!< DigitalIO on pin PTC0
-#define digitalIO_A0         digitalIO_PTC0
-extern const DigitalIO digitalIO_PTC1;          //!< DigitalIO on pin PTC1
-#define digitalIO_A1         digitalIO_PTC1
-extern const DigitalIO digitalIO_PTC2;          //!< DigitalIO on pin PTC2
-#define digitalIO_D10        digitalIO_PTC2
-extern const DigitalIO digitalIO_PTC3;          //!< DigitalIO on pin PTC3
-#define digitalIO_D6         digitalIO_PTC3
-#define digitalIO_LED_RED    digitalIO_PTC3
-extern const DigitalIO digitalIO_PTC4;          //!< DigitalIO on pin PTC4
-#define digitalIO_D7         digitalIO_PTC4
-extern const DigitalIO digitalIO_PTC5;          //!< DigitalIO on pin PTC5
-#define digitalIO_D18        digitalIO_PTC5
-extern const DigitalIO digitalIO_PTC6;          //!< DigitalIO on pin PTC6
-#define digitalIO_D19        digitalIO_PTC6
-#define digitalIO_ACC_INT2   digitalIO_PTC6
-extern const DigitalIO digitalIO_PTC7;          //!< DigitalIO on pin PTC7
-#define digitalIO_D20        digitalIO_PTC7
-extern const DigitalIO digitalIO_PTC8;          //!< DigitalIO on pin PTC8
-#define digitalIO_D4         digitalIO_PTC8
-extern const DigitalIO digitalIO_PTC9;          //!< DigitalIO on pin PTC9
-#define digitalIO_D23        digitalIO_PTC9
-extern const DigitalIO digitalIO_PTC10;         //!< DigitalIO on pin PTC10
-#define digitalIO_D25        digitalIO_PTC10
-extern const DigitalIO digitalIO_PTC11;         //!< DigitalIO on pin PTC11
-#define digitalIO_D17        digitalIO_PTC11
-#define digitalIO_ACC_INT1   digitalIO_PTC11
-extern const DigitalIO digitalIO_PTD0;          //!< DigitalIO on pin PTD0
-#define digitalIO_D16        digitalIO_PTD0
-extern const DigitalIO digitalIO_PTD1;          //!< DigitalIO on pin PTD1
-#define digitalIO_D13        digitalIO_PTD1
-extern const DigitalIO digitalIO_PTD2;          //!< DigitalIO on pin PTD2
-#define digitalIO_D11        digitalIO_PTD2
-extern const DigitalIO digitalIO_PTD3;          //!< DigitalIO on pin PTD3
-#define digitalIO_D12        digitalIO_PTD3
-extern const DigitalIO digitalIO_PTD4;          //!< DigitalIO on pin PTD4
-#define digitalIO_D3         digitalIO_PTD4
-#define digitalIO_LED_GREEN  digitalIO_PTD4
-extern const DigitalIO digitalIO_PTD5;          //!< DigitalIO on pin PTD5
-#define digitalIO_A3         digitalIO_PTD5
-extern const DigitalIO digitalIO_PTD6;          //!< DigitalIO on pin PTD6
-#define digitalIO_A2         digitalIO_PTD6
-extern const DigitalIO digitalIO_PTD7;          //!< DigitalIO on pin PTD7
-#define digitalIO_D22        digitalIO_PTD7
-extern const DigitalIO digitalIO_PTE0;          //!< DigitalIO on pin PTE0
-#define digitalIO_D1         digitalIO_PTE0
-extern const DigitalIO digitalIO_PTE1;          //!< DigitalIO on pin PTE1
-#define digitalIO_D0         digitalIO_PTE1
+extern const USBDM::PortA_T<0>   digitalIO_PTA0;      //!< See @ref DigitalIO
+extern const USBDM::PortA_T<1>   digitalIO_PTA1;      //!< See @ref DigitalIO
+#define digitalIO_D5             digitalIO_PTA1       //!< Alias for @ref USBDM::digitalIO_PTA1
+extern const USBDM::PortA_T<2>   digitalIO_PTA2;      //!< See @ref DigitalIO
+#define digitalIO_D9             digitalIO_PTA2       //!< Alias for @ref USBDM::digitalIO_PTA2
+#define digitalIO_LED_BLUE       digitalIO_PTA2       //!< Alias for @ref USBDM::digitalIO_PTA2
+extern const USBDM::PortA_T<3>   digitalIO_PTA3;      //!< See @ref DigitalIO
+extern const USBDM::PortA_T<4>   digitalIO_PTA4;      //!< See @ref DigitalIO
+#define digitalIO_D21            digitalIO_PTA4       //!< Alias for @ref USBDM::digitalIO_PTA4
+extern const USBDM::PortA_T<5>   digitalIO_PTA5;      //!< See @ref DigitalIO
+#define digitalIO_D2             digitalIO_PTA5       //!< Alias for @ref USBDM::digitalIO_PTA5
+extern const USBDM::PortA_T<12>  digitalIO_PTA12;     //!< See @ref DigitalIO
+#define digitalIO_D8             digitalIO_PTA12      //!< Alias for @ref USBDM::digitalIO_PTA12
+extern const USBDM::PortA_T<13>  digitalIO_PTA13;     //!< See @ref DigitalIO
+#define digitalIO_D24            digitalIO_PTA13      //!< Alias for @ref USBDM::digitalIO_PTA13
+extern const USBDM::PortA_T<18>  digitalIO_PTA18;     //!< See @ref DigitalIO
+extern const USBDM::PortA_T<19>  digitalIO_PTA19;     //!< See @ref DigitalIO
+extern const USBDM::PortB_T<0>   digitalIO_PTB0;      //!< See @ref DigitalIO
+#define digitalIO_A5             digitalIO_PTB0       //!< Alias for @ref USBDM::digitalIO_PTB0
+#define digitalIO_ACC_SCL        digitalIO_PTB0       //!< Alias for @ref USBDM::digitalIO_PTB0
+extern const USBDM::PortB_T<1>   digitalIO_PTB1;      //!< See @ref DigitalIO
+#define digitalIO_A4             digitalIO_PTB1       //!< Alias for @ref USBDM::digitalIO_PTB1
+#define digitalIO_ACC_SDA        digitalIO_PTB1       //!< Alias for @ref USBDM::digitalIO_PTB1
+extern const USBDM::PortB_T<2>   digitalIO_PTB2;      //!< See @ref DigitalIO
+#define digitalIO_D15            digitalIO_PTB2       //!< Alias for @ref USBDM::digitalIO_PTB2
+extern const USBDM::PortB_T<3>   digitalIO_PTB3;      //!< See @ref DigitalIO
+#define digitalIO_D14            digitalIO_PTB3       //!< Alias for @ref USBDM::digitalIO_PTB3
+extern const USBDM::PortB_T<16>  digitalIO_PTB16;     //!< See @ref DigitalIO
+extern const USBDM::PortB_T<17>  digitalIO_PTB17;     //!< See @ref DigitalIO
+extern const USBDM::PortB_T<18>  digitalIO_PTB18;     //!< See @ref DigitalIO
+extern const USBDM::PortB_T<19>  digitalIO_PTB19;     //!< See @ref DigitalIO
+extern const USBDM::PortC_T<0>   digitalIO_PTC0;      //!< See @ref DigitalIO
+#define digitalIO_A0             digitalIO_PTC0       //!< Alias for @ref USBDM::digitalIO_PTC0
+extern const USBDM::PortC_T<1>   digitalIO_PTC1;      //!< See @ref DigitalIO
+#define digitalIO_A1             digitalIO_PTC1       //!< Alias for @ref USBDM::digitalIO_PTC1
+extern const USBDM::PortC_T<2>   digitalIO_PTC2;      //!< See @ref DigitalIO
+#define digitalIO_D10            digitalIO_PTC2       //!< Alias for @ref USBDM::digitalIO_PTC2
+extern const USBDM::PortC_T<3>   digitalIO_PTC3;      //!< See @ref DigitalIO
+#define digitalIO_D6             digitalIO_PTC3       //!< Alias for @ref USBDM::digitalIO_PTC3
+#define digitalIO_LED_RED        digitalIO_PTC3       //!< Alias for @ref USBDM::digitalIO_PTC3
+extern const USBDM::PortC_T<4>   digitalIO_PTC4;      //!< See @ref DigitalIO
+#define digitalIO_D7             digitalIO_PTC4       //!< Alias for @ref USBDM::digitalIO_PTC4
+extern const USBDM::PortC_T<5>   digitalIO_PTC5;      //!< See @ref DigitalIO
+#define digitalIO_D18            digitalIO_PTC5       //!< Alias for @ref USBDM::digitalIO_PTC5
+extern const USBDM::PortC_T<6>   digitalIO_PTC6;      //!< See @ref DigitalIO
+#define digitalIO_D19            digitalIO_PTC6       //!< Alias for @ref USBDM::digitalIO_PTC6
+#define digitalIO_ACC_INT2       digitalIO_PTC6       //!< Alias for @ref USBDM::digitalIO_PTC6
+extern const USBDM::PortC_T<7>   digitalIO_PTC7;      //!< See @ref DigitalIO
+#define digitalIO_D20            digitalIO_PTC7       //!< Alias for @ref USBDM::digitalIO_PTC7
+extern const USBDM::PortC_T<8>   digitalIO_PTC8;      //!< See @ref DigitalIO
+#define digitalIO_D4             digitalIO_PTC8       //!< Alias for @ref USBDM::digitalIO_PTC8
+extern const USBDM::PortC_T<9>   digitalIO_PTC9;      //!< See @ref DigitalIO
+#define digitalIO_D23            digitalIO_PTC9       //!< Alias for @ref USBDM::digitalIO_PTC9
+extern const USBDM::PortC_T<10>  digitalIO_PTC10;     //!< See @ref DigitalIO
+#define digitalIO_D25            digitalIO_PTC10      //!< Alias for @ref USBDM::digitalIO_PTC10
+extern const USBDM::PortC_T<11>  digitalIO_PTC11;     //!< See @ref DigitalIO
+#define digitalIO_D17            digitalIO_PTC11      //!< Alias for @ref USBDM::digitalIO_PTC11
+#define digitalIO_ACC_INT1       digitalIO_PTC11      //!< Alias for @ref USBDM::digitalIO_PTC11
+extern const USBDM::PortD_T<0>   digitalIO_PTD0;      //!< See @ref DigitalIO
+#define digitalIO_D16            digitalIO_PTD0       //!< Alias for @ref USBDM::digitalIO_PTD0
+extern const USBDM::PortD_T<1>   digitalIO_PTD1;      //!< See @ref DigitalIO
+#define digitalIO_D13            digitalIO_PTD1       //!< Alias for @ref USBDM::digitalIO_PTD1
+extern const USBDM::PortD_T<2>   digitalIO_PTD2;      //!< See @ref DigitalIO
+#define digitalIO_D11            digitalIO_PTD2       //!< Alias for @ref USBDM::digitalIO_PTD2
+extern const USBDM::PortD_T<3>   digitalIO_PTD3;      //!< See @ref DigitalIO
+#define digitalIO_D12            digitalIO_PTD3       //!< Alias for @ref USBDM::digitalIO_PTD3
+extern const USBDM::PortD_T<4>   digitalIO_PTD4;      //!< See @ref DigitalIO
+#define digitalIO_D3             digitalIO_PTD4       //!< Alias for @ref USBDM::digitalIO_PTD4
+#define digitalIO_LED_GREEN      digitalIO_PTD4       //!< Alias for @ref USBDM::digitalIO_PTD4
+extern const USBDM::PortD_T<5>   digitalIO_PTD5;      //!< See @ref DigitalIO
+#define digitalIO_A3             digitalIO_PTD5       //!< Alias for @ref USBDM::digitalIO_PTD5
+extern const USBDM::PortD_T<6>   digitalIO_PTD6;      //!< See @ref DigitalIO
+#define digitalIO_A2             digitalIO_PTD6       //!< Alias for @ref USBDM::digitalIO_PTD6
+extern const USBDM::PortD_T<7>   digitalIO_PTD7;      //!< See @ref DigitalIO
+#define digitalIO_D22            digitalIO_PTD7       //!< Alias for @ref USBDM::digitalIO_PTD7
+extern const USBDM::PortE_T<0>   digitalIO_PTE0;      //!< See @ref DigitalIO
+#define digitalIO_D1             digitalIO_PTE0       //!< Alias for @ref USBDM::digitalIO_PTE0
+extern const USBDM::PortE_T<1>   digitalIO_PTE1;      //!< See @ref DigitalIO
+#define digitalIO_D0             digitalIO_PTE1       //!< Alias for @ref USBDM::digitalIO_PTE1
 /**
  * @}
  */
@@ -103,52 +107,52 @@ extern const DigitalIO digitalIO_PTE1;          //!< DigitalIO on pin PTE1
 * @brief Allows use of port pins as analogue inputs
 * @{
 */
-extern const AnalogueIO analogueIO_ADC0_SE19;    //!< AnalogueIO on pin ADC0_DM0
-extern const AnalogueIO analogueIO_ADC0_SE21;    //!< AnalogueIO on pin ADC0_DM3
-extern const AnalogueIO analogueIO_ADC0_SE0;     //!< AnalogueIO on pin ADC0_DP0
-extern const AnalogueIO analogueIO_ADC0_SE3;     //!< AnalogueIO on pin ADC0_DP3
-extern const AnalogueIO analogueIO_ADC0_SE23;    //!< AnalogueIO on pin ADC0_SE23
+extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,19> analogueIO_ADC0_SE19;
+extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,21> analogueIO_ADC0_SE21;
+extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 0> analogueIO_ADC0_SE0;
+extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 3> analogueIO_ADC0_SE3;
+extern const USBDM::AnalogueIOT<0,                0,                                         ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,23> analogueIO_ADC0_SE23;
 #if (PTB0_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE8;     //!< AnalogueIO on pin PTB0
-#define analogueIO_A5        analogueIO_ADC0_SE8
-#define analogueIO_ACC_SCL   analogueIO_ADC0_SE8
+extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 8> analogueIO_ADC0_SE8;
+#define analogueIO_A5            analogueIO_ADC0_SE8  //!< Alias for @ref USBDM::analogueIO_ADC0_SE8
+#define analogueIO_ACC_SCL       analogueIO_ADC0_SE8  //!< Alias for @ref USBDM::analogueIO_ADC0_SE8
 #endif
 #if (PTB1_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE9;     //!< AnalogueIO on pin PTB1
-#define analogueIO_A4        analogueIO_ADC0_SE9
-#define analogueIO_ACC_SDA   analogueIO_ADC0_SE9
+extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 9> analogueIO_ADC0_SE9;
+#define analogueIO_A4            analogueIO_ADC0_SE9  //!< Alias for @ref USBDM::analogueIO_ADC0_SE9
+#define analogueIO_ACC_SDA       analogueIO_ADC0_SE9  //!< Alias for @ref USBDM::analogueIO_ADC0_SE9
 #endif
 #if (PTB2_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE12;    //!< AnalogueIO on pin PTB2
-#define analogueIO_D15       analogueIO_ADC0_SE12
+extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,12> analogueIO_ADC0_SE12;
+#define analogueIO_D15           analogueIO_ADC0_SE12 //!< Alias for @ref USBDM::analogueIO_ADC0_SE12
 #endif
 #if (PTB3_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE13;    //!< AnalogueIO on pin PTB3
-#define analogueIO_D14       analogueIO_ADC0_SE13
+extern const USBDM::AnalogueIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[3]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,13> analogueIO_ADC0_SE13;
+#define analogueIO_D14           analogueIO_ADC0_SE13 //!< Alias for @ref USBDM::analogueIO_ADC0_SE13
 #endif
 #if (PTC0_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE14;    //!< AnalogueIO on pin PTC0
-#define analogueIO_A0        analogueIO_ADC0_SE14
+extern const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,14> analogueIO_ADC0_SE14;
+#define analogueIO_A0            analogueIO_ADC0_SE14 //!< Alias for @ref USBDM::analogueIO_ADC0_SE14
 #endif
 #if (PTC1_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE15;    //!< AnalogueIO on pin PTC1
-#define analogueIO_A1        analogueIO_ADC0_SE15
+extern const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,15> analogueIO_ADC0_SE15;
+#define analogueIO_A1            analogueIO_ADC0_SE15 //!< Alias for @ref USBDM::analogueIO_ADC0_SE15
 #endif
 #if (PTC2_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE4b;    //!< AnalogueIO on pin PTC2
-#define analogueIO_D10       analogueIO_ADC0_SE4b
+extern const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 4> analogueIO_ADC0_SE4b;
+#define analogueIO_D10           analogueIO_ADC0_SE4b //!< Alias for @ref USBDM::analogueIO_ADC0_SE4b
 #endif
 #if (PTD1_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE5b;    //!< AnalogueIO on pin PTD1
-#define analogueIO_D13       analogueIO_ADC0_SE5b
+extern const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 5> analogueIO_ADC0_SE5b;
+#define analogueIO_D13           analogueIO_ADC0_SE5b //!< Alias for @ref USBDM::analogueIO_ADC0_SE5b
 #endif
 #if (PTD5_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE6b;    //!< AnalogueIO on pin PTD5
-#define analogueIO_A3        analogueIO_ADC0_SE6b
+extern const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 6> analogueIO_ADC0_SE6b;
+#define analogueIO_A3            analogueIO_ADC0_SE6b //!< Alias for @ref USBDM::analogueIO_ADC0_SE6b
 #endif
 #if (PTD6_SIG_SEL == 0)
-extern const AnalogueIO analogueIO_ADC0_SE7b;    //!< AnalogueIO on pin PTD6
-#define analogueIO_A2        analogueIO_ADC0_SE7b
+extern const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 7> analogueIO_ADC0_SE7b;
+#define analogueIO_A2            analogueIO_ADC0_SE7b //!< Alias for @ref USBDM::analogueIO_ADC0_SE7b
 #endif
 /**
  * @}
@@ -159,79 +163,79 @@ extern const AnalogueIO analogueIO_ADC0_SE7b;    //!< AnalogueIO on pin PTD6
 * @{
 */
 #if (PTA0_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH5;          //!< PwmIO on pin PTA0
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[0]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 5,  3> pwmIO_FTM0_CH5;
 #endif
 #if (PTA1_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH6;          //!< PwmIO on pin PTA1
-#define pwmIO_D5             pwmIO_FTM0_CH6
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 6,  3> pwmIO_FTM0_CH6;
+#define pwmIO_D5                 pwmIO_FTM0_CH6       //!< Alias for @ref USBDM::pwmIO_FTM0_CH6
 #endif
 #if (PTA2_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH7;          //!< PwmIO on pin PTA2
-#define pwmIO_D9             pwmIO_FTM0_CH7
-#define pwmIO_LED_BLUE       pwmIO_FTM0_CH7
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[2]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 7,  3> pwmIO_FTM0_CH7;
+#define pwmIO_D9                 pwmIO_FTM0_CH7       //!< Alias for @ref USBDM::pwmIO_FTM0_CH7
+#define pwmIO_LED_BLUE           pwmIO_FTM0_CH7       //!< Alias for @ref USBDM::pwmIO_FTM0_CH7
 #endif
 #if (PTA3_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH0;          //!< PwmIO on pin PTA3
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[3]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 0,  3> pwmIO_FTM0_CH0;
 #endif
 #if (PTA4_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH1;          //!< PwmIO on pin PTA4
-#define pwmIO_D21            pwmIO_FTM0_CH1
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 1,  3> pwmIO_FTM0_CH1;
+#define pwmIO_D21                pwmIO_FTM0_CH1       //!< Alias for @ref USBDM::pwmIO_FTM0_CH1
 #endif
 #if (PTA5_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM0_CH2;          //!< PwmIO on pin PTA5
-#define pwmIO_D2             pwmIO_FTM0_CH2
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[5]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 2,  3> pwmIO_FTM0_CH2;
+#define pwmIO_D2                 pwmIO_FTM0_CH2       //!< Alias for @ref USBDM::pwmIO_FTM0_CH2
 #endif
 #if (PTA12_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM1_CH0;          //!< PwmIO on pin PTA12
-#define pwmIO_D8             pwmIO_FTM1_CH0
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[12]), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 0,  3> pwmIO_FTM1_CH0;
+#define pwmIO_D8                 pwmIO_FTM1_CH0       //!< Alias for @ref USBDM::pwmIO_FTM1_CH0
 #endif
 #if (PTA13_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM1_CH1;          //!< PwmIO on pin PTA13
-#define pwmIO_D24            pwmIO_FTM1_CH1
+extern const USBDM::PwmIOT<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[13]), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 1,  3> pwmIO_FTM1_CH1;
+#define pwmIO_D24                pwmIO_FTM1_CH1       //!< Alias for @ref USBDM::pwmIO_FTM1_CH1
 #endif
 #if (PTB0_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM1_CH0;          //!< PwmIO on pin PTB0
-#define pwmIO_A5             pwmIO_FTM1_CH0
-#define pwmIO_ACC_SCL        pwmIO_FTM1_CH0
+extern const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 0,  3> pwmIO_FTM1_CH0;
+#define pwmIO_A5                 pwmIO_FTM1_CH0       //!< Alias for @ref USBDM::pwmIO_FTM1_CH0
+#define pwmIO_ACC_SCL            pwmIO_FTM1_CH0       //!< Alias for @ref USBDM::pwmIO_FTM1_CH0
 #endif
 #if (PTB1_SIG_SEL == 3)
-extern const PwmIO pwmIO_FTM1_CH1;          //!< PwmIO on pin PTB1
-#define pwmIO_A4             pwmIO_FTM1_CH1
-#define pwmIO_ACC_SDA        pwmIO_FTM1_CH1
+extern const USBDM::PwmIOT<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, 1,  3> pwmIO_FTM1_CH1;
+#define pwmIO_A4                 pwmIO_FTM1_CH1       //!< Alias for @ref USBDM::pwmIO_FTM1_CH1
+#define pwmIO_ACC_SDA            pwmIO_FTM1_CH1       //!< Alias for @ref USBDM::pwmIO_FTM1_CH1
 #endif
 #if (PTC1_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH0;          //!< PwmIO on pin PTC1
-#define pwmIO_A1             pwmIO_FTM0_CH0
+extern const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 0,  4> pwmIO_FTM0_CH0;
+#define pwmIO_A1                 pwmIO_FTM0_CH0       //!< Alias for @ref USBDM::pwmIO_FTM0_CH0
 #endif
 #if (PTC2_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH1;          //!< PwmIO on pin PTC2
-#define pwmIO_D10            pwmIO_FTM0_CH1
+extern const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 1,  4> pwmIO_FTM0_CH1;
+#define pwmIO_D10                pwmIO_FTM0_CH1       //!< Alias for @ref USBDM::pwmIO_FTM0_CH1
 #endif
 #if (PTC3_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH2;          //!< PwmIO on pin PTC3
-#define pwmIO_D6             pwmIO_FTM0_CH2
-#define pwmIO_LED_RED        pwmIO_FTM0_CH2
+extern const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[3]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 2,  4> pwmIO_FTM0_CH2;
+#define pwmIO_D6                 pwmIO_FTM0_CH2       //!< Alias for @ref USBDM::pwmIO_FTM0_CH2
+#define pwmIO_LED_RED            pwmIO_FTM0_CH2       //!< Alias for @ref USBDM::pwmIO_FTM0_CH2
 #endif
 #if (PTC4_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH3;          //!< PwmIO on pin PTC4
-#define pwmIO_D7             pwmIO_FTM0_CH3
+extern const USBDM::PwmIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 3,  4> pwmIO_FTM0_CH3;
+#define pwmIO_D7                 pwmIO_FTM0_CH3       //!< Alias for @ref USBDM::pwmIO_FTM0_CH3
 #endif
 #if (PTD4_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH4;          //!< PwmIO on pin PTD4
-#define pwmIO_D3             pwmIO_FTM0_CH4
-#define pwmIO_LED_GREEN      pwmIO_FTM0_CH4
+extern const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 4,  4> pwmIO_FTM0_CH4;
+#define pwmIO_D3                 pwmIO_FTM0_CH4       //!< Alias for @ref USBDM::pwmIO_FTM0_CH4
+#define pwmIO_LED_GREEN          pwmIO_FTM0_CH4       //!< Alias for @ref USBDM::pwmIO_FTM0_CH4
 #endif
 #if (PTD5_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH5;          //!< PwmIO on pin PTD5
-#define pwmIO_A3             pwmIO_FTM0_CH5
+extern const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 5,  4> pwmIO_FTM0_CH5;
+#define pwmIO_A3                 pwmIO_FTM0_CH5       //!< Alias for @ref USBDM::pwmIO_FTM0_CH5
 #endif
 #if (PTD6_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH6;          //!< PwmIO on pin PTD6
-#define pwmIO_A2             pwmIO_FTM0_CH6
+extern const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 6,  4> pwmIO_FTM0_CH6;
+#define pwmIO_A2                 pwmIO_FTM0_CH6       //!< Alias for @ref USBDM::pwmIO_FTM0_CH6
 #endif
 #if (PTD7_SIG_SEL == 4)
-extern const PwmIO pwmIO_FTM0_CH7;          //!< PwmIO on pin PTD7
-#define pwmIO_D22            pwmIO_FTM0_CH7
+extern const USBDM::PwmIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, 7,  4> pwmIO_FTM0_CH7;
+#define pwmIO_D22                pwmIO_FTM0_CH7       //!< Alias for @ref USBDM::pwmIO_FTM0_CH7
 #endif
 /**
  * @}
@@ -245,35 +249,38 @@ extern void usbdm_PinMapping();
 
 /*
 Clock Information 
-ADC0       SIM->SCGC6   SIM_SCGC6_ADC0_MASK
-CMP        SIM->SCGC4   SIM_SCGC4_CMP_MASK
-CMT        SIM->SCGC4   SIM_SCGC4_CMT_MASK
-CRC        SIM->SCGC6   SIM_SCGC6_CRC_MASK
-DMA        SIM->SCGC7   SIM_SCGC7_DMA_MASK
-DMAMUX     SIM->SCGC6   SIM_SCGC6_DMAMUX_MASK
-EWM        SIM->SCGC4   SIM_SCGC4_EWM_MASK
-FTM0       SIM->SCGC6   SIM_SCGC6_FTM0_MASK
-FTM1       SIM->SCGC6   SIM_SCGC6_FTM1_MASK
-I2C0       SIM->SCGC4   SIM_SCGC4_I2C0_MASK
-I2S0       SIM->SCGC6   SIM_SCGC6_I2S0_MASK
-LPTMR0     SIM->SCGC5   SIM_SCGC5_LPTMR_MASK
-PDB0       SIM->SCGC6   SIM_SCGC6_PDB0_MASK
-PIT        SIM->SCGC6   SIM_SCGC6_PIT_MASK
-PORTA      SIM->SCGC5   SIM_SCGC5_PORTA_MASK
-PORTB      SIM->SCGC5   SIM_SCGC5_PORTB_MASK
-PORTC      SIM->SCGC5   SIM_SCGC5_PORTC_MASK
-PORTD      SIM->SCGC5   SIM_SCGC5_PORTD_MASK
-PORTE      SIM->SCGC5   SIM_SCGC5_PORTE_MASK
-RTC        SIM->SCGC6   SIM_SCGC6_RTC_MASK
-SPI0       SIM->SCGC6   SIM_SCGC6_SPI0_MASK
-TSI        SIM->SCGC5   SIM_SCGC5_TSI_MASK
-UART0      SIM->SCGC4   SIM_SCGC4_UART0_MASK
-UART1      SIM->SCGC4   SIM_SCGC4_UART1_MASK
-UART2      SIM->SCGC4   SIM_SCGC4_UART2_MASK
-USBDCD     SIM->SCGC6   SIM_SCGC6_USBDCD_MASK
-USBOTG     SIM->SCGC4   SIM_SCGC4_USBOTG_MASK
-VREF       SIM->SCGC4   SIM_SCGC4_VREF_MASK
+ADC0       SCGC6        SIM_SCGC6_ADC0_MASK
+CMP        SCGC4        SIM_SCGC4_CMP_MASK
+CMT        SCGC4        SIM_SCGC4_CMT_MASK
+CRC        SCGC6        SIM_SCGC6_CRC_MASK
+DMA        SCGC7        SIM_SCGC7_DMA_MASK
+DMAMUX     SCGC6        SIM_SCGC6_DMAMUX_MASK
+EWM        SCGC4        SIM_SCGC4_EWM_MASK
+FTM0       SCGC6        SIM_SCGC6_FTM0_MASK
+FTM1       SCGC6        SIM_SCGC6_FTM1_MASK
+I2C0       SCGC4        SIM_SCGC4_I2C0_MASK
+I2S0       SCGC6        SIM_SCGC6_I2S0_MASK
+LPTMR0     SCGC5        SIM_SCGC5_LPTMR_MASK
+PDB0       SCGC6        SIM_SCGC6_PDB0_MASK
+PIT        SCGC6        SIM_SCGC6_PIT_MASK
+PORTA      SCGC5        SIM_SCGC5_PORTA_MASK
+PORTB      SCGC5        SIM_SCGC5_PORTB_MASK
+PORTC      SCGC5        SIM_SCGC5_PORTC_MASK
+PORTD      SCGC5        SIM_SCGC5_PORTD_MASK
+PORTE      SCGC5        SIM_SCGC5_PORTE_MASK
+RTC        SCGC6        SIM_SCGC6_RTC_MASK
+SPI0       SCGC6        SIM_SCGC6_SPI0_MASK
+TSI        SCGC5        SIM_SCGC5_TSI_MASK
+UART0      SCGC4        SIM_SCGC4_UART0_MASK
+UART1      SCGC4        SIM_SCGC4_UART1_MASK
+UART2      SCGC4        SIM_SCGC4_UART2_MASK
+USBDCD     SCGC6        SIM_SCGC6_USBDCD_MASK
+USBOTG     SCGC4        SIM_SCGC4_USBOTG_MASK
+VREF       SCGC4        SIM_SCGC4_VREF_MASK
 */
 
+#if defined(USE_USBDM_NAMESPACE) && USE_USBDM_NAMESPACE
+} // End namespace USBDM
+#endif
 
 #endif /* GPIO_H_ */

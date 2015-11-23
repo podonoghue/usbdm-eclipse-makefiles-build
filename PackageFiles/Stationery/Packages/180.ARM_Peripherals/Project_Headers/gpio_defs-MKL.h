@@ -1,5 +1,5 @@
 /**
- * @file     gpio_defs.h (from gpio_defs-MKL.h)
+ * @file     gpio_defs.h (from gpio_defs-MK.h)
  * @brief    GPIO Pin routines
  *
  * @version  V4.11.1.70
@@ -9,53 +9,53 @@
 #define HEADER_GPIO_DEFS_H
 
 #include "derivative.h"
+#include "utilities.h"
 #include "pin_mapping.h"
 
-#if DO_INLINE_GPIO != 0
-#define OPTIONAL_INLINE __attribute__((always_inline))
-#else
-#define OPTIONAL_INLINE
-#endif
-
+namespace USBDM {
 
 /*!
- * @brief struct representing a PCR register
+ * @brief Template representing a PCR register
  *
- * <b>Example</b>
+ * @details
  * @code
- * // Set pin to boolean value
+ * // Enable clock to associated PORT
  * pcr.enableClock();
- * pcr.setPCR(GPIO_DEFAULT_PCR);
  *
+ * // Configure PCR
+ * pcr.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
  * @endcode
+ *
+ * @tparam clockMask       Mask for clock register for port associated with this PCR
+ * @tparam pcrReg          PCR to be manipulated
+ * @tparam defaultPcrValue Default value for PCR
  */
-struct PCRInit {
-   volatile uint32_t   *pcrReg;     //!< Pointer to PCR for pin
-   const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
-
+template<uint32_t clockMask, uint32_t pcrReg, uint32_t defaultPcrValue> class PCRInit {
+public:
    /**
-    * Set pin PCR value
+    * Set pin PCR value\n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param pcrValue PCR value made up of PORT_PCR_ masks
+    *
     */
-   void setPCR(uint32_t pcrValue) const  {
+   void setPCR(uint32_t pcrValue= defaultPcrValue) const  {
       if (pcrReg != 0) {
          enableClock();
-         *pcrReg = pcrValue;
+         *reinterpret_cast<volatile uint32_t *>(pcrReg) = pcrValue;
       }
    }
-
    /**
     * Enable clock to port
     */
    void enableClock() const {
-	   FIXED_PORT_CLOCK_REG |= clockMask;
+      FIXED_PORT_CLOCK_REG |= clockMask;
    }
    /**
-    * Enable clock to port
+    * Disable clock to port
     */
    void disableClock() const {
-	   FIXED_PORT_CLOCK_REG &= ~clockMask;
+      FIXED_PORT_CLOCK_REG &= ~clockMask;
    }
 };
 
@@ -65,39 +65,37 @@ struct PCRInit {
  */
 
 /*!
- * @brief struct representing a pin with Digital I/O capability
+ * @brief Template representing a pin with Digital I/O capability
  *
  * <b>Example</b>
  * @code
  * // Set as digital output
  * DigitalIO_A3.setDigitalOutput();
+ *
  * // Set pin high
  * DigitalIO_A3.set();
+ *
  * // Set pin low
  * DigitalIO_A3.clear();
+ *
  * // Toggle pin
  * DigitalIO_A3.toggle();
+ *
  * // Set pin to boolean value
  * DigitalIO_A3.write(true);
+ *
  * // Set pin to boolean value
  * DigitalIO_A3.write(false);
  *
  * @endcode
  */
-struct DigitalIO {
-   const    PCRInit     pcr;        //!< PCR information
-   volatile GPIO_Type  *gpio;       //!< Pointer to hardware registers
-   const    uint32_t    bitMask;    //!< Bit-mask to use when manipulating individual bit
-
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t gpio, const uint32_t bitMask> class DigitalIO {
+public:
    /**
     * Default PCR setting for pins (excluding multiplexor value)
     * High drive strength + Pull-up
     */
    static const uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   /**
-    * PCR multiplexor value for analogue function
-    */
-   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(FIXED_ADC_FN);
    /**
     * PCR multiplexor value for digital function
     */
@@ -107,23 +105,27 @@ struct DigitalIO {
     */
    static const uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
 
+   PCRInit<portClockMask, pcrReg, GPIO_DEFAULT_PCR> pcr; //!< PCR information
+
+   DigitalIO() {}
+
    /**
     * Toggle pin
     */
-   void toggle() const OPTIONAL_INLINE {
-      gpio->PTOR = bitMask;
+   void toggle() const {
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PTOR = bitMask;
    }
    /**
     * Set pin high
     */
-   void set() const OPTIONAL_INLINE {
-      gpio->PSOR = bitMask;
+   void set() const {
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PSOR = bitMask;
    }
    /**
     * Set pin low
     */
-   void clear() const OPTIONAL_INLINE {
-      gpio->PCOR = bitMask;
+   void clear() const {
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PCOR = bitMask;
    }
    /**
     * Set pin as digital output
@@ -132,7 +134,7 @@ struct DigitalIO {
     */
    void setDigitalOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       pcr.setPCR(pcrValue);
-      gpio->PDDR |= bitMask;
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= bitMask;
    }
    /**
     * Set pin as digital input
@@ -141,14 +143,14 @@ struct DigitalIO {
     */
    void setDigitalInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       pcr.setPCR(pcrValue);
-      gpio->PDDR &= ~bitMask;
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~bitMask;
    }
    /**
     * Write boolean value to digital output
     *
     * @param value high/low value
     */
-   void write(bool value) const OPTIONAL_INLINE {
+   void write(bool value) const {
       if (value) {
          set();
       }
@@ -161,8 +163,8 @@ struct DigitalIO {
     *
     * @return true/false reflecting pin value
     */
-   bool read() const OPTIONAL_INLINE {
-      return (gpio->PDIR & bitMask);
+   bool read() const {
+      return ( reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR & bitMask);
    }
 };
 
@@ -174,6 +176,28 @@ struct DigitalIO {
  * @addtogroup AnalogueIO_Group Analogue Input
  * @{
  */
+
+class AnalogueIO {
+protected:
+   AnalogueIO() {}
+
+public:
+   /**
+    * PCR multiplexor value for analogue function
+    */
+   static const uint32_t    GPIO_ANALOGUE_FN = PORT_PCR_MUX(FIXED_ADC_FN);
+
+   enum {
+      resolution_8bit_se    = ADC_CFG1_MODE(0),
+      resolution_10bit_se   = ADC_CFG1_MODE(2),
+      resolution_12bit_se   = ADC_CFG1_MODE(1),
+      resolution_16bit_se   = ADC_CFG1_MODE(3),
+      resolution_9bit_diff  = ADC_CFG1_MODE(0),
+      resolution_11bit_diff = ADC_CFG1_MODE(2),
+      resolution_12bit_diff = ADC_CFG1_MODE(1),
+      resolution_16bit_diff = ADC_CFG1_MODE(3),
+   } ADC_Resolution;
+};
 
 /**
  * Class representing a pin with Analogue Input capability
@@ -188,22 +212,12 @@ struct DigitalIO {
  *  uint16_t value = AnalogueIO_A2.readAnalogue();
  *  @endcode
  */
-struct AnalogueIO {
-   const    PCRInit     pcr;        //!< Associated PCR
-   volatile ADC_Type   *adc;        //!< ADC Hardware pointer
-   volatile uint32_t   *simscgc;    //!< Associated SIM_SCGC register
-   const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
-   const    uint8_t     adcChannel; //!< ADC channel
-   enum {
-      resolution_8bit_se    = ADC_CFG1_MODE(0),
-      resolution_10bit_se   = ADC_CFG1_MODE(2),
-      resolution_12bit_se   = ADC_CFG1_MODE(1),
-      resolution_16bit_se   = ADC_CFG1_MODE(3),
-      resolution_9bit_diff  = ADC_CFG1_MODE(0),
-      resolution_11bit_diff = ADC_CFG1_MODE(2),
-      resolution_12bit_diff = ADC_CFG1_MODE(1),
-      resolution_16bit_diff = ADC_CFG1_MODE(3),
-   } ADC_Resolution;
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t adc, uint32_t adcClockReg, uint32_t adcClockMask, uint8_t adcChannel> class AnalogueIOT : AnalogueIO {
+public:
+   PCRInit<portClockMask, pcrReg, PORT_PCR_MUX(FIXED_ADC_FN)> pcr; //!< PCR information
+
+   AnalogueIOT() {}
+
    /**
     * Set port pin as analogue input
     *
@@ -211,9 +225,15 @@ struct AnalogueIO {
     *
     * @note This initialises the ADC
     */
-   void setAnalogueInput(uint32_t mode = resolution_16bit_se) const {
-      pcr.setPCR(DigitalIO::GPIO_ANALOGUE_FN);
-      initialiseADC(mode);
+   void setMode(uint32_t mode = resolution_16bit_se) const {
+      // Enable clock to ADC
+      *reinterpret_cast<volatile uint32_t*>(adcClockReg)  |= adcClockMask;
+      pcr.setPCR(PORT_PCR_MUX(FIXED_ADC_FN));
+
+      // Configure ADC for software triggered conversion
+      reinterpret_cast<volatile ADC_Type*>(adc)->CFG1 = ADC_CFG1_ADIV(1)|mode|ADC_CFG1_ADLSMP_MASK|ADC_CFG1_ADICLK(0);
+      reinterpret_cast<volatile ADC_Type*>(adc)->SC2  = 0;
+      reinterpret_cast<volatile ADC_Type*>(adc)->CFG2 = ADC_CFG2_ADLSTS(0)|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
    }
    /**
     * Initiates a conversion and waits for it to complete
@@ -223,28 +243,14 @@ struct AnalogueIO {
    int readAnalogue() const {
 
       // Trigger conversion
-      adc->SC1[0] = ADC_SC1_ADCH(adcChannel);
+      reinterpret_cast<volatile ADC_Type*>(adc)->SC1[0] = ADC_SC1_ADCH(adcChannel);
 
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+      while ((reinterpret_cast<volatile ADC_Type*>(adc)->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return (int)adc->R[0];
+      return (int)reinterpret_cast<volatile ADC_Type*>(adc)->R[0];
    };
-private:
-   /**
-    * Initialise ADC before first use
-    */
-   void initialiseADC(uint32_t mode) const {
-      // Enable clock to ADC
-      *simscgc  |= clockMask;
-
-      // Configure ADC for software triggered conversion
-      adc->CFG1 = ADC_CFG1_ADIV(1)|mode|ADC_CFG1_ADLSMP_MASK|ADC_CFG1_ADICLK(0);
-      adc->SC2  = 0;
-      adc->CFG2 = ADC_CFG2_ADLSTS(0)|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
-   }
 };
-
 /**
  * @}
  */
@@ -253,21 +259,14 @@ private:
  * @addtogroup PwmIO_Group PWM, Input capture, Output compare
  * @{
  */
-
 /**
- * Class representing a pin with PWM capability
- *
- * Example
- * @code
- * // Initialise PWM with initial period and alignment
- * pwmIO_D5.setPwmOutput(200, PwmIO::ftm_leftAlign);
- * // Change period (in ticks)
- * pwmIO_D5.setPeriod(500);
- * // Change duty cycle (in percent)
- * pwmIO_D5.setDutyCycle(45);
- * @endcode
+ * Base class for PWM
  */
 struct PwmIO {
+protected:
+   PwmIO() {}
+
+public:
    /**
     * Controls basic operation of PWM/Input capture
     */
@@ -301,14 +300,32 @@ struct PwmIO {
       //! Centre-aligned
       ftm_centreAlign = TPM_SC_CPWMS_MASK,
    } Pwm_Mode;
+   /**
+    * Default PCR setting for pins (excluding multiplexor value)
+    * High drive strength + Pull-up
+    */
+   static const uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+};
 
-   const    PCRInit     pcr;        //!< Digital I/O
-   volatile TPM_Type   *ftm;        //!< FTM hardware pointer
-   const    uint8_t     ftmChannel; //!< FTM channel number
-   const    uint32_t    portMux;    //!< Port multiplexor value for PWM operation
-   volatile uint32_t   *simscgc;    //!< Associated SIM_SCGC register
-   const    uint32_t    clockMask;  //!< Mask for clock bit in SIM_SCGC
-   const    uint32_t    scValue;    //!< FTM->SC base value (clock selection & divider)
+/**
+ * Class representing a pin with PWM capability
+ *
+ * Example
+ * @code
+ * // Initialise PWM with initial period and alignment
+ * pwmIO_D5.setPwmOutput(200, PwmIO::ftm_leftAlign);
+ * // Change period (in ticks)
+ * pwmIO_D5.setPeriod(500);
+ * // Change duty cycle (in percent)
+ * pwmIO_D5.setDutyCycle(45);
+ * @endcode
+ */
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint8_t ftmChannel, uint32_t ftmMuxFn> class PwmIOT : PwmIO {
+public:
+   PCRInit<portClockMask, pcrReg, PORT_PCR_MUX(FIXED_ADC_FN)> pcr; //!< PCR information
+   static const uint32_t scValue = FTM_SC_CLKS(1)|FTM_SC_PS(0);    //!< FTM->SC base value (clock selection & divider)
+
+   PwmIOT() {}
 
    /**
     * Configure PWM operation
@@ -316,39 +333,40 @@ struct PwmIO {
     * @param period  Period in timer ticks
     * @param mode    Mode of operation see @ref Pwm_Mode
     */
-   void setPwmOutput(int period /* ticks */, Pwm_Mode mode) const {
-      pcr.setPCR(portMux|DigitalIO::DEFAULT_PCR);
+   void setPwmOutput(int period /* ticks */, Pwm_Mode mode=ftm_centreAlign) const {
+      pcr.setPCR(PORT_PCR_MUX(ftmMuxFn)|DEFAULT_PCR);
 
       // Enable clock to timer
-      *simscgc  |= clockMask;
+      *reinterpret_cast<uint32_t*>(ftmClockMask) |= ftmClockMask;
 
       // Common registers
-      ftm->SC      = TPM_SC_PS(0); // Disable FTM so register changes are immediate
-      ftm->CNT     = 0;
+      reinterpret_cast<volatile FTM_Type*>(ftm)->SC      = TPM_SC_PS(0); // Disable FTM so register changes are immediate
+      reinterpret_cast<volatile FTM_Type*>(ftm)->CNT     = 0;
       if (mode == ftm_centreAlign) {
-         ftm->MOD     = period/2;
+         reinterpret_cast<volatile FTM_Type*>(ftm)->MOD     = period/2;
          // Centre aligned PWM with CPWMS not selected
-         ftm->SC      = scValue|TPM_SC_CPWMS_MASK;
+         reinterpret_cast<volatile FTM_Type*>(ftm)->SC      = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
-         ftm->MOD     = period-1;
+         reinterpret_cast<volatile FTM_Type*>(ftm)->MOD     = period-1;
          // Left aligned PWM without CPWMS selected
-         ftm->SC      = scValue;
+         reinterpret_cast<volatile FTM_Type*>(ftm)->SC      = scValue;
       }
    }
+
    /**
     * Set PWM duty cycle
     *
     * @param dutyCycle Duty-cycle as percentage
     */
    void setDutyCycle(int dutyCycle) const {
-      ftm->CONTROLS[ftmChannel].CnSC = ftm_pwmHighTruePulses;
+      reinterpret_cast<volatile FTM_Type*>(ftm)->CONTROLS[ftmChannel].CnSC = ftm_pwmHighTruePulses;
 
-      if (ftm->SC&TPM_SC_CPWMS_MASK) {
-         ftm->CONTROLS[ftmChannel].CnV  = (dutyCycle*ftm->MOD)/100;
+      if (reinterpret_cast<volatile FTM_Type*>(ftm)->SC&FTM_SC_CPWMS_MASK) {
+         reinterpret_cast<volatile FTM_Type*>(ftm)->CONTROLS[ftmChannel].CnV  = (dutyCycle*reinterpret_cast<volatile FTM_Type*>(ftm)->MOD)/100;
       }
       else {
-         ftm->CONTROLS[ftmChannel].CnV  = (dutyCycle*(ftm->MOD+1))/100;
+         reinterpret_cast<volatile FTM_Type*>(ftm)->CONTROLS[ftmChannel].CnV  = (dutyCycle*(reinterpret_cast<volatile FTM_Type*>(ftm)->MOD+1))/100;
       }
    }
    /**
@@ -358,16 +376,16 @@ struct PwmIO {
     */
    void setPeriod(int period) const {
       // Common registers
-      ftm->SC      = TPM_SC_PS(0); // Disable FTM so register changes are immediate
-      if ((ftm->SC&TPM_SC_CPWMS_MASK) != 0) {
-         ftm->MOD     = period/2;
+      reinterpret_cast<volatile FTM_Type   *>(ftm)->SC      = TPM_SC_PS(0); // Disable FTM so register changes are immediate
+      if ((reinterpret_cast<volatile FTM_Type   *>(ftm)->SC&TPM_SC_CPWMS_MASK) != 0) {
+         reinterpret_cast<volatile FTM_Type   *>(ftm)->MOD     = period/2;
          // Centre aligned PWM with CPWMS not selected
-         ftm->SC      = scValue|TPM_SC_CPWMS_MASK;
+         reinterpret_cast<volatile FTM_Type   *>(ftm)->SC      = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
-         ftm->MOD     = period-1;
+         reinterpret_cast<volatile FTM_Type   *>(ftm)->MOD     = period-1;
          // Left aligned PWM without CPWMS selected
-         ftm->SC      = scValue;
+         reinterpret_cast<volatile FTM_Type   *>(ftm)->SC      = scValue;
       }
    }
 };
