@@ -7,109 +7,112 @@
 #include "gpio.h"
 #include "pin_mapping.h"
 
-const USBDM::PortA_T<0>   digitalIO_PTA0;      //!< See @ref DigitalIO
-const USBDM::PortA_T<1>   digitalIO_PTA1;      //!< See @ref DigitalIO
-const USBDM::PortA_T<2>   digitalIO_PTA2;      //!< See @ref DigitalIO
-const USBDM::PortA_T<3>   digitalIO_PTA3;      //!< See @ref DigitalIO
-const USBDM::PortA_T<4>   digitalIO_PTA4;      //!< See @ref DigitalIO
-const USBDM::PortA_T<5>   digitalIO_PTA5;      //!< See @ref DigitalIO
-const USBDM::PortA_T<6>   digitalIO_PTA6;      //!< See @ref DigitalIO
-const USBDM::PortA_T<7>   digitalIO_PTA7;      //!< See @ref DigitalIO
-const USBDM::PortB_T<0>   digitalIO_PTB0;      //!< See @ref DigitalIO
-const USBDM::PortB_T<1>   digitalIO_PTB1;      //!< See @ref DigitalIO
-const USBDM::PortB_T<2>   digitalIO_PTB2;      //!< See @ref DigitalIO
-const USBDM::PortB_T<3>   digitalIO_PTB3;      //!< See @ref DigitalIO
-const USBDM::PortB_T<4>   digitalIO_PTB4;      //!< See @ref DigitalIO
-const USBDM::PortB_T<5>   digitalIO_PTB5;      //!< See @ref DigitalIO
-const USBDM::PortB_T<6>   digitalIO_PTB6;      //!< See @ref DigitalIO
-const USBDM::PortB_T<7>   digitalIO_PTB7;      //!< See @ref DigitalIO
-const USBDM::PortC_T<0>   digitalIO_PTC0;      //!< See @ref DigitalIO
-const USBDM::PortC_T<1>   digitalIO_PTC1;      //!< See @ref DigitalIO
-const USBDM::PortC_T<2>   digitalIO_PTC2;      //!< See @ref DigitalIO
-const USBDM::PortC_T<3>   digitalIO_PTC3;      //!< See @ref DigitalIO
-const USBDM::PortC_T<4>   digitalIO_PTC4;      //!< See @ref DigitalIO
-const USBDM::PortC_T<5>   digitalIO_PTC5;      //!< See @ref DigitalIO
-const USBDM::PortC_T<6>   digitalIO_PTC6;      //!< See @ref DigitalIO
-const USBDM::PortC_T<7>   digitalIO_PTC7;      //!< See @ref DigitalIO
-const USBDM::PortD_T<0>   digitalIO_PTD0;      //!< See @ref DigitalIO
-const USBDM::PortD_T<1>   digitalIO_PTD1;      //!< See @ref DigitalIO
-const USBDM::PortD_T<2>   digitalIO_PTD2;      //!< See @ref DigitalIO
-const USBDM::PortD_T<3>   digitalIO_PTD3;      //!< See @ref DigitalIO
-const USBDM::PortD_T<4>   digitalIO_PTD4;      //!< See @ref DigitalIO
-const USBDM::PortD_T<5>   digitalIO_PTD5;      //!< See @ref DigitalIO
-const USBDM::PortD_T<6>   digitalIO_PTD6;      //!< See @ref DigitalIO
-const USBDM::PortD_T<7>   digitalIO_PTD7;      //!< See @ref DigitalIO
-const USBDM::PortE_T<0>   digitalIO_PTE0;      //!< See @ref DigitalIO
-const USBDM::PortE_T<1>   digitalIO_PTE1;      //!< See @ref DigitalIO
-const USBDM::PortE_T<2>   digitalIO_PTE2;      //!< See @ref DigitalIO
-const USBDM::PortE_T<3>   digitalIO_PTE3;      //!< See @ref DigitalIO
-const USBDM::PortE_T<4>   digitalIO_PTE4;      //!< See @ref DigitalIO
-const USBDM::PortE_T<5>   digitalIO_PTE5;      //!< See @ref DigitalIO
-const USBDM::PortE_T<6>   digitalIO_PTE6;      //!< See @ref DigitalIO
-const USBDM::PortE_T<7>   digitalIO_PTE7;      //!< See @ref DigitalIO
-const USBDM::PortF_T<0>   digitalIO_PTF0;      //!< See @ref DigitalIO
-const USBDM::PortF_T<1>   digitalIO_PTF1;      //!< See @ref DigitalIO
-const USBDM::PortF_T<2>   digitalIO_PTF2;      //!< See @ref DigitalIO
-const USBDM::PortF_T<3>   digitalIO_PTF3;      //!< See @ref DigitalIO
-const USBDM::PortF_T<4>   digitalIO_PTF4;      //!< See @ref DigitalIO
-const USBDM::PortF_T<5>   digitalIO_PTF5;      //!< See @ref DigitalIO
-const USBDM::PortF_T<6>   digitalIO_PTF6;      //!< See @ref DigitalIO
-const USBDM::PortF_T<7>   digitalIO_PTF7;      //!< See @ref DigitalIO
-const USBDM::PortG_T<0>   digitalIO_PTG0;      //!< See @ref DigitalIO
-const USBDM::PortG_T<1>   digitalIO_PTG1;      //!< See @ref DigitalIO
-const USBDM::PortG_T<2>   digitalIO_PTG2;      //!< See @ref DigitalIO
-const USBDM::PortG_T<3>   digitalIO_PTG3;      //!< See @ref DigitalIO
-const USBDM::PortG_T<4>   digitalIO_PTG4;      //!< See @ref DigitalIO
-const USBDM::PortG_T<5>   digitalIO_PTG5;      //!< See @ref DigitalIO
-const USBDM::PortG_T<6>   digitalIO_PTG6;      //!< See @ref DigitalIO
-const USBDM::PortG_T<7>   digitalIO_PTG7;      //!< See @ref DigitalIO
-const USBDM::PortH_T<0>   digitalIO_PTH0;      //!< See @ref DigitalIO
-const USBDM::PortH_T<1>   digitalIO_PTH1;      //!< See @ref DigitalIO
-const USBDM::PortH_T<2>   digitalIO_PTH2;      //!< See @ref DigitalIO
-const USBDM::PortH_T<3>   digitalIO_PTH3;      //!< See @ref DigitalIO
-const USBDM::PortH_T<4>   digitalIO_PTH4;      //!< See @ref DigitalIO
-const USBDM::PortH_T<5>   digitalIO_PTH5;      //!< See @ref DigitalIO
-const USBDM::PortH_T<6>   digitalIO_PTH6;      //!< See @ref DigitalIO
-const USBDM::PortH_T<7>   digitalIO_PTH7;      //!< See @ref DigitalIO
-const USBDM::PortI_T<0>   digitalIO_PTI0;      //!< See @ref DigitalIO
-const USBDM::PortI_T<1>   digitalIO_PTI1;      //!< See @ref DigitalIO
-const USBDM::PortI_T<2>   digitalIO_PTI2;      //!< See @ref DigitalIO
-const USBDM::PortI_T<3>   digitalIO_PTI3;      //!< See @ref DigitalIO
+#if USBDM_USE_NAMESPACES
+namespace USBDM {
+#endif
+const USBDM::GpioA<0>     gpioA_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<1>     gpioA_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<2>     gpioA_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<3>     gpioA_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<4>     gpioA_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<5>     gpioA_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<6>     gpioA_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<7>     gpioA_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<0>     gpioB_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<1>     gpioB_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<2>     gpioB_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<3>     gpioB_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<4>     gpioB_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<5>     gpioB_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<6>     gpioB_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioB<7>     gpioB_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<0>     gpioC_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<1>     gpioC_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<2>     gpioC_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<3>     gpioC_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<4>     gpioC_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<5>     gpioC_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<6>     gpioC_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioC<7>     gpioC_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<0>     gpioD_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<1>     gpioD_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<2>     gpioD_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<3>     gpioD_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<4>     gpioD_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<5>     gpioD_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<6>     gpioD_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioD<7>     gpioD_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<0>     gpioE_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<1>     gpioE_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<2>     gpioE_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<3>     gpioE_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<4>     gpioE_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<5>     gpioE_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<6>     gpioE_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioE<7>     gpioE_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<0>     gpioF_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<1>     gpioF_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<2>     gpioF_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<3>     gpioF_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<4>     gpioF_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<5>     gpioF_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<6>     gpioF_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioF<7>     gpioF_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<0>     gpioG_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<1>     gpioG_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<2>     gpioG_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<3>     gpioG_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<4>     gpioG_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<5>     gpioG_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<6>     gpioG_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioG<7>     gpioG_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<0>     gpioH_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<1>     gpioH_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<2>     gpioH_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<3>     gpioH_3;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<4>     gpioH_4;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<5>     gpioH_5;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<6>     gpioH_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioH<7>     gpioH_7;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioI<0>     gpioI_0;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioI<1>     gpioI_1;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioI<2>     gpioI_2;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioI<3>     gpioI_3;             //!< See @ref USBDM::DigitalIOT
 #if (PTC5_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 0> analogueIO_ADC0_SE0;
+const USBDM::Adc0<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),   0> adc0_se0;
 #endif
 #if (PTC6_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 1> analogueIO_ADC0_SE1;
+const USBDM::Adc0<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),   1> adc0_se1;
 #endif
 #if (PTC7_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 2> analogueIO_ADC0_SE2;
+const USBDM::Adc0<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),   2> adc0_se2;
 #endif
 #if (PTD4_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 3> analogueIO_ADC0_SE3;
+const USBDM::Adc0<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),   3> adc0_se3;
 #endif
 #if (PTD5_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 4> analogueIO_ADC0_SE4;
+const USBDM::Adc0<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),   4> adc0_se4;
 #endif
 #if (PTD6_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 5> analogueIO_ADC0_SE5;
+const USBDM::Adc0<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),   5> adc0_se5;
 #endif
 #if (PTE7_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 6> analogueIO_ADC0_SE6;
+const USBDM::Adc0<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),   6> adc0_se6;
 #endif
 #if (PTF0_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 7> analogueIO_ADC0_SE7;
+const USBDM::Adc0<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]),   7> adc0_se7;
 #endif
 #if (PTF1_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 8> analogueIO_ADC0_SE8;
+const USBDM::Adc0<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]),   8> adc0_se8;
 #endif
 #if (PTF2_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK, 9> analogueIO_ADC0_SE9;
+const USBDM::Adc0<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]),   9> adc0_se9;
 #endif
 #if (PTG1_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,10> analogueIO_ADC0_SE10;
+const USBDM::Adc0<PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]),  10> adc0_se10;
 #endif
 #if (PTG2_SIG_SEL == 0)
-const USBDM::AnalogueIOT<PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]),  ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),ADC0_CLOCK_MASK,11> analogueIO_ADC0_SE11;
+const USBDM::Adc0<PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]),  11> adc0_se11;
 #endif
 
 #if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
@@ -440,3 +443,6 @@ void usbdm_PinMapping() {
 }
 #endif
 
+#if USBDM_USE_NAMESPACES
+} // End namespace USBDM
+#endif
