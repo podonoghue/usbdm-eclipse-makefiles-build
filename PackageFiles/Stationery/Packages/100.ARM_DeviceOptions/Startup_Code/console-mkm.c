@@ -1,5 +1,5 @@
 /*
- * uart.c
+ * console-mkm.c
  *
  *  Created on: 14/04/2013
  *      Author: pgo
@@ -8,20 +8,16 @@
 #include <derivative.h>
 #include "system.h"
 #include "clock_configure.h"
-#include "uart.h"
+#include "console.h"
 
-#define TX_MUX_REG     MXC(UART0_TX_PIN_PORT,UART0_TX_MUX_NUM)
-#define RX_MUX_REG     MXC(UART0_RX_PIN_PORT,UART0_RX_MUX_NUM)
-#define TX_MUX_MASK(n) MXC_MASK(UART0_TX_PIN_NUM,n)
-#define RX_MUX_MASK(n) MXC_MASK(UART0_RX_PIN_NUM,n)
+//#define USE_IRQ
 
-#if defined(MCU_mcf51jf128) || defined(MCU_MCF51JF) || defined(MCU_mcf51ju128) || defined(MCU_MCF51JU)
+#if defined(MCU_MKM33Z5)
 //=================================================================================
 // UART to use
 //
-#define UART  UART0
-
-#define UART_CLOCK SYSTEM_UART0_CLOCK
+#define UART  UART1
+#define UART_CLOCK SYSTEM_UART1_CLOCK
 
 //=================================================================================
 // UART Port pin setup
@@ -29,41 +25,14 @@
 __attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
-   SIM->SCGC1 |= SIM_SCGC1_UART0_MASK;
+   SIM->SCGC4 |= SIM_SCGC4_UART1_MASK;
 
-   // Set Tx (A7) & Rx (D6) Pin function
-   MXC->PTDPF1 = (MXC->PTDPF1 & ~MXC_PTDPF1_D6_MASK) | MXC_PTDPF1_D6(2); // UART0_Rx
-   MXC->PTAPF1 = (MXC->PTAPF1 & ~MXC_PTAPF1_A7_MASK) | MXC_PTAPF1_A7(2); // UART0_Tx
+   // Enable clock to port pins used by UART
+   SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
 
-   // Set Tx & Rx pins in use
-//   SIM_SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-
-}
-#elif defined(MCU_mcf51ju128)
-//=================================================================================
-// UART to use
-//
-#define UART  UART0_BASE_PTR
-
-#define UART_CLOCK SYSTEM_UART0_CLOCK
-
-//=================================================================================
-// UART Port pin setup
-//
-__attribute__((always_inline))
-inline static void initDefaultUart()  {
-   // Enable clock to UART
-   SIM->SCGC1 |= SIM_SCGC1_UART0_MASK;
-
-   // Set Tx (C6) & Rx (C7) Pin function
-   MXC->PTDPF1 = (MXC_PTCPF1 & ~MXC_PTCPF1_C6_MASK) | MXC_PTCPF1_C6(2); // UART0_Rx
-   MXC->PTAPF1 = (MXC_PTCPF1 & ~MXC_PTCPF1_C7_MASK) | MXC_PTCPF1_C7(2); // UART0_Tx
-
-   // Set Tx & Rx pins in use
-//   SIM_SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-
+   // Set Tx & Rx Pin function
+   PORTD->PCR[1] = PORT_PCR_MUX(2);
+   PORTD->PCR[2] = PORT_PCR_MUX(2);
 }
 #else
 #error "Please modify before use"
@@ -79,17 +48,17 @@ inline static void initDefaultUart()  {
 __attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
-   SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
+   SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
 
    // Enable clock to port pins used by UART
-   SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+   SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
 
    // Select Tx & Rx pins to use
-   SIM_SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
+   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
 
    // Set Tx & Rx Pin function
-   PORTD_PCR6 = PORT_PCR_MUX(3);
-   PORTD_PCR7 = PORT_PCR_MUX(3);
+   PORTD->PCR[6] = PORT_PCR_MUX(3);
+   PORTD->PCR[7] = PORT_PCR_MUX(3);
 }
 #endif
 
@@ -102,7 +71,7 @@ inline static void initDefaultUart()  {
  *
  * @param baudrate - the baud rate to use e.g. 19200
  */
-void uart_initialise(int baudrate) {
+void console_initialise(int baudrate) {
    initDefaultUart();
 
    // Disable UART before changing registers
@@ -126,8 +95,13 @@ void uart_initialise(int baudrate) {
 
    UART->C1 = 0;
 
+#ifdef USE_IRQ
+   // Enable UART Tx & Rx - with Rx IRQ
+   UART->C2 = UART_C2_TE_MASK|UART_C2_RE_MASK|UART_C2_RIE_MASK;
+#else
    // Enable UART Tx & Rx
    UART->C2 = UART_C2_TE_MASK|UART_C2_RE_MASK;
+#endif
 }
 
 /*
@@ -135,7 +109,7 @@ void uart_initialise(int baudrate) {
  *
  * @param ch - character to send
  */
-void uart_txChar(int ch) {
+void console_txChar(int ch) {
    while ((UART->S1 & UART_S1_TDRE_MASK) == 0) {
       // Wait for Tx buffer empty
       __asm__("nop");
@@ -143,15 +117,72 @@ void uart_txChar(int ch) {
    UART->D = ch;
 }
 
+#ifdef USE_IRQ
+static uint8_t rxBuffer[100];
+static uint8_t *rxPutPtr = rxBuffer;
+static uint8_t *rxGetPtr = rxBuffer;
+
+void UART0_RxTx_IRQHandler() {
+   // Ignores overflow
+   (void)UART->S1;
+   int ch = UART->D;
+   *rxPutPtr++ = ch;
+   if (rxPutPtr == rxBuffer+sizeof(rxBuffer)) {
+      rxPutPtr = rxBuffer;
+   }
+}
+
+void UART0_Error_IRQHandler() {
+   // Clear & ignore any pending errors
+   if ((UART->S1 & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
+      // Discard data (& clear status)
+      (void)UART->D;
+   }
+}
+
 /*
  * Receives a single character over the UART (blocking)
  *
  * @return - character received
  */
-int uart_rxChar(void) {
-   while ((UART->S1 & UART_S1_RDRF_MASK) == 0) {
-      // Wait for Rx buffer full
-      __asm__("nop");
+int console_rxChar(void) {
+
+   // Wait for character
+   while (rxGetPtr==rxPutPtr) {
    }
-   return UART->D;
-};
+   // Get char from buffer
+   __disable_irq();
+   int ch = *rxGetPtr++;
+   if (rxGetPtr==rxBuffer+sizeof(rxBuffer)) {
+      rxGetPtr = rxBuffer;
+   }
+   __enable_irq();
+   if (ch == '\r') {
+      ch = '\n';
+   }
+   return ch;
+}
+#else
+/*
+ * Receives a single character over the UART (blocking)
+ *
+ * @return - character received
+ */
+int console_rxChar(void) {
+   uint8_t status;
+   // Wait for Rx buffer full
+   do {
+      status = UART->S1;
+      // Clear & ignore pending errors
+      if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
+         (void)UART->D;
+      }
+   }  while ((status & UART_S1_RDRF_MASK) == 0);
+   int ch = UART->D;
+//   console_txChar(ch);
+   if (ch == '\r') {
+      ch = '\n';
+   }
+   return ch;
+}
+#endif

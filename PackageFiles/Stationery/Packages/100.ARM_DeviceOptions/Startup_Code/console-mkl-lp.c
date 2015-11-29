@@ -1,5 +1,5 @@
 /*
- * uart-mkl-lp.c
+ * console-lp.c
  *
  *  Created on: 14/04/2013
  *      Author: pgo
@@ -8,7 +8,7 @@
 #include <derivative.h>
 #include "system.h"
 #include "clock_configure.h"
-#include "uart.h"
+#include "console.h"
 
 //#define USE_IRQ
 
@@ -110,7 +110,7 @@ inline static void initDefaultUart()  {
  *
  * @param baudrate - the baud rate to use e.g. 19200
  */
-void uart_initialise(int baudrate) {
+void console_initialise(int baudrate) {
    initDefaultUart();
 
    #define OVERSAMPLE (16)
@@ -138,7 +138,7 @@ void uart_initialise(int baudrate) {
  *
  * @param ch - character to send
  */
-void uart_txChar(int ch) {
+void console_txChar(int ch) {
    while ((LPUART->STAT & LPUART_STAT_TDRE_MASK) == 0) {
       // Wait for Tx buffer empty
       __asm__("nop");
@@ -169,7 +169,7 @@ void LPUART0_IRQHandler() {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
 
    // Wait for character
    while (rxGetPtr==rxPutPtr) {
@@ -192,7 +192,7 @@ int uart_rxChar(void) {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
    uint8_t status;
    // Wait for Rx buffer full
    do {
@@ -203,7 +203,7 @@ int uart_rxChar(void) {
       }
    }  while ((status & LPUART_STAT_RDRF_MASK) == 0);
    int ch = LPUART_DATA_RT(LPUART->DATA);
-//   uart_txChar(ch);
+//   console_txChar(ch);
    if (ch == '\r') {
       ch = '\n';
    }

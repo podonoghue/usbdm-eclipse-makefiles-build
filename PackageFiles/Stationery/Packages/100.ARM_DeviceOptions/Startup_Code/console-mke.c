@@ -1,5 +1,5 @@
 /*
- * uart-mkl.c
+ * console-mke.c
  *
  *  Created on: 14/04/2013
  *      Author: pgo
@@ -8,16 +8,16 @@
 #include <derivative.h>
 #include "system.h"
 #include "clock_configure.h"
-#include "uart.h"
+#include "console.h"
 
 //#define USE_IRQ
 
-#if defined(MCU_MKL02Z4) || defined(MCU_MKL04Z4) || defined(MCU_MKL05Z4)
+#if defined(MCU_MKE02Z2) ||  defined(MCU_MKE02Z4) ||  defined(MCU_MKE06Z4)
 //=================================================================================
 // UART to use
 //
-#define UART  UART0
-#define UART_CLOCK SYSTEM_UART0_CLOCK
+#define UART  UART1
+#define UART_CLOCK SYSTEM_UART1_CLOCK
 
 //=================================================================================
 // UART Port pin setup
@@ -25,21 +25,9 @@
 __attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
-   SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
-
-   // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-   // Set Tx & Rx Pin function
-   PORTB->PCR[1] = PORT_PCR_MUX(2);
-   PORTB->PCR[2] = PORT_PCR_MUX(2);
+   SIM->SCGC |= SIM_SCGC_UART1_MASK;
 }
-#elif defined(MCU_MKL14Z4) || defined(MCU_MKL15Z4) || defined(MCU_MKL16Z4) || defined(MCU_MKL24Z4) || \
-      defined(MCU_MKL25Z4) || defined(MCU_MKL26Z4) || defined(MCU_MKL34Z4) || defined(MCU_MKL36Z4) || \
-      defined(MCU_MKL46Z4)
+#elif defined(MCU_MKE04Z8M4)
 //=================================================================================
 // UART to use
 //
@@ -52,23 +40,13 @@ inline static void initDefaultUart()  {
 __attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
-   SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
-
-   // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
+   SIM->SCGC |= SIM_SCGC_UART0_MASK;
 
    // Set Tx & Rx Pin function
-   PORTA->PCR[1] = PORT_PCR_MUX(2);
-   PORTA->PCR[2] = PORT_PCR_MUX(2);
-
-#ifdef USE_IRQ
-   // Enable IRQs in NVIC
-   NVIC_EnableIRQ(UART0_RxTx_IRQn);
-   NVIC_EnableIRQ(UART0_Error_IRQn);
-#endif
+   SIM->PINSEL &= ~SIM_PINSEL_UART0PS_MASK; // UART0_RX and UART0_TX are mapped on PTB0 and PTB1.
+   SIM->SOPT   &= ~(SIM_SOPT_RXDFE_MASK|  // RXD0 input signal is connected to UART0 module directly
+                    SIM_SOPT_RXDCE_MASK|  // UART0_RX input signal is connected to the UART0 module only
+                    SIM_SOPT_TXDME_MASK); // UART0_TX output is connected to pin-out directly.
 }
 #else
 #error "Please modify before use"
@@ -107,7 +85,7 @@ inline static void initDefaultUart()  {
  *
  * @param baudrate - the baud rate to use e.g. 19200
  */
-void uart_initialise(int baudrate) {
+void console_initialise(int baudrate) {
    initDefaultUart();
 
    // Disable UART before changing registers
@@ -145,7 +123,7 @@ void uart_initialise(int baudrate) {
  *
  * @param ch - character to send
  */
-void uart_txChar(int ch) {
+void console_txChar(int ch) {
    while ((UART->S1 & UART_S1_TDRE_MASK) == 0) {
       // Wait for Tx buffer empty
       __asm__("nop");
@@ -171,8 +149,8 @@ void UART0_RxTx_IRQHandler() {
 void UART0_Error_IRQHandler() {
    // Clear & ignore any pending errors
    if ((UART->S1 & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-      // Clear error status
-      UART->S1 = UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK;
+      // Discard data (& clear status)
+      (void)UART->D;
    }
 }
 
@@ -181,7 +159,7 @@ void UART0_Error_IRQHandler() {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
 
    // Wait for character
    while (rxGetPtr==rxPutPtr) {
@@ -204,18 +182,18 @@ int uart_rxChar(void) {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
    uint8_t status;
    // Wait for Rx buffer full
    do {
       status = UART->S1;
       // Clear & ignore pending errors
       if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-         UART->S1 = UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK;
+         (void)UART->D;
       }
    }  while ((status & UART_S1_RDRF_MASK) == 0);
    int ch = UART->D;
-//   uart_txChar(ch);
+//   console_txChar(ch);
    if (ch == '\r') {
       ch = '\n';
    }

@@ -21,7 +21,7 @@ extern int errno;
  * Overridden by actual routine if present
  */
 __attribute__((__weak__))
-void uart_txChar(int ch) {
+void console_txChar(int ch) {
    (void)ch;
 }
 
@@ -29,7 +29,7 @@ void uart_txChar(int ch) {
  * Overridden by actual routine if present
  */
 __attribute__((__weak__))
-int uart_rxChar(void) {
+int console_rxChar(void) {
    return 0;
 }
 
@@ -271,7 +271,7 @@ int _usbdm_read(int file, char *ptr, int len) {
    int done=0; // Characters read
    int ch;
    do {
-      ch = uart_rxChar();
+      ch = console_rxChar();
       *ptr++ = ch;
    } while ((++done<len) && (ch != '\n'));
    return done;
@@ -292,9 +292,9 @@ int _usbdm_write(int file, char *ptr, int len) {
    case STDERR_FILENO: /* stderr */
       for (n = 0; n < len; n++) {
          if (*ptr == '\n') {
-            uart_txChar('\r');
+            console_txChar('\r');
          }
-         uart_txChar(*ptr++);
+         console_txChar(*ptr++);
       }
       break;
    default:

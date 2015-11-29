@@ -56,7 +56,7 @@ void clock_initialise() {
 
 /* This definition is overridden if UART initialisation is provided */
 __attribute__((__weak__))
-void uart_initialise(int baudRate __attribute__((__unused__))) {
+void console_initialise(int baudRate __attribute__((__unused__))) {
 }
 
 /**
@@ -85,7 +85,7 @@ void SystemInit(void) {
    clock_initialise();
 
    /* Use UART initialisation - if present */
-   uart_initialise(DEFAULT_BAUD_RATE);
+   console_initialise(DEFAULT_BAUD_RATE);
 }
 
 void hardware_init_hook() {

@@ -1,6 +1,6 @@
 /**
- * @file    uart.h
- * @brief   Basic UART routines
+ * @file    console.h
+ * @brief   Basic UART routines for console
  * @date    13 June 2015
  */
 #include <derivative.h>
@@ -17,19 +17,19 @@ extern "C" {
  *
  * @param baudRate - the baud rate to use e.g. @ref DEFAULT_BAUD_RATE
  */
-void uart_initialise(int baudRate);
+void console_initialise(int baudRate);
 /**
  * Transmits a single character over the UART (blocking)
  *
  * @param ch - character to send
  */
-void uart_txChar(int ch);
+void console_txChar(int ch);
 /**
  * Receives a single character over the UART (blocking)
  *
  * @return - character received
  */
-int  uart_rxChar(void);
+int  console_rxChar(void);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : main.c
+ Name        : main.c derived from main-printf.c
  Author      : $(author)
  Version     :
  Copyright   : $(copyright)

@@ -35,8 +35,8 @@
             <variableRef idRef="projectOptionValue.UART-setup" />
          </applyWhen>
          <copy source="Startup_Code/uart.c"                         target="Startup_Code/uart.c" />
-         <copy source="Project_Headers/uart.h"                      target="Project_Headers/uart.h" />
-         <copy source="Sources/main-uart.c"                         target="Sources/main.c" replace="true"/>
+         <copy source="Project_Headers/console.h"                   target="Project_Headers/console.h" />
+         <copy source="Sources/main-printf.c"                       target="Sources/main.c" replace="true"/>
       </projectActionList>
    </projectActionList>
 

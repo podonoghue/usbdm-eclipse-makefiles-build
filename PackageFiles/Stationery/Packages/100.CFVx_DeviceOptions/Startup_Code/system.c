@@ -42,7 +42,7 @@ void SystemInit(void) {
    clock_initialise();
 
    /* Use UART initialisation - if present */
-   uart_initialise(19200);
+   console_initialise(DEFAULT_BAUD_RATE);
 }
 
 void hardware_init_hook() {

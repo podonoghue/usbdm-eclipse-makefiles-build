@@ -1,5 +1,5 @@
 /*
- * uart-mk.c
+ * console-mkl.c
  *
  *  Created on: 14/04/2013
  *      Author: pgo
@@ -8,36 +8,11 @@
 #include <derivative.h>
 #include "system.h"
 #include "clock_configure.h"
-#include "uart.h"
+#include "console.h"
 
 //#define USE_IRQ
 
-#if defined(MCU_MK22F51212)
-//=================================================================================
-// UART to use
-//
-#define UART  UART1
-#define UART_CLOCK SYSTEM_UART1_CLOCK
-
-//=================================================================================
-// UART Port pin setup
-//
-__attribute__((always_inline))
-inline static void initDefaultUart()  {
-   // Enable clock to UART
-   SIM->SCGC4 |= SIM_SCGC4_UART1_MASK;
-
-   // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-   // Set Tx & Rx Pin function
-   PORTE->PCR[0] = PORT_PCR_MUX(3);
-   PORTE->PCR[1] = PORT_PCR_MUX(3);
-}
-#elif defined(MCU_MK21F12) || defined(MCU_MK22F12) || defined(MCU_MK20D5)
+#if defined(MCU_MKL02Z4) || defined(MCU_MKL04Z4) || defined(MCU_MKL05Z4)
 //=================================================================================
 // UART to use
 //
@@ -59,10 +34,12 @@ inline static void initDefaultUart()  {
    SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
 
    // Set Tx & Rx Pin function
-   PORTB->PCR[16] = PORT_PCR_MUX(3);
-   PORTB->PCR[17] = PORT_PCR_MUX(3);
+   PORTB->PCR[1] = PORT_PCR_MUX(2);
+   PORTB->PCR[2] = PORT_PCR_MUX(2);
 }
-#elif defined(MCU_MK20D10) || defined(MCU_MK20DZ10) || defined(MCU_MK40D10) || defined(MCU_MK40DZ10) || defined(MCU_MK20D7)
+#elif defined(MCU_MKL14Z4) || defined(MCU_MKL15Z4) || defined(MCU_MKL16Z4) || defined(MCU_MKL24Z4) || \
+      defined(MCU_MKL25Z4) || defined(MCU_MKL26Z4) || defined(MCU_MKL34Z4) || defined(MCU_MKL36Z4) || \
+      defined(MCU_MKL46Z4)
 //=================================================================================
 // UART to use
 //
@@ -78,64 +55,14 @@ inline static void initDefaultUart()  {
    SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
 
    // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
+   SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
 
    // Select Tx & Rx pins to use
    SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
 
    // Set Tx & Rx Pin function
-   PORTD->PCR[6] = PORT_PCR_MUX(3);
-   PORTD->PCR[7] = PORT_PCR_MUX(3);
-}
-#elif defined(MCU_MK60DZ10) || defined(MCU_MK60D10) || defined(MCU_MK60F12) || defined(MCU_MK10DZ10) || defined(MCU_MK10D10) || defined(MCU_MK10F12)
-//=================================================================================
-// UART to use
-//
-#define UART  UART5
-#define UART_CLOCK SYSTEM_UART5_CLOCK
-
-//=================================================================================
-// UART Port pin setup
-//
-__attribute__((always_inline))
-inline static void initDefaultUart()  {
-   // Enable clock to UART
-   SIM->SCGC1 |= SIM_SCGC1_UART5_MASK;
-
-   // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-
-   // Set Tx & Rx pins in use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-   // Set Tx & Rx Pin function
-   PORTE->PCR[8] = PORT_PCR_MUX(3);
-   PORTE->PCR[9] = PORT_PCR_MUX(3);
-}
-#elif defined(MCU_MK64F12)
-//=================================================================================
-// UART to use
-//
-#define UART  UART0
-#define UART_CLOCK SYSTEM_UART0_CLOCK
-
-//=================================================================================
-// UART Port pin setup
-//
-__attribute__((always_inline))
-inline static void initDefaultUart()  {
-   // Enable clock to UART
-   SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
-
-   // Enable clock to port pins used by UART
-   SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-
-   // Set Tx & Rx Pin function
-   PORTB->PCR[16] = PORT_PCR_MUX(3);
-   PORTB->PCR[17] = PORT_PCR_MUX(3);
+   PORTA->PCR[1] = PORT_PCR_MUX(2);
+   PORTA->PCR[2] = PORT_PCR_MUX(2);
 
 #ifdef USE_IRQ
    // Enable IRQs in NVIC
@@ -178,9 +105,9 @@ inline static void initDefaultUart()  {
 /*
  * Initialises the UART
  *
- * @param baudrate - the baud rate to use e.g. DEFAULT_BAUD_RATE
+ * @param baudrate - the baud rate to use e.g. 19200
  */
-void uart_initialise(int baudrate) {
+void console_initialise(int baudrate) {
    initDefaultUart();
 
    // Disable UART before changing registers
@@ -218,7 +145,7 @@ void uart_initialise(int baudrate) {
  *
  * @param ch - character to send
  */
-void uart_txChar(int ch) {
+void console_txChar(int ch) {
    while ((UART->S1 & UART_S1_TDRE_MASK) == 0) {
       // Wait for Tx buffer empty
       __asm__("nop");
@@ -244,8 +171,8 @@ void UART0_RxTx_IRQHandler() {
 void UART0_Error_IRQHandler() {
    // Clear & ignore any pending errors
    if ((UART->S1 & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-      // Discard data (& clear status)
-      (void)UART->D;
+      // Clear error status
+      UART->S1 = UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK;
    }
 }
 
@@ -254,7 +181,7 @@ void UART0_Error_IRQHandler() {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
 
    // Wait for character
    while (rxGetPtr==rxPutPtr) {
@@ -277,18 +204,18 @@ int uart_rxChar(void) {
  *
  * @return - character received
  */
-int uart_rxChar(void) {
+int console_rxChar(void) {
    uint8_t status;
    // Wait for Rx buffer full
    do {
       status = UART->S1;
       // Clear & ignore pending errors
       if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-         (void)UART->D;
+         UART->S1 = UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK;
       }
    }  while ((status & UART_S1_RDRF_MASK) == 0);
    int ch = UART->D;
-//   uart_txChar(ch);
+//   console_txChar(ch);
    if (ch == '\r') {
       ch = '\n';
    }
