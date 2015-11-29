@@ -1,8 +1,13 @@
+/**
+ * @file pit-example2.cpp Derived from pit-example2-MKL.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
 #include "PIT.h"
+
+using namespace USBDM;
 
 /**
  * Programmable Interrupt Timer (PIT) Example
@@ -13,8 +18,8 @@
  */
 
 // LED connections
-#define RED_LED   digitalIO_$(demo.cpp.red.led)
-#define GREEN_LED digitalIO_$(demo.cpp.green.led)
+#define RED_LED   gpio_$(demo.cpp.red.led)
+#define GREEN_LED gpio_$(demo.cpp.green.led)
 
 #if PIT_USES_NAKED_HANDLER == 1
 /*

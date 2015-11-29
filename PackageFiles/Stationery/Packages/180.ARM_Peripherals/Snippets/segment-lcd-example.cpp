@@ -4,6 +4,8 @@
 #include "derivative.h"
 #include "Segment_LCD.h"
 
+using namespace USBDM;
+
 /**
  * Demonstration of Segment-LCD on FRDM-KL43 and and FRDM-KL46 boards
  *

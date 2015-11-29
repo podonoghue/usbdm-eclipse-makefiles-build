@@ -96,7 +96,7 @@ public:
     */
    void configure(uint32_t mcr=PIT_MCR_DEFAULT_VALUE) const {
       // Enable clock
-      PIT_CLOCK_REG |= PIT_CLOCK_MASK;
+      SIM->PIT_CLOCK_REG |= PIT_CLOCK_MASK;
 
       // Enable timer
       PIT->MCR = mcr;
@@ -105,7 +105,7 @@ public:
     *   Disable the PIT channel
     */
    void finalise(uint8_t channel) const {
-      PIT_CLOCK_REG &= ~PIT_CLOCK_MASK;
+      SIM->PIT_CLOCK_REG &= ~PIT_CLOCK_MASK;
    }
    /**
     *  Configure the PIT channel

@@ -7,6 +7,8 @@
 #include "MMA845x.h"
 #include "delay.h"
 
+using namespace USBDM;
+
 /**
  * Demonstrates use of MMA845x Accelerometer over I2C
  *

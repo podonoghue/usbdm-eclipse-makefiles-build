@@ -4,6 +4,8 @@
 #include "gpio.h"
 #include "LPTMR.h"
 
+using namespace USBDM;
+
 /*
  * Low power timer (LPTMR) example
  *
@@ -11,7 +13,7 @@
  */
 
 // LED connections
-#define RED_LED   digitalIO_$(demo.cpp.red.led)
+#define RED_LED   gpio_$(demo.cpp.red.led)
 
 #if LPTMR_USES_NAKED_HANDLER == 1
 /*

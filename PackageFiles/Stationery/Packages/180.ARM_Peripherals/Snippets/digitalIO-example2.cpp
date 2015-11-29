@@ -3,6 +3,8 @@
 #include "derivative.h"
 #include "gpio.h"
 
+using namespace USBDM;
+
 /*
  * Simple Digital I/O example
  *
@@ -22,8 +24,8 @@ void delay(void) {
 }
 
 // Connection mapping
-#define SWITCH    digitalIO_D12
-#define LED       digitalIO_D13
+#define SWITCH    gpio_D12
+#define LED       gpio_D13
 
 int main(void) {
    LED.setDigitalOutput();

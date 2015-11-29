@@ -134,7 +134,7 @@
 class FXOS8700CQ {
 
 private:
-   I2C *i2c;
+   USBDM::I2C *i2c;
 #ifdef MCU_MK22F51212
    static const uint8_t DEVICE_ADDRESS = 0x1C<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #else
@@ -209,7 +209,7 @@ public:
     * @param i2c  - The I2C interface to use
     * @param mode - Mode of operation (gain and filtering)
     */
-   FXOS8700CQ(I2C *i2c, AccelerometerMode mode);
+   FXOS8700CQ(USBDM::I2C *i2c, AccelerometerMode mode);
    /**
     * Enable accelerometer and/or magnetometer
     *

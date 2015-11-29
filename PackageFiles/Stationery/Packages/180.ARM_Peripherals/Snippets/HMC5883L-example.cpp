@@ -5,6 +5,8 @@
 #include "I2C.h"
 #include "HMC5883L.h"
 
+using namespace USBDM;
+
 /**
  * Demonstrates use of HMC5883L Compass over I2C
  *

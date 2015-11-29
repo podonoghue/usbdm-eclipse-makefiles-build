@@ -3,6 +3,8 @@
 #include "derivative.h"
 #include "gpio.h"
 
+using namespace USBDM;
+
 /*
  * External Joy-stick
  * 2 x Analogue input
@@ -11,9 +13,9 @@
  */
 
 // Connection mapping
-#define JOYSTICK_X   analogueIO_A2
-#define JOYSTICK_Y   analogueIO_A1
-#define JOYSTICK_K   digitalIO_A0
+#define JOYSTICK_X   adc_A2
+#define JOYSTICK_Y   adc_A1
+#define JOYSTICK_K   adc_A0
 
 int main(void) {
    JOYSTICK_X.setAnalogueInput();

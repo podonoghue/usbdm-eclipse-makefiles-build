@@ -3,6 +3,8 @@
 #include "SPI.h"
 #include "delay.h"
 
+using namespace USBDM;
+
 /**
  * Example demonstrating Elecfreaks LCD shield
  *
@@ -26,13 +28,32 @@
 // Radius used for the moving circle
 #define CIRCLE_RADIUS (20)
 
+/*
+ * Draws a cursor on the lcd screen
+ *
+ * @param lcd     The LCD to draw on
+ * @param x       x position
+ * @param y       y position
+ * @param colour  Colour of cursor
+ *
+ * @note Done this way so a more sophisticated cursor can be added
+ */
+void drawCursor(LCD *lcd, int x, int y, int colour) {
+   lcd->drawCircle(x, y, CIRCLE_RADIUS, colour);
+}
 
 int main() {
+   // Instantiate SPI interface class
    SPI *spi = new $(demo.cpp.lcd.spi)();
+   // Set higher speed to improve LCD draw rate
    spi->setSpeed(1000000);
+   // Instantiate LCD interface class
    LCD *lcd = new LCD(spi);
 
    lcd->clear(BACKGROUND_COLOUR);
+   lcd->drawCircle(CENTRE_X, CENTRE_Y, 20, WHITE);
+   lcd->drawCircle(CENTRE_X, CENTRE_Y, 30, WHITE);
+   lcd->drawCircle(CENTRE_X, CENTRE_Y, 40, WHITE);
    lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, FOREGROUND_COLOUR, BACKGROUND_COLOUR);
 
    // Cursor position on screen

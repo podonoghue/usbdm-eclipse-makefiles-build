@@ -249,7 +249,7 @@ public:
     *        http://www.wikipedia.org
     */
    void drawCircle(int x, int y, int radius, int color, int sectors=FULLCIRCLE);
-   /** Writes the entire LCD screen from a bmp file\n
+   /** Writes the entire LCD screen from a bmp file
     *
     * @param bmp - bitmap to display
     *

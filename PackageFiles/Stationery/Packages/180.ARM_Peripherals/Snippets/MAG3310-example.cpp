@@ -7,6 +7,8 @@
 #include "MAG3310.h"
 #include "delay.h"
 
+using namespace USBDM;
+
 /**
  * Demonstrates use of MAG3310 Magnetometer over I2C
  *

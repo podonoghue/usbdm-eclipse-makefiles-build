@@ -4,6 +4,8 @@
 #include "gpio.h"
 #include "PIT.h"
 
+using namespace USBDM;
+
 /**
  * Programmable Interrupt Timer (PIT) Example
  *
@@ -11,7 +13,7 @@
  */
 
 // LED connections
-#define RED_LED   digitalIO_$(demo.cpp.red.led)
+#define RED_LED   gpio_$(demo.cpp.red.led)
 
 int main() {
    RED_LED.setDigitalOutput();

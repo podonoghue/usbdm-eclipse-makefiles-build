@@ -3,6 +3,8 @@
 #include "derivative.h"
 #include "gpio.h"
 
+using namespace USBDM;
+
 /*
  * Simple example flashing LEDs on digital outputs
  */
@@ -15,8 +17,8 @@ void delay(void) {
 }
 
 // LED connections
-#define RED_LED   digitalIO_$(demo.cpp.red.led)
-#define GREEN_LED digitalIO_$(demo.cpp.green.led)
+#define RED_LED   gpio_$(demo.cpp.red.led)
+#define GREEN_LED gpio_$(demo.cpp.green.led)
 
 int main() {
    RED_LED.setDigitalOutput();

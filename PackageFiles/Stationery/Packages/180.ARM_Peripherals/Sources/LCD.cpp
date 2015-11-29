@@ -88,17 +88,17 @@
 #ifdef ELEC_FREAKS
 #if LCD_BACKLIGHT_PWM_FEATURE
 // PWM Control for back-light
-#define LCD_PWM pwmIO_D10 // = D10 on Arduino
+#define LCD_PWM USBDM::ftm_D10 // = D10 on Arduino
 #else
-#define LCD_PWM digitalIO_D10 // = D10 on Arduino
+#define LCD_PWM USBDM::gpio_D10 // = D10 on Arduino
 #endif
 #endif
 
 // Display CS
-#define SPI_CSn digitalIO_D9 // = D9 on Arduino
+#define SPI_CSn USBDM::gpio_D9 // = D9 on Arduino
 
 // Display reset
-#define LCD_RSTn digitalIO_D8  // = D8 on Arduino
+#define LCD_RSTn USBDM::gpio_D8  // = D8 on Arduino
 
 #ifdef ELEC_FREAKS
 /**
@@ -109,15 +109,15 @@
 void LCD::backlightSetLevel(int level) {
 #if LCD_BACKLIGHT_PWM_FEATURE
    LCD_PWM.setPwmOutput(1000, PwmIO::ftm_leftAlign);
-	if (level>100) {
-		level = 100;
-	}
-	if (level<0) {
-		level = 0;
-	}
-	LCD_PWM.setDutyCycle(level);
+   if (level>100) {
+      level = 100;
+   }
+   if (level<0) {
+      level = 0;
+   }
+   LCD_PWM.setDutyCycle(level);
 #else
-   LCD_PWM.setDigitalOutput(DigitalIO::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
+   LCD_PWM.setDigitalOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
    LCD_PWM.write(level>0);
 #endif
 }

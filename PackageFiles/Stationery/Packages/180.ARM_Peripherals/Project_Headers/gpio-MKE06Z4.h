@@ -12,88 +12,86 @@
 #include "pin_mapping.h"
 #include "gpio_defs.h"
 
-#if USBDM_USE_NAMESPACES
 namespace USBDM {
-#endif
 /**
 * @addtogroup DigitalIO_Group Digital Input/Output
 * @brief Allows use of port pins as simple digital inputs or outputs
 * @{
 */
-extern const USBDM::GpioA<0>     gpioA_0;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<1>     gpioA_1;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<2>     gpioA_2;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<3>     gpioA_3;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<4>     gpioA_4;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<5>     gpioA_5;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<6>     gpioA_6;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<7>     gpioA_7;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<8>     gpioA_8;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<9>     gpioA_9;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<10>    gpioA_10;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<11>    gpioA_11;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<12>    gpioA_12;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<13>    gpioA_13;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<14>    gpioA_14;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<15>    gpioA_15;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<16>    gpioA_16;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<17>    gpioA_17;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<18>    gpioA_18;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<19>    gpioA_19;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<20>    gpioA_20;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<21>    gpioA_21;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<22>    gpioA_22;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<23>    gpioA_23;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<24>    gpioA_24;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<25>    gpioA_25;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<26>    gpioA_26;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<27>    gpioA_27;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<28>    gpioA_28;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<29>    gpioA_29;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<30>    gpioA_30;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioA<31>    gpioA_31;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<0>     gpioB_0;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<1>     gpioB_1;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<2>     gpioB_2;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<3>     gpioB_3;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<4>     gpioB_4;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<5>     gpioB_5;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<6>     gpioB_6;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<7>     gpioB_7;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<8>     gpioB_8;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<9>     gpioB_9;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<10>    gpioB_10;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<11>    gpioB_11;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<12>    gpioB_12;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<13>    gpioB_13;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<14>    gpioB_14;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<15>    gpioB_15;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<16>    gpioB_16;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<17>    gpioB_17;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<18>    gpioB_18;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<19>    gpioB_19;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<20>    gpioB_20;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<21>    gpioB_21;            //!< See @ref USBDM::DigitalIOT
-#define digitalIO_LED_RED        gpioB_21             //!< Alias for @ref USBDM::gpioB_21
-extern const USBDM::GpioB<22>    gpioB_22;            //!< See @ref USBDM::DigitalIOT
-#define digitalIO_LED_GREEN      gpioB_22             //!< Alias for @ref USBDM::gpioB_22
-extern const USBDM::GpioB<23>    gpioB_23;            //!< See @ref USBDM::DigitalIOT
-#define digitalIO_LED_BLUE       gpioB_23             //!< Alias for @ref USBDM::gpioB_23
-extern const USBDM::GpioB<24>    gpioB_24;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<25>    gpioB_25;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<26>    gpioB_26;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<27>    gpioB_27;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<28>    gpioB_28;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<29>    gpioB_29;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<30>    gpioB_30;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioB<31>    gpioB_31;            //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<0>     gpioC_0;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<1>     gpioC_1;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<2>     gpioC_2;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<3>     gpioC_3;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<4>     gpioC_4;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<5>     gpioC_5;             //!< See @ref USBDM::DigitalIOT
-extern const USBDM::GpioC<6>     gpioC_6;             //!< See @ref USBDM::DigitalIOT
+const USBDM::GpioA<0>     gpioA_0;
+const USBDM::GpioA<1>     gpioA_1;
+const USBDM::GpioA<2>     gpioA_2;
+const USBDM::GpioA<3>     gpioA_3;
+const USBDM::GpioA<4>     gpioA_4;
+const USBDM::GpioA<5>     gpioA_5;
+const USBDM::GpioA<6>     gpioA_6;
+const USBDM::GpioA<7>     gpioA_7;
+const USBDM::GpioA<8>     gpioA_8;
+const USBDM::GpioA<9>     gpioA_9;
+const USBDM::GpioA<10>    gpioA_10;
+const USBDM::GpioA<11>    gpioA_11;
+const USBDM::GpioA<12>    gpioA_12;
+const USBDM::GpioA<13>    gpioA_13;
+const USBDM::GpioA<14>    gpioA_14;
+const USBDM::GpioA<15>    gpioA_15;
+const USBDM::GpioA<16>    gpioA_16;
+const USBDM::GpioA<17>    gpioA_17;
+const USBDM::GpioA<18>    gpioA_18;
+const USBDM::GpioA<19>    gpioA_19;
+const USBDM::GpioA<20>    gpioA_20;
+const USBDM::GpioA<21>    gpioA_21;
+const USBDM::GpioA<22>    gpioA_22;
+const USBDM::GpioA<23>    gpioA_23;
+const USBDM::GpioA<24>    gpioA_24;
+const USBDM::GpioA<25>    gpioA_25;
+const USBDM::GpioA<26>    gpioA_26;
+const USBDM::GpioA<27>    gpioA_27;
+const USBDM::GpioA<28>    gpioA_28;
+const USBDM::GpioA<29>    gpioA_29;
+const USBDM::GpioA<30>    gpioA_30;
+const USBDM::GpioA<31>    gpioA_31;
+const USBDM::GpioB<0>     gpioB_0;
+const USBDM::GpioB<1>     gpioB_1;
+const USBDM::GpioB<2>     gpioB_2;
+const USBDM::GpioB<3>     gpioB_3;
+const USBDM::GpioB<4>     gpioB_4;
+const USBDM::GpioB<5>     gpioB_5;
+const USBDM::GpioB<6>     gpioB_6;
+const USBDM::GpioB<7>     gpioB_7;
+const USBDM::GpioB<8>     gpioB_8;
+const USBDM::GpioB<9>     gpioB_9;
+const USBDM::GpioB<10>    gpioB_10;
+const USBDM::GpioB<11>    gpioB_11;
+const USBDM::GpioB<12>    gpioB_12;
+const USBDM::GpioB<13>    gpioB_13;
+const USBDM::GpioB<14>    gpioB_14;
+const USBDM::GpioB<15>    gpioB_15;
+const USBDM::GpioB<16>    gpioB_16;
+const USBDM::GpioB<17>    gpioB_17;
+const USBDM::GpioB<18>    gpioB_18;
+const USBDM::GpioB<19>    gpioB_19;
+const USBDM::GpioB<20>    gpioB_20;
+const USBDM::GpioB<21>    gpioB_21;
+const USBDM::GpioB<21>    gpio_LED_RED;
+const USBDM::GpioB<22>    gpioB_22;
+const USBDM::GpioB<22>    gpio_LED_GREEN;
+const USBDM::GpioB<23>    gpioB_23;
+const USBDM::GpioB<23>    gpio_LED_BLUE;
+const USBDM::GpioB<24>    gpioB_24;
+const USBDM::GpioB<25>    gpioB_25;
+const USBDM::GpioB<26>    gpioB_26;
+const USBDM::GpioB<27>    gpioB_27;
+const USBDM::GpioB<28>    gpioB_28;
+const USBDM::GpioB<29>    gpioB_29;
+const USBDM::GpioB<30>    gpioB_30;
+const USBDM::GpioB<31>    gpioB_31;
+const USBDM::GpioC<0>     gpioC_0;
+const USBDM::GpioC<1>     gpioC_1;
+const USBDM::GpioC<2>     gpioC_2;
+const USBDM::GpioC<3>     gpioC_3;
+const USBDM::GpioC<4>     gpioC_4;
+const USBDM::GpioC<5>     gpioC_5;
+const USBDM::GpioC<6>     gpioC_6;
 /**
  * @}
  */
@@ -130,8 +128,6 @@ UART1      SCGC         SIM_SCGC_UART1_MASK
 UART2      SCGC         SIM_SCGC_UART2_MASK
 */
 
-#if USBDM_USE_NAMESPACES
 } // End namespace USBDM
-#endif
 
 #endif /* GPIO_H_ */

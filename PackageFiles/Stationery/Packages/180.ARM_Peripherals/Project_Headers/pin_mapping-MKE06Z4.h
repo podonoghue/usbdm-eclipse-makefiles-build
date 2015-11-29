@@ -99,14 +99,6 @@
 
 // </h>
 
-// Use USBDM namespace
-//
-//   <q> Place CPP objects in the USBDM namespace 
-//   <i> This will require us of "using namespace USBDM" directive
-//     <0=> Disabled
-//     <1=> Enabled
-#define USBDM_USE_NAMESPACES 0
-
 // Pin mapping Options
 //
 //   <q> Map pins 
@@ -930,7 +922,7 @@
 //     <0=> Default
 #define BUSOUT_PIN_SEL       0
 #if BUSOUT_PIN_SEL == 1
-#define BUSOUT_GPIO          digitalIO_PTH2
+#define BUSOUT_GPIO          USBDM::GpioH<2>
 #define BUSOUT_FN            2
 #endif
 
@@ -949,28 +941,28 @@
 //     <0=> Default
 #define IRQ_PIN_SEL          0
 #if IRQ_PIN_SEL == 1
-#define IRQ_GPIO             digitalIO_PTI2
+#define IRQ_GPIO             USBDM::GpioI<2>
 #define IRQ_FN               1
 #elif IRQ_PIN_SEL == 2
-#define IRQ_GPIO             digitalIO_PTI3
+#define IRQ_GPIO             USBDM::GpioI<3>
 #define IRQ_FN               1
 #elif IRQ_PIN_SEL == 3
-#define IRQ_GPIO             digitalIO_PTI5
+#define IRQ_GPIO             USBDM::GpioI<5>
 #define IRQ_FN               1
 #elif IRQ_PIN_SEL == 4
-#define IRQ_GPIO             digitalIO_PTI6
+#define IRQ_GPIO             USBDM::GpioI<6>
 #define IRQ_FN               1
 #elif IRQ_PIN_SEL == 5
-#define IRQ_GPIO             digitalIO_PTA5
+#define IRQ_GPIO             USBDM::GpioA<5>
 #define IRQ_FN               2
 #elif IRQ_PIN_SEL == 6
-#define IRQ_GPIO             digitalIO_PTI0
+#define IRQ_GPIO             USBDM::GpioI<0>
 #define IRQ_FN               2
 #elif IRQ_PIN_SEL == 7
-#define IRQ_GPIO             digitalIO_PTI1
+#define IRQ_GPIO             USBDM::GpioI<1>
 #define IRQ_FN               2
 #elif IRQ_PIN_SEL == 8
-#define IRQ_GPIO             digitalIO_PTI4
+#define IRQ_GPIO             USBDM::GpioI<4>
 #define IRQ_FN               2
 #endif
 
@@ -982,7 +974,7 @@
 //     <0=> Default
 #define KBI0_P0_PIN_SEL      0
 #if KBI0_P0_PIN_SEL == 1
-#define KBI0_P0_GPIO         digitalIO_PTA0
+#define KBI0_P0_GPIO         USBDM::GpioA<0>
 #define KBI0_P0_FN           1
 #endif
 
@@ -994,7 +986,7 @@
 //     <0=> Default
 #define KBI0_P1_PIN_SEL      0
 #if KBI0_P1_PIN_SEL == 1
-#define KBI0_P1_GPIO         digitalIO_PTA1
+#define KBI0_P1_GPIO         USBDM::GpioA<1>
 #define KBI0_P1_FN           1
 #endif
 
@@ -1006,7 +998,7 @@
 //     <0=> Default
 #define KBI0_P2_PIN_SEL      0
 #if KBI0_P2_PIN_SEL == 1
-#define KBI0_P2_GPIO         digitalIO_PTA2
+#define KBI0_P2_GPIO         USBDM::GpioA<2>
 #define KBI0_P2_FN           1
 #endif
 
@@ -1018,7 +1010,7 @@
 //     <0=> Default
 #define KBI0_P3_PIN_SEL      0
 #if KBI0_P3_PIN_SEL == 1
-#define KBI0_P3_GPIO         digitalIO_PTA3
+#define KBI0_P3_GPIO         USBDM::GpioA<3>
 #define KBI0_P3_FN           1
 #endif
 
@@ -1030,7 +1022,7 @@
 //     <0=> Default
 #define KBI0_P4_PIN_SEL      0
 #if KBI0_P4_PIN_SEL == 1
-#define KBI0_P4_GPIO         digitalIO_PTA4
+#define KBI0_P4_GPIO         USBDM::GpioA<4>
 #define KBI0_P4_FN           1
 #endif
 
@@ -1042,7 +1034,7 @@
 //     <0=> Default
 #define KBI0_P5_PIN_SEL      0
 #if KBI0_P5_PIN_SEL == 1
-#define KBI0_P5_GPIO         digitalIO_PTA5
+#define KBI0_P5_GPIO         USBDM::GpioA<5>
 #define KBI0_P5_FN           1
 #endif
 
@@ -1054,7 +1046,7 @@
 //     <0=> Default
 #define KBI0_P6_PIN_SEL      0
 #if KBI0_P6_PIN_SEL == 1
-#define KBI0_P6_GPIO         digitalIO_PTA6
+#define KBI0_P6_GPIO         USBDM::GpioA<6>
 #define KBI0_P6_FN           1
 #endif
 
@@ -1066,7 +1058,7 @@
 //     <0=> Default
 #define KBI0_P7_PIN_SEL      0
 #if KBI0_P7_PIN_SEL == 1
-#define KBI0_P7_GPIO         digitalIO_PTA7
+#define KBI0_P7_GPIO         USBDM::GpioA<7>
 #define KBI0_P7_FN           1
 #endif
 
@@ -1078,7 +1070,7 @@
 //     <0=> Default
 #define KBI0_P8_PIN_SEL      0
 #if KBI0_P8_PIN_SEL == 1
-#define KBI0_P8_GPIO         digitalIO_PTB0
+#define KBI0_P8_GPIO         USBDM::GpioB<0>
 #define KBI0_P8_FN           1
 #endif
 
@@ -1090,7 +1082,7 @@
 //     <0=> Default
 #define KBI0_P9_PIN_SEL      0
 #if KBI0_P9_PIN_SEL == 1
-#define KBI0_P9_GPIO         digitalIO_PTB1
+#define KBI0_P9_GPIO         USBDM::GpioB<1>
 #define KBI0_P9_FN           1
 #endif
 
@@ -1102,7 +1094,7 @@
 //     <0=> Default
 #define KBI0_P10_PIN_SEL     0
 #if KBI0_P10_PIN_SEL == 1
-#define KBI0_P10_GPIO        digitalIO_PTB2
+#define KBI0_P10_GPIO        USBDM::GpioB<2>
 #define KBI0_P10_FN          1
 #endif
 
@@ -1114,7 +1106,7 @@
 //     <0=> Default
 #define KBI0_P11_PIN_SEL     0
 #if KBI0_P11_PIN_SEL == 1
-#define KBI0_P11_GPIO        digitalIO_PTB3
+#define KBI0_P11_GPIO        USBDM::GpioB<3>
 #define KBI0_P11_FN          1
 #endif
 
@@ -1126,7 +1118,7 @@
 //     <0=> Default
 #define KBI0_P12_PIN_SEL     0
 #if KBI0_P12_PIN_SEL == 1
-#define KBI0_P12_GPIO        digitalIO_PTB4
+#define KBI0_P12_GPIO        USBDM::GpioB<4>
 #define KBI0_P12_FN          1
 #endif
 
@@ -1138,7 +1130,7 @@
 //     <0=> Default
 #define KBI0_P13_PIN_SEL     0
 #if KBI0_P13_PIN_SEL == 1
-#define KBI0_P13_GPIO        digitalIO_PTB5
+#define KBI0_P13_GPIO        USBDM::GpioB<5>
 #define KBI0_P13_FN          1
 #endif
 
@@ -1150,7 +1142,7 @@
 //     <0=> Default
 #define KBI0_P14_PIN_SEL     0
 #if KBI0_P14_PIN_SEL == 1
-#define KBI0_P14_GPIO        digitalIO_PTB6
+#define KBI0_P14_GPIO        USBDM::GpioB<6>
 #define KBI0_P14_FN          1
 #endif
 
@@ -1162,7 +1154,7 @@
 //     <0=> Default
 #define KBI0_P15_PIN_SEL     0
 #if KBI0_P15_PIN_SEL == 1
-#define KBI0_P15_GPIO        digitalIO_PTB7
+#define KBI0_P15_GPIO        USBDM::GpioB<7>
 #define KBI0_P15_FN          1
 #endif
 
@@ -1174,7 +1166,7 @@
 //     <0=> Default
 #define KBI0_P16_PIN_SEL     0
 #if KBI0_P16_PIN_SEL == 1
-#define KBI0_P16_GPIO        digitalIO_PTC0
+#define KBI0_P16_GPIO        USBDM::GpioC<0>
 #define KBI0_P16_FN          1
 #endif
 
@@ -1186,7 +1178,7 @@
 //     <0=> Default
 #define KBI0_P17_PIN_SEL     0
 #if KBI0_P17_PIN_SEL == 1
-#define KBI0_P17_GPIO        digitalIO_PTC1
+#define KBI0_P17_GPIO        USBDM::GpioC<1>
 #define KBI0_P17_FN          1
 #endif
 
@@ -1198,7 +1190,7 @@
 //     <0=> Default
 #define KBI0_P18_PIN_SEL     0
 #if KBI0_P18_PIN_SEL == 1
-#define KBI0_P18_GPIO        digitalIO_PTC2
+#define KBI0_P18_GPIO        USBDM::GpioC<2>
 #define KBI0_P18_FN          1
 #endif
 
@@ -1210,7 +1202,7 @@
 //     <0=> Default
 #define KBI0_P19_PIN_SEL     0
 #if KBI0_P19_PIN_SEL == 1
-#define KBI0_P19_GPIO        digitalIO_PTC3
+#define KBI0_P19_GPIO        USBDM::GpioC<3>
 #define KBI0_P19_FN          1
 #endif
 
@@ -1222,7 +1214,7 @@
 //     <0=> Default
 #define KBI0_P20_PIN_SEL     0
 #if KBI0_P20_PIN_SEL == 1
-#define KBI0_P20_GPIO        digitalIO_PTC4
+#define KBI0_P20_GPIO        USBDM::GpioC<4>
 #define KBI0_P20_FN          1
 #endif
 
@@ -1234,7 +1226,7 @@
 //     <0=> Default
 #define KBI0_P21_PIN_SEL     0
 #if KBI0_P21_PIN_SEL == 1
-#define KBI0_P21_GPIO        digitalIO_PTC5
+#define KBI0_P21_GPIO        USBDM::GpioC<5>
 #define KBI0_P21_FN          1
 #endif
 
@@ -1246,7 +1238,7 @@
 //     <0=> Default
 #define KBI0_P22_PIN_SEL     0
 #if KBI0_P22_PIN_SEL == 1
-#define KBI0_P22_GPIO        digitalIO_PTC6
+#define KBI0_P22_GPIO        USBDM::GpioC<6>
 #define KBI0_P22_FN          1
 #endif
 
@@ -1258,7 +1250,7 @@
 //     <0=> Default
 #define KBI0_P23_PIN_SEL     0
 #if KBI0_P23_PIN_SEL == 1
-#define KBI0_P23_GPIO        digitalIO_PTC7
+#define KBI0_P23_GPIO        USBDM::GpioC<7>
 #define KBI0_P23_FN          1
 #endif
 
@@ -1270,7 +1262,7 @@
 //     <0=> Default
 #define KBI0_P24_PIN_SEL     0
 #if KBI0_P24_PIN_SEL == 1
-#define KBI0_P24_GPIO        digitalIO_PTD0
+#define KBI0_P24_GPIO        USBDM::GpioD<0>
 #define KBI0_P24_FN          1
 #endif
 
@@ -1282,7 +1274,7 @@
 //     <0=> Default
 #define KBI0_P25_PIN_SEL     0
 #if KBI0_P25_PIN_SEL == 1
-#define KBI0_P25_GPIO        digitalIO_PTD1
+#define KBI0_P25_GPIO        USBDM::GpioD<1>
 #define KBI0_P25_FN          1
 #endif
 
@@ -1294,7 +1286,7 @@
 //     <0=> Default
 #define KBI0_P26_PIN_SEL     0
 #if KBI0_P26_PIN_SEL == 1
-#define KBI0_P26_GPIO        digitalIO_PTD2
+#define KBI0_P26_GPIO        USBDM::GpioD<2>
 #define KBI0_P26_FN          1
 #endif
 
@@ -1306,7 +1298,7 @@
 //     <0=> Default
 #define KBI0_P27_PIN_SEL     0
 #if KBI0_P27_PIN_SEL == 1
-#define KBI0_P27_GPIO        digitalIO_PTD3
+#define KBI0_P27_GPIO        USBDM::GpioD<3>
 #define KBI0_P27_FN          1
 #endif
 
@@ -1318,7 +1310,7 @@
 //     <0=> Default
 #define KBI0_P28_PIN_SEL     0
 #if KBI0_P28_PIN_SEL == 1
-#define KBI0_P28_GPIO        digitalIO_PTD4
+#define KBI0_P28_GPIO        USBDM::GpioD<4>
 #define KBI0_P28_FN          1
 #endif
 
@@ -1330,7 +1322,7 @@
 //     <0=> Default
 #define KBI0_P29_PIN_SEL     0
 #if KBI0_P29_PIN_SEL == 1
-#define KBI0_P29_GPIO        digitalIO_PTD5
+#define KBI0_P29_GPIO        USBDM::GpioD<5>
 #define KBI0_P29_FN          1
 #endif
 
@@ -1342,7 +1334,7 @@
 //     <0=> Default
 #define KBI0_P30_PIN_SEL     0
 #if KBI0_P30_PIN_SEL == 1
-#define KBI0_P30_GPIO        digitalIO_PTD6
+#define KBI0_P30_GPIO        USBDM::GpioD<6>
 #define KBI0_P30_FN          1
 #endif
 
@@ -1354,7 +1346,7 @@
 //     <0=> Default
 #define KBI0_P31_PIN_SEL     0
 #if KBI0_P31_PIN_SEL == 1
-#define KBI0_P31_GPIO        digitalIO_PTD7
+#define KBI0_P31_GPIO        USBDM::GpioD<7>
 #define KBI0_P31_FN          1
 #endif
 
@@ -1366,7 +1358,7 @@
 //     <0=> Default
 #define KBI1_P0_PIN_SEL      0
 #if KBI1_P0_PIN_SEL == 1
-#define KBI1_P0_GPIO         digitalIO_PTE0
+#define KBI1_P0_GPIO         USBDM::GpioE<0>
 #define KBI1_P0_FN           1
 #endif
 
@@ -1378,7 +1370,7 @@
 //     <0=> Default
 #define KBI1_P1_PIN_SEL      0
 #if KBI1_P1_PIN_SEL == 1
-#define KBI1_P1_GPIO         digitalIO_PTE1
+#define KBI1_P1_GPIO         USBDM::GpioE<1>
 #define KBI1_P1_FN           1
 #endif
 
@@ -1390,7 +1382,7 @@
 //     <0=> Default
 #define KBI1_P2_PIN_SEL      0
 #if KBI1_P2_PIN_SEL == 1
-#define KBI1_P2_GPIO         digitalIO_PTE2
+#define KBI1_P2_GPIO         USBDM::GpioE<2>
 #define KBI1_P2_FN           1
 #endif
 
@@ -1402,7 +1394,7 @@
 //     <0=> Default
 #define KBI1_P3_PIN_SEL      0
 #if KBI1_P3_PIN_SEL == 1
-#define KBI1_P3_GPIO         digitalIO_PTE3
+#define KBI1_P3_GPIO         USBDM::GpioE<3>
 #define KBI1_P3_FN           1
 #endif
 
@@ -1414,7 +1406,7 @@
 //     <0=> Default
 #define KBI1_P4_PIN_SEL      0
 #if KBI1_P4_PIN_SEL == 1
-#define KBI1_P4_GPIO         digitalIO_PTE4
+#define KBI1_P4_GPIO         USBDM::GpioE<4>
 #define KBI1_P4_FN           1
 #endif
 
@@ -1426,7 +1418,7 @@
 //     <0=> Default
 #define KBI1_P5_PIN_SEL      0
 #if KBI1_P5_PIN_SEL == 1
-#define KBI1_P5_GPIO         digitalIO_PTE5
+#define KBI1_P5_GPIO         USBDM::GpioE<5>
 #define KBI1_P5_FN           1
 #endif
 
@@ -1438,7 +1430,7 @@
 //     <0=> Default
 #define KBI1_P6_PIN_SEL      0
 #if KBI1_P6_PIN_SEL == 1
-#define KBI1_P6_GPIO         digitalIO_PTE6
+#define KBI1_P6_GPIO         USBDM::GpioE<6>
 #define KBI1_P6_FN           1
 #endif
 
@@ -1450,7 +1442,7 @@
 //     <0=> Default
 #define KBI1_P7_PIN_SEL      0
 #if KBI1_P7_PIN_SEL == 1
-#define KBI1_P7_GPIO         digitalIO_PTE7
+#define KBI1_P7_GPIO         USBDM::GpioE<7>
 #define KBI1_P7_FN           1
 #endif
 
@@ -1462,7 +1454,7 @@
 //     <0=> Default
 #define KBI1_P8_PIN_SEL      0
 #if KBI1_P8_PIN_SEL == 1
-#define KBI1_P8_GPIO         digitalIO_PTF0
+#define KBI1_P8_GPIO         USBDM::GpioF<0>
 #define KBI1_P8_FN           1
 #endif
 
@@ -1474,7 +1466,7 @@
 //     <0=> Default
 #define KBI1_P9_PIN_SEL      0
 #if KBI1_P9_PIN_SEL == 1
-#define KBI1_P9_GPIO         digitalIO_PTF1
+#define KBI1_P9_GPIO         USBDM::GpioF<1>
 #define KBI1_P9_FN           1
 #endif
 
@@ -1486,7 +1478,7 @@
 //     <0=> Default
 #define KBI1_P10_PIN_SEL     0
 #if KBI1_P10_PIN_SEL == 1
-#define KBI1_P10_GPIO        digitalIO_PTF2
+#define KBI1_P10_GPIO        USBDM::GpioF<2>
 #define KBI1_P10_FN          1
 #endif
 
@@ -1498,7 +1490,7 @@
 //     <0=> Default
 #define KBI1_P11_PIN_SEL     0
 #if KBI1_P11_PIN_SEL == 1
-#define KBI1_P11_GPIO        digitalIO_PTF3
+#define KBI1_P11_GPIO        USBDM::GpioF<3>
 #define KBI1_P11_FN          1
 #endif
 
@@ -1510,7 +1502,7 @@
 //     <0=> Default
 #define KBI1_P12_PIN_SEL     0
 #if KBI1_P12_PIN_SEL == 1
-#define KBI1_P12_GPIO        digitalIO_PTF4
+#define KBI1_P12_GPIO        USBDM::GpioF<4>
 #define KBI1_P12_FN          1
 #endif
 
@@ -1522,7 +1514,7 @@
 //     <0=> Default
 #define KBI1_P13_PIN_SEL     0
 #if KBI1_P13_PIN_SEL == 1
-#define KBI1_P13_GPIO        digitalIO_PTF5
+#define KBI1_P13_GPIO        USBDM::GpioF<5>
 #define KBI1_P13_FN          1
 #endif
 
@@ -1534,7 +1526,7 @@
 //     <0=> Default
 #define KBI1_P14_PIN_SEL     0
 #if KBI1_P14_PIN_SEL == 1
-#define KBI1_P14_GPIO        digitalIO_PTF6
+#define KBI1_P14_GPIO        USBDM::GpioF<6>
 #define KBI1_P14_FN          1
 #endif
 
@@ -1546,7 +1538,7 @@
 //     <0=> Default
 #define KBI1_P15_PIN_SEL     0
 #if KBI1_P15_PIN_SEL == 1
-#define KBI1_P15_GPIO        digitalIO_PTF7
+#define KBI1_P15_GPIO        USBDM::GpioF<7>
 #define KBI1_P15_FN          1
 #endif
 
@@ -1558,7 +1550,7 @@
 //     <0=> Default
 #define KBI1_P16_PIN_SEL     0
 #if KBI1_P16_PIN_SEL == 1
-#define KBI1_P16_GPIO        digitalIO_PTG0
+#define KBI1_P16_GPIO        USBDM::GpioG<0>
 #define KBI1_P16_FN          1
 #endif
 
@@ -1570,7 +1562,7 @@
 //     <0=> Default
 #define KBI1_P17_PIN_SEL     0
 #if KBI1_P17_PIN_SEL == 1
-#define KBI1_P17_GPIO        digitalIO_PTG1
+#define KBI1_P17_GPIO        USBDM::GpioG<1>
 #define KBI1_P17_FN          1
 #endif
 
@@ -1582,7 +1574,7 @@
 //     <0=> Default
 #define KBI1_P18_PIN_SEL     0
 #if KBI1_P18_PIN_SEL == 1
-#define KBI1_P18_GPIO        digitalIO_PTG2
+#define KBI1_P18_GPIO        USBDM::GpioG<2>
 #define KBI1_P18_FN          1
 #endif
 
@@ -1594,7 +1586,7 @@
 //     <0=> Default
 #define KBI1_P19_PIN_SEL     0
 #if KBI1_P19_PIN_SEL == 1
-#define KBI1_P19_GPIO        digitalIO_PTG3
+#define KBI1_P19_GPIO        USBDM::GpioG<3>
 #define KBI1_P19_FN          1
 #endif
 
@@ -1606,7 +1598,7 @@
 //     <0=> Default
 #define KBI1_P20_PIN_SEL     0
 #if KBI1_P20_PIN_SEL == 1
-#define KBI1_P20_GPIO        digitalIO_PTG4
+#define KBI1_P20_GPIO        USBDM::GpioG<4>
 #define KBI1_P20_FN          1
 #endif
 
@@ -1618,7 +1610,7 @@
 //     <0=> Default
 #define KBI1_P21_PIN_SEL     0
 #if KBI1_P21_PIN_SEL == 1
-#define KBI1_P21_GPIO        digitalIO_PTG5
+#define KBI1_P21_GPIO        USBDM::GpioG<5>
 #define KBI1_P21_FN          1
 #endif
 
@@ -1630,7 +1622,7 @@
 //     <0=> Default
 #define KBI1_P22_PIN_SEL     0
 #if KBI1_P22_PIN_SEL == 1
-#define KBI1_P22_GPIO        digitalIO_PTG6
+#define KBI1_P22_GPIO        USBDM::GpioG<6>
 #define KBI1_P22_FN          1
 #endif
 
@@ -1642,7 +1634,7 @@
 //     <0=> Default
 #define KBI1_P23_PIN_SEL     0
 #if KBI1_P23_PIN_SEL == 1
-#define KBI1_P23_GPIO        digitalIO_PTG7
+#define KBI1_P23_GPIO        USBDM::GpioG<7>
 #define KBI1_P23_FN          1
 #endif
 
@@ -1654,7 +1646,7 @@
 //     <0=> Default
 #define KBI1_P24_PIN_SEL     0
 #if KBI1_P24_PIN_SEL == 1
-#define KBI1_P24_GPIO        digitalIO_PTH0
+#define KBI1_P24_GPIO        USBDM::GpioH<0>
 #define KBI1_P24_FN          1
 #endif
 
@@ -1666,7 +1658,7 @@
 //     <0=> Default
 #define KBI1_P25_PIN_SEL     0
 #if KBI1_P25_PIN_SEL == 1
-#define KBI1_P25_GPIO        digitalIO_PTH1
+#define KBI1_P25_GPIO        USBDM::GpioH<1>
 #define KBI1_P25_FN          1
 #endif
 
@@ -1678,7 +1670,7 @@
 //     <0=> Default
 #define KBI1_P26_PIN_SEL     0
 #if KBI1_P26_PIN_SEL == 1
-#define KBI1_P26_GPIO        digitalIO_PTH2
+#define KBI1_P26_GPIO        USBDM::GpioH<2>
 #define KBI1_P26_FN          1
 #endif
 
@@ -1690,7 +1682,7 @@
 //     <0=> Default
 #define KBI1_P27_PIN_SEL     0
 #if KBI1_P27_PIN_SEL == 1
-#define KBI1_P27_GPIO        digitalIO_PTH3
+#define KBI1_P27_GPIO        USBDM::GpioH<3>
 #define KBI1_P27_FN          1
 #endif
 
@@ -1702,7 +1694,7 @@
 //     <0=> Default
 #define KBI1_P28_PIN_SEL     0
 #if KBI1_P28_PIN_SEL == 1
-#define KBI1_P28_GPIO        digitalIO_PTH4
+#define KBI1_P28_GPIO        USBDM::GpioH<4>
 #define KBI1_P28_FN          1
 #endif
 
@@ -1714,7 +1706,7 @@
 //     <0=> Default
 #define KBI1_P29_PIN_SEL     0
 #if KBI1_P29_PIN_SEL == 1
-#define KBI1_P29_GPIO        digitalIO_PTH5
+#define KBI1_P29_GPIO        USBDM::GpioH<5>
 #define KBI1_P29_FN          1
 #endif
 
@@ -1726,7 +1718,7 @@
 //     <0=> Default
 #define KBI1_P30_PIN_SEL     0
 #if KBI1_P30_PIN_SEL == 1
-#define KBI1_P30_GPIO        digitalIO_PTH6
+#define KBI1_P30_GPIO        USBDM::GpioH<6>
 #define KBI1_P30_FN          1
 #endif
 
@@ -1738,7 +1730,7 @@
 //     <0=> Default
 #define KBI1_P31_PIN_SEL     0
 #if KBI1_P31_PIN_SEL == 1
-#define KBI1_P31_GPIO        digitalIO_PTH7
+#define KBI1_P31_GPIO        USBDM::GpioH<7>
 #define KBI1_P31_FN          1
 #endif
 
@@ -1751,10 +1743,10 @@
 //     <0=> Default
 #define PWT_IN0_PIN_SEL      0
 #if PWT_IN0_PIN_SEL == 1
-#define PWT_IN0_GPIO         digitalIO_PTD5
+#define PWT_IN0_GPIO         USBDM::GpioD<5>
 #define PWT_IN0_FN           2
 #elif PWT_IN0_PIN_SEL == 2
-#define PWT_IN0_GPIO         digitalIO_PTE2
+#define PWT_IN0_GPIO         USBDM::GpioE<2>
 #define PWT_IN0_FN           3
 #endif
 
@@ -1767,10 +1759,10 @@
 //     <0=> Default
 #define PWT_IN1_PIN_SEL      0
 #if PWT_IN1_PIN_SEL == 1
-#define PWT_IN1_GPIO         digitalIO_PTH7
+#define PWT_IN1_GPIO         USBDM::GpioH<7>
 #define PWT_IN1_FN           2
 #elif PWT_IN1_PIN_SEL == 2
-#define PWT_IN1_GPIO         digitalIO_PTB0
+#define PWT_IN1_GPIO         USBDM::GpioB<0>
 #define PWT_IN1_FN           3
 #endif
 
@@ -1786,7 +1778,7 @@
 //     <0=> Default
 #define ACMP0_IN0_PIN_SEL    0
 #if ACMP0_IN0_PIN_SEL == 1
-#define ACMP0_IN0_GPIO       digitalIO_PTA0
+#define ACMP0_IN0_GPIO       USBDM::GpioA<0>
 #define ACMP0_IN0_FN         4
 #endif
 
@@ -1798,7 +1790,7 @@
 //     <0=> Default
 #define ACMP0_IN1_PIN_SEL    0
 #if ACMP0_IN1_PIN_SEL == 1
-#define ACMP0_IN1_GPIO       digitalIO_PTA1
+#define ACMP0_IN1_GPIO       USBDM::GpioA<1>
 #define ACMP0_IN1_FN         4
 #endif
 
@@ -1810,7 +1802,7 @@
 //     <0=> Default
 #define ACMP0_IN2_PIN_SEL    0
 #if ACMP0_IN2_PIN_SEL == 1
-#define ACMP0_IN2_GPIO       digitalIO_PTC4
+#define ACMP0_IN2_GPIO       USBDM::GpioC<4>
 #define ACMP0_IN2_FN         4
 #endif
 
@@ -1822,7 +1814,7 @@
 //     <0=> Default
 #define ACMP0_OUT_PIN_SEL    0
 #if ACMP0_OUT_PIN_SEL == 1
-#define ACMP0_OUT_GPIO       digitalIO_PTA4
+#define ACMP0_OUT_GPIO       USBDM::GpioA<4>
 #define ACMP0_OUT_FN         3
 #endif
 
@@ -1838,7 +1830,7 @@
 //     <0=> Default
 #define ACMP1_IN0_PIN_SEL    0
 #if ACMP1_IN0_PIN_SEL == 1
-#define ACMP1_IN0_GPIO       digitalIO_PTA6
+#define ACMP1_IN0_GPIO       USBDM::GpioA<6>
 #define ACMP1_IN0_FN         3
 #endif
 
@@ -1850,7 +1842,7 @@
 //     <0=> Default
 #define ACMP1_IN1_PIN_SEL    0
 #if ACMP1_IN1_PIN_SEL == 1
-#define ACMP1_IN1_GPIO       digitalIO_PTA7
+#define ACMP1_IN1_GPIO       USBDM::GpioA<7>
 #define ACMP1_IN1_FN         3
 #endif
 
@@ -1862,7 +1854,7 @@
 //     <0=> Default
 #define ACMP1_IN2_PIN_SEL    0
 #if ACMP1_IN2_PIN_SEL == 1
-#define ACMP1_IN2_GPIO       digitalIO_PTB4
+#define ACMP1_IN2_GPIO       USBDM::GpioB<4>
 #define ACMP1_IN2_FN         4
 #endif
 
@@ -1874,7 +1866,7 @@
 //     <0=> Default
 #define ACMP1_OUT_PIN_SEL    0
 #if ACMP1_OUT_PIN_SEL == 1
-#define ACMP1_OUT_GPIO       digitalIO_PTB5
+#define ACMP1_OUT_GPIO       USBDM::GpioB<5>
 #define ACMP1_OUT_FN         4
 #endif
 
@@ -1891,7 +1883,7 @@
 //     <1=> Default
 #define ADC0_SE0_PIN_SEL     1
 #if ADC0_SE0_PIN_SEL == 2
-#define ADC0_SE0_GPIO        digitalIO_PTA0
+#define ADC0_SE0_GPIO        USBDM::GpioA<0>
 #define ADC0_SE0_FN          5
 #endif
 
@@ -1904,7 +1896,7 @@
 //     <1=> Default
 #define ADC0_SE1_PIN_SEL     1
 #if ADC0_SE1_PIN_SEL == 2
-#define ADC0_SE1_GPIO        digitalIO_PTA1
+#define ADC0_SE1_GPIO        USBDM::GpioA<1>
 #define ADC0_SE1_FN          5
 #endif
 
@@ -1917,7 +1909,7 @@
 //     <1=> Default
 #define ADC0_SE2_PIN_SEL     1
 #if ADC0_SE2_PIN_SEL == 2
-#define ADC0_SE2_GPIO        digitalIO_PTA6
+#define ADC0_SE2_GPIO        USBDM::GpioA<6>
 #define ADC0_SE2_FN          4
 #endif
 
@@ -1930,7 +1922,7 @@
 //     <1=> Default
 #define ADC0_SE3_PIN_SEL     1
 #if ADC0_SE3_PIN_SEL == 2
-#define ADC0_SE3_GPIO        digitalIO_PTA7
+#define ADC0_SE3_GPIO        USBDM::GpioA<7>
 #define ADC0_SE3_FN          4
 #endif
 
@@ -1943,7 +1935,7 @@
 //     <1=> Default
 #define ADC0_SE4_PIN_SEL     1
 #if ADC0_SE4_PIN_SEL == 2
-#define ADC0_SE4_GPIO        digitalIO_PTB0
+#define ADC0_SE4_GPIO        USBDM::GpioB<0>
 #define ADC0_SE4_FN          4
 #endif
 
@@ -1956,7 +1948,7 @@
 //     <1=> Default
 #define ADC0_SE5_PIN_SEL     1
 #if ADC0_SE5_PIN_SEL == 2
-#define ADC0_SE5_GPIO        digitalIO_PTB1
+#define ADC0_SE5_GPIO        USBDM::GpioB<1>
 #define ADC0_SE5_FN          4
 #endif
 
@@ -1969,7 +1961,7 @@
 //     <1=> Default
 #define ADC0_SE6_PIN_SEL     1
 #if ADC0_SE6_PIN_SEL == 2
-#define ADC0_SE6_GPIO        digitalIO_PTB2
+#define ADC0_SE6_GPIO        USBDM::GpioB<2>
 #define ADC0_SE6_FN          4
 #endif
 
@@ -1982,7 +1974,7 @@
 //     <1=> Default
 #define ADC0_SE7_PIN_SEL     1
 #if ADC0_SE7_PIN_SEL == 2
-#define ADC0_SE7_GPIO        digitalIO_PTB3
+#define ADC0_SE7_GPIO        USBDM::GpioB<3>
 #define ADC0_SE7_FN          4
 #endif
 
@@ -1995,7 +1987,7 @@
 //     <1=> Default
 #define ADC0_SE8_PIN_SEL     1
 #if ADC0_SE8_PIN_SEL == 2
-#define ADC0_SE8_GPIO        digitalIO_PTC0
+#define ADC0_SE8_GPIO        USBDM::GpioC<0>
 #define ADC0_SE8_FN          4
 #endif
 
@@ -2008,7 +2000,7 @@
 //     <1=> Default
 #define ADC0_SE9_PIN_SEL     1
 #if ADC0_SE9_PIN_SEL == 2
-#define ADC0_SE9_GPIO        digitalIO_PTC1
+#define ADC0_SE9_GPIO        USBDM::GpioC<1>
 #define ADC0_SE9_FN          4
 #endif
 
@@ -2021,7 +2013,7 @@
 //     <1=> Default
 #define ADC0_SE10_PIN_SEL    1
 #if ADC0_SE10_PIN_SEL == 2
-#define ADC0_SE10_GPIO       digitalIO_PTC2
+#define ADC0_SE10_GPIO       USBDM::GpioC<2>
 #define ADC0_SE10_FN         4
 #endif
 
@@ -2034,7 +2026,7 @@
 //     <1=> Default
 #define ADC0_SE11_PIN_SEL    1
 #if ADC0_SE11_PIN_SEL == 2
-#define ADC0_SE11_GPIO       digitalIO_PTC3
+#define ADC0_SE11_GPIO       USBDM::GpioC<3>
 #define ADC0_SE11_FN         4
 #endif
 
@@ -2047,7 +2039,7 @@
 //     <1=> Default
 #define ADC0_SE12_PIN_SEL    1
 #if ADC0_SE12_PIN_SEL == 2
-#define ADC0_SE12_GPIO       digitalIO_PTF4
+#define ADC0_SE12_GPIO       USBDM::GpioF<4>
 #define ADC0_SE12_FN         4
 #endif
 
@@ -2060,7 +2052,7 @@
 //     <1=> Default
 #define ADC0_SE13_PIN_SEL    1
 #if ADC0_SE13_PIN_SEL == 2
-#define ADC0_SE13_GPIO       digitalIO_PTF5
+#define ADC0_SE13_GPIO       USBDM::GpioF<5>
 #define ADC0_SE13_FN         4
 #endif
 
@@ -2073,7 +2065,7 @@
 //     <1=> Default
 #define ADC0_SE14_PIN_SEL    1
 #if ADC0_SE14_PIN_SEL == 2
-#define ADC0_SE14_GPIO       digitalIO_PTF6
+#define ADC0_SE14_GPIO       USBDM::GpioF<6>
 #define ADC0_SE14_FN         4
 #endif
 
@@ -2086,7 +2078,7 @@
 //     <1=> Default
 #define ADC0_SE15_PIN_SEL    1
 #if ADC0_SE15_PIN_SEL == 2
-#define ADC0_SE15_GPIO       digitalIO_PTF7
+#define ADC0_SE15_GPIO       USBDM::GpioF<7>
 #define ADC0_SE15_FN         4
 #endif
 
@@ -2103,10 +2095,10 @@
 //     <0=> Default
 #define CAN0_RX_PIN_SEL      0
 #if CAN0_RX_PIN_SEL == 1
-#define CAN0_RX_GPIO         digitalIO_PTC6
+#define CAN0_RX_GPIO         USBDM::GpioC<6>
 #define CAN0_RX_FN           5
 #elif CAN0_RX_PIN_SEL == 2
-#define CAN0_RX_GPIO         digitalIO_PTH2
+#define CAN0_RX_GPIO         USBDM::GpioH<2>
 #define CAN0_RX_FN           5
 #endif
 
@@ -2119,10 +2111,10 @@
 //     <0=> Default
 #define CAN0_TX_PIN_SEL      0
 #if CAN0_TX_PIN_SEL == 1
-#define CAN0_TX_GPIO         digitalIO_PTC7
+#define CAN0_TX_GPIO         USBDM::GpioC<7>
 #define CAN0_TX_FN           5
 #elif CAN0_TX_PIN_SEL == 2
-#define CAN0_TX_GPIO         digitalIO_PTE7
+#define CAN0_TX_GPIO         USBDM::GpioE<7>
 #define CAN0_TX_FN           5
 #endif
 
@@ -2139,7 +2131,7 @@
 //     <1=> Default
 #define EXTAL_PIN_SEL        1
 #if EXTAL_PIN_SEL == 2
-#define EXTAL_GPIO           digitalIO_PTB7
+#define EXTAL_GPIO           USBDM::GpioB<7>
 #define EXTAL_FN             6
 #endif
 
@@ -2152,10 +2144,10 @@
 //     <0=> Default
 #define RTC_CLKOUT_PIN_SEL   0
 #if RTC_CLKOUT_PIN_SEL == 1
-#define RTC_CLKOUT_GPIO      digitalIO_PTC4
+#define RTC_CLKOUT_GPIO      USBDM::GpioC<4>
 #define RTC_CLKOUT_FN        2
 #elif RTC_CLKOUT_PIN_SEL == 2
-#define RTC_CLKOUT_GPIO      digitalIO_PTC5
+#define RTC_CLKOUT_GPIO      USBDM::GpioC<5>
 #define RTC_CLKOUT_FN        5
 #endif
 
@@ -2167,7 +2159,7 @@
 //     <0=> Default
 #define TCLK0_PIN_SEL        0
 #if TCLK0_PIN_SEL == 1
-#define TCLK0_GPIO           digitalIO_PTA5
+#define TCLK0_GPIO           USBDM::GpioA<5>
 #define TCLK0_FN             3
 #endif
 
@@ -2179,7 +2171,7 @@
 //     <0=> Default
 #define TCLK1_PIN_SEL        0
 #if TCLK1_PIN_SEL == 1
-#define TCLK1_GPIO           digitalIO_PTE0
+#define TCLK1_GPIO           USBDM::GpioE<0>
 #define TCLK1_FN             3
 #endif
 
@@ -2191,7 +2183,7 @@
 //     <0=> Default
 #define TCLK2_PIN_SEL        0
 #if TCLK2_PIN_SEL == 1
-#define TCLK2_GPIO           digitalIO_PTE7
+#define TCLK2_GPIO           USBDM::GpioE<7>
 #define TCLK2_FN             2
 #endif
 
@@ -2204,7 +2196,7 @@
 //     <1=> Default
 #define XTAL_PIN_SEL         1
 #if XTAL_PIN_SEL == 2
-#define XTAL_GPIO            digitalIO_PTB6
+#define XTAL_GPIO            USBDM::GpioB<6>
 #define XTAL_FN              6
 #endif
 
@@ -2221,10 +2213,10 @@
 //     <0=> Default
 #define FTM0_CH0_PIN_SEL     0
 #if FTM0_CH0_PIN_SEL == 1
-#define FTM0_CH0_GPIO        digitalIO_PTA0
+#define FTM0_CH0_GPIO        USBDM::GpioA<0>
 #define FTM0_CH0_FN          2
 #elif FTM0_CH0_PIN_SEL == 2
-#define FTM0_CH0_GPIO        digitalIO_PTB2
+#define FTM0_CH0_GPIO        USBDM::GpioB<2>
 #define FTM0_CH0_FN          3
 #endif
 
@@ -2237,10 +2229,10 @@
 //     <0=> Default
 #define FTM0_CH1_PIN_SEL     0
 #if FTM0_CH1_PIN_SEL == 1
-#define FTM0_CH1_GPIO        digitalIO_PTA1
+#define FTM0_CH1_GPIO        USBDM::GpioA<1>
 #define FTM0_CH1_FN          2
 #elif FTM0_CH1_PIN_SEL == 2
-#define FTM0_CH1_GPIO        digitalIO_PTB3
+#define FTM0_CH1_GPIO        USBDM::GpioB<3>
 #define FTM0_CH1_FN          3
 #endif
 
@@ -2257,10 +2249,10 @@
 //     <0=> Default
 #define FTM1_CH0_PIN_SEL     0
 #if FTM1_CH0_PIN_SEL == 1
-#define FTM1_CH0_GPIO        digitalIO_PTC4
+#define FTM1_CH0_GPIO        USBDM::GpioC<4>
 #define FTM1_CH0_FN          3
 #elif FTM1_CH0_PIN_SEL == 2
-#define FTM1_CH0_GPIO        digitalIO_PTH2
+#define FTM1_CH0_GPIO        USBDM::GpioH<2>
 #define FTM1_CH0_FN          4
 #endif
 
@@ -2273,10 +2265,10 @@
 //     <0=> Default
 #define FTM1_CH1_PIN_SEL     0
 #if FTM1_CH1_PIN_SEL == 1
-#define FTM1_CH1_GPIO        digitalIO_PTC5
+#define FTM1_CH1_GPIO        USBDM::GpioC<5>
 #define FTM1_CH1_FN          3
 #elif FTM1_CH1_PIN_SEL == 2
-#define FTM1_CH1_GPIO        digitalIO_PTE7
+#define FTM1_CH1_GPIO        USBDM::GpioE<7>
 #define FTM1_CH1_FN          4
 #endif
 
@@ -2294,13 +2286,13 @@
 //     <0=> Default
 #define FTM2_CH0_PIN_SEL     0
 #if FTM2_CH0_PIN_SEL == 1
-#define FTM2_CH0_GPIO        digitalIO_PTC0
+#define FTM2_CH0_GPIO        USBDM::GpioC<0>
 #define FTM2_CH0_FN          2
 #elif FTM2_CH0_PIN_SEL == 2
-#define FTM2_CH0_GPIO        digitalIO_PTF0
+#define FTM2_CH0_GPIO        USBDM::GpioF<0>
 #define FTM2_CH0_FN          2
 #elif FTM2_CH0_PIN_SEL == 3
-#define FTM2_CH0_GPIO        digitalIO_PTH0
+#define FTM2_CH0_GPIO        USBDM::GpioH<0>
 #define FTM2_CH0_FN          2
 #endif
 
@@ -2314,13 +2306,13 @@
 //     <0=> Default
 #define FTM2_CH1_PIN_SEL     0
 #if FTM2_CH1_PIN_SEL == 1
-#define FTM2_CH1_GPIO        digitalIO_PTC1
+#define FTM2_CH1_GPIO        USBDM::GpioC<1>
 #define FTM2_CH1_FN          2
 #elif FTM2_CH1_PIN_SEL == 2
-#define FTM2_CH1_GPIO        digitalIO_PTF1
+#define FTM2_CH1_GPIO        USBDM::GpioF<1>
 #define FTM2_CH1_FN          2
 #elif FTM2_CH1_PIN_SEL == 3
-#define FTM2_CH1_GPIO        digitalIO_PTH1
+#define FTM2_CH1_GPIO        USBDM::GpioH<1>
 #define FTM2_CH1_FN          2
 #endif
 
@@ -2334,13 +2326,13 @@
 //     <0=> Default
 #define FTM2_CH2_PIN_SEL     0
 #if FTM2_CH2_PIN_SEL == 1
-#define FTM2_CH2_GPIO        digitalIO_PTC2
+#define FTM2_CH2_GPIO        USBDM::GpioC<2>
 #define FTM2_CH2_FN          2
 #elif FTM2_CH2_PIN_SEL == 2
-#define FTM2_CH2_GPIO        digitalIO_PTD0
+#define FTM2_CH2_GPIO        USBDM::GpioD<0>
 #define FTM2_CH2_FN          2
 #elif FTM2_CH2_PIN_SEL == 3
-#define FTM2_CH2_GPIO        digitalIO_PTG4
+#define FTM2_CH2_GPIO        USBDM::GpioG<4>
 #define FTM2_CH2_FN          2
 #endif
 
@@ -2354,13 +2346,13 @@
 //     <0=> Default
 #define FTM2_CH3_PIN_SEL     0
 #if FTM2_CH3_PIN_SEL == 1
-#define FTM2_CH3_GPIO        digitalIO_PTC3
+#define FTM2_CH3_GPIO        USBDM::GpioC<3>
 #define FTM2_CH3_FN          2
 #elif FTM2_CH3_PIN_SEL == 2
-#define FTM2_CH3_GPIO        digitalIO_PTD1
+#define FTM2_CH3_GPIO        USBDM::GpioD<1>
 #define FTM2_CH3_FN          2
 #elif FTM2_CH3_PIN_SEL == 3
-#define FTM2_CH3_GPIO        digitalIO_PTG5
+#define FTM2_CH3_GPIO        USBDM::GpioG<5>
 #define FTM2_CH3_FN          2
 #endif
 
@@ -2373,10 +2365,10 @@
 //     <0=> Default
 #define FTM2_CH4_PIN_SEL     0
 #if FTM2_CH4_PIN_SEL == 1
-#define FTM2_CH4_GPIO        digitalIO_PTB4
+#define FTM2_CH4_GPIO        USBDM::GpioB<4>
 #define FTM2_CH4_FN          2
 #elif FTM2_CH4_PIN_SEL == 2
-#define FTM2_CH4_GPIO        digitalIO_PTG6
+#define FTM2_CH4_GPIO        USBDM::GpioG<6>
 #define FTM2_CH4_FN          2
 #endif
 
@@ -2389,10 +2381,10 @@
 //     <0=> Default
 #define FTM2_CH5_PIN_SEL     0
 #if FTM2_CH5_PIN_SEL == 1
-#define FTM2_CH5_GPIO        digitalIO_PTB5
+#define FTM2_CH5_GPIO        USBDM::GpioB<5>
 #define FTM2_CH5_FN          2
 #elif FTM2_CH5_PIN_SEL == 2
-#define FTM2_CH5_GPIO        digitalIO_PTG7
+#define FTM2_CH5_GPIO        USBDM::GpioG<7>
 #define FTM2_CH5_FN          2
 #endif
 
@@ -2404,7 +2396,7 @@
 //     <0=> Default
 #define FTM2_FLT1_PIN_SEL    0
 #if FTM2_FLT1_PIN_SEL == 1
-#define FTM2_FLT1_GPIO       digitalIO_PTA6
+#define FTM2_FLT1_GPIO       USBDM::GpioA<6>
 #define FTM2_FLT1_FN         2
 #endif
 
@@ -2416,7 +2408,7 @@
 //     <0=> Default
 #define FTM2_FLT2_PIN_SEL    0
 #if FTM2_FLT2_PIN_SEL == 1
-#define FTM2_FLT2_GPIO       digitalIO_PTA7
+#define FTM2_FLT2_GPIO       USBDM::GpioA<7>
 #define FTM2_FLT2_FN         2
 #endif
 
@@ -2432,7 +2424,7 @@
 //     <0=> Default
 #define GPIOA_0_PIN_SEL      0
 #if GPIOA_0_PIN_SEL == 1
-#define GPIOA_0_GPIO         digitalIO_PTA0
+#define GPIOA_0_GPIO         USBDM::GpioA<0>
 #define GPIOA_0_FN           0
 #endif
 
@@ -2444,7 +2436,7 @@
 //     <0=> Default
 #define GPIOA_1_PIN_SEL      0
 #if GPIOA_1_PIN_SEL == 1
-#define GPIOA_1_GPIO         digitalIO_PTA1
+#define GPIOA_1_GPIO         USBDM::GpioA<1>
 #define GPIOA_1_FN           0
 #endif
 
@@ -2456,7 +2448,7 @@
 //     <0=> Default
 #define GPIOA_2_PIN_SEL      0
 #if GPIOA_2_PIN_SEL == 1
-#define GPIOA_2_GPIO         digitalIO_PTA2
+#define GPIOA_2_GPIO         USBDM::GpioA<2>
 #define GPIOA_2_FN           0
 #endif
 
@@ -2468,7 +2460,7 @@
 //     <0=> Default
 #define GPIOA_3_PIN_SEL      0
 #if GPIOA_3_PIN_SEL == 1
-#define GPIOA_3_GPIO         digitalIO_PTA3
+#define GPIOA_3_GPIO         USBDM::GpioA<3>
 #define GPIOA_3_FN           0
 #endif
 
@@ -2480,7 +2472,7 @@
 //     <0=> Default
 #define GPIOA_4_PIN_SEL      0
 #if GPIOA_4_PIN_SEL == 1
-#define GPIOA_4_GPIO         digitalIO_PTA4
+#define GPIOA_4_GPIO         USBDM::GpioA<4>
 #define GPIOA_4_FN           0
 #endif
 
@@ -2492,7 +2484,7 @@
 //     <0=> Default
 #define GPIOA_5_PIN_SEL      0
 #if GPIOA_5_PIN_SEL == 1
-#define GPIOA_5_GPIO         digitalIO_PTA5
+#define GPIOA_5_GPIO         USBDM::GpioA<5>
 #define GPIOA_5_FN           0
 #endif
 
@@ -2504,7 +2496,7 @@
 //     <0=> Default
 #define GPIOA_6_PIN_SEL      0
 #if GPIOA_6_PIN_SEL == 1
-#define GPIOA_6_GPIO         digitalIO_PTA6
+#define GPIOA_6_GPIO         USBDM::GpioA<6>
 #define GPIOA_6_FN           0
 #endif
 
@@ -2516,7 +2508,7 @@
 //     <0=> Default
 #define GPIOA_7_PIN_SEL      0
 #if GPIOA_7_PIN_SEL == 1
-#define GPIOA_7_GPIO         digitalIO_PTA7
+#define GPIOA_7_GPIO         USBDM::GpioA<7>
 #define GPIOA_7_FN           0
 #endif
 
@@ -2528,7 +2520,7 @@
 //     <0=> Default
 #define GPIOA_8_PIN_SEL      0
 #if GPIOA_8_PIN_SEL == 1
-#define GPIOA_8_GPIO         digitalIO_PTB0
+#define GPIOA_8_GPIO         USBDM::GpioB<0>
 #define GPIOA_8_FN           0
 #endif
 
@@ -2540,7 +2532,7 @@
 //     <0=> Default
 #define GPIOA_9_PIN_SEL      0
 #if GPIOA_9_PIN_SEL == 1
-#define GPIOA_9_GPIO         digitalIO_PTB1
+#define GPIOA_9_GPIO         USBDM::GpioB<1>
 #define GPIOA_9_FN           0
 #endif
 
@@ -2552,7 +2544,7 @@
 //     <0=> Default
 #define GPIOA_10_PIN_SEL     0
 #if GPIOA_10_PIN_SEL == 1
-#define GPIOA_10_GPIO        digitalIO_PTB2
+#define GPIOA_10_GPIO        USBDM::GpioB<2>
 #define GPIOA_10_FN          0
 #endif
 
@@ -2564,7 +2556,7 @@
 //     <0=> Default
 #define GPIOA_11_PIN_SEL     0
 #if GPIOA_11_PIN_SEL == 1
-#define GPIOA_11_GPIO        digitalIO_PTB3
+#define GPIOA_11_GPIO        USBDM::GpioB<3>
 #define GPIOA_11_FN          0
 #endif
 
@@ -2576,7 +2568,7 @@
 //     <0=> Default
 #define GPIOA_12_PIN_SEL     0
 #if GPIOA_12_PIN_SEL == 1
-#define GPIOA_12_GPIO        digitalIO_PTB4
+#define GPIOA_12_GPIO        USBDM::GpioB<4>
 #define GPIOA_12_FN          0
 #endif
 
@@ -2588,7 +2580,7 @@
 //     <0=> Default
 #define GPIOA_13_PIN_SEL     0
 #if GPIOA_13_PIN_SEL == 1
-#define GPIOA_13_GPIO        digitalIO_PTB5
+#define GPIOA_13_GPIO        USBDM::GpioB<5>
 #define GPIOA_13_FN          0
 #endif
 
@@ -2600,7 +2592,7 @@
 //     <0=> Default
 #define GPIOA_14_PIN_SEL     0
 #if GPIOA_14_PIN_SEL == 1
-#define GPIOA_14_GPIO        digitalIO_PTB6
+#define GPIOA_14_GPIO        USBDM::GpioB<6>
 #define GPIOA_14_FN          0
 #endif
 
@@ -2612,7 +2604,7 @@
 //     <0=> Default
 #define GPIOA_15_PIN_SEL     0
 #if GPIOA_15_PIN_SEL == 1
-#define GPIOA_15_GPIO        digitalIO_PTB7
+#define GPIOA_15_GPIO        USBDM::GpioB<7>
 #define GPIOA_15_FN          0
 #endif
 
@@ -2624,7 +2616,7 @@
 //     <0=> Default
 #define GPIOA_16_PIN_SEL     0
 #if GPIOA_16_PIN_SEL == 1
-#define GPIOA_16_GPIO        digitalIO_PTC0
+#define GPIOA_16_GPIO        USBDM::GpioC<0>
 #define GPIOA_16_FN          0
 #endif
 
@@ -2636,7 +2628,7 @@
 //     <0=> Default
 #define GPIOA_17_PIN_SEL     0
 #if GPIOA_17_PIN_SEL == 1
-#define GPIOA_17_GPIO        digitalIO_PTC1
+#define GPIOA_17_GPIO        USBDM::GpioC<1>
 #define GPIOA_17_FN          0
 #endif
 
@@ -2648,7 +2640,7 @@
 //     <0=> Default
 #define GPIOA_18_PIN_SEL     0
 #if GPIOA_18_PIN_SEL == 1
-#define GPIOA_18_GPIO        digitalIO_PTC2
+#define GPIOA_18_GPIO        USBDM::GpioC<2>
 #define GPIOA_18_FN          0
 #endif
 
@@ -2660,7 +2652,7 @@
 //     <0=> Default
 #define GPIOA_19_PIN_SEL     0
 #if GPIOA_19_PIN_SEL == 1
-#define GPIOA_19_GPIO        digitalIO_PTC3
+#define GPIOA_19_GPIO        USBDM::GpioC<3>
 #define GPIOA_19_FN          0
 #endif
 
@@ -2672,7 +2664,7 @@
 //     <0=> Default
 #define GPIOA_20_PIN_SEL     0
 #if GPIOA_20_PIN_SEL == 1
-#define GPIOA_20_GPIO        digitalIO_PTC4
+#define GPIOA_20_GPIO        USBDM::GpioC<4>
 #define GPIOA_20_FN          0
 #endif
 
@@ -2684,7 +2676,7 @@
 //     <0=> Default
 #define GPIOA_21_PIN_SEL     0
 #if GPIOA_21_PIN_SEL == 1
-#define GPIOA_21_GPIO        digitalIO_PTC5
+#define GPIOA_21_GPIO        USBDM::GpioC<5>
 #define GPIOA_21_FN          0
 #endif
 
@@ -2696,7 +2688,7 @@
 //     <0=> Default
 #define GPIOA_22_PIN_SEL     0
 #if GPIOA_22_PIN_SEL == 1
-#define GPIOA_22_GPIO        digitalIO_PTC6
+#define GPIOA_22_GPIO        USBDM::GpioC<6>
 #define GPIOA_22_FN          0
 #endif
 
@@ -2708,7 +2700,7 @@
 //     <0=> Default
 #define GPIOA_23_PIN_SEL     0
 #if GPIOA_23_PIN_SEL == 1
-#define GPIOA_23_GPIO        digitalIO_PTC7
+#define GPIOA_23_GPIO        USBDM::GpioC<7>
 #define GPIOA_23_FN          0
 #endif
 
@@ -2720,7 +2712,7 @@
 //     <0=> Default
 #define GPIOA_24_PIN_SEL     0
 #if GPIOA_24_PIN_SEL == 1
-#define GPIOA_24_GPIO        digitalIO_PTD0
+#define GPIOA_24_GPIO        USBDM::GpioD<0>
 #define GPIOA_24_FN          0
 #endif
 
@@ -2732,7 +2724,7 @@
 //     <0=> Default
 #define GPIOA_25_PIN_SEL     0
 #if GPIOA_25_PIN_SEL == 1
-#define GPIOA_25_GPIO        digitalIO_PTD1
+#define GPIOA_25_GPIO        USBDM::GpioD<1>
 #define GPIOA_25_FN          0
 #endif
 
@@ -2744,7 +2736,7 @@
 //     <0=> Default
 #define GPIOA_26_PIN_SEL     0
 #if GPIOA_26_PIN_SEL == 1
-#define GPIOA_26_GPIO        digitalIO_PTD2
+#define GPIOA_26_GPIO        USBDM::GpioD<2>
 #define GPIOA_26_FN          0
 #endif
 
@@ -2756,7 +2748,7 @@
 //     <0=> Default
 #define GPIOA_27_PIN_SEL     0
 #if GPIOA_27_PIN_SEL == 1
-#define GPIOA_27_GPIO        digitalIO_PTD3
+#define GPIOA_27_GPIO        USBDM::GpioD<3>
 #define GPIOA_27_FN          0
 #endif
 
@@ -2768,7 +2760,7 @@
 //     <0=> Default
 #define GPIOA_28_PIN_SEL     0
 #if GPIOA_28_PIN_SEL == 1
-#define GPIOA_28_GPIO        digitalIO_PTD4
+#define GPIOA_28_GPIO        USBDM::GpioD<4>
 #define GPIOA_28_FN          0
 #endif
 
@@ -2780,7 +2772,7 @@
 //     <0=> Default
 #define GPIOA_29_PIN_SEL     0
 #if GPIOA_29_PIN_SEL == 1
-#define GPIOA_29_GPIO        digitalIO_PTD5
+#define GPIOA_29_GPIO        USBDM::GpioD<5>
 #define GPIOA_29_FN          0
 #endif
 
@@ -2792,7 +2784,7 @@
 //     <0=> Default
 #define GPIOA_30_PIN_SEL     0
 #if GPIOA_30_PIN_SEL == 1
-#define GPIOA_30_GPIO        digitalIO_PTD6
+#define GPIOA_30_GPIO        USBDM::GpioD<6>
 #define GPIOA_30_FN          0
 #endif
 
@@ -2804,7 +2796,7 @@
 //     <0=> Default
 #define GPIOA_31_PIN_SEL     0
 #if GPIOA_31_PIN_SEL == 1
-#define GPIOA_31_GPIO        digitalIO_PTD7
+#define GPIOA_31_GPIO        USBDM::GpioD<7>
 #define GPIOA_31_FN          0
 #endif
 
@@ -2820,7 +2812,7 @@
 //     <0=> Default
 #define GPIOB_0_PIN_SEL      0
 #if GPIOB_0_PIN_SEL == 1
-#define GPIOB_0_GPIO         digitalIO_PTE0
+#define GPIOB_0_GPIO         USBDM::GpioE<0>
 #define GPIOB_0_FN           0
 #endif
 
@@ -2832,7 +2824,7 @@
 //     <0=> Default
 #define GPIOB_1_PIN_SEL      0
 #if GPIOB_1_PIN_SEL == 1
-#define GPIOB_1_GPIO         digitalIO_PTE1
+#define GPIOB_1_GPIO         USBDM::GpioE<1>
 #define GPIOB_1_FN           0
 #endif
 
@@ -2844,7 +2836,7 @@
 //     <0=> Default
 #define GPIOB_2_PIN_SEL      0
 #if GPIOB_2_PIN_SEL == 1
-#define GPIOB_2_GPIO         digitalIO_PTE2
+#define GPIOB_2_GPIO         USBDM::GpioE<2>
 #define GPIOB_2_FN           0
 #endif
 
@@ -2856,7 +2848,7 @@
 //     <0=> Default
 #define GPIOB_3_PIN_SEL      0
 #if GPIOB_3_PIN_SEL == 1
-#define GPIOB_3_GPIO         digitalIO_PTE3
+#define GPIOB_3_GPIO         USBDM::GpioE<3>
 #define GPIOB_3_FN           0
 #endif
 
@@ -2868,7 +2860,7 @@
 //     <0=> Default
 #define GPIOB_4_PIN_SEL      0
 #if GPIOB_4_PIN_SEL == 1
-#define GPIOB_4_GPIO         digitalIO_PTE4
+#define GPIOB_4_GPIO         USBDM::GpioE<4>
 #define GPIOB_4_FN           0
 #endif
 
@@ -2880,7 +2872,7 @@
 //     <0=> Default
 #define GPIOB_5_PIN_SEL      0
 #if GPIOB_5_PIN_SEL == 1
-#define GPIOB_5_GPIO         digitalIO_PTE5
+#define GPIOB_5_GPIO         USBDM::GpioE<5>
 #define GPIOB_5_FN           0
 #endif
 
@@ -2892,7 +2884,7 @@
 //     <0=> Default
 #define GPIOB_6_PIN_SEL      0
 #if GPIOB_6_PIN_SEL == 1
-#define GPIOB_6_GPIO         digitalIO_PTE6
+#define GPIOB_6_GPIO         USBDM::GpioE<6>
 #define GPIOB_6_FN           0
 #endif
 
@@ -2904,7 +2896,7 @@
 //     <0=> Default
 #define GPIOB_7_PIN_SEL      0
 #if GPIOB_7_PIN_SEL == 1
-#define GPIOB_7_GPIO         digitalIO_PTE7
+#define GPIOB_7_GPIO         USBDM::GpioE<7>
 #define GPIOB_7_FN           0
 #endif
 
@@ -2916,7 +2908,7 @@
 //     <0=> Default
 #define GPIOB_8_PIN_SEL      0
 #if GPIOB_8_PIN_SEL == 1
-#define GPIOB_8_GPIO         digitalIO_PTF0
+#define GPIOB_8_GPIO         USBDM::GpioF<0>
 #define GPIOB_8_FN           0
 #endif
 
@@ -2928,7 +2920,7 @@
 //     <0=> Default
 #define GPIOB_9_PIN_SEL      0
 #if GPIOB_9_PIN_SEL == 1
-#define GPIOB_9_GPIO         digitalIO_PTF1
+#define GPIOB_9_GPIO         USBDM::GpioF<1>
 #define GPIOB_9_FN           0
 #endif
 
@@ -2940,7 +2932,7 @@
 //     <0=> Default
 #define GPIOB_10_PIN_SEL     0
 #if GPIOB_10_PIN_SEL == 1
-#define GPIOB_10_GPIO        digitalIO_PTF2
+#define GPIOB_10_GPIO        USBDM::GpioF<2>
 #define GPIOB_10_FN          0
 #endif
 
@@ -2952,7 +2944,7 @@
 //     <0=> Default
 #define GPIOB_11_PIN_SEL     0
 #if GPIOB_11_PIN_SEL == 1
-#define GPIOB_11_GPIO        digitalIO_PTF3
+#define GPIOB_11_GPIO        USBDM::GpioF<3>
 #define GPIOB_11_FN          0
 #endif
 
@@ -2964,7 +2956,7 @@
 //     <0=> Default
 #define GPIOB_12_PIN_SEL     0
 #if GPIOB_12_PIN_SEL == 1
-#define GPIOB_12_GPIO        digitalIO_PTF4
+#define GPIOB_12_GPIO        USBDM::GpioF<4>
 #define GPIOB_12_FN          0
 #endif
 
@@ -2976,7 +2968,7 @@
 //     <0=> Default
 #define GPIOB_13_PIN_SEL     0
 #if GPIOB_13_PIN_SEL == 1
-#define GPIOB_13_GPIO        digitalIO_PTF5
+#define GPIOB_13_GPIO        USBDM::GpioF<5>
 #define GPIOB_13_FN          0
 #endif
 
@@ -2988,7 +2980,7 @@
 //     <0=> Default
 #define GPIOB_14_PIN_SEL     0
 #if GPIOB_14_PIN_SEL == 1
-#define GPIOB_14_GPIO        digitalIO_PTF6
+#define GPIOB_14_GPIO        USBDM::GpioF<6>
 #define GPIOB_14_FN          0
 #endif
 
@@ -3000,7 +2992,7 @@
 //     <0=> Default
 #define GPIOB_15_PIN_SEL     0
 #if GPIOB_15_PIN_SEL == 1
-#define GPIOB_15_GPIO        digitalIO_PTF7
+#define GPIOB_15_GPIO        USBDM::GpioF<7>
 #define GPIOB_15_FN          0
 #endif
 
@@ -3012,7 +3004,7 @@
 //     <0=> Default
 #define GPIOB_16_PIN_SEL     0
 #if GPIOB_16_PIN_SEL == 1
-#define GPIOB_16_GPIO        digitalIO_PTG0
+#define GPIOB_16_GPIO        USBDM::GpioG<0>
 #define GPIOB_16_FN          0
 #endif
 
@@ -3024,7 +3016,7 @@
 //     <0=> Default
 #define GPIOB_17_PIN_SEL     0
 #if GPIOB_17_PIN_SEL == 1
-#define GPIOB_17_GPIO        digitalIO_PTG1
+#define GPIOB_17_GPIO        USBDM::GpioG<1>
 #define GPIOB_17_FN          0
 #endif
 
@@ -3036,7 +3028,7 @@
 //     <0=> Default
 #define GPIOB_18_PIN_SEL     0
 #if GPIOB_18_PIN_SEL == 1
-#define GPIOB_18_GPIO        digitalIO_PTG2
+#define GPIOB_18_GPIO        USBDM::GpioG<2>
 #define GPIOB_18_FN          0
 #endif
 
@@ -3048,7 +3040,7 @@
 //     <0=> Default
 #define GPIOB_19_PIN_SEL     0
 #if GPIOB_19_PIN_SEL == 1
-#define GPIOB_19_GPIO        digitalIO_PTG3
+#define GPIOB_19_GPIO        USBDM::GpioG<3>
 #define GPIOB_19_FN          0
 #endif
 
@@ -3060,7 +3052,7 @@
 //     <0=> Default
 #define GPIOB_20_PIN_SEL     0
 #if GPIOB_20_PIN_SEL == 1
-#define GPIOB_20_GPIO        digitalIO_PTG4
+#define GPIOB_20_GPIO        USBDM::GpioG<4>
 #define GPIOB_20_FN          0
 #endif
 
@@ -3072,7 +3064,7 @@
 //     <1=> Default
 #define GPIOB_21_PIN_SEL     1
 #if GPIOB_21_PIN_SEL == 1
-#define GPIOB_21_GPIO        digitalIO_PTG5
+#define GPIOB_21_GPIO        USBDM::GpioG<5>
 #define GPIOB_21_FN          0
 #endif
 
@@ -3084,7 +3076,7 @@
 //     <1=> Default
 #define GPIOB_22_PIN_SEL     1
 #if GPIOB_22_PIN_SEL == 1
-#define GPIOB_22_GPIO        digitalIO_PTG6
+#define GPIOB_22_GPIO        USBDM::GpioG<6>
 #define GPIOB_22_FN          0
 #endif
 
@@ -3096,7 +3088,7 @@
 //     <1=> Default
 #define GPIOB_23_PIN_SEL     1
 #if GPIOB_23_PIN_SEL == 1
-#define GPIOB_23_GPIO        digitalIO_PTG7
+#define GPIOB_23_GPIO        USBDM::GpioG<7>
 #define GPIOB_23_FN          0
 #endif
 
@@ -3108,7 +3100,7 @@
 //     <0=> Default
 #define GPIOB_24_PIN_SEL     0
 #if GPIOB_24_PIN_SEL == 1
-#define GPIOB_24_GPIO        digitalIO_PTH0
+#define GPIOB_24_GPIO        USBDM::GpioH<0>
 #define GPIOB_24_FN          0
 #endif
 
@@ -3120,7 +3112,7 @@
 //     <0=> Default
 #define GPIOB_25_PIN_SEL     0
 #if GPIOB_25_PIN_SEL == 1
-#define GPIOB_25_GPIO        digitalIO_PTH1
+#define GPIOB_25_GPIO        USBDM::GpioH<1>
 #define GPIOB_25_FN          0
 #endif
 
@@ -3132,7 +3124,7 @@
 //     <0=> Default
 #define GPIOB_26_PIN_SEL     0
 #if GPIOB_26_PIN_SEL == 1
-#define GPIOB_26_GPIO        digitalIO_PTH2
+#define GPIOB_26_GPIO        USBDM::GpioH<2>
 #define GPIOB_26_FN          0
 #endif
 
@@ -3144,7 +3136,7 @@
 //     <0=> Default
 #define GPIOB_27_PIN_SEL     0
 #if GPIOB_27_PIN_SEL == 1
-#define GPIOB_27_GPIO        digitalIO_PTH3
+#define GPIOB_27_GPIO        USBDM::GpioH<3>
 #define GPIOB_27_FN          0
 #endif
 
@@ -3156,7 +3148,7 @@
 //     <0=> Default
 #define GPIOB_28_PIN_SEL     0
 #if GPIOB_28_PIN_SEL == 1
-#define GPIOB_28_GPIO        digitalIO_PTH4
+#define GPIOB_28_GPIO        USBDM::GpioH<4>
 #define GPIOB_28_FN          0
 #endif
 
@@ -3168,7 +3160,7 @@
 //     <0=> Default
 #define GPIOB_29_PIN_SEL     0
 #if GPIOB_29_PIN_SEL == 1
-#define GPIOB_29_GPIO        digitalIO_PTH5
+#define GPIOB_29_GPIO        USBDM::GpioH<5>
 #define GPIOB_29_FN          0
 #endif
 
@@ -3180,7 +3172,7 @@
 //     <0=> Default
 #define GPIOB_30_PIN_SEL     0
 #if GPIOB_30_PIN_SEL == 1
-#define GPIOB_30_GPIO        digitalIO_PTH6
+#define GPIOB_30_GPIO        USBDM::GpioH<6>
 #define GPIOB_30_FN          0
 #endif
 
@@ -3192,7 +3184,7 @@
 //     <0=> Default
 #define GPIOB_31_PIN_SEL     0
 #if GPIOB_31_PIN_SEL == 1
-#define GPIOB_31_GPIO        digitalIO_PTH7
+#define GPIOB_31_GPIO        USBDM::GpioH<7>
 #define GPIOB_31_FN          0
 #endif
 
@@ -3208,7 +3200,7 @@
 //     <0=> Default
 #define GPIOC_0_PIN_SEL      0
 #if GPIOC_0_PIN_SEL == 1
-#define GPIOC_0_GPIO         digitalIO_PTI0
+#define GPIOC_0_GPIO         USBDM::GpioI<0>
 #define GPIOC_0_FN           0
 #endif
 
@@ -3220,7 +3212,7 @@
 //     <0=> Default
 #define GPIOC_1_PIN_SEL      0
 #if GPIOC_1_PIN_SEL == 1
-#define GPIOC_1_GPIO         digitalIO_PTI1
+#define GPIOC_1_GPIO         USBDM::GpioI<1>
 #define GPIOC_1_FN           0
 #endif
 
@@ -3232,7 +3224,7 @@
 //     <0=> Default
 #define GPIOC_2_PIN_SEL      0
 #if GPIOC_2_PIN_SEL == 1
-#define GPIOC_2_GPIO         digitalIO_PTI2
+#define GPIOC_2_GPIO         USBDM::GpioI<2>
 #define GPIOC_2_FN           0
 #endif
 
@@ -3244,7 +3236,7 @@
 //     <0=> Default
 #define GPIOC_3_PIN_SEL      0
 #if GPIOC_3_PIN_SEL == 1
-#define GPIOC_3_GPIO         digitalIO_PTI3
+#define GPIOC_3_GPIO         USBDM::GpioI<3>
 #define GPIOC_3_FN           0
 #endif
 
@@ -3256,7 +3248,7 @@
 //     <0=> Default
 #define GPIOC_4_PIN_SEL      0
 #if GPIOC_4_PIN_SEL == 1
-#define GPIOC_4_GPIO         digitalIO_PTI4
+#define GPIOC_4_GPIO         USBDM::GpioI<4>
 #define GPIOC_4_FN           0
 #endif
 
@@ -3268,7 +3260,7 @@
 //     <0=> Default
 #define GPIOC_5_PIN_SEL      0
 #if GPIOC_5_PIN_SEL == 1
-#define GPIOC_5_GPIO         digitalIO_PTI5
+#define GPIOC_5_GPIO         USBDM::GpioI<5>
 #define GPIOC_5_FN           0
 #endif
 
@@ -3280,7 +3272,7 @@
 //     <0=> Default
 #define GPIOC_6_PIN_SEL      0
 #if GPIOC_6_PIN_SEL == 1
-#define GPIOC_6_GPIO         digitalIO_PTI6
+#define GPIOC_6_GPIO         USBDM::GpioI<6>
 #define GPIOC_6_FN           0
 #endif
 
@@ -3297,10 +3289,10 @@
 //     <0=> Default
 #define I2C0_SCL_PIN_SEL     0
 #if I2C0_SCL_PIN_SEL == 1
-#define I2C0_SCL_GPIO        digitalIO_PTB7
+#define I2C0_SCL_GPIO        USBDM::GpioB<7>
 #define I2C0_SCL_FN          2
 #elif I2C0_SCL_PIN_SEL == 2
-#define I2C0_SCL_GPIO        digitalIO_PTA3
+#define I2C0_SCL_GPIO        USBDM::GpioA<3>
 #define I2C0_SCL_FN          3
 #endif
 
@@ -3312,7 +3304,7 @@
 //     <0=> Default
 #define I2C0_4WSDAOUT_PIN_SEL 0
 #if I2C0_4WSDAOUT_PIN_SEL == 1
-#define I2C0_4WSDAOUT_GPIO   digitalIO_PTA1
+#define I2C0_4WSDAOUT_GPIO   USBDM::GpioA<1>
 #define I2C0_4WSDAOUT_FN     3
 #endif
 
@@ -3325,10 +3317,10 @@
 //     <0=> Default
 #define I2C0_SDA_PIN_SEL     0
 #if I2C0_SDA_PIN_SEL == 1
-#define I2C0_SDA_GPIO        digitalIO_PTB6
+#define I2C0_SDA_GPIO        USBDM::GpioB<6>
 #define I2C0_SDA_FN          2
 #elif I2C0_SDA_PIN_SEL == 2
-#define I2C0_SDA_GPIO        digitalIO_PTA2
+#define I2C0_SDA_GPIO        USBDM::GpioA<2>
 #define I2C0_SDA_FN          3
 #endif
 
@@ -3340,7 +3332,7 @@
 //     <0=> Default
 #define I2C0_4WSCLOUT_PIN_SEL 0
 #if I2C0_4WSCLOUT_PIN_SEL == 1
-#define I2C0_4WSCLOUT_GPIO   digitalIO_PTA0
+#define I2C0_4WSCLOUT_GPIO   USBDM::GpioA<0>
 #define I2C0_4WSCLOUT_FN     3
 #endif
 
@@ -3357,10 +3349,10 @@
 //     <0=> Default
 #define I2C1_SDA_PIN_SEL     0
 #if I2C1_SDA_PIN_SEL == 1
-#define I2C1_SDA_GPIO        digitalIO_PTH3
+#define I2C1_SDA_GPIO        USBDM::GpioH<3>
 #define I2C1_SDA_FN          2
 #elif I2C1_SDA_PIN_SEL == 2
-#define I2C1_SDA_GPIO        digitalIO_PTE0
+#define I2C1_SDA_GPIO        USBDM::GpioE<0>
 #define I2C1_SDA_FN          4
 #endif
 
@@ -3373,10 +3365,10 @@
 //     <0=> Default
 #define I2C1_SCL_PIN_SEL     0
 #if I2C1_SCL_PIN_SEL == 1
-#define I2C1_SCL_GPIO        digitalIO_PTH4
+#define I2C1_SCL_GPIO        USBDM::GpioH<4>
 #define I2C1_SCL_FN          2
 #elif I2C1_SCL_PIN_SEL == 2
-#define I2C1_SCL_GPIO        digitalIO_PTE1
+#define I2C1_SCL_GPIO        USBDM::GpioE<1>
 #define I2C1_SCL_FN          4
 #endif
 
@@ -3393,7 +3385,7 @@
 //     <1=> Default
 #define NMI_b_PIN_SEL        1
 #if NMI_b_PIN_SEL == 2
-#define NMI_b_GPIO           digitalIO_PTB4
+#define NMI_b_GPIO           USBDM::GpioB<4>
 #define NMI_b_FN             5
 #endif
 
@@ -3406,7 +3398,7 @@
 //     <1=> Default
 #define RESET_b_PIN_SEL      1
 #if RESET_b_PIN_SEL == 2
-#define RESET_b_GPIO         digitalIO_PTA5
+#define RESET_b_GPIO         USBDM::GpioA<5>
 #define RESET_b_FN           4
 #endif
 
@@ -3419,7 +3411,7 @@
 //     <1=> Default
 #define SWD_CLK_PIN_SEL      1
 #if SWD_CLK_PIN_SEL == 2
-#define SWD_CLK_GPIO         digitalIO_PTC4
+#define SWD_CLK_GPIO         USBDM::GpioC<4>
 #define SWD_CLK_FN           5
 #endif
 
@@ -3432,7 +3424,7 @@
 //     <1=> Default
 #define SWD_DIO_PIN_SEL      1
 #if SWD_DIO_PIN_SEL == 2
-#define SWD_DIO_GPIO         digitalIO_PTA4
+#define SWD_DIO_GPIO         USBDM::GpioA<4>
 #define SWD_DIO_FN           4
 #endif
 
@@ -3449,10 +3441,10 @@
 //     <0=> Default
 #define SPI0_MISO_PIN_SEL    0
 #if SPI0_MISO_PIN_SEL == 1
-#define SPI0_MISO_GPIO       digitalIO_PTE2
+#define SPI0_MISO_GPIO       USBDM::GpioE<2>
 #define SPI0_MISO_FN         2
 #elif SPI0_MISO_PIN_SEL == 2
-#define SPI0_MISO_GPIO       digitalIO_PTB4
+#define SPI0_MISO_GPIO       USBDM::GpioB<4>
 #define SPI0_MISO_FN         3
 #endif
 
@@ -3465,10 +3457,10 @@
 //     <0=> Default
 #define SPI0_MOSI_PIN_SEL    0
 #if SPI0_MOSI_PIN_SEL == 1
-#define SPI0_MOSI_GPIO       digitalIO_PTB3
+#define SPI0_MOSI_GPIO       USBDM::GpioB<3>
 #define SPI0_MOSI_FN         2
 #elif SPI0_MOSI_PIN_SEL == 2
-#define SPI0_MOSI_GPIO       digitalIO_PTE1
+#define SPI0_MOSI_GPIO       USBDM::GpioE<1>
 #define SPI0_MOSI_FN         2
 #endif
 
@@ -3481,10 +3473,10 @@
 //     <0=> Default
 #define SPI0_PCS_PIN_SEL     0
 #if SPI0_PCS_PIN_SEL == 1
-#define SPI0_PCS_GPIO        digitalIO_PTE3
+#define SPI0_PCS_GPIO        USBDM::GpioE<3>
 #define SPI0_PCS_FN          2
 #elif SPI0_PCS_PIN_SEL == 2
-#define SPI0_PCS_GPIO        digitalIO_PTB5
+#define SPI0_PCS_GPIO        USBDM::GpioB<5>
 #define SPI0_PCS_FN          3
 #endif
 
@@ -3497,10 +3489,10 @@
 //     <0=> Default
 #define SPI0_SCK_PIN_SEL     0
 #if SPI0_SCK_PIN_SEL == 1
-#define SPI0_SCK_GPIO        digitalIO_PTB2
+#define SPI0_SCK_GPIO        USBDM::GpioB<2>
 #define SPI0_SCK_FN          2
 #elif SPI0_SCK_PIN_SEL == 2
-#define SPI0_SCK_GPIO        digitalIO_PTE0
+#define SPI0_SCK_GPIO        USBDM::GpioE<0>
 #define SPI0_SCK_FN          2
 #endif
 
@@ -3517,10 +3509,10 @@
 //     <0=> Default
 #define SPI1_MISO_PIN_SEL    0
 #if SPI1_MISO_PIN_SEL == 1
-#define SPI1_MISO_GPIO       digitalIO_PTD2
+#define SPI1_MISO_GPIO       USBDM::GpioD<2>
 #define SPI1_MISO_FN         2
 #elif SPI1_MISO_PIN_SEL == 2
-#define SPI1_MISO_GPIO       digitalIO_PTG6
+#define SPI1_MISO_GPIO       USBDM::GpioG<6>
 #define SPI1_MISO_FN         3
 #endif
 
@@ -3533,10 +3525,10 @@
 //     <0=> Default
 #define SPI1_MOSI_PIN_SEL    0
 #if SPI1_MOSI_PIN_SEL == 1
-#define SPI1_MOSI_GPIO       digitalIO_PTD1
+#define SPI1_MOSI_GPIO       USBDM::GpioD<1>
 #define SPI1_MOSI_FN         3
 #elif SPI1_MOSI_PIN_SEL == 2
-#define SPI1_MOSI_GPIO       digitalIO_PTG5
+#define SPI1_MOSI_GPIO       USBDM::GpioG<5>
 #define SPI1_MOSI_FN         3
 #endif
 
@@ -3549,10 +3541,10 @@
 //     <0=> Default
 #define SPI1_PCS_PIN_SEL     0
 #if SPI1_PCS_PIN_SEL == 1
-#define SPI1_PCS_GPIO        digitalIO_PTD3
+#define SPI1_PCS_GPIO        USBDM::GpioD<3>
 #define SPI1_PCS_FN          2
 #elif SPI1_PCS_PIN_SEL == 2
-#define SPI1_PCS_GPIO        digitalIO_PTG7
+#define SPI1_PCS_GPIO        USBDM::GpioG<7>
 #define SPI1_PCS_FN          3
 #endif
 
@@ -3565,10 +3557,10 @@
 //     <0=> Default
 #define SPI1_SCK_PIN_SEL     0
 #if SPI1_SCK_PIN_SEL == 1
-#define SPI1_SCK_GPIO        digitalIO_PTD0
+#define SPI1_SCK_GPIO        USBDM::GpioD<0>
 #define SPI1_SCK_FN          3
 #elif SPI1_SCK_PIN_SEL == 2
-#define SPI1_SCK_GPIO        digitalIO_PTG4
+#define SPI1_SCK_GPIO        USBDM::GpioG<4>
 #define SPI1_SCK_FN          3
 #endif
 
@@ -3585,10 +3577,10 @@
 //     <0=> Default
 #define UART0_RX_PIN_SEL     0
 #if UART0_RX_PIN_SEL == 1
-#define UART0_RX_GPIO        digitalIO_PTA2
+#define UART0_RX_GPIO        USBDM::GpioA<2>
 #define UART0_RX_FN          2
 #elif UART0_RX_PIN_SEL == 2
-#define UART0_RX_GPIO        digitalIO_PTB0
+#define UART0_RX_GPIO        USBDM::GpioB<0>
 #define UART0_RX_FN          2
 #endif
 
@@ -3601,10 +3593,10 @@
 //     <0=> Default
 #define UART0_TX_PIN_SEL     0
 #if UART0_TX_PIN_SEL == 1
-#define UART0_TX_GPIO        digitalIO_PTA3
+#define UART0_TX_GPIO        USBDM::GpioA<3>
 #define UART0_TX_FN          2
 #elif UART0_TX_PIN_SEL == 2
-#define UART0_TX_GPIO        digitalIO_PTB1
+#define UART0_TX_GPIO        USBDM::GpioB<1>
 #define UART0_TX_FN          2
 #endif
 
@@ -3621,10 +3613,10 @@
 //     <0=> Default
 #define UART1_RX_PIN_SEL     0
 #if UART1_RX_PIN_SEL == 1
-#define UART1_RX_GPIO        digitalIO_PTC6
+#define UART1_RX_GPIO        USBDM::GpioC<6>
 #define UART1_RX_FN          2
 #elif UART1_RX_PIN_SEL == 2
-#define UART1_RX_GPIO        digitalIO_PTF2
+#define UART1_RX_GPIO        USBDM::GpioF<2>
 #define UART1_RX_FN          2
 #endif
 
@@ -3637,10 +3629,10 @@
 //     <0=> Default
 #define UART1_TX_PIN_SEL     0
 #if UART1_TX_PIN_SEL == 1
-#define UART1_TX_GPIO        digitalIO_PTC7
+#define UART1_TX_GPIO        USBDM::GpioC<7>
 #define UART1_TX_FN          2
 #elif UART1_TX_PIN_SEL == 2
-#define UART1_TX_GPIO        digitalIO_PTF3
+#define UART1_TX_GPIO        USBDM::GpioF<3>
 #define UART1_TX_FN          2
 #endif
 
@@ -3657,10 +3649,10 @@
 //     <0=> Default
 #define UART2_RX_PIN_SEL     0
 #if UART2_RX_PIN_SEL == 1
-#define UART2_RX_GPIO        digitalIO_PTD6
+#define UART2_RX_GPIO        USBDM::GpioD<6>
 #define UART2_RX_FN          2
 #elif UART2_RX_PIN_SEL == 2
-#define UART2_RX_GPIO        digitalIO_PTI0
+#define UART2_RX_GPIO        USBDM::GpioI<0>
 #define UART2_RX_FN          3
 #endif
 
@@ -3673,10 +3665,10 @@
 //     <0=> Default
 #define UART2_TX_PIN_SEL     0
 #if UART2_TX_PIN_SEL == 1
-#define UART2_TX_GPIO        digitalIO_PTD7
+#define UART2_TX_GPIO        USBDM::GpioD<7>
 #define UART2_TX_FN          2
 #elif UART2_TX_PIN_SEL == 2
-#define UART2_TX_GPIO        digitalIO_PTI1
+#define UART2_TX_GPIO        USBDM::GpioI<1>
 #define UART2_TX_FN          3
 #endif
 

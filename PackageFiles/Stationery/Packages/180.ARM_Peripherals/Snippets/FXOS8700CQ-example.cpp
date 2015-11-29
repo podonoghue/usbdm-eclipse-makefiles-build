@@ -8,6 +8,8 @@
 #include "FXOS8700CQ.h"
 #include "delay.h"
 
+using namespace USBDM;
+
 #define M_PI      3.14159265358979323846
 
 /**

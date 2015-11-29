@@ -29,7 +29,7 @@ enum {
     * @param i2c - I2C interface to use
     *
     */
-   HMC5883L::HMC5883L(I2C *i2c) : i2c(i2c) {
+   HMC5883L::HMC5883L(USBDM::I2C *i2c) : i2c(i2c) {
       // Set default settings
       static const uint8_t settings[] = {
          CRA,

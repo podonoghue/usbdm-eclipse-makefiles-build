@@ -3,6 +3,8 @@
 #include "derivative.h"
 #include "gpio.h"
 
+using namespace USBDM;
+
 /**
  * Demonstrates use of the PWM outputs
  *
@@ -26,16 +28,16 @@ void delay(void) {
  *
  */
  // LED connections
-#define RED_LED   pwmIO_$(demo.cpp.red.led)
-#define GREEN_LED pwmIO_$(demo.cpp.green.led)
+#define RED_LED   ftm_$(demo.cpp.red.led)
+#define GREEN_LED ftm_$(demo.cpp.green.led)
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"
 #endif
 
 int main() {
-   RED_LED.setPwmOutput(2000,   PwmIO::ftm_leftAlign);
-   GREEN_LED.setPwmOutput(2000, PwmIO::ftm_leftAlign);
+   RED_LED.setPwmOutput(2000,   ftm_leftAlign);
+   GREEN_LED.setPwmOutput(2000, ftm_leftAlign);
    for(;;) {
       for (int i=0; i<=100; i++) {
          RED_LED.setDutyCycle(i);
