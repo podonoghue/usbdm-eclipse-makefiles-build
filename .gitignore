@@ -52,3 +52,5 @@ Thumbs.db
 /RemoteSystemsTempFiles/
 /Tests/
 .settings
+/TryClasses/
+/checkmem/
