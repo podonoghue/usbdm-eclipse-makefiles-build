@@ -167,7 +167,7 @@ Devices using this vector table:
             <value>31</value>
          </interrupt>
          <interrupt>
-            <name>UART0_Error</name>
+            <name>UART0_ERR</name>
             <description>UART error sources</description>
             <value>32</value>
          </interrupt>
@@ -177,7 +177,7 @@ Devices using this vector table:
             <value>33</value>
          </interrupt>
          <interrupt>
-            <name>UART1_Error</name>
+            <name>UART1_ERR</name>
             <description>UART error sources</description>
             <value>34</value>
          </interrupt>
@@ -187,7 +187,7 @@ Devices using this vector table:
             <value>35</value>
          </interrupt>
          <interrupt>
-            <name>UART2_Error</name>
+            <name>UART2_ERR</name>
             <description>UART error sources</description>
             <value>36</value>
          </interrupt>
@@ -197,7 +197,7 @@ Devices using this vector table:
             <value>37</value>
          </interrupt>
          <interrupt>
-            <name>UART3_Error</name>
+            <name>UART3_ERR</name>
             <description>UART error sources</description>
             <value>38</value>
          </interrupt>
@@ -337,7 +337,7 @@ Devices using this vector table:
             <value>66</value>
          </interrupt>
          <interrupt>
-            <name>UART4_Error</name>
+            <name>UART4_ERR</name>
             <description>UART error sources</description>
             <value>67</value>
          </interrupt>
@@ -347,7 +347,7 @@ Devices using this vector table:
             <value>68</value>
          </interrupt>
          <interrupt>
-            <name>UART5_Error</name>
+            <name>UART5_ERR</name>
             <description>UART error sources</description>
             <value>69</value>
          </interrupt>

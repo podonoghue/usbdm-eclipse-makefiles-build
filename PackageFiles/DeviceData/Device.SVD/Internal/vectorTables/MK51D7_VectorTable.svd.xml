@@ -156,7 +156,7 @@ Devices using this vector table:
             <value>45</value>
          </interrupt>
          <interrupt>
-            <name>UART0_Error</name>
+            <name>UART0_ERR</name>
             <description>UART0 error interrupt</description>
             <value>46</value>
          </interrupt>
@@ -166,7 +166,7 @@ Devices using this vector table:
             <value>47</value>
          </interrupt>
          <interrupt>
-            <name>UART1_Error</name>
+            <name>UART1_ERR</name>
             <description>UART1 error interrupt</description>
             <value>48</value>
          </interrupt>
@@ -176,7 +176,7 @@ Devices using this vector table:
             <value>49</value>
          </interrupt>
          <interrupt>
-            <name>UART2_Error</name>
+            <name>UART2_ERR</name>
             <description>UART0 error interrupt</description>
             <value>50</value>
          </interrupt>
@@ -186,7 +186,7 @@ Devices using this vector table:
             <value>51</value>
          </interrupt>
          <interrupt>
-            <name>UART3_Error</name>
+            <name>UART3_ERR</name>
             <description>UART0 error interrupt</description>
             <value>52</value>
          </interrupt>
@@ -196,7 +196,7 @@ Devices using this vector table:
             <value>53</value>
          </interrupt>
          <interrupt>
-            <name>UART4_Error</name>
+            <name>UART4_ERR</name>
             <description>UART0 error interrupt</description>
             <value>54</value>
          </interrupt>
