@@ -587,6 +587,12 @@ NOTES:
       <memory id="FTFE_PFlash1_512K_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="8">
          <memoryRange start="0x00080000" size="512K" />
       </memory>
+      <memory id="FTFE_PFlash2_512K_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="8">
+         <memoryRange start="0x00100000" size="512K" />
+      </memory>
+      <memory id="FTFE_PFlash3_512K_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="8">
+         <memoryRange start="0x00180000" size="512K" />
+      </memory>
       <memory id="FTFE_PFlash0_SEC_1M_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="8" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="1M" />
@@ -1412,17 +1418,6 @@ NOTES:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV11P64M75RM</note>
       </device>
-<!-- MKV30F7 -->
-      <device name="MKV30F128M10" family="CortexM4F" subfamily="MKV30F10">
-         <memoryRef ref="kinetis8K_8K_Ram" />
-         <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
-         <memoryRef ref="kinetisIO_MK" />
-         <sdid value="0x30600280" mask="0xFFF00F80"/>
-         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
-         <registerDescriptionRef ref="CortexM4F-register-description" />
-         <note>KV30P64M100SFARM</note>
-      </device>
 <!-- MKV30F10 -->
       <device name="MKV30F64M10" family="CortexM4F" subfamily="MKV30F10">
          <memoryRef ref="kinetis8K_8K_Ram" />
@@ -1749,7 +1744,7 @@ NOTES:
          <memoryRef ref="FTFL_PFlash0_128K_2KS" /-->
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
-         <sdid value="0x00000000" mask="0x00000000" />
+         <sdid value="0x00003095" mask="0x0000FFFF" />
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
@@ -2553,6 +2548,33 @@ NOTES:
          <flashProgramRef ref="Kinetis-FTFE-flash-program" />
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K64P144M120SF5RM</note>
+      </device>
+      
+<!-- MK66-M12 -->
+      <device name="MK66FX1M0M12" family="CortexM4F" subfamily="MK66F12">
+         <memoryRef ref="kinetis64K_192K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_DFlash0_128K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x660083CA" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K66P144M180SF5RMV2</note>
+      </device>
+      <device name="MK66FN2M0M12" family="CortexM4F" subfamily="MK66F12">
+         <memoryRef ref="kinetis64K_192K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash2_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash3_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x660083CA" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K66P144M180SF5RMV2</note>
       </device>
       
 <!-- MK70-M12 -->
