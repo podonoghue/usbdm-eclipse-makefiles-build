@@ -12,7 +12,9 @@
 // Author: Jim Parise, James P Lynch July 7, 2007
 // *********************************************************************************
 #include <stdint.h>
-#include "Fonts.h"
+#include "fonts.h"
+
+using namespace USBDM;
 
 const uint8_t Fonts::FONT6x8[97][8] = {
       {0x06,0x08,0x08,0x00,0x00,0x00,0x00,0x00}, // columns, rows, num_bytes_per_char

@@ -21,7 +21,7 @@
          <variable id="projectOptionValue.CPP-abstraction-HMC5883L" 
             name="HMC5883L C++ interface" 
             description="Adds a CPP abstraction layer for HMC5883L accelerometer" 
-            checkGroup="group-i2c-peripheral-optionso" >
+            checkGroup="group-i2c-peripheral-options" >
             <enableWhen>
                <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
             </enableWhen>
@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-HMC5883L" />
                </applyWhen>
-               <copy source="Snippets/HMC5883L-example.cpp"     target="Snippets/HMC5883L-example.cpp" />
-               <copy source="Project_Headers/HMC5883L.h"        target="Project_Headers/HMC5883L.h" />
-               <copy source="Sources/HMC5883L.cpp"              target="Sources/HMC5883L.cpp" />
+               <copy source="Snippets/hmc5883l-example.cpp"     target="Snippets/hmc5883l-example.cpp" />
+               <copy source="Project_Headers/hmc5883l.h"        target="Project_Headers/hmc5883l.h" />
+               <copy source="Sources/hmc5883l.cpp"              target="Sources/hmc5883l.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

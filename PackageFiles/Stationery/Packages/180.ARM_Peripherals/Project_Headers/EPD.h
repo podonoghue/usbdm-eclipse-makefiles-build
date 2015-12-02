@@ -15,8 +15,8 @@
 #ifndef EPD_H
 #define EPD_H
 
-#include "Gpio.h"
-#include "SPI.h"
+#include "gpio.h"
+#include "spi.h"
 
 enum EPD_size {
    EPD_1_44,        // 128 x 96

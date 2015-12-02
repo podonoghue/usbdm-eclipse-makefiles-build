@@ -1,11 +1,13 @@
 /*
- * HMC5883L.cpp
+ * @file HMC5883L.cpp
  *
  *  Created on: 10/07/2014
  *      Author: podonoghue
  */
 
-#include "HMC5883L.h"
+#include "hmc5883l.h"
+
+using namespace USBDM;
 
 enum {
    CRA,
@@ -29,7 +31,7 @@ enum {
     * @param i2c - I2C interface to use
     *
     */
-   HMC5883L::HMC5883L(USBDM::I2C *i2c) : i2c(i2c) {
+   HMC5883L::HMC5883L(USBDM::I2c *i2c) : i2c(i2c) {
       // Set default settings
       static const uint8_t settings[] = {
          CRA,

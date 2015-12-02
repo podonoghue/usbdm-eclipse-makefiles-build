@@ -1,6 +1,9 @@
+/**
+ * @file elecfreaks-lcd-example.cpp
+ */
 #include <stdlib.h>
-#include "LCD.h"
-#include "SPI.h"
+#include "lcd.h"
+#include "spi.h"
 #include "delay.h"
 
 using namespace USBDM;
@@ -40,11 +43,13 @@ using namespace USBDM;
  */
 void drawCursor(LCD *lcd, int x, int y, int colour) {
    lcd->drawCircle(x, y, CIRCLE_RADIUS, colour);
+//   lcd->drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, false, colour);
+//   lcd->drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, true, colour);
 }
 
 int main() {
    // Instantiate SPI interface class
-   SPI *spi = new $(demo.cpp.lcd.spi)();
+   Spi *spi = new $(demo.cpp.lcd.spi)();
    // Set higher speed to improve LCD draw rate
    spi->setSpeed(1000000);
    // Instantiate LCD interface class
@@ -58,14 +63,14 @@ int main() {
 
    // Cursor position on screen
    int x=0, y=0;
-   int xOld=0, yOld=0;
+   int xOld=50, yOld=50;
 
    for(;;) {
       x = LCD_X_MIN + CIRCLE_RADIUS + rand() % (LCD_WIDTH-2*CIRCLE_RADIUS);
       y = LCD_Y_MIN + CIRCLE_RADIUS + rand() % (LCD_HEIGHT-2*CIRCLE_RADIUS);
       waitMS(50);
-      lcd->drawCircle(xOld, yOld, CIRCLE_RADIUS, BACKGROUND_COLOUR);
-      lcd->drawCircle(x, y, CIRCLE_RADIUS, FOREGROUND_COLOUR);
+      drawCursor(lcd, xOld, yOld, BACKGROUND_COLOUR);
+      drawCursor(lcd, x, y, FOREGROUND_COLOUR);
       xOld = x;
       yOld = y;
    }

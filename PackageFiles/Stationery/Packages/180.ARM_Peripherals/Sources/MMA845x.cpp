@@ -1,11 +1,13 @@
 /**
- * @file MMA845x.cpp
+ * @file mma845x.cpp
  *
  *  Created on: 22/11/2013
  *      Author: podonoghue
  */
-#include "MMA845x.h"
+#include "mma845x.h"
 #include "delay.h"
+
+using namespace USBDM;
 
 // Accelerometer registers
 enum {
@@ -68,7 +70,7 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-MMA845x::MMA845x(USBDM::I2C *i2c, AccelerometerMode mode) : i2c(i2c) {
+MMA845x::MMA845x(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;
       return;

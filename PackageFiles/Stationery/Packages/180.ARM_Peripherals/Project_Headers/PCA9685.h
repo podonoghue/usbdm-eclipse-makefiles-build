@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include "I2C.h"
+#include "i2c.h"
 
 // Default address of first (only) motor board
 #define PCA9685_DEFAULT_SLAVE_BASE_ADDRESS   ((uint8_t)(0x60<<1)) // PCA9685 Slave address

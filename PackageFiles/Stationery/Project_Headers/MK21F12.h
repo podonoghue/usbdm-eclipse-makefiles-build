@@ -5,7 +5,7 @@
  *           Equivalent: MK21FN1M0M12, MK21FX512M12
  *
  * @version  V0.0
- * @date     2015/11
+ * @date     2015/12
  *
  *******************************************************************************************************/
 
@@ -70,13 +70,13 @@ typedef enum {
   I2S0_Tx_IRQn                  =  28,   /**<  44 I2S0 Tx Interrupt                                                                */
   I2S0_Rx_IRQn                  =  29,   /**<  45 I2S0 Rx Interrupt                                                                */
   UART0_RxTx_IRQn               =  31,   /**<  47 UART status sources                                                              */
-  UART0_Error_IRQn              =  32,   /**<  48 UART error sources                                                               */
+  UART0_ERR_IRQn                =  32,   /**<  48 UART error sources                                                               */
   UART1_RxTx_IRQn               =  33,   /**<  49 UART status sources                                                              */
-  UART1_Error_IRQn              =  34,   /**<  50 UART error sources                                                               */
+  UART1_ERR_IRQn                =  34,   /**<  50 UART error sources                                                               */
   UART2_RxTx_IRQn               =  35,   /**<  51 UART status sources                                                              */
-  UART2_Error_IRQn              =  36,   /**<  52 UART error sources                                                               */
+  UART2_ERR_IRQn                =  36,   /**<  52 UART error sources                                                               */
   UART3_RxTx_IRQn               =  37,   /**<  53 UART status sources                                                              */
-  UART3_Error_IRQn              =  38,   /**<  54 UART error sources                                                               */
+  UART3_ERR_IRQn                =  38,   /**<  54 UART error sources                                                               */
   ADC0_IRQn                     =  39,   /**<  55 ADC0 interrupt                                                                   */
   CMP0_IRQn                     =  40,   /**<  56 CMP0 interrupt                                                                   */
   CMP1_IRQn                     =  41,   /**<  57 CMP1 interrupt                                                                   */
@@ -102,9 +102,9 @@ typedef enum {
   PORTE_IRQn                    =  63,   /**<  79 Port E interrupt                                                                 */
   SPI2_IRQn                     =  65,   /**<  81 SPI2 interrupt                                                                   */
   UART4_RxTx_IRQn               =  66,   /**<  82 UART status sources                                                              */
-  UART4_Error_IRQn              =  67,   /**<  83 UART error sources                                                               */
+  UART4_ERR_IRQn                =  67,   /**<  83 UART error sources                                                               */
   UART5_RxTx_IRQn               =  68,   /**<  84 UART status sources                                                              */
-  UART5_Error_IRQn              =  69,   /**<  85 UART error sources                                                               */
+  UART5_ERR_IRQn                =  69,   /**<  85 UART error sources                                                               */
   CMP2_IRQn                     =  70,   /**<  86 CMP2 interrupt                                                                   */
   FTM3_IRQn                     =  71,   /**<  87 FTM3 interrupt                                                                   */
   DAC1_IRQn                     =  72,   /**<  88 Digital to Analogue Converter                                                    */
@@ -167,13 +167,13 @@ extern void SPI1_IRQHandler(void);             /**< SPI1 interrupt              
 extern void I2S0_Tx_IRQHandler(void);          /**< I2S0 Tx Interrupt                                                                */
 extern void I2S0_Rx_IRQHandler(void);          /**< I2S0 Rx Interrupt                                                                */
 extern void UART0_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART0_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART0_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void UART1_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART1_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART1_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void UART2_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART2_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART2_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void UART3_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART3_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART3_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void ADC0_IRQHandler(void);             /**< ADC0 interrupt                                                                   */
 extern void CMP0_IRQHandler(void);             /**< CMP0 interrupt                                                                   */
 extern void CMP1_IRQHandler(void);             /**< CMP1 interrupt                                                                   */
@@ -199,9 +199,9 @@ extern void PORTD_IRQHandler(void);            /**< Port D interrupt            
 extern void PORTE_IRQHandler(void);            /**< Port E interrupt                                                                 */
 extern void SPI2_IRQHandler(void);             /**< SPI2 interrupt                                                                   */
 extern void UART4_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART4_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART4_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void UART5_RxTx_IRQHandler(void);       /**< UART status sources                                                              */
-extern void UART5_Error_IRQHandler(void);      /**< UART error sources                                                               */
+extern void UART5_ERR_IRQHandler(void);        /**< UART error sources                                                               */
 extern void CMP2_IRQHandler(void);             /**< CMP2 interrupt                                                                   */
 extern void FTM3_IRQHandler(void);             /**< FTM3 interrupt                                                                   */
 extern void DAC1_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */

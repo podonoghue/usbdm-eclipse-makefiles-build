@@ -5,7 +5,7 @@
  *           Equivalent: MK30DX256M7, MK30DX128M7, MK30DX64M7
  *
  * @version  V0.0
- * @date     2015/11
+ * @date     2015/12
  *
  *******************************************************************************************************/
 
@@ -76,15 +76,15 @@ typedef enum {
   I2S0_Rx_IRQn                  =  36,   /**<  52 Inter-IC Sound / Synchronous Audio Interface                                     */
   UART0_LON_IRQn                =  44,   /**<  60                                                                                  */
   UART0_RxTx_IRQn               =  45,   /**<  61 UART0 receive/transmit interrupt                                                 */
-  UART0_Error_IRQn              =  46,   /**<  62 UART0 error interrupt                                                            */
+  UART0_ERR_IRQn                =  46,   /**<  62 UART0 error interrupt                                                            */
   UART1_RxTx_IRQn               =  47,   /**<  63 UART1 receive/transmit interrupt                                                 */
-  UART1_Error_IRQn              =  48,   /**<  64 UART1 error interrupt                                                            */
+  UART1_ERR_IRQn                =  48,   /**<  64 UART1 error interrupt                                                            */
   UART2_RxTx_IRQn               =  49,   /**<  65 UART2 receive/transmit interrupt                                                 */
-  UART2_Error_IRQn              =  50,   /**<  66 UART0 error interrupt                                                            */
+  UART2_ERR_IRQn                =  50,   /**<  66 UART0 error interrupt                                                            */
   UART3_RxTx_IRQn               =  51,   /**<  67 UART2 receive/transmit interrupt                                                 */
-  UART3_Error_IRQn              =  52,   /**<  68 UART0 error interrupt                                                            */
+  UART3_ERR_IRQn                =  52,   /**<  68 UART0 error interrupt                                                            */
   UART4_RxTx_IRQn               =  53,   /**<  69 UART2 receive/transmit interrupt                                                 */
-  UART4_Error_IRQn              =  54,   /**<  70 UART0 error interrupt                                                            */
+  UART4_ERR_IRQn                =  54,   /**<  70 UART0 error interrupt                                                            */
   ADC0_IRQn                     =  57,   /**<  73 ADC0 interrupt                                                                   */
   ADC1_IRQn                     =  58,   /**<  74 ADC1 interrupt                                                                   */
   CMP0_IRQn                     =  59,   /**<  75 CMP0 interrupt                                                                   */
@@ -168,15 +168,15 @@ extern void I2S0_Tx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous
 extern void I2S0_Rx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous Audio Interface                                     */
 extern void UART0_LON_IRQHandler(void);        /**<                                                                                  */
 extern void UART0_RxTx_IRQHandler(void);       /**< UART0 receive/transmit interrupt                                                 */
-extern void UART0_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART0_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART1_RxTx_IRQHandler(void);       /**< UART1 receive/transmit interrupt                                                 */
-extern void UART1_Error_IRQHandler(void);      /**< UART1 error interrupt                                                            */
+extern void UART1_ERR_IRQHandler(void);        /**< UART1 error interrupt                                                            */
 extern void UART2_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART2_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART2_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART3_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART3_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART3_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART4_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART4_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART4_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void ADC0_IRQHandler(void);             /**< ADC0 interrupt                                                                   */
 extern void ADC1_IRQHandler(void);             /**< ADC1 interrupt                                                                   */
 extern void CMP0_IRQHandler(void);             /**< CMP0 interrupt                                                                   */

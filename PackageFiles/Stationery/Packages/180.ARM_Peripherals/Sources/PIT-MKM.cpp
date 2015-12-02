@@ -1,5 +1,5 @@
 /*
- * @file PIT.cpp (from PIT-MKM.cpp)
+ * @file pit.cpp (derived from pit-MKM.cpp)
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
@@ -9,6 +9,8 @@
 #include "derivative.h"
 #include "utilities.h"
 #include "PIT.h"
+
+using namespace USBDM;
 
 /*!=========================================================================
  *

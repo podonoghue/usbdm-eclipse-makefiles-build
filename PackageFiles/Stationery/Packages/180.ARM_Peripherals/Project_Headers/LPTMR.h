@@ -1,15 +1,17 @@
 /**
- * @file      LPTMR.h
+ * @file      lptmr.h
  * @version   1.0.0
  * @brief     Low Power Timer
  */
 
-#ifndef LPTMR_H_
-#define LPTMR_H_
+#ifndef INCLUDE_USBDM_LPTMR_H_
+#define INCLUDE_USBDM_LPTMR_H_
 
 #include "derivative.h"
 #include "system.h"
 #include "gpio.h"
+
+namespace USBDM {
 
 /**
  * @addtogroup LPTMR_Group Low Power Timer
@@ -148,7 +150,6 @@
  */
 #define LPTMR_CSR_DEFAULT_VALUE (LPTMR_CSR_TMS_M|LPTMR_CSR_TFC_M|LPTMR_CSR_TPP_M|LPTMR_CSR_TPS_M)
 
-
 #if LPTMR_USES_NAKED_HANDLER == 0
    /**
     * Type definition for LPTMR interrupt call back
@@ -241,4 +242,6 @@ extern const LPTMR LPTMR_0;
  * @}
  */
 
-#endif /* LPTMR_H_ */
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_LPTMR_H_ */

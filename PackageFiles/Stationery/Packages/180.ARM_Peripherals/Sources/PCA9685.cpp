@@ -1,16 +1,13 @@
 /*
- ============================================================================
- Name        : main.c
- Author      : $(author)
- Version     :
- Copyright   : $(copyright)
- Description : Basic C Main
- ============================================================================
+ * @file lptmr.cpp (derived from pca9685.cpp)
+ *
  */
 #include "derivative.h"
 #include "utilities.h"
-#include "I2C.h"
-#include "PCA9685.h"
+#include "i2c.h"
+#include "pca9685.h"
+
+using namespace USBDM;
 
 #define I2C_SWRST_ADDRESS        (0x00<<1) // General I2C Software reset address
 

@@ -1,5 +1,5 @@
 /*
- * @file delay.c generated from delay-dwt.c
+ * @file delay.c (derived from delay-dwt.c)
  * @brief Delay routines using DWT->CYCCNT counter
  *
  *  Created on: 5 Oct 2015

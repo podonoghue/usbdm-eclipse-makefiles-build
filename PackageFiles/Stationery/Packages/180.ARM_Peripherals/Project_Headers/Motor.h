@@ -1,5 +1,5 @@
 /*
- * motor.h
+ *  @file motor.h
  *
  *  Created on: 10/07/2014
  *      Author: podonoghue
@@ -8,7 +8,7 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-#include "PCA9685.h"
+#include "pca9685.h"
 
 class Motor : private PCA9685 {
 

@@ -1,5 +1,5 @@
 /*
- * @file delay.c generated from delay-systick.c
+ * @file delay.c (derived from delay-systick.c)
  *
  * @brief Delay routines using Systick Counter
  *

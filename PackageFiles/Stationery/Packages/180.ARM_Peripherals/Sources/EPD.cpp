@@ -14,9 +14,11 @@
 
 #include <limits.h>
 #include <string.h>
-#include "Delay.h"
-#include "EPD.h"
-#include "Seeed_SLD00200P.h"
+#include "delay.h"
+#include "epd.h"
+#include "seeed_sld00200p.h"
+
+using namespace USBDM;
 
 #define CHANNEL_SELECT_REG      0x01
 #define OUTPUT_ENABLE_REG       0x02

@@ -1,5 +1,5 @@
 /*
- * SPI-MKL.c
+ * spi-MKL.cpp (derived from spi-MKL.cpp)
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue
@@ -9,12 +9,12 @@
 #include "system.h"
 #include "derivative.h"
 #include "utilities.h"
-#include "SPI.h"
+#include "spi.h"
 #include "gpio.h"
 
-#define DEFAULT_SPI_FREQUENCY  (10000000)     //!< Default SPI frequency 10 MHz
+namespace USBDM {
 
-#define GPIO_ALT_FN            1
+static const uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
 
 /**
  * Constructor
@@ -25,17 +25,12 @@
  * @param rxMuxSource  Receive Mux value
  * @param pcs          Manual PCS select signal
  */
-SPI::SPI(volatile SPI_Type *baseAddress, DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, uint8_t rxMuxSource, DigitalIO *pcs) :
+Spi::Spi(volatile SPI_Type *baseAddress, DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, uint8_t rxMuxSource) :
    spi(baseAddress),
    dmacTxChannel(dmaTxChannel),
    dmacRxChannel(dmaRxChannel),
    dmaSpiRxSlot(rxMuxSource),
-   pcs(pcs),
-   interfaceFrequency(10000000) {
-   if (pcs != 0) {
-      // SPI PCS pin - manual control as GPIO
-      pcs->setDigitalOutput(PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   }
+   interfaceFrequency(DEFAULT_SPI_FREQUENCY) {
 }
 
 #ifdef SPI0
@@ -50,19 +45,19 @@ SPI::SPI(volatile SPI_Type *baseAddress, DMAChannel *dmaTxChannel, DMAChannel *d
  * @param dmaRxChannel DMA Channel for reception
  * @param pcs          Manual PCS select signal
  */
-SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs) :
-      SPI(SPI0, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI0_Rx, pcs) {
+Spi0::Spi0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel) :
+      Spi(SPI0, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI0_Rx) {
 
    thisPtr = this;
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
-   SPI0_SCK_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI0_MOSI_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI0_MISO_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI0_SCK_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI0_MOSI_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI0_MISO_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 
 #ifdef SPI0_PCS0_GPIO
-   SPI0_PCS0_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI0_PCS0_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 #define SPI0_C1_SSOE_VALUE SPI_C1_SSOE_MASK
 #endif
 #ifndef SPI0_C1_SSOE_VALUE
@@ -70,7 +65,7 @@ SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 #endif
 
    // Enable SPI module clock
-   SPI0_CLOCK_REG |= SPI0_CLOCK_MASK;
+   SIM->SPI0_CLOCK_REG |= SPI0_CLOCK_MASK;
 
    setSpeed(0); // default baud
 
@@ -81,11 +76,11 @@ SPI_0::SPI_0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
    spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI0_C1_SSOE_VALUE;//|SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK;
 }
 
-SPI_0 *SPI_0::thisPtr = NULL;
+Spi0 *Spi0::thisPtr = NULL;
 
 extern "C"
 void SPI0_IRQHandler(void) {
-   SPI_0::thisPtr->poll();
+   Spi0::thisPtr->poll();
 }
 
 #endif // !defined(SPI0_SCK_GPIO) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
@@ -103,19 +98,19 @@ void SPI0_IRQHandler(void) {
  * @param dmaRxChannel DMA Channel for reception
  * @param pcs          Manual PCS select signal
  */
-SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs) :
-      SPI(SPI1, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI1_Rx, pcs) {
+Spi1::Spi1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel) :
+      Spi(SPI1, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI1_Rx) {
 
    thisPtr = this;
 
    // Enable SPI port pin clocks
    // MOSI,MISO,SCLK
-   SPI1_SCK_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI1_MOSI_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI1_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI1_MISO_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI1_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI1_SCK_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI1_MOSI_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI1_MISO_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 
 #ifdef SPI1_PCS0_GPIO
-   SPI1_PCS1_GPIO.pcr.setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+   SPI1_PCS0_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 #define SPI1_C1_SSOE_VALUE SPI_C1_SSOE_MASK
 #endif
 #ifndef SPI1_C1_SSOE_VALUE
@@ -123,7 +118,7 @@ SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
 #endif
 
    // Enable SPI module clock
-   SPI1_CLOCK_REG |= SPI1_CLOCK_MASK;
+   SIM->SPI1_CLOCK_REG |= SPI1_CLOCK_MASK;
 
    setSpeed(0); // default baud
 
@@ -133,11 +128,11 @@ SPI_1::SPI_1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, DigitalIO *pcs)
    spi->C2 = 0;
 }
 
-SPI_1 *SPI_1::thisPtr = NULL;
+Spi1 *Spi1::thisPtr = NULL;
 
 extern "C"
 void SPI1_IRQHandler(void) {
-   SPI_1::thisPtr->poll();
+   Spi1::thisPtr->poll();
 }
 
 #endif // !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
@@ -153,11 +148,8 @@ static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-void SPI::setSpeed(uint32_t targetFrequency) {
+void Spi::setSpeed(uint32_t targetFrequency = DEFAULT_SPI_FREQUENCY) {
 
-   if (targetFrequency == 0) {
-      targetFrequency = DEFAULT_SPI_FREQUENCY;
-   }
    int bestSPPR = 0;
    int bestSPR  = 0;
    uint32_t difference = -1;
@@ -187,7 +179,7 @@ void SPI::setSpeed(uint32_t targetFrequency) {
  *
  * @return Data received
  */
-uint32_t SPI::txRx(uint32_t data) {
+uint32_t Spi::txRx(uint32_t data) {
    while ((spi->S & SPI_S_SPTEF_MASK)==0) {
       __asm__("nop");
    }
@@ -207,7 +199,7 @@ uint32_t SPI::txRx(uint32_t data) {
  *
  *  Note: dataIn may use same buffer as dataOut
  */
-void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
+void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
    uint8_t dummy = 0xFF;
    uint32_t dataInInc  = DMA_DCR_DINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
    uint32_t dataOutInc = DMA_DCR_SINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
@@ -240,16 +232,16 @@ void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
    };
    dmacTxChannel->configure(&dmaTxInformation);
 
-   if (pcs != 0) {
-      pcs->clear();
-   }
+//   if (pcs != 0) {
+//      pcs->clear();
+//   }
    spi->C2 |= SPI_C2_RXDMAE_MASK|SPI_C2_TXDMAE_MASK;
    dmacTxChannel->wait();
    dmacRxChannel->wait();
    spi->C2 &= ~(SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK);
-   if (pcs != 0) {
-      pcs->set();
-   }
+//   if (pcs != 0) {
+//      pcs->set();
+//   }
 }
 
 ///**
@@ -261,7 +253,7 @@ void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
 // *
 // *  Note: dataIn may use same buffer as dataOut
 // */
-//void SPI::txRxBytes(int dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
+//void SPI_T::txRxBytes(int dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
 //   __disable_interrupt();
 //   txBytesRemaining = dataSize;
 //   rxBytesRemaining = dataSize;
@@ -278,7 +270,7 @@ void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
 //   }
 //}
 //
-void SPI::poll() {
+void Spi::poll() {
 //   uint8_t status = spi->S;
 //   if ((status & SPI_S_SPTEF_MASK) != 0) {
 //      if (txBytesRemaining>0) {
@@ -300,3 +292,5 @@ void SPI::poll() {
 //      }
 //   }
 }
+
+} // End namespace USBDM

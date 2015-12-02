@@ -5,7 +5,7 @@
  *           Equivalent: MKL46Z128M4, MKL46Z256M4, FRDM_KL46Z
  *
  * @version  V0.0
- * @date     2015/11
+ * @date     2015/12
  *
  *******************************************************************************************************/
 
@@ -4384,7 +4384,7 @@ typedef struct {                                /*       UART0 Structure        
    __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
-} UART0_Type;
+} UART_Type;
 
 /**
  * @} */ /* End group UART_structs_GROUP 
@@ -4531,7 +4531,7 @@ typedef struct {                                /*       UART0 Structure        
 
 /* UART0 - Peripheral instance base addresses */
 #define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
-#define UART0                          ((UART0_Type *) UART0_BasePtr) //!< Freescale base pointer
+#define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
 #define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
 /**
  * @} */ /* End group UART_Peripheral_access_layer_GROUP 

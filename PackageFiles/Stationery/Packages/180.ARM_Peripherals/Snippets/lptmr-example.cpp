@@ -1,8 +1,11 @@
+/**
+ * @file lptmr-example.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "LPTMR.h"
+#include "lptmr.h"
 
 using namespace USBDM;
 
@@ -22,19 +25,19 @@ using namespace USBDM;
 void LPTMR0_IRQHandler(void) {
    // Clear interrupt flag
    LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
-   RED_LED.toggle();
+   RED_LED::toggle();
 }
 #else
 /*
  * This handler is set programmatically
  */
 void flash(void) {
-   RED_LED.toggle();
+   RED_LED::toggle();
 }
 #endif
 
 int main() {
-   RED_LED.setDigitalOutput();
+   RED_LED::setOutput();
 
    // May need to change prescaler to get useful delays
    LPTMR_0.configure(1000, LPTMR_CSR_DEFAULT_VALUE|LPTMR_CSR_TIE_MASK);

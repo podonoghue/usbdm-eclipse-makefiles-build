@@ -5,8 +5,10 @@
  *      Author: podonoghue
  */
 //#include <stdio.h>
-#include "FXOS8700CQ.h"
+#include "fxos8700cq.h"
 #include "delay.h"
+
+using namespace USBDM;
 
 // Accelerometer registers
 enum {
@@ -143,7 +145,7 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-FXOS8700CQ::FXOS8700CQ(USBDM::I2C *i2c, AccelerometerMode mode) : i2c(i2c) {
+FXOS8700CQ::FXOS8700CQ(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
    failedInit = false;
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;

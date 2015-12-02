@@ -1,5 +1,5 @@
 /*
- * LPTMR.cpp
+ * @file lptmr.cpp
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
@@ -8,7 +8,9 @@
 #include <stddef.h>
 #include "derivative.h"
 #include "utilities.h"
-#include "LPTMR.h"
+#include "lptmr.h"
+
+using namespace USBDM;
 
 /*!=========================================================================
  *

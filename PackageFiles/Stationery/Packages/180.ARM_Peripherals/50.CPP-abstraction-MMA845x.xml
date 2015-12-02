@@ -21,7 +21,7 @@
          <variable id="projectOptionValue.CPP-abstraction-MMA845x" 
             name="MMA845x C++ interface" 
             description="Adds a CPP abstraction layer for MMA845x accelerometer" 
-            checkGroup="group-i2c-peripheral-optionso" >
+            checkGroup="group-i2c-peripheral-options" >
             <enableWhen>
                <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
             </enableWhen>
@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-MMA845x" />
                </applyWhen>
-               <copy source="Snippets/MMA845x-example.cpp"     target="Snippets/MMA845x-example.cpp" />
-               <copy source="Project_Headers/MMA845x.h"        target="Project_Headers/MMA845x.h" />
-               <copy source="Sources/MMA845x.cpp"              target="Sources/MMA845x.cpp" />
+               <copy source="Snippets/mma845x-example.cpp"     target="Snippets/mma845x-example.cpp" />
+               <copy source="Project_Headers/mma845x.h"        target="Project_Headers/mma845x.h" />
+               <copy source="Sources/mma845x.cpp"              target="Sources/mma845x.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

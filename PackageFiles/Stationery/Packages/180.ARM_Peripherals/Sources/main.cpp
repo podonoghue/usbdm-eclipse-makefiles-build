@@ -16,7 +16,7 @@
  */
 
 // Simple delay - not for real programs!
-void delay(void) {
+static void delay(void) {
    for(int i=0; i<400000; i++) {
       __asm__("nop");
    }
@@ -27,18 +27,18 @@ void delay(void) {
 #define GREEN_LED USBDM::gpio_$(demo.cpp.green.led)
 
 int main() {
-   RED_LED.setDigitalOutput();
-   GREEN_LED.setDigitalOutput();
-   RED_LED.set();
-   GREEN_LED.set();
+   RED_LED::setOutput();
+   GREEN_LED::setOutput();
+   RED_LED::set();
+   GREEN_LED::set();
    for(;;) {
-      RED_LED.toggle();
+      RED_LED::toggle();
       delay();
-      RED_LED.toggle();
+      RED_LED::toggle();
       delay();
-      GREEN_LED.toggle();
+      GREEN_LED::toggle();
       delay();
-      GREEN_LED.toggle();
+      GREEN_LED::toggle();
       delay();
    }
 }

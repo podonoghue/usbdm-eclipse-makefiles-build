@@ -1,10 +1,13 @@
+/**
+ * @file mma8491q-example.cpp
+ */
 #include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "I2C.h"
-#include "MMA8491Q.h"
+#include "i2c.h"
+#include "mma8491q.h"
 #include "delay.h"
 
 using namespace USBDM;
@@ -29,10 +32,12 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2C *i2c = new USBDM::$(demo.cpp.accelerometer.i2c)();
+   I2c *i2c = new USBDM::$(demo.cpp.external.i2c)();
 
-   // External port will need adjustment i.e. <USBDM::GpioD<8>
-   MMA8491Q *accelerometer = new MMA8491QT<USBDM::GpioD<8>>(i2c);
+   // Enable pin will need adjustment e.g.
+   // D8 => USBDM::GpioA<13> on FRDM-KL25
+   // D8 => USBDM::GpioA<12> on FRDM-MK20D50
+   MMA8491Q *accelerometer = new MMA8491QT<USBDM::GpioA<13>>(i2c);
 
    printf("Before simple calibration (make sure the device is level!)\n");
    report(accelerometer);

@@ -1,15 +1,17 @@
 /**
- * @file      LPTMR.h
+ * @file      lptmr.h (derived from lptmr-multi.h)
  * @version   1.0.0
  * @brief     Low Power Timer
  */
 
-#ifndef LPTMR_H_
-#define LPTMR_H_
+#ifndef INCLUDE_USBDM_LPTMR_H_
+#define INCLUDE_USBDM_LPTMR_H_
 
 #include "derivative.h"
 #include "system.h"
 #include "gpio.h"
+
+namespace USBDM {
 
 /**
  * @addtogroup LPTMR_Group Low Power Timer
@@ -234,8 +236,8 @@ public:
 };
 
 #ifdef LPTMR0
-/*!
- * @brief struct representing LPTMR0
+/**
+ * @brief struct representing LPTMR_0
  */
 extern const LPTMR LPTMR_0;
 #endif
@@ -244,4 +246,6 @@ extern const LPTMR LPTMR_0;
  * @}
  */
 
-#endif /* LPTMR_H_ */
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_LPTMR_H_ */

@@ -1,28 +1,42 @@
+/**
+ * @file gps-example.cpp
+ */
 #include <stdio.h>
 #include <string.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "Gps.h"
+#include "gps.h"
 #include "delay.h"
 
+using namespace USBDM;
+
 /**
- * See examples in Snippets directory
+ * This example requires use of floating point in printf()
+ * It is necessary to change the library options to support this
+ *
+ * Right-click on project and open Properties
+ *
+ * Select [C/C++ Build->Settings] on left of [Tool Settings] tab
+ * Select [ARM C++ Linker->General] in middle panel
+ * Turn on [Support %f format in printf]
+ *
+ * (In may be necessary to clean and re-build the project)
  */
 
 // LED connections
-#define RED_LED   USBDM::gpio_LED_RED
-#define GREEN_LED USBDM::gpio_LED_GREEN
+#define RED_LED   gpio_LED_RED
+#define GREEN_LED gpio_LED_GREEN
 
 int main() {
    printf("Starting\n");
 
-   USBDM::Gps *gps = new USBDM::$(demo.cpp.gps.interface)();
+   Gps *gps = new $(demo.cpp.external.gps)();
 
    for(;;) {
-      USBDM::Gps::GpsData gpsData;
+      Gps::GpsData gpsData;
       if (gps->getGpsData(gpsData)) {
-         USBDM::Gps::report(gpsData);
+         Gps::report(gpsData);
       }
    }
 }

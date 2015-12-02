@@ -15,6 +15,7 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
+
       <projectActionList>
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
@@ -25,17 +26,41 @@
             checkGroup="group-serial-options" >
          </variable>
    
-         <!-- LPTMR CPP abstraction layer -->
+         <!-- MK GPS CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
-               <applyWhen >
+               <applyWhen>
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+                     </or>
                      <variableRef idRef="projectOptionValue.CPP-abstraction-GPS" />
+                  </and>
                </applyWhen>
                <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp" />
-               <copy source="Project_Headers/Gps.h"        target="Project_Headers/Gps.h" />
-               <copy source="Sources/Gps.cpp"              target="Sources/Gps.cpp" />
+               <copy source="Project_Headers/gps-MK.h"     target="Project_Headers/gps.h" />
+               <copy source="Sources/gps-MK.cpp"           target="Sources/gps.cpp" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MKL GPS CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+                     </or>
+                     <variableRef idRef="projectOptionValue.CPP-abstraction-GPS" />
+                  </and>
+               </applyWhen>
+               <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp" />
+               <copy source="Project_Headers/gps-MKL.h"    target="Project_Headers/gps.h" />
+               <copy source="Sources/gps-MKL.cpp"          target="Sources/gps.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>
-    </projectActionList>
+   </projectActionList>
 </root>

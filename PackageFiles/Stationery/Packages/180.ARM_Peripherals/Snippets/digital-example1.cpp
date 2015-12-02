@@ -1,3 +1,6 @@
+/**
+ * @file digital-example1.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
@@ -21,18 +24,18 @@ void delay(void) {
 #define GREEN_LED gpio_$(demo.cpp.green.led)
 
 int main() {
-   RED_LED.setDigitalOutput();
-   GREEN_LED.setDigitalOutput();
-   RED_LED.set();
-   GREEN_LED.set();
+   RED_LED::setOutput();
+   GREEN_LED::setOutput();
+   RED_LED::set();
+   GREEN_LED::set();
    for(;;) {
-      RED_LED.toggle();
+      RED_LED::toggle();
       delay();
-      RED_LED.toggle();
+      RED_LED::toggle();
       delay();
-      GREEN_LED.toggle();
+      GREEN_LED::toggle();
       delay();
-      GREEN_LED.toggle();
+      GREEN_LED::toggle();
       delay();
    }
 }

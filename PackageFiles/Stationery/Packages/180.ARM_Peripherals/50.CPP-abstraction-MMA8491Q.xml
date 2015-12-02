@@ -21,7 +21,7 @@
          <variable id="projectOptionValue.CPP-abstraction-MMA8491Q" 
             name="MMA8491Q C++ interface" 
             description="Adds a CPP abstraction layer for MMA8491Q accelerometer" 
-            checkGroup="group-i2c-peripheral-optionso" >
+            checkGroup="group-i2c-peripheral-options" >
             <enableWhen>
                <requirement idRef="projectOptionValue.CPP-abstraction-I2C"/>
             </enableWhen>
@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-MMA8491Q" />
                </applyWhen>
-               <copy source="Snippets/MMA8491Q-example.cpp"     target="Snippets/MMA8491Q-example.cpp" />
-               <copy source="Project_Headers/MMA8491Q.h"        target="Project_Headers/MMA8491Q.h" />
-               <copy source="Sources/MMA8491Q.cpp"              target="Sources/MMA8491Q.cpp" />
+               <copy source="Snippets/mma8491q-example.cpp"     target="Snippets/mma8491q-example.cpp" />
+               <copy source="Project_Headers/mma8491q.h"        target="Project_Headers/mma8491q.h" />
+               <copy source="Sources/mma8491q.cpp"              target="Sources/mma8491q.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

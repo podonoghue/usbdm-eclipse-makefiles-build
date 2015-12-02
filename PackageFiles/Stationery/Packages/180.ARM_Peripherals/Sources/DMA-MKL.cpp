@@ -1,5 +1,5 @@
 /*
- * @file DMA.cpp
+ * @file dma.cpp (derived from dma-MKL.cpp)
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue
@@ -7,6 +7,8 @@
 
 #include "derivative.h"
 #include "dma.h"
+
+namespace USBDM {
 
 DMAChannel0 *DMAChannel0::thisPtr = 0;
 
@@ -43,3 +45,5 @@ void DMAChannel3::handler(void) {
 void DMA3_IRQHandler(void) {
    DMAChannel3::thisPtr->handler();
 }
+
+} // End namespace USBDM

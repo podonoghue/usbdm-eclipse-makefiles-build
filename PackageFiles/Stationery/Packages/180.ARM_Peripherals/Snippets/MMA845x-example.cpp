@@ -1,10 +1,13 @@
+/**
+ * @file mma845x-example.cpp
+ */
 #include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "I2C.h"
-#include "MMA845x.h"
+#include "i2c.h"
+#include "mma845x.h"
 #include "delay.h"
 
 using namespace USBDM;
@@ -14,7 +17,6 @@ using namespace USBDM;
  *
  * You may need to change the pin-mapping of the I2C interface
  */
-
 void report(MMA845x *accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
@@ -28,7 +30,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2C *i2c = new $(demo.cpp.accelerometer.i2c)();
+   I2c *i2c = new $(demo.cpp.mma845x.i2c)();
    MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
 
    uint8_t id = accelerometer->readID();
@@ -40,6 +42,7 @@ int main() {
    report(accelerometer);
 
    accelerometer->calibrateAccelerometer();
+
    // Make sure we have new values
    waitMS(100);
 

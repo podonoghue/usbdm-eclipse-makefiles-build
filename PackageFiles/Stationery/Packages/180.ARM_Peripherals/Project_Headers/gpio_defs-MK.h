@@ -236,7 +236,7 @@ public:
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   static void setDigitalOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
+   static void setOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
       Pcr::setPCR(pcrValue);
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
    }
@@ -245,7 +245,7 @@ public:
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   static void setDigitalInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
       Pcr::setPCR(pcrValue);
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
    }
@@ -268,12 +268,12 @@ public:
     * @return true/false reflecting pin value
     */
    static bool read() {
-      return ( reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR & (1<<bitNum));
+      return (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR & (1<<bitNum));
    }
 };
 #ifdef PORTA_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOA bits. See @ref DigitalIO
+ * @brief Convenience template for GPIOA bits. See @ref DigitalIOT
  *
  * <b>Usage</b>
  * @code
@@ -576,7 +576,7 @@ public:
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   void setDigitalOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
+   void setOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       SIM->FIXED_PORT_CLOCK_REG |= portClockMask;
       setPCRs();
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= MASK;
@@ -586,7 +586,7 @@ public:
     *
     * @param pcrValue PCR value to use in configuring port
     */
-   void setDigitalInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
+   void setInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) const  {
       SIM->FIXED_PORT_CLOCK_REG |= portClockMask;
       setPCRs();
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~MASK;
@@ -898,7 +898,7 @@ public:
     *
     * @note This initialises the ADC
     */
-   void setMode(uint32_t mode = resolution_16bit_se) const {
+   static void setMode(uint32_t mode = resolution_16bit_se) {
       // Enable clock to ADC
       *reinterpret_cast<volatile uint32_t*>(adcClockReg)  |= adcClockMask;
       Pcr::setPCR(ADC_PORT_FN);
@@ -913,7 +913,7 @@ public:
     *
     * @return - the result of the conversion
     */
-   int readAnalogue() const {
+   static int readAnalogue() {
       // Trigger conversion
       reinterpret_cast<volatile ADC_Type*>(adc)->SC1[0] = ADC_SC1_ADCH(adcChannel);
 
@@ -923,85 +923,6 @@ public:
       return (int)reinterpret_cast<volatile ADC_Type*>(adc)->R[0];
    };
 };
-
-#ifdef ADC0_CLOCK_MASK
-/**
- * Convenience templated class representing a pin with Analogue Input capability
- *
- * Example
- * @code
- *  // Instantiate ADC (Assumes adc0_se8 is mapped to PORTB.0)
- *  const adc0<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]), 8> adc0_se8;
- *
- *  // Initialise ADC
- *  adc0_se8.initialiseADC();
- *
- *  // Set as analogue input
- *  adc0_se8.setAnalogueInput();
- *
- *  // Read input
- *  uint16_t value = adc0_se8.readAnalogue();
- *  @endcode
- *
- * @tparam portClockMask Mask for clock register for PORT associated with this ADC
- * @tparam pcrReg        PCR for the PORT pin associated with this ADC
- * @tparam adcChannel    ADC channel
- */
-template<uint32_t portClockMask, uint32_t pcrReg, uint8_t adcChannel> using Adc0 =
-      AnalogueIOT<portClockMask, pcrReg, ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
-#endif
-#ifdef ADC1_CLOCK_MASK
-/**
- * Convenience templated class representing a pin with Analogue Input capability
- *
- * Example
- * @code
- *  // Instantiate ADC (Assumes adc0_se8 is mapped to PORTB.0)
- *  const adc0<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]), 8> adc0_se8;
- *
- *  // Initialise ADC
- *  adc0_se8.initialiseADC();
- *
- *  // Set as analogue input
- *  adc0_se8.setAnalogueInput();
- *
- *  // Read input
- *  uint16_t value = adc0_se8.readAnalogue();
- *  @endcode
- *
- * @tparam portClockMask Mask for clock register for pin associated with this ADC
- * @tparam pcrReg        PCR for the pin associated with this ADC
- * @tparam adcChannel    ADC channel
- */
-template<uint32_t portClockMask, uint32_t pcrReg, uint8_t adcChannel> using Adc1 =
-      AnalogueIOT<portClockMask, pcrReg, ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
-#endif
-#ifdef ADC2_CLOCK_MASK
-/**
- * Convenience templated class representing a pin with Analogue Input capability
- *
- * Example
- * @code
- *  // Instantiate ADC (Assumes adc0_se8 is mapped to PORTB.0)
- *  const adc0<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]), 8> adc0_se8;
- *
- *  // Initialise ADC
- *  adc0_se8.initialiseADC();
- *
- *  // Set as analogue input
- *  adc0_se8.setAnalogueInput();
- *
- *  // Read input
- *  uint16_t value = adc0_se8.readAnalogue();
- *  @endcode
- *
- * @tparam portClockMask Mask for clock register for pin associated with this ADC
- * @tparam pcrReg        PCR for the pin associated with this ADC
- * @tparam adcChannel    ADC channel
- */
-template<uint32_t portClockMask, uint32_t pcrReg, uint8_t adcChannel> using Adc2 =
-      AnalogueIOT<portClockMask, pcrReg, ADC2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC2_CLOCK_REG), ADC2_CLOCK_MASK, adcChannel>;
-#endif
 
 /**
  * @}
@@ -1082,7 +1003,7 @@ public:
     * @param period  Period in timer ticks
     * @param mode    Mode of operation see @ref Pwm_Mode
     */
-   void setPwmOutput(int period /* ticks */, Pwm_Mode mode=ftm_centreAlign) const {
+   static void setMode(int period /* ticks */, Pwm_Mode mode=ftm_centreAlign) {
       Pcr::setPCR(PORT_PCR_MUX(ftmMuxFn)|DEFAULT_PCR);
 
       // Enable clock to timer
@@ -1109,7 +1030,7 @@ public:
     *
     * @param dutyCycle Duty-cycle as percentage
     */
-   void setDutyCycle(int dutyCycle) const {
+   static void setDutyCycle(int dutyCycle) {
       reinterpret_cast<volatile FTM_Type*>(ftm)->CONTROLS[ftmChannel].CnSC = ftm_pwmHighTruePulses;
 
       if (reinterpret_cast<volatile FTM_Type*>(ftm)->SC&FTM_SC_CPWMS_MASK) {
@@ -1125,7 +1046,7 @@ public:
     *
     * @param period Period in timer ticks
     */
-   void setPeriod(int period) const {
+   static void setPeriod(int period) {
       // Common registers
       reinterpret_cast<volatile FTM_Type*>(ftm)->SC = FTM_SC_CLKS(0); // Disable FTM so register changes are immediate
 
@@ -1143,60 +1064,60 @@ public:
 };
 
 /**
- * Convenience templated class representing a pin with PWM capability
- *
- * Example
- * @code
- * // Instantiate the ftm channel (for FTM0 CH6)
- * const USBDM::Ftm0<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),   3,  6>   ftm0_ch6;
- *
- * // Initialise PWM with initial period and alignment
- * ftm0_ch6.setPwmOutput(200, PwmIO::ftm_leftAlign);
- *
- * // Change period (in ticks)
- * ftm0_ch6.setPeriod(500);
- *
- * // Change duty cycle (in percent)
- * ftm0_ch6.setDutyCycle(45);
- * @endcode
- *
- * @tparam portClockMask Mask for clock register for PORT associated with this FTM
- * @tparam pcrReg        PCR for the PORT pin associated with this FTM
- * @tparam ftmMuxFn      PCR multiplexer selection to map pin to FTM
- * @tparam ftmChannel    ADC channel
- */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ftmChannel> using Ftm0 =
-      PwmIOT<portClockMask, pcrReg, ftmMuxFn, FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, ftmChannel>;
-
-/**
- * Convenience templated class representing a pin with PWM capability
- *
- * Example
- * @code
- * // Instantiate the ftm channel (for FTM0 CH6)
- * const USBDM::Ftm0<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),   3,  6>   ftm0_ch6;
- *
- * // Initialise PWM with initial period and alignment
- * ftm0_ch6.setPwmOutput(200, PwmIO::ftm_leftAlign);
- *
- * // Change period (in ticks)
- * ftm0_ch6.setPeriod(500);
- *
- * // Change duty cycle (in percent)
- * ftm0_ch6.setDutyCycle(45);
- * @endcode
- *
- * @tparam portClockMask Mask for clock register for PORT associated with this FTM
- * @tparam pcrReg        PCR for the PORT pin associated with this FTM
- * @tparam ftmMuxFn      PCR multiplexer selection to map pin to FTM
- * @tparam ftmChannel    ADC channel
- */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ftmChannel> using Ftm1 =
-      PwmIOT<portClockMask, pcrReg, ftmMuxFn, FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, ftmChannel>;
-
-/**
  * @}
  */
+
+struct PcrInfo {
+   uint32_t clockMask;
+   uint32_t pcrAddress;
+   int      muxValue;
+};
+
+/**
+ * @brief Get Clock mask for the Port associated with a peripheral channel.
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return clock mask e.g. SIM_SCGC5_PORTA_MASK (as a number)
+ */
+constexpr uint32_t getPortClockMask(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].clockMask:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Get address of PCR for the Port associated with a peripheral channel.
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return PCR address (e.g. PORTC_BasePtr+offsetof(PORT_Type,PCR[2]))
+ */
+constexpr uint32_t getPcrReg(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].pcrAddress:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Get PCR mux value to map a peripheral channel to the port pin.
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return  Mux value [0..15]
+ */
+constexpr uint32_t getPcrMux(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].muxValue:(1/0);
+#pragma GCC diagnostic pop
+}
 
 } // End namespace USBDM
 

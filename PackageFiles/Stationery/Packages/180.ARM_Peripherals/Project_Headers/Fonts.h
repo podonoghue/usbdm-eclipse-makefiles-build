@@ -1,7 +1,9 @@
-#ifndef FONTS_H
-#define FONTS_H
+#ifndef INCLUDE_USBDM_FONTS_H
+#define INCLUDE_USBDM_FONTS_H
 
 #include <stdint.h>
+
+namespace USBDM {
 
 struct Fonts {
 public:
@@ -15,4 +17,6 @@ public:
    static const uint8_t FONT8x16[97][16];
 };
 
-#endif /* FONTS_H */
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_FONTS_H */

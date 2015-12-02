@@ -1,16 +1,18 @@
 /**
- * @file     MMA845x.h
+ * @file     mma845x.h
  * @brief    Interface for MMA845x accelerometer
  *
  * @version  V4.11.1.70
  * @date     18 June 2015
  */
 
-#ifndef MMA845X_H_
-#define MMA845X_H_
+#ifndef INCLUDE_USBDM_MMA845X_H_
+#define INCLUDE_USBDM_MMA845X_H_
 
 #include <stdint.h>
-#include "I2C.h"
+#include "i2c.h"
+
+namespace USBDM {
 
 /**
  * @addtogroup MMA845x_Group MMA845x 3-axis accelerometer
@@ -70,7 +72,7 @@
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  I2C *i2c = new I2C_0();
+ *  I2c *i2c = new I2C_0();
  *  MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
  *
  *  uint8_t id = accelerometer->readID();
@@ -94,7 +96,7 @@
 class MMA845x {
 
 private:
-   USBDM::I2C *i2c;
+   USBDM::I2c *i2c;
    static const uint8_t DEVICE_ADDRESS = 0x1D<<1;  // SA0 pin : 0=>1C, 1=>1D
    static const uint8_t WHO_AM_I_VALUE = 0x1A;
 
@@ -134,7 +136,7 @@ public:
     * @param i2c  - The I2C interface to use
     * @param mode - Mode of operation (gain and filtering)
     */
-   MMA845x(USBDM::I2C *i2c, AccelerometerMode mode);
+   MMA845x(USBDM::I2c *i2c, AccelerometerMode mode);
    /**
     * Put accelerometer into Standby mode
     */
@@ -175,4 +177,7 @@ public:
 /**
  * @}
  */
-#endif /* MMA845X_H_ */
+
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_MMA845X_H_ */

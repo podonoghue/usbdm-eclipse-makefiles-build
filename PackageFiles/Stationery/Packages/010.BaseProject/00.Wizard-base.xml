@@ -23,7 +23,7 @@
             width="1"
             span="1"
           />
-         <group id="group-i2c-peripheral-optionso"
+         <group id="group-i2c-peripheral-options"
             name="I2C Devices"
             row="1"
             width="1"

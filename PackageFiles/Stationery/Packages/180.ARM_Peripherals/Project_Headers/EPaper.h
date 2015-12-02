@@ -31,9 +31,9 @@
 
 #include <string.h>
 #include "SPI.h"
-#include "Seeed_SLD00200P.h"
-#include "GT20L16.h"
-#include "EPD.h"
+#include "seeed_sld00200p.h"
+#include "gt20l16.h"
+#include "epd.h"
 
 #define BLACK   1
 #define WHITE   0

@@ -1,19 +1,22 @@
-/****************************************************************************************************//**
- * @file     SPI.h (from SPI-MK.h)
+/**
+ * @file     spi.h (derived from spi-MK.h)
  *
- * @brief    Abstracion layer for I2C interface
+ * @brief    Abstracion layer for SPI interface
  *
- * @version  V0.0
- * @date     2015/06
- *
- *******************************************************************************************************/
+ * @version   1.1.0
+ * @date     2015/12
+ */
 
-#ifndef SPI_H_
-#define SPI_H_
+#ifndef INCLUDE_USBDM_SPI_H_
+#define INCLUDE_USBDM_SPI_H_
 
 #include <stdint.h>
 #include "derivative.h"
 #include "gpio.h"
+
+namespace USBDM {
+
+static const uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
 
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface
@@ -22,33 +25,13 @@
  */
 
 /**
- * @brief Class representing an SPI interface
- *
- * <b>Example</b>
- * @code
- *  // Instantiate interface
- *  SPI *spi = new SPI_0();
- *  spi->setSpeed(400000);
- *
- *  // Transmit message (reception discarded)
- *  const uint8_t outBuffer[] = {1,2,3,4};
- *  spi->txRxBytes(sizeof(outBuffer), outBuffer);
- *
- *  // Receive message (transmission of 0xFF)
- *  uint8_t inBuffer[100];
- *  spi->txRxBytes(sizeof(inBuffer), 0, inBuffer);
- *
- *  // Transmit and receive message
- *  uint8_t inoutBuffer[100] = {1,2,3,4};
- *  spi->txRxBytes(sizeof(inoutBuffer), inoutBuffer, inoutBuffer);
- *
- *  @endcode
+ * @brief Base class for representing an SPI interface
  */
-class SPI {
+class Spi {
 protected:
    volatile  SPI_Type *spi;
    uint32_t  spiBaudValue;
-   uint32_t  interfaceFrequency;
+   uint32_t  interfaceFrequency;  //!< Interface frequency to use
    uint32_t  pushrMask;
 
 protected:
@@ -57,7 +40,7 @@ protected:
     *
     * @param baseAddress  Base address of SPI
     */
-   SPI(volatile SPI_Type  *baseAddress);
+   Spi(volatile SPI_Type  *baseAddress);
    
 public:
    /**
@@ -67,7 +50,7 @@ public:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t frequency);
+   void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
    /**
     * Gets current speed of interface
     *
@@ -148,12 +131,12 @@ public:
 /**
  * Class representing SPI0
  */
-class SPI_0 : public SPI {
+class Spi0 : public Spi {
 public:
    /**
     * Constructor
     */
-   SPI_0();
+   Spi0();
 };
 #endif
 
@@ -161,17 +144,19 @@ public:
 /**
  * Class representing SPI1
  */
-class SPI_1 : public SPI {
+class Spi1 : public Spi {
 public:
    /**
     * Constructor
     */
-   SPI_1();
+   Spi1();
 };
 #endif
 
 /**
  * @}
  */
+
+} // End namespace USBDM
 
 #endif /* SPI_H_ */

@@ -1,8 +1,11 @@
+/**
+ * @file pit-example1.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "PIT.h"
+#include "pit.h"
 
 using namespace USBDM;
 
@@ -16,15 +19,15 @@ using namespace USBDM;
 #define RED_LED   gpio_$(demo.cpp.red.led)
 
 int main() {
-   RED_LED.setDigitalOutput();
+   RED_LED::setOutput();
 
    // Turn off LED initially
-   RED_LED.set();
+   RED_LED::set();
 
    PIT_0.configure();
 
    for(;;) {
-      RED_LED.toggle();
+      RED_LED::toggle();
       PIT_0.delay(0, SystemBusClock*1);
    }
 }

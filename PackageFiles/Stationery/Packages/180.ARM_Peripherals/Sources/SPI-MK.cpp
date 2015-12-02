@@ -1,5 +1,5 @@
 /*
- * SPI-MK.c
+ * spi-MK.cpp (derived from spi-MK.cpp)
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue
@@ -9,17 +9,17 @@
 #include "system.h"
 #include "derivative.h"
 #include "utilities.h"
-#include "SPI.h"
+#include "spi.h"
 #include "gpio.h"
 
-#define DEFAULT_SPI_FREQUENCY  (10000000)     //!< Default SPI frequency 10 MHz
+namespace USBDM {
 
 /**
  * Constructor
  *
  * @param baseAddress - Base address of SPI
  */
-SPI::SPI(volatile SPI_Type *baseAddress) :
+Spi::Spi(volatile SPI_Type *baseAddress) :
    spi(baseAddress) {
    spiBaudValue = 0;
    setSpeed(0);   // Use default speed
@@ -33,7 +33,7 @@ SPI::SPI(volatile SPI_Type *baseAddress) :
 /**
  * Constructor
  */
-SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
+Spi0::Spi0() : Spi((SPI_Type*)SPI0) {
 
    // Enable SPI port pin clocks & configure PCS register
    // SIN,SOUT,SCLK,PCS
@@ -92,7 +92,7 @@ SPI_0::SPI_0() : SPI((SPI_Type*)SPI0) {
 /**
  * Constructor
  */
-SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
+Spi1::Spi1() : Spi((SPI_Type*)SPI1) {
 
    // Enable SPI port pin clocks
    // SIN,SOUT,SCLK,PCS
@@ -131,7 +131,7 @@ SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
    pushrMask = SPI1_PUSHR_PCS_VALUE;
 
    // Enable SPI module clock
-   SPI1_CLOCK_REG |= SPI1_CLOCK_MASK;
+   SIM->SPI1_CLOCK_REG |= SPI1_CLOCK_MASK;
 
    spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
                 SPI_MCR_MSTR_MASK|SPI_MCR_FRZ_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0);
@@ -150,16 +150,12 @@ SPI_1::SPI_1() : SPI((SPI_Type*)SPI1) {
 /**
  * Sets Communication speed for SPI
  *
- * @param frequency => Frequency in Hz (0 => use default value)
+ * @param frequency => Frequency in Hz
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed
  */
-void SPI::setSpeed(uint32_t targetFrequency) {
-
-   if (targetFrequency == 0) {
-      targetFrequency = DEFAULT_SPI_FREQUENCY;
-   }
+void Spi::setSpeed(uint32_t targetFrequency) {
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
@@ -183,14 +179,14 @@ void SPI::setSpeed(uint32_t targetFrequency) {
 }
 
 /**
- * Transmit and receive an value over SPI
+ * Transmit and receive a value over SPI
  *
  * @param data - Data to send (8-16 bits) <br>
  *               May include other control bits
  *
  * @return Data received
  */
-uint32_t SPI::txRx(uint32_t data) {
+uint32_t Spi::txRx(uint32_t data) {
    spi->MCR &= ~SPI_MCR_HALT_MASK;
    spi->PUSHR = data;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
@@ -207,7 +203,7 @@ uint32_t SPI::txRx(uint32_t data) {
  *  @param dataOut   Transmit bytes (may be NULL for Rx only)
  *  @param dataIn    Receive byte buffer (may be NULL for Tx only)
  */
-void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
+void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
    while(dataSize-->0) {
       uint32_t sendData = 0xFF;
       if (dataOut != 0) {
@@ -237,7 +233,7 @@ void SPI::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
  *  @param dataOut   Transmit values (may be NULL for Rx only)
  *  @param dataIn    Receive buffer (may be NULL for Tx only)
  */
-void SPI::txRxWords(uint32_t dataSize, const uint16_t *dataOut, uint16_t *dataIn) {
+void Spi::txRxWords(uint32_t dataSize, const uint16_t *dataOut, uint16_t *dataIn) {
    while(dataSize-->0) {
       uint32_t sendData = 0xFFFF;
       if (dataOut != 0) {
@@ -260,3 +256,4 @@ void SPI::txRxWords(uint32_t dataSize, const uint16_t *dataOut, uint16_t *dataIn
    }
 }
 
+} // End namespace USBDM

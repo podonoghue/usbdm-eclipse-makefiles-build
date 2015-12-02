@@ -5,7 +5,7 @@
  *           Equivalent: MK20DX128ZM10, MK20DX256ZM10, MK20DN512ZM10
  *
  * @version  V0.0
- * @date     2015/11
+ * @date     2015/12
  *
  *******************************************************************************************************/
 
@@ -80,13 +80,13 @@ typedef enum {
   CAN1_Rx_IRQn                  =  41,   /**<  57 CAN1 Receive Warning                                                             */
   CAN1_WakeUp_IRQn              =  42,   /**<  58 CAN1 Wake Up                                                                     */
   UART0_RxTx_IRQn               =  45,   /**<  61 UART0 receive/transmit interrupt                                                 */
-  UART0_Error_IRQn              =  46,   /**<  62 UART0 error interrupt                                                            */
+  UART0_ERR_IRQn                =  46,   /**<  62 UART0 error interrupt                                                            */
   UART1_RxTx_IRQn               =  47,   /**<  63 UART1 receive/transmit interrupt                                                 */
-  UART1_Error_IRQn              =  48,   /**<  64 UART1 error interrupt                                                            */
+  UART1_ERR_IRQn                =  48,   /**<  64 UART1 error interrupt                                                            */
   UART2_RxTx_IRQn               =  49,   /**<  65 UART2 receive/transmit interrupt                                                 */
-  UART2_Error_IRQn              =  50,   /**<  66 UART0 error interrupt                                                            */
+  UART2_ERR_IRQn                =  50,   /**<  66 UART0 error interrupt                                                            */
   UART3_RxTx_IRQn               =  51,   /**<  67 UART2 receive/transmit interrupt                                                 */
-  UART3_Error_IRQn              =  52,   /**<  68 UART0 error interrupt                                                            */
+  UART3_ERR_IRQn                =  52,   /**<  68 UART0 error interrupt                                                            */
   ADC0_IRQn                     =  57,   /**<  73 ADC0 interrupt                                                                   */
   ADC1_IRQn                     =  58,   /**<  74 ADC1 interrupt                                                                   */
   CMP0_IRQn                     =  59,   /**<  75 CMP0 interrupt                                                                   */
@@ -176,13 +176,13 @@ extern void CAN1_Tx_IRQHandler(void);          /**< CAN1 Transmit Warning       
 extern void CAN1_Rx_IRQHandler(void);          /**< CAN1 Receive Warning                                                             */
 extern void CAN1_WakeUp_IRQHandler(void);      /**< CAN1 Wake Up                                                                     */
 extern void UART0_RxTx_IRQHandler(void);       /**< UART0 receive/transmit interrupt                                                 */
-extern void UART0_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART0_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART1_RxTx_IRQHandler(void);       /**< UART1 receive/transmit interrupt                                                 */
-extern void UART1_Error_IRQHandler(void);      /**< UART1 error interrupt                                                            */
+extern void UART1_ERR_IRQHandler(void);        /**< UART1 error interrupt                                                            */
 extern void UART2_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART2_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART2_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART3_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART3_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART3_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void ADC0_IRQHandler(void);             /**< ADC0 interrupt                                                                   */
 extern void ADC1_IRQHandler(void);             /**< ADC1 interrupt                                                                   */
 extern void CMP0_IRQHandler(void);             /**< CMP0 interrupt                                                                   */

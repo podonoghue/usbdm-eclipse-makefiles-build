@@ -1,5 +1,5 @@
 /*
-  GT20L16.cpp
+  @file GT20L16.cpp
 
   Based on GT20L16 (in Chinese!)
 
@@ -22,6 +22,8 @@
 
 #include "GT20L16.h"
 #include "Delay.h"
+
+using namespace USBDM;
 
 #define GT20L16_READ_COMMAND        (0x03)
 #define GT20L16_FAST_READ_COMMAND   (0x0B)

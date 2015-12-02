@@ -1,14 +1,14 @@
 /*!
  *  @file LCD.cpp
- *    
+ *
  *  @brief  Driver for Nokia 6610 LCD Display (PCF8833 Controller)
- *    
+ *
  *     Controller used for LCD Display is a Philips PCF8833 STN RGB-132x132x3 driver
  *     Note: Leadis LDS176 controller (GE-12) is 100% compatible with Philips PCF8833
- *    
+ *
  *     Nokia 6610 has a 132 x 132 pixel matrix - each pixel has 12 bits of colour information.
- *    
- * @verbatim     
+ *
+ * @verbatim
  *                                 +--+
  *                                 |  |
  *              ___________________|__|_____
@@ -30,38 +30,38 @@
  *     +        |--------------------------|
  *             (0,0)     Columns          (0,131)
  *              +---------- X ------------->
- *    
+ *
  * @endverbatim
- * 
+ *
  *     132 x 132 pixel matrix has three methods to specify the colour info
- *    
+ *
  *     1. 12 bits per pixel
  *        requires command and 1.5 data bytes to specify a single pixel
  *        (3 data bytes can specify 2 pixels)
- *    
+ *
  *     2. 8 bits per pixel
  *        requires one command and one data byte to specify the single pixel
  *        note: pixel data byte converted by RGB table to 12-bit format above
- *    
+ *
  *     3. 16 bits per pixel
  *        requires one command and two data bytes to specify the single pixel
  *        note: pixel data bytes converted by dithering circuitry to 12-bit format above
- *        
+ *
  *     THIS IMPLEMENTATION USES THE 12 BITS PER PIXEL METHOD!
  *     -------------------------
- *    
+ *
  *     Notes: To orient the LCD display so that the origin (0, 0) is at the opposite
  *            corner from the connector (to match the orientation of the Olimex SAM7-EX256
  *            boards silk screen printing), I selected "mirror x" and "mirror y" setting
  *            in the MADCTL command (MY=1, MX=1).
- *            
+ *
  *            Also, while I can't yet explain it, I had to reverse the RGB orientation in the
  *            MADCTL command and invert the entire display using the INVON command to make
  *            0x0=black, 0xF= full red.
- *            
+ *
  * @author James P Lynch July 7, 2007,
  *         modified for Kinetis PO'Donoghue May, 2013
- *            
+ *
  */
 #include <string.h>
 #include <stdlib.h>
@@ -71,9 +71,11 @@
 #include "derivative.h"
 #include "Delay.h"
 #include "utilities.h"
-#include "LCD.h"
+#include "lcd.h"
 #include "gpio.h"
 #include "Fonts.h"
+
+using namespace USBDM;
 
 #ifdef ELEC_FREAKS
 #define   PHILIPS
@@ -106,19 +108,19 @@
  *
  * @param level 0-100 back-light level as percentage
  */
-void LCD::backlightSetLevel(int level) {
+void Lcd::backlightSetLevel(int level) {
 #if LCD_BACKLIGHT_PWM_FEATURE
-   LCD_PWM.setPwmOutput(1000, PwmIO::ftm_leftAlign);
+   LCD_PWM::setMode(1000, PwmIO::ftm_leftAlign);
    if (level>100) {
       level = 100;
    }
    if (level<0) {
       level = 0;
    }
-   LCD_PWM.setDutyCycle(level);
+   LCD_PWM::setDutyCycle(level);
 #else
-   LCD_PWM.setDigitalOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
-   LCD_PWM.write(level>0);
+   LCD_PWM::setOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
+   LCD_PWM::write(level>0);
 #endif
 }
 #endif
@@ -126,14 +128,14 @@ void LCD::backlightSetLevel(int level) {
 /**
  * Reset LCD
  */
-void LCD::reset() {
+void Lcd::reset() {
    // LCD Reset pin
-   LCD_RSTn.setDigitalOutput();
+   LCD_RSTn::setOutput();
 
    // Reset display
-   LCD_RSTn.clear();
+   LCD_RSTn::clear();
    waitMS(2);
-   LCD_RSTn.set();
+   LCD_RSTn::set();
    waitMS(10);
 }
 
@@ -142,10 +144,10 @@ void LCD::reset() {
  *
  *  Initialises the LCD
  */
-LCD::LCD(SPI *spi) : spi(spi) {
+Lcd::Lcd(Spi *spi) : spi(spi) {
 
-	SPI_CSn.setDigitalOutput();
-	SPI_CSn.set();
+   SPI_CSn::setOutput();
+   SPI_CSn::set();
 
 #ifdef ELEC_FREAKS
    backlightOn();
@@ -173,7 +175,7 @@ LCD::LCD(SPI *spi) : spi(spi) {
 
    txCommand(P_DISPON);                  // Display on
 #endif
-#ifdef EPSON   
+#ifdef EPSON
    txCommand(DISCTL);        // Display control(EPSON)
    txData(0x00);             // P1: 0x00 = 2 divisions, switching period=8 (default)
    txData(0x20);             // P2: 0x20 = nlines/4 - 1 = 132/4 - 1 = 32)
@@ -218,7 +220,7 @@ LCD::LCD(SPI *spi) : spi(spi) {
 //   txData(0x00);             // normal RGB arrangement
 //   txData(0x01);             // 8-bit Grayscale
 //   txData(0x02);             // 16-bit Grayscale Type A
-   
+
 #endif
 
    clear(BLACK);
@@ -227,19 +229,19 @@ LCD::LCD(SPI *spi) : spi(spi) {
 /**
  * Send a single command byte to the display
  */
-void LCD::txCommand(uint8_t command) {
-   SPI_CSn.clear();
+void Lcd::txCommand(uint8_t command) {
+   SPI_CSn::clear();
    spi->txRx(command);
-   SPI_CSn.set();
+   SPI_CSn::set();
 }
 
 /**
  * Send a single data byte to the display
  */
-void LCD::txData(uint8_t data) {
-   SPI_CSn.clear();
+void Lcd::txData(uint8_t data) {
+   SPI_CSn::clear();
    spi->txRx(0x100|data);
-   SPI_CSn.set();
+   SPI_CSn::set();
 }
 
 /** Writes the entire LCD screen from a bmp file
@@ -249,7 +251,7 @@ void LCD::txData(uint8_t data) {
  *
  * @author Olimex, James P Lynch July 7, 2007
  */
-void LCD::drawBitmap(uint8_t bmp[131*131]) {
+void Lcd::drawBitmap(uint8_t bmp[131*131]) {
    unsigned j; // loop counter
 
 #ifdef PHILIPS
@@ -310,7 +312,7 @@ void LCD::drawBitmap(uint8_t bmp[131*131]) {
  *
  * @author James P Lynch July 7, 2007
  */
-void LCD::clear(int color)
+void Lcd::clear(int color)
 {
    int i;
 
@@ -365,7 +367,7 @@ void LCD::clear(int color)
  *
  * @author James P Lynch July 7, 2007
  */
-void LCD::setXY(int x, int y) {
+void Lcd::setXY(int x, int y) {
    // Row address set (command 0x2B)
 #ifdef PHILIPS
    txCommand(P_PASET);
@@ -394,11 +396,11 @@ void LCD::setXY(int x, int y) {
  * @param  y     - column address (0 .. 131)
  * @param  color - 12-bit color value rrrrggggbbbb
  *
- * @note See LCD.h for some sample color settings
+ * @note See lcd.h for some sample color settings
  *
  * @author James P Lynch July 7, 2007
  */
-void LCD::drawPixel(int x, int y, int color) {
+void Lcd::drawPixel(int x, int y, int color) {
 #ifdef PHILIPS
    setXY(x, y);
    txCommand(P_RAMWR);
@@ -429,7 +431,7 @@ void LCD::drawPixel(int x, int y, int color) {
  * @author James P Lynch July 7, 2007
  *
  * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)
- * @note See LCD.h for some sample color settings
+ * @note See lcd.h for some sample color settings
  *
  * @author Authors: Dr. Leonard McMillan, Associate Professor UNC \n
  *                  Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
@@ -437,7 +439,7 @@ void LCD::drawPixel(int x, int y, int color) {
  * @note Taken verbatim from Professor McMillan's presentation: \n
  *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
  */
-void LCD::drawLine(int x0, int y0, int x1, int y1, int color) {
+void Lcd::drawLine(int x0, int y0, int x1, int y1, int color) {
    int dy = y1 - y0;
    int dx = x1 - x0;
    int stepx, stepy;
@@ -491,7 +493,7 @@ void LCD::drawLine(int x0, int y0, int x1, int y1, int color) {
  * @param  fill   indicates if the
  * @param  color  12-bit color value rrrrggggbbbb
  *
- * note See LCD.h for some sample color settings
+ * note See lcd.h for some sample color settings
  *
  * author James P Lynch July 7, 2007
  *
@@ -543,7 +545,7 @@ void LCD::drawLine(int x0, int y0, int x1, int y1, int color) {
  *       In the case of an unfilled rectangle, drawing four lines with the Bresenham line
  *       drawing algorithm is reasonably efficient.
  */
-void LCD::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
+void Lcd::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
    int xmin, xmax, ymin, ymax;
    int i;
    // check if the rectangle is to be filled
@@ -671,7 +673,7 @@ void LCD::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
  *
  *  @author James P Lynch July 7, 2007
  */
-void LCD::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
+void Lcd::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
    unsigned int nCols;
    unsigned int nRows;
    unsigned int nBytes;
@@ -681,7 +683,7 @@ void LCD::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, in
    unsigned int word1;
    unsigned char *pFont;
    unsigned char *pChar;
-   
+
    static const unsigned char *FontTable[] = {
       (unsigned char *)Fonts::FONT6x8,
       (unsigned char *)Fonts::FONT8x8,
@@ -718,7 +720,7 @@ void LCD::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, in
 #endif
    txData(y);
    txData(y + nRows - 1);
-   
+
    // Write memory
 #ifdef PHILIPS
       txCommand(P_RAMWR);
@@ -726,7 +728,7 @@ void LCD::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, in
 #ifdef EPSON
       txCommand(RAMWR);
 #endif
-   
+
    // Loop on each row, working backwards from the bottom to the top
    int i;
    for (i = nRows - 1; i >= 0; i--) {
@@ -787,11 +789,11 @@ void LCD::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, in
  * @note For more information on how this code does it's thing look at this \n
  *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
  */
-void LCD::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
+void Lcd::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
    // loop until null-terminator is seen
    while (*pString != 0x00) {
       // draw the character
-      LCD::putChar(*pString++, x, y, fontSize, fColor, bColor);
+      Lcd::putChar(*pString++, x, y, fontSize, fColor, bColor);
       // advance the y position
       if (fontSize == Fonts::FontSmall)
          x = x + 6;
@@ -808,12 +810,12 @@ void LCD::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, in
  *
  *  @param setting - contrast level (0..127) ?
  */
-void LCD::setContrast(uint8_t setting) {
+void Lcd::setContrast(uint8_t setting) {
 #ifdef EPSON
    txCommand(VOLCTR);       // electronic volume, this is the contrast/brightness(EPSON)
    txData(setting);         // volume (contrast) setting - course adjustment,  -- original was 24
    //     LCDData(0x03);     // internal resistor ratio - coarse adjustment
-   //     LCDData(0x30);   
+   //     LCDData(0x30);
    txCommand(NOP);          // nop(EPSON)
 #endif
 #ifdef PHILIPS
@@ -835,13 +837,13 @@ void LCD::setContrast(uint8_t setting) {
  * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
  *        http://www.wikipedia.org
  */
-void LCD::drawCircle(int x0, int y0, int radius, int color, int circleType) {
+void Lcd::drawCircle(int x0, int y0, int radius, int color, int circleType) {
    int f = 1 - radius;
    int ddF_x = 0;
    int ddF_y = -2 * radius;
    int x = 0;
    int y = radius;
-   
+
    if (circleType&(SECTOR_315_360|SECTOR_0_45)) {
       drawPixel(x0 + radius, y0, color);  // 0,360
    }

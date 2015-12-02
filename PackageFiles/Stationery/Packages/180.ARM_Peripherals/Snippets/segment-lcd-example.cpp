@@ -1,8 +1,11 @@
+/**
+ * @file segment-lcd-example.cpp
+ */
 #include <stdio.h>
 #include <stdbool.h>
 #include "system.h"
 #include "derivative.h"
-#include "Segment_LCD.h"
+#include "segment_lcd.h"
 
 using namespace USBDM;
 

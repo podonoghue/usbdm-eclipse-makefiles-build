@@ -1,11 +1,14 @@
+/**
+ * @file fxos8700cq-example.cpp
+ */
 #define _USE_MATH_DEFINES
 #include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "I2C.h"
-#include "FXOS8700CQ.h"
+#include "i2c.h"
+#include "fxos8700cq.h"
 #include "delay.h"
 
 using namespace USBDM;
@@ -34,7 +37,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
+   I2c *i2c = new $(demo.cpp.fx0s8700cq.i2c)();
    FXOS8700CQ *accelmag = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
 
    uint8_t id = accelmag->readID();

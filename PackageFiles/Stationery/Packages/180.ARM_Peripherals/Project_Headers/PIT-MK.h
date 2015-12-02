@@ -1,15 +1,20 @@
 /**
- * @file      pit.h
- * @version   1.0.0
- * @brief     Programmable Interrupt Timer MK
+ * @file      pit.h (derived from pit-MK.h)
+ *
+ * @brief    Abstracion layer for PIT interface
+ *
+ * @version   1.1.0
+ * @date     2015/12
  */
 
-#ifndef PIT_H_
-#define PIT_H_
+#ifndef INCLUDE_USBDM_PIT_H_
+#define INCLUDE_USBDM_PIT_H_
 
 #include "derivative.h"
 #include "system.h"
 #include "gpio.h"
+
+namespace USBDM {
 
 /**
  * @addtogroup PIT_Group Programmable Interrupt Timer
@@ -168,4 +173,6 @@ extern const PIT_ PIT_0;
  * @}
  */
 
-#endif /* PIT_H_ */
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_PIT_H_ */

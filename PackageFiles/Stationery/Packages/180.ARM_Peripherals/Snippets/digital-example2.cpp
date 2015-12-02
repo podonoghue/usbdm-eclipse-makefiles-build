@@ -1,3 +1,6 @@
+/**
+ * @file digital-example2.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
@@ -9,6 +12,7 @@ using namespace USBDM;
  * Simple Digital I/O example
  *
  * Echos an external switch to an external LED
+ * Uses arduino aliases
  *
  *  SWITCH + LED
  *  1 x Digital input
@@ -16,22 +20,15 @@ using namespace USBDM;
  *
  */
 
-// Simple delay - not for real programs!
-void delay(void) {
-   for(int i=0; i<400000; i++) {
-      __asm__("nop");
-   }
-}
-
 // Connection mapping
 #define SWITCH    gpio_D12
 #define LED       gpio_D13
 
 int main(void) {
-   LED.setDigitalOutput();
-   SWITCH.setDigitalInput();
+   LED::setOutput();
+   SWITCH::setInput();
 
    for(;;) {
-      LED.write(!SWITCH.read());
+      LED::write(!SWITCH::read());
    }
 }

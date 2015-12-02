@@ -1,3 +1,6 @@
+/**
+ * @file pwm-example.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
@@ -13,7 +16,7 @@ using namespace USBDM;
  */
 
 // Simple delay - not for real programs!
-void delay(void) {
+static void delay(void) {
    for(int i=0; i<400000; i++) {
       __asm__("nop");
    }
@@ -36,15 +39,15 @@ void delay(void) {
 #endif
 
 int main() {
-   RED_LED.setPwmOutput(2000,   ftm_leftAlign);
-   GREEN_LED.setPwmOutput(2000, ftm_leftAlign);
+   RED_LED::setMode(2000,   ftm_leftAlign);
+   GREEN_LED::setMode(2000, ftm_leftAlign);
    for(;;) {
       for (int i=0; i<=100; i++) {
-         RED_LED.setDutyCycle(i);
+         RED_LED::setDutyCycle(i);
          delay();
       }
       for (int i=0; i<=100; i++) {
-         GREEN_LED.setDutyCycle(i);
+         GREEN_LED::setDutyCycle(i);
          delay();
       }
    }

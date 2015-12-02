@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     I2C.h
+ * @file     i2c.h
  *
  * @brief    Abstracion layer for I2C interface
  *
@@ -8,20 +8,20 @@
  *
  *******************************************************************************************************/
 
-#ifndef I2C_H_
-#define I2C_H_
+#ifndef INCLUDE_USBDM_I2C_H_
+#define INCLUDE_USBDM_I2C_H_
 
 #include <stdint.h>
 #include "derivative.h"
 #include "gpio.h"
+
+namespace USBDM {
 
 #ifndef PORT_PCR_ODE_MASK
 // Some devices don't have ODE function on pin
 // The open-drain mode is automatically selected when I2C function is selected for the pin
 #define PORT_PCR_ODE_MASK 0
 #endif
-
-namespace USBDM {
 
 /**
  * @addtogroup I2C_Group Inter-Integrated-Circuit I2C
@@ -32,7 +32,7 @@ namespace USBDM {
 /**
  * Virtual Base class for I2C interface
  */
-class I2C {
+class I2c {
 
 public:
    /** Operating mode */
@@ -65,7 +65,7 @@ protected:
     * @param mode Mode of operation (interrupt or polled)
     *
     */
-   I2C(I2C_Type *i2c, I2C::Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
+   I2c(I2C_Type *i2c, I2c::Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
    }
 
    /**
@@ -208,9 +208,9 @@ public:
  *
  *  @endcode
  */
-template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, class Scl, int sclFn, class Sda, int sdaFn> class I2C_T : public I2C {
+template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, class Scl, int sclFn, class Sda, int sdaFn> class I2C_T : public I2c {
 public:
-   static class I2C *thisPtr;
+   static class I2c *thisPtr;
 
 private:
    friend void I2C0_IRQHandler(void);
@@ -231,7 +231,7 @@ public:
     * @tparam scl        I2C Clock port
     * @tparam sda        I2C Data port
     */
-   I2C_T(unsigned baud=400000, I2C::Mode mode=I2C::Mode::polled, uint8_t myAddress=0) : I2C(reinterpret_cast<I2C_Type*>(i2cBasePtr), mode) {
+   I2C_T(unsigned baud=400000, I2c::Mode mode=I2c::Mode::polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(i2cBasePtr), mode) {
       busHangReset();
       init(myAddress);
       setBPS(baud);
@@ -271,13 +271,13 @@ public:
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
-      Sda::setDigitalInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      Sda::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
-      Scl::setDigitalInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      Scl::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
       Scl::set();
-      Scl::setDigitalOutput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      Scl::setOutput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
       for (int i=0; i<9; i++) {
          // Set clock high (3-state)
          Scl::set();
@@ -304,7 +304,7 @@ public:
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2C *i2c = new USBDM::I2C_0();
+ *  USBDM::I2c *i2c = new USBDM::I2C_0();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -324,7 +324,7 @@ public:
  *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
  *  @endcode
  */
-using I2C_0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_SCL_GPIO, I2C0_SCL_FN, I2C0_SDA_GPIO, I2C0_SDA_FN>;
+using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_SCL_GPIO, I2C0_SCL_FN, I2C0_SDA_GPIO, I2C0_SDA_FN>;
 #endif
 
 #if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
@@ -334,7 +334,7 @@ using I2C_0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLO
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2C *i2c = new USBDM::I2C_1();
+ *  USBDM::I2c *i2c = new USBDM::I2C_1();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -355,7 +355,7 @@ using I2C_0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLO
  *  }
  *  @endcode
  */
-using I2C_1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C1_SCL_GPIO, I2C1_SCL_FN, I2C1_SDA_GPIO, I2C1_SDA_FN>;
+using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C1_SCL_GPIO, I2C1_SCL_FN, I2C1_SDA_GPIO, I2C1_SDA_FN>;
 #endif
 
 #if defined(I2C2) && defined(I2C2_SCL_GPIO) && defined(I2C2_SDA_GPIO)
@@ -365,7 +365,7 @@ using I2C_1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLO
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2C *i2c = new USBDM::I2C_2();
+ *  USBDM::I2c *i2c = new USBDM::I2C_2();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -386,7 +386,7 @@ using I2C_1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLO
  *  }
  *  @endcode
  */
-using I2C_2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, USBDM::I2C2_SCL_GPIO, I2C2_SCL_FN, USBDM::I2C2_SDA_GPIO, I2C2_SDA_FN>;
+using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, USBDM::I2C2_SCL_GPIO, I2C2_SCL_FN, USBDM::I2C2_SDA_GPIO, I2C2_SDA_FN>;
 #endif
 
 /**
@@ -395,4 +395,4 @@ using I2C_2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLO
 
 } // End namespace USBDM
 
-#endif /* I2C_H_ */
+#endif /* INCLUDE_USBDM_I2C_H_ */

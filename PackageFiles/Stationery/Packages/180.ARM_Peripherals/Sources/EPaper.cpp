@@ -35,8 +35,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "SPI.h"
-#include "EPaper.h"
+#include "spi.h"
+#include "epaper.h"
+
+using namespace USBDM;
+
 /*!
  * Constructor - Create ePaper interface
  *

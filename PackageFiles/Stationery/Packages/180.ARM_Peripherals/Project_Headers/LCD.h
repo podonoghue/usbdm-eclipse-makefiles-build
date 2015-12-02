@@ -1,26 +1,28 @@
 /****************************************************************************************************//**
- * @file     LCD.h
+ * @file     Lcd.h
  *
- * @brief    Abstraction layer for LCD interface
+ * @brief    Abstraction layer for Lcd interface
  *
- * @version  V0.0
+ * @version  V1.0
  * @date     2015/06
  *
  *******************************************************************************************************/
 
-#ifndef LCD_H
-#define LCD_H
+#ifndef INCLUDES_LCD_H_
+#define INCLUDES_LCD_H_
 
 #include <stdint.h>
-#include "SPI.h"
-#include "Fonts.h"
+#include "spi.h"
+#include "fonts.h"
+
+namespace USBDM {
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 
-// LCD Options ==============================
+// Lcd Options ==============================
 //
-//   <o> LCD PWM Backlight support
-//   <i> Enables the use of PWM to adjust the LCD backlight
+//   <o> Lcd PWM Backlight support
+//   <i> Enables the use of PWM to adjust the Lcd backlight
 //   <i> This ties up one of the FTMs so is rather expensive to provide.
 //     <0=> Backlight on/off only
 //     <1=> Backlight adjustable
@@ -33,19 +35,19 @@
 //------------- <<< end of configuration section >>> -----------------------
 
 /**
- * Indicates the code should be for a ELEC FREAKS version of the LCD
+ * Indicates the code should be for a ELEC FREAKS version of the Lcd
  */
 #define ELEC_FREAKS
 
 /**
  * @addtogroup LCD_Group Elecfreaks Liquid Crystal Display
- * @brief C++ Class allowing access LCD
+ * @brief C++ Class allowing access Lcd
  * @{
  */
 
 //********************************************************************
 //
-//   LCD Dimension Definitions
+//   Lcd Dimension Definitions
 //
 //********************************************************************
 #define ROW_LENGTH   132
@@ -122,12 +124,12 @@
 #define DEFAULT_FOREGROUND WHITE
 
 /**
- * @brief Class representing a LCD
+ * @brief Class representing an LCD
  *
  * <b>Example</b>
  * @code
  * // Instantiate interface
- *	LCD *lcd = new LCD(new SPI_0());
+ *	Lcd *lcd = new Lcd(new SPI_0());
  *
  * lcd->clear(RED);
  * lcd->drawCircle(65, 65, 20, WHITE);
@@ -138,8 +140,8 @@
  *  @endcode
  */
 
-class LCD {
-   SPI *spi;   //!< SPI interface used to communicate with LCD
+class Lcd {
+   Spi *spi;   //!< SPI interface used to communicate with LCD
 
 public:
    /**
@@ -149,7 +151,7 @@ public:
     *
     *  @param spi The SPI interface to use to communicate with LCD
     */
-   LCD(SPI *spi);
+   Lcd(Spi *spi);
 
 #ifdef ELEC_FREAKS
    // Only on Elecfreaks model
@@ -190,7 +192,7 @@ public:
     * @param  y     column address (0 .. 131)
     * @param  color 12-bit color value rrrrggggbbbb
     *
-    * @note See LCD.h for some sample color settings
+    * @note See lcd.h for some sample color settings
     *
     * @author James P Lynch July 7, 2007
     */
@@ -206,7 +208,7 @@ public:
     *
     * @author James P Lynch July 7, 2007
     *
-    * @note See LCD.h for some sample color settings
+    * @note See lcd.h for some sample color settings
     *
     * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)\n
     * Authors: \n
@@ -228,7 +230,7 @@ public:
     * @param  fill   indicates if the rectangle will be filled
     * @param  color  12-bit color value rrrrggggbbbb
     *
-    * @note See LCD.h for some sample color settings
+    * @note See lcd.h for some sample color settings
     *
     * @author James P Lynch July 7, 2007
     *
@@ -270,7 +272,7 @@ public:
     * @code{.c}
     *   Notes: Here's an example to display "E" at address (20,20)
     *
-    *   LCDPutChar('E', 20, 20, LCD::FontMedium, WHITE, BLACK);
+    *   LCDPutChar('E', 20, 20, Lcd::FontMedium, WHITE, BLACK);
     *
     *                (27,20)       (27,27)
     *                   |             |
@@ -301,7 +303,7 @@ public:
     * @param pString = pointer to character string to be displayed
     * @param x = row address (0 .. 131)
     * @param y = column address (0 .. 131)
-    * @param fontSize = font pitch (LCD::FontSmall, LCD::FontMedium, LCD::FontLarge)
+    * @param fontSize = font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
     * @param fColor = 12-bit foreground colour value rrrrggggbbbb
     * @param bColor = 12-bit background colour value rrrrggggbbbb
     *
@@ -348,4 +350,6 @@ private:
  * @}
  */
 
-#endif /* LCD_H */
+} // End namespace USBDM
+
+#endif /* INCLUDES_LCD_H_ */

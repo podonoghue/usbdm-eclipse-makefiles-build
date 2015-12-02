@@ -5,7 +5,7 @@
  *           Equivalent: MK10DN128M5, MK10DX128M5, MK10DN64M5, MK10DX32M5, MK10DX64M5, MK10DN32M5
  *
  * @version  V0.0
- * @date     2015/11
+ * @date     2015/12
  *
  *******************************************************************************************************/
 
@@ -56,11 +56,11 @@ typedef enum {
   I2S0_Rx_IRQn                  =  14,   /**<  30 I2S0 receive interrupt                                                           */
   UART0_LON_IRQn                =  15,   /**<  31 UART0 LON interrupt                                                              */
   UART0_RxTx_IRQn               =  16,   /**<  32 UART0 receive/transmit interrupt                                                 */
-  UART0_Error_IRQn              =  17,   /**<  33 UART0 error interrupt                                                            */
+  UART0_ERR_IRQn                =  17,   /**<  33 UART0 error interrupt                                                            */
   UART1_RxTx_IRQn               =  18,   /**<  34 UART1 receive/transmit interrupt                                                 */
-  UART1_Error_IRQn              =  19,   /**<  35 UART1 error interrupt                                                            */
+  UART1_ERR_IRQn                =  19,   /**<  35 UART1 error interrupt                                                            */
   UART2_RxTx_IRQn               =  20,   /**<  36 UART2 receive/transmit interrupt                                                 */
-  UART2_Error_IRQn              =  21,   /**<  37 UART0 error interrupt                                                            */
+  UART2_ERR_IRQn                =  21,   /**<  37 UART0 error interrupt                                                            */
   ADC0_IRQn                     =  22,   /**<  38 ADC0 interrupt                                                                   */
   CMP0_IRQn                     =  23,   /**<  39 CMP0 interrupt                                                                   */
   CMP1_IRQn                     =  24,   /**<  40 CMP1 interrupt                                                                   */
@@ -119,11 +119,11 @@ extern void I2S0_Tx_IRQHandler(void);          /**< I2S0 transmit interrupt     
 extern void I2S0_Rx_IRQHandler(void);          /**< I2S0 receive interrupt                                                           */
 extern void UART0_LON_IRQHandler(void);        /**< UART0 LON interrupt                                                              */
 extern void UART0_RxTx_IRQHandler(void);       /**< UART0 receive/transmit interrupt                                                 */
-extern void UART0_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART0_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void UART1_RxTx_IRQHandler(void);       /**< UART1 receive/transmit interrupt                                                 */
-extern void UART1_Error_IRQHandler(void);      /**< UART1 error interrupt                                                            */
+extern void UART1_ERR_IRQHandler(void);        /**< UART1 error interrupt                                                            */
 extern void UART2_RxTx_IRQHandler(void);       /**< UART2 receive/transmit interrupt                                                 */
-extern void UART2_Error_IRQHandler(void);      /**< UART0 error interrupt                                                            */
+extern void UART2_ERR_IRQHandler(void);        /**< UART0 error interrupt                                                            */
 extern void ADC0_IRQHandler(void);             /**< ADC0 interrupt                                                                   */
 extern void CMP0_IRQHandler(void);             /**< CMP0 interrupt                                                                   */
 extern void CMP1_IRQHandler(void);             /**< CMP1 interrupt                                                                   */

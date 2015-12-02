@@ -33,8 +33,8 @@
                <createFolder target="Snippets" />
                <excludeSourceFolder target="Snippets" />
                <copy source="Snippets/segment-lcd-example.cpp"   target="Snippets/segment-lcd-example.cpp" />
-               <copy source="Project_Headers/Segment_LCD.h"      target="Project_Headers/Segment_LCD.h" />
-               <copy source="Sources/Segment_LCD-MKL43Z4.c"      target="Sources/Segment_LCD.c" />
+               <copy source="Project_Headers/Segment_lcd.h"      target="Project_Headers/Segment_lcd.h" />
+               <copy source="Sources/Segment_lcd-MKL43Z4.c"      target="Sources/Segment_lcd.c" />
             </projectActionList>
          </projectActionList>
          
@@ -50,8 +50,8 @@
                <createFolder target="Snippets" />
                <excludeSourceFolder target="Snippets" />
                <copy source="Snippets/segment-lcd-example.cpp"   target="Snippets/segment-lcd-example.cpp" />
-               <copy source="Project_Headers/Segment_LCD.h"      target="Project_Headers/Segment_LCD.h" />
-               <copy source="Sources/Segment_LCD-MKL46Z4.c"      target="Sources/Segment_LCD.c" />
+               <copy source="Project_Headers/Segment_lcd.h"      target="Project_Headers/Segment_lcd.h" />
+               <copy source="Sources/Segment_lcd-MKL46Z4.c"      target="Sources/Segment_lcd.c" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

@@ -1,5 +1,5 @@
 /*
- * LPTMR.cpp
+ * @file lptmr.cpp (derived from lptmr-multi.cpp)
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue
@@ -8,7 +8,9 @@
 #include <stddef.h>
 #include "derivative.h"
 #include "utilities.h"
-#include "LPTMR.h"
+#include "lptmr.h"
+
+using namespace USBDM;
 
 /*!=========================================================================
  *
@@ -45,6 +47,5 @@ void LPTMR0_IRQHandler(void) {
 const LPTMR LPTMR_0 = {LPTMR0, &LPTMR0_CLOCK_REG, LPTMR0_CLOCK_MASK, LPTMR0_IRQn, LPTMR_IRQ_LEVEL_V};
 
 #endif
-
 
 #endif

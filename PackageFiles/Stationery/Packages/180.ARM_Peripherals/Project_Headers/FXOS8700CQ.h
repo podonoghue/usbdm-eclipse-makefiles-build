@@ -1,16 +1,18 @@
 /**
- * @file     FXOS8700CQ.h
+ * @file     fxos8700cq.h
  * @brief    Interface for FXOS8700CQ 3-axis accelerometer and magnetometer
  *
  * @version  V4.11.1.70
  * @date     18 June 2015
  */
 
-#ifndef FXOS8700CQ_H_
-#define FXOS8700CQ_H_
+#ifndef INCLUDE_USBDM_FXOS8700CQ_H_
+#define INCLUDE_USBDM_FXOS8700CQ_H_
 
 #include <stdint.h>
-#include "I2C.h"
+#include "i2c.h"
+
+namespace USBDM {
 
 /**
  * @addtogroup FXOS8700CQ_Group FXOS8700CQ 3-axis accelerometer and magnetometer
@@ -106,7 +108,7 @@
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  I2C *i2c = new I2C_0();
+ *  I2c *i2c = new I2C_0();
  *  FXOS8700CQ *accelerometer = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
  *
  *  uint8_t id = accelerometer->readID();
@@ -134,7 +136,7 @@
 class FXOS8700CQ {
 
 private:
-   USBDM::I2C *i2c;
+   USBDM::I2c *i2c;
 #ifdef MCU_MK22F51212
    static const uint8_t DEVICE_ADDRESS = 0x1C<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #else
@@ -209,7 +211,7 @@ public:
     * @param i2c  - The I2C interface to use
     * @param mode - Mode of operation (gain and filtering)
     */
-   FXOS8700CQ(USBDM::I2C *i2c, AccelerometerMode mode);
+   FXOS8700CQ(USBDM::I2c *i2c, AccelerometerMode mode);
    /**
     * Enable accelerometer and/or magnetometer
     *
@@ -285,4 +287,7 @@ public:
 /**
  * @}
  */
-#endif /* FXOS8700CQ_H_ */
+
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_FXOS8700CQ_H_ */

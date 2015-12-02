@@ -37,8 +37,8 @@
                </applyWhen>
                <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
                <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" />
-               <copy source="Project_Headers/PIT-MK.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/PIT-MK.cpp"              target="Sources/PIT.cpp" />
+               <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h" />
+               <copy source="Sources/pit-MK.cpp"              target="Sources/pit.cpp" />
             </projectActionList>
          </projectActionList>
          
@@ -60,8 +60,8 @@
                </applyWhen>
                <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
                <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" />
-               <copy source="Project_Headers/PIT-MKL.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/PIT-MKL.cpp"              target="Sources/PIT.cpp" />
+               <copy source="Project_Headers/pit-MKL.h"        target="Project_Headers/pit.h" />
+               <copy source="Sources/pit-MKL.cpp"              target="Sources/pit.cpp" />
             </projectActionList>
          </projectActionList>
          
@@ -82,8 +82,8 @@
                </applyWhen>
                <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
                <copy source="Snippets/pit-example2-MKM.cpp"   target="Snippets/pit-example2.cpp" />
-               <copy source="Project_Headers/PIT-MKM.h"        target="Project_Headers/PIT.h" />
-               <copy source="Sources/PIT-MKM.cpp"              target="Sources/PIT.cpp" />
+               <copy source="Project_Headers/pit-MKM.h"        target="Project_Headers/pit.h" />
+               <copy source="Sources/pit-MKM.cpp"              target="Sources/pit.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

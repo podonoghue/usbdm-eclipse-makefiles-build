@@ -1,9 +1,12 @@
+/**
+ * @file hmc5883l-example.cpp
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "I2C.h"
-#include "HMC5883L.h"
+#include "i2c.h"
+#include "hmc5883l.h"
 
 using namespace USBDM;
 
@@ -17,7 +20,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
+   I2c *i2c = new $(demo.cpp.external.i2c)();
 
    HMC5883L *compass = new HMC5883L(i2c);
 

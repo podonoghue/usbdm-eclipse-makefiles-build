@@ -1,5 +1,5 @@
 /*
- * Seed_SLD00200P.h
+ * seed_sld00200p.h
  *
  * Pin mapping for Seeed Studio ePaper interface
  *

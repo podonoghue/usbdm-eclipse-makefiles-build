@@ -1,14 +1,16 @@
 /*
- * DMA.h
+ * dma.h (derived from dma-MKL.h)
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue
  */
 
-#ifndef DMA_H_
-#define DMA_H_
+#ifndef INCLUDE_USBDM_DMA_H_
+#define INCLUDE_USBDM_DMA_H_
 
 #include "derivative.h"
+
+namespace USBDM {
 
 class DMAChannel {
 public:
@@ -131,4 +133,7 @@ public:
       thisPtr = this;
    }
 };
-#endif /* DMA_H_ */
+
+} // End namespace USBDM
+
+#endif /* INCLUDE_USBDM_DMA_H_ */

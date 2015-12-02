@@ -1,10 +1,13 @@
+/**
+ * @file mag3310-example.cpp
+ */
 #include <math.h>
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
-#include "I2C.h"
-#include "MAG3310.h"
+#include "i2c.h"
+#include "mag3310.h"
 #include "delay.h"
 
 using namespace USBDM;
@@ -21,7 +24,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2C *i2c = new $(demo.cpp.magnetometer.i2c)();
+   I2c *i2c = new $(demo.cpp.mag3110.i2c)();
    MAG3310 *magnetometer = new MAG3310(i2c);
 
    uint8_t id = magnetometer->readID();

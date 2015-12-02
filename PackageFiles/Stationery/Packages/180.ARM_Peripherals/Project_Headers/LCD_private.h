@@ -1,3 +1,6 @@
+/*
+ * @file lcd_private.h
+ */
 #ifndef LCD_PRIVATE_H
 #define LCD_PRIVATE_H
 
