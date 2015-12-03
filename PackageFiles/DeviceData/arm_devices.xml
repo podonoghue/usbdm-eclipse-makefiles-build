@@ -1202,6 +1202,7 @@ NOTES:
          <flashProgramRef ref="Kinetis-MKL-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KL27P64M48SF2RM</note>
+         <note>Tested</note>
       </device>
 <!-- MKL27Z256M4 -->
       <device name="MKL27Z128M4" family="CortexM0plus" subfamily="MKL27Z4">
@@ -1460,6 +1461,7 @@ NOTES:
          <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>KV31P100M120SF8RM</note>
+         <note>Tested</note>
       </device>
       <device name="MKV31F512M12" family="CortexM4F" subfamily="MKV31F12">
          <memoryRef ref="kinetis32K_64K_Ram" />
@@ -1715,6 +1717,7 @@ NOTES:
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
          <note>K20P32M50SF0RM</note>
+         <note>Tested</note>
       </device>
 <!-- MK20-M7 -->
       <device name="MK20DX64M7"  family="CortexM4" subfamily="MK20D7">
@@ -1726,6 +1729,7 @@ NOTES:
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
+         <note>K20P64M72SF1RM</note>
       </device>
       <device name="MK20DX128M7" family="CortexM4" subfamily="MK20D7">
          <memoryRef ref="kinetis16K_16K_Ram" />
@@ -1736,6 +1740,7 @@ NOTES:
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
+         <note>K20P64M72SF1RM</note>
       </device>
       <device name="MK20DX256M7" family="CortexM4" subfamily="MK20D7">
          <memoryRef ref="kinetis32K_32K_Ram" />
@@ -1748,6 +1753,8 @@ NOTES:
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFL-flash-program" />
          <registerDescriptionRef ref="CortexM4-register-description" />
+         <note>K20P64M72SF1RM</note>
+         <note>Tested</note>
       </device>
 <!-- MK20-M10 -->
       <device name="MK20DN512M10"  family="CortexM4" subfamily="MK20D10">
@@ -1952,6 +1959,7 @@ NOTES:
          <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K22P121M120SF7RM</note>
+         <note>Tested(FRDM-MK22F)</note>
       </device>
       <device name="MK22FN1M0M12" family="CortexM4F" subfamily="MK22F12">
          <memoryRef ref="kinetis64K_64K_Ram" />
@@ -2550,20 +2558,48 @@ NOTES:
          <note>K64P144M120SF5RM</note>
       </device>
       
-<!-- MK66-M12 -->
-      <device name="MK66FX1M0M12" family="CortexM4F" subfamily="MK66F12">
+<!-- MK65-M18 -->
+      <device name="MK65FX1M0M18" family="CortexM4F" subfamily="MK65F18">
          <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
-         <memoryRef ref="FTFE_DFlash0_128K_4KS" />
+         <memoryRef ref="FTFE_DFlash0_256K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x650083CA" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K65P169M180SF5RMV2</note>
+      </device>
+      <device name="MK65FN2M0M18" family="CortexM4F" subfamily="MK65F18">
+         <memoryRef ref="kinetis64K_192K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash2_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash3_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x650083CA" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K65P169M180SF5RMV2</note>
+      </device>
+      
+<!-- MK66-M18 -->
+      <device name="MK66FX1M0M18" family="CortexM4F" subfamily="MK66F18">
+         <memoryRef ref="kinetis64K_192K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_DFlash0_256K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x660083CA" mask="0xFFF00F80" />
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFE-flash-program" />
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K66P144M180SF5RMV2</note>
+         <note>Tested</note>
       </device>
-      <device name="MK66FN2M0M12" family="CortexM4F" subfamily="MK66F12">
+      <device name="MK66FN2M0M18" family="CortexM4F" subfamily="MK66F18">
          <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
