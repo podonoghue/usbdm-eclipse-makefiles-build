@@ -310,7 +310,7 @@ NOTES:
          <memoryRange middle="0x20000000" size="16K" name= "ram" />
       </memory>
       <memory id="kinetis8K_16K_Ram" type="ram">
-         <memoryRange start="0x1FFFC000" size="24K" name= "ram" />
+         <memoryRange start="0x1FFFE000" size="24K" name= "ram" />
       </memory>
       <memory id="kinetis8K_24K_Ram" type="ram">
          <memoryRange start="0x1FFFE000" size="32K" name= "ram" />
@@ -1449,7 +1449,7 @@ NOTES:
          <tclScriptRef ref="Kinetis-Kxx-Scripts" />
          <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM4F-register-description" />
-         <note>KV31P100M120SF8RM</note>
+         <note>KV31P100M100SF9RM</note>
       </device>
 <!-- MKV31F12-->
       <device name="MKV31F256M12" family="CortexM4F" subfamily="MKV31F12">
