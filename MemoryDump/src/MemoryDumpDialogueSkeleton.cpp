@@ -85,6 +85,9 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid->SetMargins( 0, 0 );
 	
 	// Columns
+	memoryRangesGrid->SetColSize( 0, 108 );
+	memoryRangesGrid->SetColSize( 1, 116 );
+	memoryRangesGrid->SetColSize( 2, 80 );
 	memoryRangesGrid->EnableDragColMove( false );
 	memoryRangesGrid->EnableDragColSize( true );
 	memoryRangesGrid->SetColLabelSize( 30 );

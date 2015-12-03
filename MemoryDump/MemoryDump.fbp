@@ -713,7 +713,7 @@
                                 <property name="col_label_values">&quot;Start&quot; &quot;End&quot; &quot;Width&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">3</property>
-                                <property name="column_sizes"></property>
+                                <property name="column_sizes">108,116,80</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
