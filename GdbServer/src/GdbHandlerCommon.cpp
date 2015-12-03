@@ -740,13 +740,13 @@ void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferS
          case MemPRAM:
             log.printq(" - XRAM/XROM - Ignored\n");
             break;
-         case MemFlexNVM:
          case MemFlexRAM:
             log.printq(" - FlexNVM/FlexNVM - Ignored\n");
             break;
          case MemEEPROM:
             log.printq(" - EEPROM - Ignored\n");
             break;
+         case MemFlexNVM:
          case MemDFlash:
          case MemPFlash:
          case MemFLASH:
