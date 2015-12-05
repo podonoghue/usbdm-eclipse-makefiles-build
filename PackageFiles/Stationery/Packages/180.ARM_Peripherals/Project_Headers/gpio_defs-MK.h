@@ -170,6 +170,17 @@ static constexpr uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
  */
 static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
 
+#ifndef PORT_PCR_ODE_MASK
+// Some devices don't have ODE function on pin
+// The open-drain mode is automatically selected when I2C function is selected for the pin
+#define PORT_PCR_ODE_MASK 0
+#endif
+/**
+ * Default PCR setting for I2C pins (excluding multiplexor value)
+ * High drive strength + Pull-up + Opendrain (if available)
+ */
+static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
+
 /**
  * @brief Template representing a pin with Digital I/O capability
  *
@@ -210,10 +221,10 @@ static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
  * @tparam gpio            GPIO hardware
  * @tparam bitNum          Bit number in the port
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t bitNum> class Digital_T {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t defPcrValue, uint32_t gpio, const uint32_t bitNum> class Digital_T {
 
 public:
-   using Pcr = Pcr_T<portClockMask, port+offsetof(PORT_Type,PCR[bitNum]), PORT_PCR_MUX(pcrFn)|DEFAULT_PCR>; //!< PCR information
+   using Pcr = Pcr_T<portClockMask, pcrReg, defPcrValue>; //!< PCR information
 
 public:
    /**
@@ -240,7 +251,7 @@ public:
     * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setOutput(uint32_t pcrValue=DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|defPcrValue);
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
    }
    /**
@@ -249,7 +260,7 @@ public:
     * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setInput(uint32_t pcrValue=DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|defPcrValue);
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
    }
    /**
@@ -310,7 +321,7 @@ public:
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FIXED_GPIO_FN, GPIOA_BasePtr, bitNum>;
+template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOA_BasePtr, bitNum>;
 #endif
 #ifdef PORTB_CLOCK_MASK
 /**
@@ -348,7 +359,7 @@ template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FIXED_GPIO_FN, GPIOB_BasePtr, bitNum>;
+template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOB_BasePtr, bitNum>;
 #endif
 #ifdef PORTC_CLOCK_MASK
 /**
@@ -386,7 +397,7 @@ template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FIXED_GPIO_FN, GPIOC_BasePtr, bitNum>;
+template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOC_BasePtr, bitNum>;
 #endif
 #ifdef PORTD_CLOCK_MASK
 /**
@@ -424,7 +435,7 @@ template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FIXED_GPIO_FN, GPIOD_BasePtr, bitNum>;
+template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOD_BasePtr, bitNum>;
 #endif
 #ifdef PORTE_CLOCK_MASK
 /**
@@ -462,7 +473,7 @@ template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FIXED_GPIO_FN, GPIOE_BasePtr, bitNum>;
+template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOE_BasePtr, bitNum>;
 #endif
 #ifdef PORTF_CLOCK_MASK
 /**
@@ -500,7 +511,7 @@ template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN, GPIOF_BasePtr, bitNum>;
+template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOF_BasePtr, bitNum>;
 #endif
 
 /**
@@ -1141,16 +1152,83 @@ constexpr uint32_t getPcrMux(unsigned channel, const PcrInfo info[]) {
    return (channel<=32)?info[channel].muxValue:(1/0);
 #pragma GCC diagnostic pop
 }
-
+/**
+ * @brief Get address of GPIO associated with peripheral pin
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel/Pin e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return GPIO address e.g. GPIOC_BasePtr
+ */
+constexpr uint32_t getGpioAddress(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].gpioAddress:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Get GPIO bit number associated with a peripheral channel.
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return  Bit number of GPIO bit
+ */
+constexpr uint32_t getGpioBit(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].gpioBit:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Templated function to set a PCR to the default value
+ *
+ * @tparam  Last PCR to modify
+ */
 template<typename Last>
 void processPcrs() {
    Last::setPCR();
 }
 
+/**
+ * @brief Templated function to set a collection of PCRs to the default value
+ *
+ * @tparam  Pcr1 PCR to modify
+ * @tparam  Pcr2 PCR to modify
+ * @tparam  Rest remaining PCRs to modify
+ */
 template<typename Pcr1, typename  Pcr2, typename  ... Rest>
 void processPcrs() {
    processPcrs<Pcr1>();
    processPcrs<Pcr2, Rest...>();
+}
+/**
+ * @brief Templated function to set a PCR to the default value
+ *
+ * @param   pcrValue PCR value to set
+ *
+ * @tparam  Last PCR to modify
+ */
+template<typename Last>
+void processPcrs(uint32_t pcrValue) {
+   Last::setPCR(pcrValue);
+}
+
+/**
+ * @brief Templated function to set a collection of PCRs to the default value
+ *
+ * @param pcrValue PCR value to set
+ *
+ * @tparam  Pcr1 PCR to modify
+ * @tparam  Pcr2 PCR to modify
+ * @tparam  Rest remaining PCRs to modify
+ */
+template<typename Pcr1, typename  Pcr2, typename  ... Rest>
+void processPcrs(uint32_t pcrValue) {
+   processPcrs<Pcr1>(pcrValue);
+   processPcrs<Pcr2, Rest...>(pcrValue);
 }
 
 } // End namespace USBDM

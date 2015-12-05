@@ -60,7 +60,7 @@ int main() {
 
    printf("Calibrating magnetometer\nPlease rotate the board in all dimensions until complete\n");
    for (int time=5; time>0; time--) {
-      printf("Calibrating for %2d seconds", time);
+      printf("Calibrating for %2d seconds\n", time);
       accelmag->calibrateMagnetometer(1);
    }
 

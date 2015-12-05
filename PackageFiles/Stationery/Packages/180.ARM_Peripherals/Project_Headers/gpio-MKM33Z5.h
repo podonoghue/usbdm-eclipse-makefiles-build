@@ -94,6 +94,11 @@ using gpioI_3              = const USBDM::GpioI<3>;
  * @}
  */
 /**
+* @addtogroup AnalogueIO_Group Analogue Input
+* @brief Allows use of port pins as analogue inputs
+* @{
+*/
+/**
  * Convenience templated class representing an ADC
  *
  * Example
@@ -116,11 +121,6 @@ using gpioI_3              = const USBDM::GpioI<3>;
 template<uint8_t adcChannel> using Adc0 =
    Analogue_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
-/**
-* @addtogroup AnalogueIO_Group Analogue Input
-* @brief Allows use of port pins as analogue inputs
-* @{
-*/
 #if (PTC5_SIG_SEL == 0)
 using adc0_se0             = const USBDM::Adc0<0>;
 #endif
@@ -161,6 +161,11 @@ using adc0_se11            = const USBDM::Adc0<11>;
  * @}
  */
 /**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+/**
  * Convenience templated class representing an SPI pin
  *
  * Example
@@ -173,15 +178,15 @@ using adc0_se11            = const USBDM::Adc0<11>;
 template<uint8_t spiPinNum> using Spi0Pin =
    Pcr_T<getPortClockMask(spiPinNum,Spi0Info), getPcrReg(spiPinNum,Spi0Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi0Info))|DEFAULT_PCR>;
 
+using spi0_SCK             = const USBDM::Spi0Pin<0>;
+/**
+ * @}
+ */
 /**
 * @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
 * @brief Pins used for SPI functions
 * @{
 */
-using spi0_SCK             = const USBDM::Spi0Pin<0>;
-/**
- * @}
- */
 /**
  * Convenience templated class representing an SPI pin
  *
@@ -195,12 +200,83 @@ using spi0_SCK             = const USBDM::Spi0Pin<0>;
 template<uint8_t spiPinNum> using Spi1Pin =
    Pcr_T<getPortClockMask(spiPinNum,Spi1Info), getPcrReg(spiPinNum,Spi1Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi1Info))|DEFAULT_PCR>;
 
+using spi1_SCK             = const USBDM::Spi1Pin<0>;
 /**
-* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
-* @brief Pins used for SPI functions
+ * @}
+ */
+/**
+* @addtogroup I2CIO_Group I2C, Inter-Integrated-Circuit Interface
+* @brief Pins used for I2C functions
 * @{
 */
-using spi1_SCK             = const USBDM::Spi1Pin<0>;
+/**
+ * Convenience templated class representing PCR associated with a I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c0Pcr =
+   Pcr_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c0Info))|I2C_DEFAULT_PCR>;
+
+/**
+ * Convenience templated class representing a GPIO used as I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c0Gpio =
+   Digital_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+             getGpioAddress(i2cPinIndex,I2c0Info),   getGpioBit(i2cPinIndex,I2c0Info)>;
+using i2c0_SCLPcr    = const USBDM::I2c0Pcr<0>;
+using i2c0_SCLGpio   = const USBDM::I2c0Gpio<0>;
+using i2c0_SDAPcr    = const USBDM::I2c0Pcr<1>;
+using i2c0_SDAGpio   = const USBDM::I2c0Gpio<1>;
+/**
+ * @}
+ */
+/**
+* @addtogroup I2CIO_Group I2C, Inter-Integrated-Circuit Interface
+* @brief Pins used for I2C functions
+* @{
+*/
+/**
+ * Convenience templated class representing PCR associated with a I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c1Pcr =
+   Pcr_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c1Info))|I2C_DEFAULT_PCR>;
+
+/**
+ * Convenience templated class representing a GPIO used as I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c1Gpio =
+   Digital_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+             getGpioAddress(i2cPinIndex,I2c1Info),   getGpioBit(i2cPinIndex,I2c1Info)>;
+using i2c1_SDAPcr    = const USBDM::I2c1Pcr<1>;
+using i2c1_SDAGpio   = const USBDM::I2c1Gpio<1>;
+using i2c1_SCLPcr    = const USBDM::I2c1Pcr<0>;
+using i2c1_SCLGpio   = const USBDM::I2c1Gpio<0>;
 /**
  * @}
  */

@@ -3785,7 +3785,9 @@ namespace USBDM {
 struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
    uint32_t pcrAddress;  //!< PCR[x] register address
-   int      muxValue;    //!< PCR mux value to select this function
+   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
+   uint8_t  gpioBit;     //!< Bit number of pin in GPIO
+   uint8_t  muxValue;    //!< PCR mux value to select this function
 };
 /**
  * @}

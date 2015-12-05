@@ -2669,16 +2669,6 @@
 //     <3=> PTE6<selection=PTE6_SIG_SEL,I2C0_SCL>
 //     <0=> Default
 #define I2C0_SCL_PIN_SEL     0
-#if (I2C0_SCL_PIN_SEL == 1)
-#define I2C0_SCL_GPIO        USBDM::GpioD<7>
-#define I2C0_SCL_FN          2
-#elif (I2C0_SCL_PIN_SEL == 2)
-#define I2C0_SCL_GPIO        USBDM::GpioG<3>
-#define I2C0_SCL_FN          3
-#elif (I2C0_SCL_PIN_SEL == 3)
-#define I2C0_SCL_GPIO        USBDM::GpioE<6>
-#define I2C0_SCL_FN          5
-#endif
 
 // Pin Mapping for I2C0_SDA signal
 //   <o> I2C0_SDA [PTE0, PTG4, PTE7]<name=I2C0_SDA_PIN_SEL>
@@ -2689,16 +2679,6 @@
 //     <3=> PTE7<selection=PTE7_SIG_SEL,I2C0_SDA>
 //     <0=> Default
 #define I2C0_SDA_PIN_SEL     0
-#if (I2C0_SDA_PIN_SEL == 1)
-#define I2C0_SDA_GPIO        USBDM::GpioE<0>
-#define I2C0_SDA_FN          2
-#elif (I2C0_SDA_PIN_SEL == 2)
-#define I2C0_SDA_GPIO        USBDM::GpioG<4>
-#define I2C0_SDA_FN          3
-#elif (I2C0_SDA_PIN_SEL == 3)
-#define I2C0_SDA_GPIO        USBDM::GpioE<7>
-#define I2C0_SDA_FN          5
-#endif
 
 // </h>
 
@@ -2712,13 +2692,6 @@
 //     <2=> PTE2<selection=PTE2_SIG_SEL,I2C1_SDA>
 //     <0=> Default
 #define I2C1_SDA_PIN_SEL     0
-#if (I2C1_SDA_PIN_SEL == 1)
-#define I2C1_SDA_GPIO        USBDM::GpioF<6>
-#define I2C1_SDA_FN          3
-#elif (I2C1_SDA_PIN_SEL == 2)
-#define I2C1_SDA_GPIO        USBDM::GpioE<2>
-#define I2C1_SDA_FN          4
-#endif
 
 // Pin Mapping for I2C1_SCL signal
 //   <o> I2C1_SCL [PTF5, PTE3]<name=I2C1_SCL_PIN_SEL>
@@ -2728,13 +2701,6 @@
 //     <2=> PTE3<selection=PTE3_SIG_SEL,I2C1_SCL>
 //     <0=> Default
 #define I2C1_SCL_PIN_SEL     0
-#if (I2C1_SCL_PIN_SEL == 1)
-#define I2C1_SCL_GPIO        USBDM::GpioF<5>
-#define I2C1_SCL_FN          3
-#elif (I2C1_SCL_PIN_SEL == 2)
-#define I2C1_SCL_GPIO        USBDM::GpioE<3>
-#define I2C1_SCL_FN          4
-#endif
 
 // </h>
 
@@ -3973,71 +3939,74 @@ namespace USBDM {
 struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
    uint32_t pcrAddress;  //!< PCR[x] register address
-   int      muxValue;    //!< PCR mux value to select this function
+   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
+   uint8_t  gpioBit;     //!< Bit number of pin in GPIO
+   uint8_t  muxValue;    //!< PCR mux value to select this function
 };
 /**
  * Peripheral pin mapping information for Analogue Input
  */
 constexpr PcrInfo Adc0Info[32] = {
+ //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (ADC0_SE0_PIN_SEL == 1)
- /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]), 0 },
+ /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOC_BasePtr,  5,  0 },
 #else
- /*  0 */  { 0, 0, 0 },
+ /*  0 */  { 0 },
 #endif
 #if (ADC0_SE1_PIN_SEL == 1)
- /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]), 0 },
+ /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOC_BasePtr,  6,  0 },
 #else
- /*  1 */  { 0, 0, 0 },
+ /*  1 */  { 0 },
 #endif
 #if (ADC0_SE2_PIN_SEL == 1)
- /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]), 0 },
+ /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOC_BasePtr,  7,  0 },
 #else
- /*  2 */  { 0, 0, 0 },
+ /*  2 */  { 0 },
 #endif
 #if (ADC0_SE3_PIN_SEL == 1)
- /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]), 0 },
+ /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOD_BasePtr,  4,  0 },
 #else
- /*  3 */  { 0, 0, 0 },
+ /*  3 */  { 0 },
 #endif
 #if (ADC0_SE4_PIN_SEL == 1)
- /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]), 0 },
+ /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOD_BasePtr,  5,  0 },
 #else
- /*  4 */  { 0, 0, 0 },
+ /*  4 */  { 0 },
 #endif
 #if (ADC0_SE5_PIN_SEL == 1)
- /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]), 0 },
+ /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOD_BasePtr,  6,  0 },
 #else
- /*  5 */  { 0, 0, 0 },
+ /*  5 */  { 0 },
 #endif
 #if (ADC0_SE6_PIN_SEL == 1)
- /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]), 0 },
+ /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOE_BasePtr,  7,  0 },
 #else
- /*  6 */  { 0, 0, 0 },
+ /*  6 */  { 0 },
 #endif
 #if (ADC0_SE7_PIN_SEL == 1)
- /*  7 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]), 0 },
+ /*  7 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOF_BasePtr,  0,  0 },
 #else
- /*  7 */  { 0, 0, 0 },
+ /*  7 */  { 0 },
 #endif
 #if (ADC0_SE8_PIN_SEL == 1)
- /*  8 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]), 0 },
+ /*  8 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOF_BasePtr,  1,  0 },
 #else
- /*  8 */  { 0, 0, 0 },
+ /*  8 */  { 0 },
 #endif
 #if (ADC0_SE9_PIN_SEL == 1)
- /*  9 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]), 0 },
+ /*  9 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOF_BasePtr,  2,  0 },
 #else
- /*  9 */  { 0, 0, 0 },
+ /*  9 */  { 0 },
 #endif
 #if (ADC0_SE10_PIN_SEL == 1)
- /* 10 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]), 0 },
+ /* 10 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOG_BasePtr,  1,  0 },
 #else
- /* 10 */  { 0, 0, 0 },
+ /* 10 */  { 0 },
 #endif
 #if (ADC0_SE11_PIN_SEL == 1)
- /* 11 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]), 0 },
+ /* 11 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOG_BasePtr,  2,  0 },
 #else
- /* 11 */  { 0, 0, 0 },
+ /* 11 */  { 0 },
 #endif
 };
 
@@ -4045,12 +4014,13 @@ constexpr PcrInfo Adc0Info[32] = {
  * Peripheral pin mapping information for SPI, Serial Peripheral Interface
  */
 constexpr PcrInfo Spi0Info[32] = {
+ //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (SPI0_SCK_PIN_SEL == 1)
- /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]), 2 },
+ /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOG_BasePtr,  3,  2 },
 #elif (SPI0_SCK_PIN_SEL == 2)
- /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]), 3 },
+ /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOD_BasePtr,  2,  3 },
 #else
- /*  0 */  { 0, 0, 0 },
+ /*  0 */  { 0 },
 #endif
 };
 
@@ -4058,12 +4028,59 @@ constexpr PcrInfo Spi0Info[32] = {
  * Peripheral pin mapping information for SPI, Serial Peripheral Interface
  */
 constexpr PcrInfo Spi1Info[32] = {
+ //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (SPI1_SCK_PIN_SEL == 1)
- /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[4]), 2 },
+ /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOF_BasePtr,  4,  2 },
 #elif (SPI1_SCK_PIN_SEL == 2)
- /*  0 */  { PORTH_CLOCK_MASK, PORTH_BasePtr+offsetof(PORT_Type,PCR[7]), 3 },
+ /*  0 */  { PORTH_CLOCK_MASK, PORTH_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOH_BasePtr,  7,  3 },
 #else
- /*  0 */  { 0, 0, 0 },
+ /*  0 */  { 0 },
+#endif
+};
+
+/**
+ * Peripheral pin mapping information for I2C, Inter-Integrated-Circuit Interface
+ */
+constexpr PcrInfo I2c0Info[32] = {
+ //          clockMask pcrAddress gpioAddress gpioBit muxValue
+#if (I2C0_SCL_PIN_SEL == 1)
+ /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOD_BasePtr,  7,  2 },
+#elif (I2C0_SCL_PIN_SEL == 2)
+ /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOG_BasePtr,  3,  3 },
+#elif (I2C0_SCL_PIN_SEL == 3)
+ /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOE_BasePtr,  6,  5 },
+#else
+ /*  0 */  { 0 },
+#endif
+#if (I2C0_SDA_PIN_SEL == 1)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOE_BasePtr,  0,  2 },
+#elif (I2C0_SDA_PIN_SEL == 2)
+ /*  1 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOG_BasePtr,  4,  3 },
+#elif (I2C0_SDA_PIN_SEL == 3)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOE_BasePtr,  7,  5 },
+#else
+ /*  1 */  { 0 },
+#endif
+};
+
+/**
+ * Peripheral pin mapping information for I2C, Inter-Integrated-Circuit Interface
+ */
+constexpr PcrInfo I2c1Info[32] = {
+ //          clockMask pcrAddress gpioAddress gpioBit muxValue
+#if (I2C1_SCL_PIN_SEL == 1)
+ /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOF_BasePtr,  5,  3 },
+#elif (I2C1_SCL_PIN_SEL == 2)
+ /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOE_BasePtr,  3,  4 },
+#else
+ /*  0 */  { 0 },
+#endif
+#if (I2C1_SDA_PIN_SEL == 1)
+ /*  1 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOF_BasePtr,  6,  3 },
+#elif (I2C1_SDA_PIN_SEL == 2)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOE_BasePtr,  2,  4 },
+#else
+ /*  1 */  { 0 },
 #endif
 };
 

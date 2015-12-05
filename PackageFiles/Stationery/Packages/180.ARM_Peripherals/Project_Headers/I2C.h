@@ -17,12 +17,6 @@
 
 namespace USBDM {
 
-#ifndef PORT_PCR_ODE_MASK
-// Some devices don't have ODE function on pin
-// The open-drain mode is automatically selected when I2C function is selected for the pin
-#define PORT_PCR_ODE_MASK 0
-#endif
-
 /**
  * @addtogroup I2C_Group Inter-Integrated-Circuit I2C
  * @brief C++ Class allowing access to I2C interface
@@ -175,10 +169,10 @@ public:
  * @tparam  i2cBasePtr     Base address of I2C hardware
  * @tparam  i2cClockReg    Address of SIM register controlling I2C hardware clock
  * @tparam  i2cClockMask   Clock mask for SIM clock register
- * @tparam  Scl            GpioX used for SCL signal
- * @tparam  sclFn          PCR Mux value to connect SCL to pin
- * @tparam  Sda            GpioX used for SDA signal
- * @tparam  sdaFn          PCR Mux value to connect SDA to pin
+ * @tparam  SclPcr         Pcr used for SCL signal
+ * @tparam  SclGpio        Gpio used for SCL signal
+ * @tparam  SdaPcr         Pcr used for SDA signal
+ * @tparam  SdaGpio        Gpio used for SDA signal
  *
  * <b>Example</b>
  * @code
@@ -208,7 +202,7 @@ public:
  *
  *  @endcode
  */
-template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, class Scl, int sclFn, class Sda, int sdaFn> class I2C_T : public I2c {
+template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, class SclPcr, class SclGpio, class SdaPcr, class SdaGpio> class I2C_T : public I2c {
 public:
    static class I2c *thisPtr;
 
@@ -248,8 +242,8 @@ public:
       thisPtr = this;
 
       // Configure I2C pins
-      Sda::Pcr::setPCR(PORT_PCR_MUX(sclFn)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-      Scl::Pcr::setPCR(PORT_PCR_MUX(sdaFn)|PORT_PCR_ODE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+      SdaPcr::setPCR();
+      SclPcr::setPCR();
 
       if (mode&I2C_C1_IICIE_MASK) {
          NVIC_EnableIRQ(I2C0_IRQn);
@@ -271,25 +265,25 @@ public:
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
-      Sda::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      SdaGpio::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
-      Scl::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
-      Scl::set();
-      Scl::setOutput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      SclGpio::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      SclGpio::set();
+      SclGpio::setOutput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
       for (int i=0; i<9; i++) {
          // Set clock high (3-state)
-         Scl::set();
+         SclGpio::set();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
          // If data is high bus is OK
-         if (Sda::read()) {
+         if (SdaGpio::read()) {
             break;
          }
          // Set clock low
-         Scl::clear();
+         SclGpio::clear();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
@@ -297,7 +291,7 @@ public:
    }
 };
 
-#if defined(I2C0) && defined(I2C0_SCL_GPIO) && defined(I2C0_SDA_GPIO)
+#if defined(I2C0) && (I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0)
 /**
  * @brief Convenience template class representing the I2C0 interface
  *
@@ -324,10 +318,10 @@ public:
  *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
  *  @endcode
  */
-using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_SCL_GPIO, I2C0_SCL_FN, I2C0_SDA_GPIO, I2C0_SDA_FN>;
+using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
 #endif
 
-#if defined(I2C1) && defined(I2C1_SCL_GPIO) && defined(I2C1_SDA_GPIO)
+#if defined(I2C1) && (I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)
 /**
  * @brief Convenience template class representing the I2C1 interface
  *
@@ -355,10 +349,10 @@ using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOC
  *  }
  *  @endcode
  */
-using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C1_SCL_GPIO, I2C1_SCL_FN, I2C1_SDA_GPIO, I2C1_SDA_FN>;
+using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
 #endif
 
-#if defined(I2C2) && defined(I2C2_SCL_GPIO) && defined(I2C2_SDA_GPIO)
+#if defined(I2C2) && (I2C2_SCL_PIN_SEL!=0) && (I2C2_SDA_PIN_SEL!=0)
 /**
  * @brief Convenience template class representing the I2C2 interface
  *
@@ -386,7 +380,7 @@ using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOC
  *  }
  *  @endcode
  */
-using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, USBDM::I2C2_SCL_GPIO, I2C2_SCL_FN, USBDM::I2C2_SDA_GPIO, I2C2_SDA_FN>;
+using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, i2c2_SCLPcr, i2c2_SCLGpio, i2c2_SDAPcr, i2c2_SDAGpio>;
 #endif
 
 /**

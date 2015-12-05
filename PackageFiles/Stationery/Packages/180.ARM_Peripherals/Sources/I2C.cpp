@@ -9,7 +9,7 @@
 using namespace USBDM;
 
 #if defined(I2C0)
-#if !defined(I2C0_SCL_GPIO) || !defined(I2C0_SDA_GPIO)
+#if (I2C0_SCL_PIN_SEL==0) || (I2C0_SDA_PIN_SEL==0)
 #warning "I2C0 unavailable - Please check pin mapping for I2C0_SCL and I2C0_SDA"
 #else
 
@@ -26,7 +26,7 @@ void I2C0_IRQHandler() {
 #endif
 
 #if defined(I2C1)
-#if !defined(I2C1_SCL_GPIO) || !defined(I2C1_SDA_GPIO)
+#if (I2C1_SCL_PIN_SEL==0) || (I2C1_SDA_PIN_SEL==0)
 #warning "I2C1 unavailable - Please check pin mapping for I2C1_SCL and I2C1_SDA"
 #else
 
