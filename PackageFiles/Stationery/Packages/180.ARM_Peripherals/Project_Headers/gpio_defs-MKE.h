@@ -31,27 +31,22 @@
 #ifdef SIM_SCGC5_PORTA_MASK
 #define PORTA_CLOCK_MASK  SIM_SCGC5_PORTA_MASK
 #define PORTA_CLOCK_REG   SCGC5
-#define PORTA_GPIO_FN     FIXED_GPIO_FN
 #endif
 #ifdef SIM_SCGC5_PORTB_MASK
 #define PORTB_CLOCK_MASK  SIM_SCGC5_PORTB_MASK
 #define PORTB_CLOCK_REG   SCGC5
-#define PORTB_GPIO_FN     FIXED_GPIO_FN
 #endif
 #ifdef SIM_SCGC5_PORTC_MASK
 #define PORTC_CLOCK_MASK  SIM_SCGC5_PORTC_MASK
 #define PORTC_CLOCK_REG   SCGC5
-#define PORTC_GPIO_FN     FIXED_GPIO_FN
 #endif
 #ifdef SIM_SCGC5_PORTD_MASK
 #define PORTD_CLOCK_MASK  SIM_SCGC5_PORTD_MASK
 #define PORTD_CLOCK_REG   SCGC5
-#define PORTD_GPIO_FN     FIXED_GPIO_FN
 #endif
 #ifdef SIM_SCGC5_PORTE_MASK
 #define PORTE_CLOCK_MASK  SIM_SCGC5_PORTE_MASK
 #define PORTE_CLOCK_REG   SCGC5
-#define PORTE_GPIO_FN     FIXED_GPIO_FN
 #endif
 #ifdef SIM_SCGC5_PORTF_MASK
 #define PORTF_CLOCK_MASK  SIM_SCGC5_PORTF_MASK
@@ -125,9 +120,9 @@ namespace USBDM {
  *
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
  * @tparam pcrReg          PCR to be manipulated
- * @tparam defaultPcrValue Default value for PCR
+ * @tparam defPcrValue     Default value for PCR
  */
-template<uint32_t clockMask, uint32_t pcrReg> class PCRInit {
+template<uint32_t clockMask, uint32_t pcrReg, uint32_t defPcrValue> class Pcr_T {
 
 public:
    /**
@@ -136,7 +131,7 @@ public:
     *
     * @param pcrValue PCR value made up of PORT_PCR_ masks
     */
-   static void setPCR(uint32_t pcrValue) {
+   static void setPCR(uint32_t pcrValue=defPcrValue) {
       if (pcrReg != 0) {
          enableClock();
          *reinterpret_cast<volatile uint32_t *>(pcrReg) = pcrValue;
@@ -165,15 +160,15 @@ public:
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
-static const uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 /**
  * PCR multiplexor value for digital function
  */
-static const uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
+static constexpr uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static const uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
+static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
 
 /**
  * @brief Template representing a pin with Digital I/O capability
@@ -181,7 +176,7 @@ static const uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::DigitalIOT<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
+ * USBDM::Digital_T<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
  *
  * // Set as digital output
  * pta3.setDigitalOutput();
@@ -215,10 +210,10 @@ static const uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
  * @tparam gpio            GPIO hardware
  * @tparam bitNum          Bit number in the port
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t bitNum> class DigitalIOT {
+template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t bitNum> class Digital_T {
 
 public:
-   using Pcr = PCRInit<portClockMask, port+offsetof(PORT_Type,PCR[bitNum])>; //!< PCR information
+   using Pcr = Pcr_T<portClockMask, port+offsetof(PORT_Type,PCR[bitNum]), PORT_PCR_MUX(pcrFn)|DEFAULT_PCR>; //!< PCR information
 
 public:
    /**
@@ -281,7 +276,7 @@ public:
 };
 #ifdef PORTA_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOA bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOA bits. See @ref Digital_T
  *
  * <b>Usage</b>
  * @code
@@ -315,11 +310,11 @@ public:
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioA = DigitalIOT<PORTA_CLOCK_MASK, PORTA_BasePtr, PORTA_GPIO_FN, GPIOA_BasePtr, bitNum>;
+template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FIXED_GPIO_FN, GPIOA_BasePtr, bitNum>;
 #endif
 #ifdef PORTB_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOB bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOB bits. See @ref Digital_T
  *
  * <b>Usage</b>
  * @code
@@ -353,11 +348,11 @@ template<int bitNum> using GpioA = DigitalIOT<PORTA_CLOCK_MASK, PORTA_BasePtr, P
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioB = DigitalIOT<PORTB_CLOCK_MASK, PORTB_BasePtr, PORTB_GPIO_FN, GPIOB_BasePtr, bitNum>;
+template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FIXED_GPIO_FN, GPIOB_BasePtr, bitNum>;
 #endif
 #ifdef PORTC_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOC bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOC bits. See @ref Digital_T
  *
  * <b>Usage</b>
  * @code
@@ -391,11 +386,11 @@ template<int bitNum> using GpioB = DigitalIOT<PORTB_CLOCK_MASK, PORTB_BasePtr, P
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioC = DigitalIOT<PORTC_CLOCK_MASK, PORTC_BasePtr, PORTC_GPIO_FN, GPIOC_BasePtr, bitNum>;
+template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FIXED_GPIO_FN, GPIOC_BasePtr, bitNum>;
 #endif
 #ifdef PORTD_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOD bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOD bits. See @ref Digital_T
  *
  * @code
  * <b>Usage</b>
@@ -429,11 +424,11 @@ template<int bitNum> using GpioC = DigitalIOT<PORTC_CLOCK_MASK, PORTC_BasePtr, P
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioD = DigitalIOT<PORTD_CLOCK_MASK, PORTD_BasePtr, PORTD_GPIO_FN, GPIOD_BasePtr, bitNum>;
+template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FIXED_GPIO_FN, GPIOD_BasePtr, bitNum>;
 #endif
 #ifdef PORTE_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOE bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOE bits. See @ref Digital_T
  *
  * <b>Usage</b>
  * @code
@@ -467,11 +462,11 @@ template<int bitNum> using GpioD = DigitalIOT<PORTD_CLOCK_MASK, PORTD_BasePtr, P
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioE = DigitalIOT<PORTE_CLOCK_MASK, PORTE_BasePtr, PORTE_GPIO_FN, GPIOE_BasePtr, bitNum>;
+template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FIXED_GPIO_FN, GPIOE_BasePtr, bitNum>;
 #endif
 #ifdef PORTF_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOF bits. See @ref DigitalIOT
+ * @brief Convenience template for GPIOF bits. See @ref Digital_T
  *
  * <b>Usage</b>
  * @code
@@ -505,7 +500,7 @@ template<int bitNum> using GpioE = DigitalIOT<PORTE_CLOCK_MASK, PORTE_BasePtr, P
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioF = DigitalIOT<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN, GPIOF_BasePtr, bitNum>;
+template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN, GPIOF_BasePtr, bitNum>;
 #endif
 
 /**
@@ -514,7 +509,7 @@ template<int bitNum> using GpioF = DigitalIOT<PORTF_CLOCK_MASK, PORTF_BasePtr, P
  * <b>Example</b>
  * @code
  * // Instantiate object representing Port A 6 down to 3
- * FieldIO<PORTA_CLOCK_MASK, PORTA_BasePtr, GPIOA_BasePtr, 6, 3> pta6_3;
+ * Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, GPIOA_BasePtr, 6, 3> pta6_3;
  *
  * // Set as digital output
  * pta6_3.setDigitalOutput();
@@ -544,7 +539,7 @@ template<int bitNum> using GpioF = DigitalIOT<PORTF_CLOCK_MASK, PORTF_BasePtr, P
  * @tparam left           Bit number of leftmost bit in port (inclusive)
  * @tparam right          Bit number of rightmost bit in port (inclusive)
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t left, const uint32_t right> class FieldIO {
+template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t left, const uint32_t right> class Field_T {
 private:
    /**
     * Utility function to set multiple PCRs using GPCLR & GPCHR
@@ -622,7 +617,7 @@ public:
 };
 #ifdef PORTA_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOA fields. See @ref FieldIO
+ * @brief Convenience template for GPIOA fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -654,11 +649,11 @@ public:
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioAField = FieldIO<PORTA_CLOCK_MASK, PORTA_BasePtr, PORTA_GPIO_FN,  GPIOA_BasePtr, left, right>;
+template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FIXED_GPIO_FN,  GPIOA_BasePtr, left, right>;
 #endif
 #ifdef PORTB_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOB fields. See @ref FieldIO
+ * @brief Convenience template for GPIOB fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -690,11 +685,11 @@ template<int left, int right> using GpioAField = FieldIO<PORTA_CLOCK_MASK, PORTA
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioBField = FieldIO<PORTB_CLOCK_MASK, PORTB_BasePtr, PORTB_GPIO_FN,  GPIOB_BasePtr, left, right>;
+template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FIXED_GPIO_FN,  GPIOB_BasePtr, left, right>;
 #endif
 #ifdef PORTC_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOC fields. See @ref FieldIO
+ * @brief Convenience template for GPIOC fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -726,11 +721,11 @@ template<int left, int right> using GpioBField = FieldIO<PORTB_CLOCK_MASK, PORTB
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioCField = FieldIO<PORTC_CLOCK_MASK, PORTC_BasePtr, PORTC_GPIO_FN,  GPIOC_BasePtr, left, right>;
+template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FIXED_GPIO_FN,  GPIOC_BasePtr, left, right>;
 #endif
 #ifdef PORTD_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOD fields. See @ref FieldIO
+ * @brief Convenience template for GPIOD fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -762,11 +757,11 @@ template<int left, int right> using GpioCField = FieldIO<PORTC_CLOCK_MASK, PORTC
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioDField = FieldIO<PORTD_CLOCK_MASK, PORTD_BasePtr, PORTD_GPIO_FN,  GPIOD_BasePtr, left, right>;
+template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FIXED_GPIO_FN,  GPIOD_BasePtr, left, right>;
 #endif
 #ifdef PORTE_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOE fields. See @ref FieldIO
+ * @brief Convenience template for GPIOE fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -798,11 +793,11 @@ template<int left, int right> using GpioDField = FieldIO<PORTD_CLOCK_MASK, PORTD
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioEField = FieldIO<PORTE_CLOCK_MASK, PORTE_BasePtr, PORTE_GPIO_FN,  GPIOE_BasePtr, left, right>;
+template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FIXED_GPIO_FN,  GPIOE_BasePtr, left, right>;
 #endif
 #ifdef PORTF_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOF fields. See @ref FieldIO
+ * @brief Convenience template for GPIOF fields. See @ref Field_T
  *
  * <b>Usage</b>
  * @code
@@ -834,7 +829,7 @@ template<int left, int right> using GpioEField = FieldIO<PORTE_CLOCK_MASK, PORTE
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioFField = FieldIO<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN,  GPIOF_BasePtr, left, right>;
+template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN,  GPIOF_BasePtr, left, right>;
 #endif
 
 /**
@@ -897,6 +892,18 @@ constexpr uint32_t getPcrMux(unsigned channel, const PcrInfo info[]) {
    return (channel<=32)?info[channel].muxValue:(1/0);
 #pragma GCC diagnostic pop
 }
+
+template<typename Last>
+void processPcrs() {
+   Last::setPCR();
+}
+
+template<typename Pcr1, typename  Pcr2, typename  ... Rest>
+void processPcrs() {
+   processPcrs<Pcr1>();
+   processPcrs<Pcr2, Rest...>();
+}
+
 } // End namespace USBDM
 
 #endif /* HEADER_GPIO_DEFS_H */

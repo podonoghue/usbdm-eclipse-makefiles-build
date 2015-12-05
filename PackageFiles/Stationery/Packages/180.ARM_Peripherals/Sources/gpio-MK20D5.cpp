@@ -9,132 +9,132 @@
 
 namespace USBDM {
 
-#if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
+#if (DO_MAP_PINS_ON_RESET>0)
 struct PinInit {
    uint32_t pcrValue;
    uint32_t volatile *pcr;
 };
 
-static const PinInit pinInit[] = {
-#if defined(PTA0_SIG_SEL) && (PTA0_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA0_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[0]},
+static constexpr PinInit pinInit[] = {
+#if (PTA0_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[0]},
 #endif
-#if defined(PTA1_SIG_SEL) && (PTA1_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA1_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[1]},
+#if (PTA1_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA1_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[1]},
 #endif
-#if defined(PTA2_SIG_SEL) && (PTA2_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA2_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[2]},
+#if (PTA2_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA2_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[2]},
 #endif
-#if defined(PTA3_SIG_SEL) && (PTA3_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA3_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[3]},
+#if (PTA3_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA3_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[3]},
 #endif
-#if defined(PTA4_SIG_SEL) && (PTA4_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA4_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[4]},
+#if (PTA4_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA4_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[4]},
 #endif
-#if defined(PTA5_SIG_SEL) && (PTA5_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA5_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[5]},
+#if (PTA5_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA5_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[5]},
 #endif
-#if defined(PTA12_SIG_SEL) && (PTA12_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA12_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[12]},
+#if (PTA12_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA12_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[12]},
 #endif
-#if defined(PTA13_SIG_SEL) && (PTA13_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA13_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[13]},
+#if (PTA13_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA13_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[13]},
 #endif
-#if defined(PTA18_SIG_SEL) && (PTA18_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA18_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[18]},
+#if (PTA18_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA18_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[18]},
 #endif
-#if defined(PTA19_SIG_SEL) && (PTA19_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTA19_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTA->PCR[19]},
+#if (PTA19_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA19_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[19]},
 #endif
-#if defined(PTB0_SIG_SEL) && (PTB0_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB0_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[0]},
+#if (PTB0_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[0]},
 #endif
-#if defined(PTB1_SIG_SEL) && (PTB1_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB1_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[1]},
+#if (PTB1_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB1_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[1]},
 #endif
-#if defined(PTB2_SIG_SEL) && (PTB2_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB2_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[2]},
+#if (PTB2_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB2_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[2]},
 #endif
-#if defined(PTB3_SIG_SEL) && (PTB3_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB3_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[3]},
+#if (PTB3_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB3_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[3]},
 #endif
-#if defined(PTB16_SIG_SEL) && (PTB16_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB16_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[16]},
+#if (PTB16_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB16_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[16]},
 #endif
-#if defined(PTB17_SIG_SEL) && (PTB17_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB17_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[17]},
+#if (PTB17_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB17_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[17]},
 #endif
-#if defined(PTB18_SIG_SEL) && (PTB18_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB18_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[18]},
+#if (PTB18_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB18_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[18]},
 #endif
-#if defined(PTB19_SIG_SEL) && (PTB19_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTB19_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTB->PCR[19]},
+#if (PTB19_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTB19_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[19]},
 #endif
-#if defined(PTC0_SIG_SEL) && (PTC0_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC0_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[0]},
+#if (PTC0_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[0]},
 #endif
-#if defined(PTC1_SIG_SEL) && (PTC1_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC1_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[1]},
+#if (PTC1_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC1_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[1]},
 #endif
-#if defined(PTC2_SIG_SEL) && (PTC2_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC2_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[2]},
+#if (PTC2_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC2_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[2]},
 #endif
-#if defined(PTC3_SIG_SEL) && (PTC3_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC3_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[3]},
+#if (PTC3_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC3_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[3]},
 #endif
-#if defined(PTC4_SIG_SEL) && (PTC4_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC4_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[4]},
+#if (PTC4_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC4_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[4]},
 #endif
-#if defined(PTC5_SIG_SEL) && (PTC5_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC5_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[5]},
+#if (PTC5_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC5_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[5]},
 #endif
-#if defined(PTC6_SIG_SEL) && (PTC6_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC6_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[6]},
+#if (PTC6_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC6_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[6]},
 #endif
-#if defined(PTC7_SIG_SEL) && (PTC7_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC7_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[7]},
+#if (PTC7_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC7_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[7]},
 #endif
-#if defined(PTC8_SIG_SEL) && (PTC8_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC8_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[8]},
+#if (PTC8_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC8_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[8]},
 #endif
-#if defined(PTC9_SIG_SEL) && (PTC9_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC9_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[9]},
+#if (PTC9_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC9_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[9]},
 #endif
-#if defined(PTC10_SIG_SEL) && (PTC10_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC10_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[10]},
+#if (PTC10_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC10_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[10]},
 #endif
-#if defined(PTC11_SIG_SEL) && (PTC11_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTC11_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTC->PCR[11]},
+#if (PTC11_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTC11_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTC->PCR[11]},
 #endif
-#if defined(PTD0_SIG_SEL) && (PTD0_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD0_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[0]},
+#if (PTD0_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[0]},
 #endif
-#if defined(PTD1_SIG_SEL) && (PTD1_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD1_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[1]},
+#if (PTD1_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD1_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[1]},
 #endif
-#if defined(PTD2_SIG_SEL) && (PTD2_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD2_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[2]},
+#if (PTD2_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD2_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[2]},
 #endif
-#if defined(PTD3_SIG_SEL) && (PTD3_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD3_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[3]},
+#if (PTD3_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD3_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[3]},
 #endif
-#if defined(PTD4_SIG_SEL) && (PTD4_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD4_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[4]},
+#if (PTD4_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD4_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[4]},
 #endif
-#if defined(PTD5_SIG_SEL) && (PTD5_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD5_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[5]},
+#if (PTD5_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD5_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[5]},
 #endif
-#if defined(PTD6_SIG_SEL) && (PTD6_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD6_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[6]},
+#if (PTD6_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD6_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[6]},
 #endif
-#if defined(PTD7_SIG_SEL) && (PTD7_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTD7_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTD->PCR[7]},
+#if (PTD7_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD7_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[7]},
 #endif
-#if defined(PTE0_SIG_SEL) && (PTE0_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTE0_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTE->PCR[0]},
+#if (PTE0_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTE0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTE->PCR[0]},
 #endif
-#if defined(PTE1_SIG_SEL) && (PTE1_SIG_SEL>=0)
-   { PORT_PCR_MUX(PTE1_SIG_SEL)|USBDM::DigitalIO::DEFAULT_PCR, &PORTE->PCR[1]},
+#if (PTE1_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTE1_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTE->PCR[1]},
 #endif
 };
 
@@ -142,63 +142,35 @@ static const PinInit pinInit[] = {
  * Used to configure pin-mapping before 1st use of peripherals
  */
 void usbdm_PinMapping() {
-#if (defined(PTA0_SIG_SEL) && (PTA0_SIG_SEL>=0)) || \
-    (defined(PTA1_SIG_SEL) && (PTA1_SIG_SEL>=0)) || \
-    (defined(PTA2_SIG_SEL) && (PTA2_SIG_SEL>=0)) || \
-    (defined(PTA3_SIG_SEL) && (PTA3_SIG_SEL>=0)) || \
-    (defined(PTA4_SIG_SEL) && (PTA4_SIG_SEL>=0)) || \
-    (defined(PTA5_SIG_SEL) && (PTA5_SIG_SEL>=0)) || \
-    (defined(PTA12_SIG_SEL) && (PTA12_SIG_SEL>=0)) || \
-    (defined(PTA13_SIG_SEL) && (PTA13_SIG_SEL>=0)) || \
-    (defined(PTA18_SIG_SEL) && (PTA18_SIG_SEL>=0)) || \
-    (defined(PTA19_SIG_SEL) && (PTA19_SIG_SEL>=0))
+#if (PTA0_SIG_SEL>=0) || (PTA1_SIG_SEL>=0) || (PTA2_SIG_SEL>=0) || (PTA3_SIG_SEL>=0) || \
+    (PTA4_SIG_SEL>=0) || (PTA5_SIG_SEL>=0) || (PTA12_SIG_SEL>=0) || (PTA13_SIG_SEL>=0) || \
+    (PTA18_SIG_SEL>=0) || (PTA19_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTA_CLOCK_MASK;
 #endif
 
-#if (defined(PTB0_SIG_SEL) && (PTB0_SIG_SEL>=0)) || \
-    (defined(PTB1_SIG_SEL) && (PTB1_SIG_SEL>=0)) || \
-    (defined(PTB2_SIG_SEL) && (PTB2_SIG_SEL>=0)) || \
-    (defined(PTB3_SIG_SEL) && (PTB3_SIG_SEL>=0)) || \
-    (defined(PTB16_SIG_SEL) && (PTB16_SIG_SEL>=0)) || \
-    (defined(PTB17_SIG_SEL) && (PTB17_SIG_SEL>=0)) || \
-    (defined(PTB18_SIG_SEL) && (PTB18_SIG_SEL>=0)) || \
-    (defined(PTB19_SIG_SEL) && (PTB19_SIG_SEL>=0))
+#if (PTB0_SIG_SEL>=0) || (PTB1_SIG_SEL>=0) || (PTB2_SIG_SEL>=0) || \
+    (PTB3_SIG_SEL>=0) || (PTB16_SIG_SEL>=0) || (PTB17_SIG_SEL>=0) || (PTB18_SIG_SEL>=0) || \
+    (PTB19_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTB_CLOCK_MASK;
 #endif
 
-#if (defined(PTC0_SIG_SEL) && (PTC0_SIG_SEL>=0)) || \
-    (defined(PTC1_SIG_SEL) && (PTC1_SIG_SEL>=0)) || \
-    (defined(PTC2_SIG_SEL) && (PTC2_SIG_SEL>=0)) || \
-    (defined(PTC3_SIG_SEL) && (PTC3_SIG_SEL>=0)) || \
-    (defined(PTC4_SIG_SEL) && (PTC4_SIG_SEL>=0)) || \
-    (defined(PTC5_SIG_SEL) && (PTC5_SIG_SEL>=0)) || \
-    (defined(PTC6_SIG_SEL) && (PTC6_SIG_SEL>=0)) || \
-    (defined(PTC7_SIG_SEL) && (PTC7_SIG_SEL>=0)) || \
-    (defined(PTC8_SIG_SEL) && (PTC8_SIG_SEL>=0)) || \
-    (defined(PTC9_SIG_SEL) && (PTC9_SIG_SEL>=0)) || \
-    (defined(PTC10_SIG_SEL) && (PTC10_SIG_SEL>=0)) || \
-    (defined(PTC11_SIG_SEL) && (PTC11_SIG_SEL>=0))
+#if (PTC0_SIG_SEL>=0) || (PTC1_SIG_SEL>=0) || (PTC2_SIG_SEL>=0) || (PTC3_SIG_SEL>=0) || \
+    (PTC4_SIG_SEL>=0) || (PTC5_SIG_SEL>=0) || (PTC6_SIG_SEL>=0) || (PTC7_SIG_SEL>=0) || \
+    (PTC8_SIG_SEL>=0) || (PTC9_SIG_SEL>=0) || (PTC10_SIG_SEL>=0) || (PTC11_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTC_CLOCK_MASK;
 #endif
 
-#if (defined(PTD0_SIG_SEL) && (PTD0_SIG_SEL>=0)) || \
-    (defined(PTD1_SIG_SEL) && (PTD1_SIG_SEL>=0)) || \
-    (defined(PTD2_SIG_SEL) && (PTD2_SIG_SEL>=0)) || \
-    (defined(PTD3_SIG_SEL) && (PTD3_SIG_SEL>=0)) || \
-    (defined(PTD4_SIG_SEL) && (PTD4_SIG_SEL>=0)) || \
-    (defined(PTD5_SIG_SEL) && (PTD5_SIG_SEL>=0)) || \
-    (defined(PTD6_SIG_SEL) && (PTD6_SIG_SEL>=0)) || \
-    (defined(PTD7_SIG_SEL) && (PTD7_SIG_SEL>=0))
+#if (PTD0_SIG_SEL>=0) || \
+    (PTD1_SIG_SEL>=0) || (PTD2_SIG_SEL>=0) || (PTD3_SIG_SEL>=0) || (PTD4_SIG_SEL>=0) || \
+    (PTD5_SIG_SEL>=0) || (PTD6_SIG_SEL>=0) || (PTD7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTD_CLOCK_MASK;
 #endif
 
-#if (defined(PTE0_SIG_SEL) && (PTE0_SIG_SEL>=0)) || \
-    (defined(PTE1_SIG_SEL) && (PTE1_SIG_SEL>=0))
-
+#if (PTE0_SIG_SEL>=0) || (PTE1_SIG_SEL>=0)
    SIM->FIXED_PORT_CLOCK_REG |= PORTE_CLOCK_MASK;
 
 #endif

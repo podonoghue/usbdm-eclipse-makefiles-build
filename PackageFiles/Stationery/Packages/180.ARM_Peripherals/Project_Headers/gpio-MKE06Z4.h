@@ -13,6 +13,7 @@
 #include "gpio_defs.h"
 
 namespace USBDM {
+
 /**
 * @addtogroup DigitalIO_Group Digital Input/Output
 * @brief Allows use of port pins as simple digital inputs or outputs
@@ -95,38 +96,12 @@ using gpioC_6              = const USBDM::GpioC<6>;
 /**
  * @}
  */
-#if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
+#if (DO_MAP_PINS_ON_RESET>0)
 /**
  * Used to configure pin-mapping before 1st use of peripherals
  */
 extern void usbdm_PinMapping();
 #endif
-
-/*
-Clock Information 
-ACMP0      SCGC         SIM_SCGC_ACMP0_MASK
-ACMP1      SCGC         SIM_SCGC_ACMP1_MASK
-ADC0       SCGC         SIM_SCGC_ADC0_MASK
-CRC        SCGC         SIM_SCGC_CRC_MASK
-FTM0       SCGC         SIM_SCGC_FTM0_MASK
-FTM1       SCGC         SIM_SCGC_FTM1_MASK
-FTM2       SCGC         SIM_SCGC_FTM2_MASK
-I2C0       SCGC         SIM_SCGC_I2C0_MASK
-I2C1       SCGC         SIM_SCGC_I2C1_MASK
-IRQ        SCGC         SIM_SCGC_IRQ_MASK
-KBI0       SCGC         SIM_SCGC_KBI0_MASK
-KBI1       SCGC         SIM_SCGC_KBI1_MASK
-MSCAN      SCGC         SIM_SCGC_MSCAN_MASK
-PIT        SCGC         SIM_SCGC_PIT_MASK
-PWT        SCGC         SIM_SCGC_PWT_MASK
-RTC        SCGC         SIM_SCGC_RTC_MASK
-SPI0       SCGC         SIM_SCGC_SPI0_MASK
-SPI1       SCGC         SIM_SCGC_SPI1_MASK
-SWD        SCGC         SIM_SCGC_SWD_MASK
-UART0      SCGC         SIM_SCGC_UART0_MASK
-UART1      SCGC         SIM_SCGC_UART1_MASK
-UART2      SCGC         SIM_SCGC_UART2_MASK
-*/
 
 } // End namespace USBDM
 

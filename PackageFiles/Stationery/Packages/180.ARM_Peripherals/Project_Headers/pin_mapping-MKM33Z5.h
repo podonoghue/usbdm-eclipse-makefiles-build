@@ -7,6 +7,7 @@
 #ifndef PIN_MAPPING_H_
 #define PIN_MAPPING_H_
 
+#include <stddef.h>
 #include "derivative.h"
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------  
@@ -20,9 +21,8 @@
 //   <q> Map pins 
 //   <i> Selects whether pin mappings are done when individual
 //   <i> peripherals are configured or during reset initialisation.
-//   <i> This will also cause unselected peripherals to be unavailable.
 //     <0=> Pins mapped on demand
-//     <1=> Pin mapping on reset  - unselected peripherals unavailable
+//     <1=> Pin mapping on reset
 #define DO_MAP_PINS_ON_RESET 0
 
 // Pin peripheral signal mapping
@@ -879,7 +879,7 @@
 //     <1=> PTF1<selection=PTF1_SIG_SEL,LCD0/ADC0_SE8>
 //     <0=> Default
 #define LCD0_PIN_SEL         0
-#if LCD0_PIN_SEL == 1
+#if (LCD0_PIN_SEL == 1)
 #define LCD0_GPIO            USBDM::GpioF<1>
 #define LCD0_FN              0
 #endif
@@ -891,7 +891,7 @@
 //     <1=> PTF2<selection=PTF2_SIG_SEL,LCD1/ADC0_SE9>
 //     <0=> Default
 #define LCD1_PIN_SEL         0
-#if LCD1_PIN_SEL == 1
+#if (LCD1_PIN_SEL == 1)
 #define LCD1_GPIO            USBDM::GpioF<2>
 #define LCD1_FN              0
 #endif
@@ -903,7 +903,7 @@
 //     <1=> PTF3<selection=PTF3_SIG_SEL,LCD2>
 //     <0=> Default
 #define LCD2_PIN_SEL         0
-#if LCD2_PIN_SEL == 1
+#if (LCD2_PIN_SEL == 1)
 #define LCD2_GPIO            USBDM::GpioF<3>
 #define LCD2_FN              0
 #endif
@@ -915,7 +915,7 @@
 //     <1=> PTF4<selection=PTF4_SIG_SEL,LCD3>
 //     <0=> Default
 #define LCD3_PIN_SEL         0
-#if LCD3_PIN_SEL == 1
+#if (LCD3_PIN_SEL == 1)
 #define LCD3_GPIO            USBDM::GpioF<4>
 #define LCD3_FN              0
 #endif
@@ -927,7 +927,7 @@
 //     <1=> PTF5<selection=PTF5_SIG_SEL,LCD4>
 //     <0=> Default
 #define LCD4_PIN_SEL         0
-#if LCD4_PIN_SEL == 1
+#if (LCD4_PIN_SEL == 1)
 #define LCD4_GPIO            USBDM::GpioF<5>
 #define LCD4_FN              0
 #endif
@@ -939,7 +939,7 @@
 //     <1=> PTF6<selection=PTF6_SIG_SEL,LCD5>
 //     <0=> Default
 #define LCD5_PIN_SEL         0
-#if LCD5_PIN_SEL == 1
+#if (LCD5_PIN_SEL == 1)
 #define LCD5_GPIO            USBDM::GpioF<6>
 #define LCD5_FN              0
 #endif
@@ -951,7 +951,7 @@
 //     <1=> PTF7<selection=PTF7_SIG_SEL,LCD6>
 //     <0=> Default
 #define LCD6_PIN_SEL         0
-#if LCD6_PIN_SEL == 1
+#if (LCD6_PIN_SEL == 1)
 #define LCD6_GPIO            USBDM::GpioF<7>
 #define LCD6_FN              0
 #endif
@@ -963,7 +963,7 @@
 //     <1=> PTG0<selection=PTG0_SIG_SEL,LCD7>
 //     <0=> Default
 #define LCD7_PIN_SEL         0
-#if LCD7_PIN_SEL == 1
+#if (LCD7_PIN_SEL == 1)
 #define LCD7_GPIO            USBDM::GpioG<0>
 #define LCD7_FN              0
 #endif
@@ -975,7 +975,7 @@
 //     <1=> PTG1<selection=PTG1_SIG_SEL,LCD8/ADC0_SE10>
 //     <0=> Default
 #define LCD8_PIN_SEL         0
-#if LCD8_PIN_SEL == 1
+#if (LCD8_PIN_SEL == 1)
 #define LCD8_GPIO            USBDM::GpioG<1>
 #define LCD8_FN              0
 #endif
@@ -987,7 +987,7 @@
 //     <1=> PTG2<selection=PTG2_SIG_SEL,LCD9/ADC0_SE11>
 //     <0=> Default
 #define LCD9_PIN_SEL         0
-#if LCD9_PIN_SEL == 1
+#if (LCD9_PIN_SEL == 1)
 #define LCD9_GPIO            USBDM::GpioG<2>
 #define LCD9_FN              0
 #endif
@@ -999,7 +999,7 @@
 //     <1=> PTG3<selection=PTG3_SIG_SEL,LCD10>
 //     <0=> Default
 #define LCD10_PIN_SEL        0
-#if LCD10_PIN_SEL == 1
+#if (LCD10_PIN_SEL == 1)
 #define LCD10_GPIO           USBDM::GpioG<3>
 #define LCD10_FN             0
 #endif
@@ -1011,7 +1011,7 @@
 //     <1=> PTG4<selection=PTG4_SIG_SEL,LCD11>
 //     <0=> Default
 #define LCD11_PIN_SEL        0
-#if LCD11_PIN_SEL == 1
+#if (LCD11_PIN_SEL == 1)
 #define LCD11_GPIO           USBDM::GpioG<4>
 #define LCD11_FN             0
 #endif
@@ -1023,7 +1023,7 @@
 //     <1=> PTG5<selection=PTG5_SIG_SEL,LCD12>
 //     <0=> Default
 #define LCD12_PIN_SEL        0
-#if LCD12_PIN_SEL == 1
+#if (LCD12_PIN_SEL == 1)
 #define LCD12_GPIO           USBDM::GpioG<5>
 #define LCD12_FN             0
 #endif
@@ -1035,7 +1035,7 @@
 //     <1=> PTG6<selection=PTG6_SIG_SEL,LCD13>
 //     <0=> Default
 #define LCD13_PIN_SEL        0
-#if LCD13_PIN_SEL == 1
+#if (LCD13_PIN_SEL == 1)
 #define LCD13_GPIO           USBDM::GpioG<6>
 #define LCD13_FN             0
 #endif
@@ -1047,7 +1047,7 @@
 //     <1=> PTG7<selection=PTG7_SIG_SEL,LCD14>
 //     <0=> Default
 #define LCD14_PIN_SEL        0
-#if LCD14_PIN_SEL == 1
+#if (LCD14_PIN_SEL == 1)
 #define LCD14_GPIO           USBDM::GpioG<7>
 #define LCD14_FN             0
 #endif
@@ -1059,7 +1059,7 @@
 //     <1=> PTH0<selection=PTH0_SIG_SEL,LCD15>
 //     <0=> Default
 #define LCD15_PIN_SEL        0
-#if LCD15_PIN_SEL == 1
+#if (LCD15_PIN_SEL == 1)
 #define LCD15_GPIO           USBDM::GpioH<0>
 #define LCD15_FN             0
 #endif
@@ -1071,7 +1071,7 @@
 //     <1=> PTH1<selection=PTH1_SIG_SEL,LCD16>
 //     <0=> Default
 #define LCD16_PIN_SEL        0
-#if LCD16_PIN_SEL == 1
+#if (LCD16_PIN_SEL == 1)
 #define LCD16_GPIO           USBDM::GpioH<1>
 #define LCD16_FN             0
 #endif
@@ -1083,7 +1083,7 @@
 //     <1=> PTH2<selection=PTH2_SIG_SEL,LCD17>
 //     <0=> Default
 #define LCD17_PIN_SEL        0
-#if LCD17_PIN_SEL == 1
+#if (LCD17_PIN_SEL == 1)
 #define LCD17_GPIO           USBDM::GpioH<2>
 #define LCD17_FN             0
 #endif
@@ -1095,7 +1095,7 @@
 //     <1=> PTH3<selection=PTH3_SIG_SEL,LCD18>
 //     <0=> Default
 #define LCD18_PIN_SEL        0
-#if LCD18_PIN_SEL == 1
+#if (LCD18_PIN_SEL == 1)
 #define LCD18_GPIO           USBDM::GpioH<3>
 #define LCD18_FN             0
 #endif
@@ -1107,7 +1107,7 @@
 //     <1=> PTH4<selection=PTH4_SIG_SEL,LCD19>
 //     <0=> Default
 #define LCD19_PIN_SEL        0
-#if LCD19_PIN_SEL == 1
+#if (LCD19_PIN_SEL == 1)
 #define LCD19_GPIO           USBDM::GpioH<4>
 #define LCD19_FN             0
 #endif
@@ -1119,7 +1119,7 @@
 //     <1=> PTH5<selection=PTH5_SIG_SEL,LCD20>
 //     <0=> Default
 #define LCD20_PIN_SEL        0
-#if LCD20_PIN_SEL == 1
+#if (LCD20_PIN_SEL == 1)
 #define LCD20_GPIO           USBDM::GpioH<5>
 #define LCD20_FN             0
 #endif
@@ -1131,7 +1131,7 @@
 //     <1=> PTI2<selection=PTI2_SIG_SEL,LCD21>
 //     <0=> Default
 #define LCD21_PIN_SEL        0
-#if LCD21_PIN_SEL == 1
+#if (LCD21_PIN_SEL == 1)
 #define LCD21_GPIO           USBDM::GpioI<2>
 #define LCD21_FN             0
 #endif
@@ -1143,7 +1143,7 @@
 //     <1=> PTI3<selection=PTI3_SIG_SEL,LCD22>
 //     <0=> Default
 #define LCD22_PIN_SEL        0
-#if LCD22_PIN_SEL == 1
+#if (LCD22_PIN_SEL == 1)
 #define LCD22_GPIO           USBDM::GpioI<3>
 #define LCD22_FN             0
 #endif
@@ -1155,7 +1155,7 @@
 //     <1=> PTA0 (Alias:LED_RED)<selection=PTA0_SIG_SEL,LCD23>
 //     <0=> Default
 #define LCD23_PIN_SEL        0
-#if LCD23_PIN_SEL == 1
+#if (LCD23_PIN_SEL == 1)
 #define LCD23_GPIO           USBDM::GpioA<0>
 #define LCD23_FN             0
 #endif
@@ -1167,7 +1167,7 @@
 //     <1=> PTA1 (Alias:LED_GREEN)<selection=PTA1_SIG_SEL,LCD24>
 //     <0=> Default
 #define LCD24_PIN_SEL        0
-#if LCD24_PIN_SEL == 1
+#if (LCD24_PIN_SEL == 1)
 #define LCD24_GPIO           USBDM::GpioA<1>
 #define LCD24_FN             0
 #endif
@@ -1179,7 +1179,7 @@
 //     <1=> PTA2<selection=PTA2_SIG_SEL,LCD25>
 //     <0=> Default
 #define LCD25_PIN_SEL        0
-#if LCD25_PIN_SEL == 1
+#if (LCD25_PIN_SEL == 1)
 #define LCD25_GPIO           USBDM::GpioA<2>
 #define LCD25_FN             0
 #endif
@@ -1191,7 +1191,7 @@
 //     <1=> PTA3<selection=PTA3_SIG_SEL,LCD26>
 //     <0=> Default
 #define LCD26_PIN_SEL        0
-#if LCD26_PIN_SEL == 1
+#if (LCD26_PIN_SEL == 1)
 #define LCD26_GPIO           USBDM::GpioA<3>
 #define LCD26_FN             0
 #endif
@@ -1203,7 +1203,7 @@
 //     <1=> PTA4<selection=PTA4_SIG_SEL,LCD27>
 //     <0=> Default
 #define LCD27_PIN_SEL        0
-#if LCD27_PIN_SEL == 1
+#if (LCD27_PIN_SEL == 1)
 #define LCD27_GPIO           USBDM::GpioA<4>
 #define LCD27_FN             0
 #endif
@@ -1215,7 +1215,7 @@
 //     <1=> PTA5<selection=PTA5_SIG_SEL,LCD28>
 //     <0=> Default
 #define LCD28_PIN_SEL        0
-#if LCD28_PIN_SEL == 1
+#if (LCD28_PIN_SEL == 1)
 #define LCD28_GPIO           USBDM::GpioA<5>
 #define LCD28_FN             0
 #endif
@@ -1227,7 +1227,7 @@
 //     <1=> PTA6<selection=PTA6_SIG_SEL,LCD29>
 //     <0=> Default
 #define LCD29_PIN_SEL        0
-#if LCD29_PIN_SEL == 1
+#if (LCD29_PIN_SEL == 1)
 #define LCD29_GPIO           USBDM::GpioA<6>
 #define LCD29_FN             0
 #endif
@@ -1239,7 +1239,7 @@
 //     <1=> PTA7<selection=PTA7_SIG_SEL,LCD30>
 //     <0=> Default
 #define LCD30_PIN_SEL        0
-#if LCD30_PIN_SEL == 1
+#if (LCD30_PIN_SEL == 1)
 #define LCD30_GPIO           USBDM::GpioA<7>
 #define LCD30_FN             0
 #endif
@@ -1251,7 +1251,7 @@
 //     <1=> PTB0<selection=PTB0_SIG_SEL,LCD31>
 //     <0=> Default
 #define LCD31_PIN_SEL        0
-#if LCD31_PIN_SEL == 1
+#if (LCD31_PIN_SEL == 1)
 #define LCD31_GPIO           USBDM::GpioB<0>
 #define LCD31_FN             0
 #endif
@@ -1263,7 +1263,7 @@
 //     <1=> PTB1<selection=PTB1_SIG_SEL,LCD32>
 //     <0=> Default
 #define LCD32_PIN_SEL        0
-#if LCD32_PIN_SEL == 1
+#if (LCD32_PIN_SEL == 1)
 #define LCD32_GPIO           USBDM::GpioB<1>
 #define LCD32_FN             0
 #endif
@@ -1275,7 +1275,7 @@
 //     <1=> PTB2<selection=PTB2_SIG_SEL,LCD33>
 //     <0=> Default
 #define LCD33_PIN_SEL        0
-#if LCD33_PIN_SEL == 1
+#if (LCD33_PIN_SEL == 1)
 #define LCD33_GPIO           USBDM::GpioB<2>
 #define LCD33_FN             0
 #endif
@@ -1287,7 +1287,7 @@
 //     <1=> PTB3<selection=PTB3_SIG_SEL,LCD34>
 //     <0=> Default
 #define LCD34_PIN_SEL        0
-#if LCD34_PIN_SEL == 1
+#if (LCD34_PIN_SEL == 1)
 #define LCD34_GPIO           USBDM::GpioB<3>
 #define LCD34_FN             0
 #endif
@@ -1299,7 +1299,7 @@
 //     <1=> PTB4<selection=PTB4_SIG_SEL,LCD35>
 //     <0=> Default
 #define LCD35_PIN_SEL        0
-#if LCD35_PIN_SEL == 1
+#if (LCD35_PIN_SEL == 1)
 #define LCD35_GPIO           USBDM::GpioB<4>
 #define LCD35_FN             0
 #endif
@@ -1311,7 +1311,7 @@
 //     <1=> PTB5<selection=PTB5_SIG_SEL,LCD36>
 //     <0=> Default
 #define LCD36_PIN_SEL        0
-#if LCD36_PIN_SEL == 1
+#if (LCD36_PIN_SEL == 1)
 #define LCD36_GPIO           USBDM::GpioB<5>
 #define LCD36_FN             0
 #endif
@@ -1323,7 +1323,7 @@
 //     <1=> PTB6<selection=PTB6_SIG_SEL,LCD37/CMP1P0>
 //     <0=> Default
 #define LCD37_PIN_SEL        0
-#if LCD37_PIN_SEL == 1
+#if (LCD37_PIN_SEL == 1)
 #define LCD37_GPIO           USBDM::GpioB<6>
 #define LCD37_FN             0
 #endif
@@ -1335,7 +1335,7 @@
 //     <1=> PTB7<selection=PTB7_SIG_SEL,LCD38>
 //     <0=> Default
 #define LCD38_PIN_SEL        0
-#if LCD38_PIN_SEL == 1
+#if (LCD38_PIN_SEL == 1)
 #define LCD38_GPIO           USBDM::GpioB<7>
 #define LCD38_FN             0
 #endif
@@ -1347,7 +1347,7 @@
 //     <1=> PTC0<selection=PTC0_SIG_SEL,LCD39>
 //     <0=> Default
 #define LCD39_PIN_SEL        0
-#if LCD39_PIN_SEL == 1
+#if (LCD39_PIN_SEL == 1)
 #define LCD39_GPIO           USBDM::GpioC<0>
 #define LCD39_FN             0
 #endif
@@ -1359,7 +1359,7 @@
 //     <1=> PTC1<selection=PTC1_SIG_SEL,LCD40/CMP1P1>
 //     <0=> Default
 #define LCD40_PIN_SEL        0
-#if LCD40_PIN_SEL == 1
+#if (LCD40_PIN_SEL == 1)
 #define LCD40_GPIO           USBDM::GpioC<1>
 #define LCD40_FN             0
 #endif
@@ -1371,7 +1371,7 @@
 //     <1=> PTC2<selection=PTC2_SIG_SEL,LCD41>
 //     <0=> Default
 #define LCD41_PIN_SEL        0
-#if LCD41_PIN_SEL == 1
+#if (LCD41_PIN_SEL == 1)
 #define LCD41_GPIO           USBDM::GpioC<2>
 #define LCD41_FN             0
 #endif
@@ -1383,7 +1383,7 @@
 //     <1=> PTC3<selection=PTC3_SIG_SEL,LCD42/CMP0P3>
 //     <0=> Default
 #define LCD42_PIN_SEL        0
-#if LCD42_PIN_SEL == 1
+#if (LCD42_PIN_SEL == 1)
 #define LCD42_GPIO           USBDM::GpioC<3>
 #define LCD42_FN             0
 #endif
@@ -1395,7 +1395,7 @@
 //     <1=> PTC4<selection=PTC4_SIG_SEL,LCD43>
 //     <0=> Default
 #define LCD43_PIN_SEL        0
-#if LCD43_PIN_SEL == 1
+#if (LCD43_PIN_SEL == 1)
 #define LCD43_GPIO           USBDM::GpioC<4>
 #define LCD43_FN             0
 #endif
@@ -1411,10 +1411,6 @@
 //     <1=> PTC5<selection=PTC5_SIG_SEL,ADC0_SE0>
 //     <0=> Default
 #define ADC0_SE0_PIN_SEL     0
-#if ADC0_SE0_PIN_SEL == 1
-#define ADC0_SE0_GPIO        USBDM::GpioC<5>
-#define ADC0_SE0_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE1 signal
 //   <o> ADC0_SE1 [PTC6]<name=ADC0_SE1_PIN_SEL>
@@ -1423,10 +1419,6 @@
 //     <1=> PTC6<selection=PTC6_SIG_SEL,ADC0_SE1>
 //     <0=> Default
 #define ADC0_SE1_PIN_SEL     0
-#if ADC0_SE1_PIN_SEL == 1
-#define ADC0_SE1_GPIO        USBDM::GpioC<6>
-#define ADC0_SE1_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE2 signal
 //   <o> ADC0_SE2 [PTC7]<name=ADC0_SE2_PIN_SEL>
@@ -1435,10 +1427,6 @@
 //     <1=> PTC7<selection=PTC7_SIG_SEL,ADC0_SE2>
 //     <0=> Default
 #define ADC0_SE2_PIN_SEL     0
-#if ADC0_SE2_PIN_SEL == 1
-#define ADC0_SE2_GPIO        USBDM::GpioC<7>
-#define ADC0_SE2_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE3 signal
 //   <o> ADC0_SE3 [PTD4]<name=ADC0_SE3_PIN_SEL>
@@ -1447,10 +1435,6 @@
 //     <1=> PTD4<selection=PTD4_SIG_SEL,ADC0_SE3>
 //     <0=> Default
 #define ADC0_SE3_PIN_SEL     0
-#if ADC0_SE3_PIN_SEL == 1
-#define ADC0_SE3_GPIO        USBDM::GpioD<4>
-#define ADC0_SE3_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE4 signal
 //   <o> ADC0_SE4 [PTD5]<name=ADC0_SE4_PIN_SEL>
@@ -1459,10 +1443,6 @@
 //     <1=> PTD5<selection=PTD5_SIG_SEL,ADC0_SE4>
 //     <0=> Default
 #define ADC0_SE4_PIN_SEL     0
-#if ADC0_SE4_PIN_SEL == 1
-#define ADC0_SE4_GPIO        USBDM::GpioD<5>
-#define ADC0_SE4_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE5 signal
 //   <o> ADC0_SE5 [PTD6]<name=ADC0_SE5_PIN_SEL>
@@ -1471,10 +1451,6 @@
 //     <1=> PTD6<selection=PTD6_SIG_SEL,ADC0_SE5>
 //     <0=> Default
 #define ADC0_SE5_PIN_SEL     0
-#if ADC0_SE5_PIN_SEL == 1
-#define ADC0_SE5_GPIO        USBDM::GpioD<6>
-#define ADC0_SE5_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE6 signal
 //   <o> ADC0_SE6 [PTE7]<name=ADC0_SE6_PIN_SEL>
@@ -1483,10 +1459,6 @@
 //     <1=> PTE7<selection=PTE7_SIG_SEL,ADC0_SE6>
 //     <0=> Default
 #define ADC0_SE6_PIN_SEL     0
-#if ADC0_SE6_PIN_SEL == 1
-#define ADC0_SE6_GPIO        USBDM::GpioE<7>
-#define ADC0_SE6_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE7 signal
 //   <o> ADC0_SE7 [PTF0]<name=ADC0_SE7_PIN_SEL>
@@ -1495,10 +1467,6 @@
 //     <1=> PTF0<selection=PTF0_SIG_SEL,ADC0_SE7>
 //     <0=> Default
 #define ADC0_SE7_PIN_SEL     0
-#if ADC0_SE7_PIN_SEL == 1
-#define ADC0_SE7_GPIO        USBDM::GpioF<0>
-#define ADC0_SE7_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE8 signal
 //   <o> ADC0_SE8 [PTF1]<name=ADC0_SE8_PIN_SEL>
@@ -1507,10 +1475,6 @@
 //     <1=> PTF1<selection=PTF1_SIG_SEL,LCD0/ADC0_SE8>
 //     <0=> Default
 #define ADC0_SE8_PIN_SEL     0
-#if ADC0_SE8_PIN_SEL == 1
-#define ADC0_SE8_GPIO        USBDM::GpioF<1>
-#define ADC0_SE8_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE9 signal
 //   <o> ADC0_SE9 [PTF2]<name=ADC0_SE9_PIN_SEL>
@@ -1519,10 +1483,6 @@
 //     <1=> PTF2<selection=PTF2_SIG_SEL,LCD1/ADC0_SE9>
 //     <0=> Default
 #define ADC0_SE9_PIN_SEL     0
-#if ADC0_SE9_PIN_SEL == 1
-#define ADC0_SE9_GPIO        USBDM::GpioF<2>
-#define ADC0_SE9_FN          0
-#endif
 
 // Pin Mapping for ADC0_SE10 signal
 //   <o> ADC0_SE10 [PTG1]<name=ADC0_SE10_PIN_SEL>
@@ -1531,10 +1491,6 @@
 //     <1=> PTG1<selection=PTG1_SIG_SEL,LCD8/ADC0_SE10>
 //     <0=> Default
 #define ADC0_SE10_PIN_SEL    0
-#if ADC0_SE10_PIN_SEL == 1
-#define ADC0_SE10_GPIO       USBDM::GpioG<1>
-#define ADC0_SE10_FN         0
-#endif
 
 // Pin Mapping for ADC0_SE11 signal
 //   <o> ADC0_SE11 [PTG2]<name=ADC0_SE11_PIN_SEL>
@@ -1543,10 +1499,6 @@
 //     <1=> PTG2<selection=PTG2_SIG_SEL,LCD9/ADC0_SE11>
 //     <0=> Default
 #define ADC0_SE11_PIN_SEL    0
-#if ADC0_SE11_PIN_SEL == 1
-#define ADC0_SE11_GPIO       USBDM::GpioG<2>
-#define ADC0_SE11_FN         0
-#endif
 
 // </h>
 
@@ -1560,10 +1512,10 @@
 //     <2=> PTE3<selection=PTE3_SIG_SEL,AFE_CLK>
 //     <0=> Default
 #define AFE_CLK_PIN_SEL      0
-#if AFE_CLK_PIN_SEL == 1
+#if (AFE_CLK_PIN_SEL == 1)
 #define AFE_CLK_GPIO         USBDM::GpioB<7>
 #define AFE_CLK_FN           2
-#elif AFE_CLK_PIN_SEL == 2
+#elif (AFE_CLK_PIN_SEL == 2)
 #define AFE_CLK_GPIO         USBDM::GpioE<3>
 #define AFE_CLK_FN           3
 #endif
@@ -1576,10 +1528,10 @@
 //     <2=> PTE0<selection=PTE0_SIG_SEL,CLKOUT>
 //     <0=> Default
 #define CLKOUT_PIN_SEL       0
-#if CLKOUT_PIN_SEL == 1
+#if (CLKOUT_PIN_SEL == 1)
 #define CLKOUT_GPIO          USBDM::GpioF<7>
 #define CLKOUT_FN            3
-#elif CLKOUT_PIN_SEL == 2
+#elif (CLKOUT_PIN_SEL == 2)
 #define CLKOUT_GPIO          USBDM::GpioE<0>
 #define CLKOUT_FN            5
 #endif
@@ -1592,7 +1544,7 @@
 //     <2=> PTE2<selection=PTE2_SIG_SEL,EXTAL1>
 //     <1=> Default
 #define EXTAL1_PIN_SEL       1
-#if EXTAL1_PIN_SEL == 2
+#if (EXTAL1_PIN_SEL == 2)
 #define EXTAL1_GPIO          USBDM::GpioE<2>
 #define EXTAL1_FN            0
 #endif
@@ -1614,10 +1566,10 @@
 //     <2=> PTF2<selection=PTF2_SIG_SEL,RTCCLKOUT>
 //     <0=> Default
 #define RTCCLKOUT_PIN_SEL    0
-#if RTCCLKOUT_PIN_SEL == 1
+#if (RTCCLKOUT_PIN_SEL == 1)
 #define RTCCLKOUT_GPIO       USBDM::GpioF<0>
 #define RTCCLKOUT_FN         2
-#elif RTCCLKOUT_PIN_SEL == 2
+#elif (RTCCLKOUT_PIN_SEL == 2)
 #define RTCCLKOUT_GPIO       USBDM::GpioF<2>
 #define RTCCLKOUT_FN         3
 #endif
@@ -1630,7 +1582,7 @@
 //     <2=> PTE3<selection=PTE3_SIG_SEL,XTAL1>
 //     <1=> Default
 #define XTAL1_PIN_SEL        1
-#if XTAL1_PIN_SEL == 2
+#if (XTAL1_PIN_SEL == 2)
 #define XTAL1_GPIO           USBDM::GpioE<3>
 #define XTAL1_FN             0
 #endif
@@ -1656,10 +1608,10 @@
 //     <2=> PTF0<selection=PTF0_SIG_SEL,CMP0OUT>
 //     <0=> Default
 #define CMP0OUT_PIN_SEL      0
-#if CMP0OUT_PIN_SEL == 1
+#if (CMP0OUT_PIN_SEL == 1)
 #define CMP0OUT_GPIO         USBDM::GpioA<5>
 #define CMP0OUT_FN           2
-#elif CMP0OUT_PIN_SEL == 2
+#elif (CMP0OUT_PIN_SEL == 2)
 #define CMP0OUT_GPIO         USBDM::GpioF<0>
 #define CMP0OUT_FN           4
 #endif
@@ -1671,7 +1623,7 @@
 //     <1=> PTD0<selection=PTD0_SIG_SEL,CMP0P0>
 //     <0=> Default
 #define CMP0P0_PIN_SEL       0
-#if CMP0P0_PIN_SEL == 1
+#if (CMP0P0_PIN_SEL == 1)
 #define CMP0P0_GPIO          USBDM::GpioD<0>
 #define CMP0P0_FN            0
 #endif
@@ -1683,7 +1635,7 @@
 //     <1=> PTD2<selection=PTD2_SIG_SEL,CMP0P1>
 //     <0=> Default
 #define CMP0P1_PIN_SEL       0
-#if CMP0P1_PIN_SEL == 1
+#if (CMP0P1_PIN_SEL == 1)
 #define CMP0P1_GPIO          USBDM::GpioD<2>
 #define CMP0P1_FN            0
 #endif
@@ -1695,7 +1647,7 @@
 //     <1=> PTE6<selection=PTE6_SIG_SEL,CMP0P2>
 //     <0=> Default
 #define CMP0P2_PIN_SEL       0
-#if CMP0P2_PIN_SEL == 1
+#if (CMP0P2_PIN_SEL == 1)
 #define CMP0P2_GPIO          USBDM::GpioE<6>
 #define CMP0P2_FN            0
 #endif
@@ -1707,7 +1659,7 @@
 //     <1=> PTC3<selection=PTC3_SIG_SEL,LCD42/CMP0P3>
 //     <0=> Default
 #define CMP0P3_PIN_SEL       0
-#if CMP0P3_PIN_SEL == 1
+#if (CMP0P3_PIN_SEL == 1)
 #define CMP0P3_GPIO          USBDM::GpioC<3>
 #define CMP0P3_FN            0
 #endif
@@ -1719,7 +1671,7 @@
 //     <1=> PTD7<selection=PTD7_SIG_SEL,CMP0P4>
 //     <0=> Default
 #define CMP0P4_PIN_SEL       0
-#if CMP0P4_PIN_SEL == 1
+#if (CMP0P4_PIN_SEL == 1)
 #define CMP0P4_GPIO          USBDM::GpioD<7>
 #define CMP0P4_FN            0
 #endif
@@ -1731,7 +1683,7 @@
 //     <1=> PTI0<selection=PTI0_SIG_SEL,CMP0P5>
 //     <0=> Default
 #define CMP0P5_PIN_SEL       0
-#if CMP0P5_PIN_SEL == 1
+#if (CMP0P5_PIN_SEL == 1)
 #define CMP0P5_GPIO          USBDM::GpioI<0>
 #define CMP0P5_FN            0
 #endif
@@ -1748,10 +1700,10 @@
 //     <2=> PTD6<selection=PTD6_SIG_SEL,CMP1OUT>
 //     <0=> Default
 #define CMP1OUT_PIN_SEL      0
-#if CMP1OUT_PIN_SEL == 1
+#if (CMP1OUT_PIN_SEL == 1)
 #define CMP1OUT_GPIO         USBDM::GpioF<2>
 #define CMP1OUT_FN           2
-#elif CMP1OUT_PIN_SEL == 2
+#elif (CMP1OUT_PIN_SEL == 2)
 #define CMP1OUT_GPIO         USBDM::GpioD<6>
 #define CMP1OUT_FN           3
 #endif
@@ -1763,7 +1715,7 @@
 //     <1=> PTB6<selection=PTB6_SIG_SEL,LCD37/CMP1P0>
 //     <0=> Default
 #define CMP1P0_PIN_SEL       0
-#if CMP1P0_PIN_SEL == 1
+#if (CMP1P0_PIN_SEL == 1)
 #define CMP1P0_GPIO          USBDM::GpioB<6>
 #define CMP1P0_FN            0
 #endif
@@ -1775,7 +1727,7 @@
 //     <1=> PTC1<selection=PTC1_SIG_SEL,LCD40/CMP1P1>
 //     <0=> Default
 #define CMP1P1_PIN_SEL       0
-#if CMP1P1_PIN_SEL == 1
+#if (CMP1P1_PIN_SEL == 1)
 #define CMP1P1_GPIO          USBDM::GpioC<1>
 #define CMP1P1_FN            0
 #endif
@@ -1828,10 +1780,10 @@
 //     <2=> PTE4<selection=PTE4_SIG_SEL,EWM_IN>
 //     <0=> Default
 #define EWM_IN_PIN_SEL       0
-#if EWM_IN_PIN_SEL == 1
+#if (EWM_IN_PIN_SEL == 1)
 #define EWM_IN_GPIO          USBDM::GpioE<2>
 #define EWM_IN_FN            2
-#elif EWM_IN_PIN_SEL == 2
+#elif (EWM_IN_PIN_SEL == 2)
 #define EWM_IN_GPIO          USBDM::GpioE<4>
 #define EWM_IN_FN            4
 #endif
@@ -1844,10 +1796,10 @@
 //     <2=> PTE5<selection=PTE5_SIG_SEL,EWM_OUT>
 //     <0=> Default
 #define EWM_OUT_PIN_SEL      0
-#if EWM_OUT_PIN_SEL == 1
+#if (EWM_OUT_PIN_SEL == 1)
 #define EWM_OUT_GPIO         USBDM::GpioE<3>
 #define EWM_OUT_FN           2
-#elif EWM_OUT_PIN_SEL == 2
+#elif (EWM_OUT_PIN_SEL == 2)
 #define EWM_OUT_GPIO         USBDM::GpioE<5>
 #define EWM_OUT_FN           4
 #endif
@@ -1863,7 +1815,7 @@
 //     <1=> PTA0 (Alias:LED_RED)<selection=PTA0_SIG_SEL,GPIOA_0>
 //     <1=> Default
 #define GPIOA_0_PIN_SEL      1
-#if GPIOA_0_PIN_SEL == 1
+#if (GPIOA_0_PIN_SEL == 1)
 #define GPIOA_0_GPIO         USBDM::GpioA<0>
 #define GPIOA_0_FN           1
 #endif
@@ -1875,7 +1827,7 @@
 //     <1=> PTA1 (Alias:LED_GREEN)<selection=PTA1_SIG_SEL,GPIOA_1>
 //     <1=> Default
 #define GPIOA_1_PIN_SEL      1
-#if GPIOA_1_PIN_SEL == 1
+#if (GPIOA_1_PIN_SEL == 1)
 #define GPIOA_1_GPIO         USBDM::GpioA<1>
 #define GPIOA_1_FN           1
 #endif
@@ -1887,7 +1839,7 @@
 //     <1=> PTA2<selection=PTA2_SIG_SEL,GPIOA_2>
 //     <0=> Default
 #define GPIOA_2_PIN_SEL      0
-#if GPIOA_2_PIN_SEL == 1
+#if (GPIOA_2_PIN_SEL == 1)
 #define GPIOA_2_GPIO         USBDM::GpioA<2>
 #define GPIOA_2_FN           1
 #endif
@@ -1899,7 +1851,7 @@
 //     <1=> PTA3<selection=PTA3_SIG_SEL,GPIOA_3>
 //     <0=> Default
 #define GPIOA_3_PIN_SEL      0
-#if GPIOA_3_PIN_SEL == 1
+#if (GPIOA_3_PIN_SEL == 1)
 #define GPIOA_3_GPIO         USBDM::GpioA<3>
 #define GPIOA_3_FN           1
 #endif
@@ -1911,7 +1863,7 @@
 //     <1=> PTA4<selection=PTA4_SIG_SEL,GPIOA_4>
 //     <0=> Default
 #define GPIOA_4_PIN_SEL      0
-#if GPIOA_4_PIN_SEL == 1
+#if (GPIOA_4_PIN_SEL == 1)
 #define GPIOA_4_GPIO         USBDM::GpioA<4>
 #define GPIOA_4_FN           1
 #endif
@@ -1923,7 +1875,7 @@
 //     <1=> PTA5<selection=PTA5_SIG_SEL,GPIOA_5>
 //     <0=> Default
 #define GPIOA_5_PIN_SEL      0
-#if GPIOA_5_PIN_SEL == 1
+#if (GPIOA_5_PIN_SEL == 1)
 #define GPIOA_5_GPIO         USBDM::GpioA<5>
 #define GPIOA_5_FN           1
 #endif
@@ -1935,7 +1887,7 @@
 //     <1=> PTA6<selection=PTA6_SIG_SEL,GPIOA_6>
 //     <0=> Default
 #define GPIOA_6_PIN_SEL      0
-#if GPIOA_6_PIN_SEL == 1
+#if (GPIOA_6_PIN_SEL == 1)
 #define GPIOA_6_GPIO         USBDM::GpioA<6>
 #define GPIOA_6_FN           1
 #endif
@@ -1947,7 +1899,7 @@
 //     <1=> PTA7<selection=PTA7_SIG_SEL,GPIOA_7>
 //     <0=> Default
 #define GPIOA_7_PIN_SEL      0
-#if GPIOA_7_PIN_SEL == 1
+#if (GPIOA_7_PIN_SEL == 1)
 #define GPIOA_7_GPIO         USBDM::GpioA<7>
 #define GPIOA_7_FN           1
 #endif
@@ -1963,7 +1915,7 @@
 //     <1=> PTB0<selection=PTB0_SIG_SEL,GPIOB_0>
 //     <0=> Default
 #define GPIOB_0_PIN_SEL      0
-#if GPIOB_0_PIN_SEL == 1
+#if (GPIOB_0_PIN_SEL == 1)
 #define GPIOB_0_GPIO         USBDM::GpioB<0>
 #define GPIOB_0_FN           1
 #endif
@@ -1975,7 +1927,7 @@
 //     <1=> PTB1<selection=PTB1_SIG_SEL,GPIOB_1>
 //     <0=> Default
 #define GPIOB_1_PIN_SEL      0
-#if GPIOB_1_PIN_SEL == 1
+#if (GPIOB_1_PIN_SEL == 1)
 #define GPIOB_1_GPIO         USBDM::GpioB<1>
 #define GPIOB_1_FN           1
 #endif
@@ -1987,7 +1939,7 @@
 //     <1=> PTB2<selection=PTB2_SIG_SEL,GPIOB_2>
 //     <0=> Default
 #define GPIOB_2_PIN_SEL      0
-#if GPIOB_2_PIN_SEL == 1
+#if (GPIOB_2_PIN_SEL == 1)
 #define GPIOB_2_GPIO         USBDM::GpioB<2>
 #define GPIOB_2_FN           1
 #endif
@@ -1999,7 +1951,7 @@
 //     <1=> PTB3<selection=PTB3_SIG_SEL,GPIOB_3>
 //     <0=> Default
 #define GPIOB_3_PIN_SEL      0
-#if GPIOB_3_PIN_SEL == 1
+#if (GPIOB_3_PIN_SEL == 1)
 #define GPIOB_3_GPIO         USBDM::GpioB<3>
 #define GPIOB_3_FN           1
 #endif
@@ -2011,7 +1963,7 @@
 //     <1=> PTB4<selection=PTB4_SIG_SEL,GPIOB_4>
 //     <0=> Default
 #define GPIOB_4_PIN_SEL      0
-#if GPIOB_4_PIN_SEL == 1
+#if (GPIOB_4_PIN_SEL == 1)
 #define GPIOB_4_GPIO         USBDM::GpioB<4>
 #define GPIOB_4_FN           1
 #endif
@@ -2023,7 +1975,7 @@
 //     <1=> PTB5<selection=PTB5_SIG_SEL,GPIOB_5>
 //     <0=> Default
 #define GPIOB_5_PIN_SEL      0
-#if GPIOB_5_PIN_SEL == 1
+#if (GPIOB_5_PIN_SEL == 1)
 #define GPIOB_5_GPIO         USBDM::GpioB<5>
 #define GPIOB_5_FN           1
 #endif
@@ -2035,7 +1987,7 @@
 //     <1=> PTB6<selection=PTB6_SIG_SEL,GPIOB_6>
 //     <0=> Default
 #define GPIOB_6_PIN_SEL      0
-#if GPIOB_6_PIN_SEL == 1
+#if (GPIOB_6_PIN_SEL == 1)
 #define GPIOB_6_GPIO         USBDM::GpioB<6>
 #define GPIOB_6_FN           1
 #endif
@@ -2047,7 +1999,7 @@
 //     <1=> PTB7<selection=PTB7_SIG_SEL,GPIOB_7>
 //     <0=> Default
 #define GPIOB_7_PIN_SEL      0
-#if GPIOB_7_PIN_SEL == 1
+#if (GPIOB_7_PIN_SEL == 1)
 #define GPIOB_7_GPIO         USBDM::GpioB<7>
 #define GPIOB_7_FN           1
 #endif
@@ -2063,7 +2015,7 @@
 //     <1=> PTC0<selection=PTC0_SIG_SEL,GPIOC_0>
 //     <0=> Default
 #define GPIOC_0_PIN_SEL      0
-#if GPIOC_0_PIN_SEL == 1
+#if (GPIOC_0_PIN_SEL == 1)
 #define GPIOC_0_GPIO         USBDM::GpioC<0>
 #define GPIOC_0_FN           1
 #endif
@@ -2075,7 +2027,7 @@
 //     <1=> PTC1<selection=PTC1_SIG_SEL,GPIOC_1>
 //     <0=> Default
 #define GPIOC_1_PIN_SEL      0
-#if GPIOC_1_PIN_SEL == 1
+#if (GPIOC_1_PIN_SEL == 1)
 #define GPIOC_1_GPIO         USBDM::GpioC<1>
 #define GPIOC_1_FN           1
 #endif
@@ -2087,7 +2039,7 @@
 //     <1=> PTC2<selection=PTC2_SIG_SEL,GPIOC_2>
 //     <0=> Default
 #define GPIOC_2_PIN_SEL      0
-#if GPIOC_2_PIN_SEL == 1
+#if (GPIOC_2_PIN_SEL == 1)
 #define GPIOC_2_GPIO         USBDM::GpioC<2>
 #define GPIOC_2_FN           1
 #endif
@@ -2099,7 +2051,7 @@
 //     <1=> PTC3<selection=PTC3_SIG_SEL,GPIOC_3>
 //     <0=> Default
 #define GPIOC_3_PIN_SEL      0
-#if GPIOC_3_PIN_SEL == 1
+#if (GPIOC_3_PIN_SEL == 1)
 #define GPIOC_3_GPIO         USBDM::GpioC<3>
 #define GPIOC_3_FN           1
 #endif
@@ -2111,7 +2063,7 @@
 //     <1=> PTC4<selection=PTC4_SIG_SEL,GPIOC_4>
 //     <0=> Default
 #define GPIOC_4_PIN_SEL      0
-#if GPIOC_4_PIN_SEL == 1
+#if (GPIOC_4_PIN_SEL == 1)
 #define GPIOC_4_GPIO         USBDM::GpioC<4>
 #define GPIOC_4_FN           1
 #endif
@@ -2123,7 +2075,7 @@
 //     <1=> PTC5<selection=PTC5_SIG_SEL,GPIOC_5>
 //     <0=> Default
 #define GPIOC_5_PIN_SEL      0
-#if GPIOC_5_PIN_SEL == 1
+#if (GPIOC_5_PIN_SEL == 1)
 #define GPIOC_5_GPIO         USBDM::GpioC<5>
 #define GPIOC_5_FN           1
 #endif
@@ -2135,7 +2087,7 @@
 //     <1=> PTC6<selection=PTC6_SIG_SEL,GPIOC_6>
 //     <0=> Default
 #define GPIOC_6_PIN_SEL      0
-#if GPIOC_6_PIN_SEL == 1
+#if (GPIOC_6_PIN_SEL == 1)
 #define GPIOC_6_GPIO         USBDM::GpioC<6>
 #define GPIOC_6_FN           1
 #endif
@@ -2147,7 +2099,7 @@
 //     <1=> PTC7<selection=PTC7_SIG_SEL,GPIOC_7>
 //     <0=> Default
 #define GPIOC_7_PIN_SEL      0
-#if GPIOC_7_PIN_SEL == 1
+#if (GPIOC_7_PIN_SEL == 1)
 #define GPIOC_7_GPIO         USBDM::GpioC<7>
 #define GPIOC_7_FN           1
 #endif
@@ -2163,7 +2115,7 @@
 //     <1=> PTD0<selection=PTD0_SIG_SEL,GPIOD_0>
 //     <0=> Default
 #define GPIOD_0_PIN_SEL      0
-#if GPIOD_0_PIN_SEL == 1
+#if (GPIOD_0_PIN_SEL == 1)
 #define GPIOD_0_GPIO         USBDM::GpioD<0>
 #define GPIOD_0_FN           1
 #endif
@@ -2175,7 +2127,7 @@
 //     <1=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,GPIOD_1>
 //     <1=> Default
 #define GPIOD_1_PIN_SEL      1
-#if GPIOD_1_PIN_SEL == 1
+#if (GPIOD_1_PIN_SEL == 1)
 #define GPIOD_1_GPIO         USBDM::GpioD<1>
 #define GPIOD_1_FN           1
 #endif
@@ -2187,7 +2139,7 @@
 //     <1=> PTD2<selection=PTD2_SIG_SEL,GPIOD_2>
 //     <0=> Default
 #define GPIOD_2_PIN_SEL      0
-#if GPIOD_2_PIN_SEL == 1
+#if (GPIOD_2_PIN_SEL == 1)
 #define GPIOD_2_GPIO         USBDM::GpioD<2>
 #define GPIOD_2_FN           1
 #endif
@@ -2199,7 +2151,7 @@
 //     <1=> PTD3<selection=PTD3_SIG_SEL,GPIOD_3>
 //     <0=> Default
 #define GPIOD_3_PIN_SEL      0
-#if GPIOD_3_PIN_SEL == 1
+#if (GPIOD_3_PIN_SEL == 1)
 #define GPIOD_3_GPIO         USBDM::GpioD<3>
 #define GPIOD_3_FN           1
 #endif
@@ -2211,7 +2163,7 @@
 //     <1=> PTD4<selection=PTD4_SIG_SEL,GPIOD_4>
 //     <0=> Default
 #define GPIOD_4_PIN_SEL      0
-#if GPIOD_4_PIN_SEL == 1
+#if (GPIOD_4_PIN_SEL == 1)
 #define GPIOD_4_GPIO         USBDM::GpioD<4>
 #define GPIOD_4_FN           1
 #endif
@@ -2223,7 +2175,7 @@
 //     <1=> PTD5<selection=PTD5_SIG_SEL,GPIOD_5>
 //     <0=> Default
 #define GPIOD_5_PIN_SEL      0
-#if GPIOD_5_PIN_SEL == 1
+#if (GPIOD_5_PIN_SEL == 1)
 #define GPIOD_5_GPIO         USBDM::GpioD<5>
 #define GPIOD_5_FN           1
 #endif
@@ -2235,7 +2187,7 @@
 //     <1=> PTD6<selection=PTD6_SIG_SEL,GPIOD_6>
 //     <0=> Default
 #define GPIOD_6_PIN_SEL      0
-#if GPIOD_6_PIN_SEL == 1
+#if (GPIOD_6_PIN_SEL == 1)
 #define GPIOD_6_GPIO         USBDM::GpioD<6>
 #define GPIOD_6_FN           1
 #endif
@@ -2247,7 +2199,7 @@
 //     <1=> PTD7<selection=PTD7_SIG_SEL,GPIOD_7>
 //     <0=> Default
 #define GPIOD_7_PIN_SEL      0
-#if GPIOD_7_PIN_SEL == 1
+#if (GPIOD_7_PIN_SEL == 1)
 #define GPIOD_7_GPIO         USBDM::GpioD<7>
 #define GPIOD_7_FN           1
 #endif
@@ -2263,7 +2215,7 @@
 //     <1=> PTE0<selection=PTE0_SIG_SEL,GPIOE_0>
 //     <0=> Default
 #define GPIOE_0_PIN_SEL      0
-#if GPIOE_0_PIN_SEL == 1
+#if (GPIOE_0_PIN_SEL == 1)
 #define GPIOE_0_GPIO         USBDM::GpioE<0>
 #define GPIOE_0_FN           1
 #endif
@@ -2275,7 +2227,7 @@
 //     <1=> PTE1<selection=PTE1_SIG_SEL,GPIOE_1>
 //     <0=> Default
 #define GPIOE_1_PIN_SEL      0
-#if GPIOE_1_PIN_SEL == 1
+#if (GPIOE_1_PIN_SEL == 1)
 #define GPIOE_1_GPIO         USBDM::GpioE<1>
 #define GPIOE_1_FN           1
 #endif
@@ -2287,7 +2239,7 @@
 //     <1=> PTE2<selection=PTE2_SIG_SEL,GPIOE_2>
 //     <0=> Default
 #define GPIOE_2_PIN_SEL      0
-#if GPIOE_2_PIN_SEL == 1
+#if (GPIOE_2_PIN_SEL == 1)
 #define GPIOE_2_GPIO         USBDM::GpioE<2>
 #define GPIOE_2_FN           1
 #endif
@@ -2299,7 +2251,7 @@
 //     <1=> PTE3<selection=PTE3_SIG_SEL,GPIOE_3>
 //     <0=> Default
 #define GPIOE_3_PIN_SEL      0
-#if GPIOE_3_PIN_SEL == 1
+#if (GPIOE_3_PIN_SEL == 1)
 #define GPIOE_3_GPIO         USBDM::GpioE<3>
 #define GPIOE_3_FN           1
 #endif
@@ -2311,7 +2263,7 @@
 //     <1=> PTE4<selection=PTE4_SIG_SEL,GPIOE_4>
 //     <0=> Default
 #define GPIOE_4_PIN_SEL      0
-#if GPIOE_4_PIN_SEL == 1
+#if (GPIOE_4_PIN_SEL == 1)
 #define GPIOE_4_GPIO         USBDM::GpioE<4>
 #define GPIOE_4_FN           1
 #endif
@@ -2323,7 +2275,7 @@
 //     <1=> PTE5<selection=PTE5_SIG_SEL,GPIOE_5>
 //     <0=> Default
 #define GPIOE_5_PIN_SEL      0
-#if GPIOE_5_PIN_SEL == 1
+#if (GPIOE_5_PIN_SEL == 1)
 #define GPIOE_5_GPIO         USBDM::GpioE<5>
 #define GPIOE_5_FN           1
 #endif
@@ -2335,7 +2287,7 @@
 //     <1=> PTE6<selection=PTE6_SIG_SEL,GPIOE_6>
 //     <0=> Default
 #define GPIOE_6_PIN_SEL      0
-#if GPIOE_6_PIN_SEL == 1
+#if (GPIOE_6_PIN_SEL == 1)
 #define GPIOE_6_GPIO         USBDM::GpioE<6>
 #define GPIOE_6_FN           1
 #endif
@@ -2347,7 +2299,7 @@
 //     <1=> PTE7<selection=PTE7_SIG_SEL,GPIOE_7>
 //     <0=> Default
 #define GPIOE_7_PIN_SEL      0
-#if GPIOE_7_PIN_SEL == 1
+#if (GPIOE_7_PIN_SEL == 1)
 #define GPIOE_7_GPIO         USBDM::GpioE<7>
 #define GPIOE_7_FN           1
 #endif
@@ -2363,7 +2315,7 @@
 //     <1=> PTF0<selection=PTF0_SIG_SEL,GPIOF_0>
 //     <0=> Default
 #define GPIOF_0_PIN_SEL      0
-#if GPIOF_0_PIN_SEL == 1
+#if (GPIOF_0_PIN_SEL == 1)
 #define GPIOF_0_GPIO         USBDM::GpioF<0>
 #define GPIOF_0_FN           1
 #endif
@@ -2375,7 +2327,7 @@
 //     <1=> PTF1<selection=PTF1_SIG_SEL,GPIOF_1>
 //     <0=> Default
 #define GPIOF_1_PIN_SEL      0
-#if GPIOF_1_PIN_SEL == 1
+#if (GPIOF_1_PIN_SEL == 1)
 #define GPIOF_1_GPIO         USBDM::GpioF<1>
 #define GPIOF_1_FN           1
 #endif
@@ -2387,7 +2339,7 @@
 //     <1=> PTF2<selection=PTF2_SIG_SEL,GPIOF_2>
 //     <0=> Default
 #define GPIOF_2_PIN_SEL      0
-#if GPIOF_2_PIN_SEL == 1
+#if (GPIOF_2_PIN_SEL == 1)
 #define GPIOF_2_GPIO         USBDM::GpioF<2>
 #define GPIOF_2_FN           1
 #endif
@@ -2399,7 +2351,7 @@
 //     <1=> PTF3<selection=PTF3_SIG_SEL,GPIOF_3>
 //     <0=> Default
 #define GPIOF_3_PIN_SEL      0
-#if GPIOF_3_PIN_SEL == 1
+#if (GPIOF_3_PIN_SEL == 1)
 #define GPIOF_3_GPIO         USBDM::GpioF<3>
 #define GPIOF_3_FN           1
 #endif
@@ -2411,7 +2363,7 @@
 //     <1=> PTF4<selection=PTF4_SIG_SEL,GPIOF_4>
 //     <0=> Default
 #define GPIOF_4_PIN_SEL      0
-#if GPIOF_4_PIN_SEL == 1
+#if (GPIOF_4_PIN_SEL == 1)
 #define GPIOF_4_GPIO         USBDM::GpioF<4>
 #define GPIOF_4_FN           1
 #endif
@@ -2423,7 +2375,7 @@
 //     <1=> PTF5<selection=PTF5_SIG_SEL,GPIOF_5>
 //     <0=> Default
 #define GPIOF_5_PIN_SEL      0
-#if GPIOF_5_PIN_SEL == 1
+#if (GPIOF_5_PIN_SEL == 1)
 #define GPIOF_5_GPIO         USBDM::GpioF<5>
 #define GPIOF_5_FN           1
 #endif
@@ -2435,7 +2387,7 @@
 //     <1=> PTF6<selection=PTF6_SIG_SEL,GPIOF_6>
 //     <0=> Default
 #define GPIOF_6_PIN_SEL      0
-#if GPIOF_6_PIN_SEL == 1
+#if (GPIOF_6_PIN_SEL == 1)
 #define GPIOF_6_GPIO         USBDM::GpioF<6>
 #define GPIOF_6_FN           1
 #endif
@@ -2447,7 +2399,7 @@
 //     <1=> PTF7<selection=PTF7_SIG_SEL,GPIOF_7>
 //     <0=> Default
 #define GPIOF_7_PIN_SEL      0
-#if GPIOF_7_PIN_SEL == 1
+#if (GPIOF_7_PIN_SEL == 1)
 #define GPIOF_7_GPIO         USBDM::GpioF<7>
 #define GPIOF_7_FN           1
 #endif
@@ -2463,7 +2415,7 @@
 //     <1=> PTG0<selection=PTG0_SIG_SEL,GPIOG_0>
 //     <0=> Default
 #define GPIOG_0_PIN_SEL      0
-#if GPIOG_0_PIN_SEL == 1
+#if (GPIOG_0_PIN_SEL == 1)
 #define GPIOG_0_GPIO         USBDM::GpioG<0>
 #define GPIOG_0_FN           1
 #endif
@@ -2475,7 +2427,7 @@
 //     <1=> PTG1<selection=PTG1_SIG_SEL,GPIOG_1>
 //     <0=> Default
 #define GPIOG_1_PIN_SEL      0
-#if GPIOG_1_PIN_SEL == 1
+#if (GPIOG_1_PIN_SEL == 1)
 #define GPIOG_1_GPIO         USBDM::GpioG<1>
 #define GPIOG_1_FN           1
 #endif
@@ -2487,7 +2439,7 @@
 //     <1=> PTG2<selection=PTG2_SIG_SEL,GPIOG_2>
 //     <0=> Default
 #define GPIOG_2_PIN_SEL      0
-#if GPIOG_2_PIN_SEL == 1
+#if (GPIOG_2_PIN_SEL == 1)
 #define GPIOG_2_GPIO         USBDM::GpioG<2>
 #define GPIOG_2_FN           1
 #endif
@@ -2499,7 +2451,7 @@
 //     <1=> PTG3<selection=PTG3_SIG_SEL,GPIOG_3>
 //     <0=> Default
 #define GPIOG_3_PIN_SEL      0
-#if GPIOG_3_PIN_SEL == 1
+#if (GPIOG_3_PIN_SEL == 1)
 #define GPIOG_3_GPIO         USBDM::GpioG<3>
 #define GPIOG_3_FN           1
 #endif
@@ -2511,7 +2463,7 @@
 //     <1=> PTG4<selection=PTG4_SIG_SEL,GPIOG_4>
 //     <0=> Default
 #define GPIOG_4_PIN_SEL      0
-#if GPIOG_4_PIN_SEL == 1
+#if (GPIOG_4_PIN_SEL == 1)
 #define GPIOG_4_GPIO         USBDM::GpioG<4>
 #define GPIOG_4_FN           1
 #endif
@@ -2523,7 +2475,7 @@
 //     <1=> PTG5<selection=PTG5_SIG_SEL,GPIOG_5>
 //     <0=> Default
 #define GPIOG_5_PIN_SEL      0
-#if GPIOG_5_PIN_SEL == 1
+#if (GPIOG_5_PIN_SEL == 1)
 #define GPIOG_5_GPIO         USBDM::GpioG<5>
 #define GPIOG_5_FN           1
 #endif
@@ -2535,7 +2487,7 @@
 //     <1=> PTG6<selection=PTG6_SIG_SEL,GPIOG_6>
 //     <0=> Default
 #define GPIOG_6_PIN_SEL      0
-#if GPIOG_6_PIN_SEL == 1
+#if (GPIOG_6_PIN_SEL == 1)
 #define GPIOG_6_GPIO         USBDM::GpioG<6>
 #define GPIOG_6_FN           1
 #endif
@@ -2547,7 +2499,7 @@
 //     <1=> PTG7<selection=PTG7_SIG_SEL,GPIOG_7>
 //     <0=> Default
 #define GPIOG_7_PIN_SEL      0
-#if GPIOG_7_PIN_SEL == 1
+#if (GPIOG_7_PIN_SEL == 1)
 #define GPIOG_7_GPIO         USBDM::GpioG<7>
 #define GPIOG_7_FN           1
 #endif
@@ -2563,7 +2515,7 @@
 //     <1=> PTH0<selection=PTH0_SIG_SEL,GPIOH_0>
 //     <0=> Default
 #define GPIOH_0_PIN_SEL      0
-#if GPIOH_0_PIN_SEL == 1
+#if (GPIOH_0_PIN_SEL == 1)
 #define GPIOH_0_GPIO         USBDM::GpioH<0>
 #define GPIOH_0_FN           1
 #endif
@@ -2575,7 +2527,7 @@
 //     <1=> PTH1<selection=PTH1_SIG_SEL,GPIOH_1>
 //     <0=> Default
 #define GPIOH_1_PIN_SEL      0
-#if GPIOH_1_PIN_SEL == 1
+#if (GPIOH_1_PIN_SEL == 1)
 #define GPIOH_1_GPIO         USBDM::GpioH<1>
 #define GPIOH_1_FN           1
 #endif
@@ -2587,7 +2539,7 @@
 //     <1=> PTH2<selection=PTH2_SIG_SEL,GPIOH_2>
 //     <0=> Default
 #define GPIOH_2_PIN_SEL      0
-#if GPIOH_2_PIN_SEL == 1
+#if (GPIOH_2_PIN_SEL == 1)
 #define GPIOH_2_GPIO         USBDM::GpioH<2>
 #define GPIOH_2_FN           1
 #endif
@@ -2599,7 +2551,7 @@
 //     <1=> PTH3<selection=PTH3_SIG_SEL,GPIOH_3>
 //     <0=> Default
 #define GPIOH_3_PIN_SEL      0
-#if GPIOH_3_PIN_SEL == 1
+#if (GPIOH_3_PIN_SEL == 1)
 #define GPIOH_3_GPIO         USBDM::GpioH<3>
 #define GPIOH_3_FN           1
 #endif
@@ -2611,7 +2563,7 @@
 //     <1=> PTH4<selection=PTH4_SIG_SEL,GPIOH_4>
 //     <0=> Default
 #define GPIOH_4_PIN_SEL      0
-#if GPIOH_4_PIN_SEL == 1
+#if (GPIOH_4_PIN_SEL == 1)
 #define GPIOH_4_GPIO         USBDM::GpioH<4>
 #define GPIOH_4_FN           1
 #endif
@@ -2623,7 +2575,7 @@
 //     <1=> PTH5<selection=PTH5_SIG_SEL,GPIOH_5>
 //     <0=> Default
 #define GPIOH_5_PIN_SEL      0
-#if GPIOH_5_PIN_SEL == 1
+#if (GPIOH_5_PIN_SEL == 1)
 #define GPIOH_5_GPIO         USBDM::GpioH<5>
 #define GPIOH_5_FN           1
 #endif
@@ -2635,7 +2587,7 @@
 //     <1=> PTH6<selection=PTH6_SIG_SEL,GPIOH_6>
 //     <0=> Default
 #define GPIOH_6_PIN_SEL      0
-#if GPIOH_6_PIN_SEL == 1
+#if (GPIOH_6_PIN_SEL == 1)
 #define GPIOH_6_GPIO         USBDM::GpioH<6>
 #define GPIOH_6_FN           1
 #endif
@@ -2647,7 +2599,7 @@
 //     <1=> PTH7<selection=PTH7_SIG_SEL,GPIOH_7>
 //     <0=> Default
 #define GPIOH_7_PIN_SEL      0
-#if GPIOH_7_PIN_SEL == 1
+#if (GPIOH_7_PIN_SEL == 1)
 #define GPIOH_7_GPIO         USBDM::GpioH<7>
 #define GPIOH_7_FN           1
 #endif
@@ -2663,7 +2615,7 @@
 //     <1=> PTI0<selection=PTI0_SIG_SEL,GPIOI_0>
 //     <0=> Default
 #define GPIOI_0_PIN_SEL      0
-#if GPIOI_0_PIN_SEL == 1
+#if (GPIOI_0_PIN_SEL == 1)
 #define GPIOI_0_GPIO         USBDM::GpioI<0>
 #define GPIOI_0_FN           1
 #endif
@@ -2675,7 +2627,7 @@
 //     <1=> PTI1<selection=PTI1_SIG_SEL,GPIOI_1>
 //     <0=> Default
 #define GPIOI_1_PIN_SEL      0
-#if GPIOI_1_PIN_SEL == 1
+#if (GPIOI_1_PIN_SEL == 1)
 #define GPIOI_1_GPIO         USBDM::GpioI<1>
 #define GPIOI_1_FN           1
 #endif
@@ -2687,7 +2639,7 @@
 //     <1=> PTI2<selection=PTI2_SIG_SEL,GPIOI_2>
 //     <0=> Default
 #define GPIOI_2_PIN_SEL      0
-#if GPIOI_2_PIN_SEL == 1
+#if (GPIOI_2_PIN_SEL == 1)
 #define GPIOI_2_GPIO         USBDM::GpioI<2>
 #define GPIOI_2_FN           1
 #endif
@@ -2699,7 +2651,7 @@
 //     <1=> PTI3<selection=PTI3_SIG_SEL,GPIOI_3>
 //     <0=> Default
 #define GPIOI_3_PIN_SEL      0
-#if GPIOI_3_PIN_SEL == 1
+#if (GPIOI_3_PIN_SEL == 1)
 #define GPIOI_3_GPIO         USBDM::GpioI<3>
 #define GPIOI_3_FN           1
 #endif
@@ -2717,13 +2669,13 @@
 //     <3=> PTE6<selection=PTE6_SIG_SEL,I2C0_SCL>
 //     <0=> Default
 #define I2C0_SCL_PIN_SEL     0
-#if I2C0_SCL_PIN_SEL == 1
+#if (I2C0_SCL_PIN_SEL == 1)
 #define I2C0_SCL_GPIO        USBDM::GpioD<7>
 #define I2C0_SCL_FN          2
-#elif I2C0_SCL_PIN_SEL == 2
+#elif (I2C0_SCL_PIN_SEL == 2)
 #define I2C0_SCL_GPIO        USBDM::GpioG<3>
 #define I2C0_SCL_FN          3
-#elif I2C0_SCL_PIN_SEL == 3
+#elif (I2C0_SCL_PIN_SEL == 3)
 #define I2C0_SCL_GPIO        USBDM::GpioE<6>
 #define I2C0_SCL_FN          5
 #endif
@@ -2737,13 +2689,13 @@
 //     <3=> PTE7<selection=PTE7_SIG_SEL,I2C0_SDA>
 //     <0=> Default
 #define I2C0_SDA_PIN_SEL     0
-#if I2C0_SDA_PIN_SEL == 1
+#if (I2C0_SDA_PIN_SEL == 1)
 #define I2C0_SDA_GPIO        USBDM::GpioE<0>
 #define I2C0_SDA_FN          2
-#elif I2C0_SDA_PIN_SEL == 2
+#elif (I2C0_SDA_PIN_SEL == 2)
 #define I2C0_SDA_GPIO        USBDM::GpioG<4>
 #define I2C0_SDA_FN          3
-#elif I2C0_SDA_PIN_SEL == 3
+#elif (I2C0_SDA_PIN_SEL == 3)
 #define I2C0_SDA_GPIO        USBDM::GpioE<7>
 #define I2C0_SDA_FN          5
 #endif
@@ -2760,10 +2712,10 @@
 //     <2=> PTE2<selection=PTE2_SIG_SEL,I2C1_SDA>
 //     <0=> Default
 #define I2C1_SDA_PIN_SEL     0
-#if I2C1_SDA_PIN_SEL == 1
+#if (I2C1_SDA_PIN_SEL == 1)
 #define I2C1_SDA_GPIO        USBDM::GpioF<6>
 #define I2C1_SDA_FN          3
-#elif I2C1_SDA_PIN_SEL == 2
+#elif (I2C1_SDA_PIN_SEL == 2)
 #define I2C1_SDA_GPIO        USBDM::GpioE<2>
 #define I2C1_SDA_FN          4
 #endif
@@ -2776,10 +2728,10 @@
 //     <2=> PTE3<selection=PTE3_SIG_SEL,I2C1_SCL>
 //     <0=> Default
 #define I2C1_SCL_PIN_SEL     0
-#if I2C1_SCL_PIN_SEL == 1
+#if (I2C1_SCL_PIN_SEL == 1)
 #define I2C1_SCL_GPIO        USBDM::GpioF<5>
 #define I2C1_SCL_FN          3
-#elif I2C1_SCL_PIN_SEL == 2
+#elif (I2C1_SCL_PIN_SEL == 2)
 #define I2C1_SCL_GPIO        USBDM::GpioE<3>
 #define I2C1_SCL_FN          4
 #endif
@@ -2795,7 +2747,7 @@
 //     <1=> PTG6<selection=PTG6_SIG_SEL,LLWU_P0>
 //     <0=> Default
 #define LLWU_P0_PIN_SEL      0
-#if LLWU_P0_PIN_SEL == 1
+#if (LLWU_P0_PIN_SEL == 1)
 #define LLWU_P0_GPIO         USBDM::GpioG<6>
 #define LLWU_P0_FN           2
 #endif
@@ -2807,7 +2759,7 @@
 //     <1=> PTG2<selection=PTG2_SIG_SEL,LLWU_P1>
 //     <0=> Default
 #define LLWU_P1_PIN_SEL      0
-#if LLWU_P1_PIN_SEL == 1
+#if (LLWU_P1_PIN_SEL == 1)
 #define LLWU_P1_GPIO         USBDM::GpioG<2>
 #define LLWU_P1_FN           3
 #endif
@@ -2819,7 +2771,7 @@
 //     <1=> PTG1<selection=PTG1_SIG_SEL,LLWU_P2>
 //     <0=> Default
 #define LLWU_P2_PIN_SEL      0
-#if LLWU_P2_PIN_SEL == 1
+#if (LLWU_P2_PIN_SEL == 1)
 #define LLWU_P2_GPIO         USBDM::GpioG<1>
 #define LLWU_P2_FN           2
 #endif
@@ -2831,7 +2783,7 @@
 //     <1=> PTF6<selection=PTF6_SIG_SEL,LLWU_P3>
 //     <0=> Default
 #define LLWU_P3_PIN_SEL      0
-#if LLWU_P3_PIN_SEL == 1
+#if (LLWU_P3_PIN_SEL == 1)
 #define LLWU_P3_GPIO         USBDM::GpioF<6>
 #define LLWU_P3_FN           4
 #endif
@@ -2843,7 +2795,7 @@
 //     <1=> PTF0<selection=PTF0_SIG_SEL,LLWU_P4>
 //     <0=> Default
 #define LLWU_P4_PIN_SEL      0
-#if LLWU_P4_PIN_SEL == 1
+#if (LLWU_P4_PIN_SEL == 1)
 #define LLWU_P4_GPIO         USBDM::GpioF<0>
 #define LLWU_P4_FN           5
 #endif
@@ -2855,7 +2807,7 @@
 //     <1=> PTE6<selection=PTE6_SIG_SEL,LLWU_P5>
 //     <0=> Default
 #define LLWU_P5_PIN_SEL      0
-#if LLWU_P5_PIN_SEL == 1
+#if (LLWU_P5_PIN_SEL == 1)
 #define LLWU_P5_GPIO         USBDM::GpioE<6>
 #define LLWU_P5_FN           4
 #endif
@@ -2867,7 +2819,7 @@
 //     <1=> PTE5<selection=PTE5_SIG_SEL,LLWU_P6>
 //     <0=> Default
 #define LLWU_P6_PIN_SEL      0
-#if LLWU_P6_PIN_SEL == 1
+#if (LLWU_P6_PIN_SEL == 1)
 #define LLWU_P6_GPIO         USBDM::GpioE<5>
 #define LLWU_P6_FN           5
 #endif
@@ -2879,7 +2831,7 @@
 //     <1=> PTD7<selection=PTD7_SIG_SEL,LLWU_P7>
 //     <0=> Default
 #define LLWU_P7_PIN_SEL      0
-#if LLWU_P7_PIN_SEL == 1
+#if (LLWU_P7_PIN_SEL == 1)
 #define LLWU_P7_GPIO         USBDM::GpioD<7>
 #define LLWU_P7_FN           5
 #endif
@@ -2891,7 +2843,7 @@
 //     <1=> PTD6<selection=PTD6_SIG_SEL,LLWU_P8>
 //     <0=> Default
 #define LLWU_P8_PIN_SEL      0
-#if LLWU_P8_PIN_SEL == 1
+#if (LLWU_P8_PIN_SEL == 1)
 #define LLWU_P8_GPIO         USBDM::GpioD<6>
 #define LLWU_P8_FN           5
 #endif
@@ -2903,7 +2855,7 @@
 //     <1=> PTD4<selection=PTD4_SIG_SEL,LLWU_P9>
 //     <0=> Default
 #define LLWU_P9_PIN_SEL      0
-#if LLWU_P9_PIN_SEL == 1
+#if (LLWU_P9_PIN_SEL == 1)
 #define LLWU_P9_GPIO         USBDM::GpioD<4>
 #define LLWU_P9_FN           4
 #endif
@@ -2915,7 +2867,7 @@
 //     <1=> PTD2<selection=PTD2_SIG_SEL,LLWU_P10>
 //     <0=> Default
 #define LLWU_P10_PIN_SEL     0
-#if LLWU_P10_PIN_SEL == 1
+#if (LLWU_P10_PIN_SEL == 1)
 #define LLWU_P10_GPIO        USBDM::GpioD<2>
 #define LLWU_P10_FN          5
 #endif
@@ -2927,7 +2879,7 @@
 //     <1=> PTD0<selection=PTD0_SIG_SEL,LLWU_P11>
 //     <0=> Default
 #define LLWU_P11_PIN_SEL     0
-#if LLWU_P11_PIN_SEL == 1
+#if (LLWU_P11_PIN_SEL == 1)
 #define LLWU_P11_GPIO        USBDM::GpioD<0>
 #define LLWU_P11_FN          4
 #endif
@@ -2939,7 +2891,7 @@
 //     <1=> PTC5<selection=PTC5_SIG_SEL,LLWU_P12>
 //     <0=> Default
 #define LLWU_P12_PIN_SEL     0
-#if LLWU_P12_PIN_SEL == 1
+#if (LLWU_P12_PIN_SEL == 1)
 #define LLWU_P12_GPIO        USBDM::GpioC<5>
 #define LLWU_P12_FN          3
 #endif
@@ -2951,7 +2903,7 @@
 //     <1=> PTC3<selection=PTC3_SIG_SEL,LLWU_P13>
 //     <0=> Default
 #define LLWU_P13_PIN_SEL     0
-#if LLWU_P13_PIN_SEL == 1
+#if (LLWU_P13_PIN_SEL == 1)
 #define LLWU_P13_GPIO        USBDM::GpioC<3>
 #define LLWU_P13_FN          3
 #endif
@@ -2963,7 +2915,7 @@
 //     <1=> PTA6<selection=PTA6_SIG_SEL,LLWU_P14>
 //     <0=> Default
 #define LLWU_P14_PIN_SEL     0
-#if LLWU_P14_PIN_SEL == 1
+#if (LLWU_P14_PIN_SEL == 1)
 #define LLWU_P14_GPIO        USBDM::GpioA<6>
 #define LLWU_P14_FN          3
 #endif
@@ -2975,7 +2927,7 @@
 //     <1=> PTA4<selection=PTA4_SIG_SEL,LLWU_P15>
 //     <0=> Default
 #define LLWU_P15_PIN_SEL     0
-#if LLWU_P15_PIN_SEL == 1
+#if (LLWU_P15_PIN_SEL == 1)
 #define LLWU_P15_GPIO        USBDM::GpioA<4>
 #define LLWU_P15_FN          2
 #endif
@@ -2993,13 +2945,13 @@
 //     <3=> PTG1<selection=PTG1_SIG_SEL,LPTMR_ALT0>
 //     <0=> Default
 #define LPTMR_ALT0_PIN_SEL   0
-#if LPTMR_ALT0_PIN_SEL == 1
+#if (LPTMR_ALT0_PIN_SEL == 1)
 #define LPTMR_ALT0_GPIO      USBDM::GpioE<4>
 #define LPTMR_ALT0_FN        2
-#elif LPTMR_ALT0_PIN_SEL == 2
+#elif (LPTMR_ALT0_PIN_SEL == 2)
 #define LPTMR_ALT0_GPIO      USBDM::GpioF<4>
 #define LPTMR_ALT0_FN        3
-#elif LPTMR_ALT0_PIN_SEL == 3
+#elif (LPTMR_ALT0_PIN_SEL == 3)
 #define LPTMR_ALT0_GPIO      USBDM::GpioG<1>
 #define LPTMR_ALT0_FN        3
 #endif
@@ -3013,13 +2965,13 @@
 //     <3=> PTG5<selection=PTG5_SIG_SEL,LPTMR_ALT1>
 //     <0=> Default
 #define LPTMR_ALT1_PIN_SEL   0
-#if LPTMR_ALT1_PIN_SEL == 1
+#if (LPTMR_ALT1_PIN_SEL == 1)
 #define LPTMR_ALT1_GPIO      USBDM::GpioD<6>
 #define LPTMR_ALT1_FN        2
-#elif LPTMR_ALT1_PIN_SEL == 2
+#elif (LPTMR_ALT1_PIN_SEL == 2)
 #define LPTMR_ALT1_GPIO      USBDM::GpioF<3>
 #define LPTMR_ALT1_FN        3
-#elif LPTMR_ALT1_PIN_SEL == 3
+#elif (LPTMR_ALT1_PIN_SEL == 3)
 #define LPTMR_ALT1_GPIO      USBDM::GpioG<5>
 #define LPTMR_ALT1_FN        3
 #endif
@@ -3033,13 +2985,13 @@
 //     <3=> PTG6<selection=PTG6_SIG_SEL,LPTMR_ALT2>
 //     <0=> Default
 #define LPTMR_ALT2_PIN_SEL   0
-#if LPTMR_ALT2_PIN_SEL == 1
+#if (LPTMR_ALT2_PIN_SEL == 1)
 #define LPTMR_ALT2_GPIO      USBDM::GpioD<5>
 #define LPTMR_ALT2_FN        2
-#elif LPTMR_ALT2_PIN_SEL == 2
+#elif (LPTMR_ALT2_PIN_SEL == 2)
 #define LPTMR_ALT2_GPIO      USBDM::GpioG<0>
 #define LPTMR_ALT2_FN        3
-#elif LPTMR_ALT2_PIN_SEL == 3
+#elif (LPTMR_ALT2_PIN_SEL == 3)
 #define LPTMR_ALT2_GPIO      USBDM::GpioG<6>
 #define LPTMR_ALT2_FN        3
 #endif
@@ -3056,7 +3008,7 @@
 //     <2=> PTA4<selection=PTA4_SIG_SEL,NMI_B>
 //     <1=> Default
 #define NMI_B_PIN_SEL        1
-#if NMI_B_PIN_SEL == 2
+#if (NMI_B_PIN_SEL == 2)
 #define NMI_B_GPIO           USBDM::GpioA<4>
 #define NMI_B_FN             7
 #endif
@@ -3069,7 +3021,7 @@
 //     <2=> PTE1<selection=PTE1_SIG_SEL,RESET_B>
 //     <1=> Default
 #define RESET_B_PIN_SEL      1
-#if RESET_B_PIN_SEL == 2
+#if (RESET_B_PIN_SEL == 2)
 #define RESET_B_GPIO         USBDM::GpioE<1>
 #define RESET_B_FN           7
 #endif
@@ -3082,7 +3034,7 @@
 //     <2=> PTE7<selection=PTE7_SIG_SEL,SWD_CLK>
 //     <1=> Default
 #define SWD_CLK_PIN_SEL      1
-#if SWD_CLK_PIN_SEL == 2
+#if (SWD_CLK_PIN_SEL == 2)
 #define SWD_CLK_GPIO         USBDM::GpioE<7>
 #define SWD_CLK_FN           7
 #endif
@@ -3095,7 +3047,7 @@
 //     <2=> PTE6<selection=PTE6_SIG_SEL,SWD_IO>
 //     <1=> Default
 #define SWD_IO_PIN_SEL       1
-#if SWD_IO_PIN_SEL == 2
+#if (SWD_IO_PIN_SEL == 2)
 #define SWD_IO_GPIO          USBDM::GpioE<6>
 #define SWD_IO_FN            7
 #endif
@@ -3111,7 +3063,7 @@
 //     <1=> PTA6<selection=PTA6_SIG_SEL,PXBAR_IN0>
 //     <0=> Default
 #define PXBAR_IN0_PIN_SEL    0
-#if PXBAR_IN0_PIN_SEL == 1
+#if (PXBAR_IN0_PIN_SEL == 1)
 #define PXBAR_IN0_GPIO       USBDM::GpioA<6>
 #define PXBAR_IN0_FN         2
 #endif
@@ -3123,7 +3075,7 @@
 //     <1=> PTC0<selection=PTC0_SIG_SEL,PXBAR_IN1>
 //     <0=> Default
 #define PXBAR_IN1_PIN_SEL    0
-#if PXBAR_IN1_PIN_SEL == 1
+#if (PXBAR_IN1_PIN_SEL == 1)
 #define PXBAR_IN1_GPIO       USBDM::GpioC<0>
 #define PXBAR_IN1_FN         3
 #endif
@@ -3135,7 +3087,7 @@
 //     <1=> PTD0<selection=PTD0_SIG_SEL,PXBAR_IN2>
 //     <0=> Default
 #define PXBAR_IN2_PIN_SEL    0
-#if PXBAR_IN2_PIN_SEL == 1
+#if (PXBAR_IN2_PIN_SEL == 1)
 #define PXBAR_IN2_GPIO       USBDM::GpioD<0>
 #define PXBAR_IN2_FN         3
 #endif
@@ -3147,7 +3099,7 @@
 //     <1=> PTD2<selection=PTD2_SIG_SEL,PXBAR_IN3>
 //     <0=> Default
 #define PXBAR_IN3_PIN_SEL    0
-#if PXBAR_IN3_PIN_SEL == 1
+#if (PXBAR_IN3_PIN_SEL == 1)
 #define PXBAR_IN3_GPIO       USBDM::GpioD<2>
 #define PXBAR_IN3_FN         4
 #endif
@@ -3159,7 +3111,7 @@
 //     <1=> PTD7<selection=PTD7_SIG_SEL,PXBAR_IN4>
 //     <0=> Default
 #define PXBAR_IN4_PIN_SEL    0
-#if PXBAR_IN4_PIN_SEL == 1
+#if (PXBAR_IN4_PIN_SEL == 1)
 #define PXBAR_IN4_GPIO       USBDM::GpioD<7>
 #define PXBAR_IN4_FN         3
 #endif
@@ -3171,7 +3123,7 @@
 //     <1=> PTE6<selection=PTE6_SIG_SEL,PXBAR_IN5>
 //     <0=> Default
 #define PXBAR_IN5_PIN_SEL    0
-#if PXBAR_IN5_PIN_SEL == 1
+#if (PXBAR_IN5_PIN_SEL == 1)
 #define PXBAR_IN5_GPIO       USBDM::GpioE<6>
 #define PXBAR_IN5_FN         2
 #endif
@@ -3183,7 +3135,7 @@
 //     <1=> PTE2<selection=PTE2_SIG_SEL,PXBAR_IN6>
 //     <0=> Default
 #define PXBAR_IN6_PIN_SEL    0
-#if PXBAR_IN6_PIN_SEL == 1
+#if (PXBAR_IN6_PIN_SEL == 1)
 #define PXBAR_IN6_GPIO       USBDM::GpioE<2>
 #define PXBAR_IN6_FN         3
 #endif
@@ -3195,7 +3147,7 @@
 //     <1=> PTH6<selection=PTH6_SIG_SEL,PXBAR_IN7>
 //     <0=> Default
 #define PXBAR_IN7_PIN_SEL    0
-#if PXBAR_IN7_PIN_SEL == 1
+#if (PXBAR_IN7_PIN_SEL == 1)
 #define PXBAR_IN7_GPIO       USBDM::GpioH<6>
 #define PXBAR_IN7_FN         4
 #endif
@@ -3207,7 +3159,7 @@
 //     <1=> PTI0<selection=PTI0_SIG_SEL,PXBAR_IN8>
 //     <0=> Default
 #define PXBAR_IN8_PIN_SEL    0
-#if PXBAR_IN8_PIN_SEL == 1
+#if (PXBAR_IN8_PIN_SEL == 1)
 #define PXBAR_IN8_GPIO       USBDM::GpioI<0>
 #define PXBAR_IN8_FN         3
 #endif
@@ -3219,7 +3171,7 @@
 //     <1=> PTA7<selection=PTA7_SIG_SEL,PXBAR_OUT0>
 //     <0=> Default
 #define PXBAR_OUT0_PIN_SEL   0
-#if PXBAR_OUT0_PIN_SEL == 1
+#if (PXBAR_OUT0_PIN_SEL == 1)
 #define PXBAR_OUT0_GPIO      USBDM::GpioA<7>
 #define PXBAR_OUT0_FN        2
 #endif
@@ -3231,7 +3183,7 @@
 //     <1=> PTC2<selection=PTC2_SIG_SEL,PXBAR_OUT1>
 //     <0=> Default
 #define PXBAR_OUT1_PIN_SEL   0
-#if PXBAR_OUT1_PIN_SEL == 1
+#if (PXBAR_OUT1_PIN_SEL == 1)
 #define PXBAR_OUT1_GPIO      USBDM::GpioC<2>
 #define PXBAR_OUT1_FN        3
 #endif
@@ -3243,7 +3195,7 @@
 //     <1=> PTC7<selection=PTC7_SIG_SEL,PXBAR_OUT2>
 //     <0=> Default
 #define PXBAR_OUT2_PIN_SEL   0
-#if PXBAR_OUT2_PIN_SEL == 1
+#if (PXBAR_OUT2_PIN_SEL == 1)
 #define PXBAR_OUT2_GPIO      USBDM::GpioC<7>
 #define PXBAR_OUT2_FN        3
 #endif
@@ -3255,7 +3207,7 @@
 //     <1=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,PXBAR_OUT3>
 //     <0=> Default
 #define PXBAR_OUT3_PIN_SEL   0
-#if PXBAR_OUT3_PIN_SEL == 1
+#if (PXBAR_OUT3_PIN_SEL == 1)
 #define PXBAR_OUT3_GPIO      USBDM::GpioD<1>
 #define PXBAR_OUT3_FN        4
 #endif
@@ -3267,7 +3219,7 @@
 //     <1=> PTE0<selection=PTE0_SIG_SEL,PXBAR_OUT4>
 //     <0=> Default
 #define PXBAR_OUT4_PIN_SEL   0
-#if PXBAR_OUT4_PIN_SEL == 1
+#if (PXBAR_OUT4_PIN_SEL == 1)
 #define PXBAR_OUT4_GPIO      USBDM::GpioE<0>
 #define PXBAR_OUT4_FN        3
 #endif
@@ -3279,7 +3231,7 @@
 //     <1=> PTE7<selection=PTE7_SIG_SEL,PXBAR_OUT5>
 //     <0=> Default
 #define PXBAR_OUT5_PIN_SEL   0
-#if PXBAR_OUT5_PIN_SEL == 1
+#if (PXBAR_OUT5_PIN_SEL == 1)
 #define PXBAR_OUT5_GPIO      USBDM::GpioE<7>
 #define PXBAR_OUT5_FN        2
 #endif
@@ -3291,7 +3243,7 @@
 //     <1=> PTF1<selection=PTF1_SIG_SEL,PXBAR_OUT6>
 //     <0=> Default
 #define PXBAR_OUT6_PIN_SEL   0
-#if PXBAR_OUT6_PIN_SEL == 1
+#if (PXBAR_OUT6_PIN_SEL == 1)
 #define PXBAR_OUT6_GPIO      USBDM::GpioF<1>
 #define PXBAR_OUT6_FN        3
 #endif
@@ -3303,7 +3255,7 @@
 //     <1=> PTH7<selection=PTH7_SIG_SEL,PXBAR_OUT7>
 //     <0=> Default
 #define PXBAR_OUT7_PIN_SEL   0
-#if PXBAR_OUT7_PIN_SEL == 1
+#if (PXBAR_OUT7_PIN_SEL == 1)
 #define PXBAR_OUT7_GPIO      USBDM::GpioH<7>
 #define PXBAR_OUT7_FN        4
 #endif
@@ -3315,7 +3267,7 @@
 //     <1=> PTI1<selection=PTI1_SIG_SEL,PXBAR_OUT8>
 //     <0=> Default
 #define PXBAR_OUT8_PIN_SEL   0
-#if PXBAR_OUT8_PIN_SEL == 1
+#if (PXBAR_OUT8_PIN_SEL == 1)
 #define PXBAR_OUT8_GPIO      USBDM::GpioI<1>
 #define PXBAR_OUT8_FN        3
 #endif
@@ -3332,10 +3284,10 @@
 //     <2=> PTD5<selection=PTD5_SIG_SEL,QT0>
 //     <0=> Default
 #define QT0_PIN_SEL          0
-#if QT0_PIN_SEL == 1
+#if (QT0_PIN_SEL == 1)
 #define QT0_GPIO             USBDM::GpioF<1>
 #define QT0_FN               2
-#elif QT0_PIN_SEL == 2
+#elif (QT0_PIN_SEL == 2)
 #define QT0_GPIO             USBDM::GpioD<5>
 #define QT0_FN               3
 #endif
@@ -3348,10 +3300,10 @@
 //     <2=> PTC6<selection=PTC6_SIG_SEL,QT1>
 //     <0=> Default
 #define QT1_PIN_SEL          0
-#if QT1_PIN_SEL == 1
+#if (QT1_PIN_SEL == 1)
 #define QT1_GPIO             USBDM::GpioG<0>
 #define QT1_FN               2
-#elif QT1_PIN_SEL == 2
+#elif (QT1_PIN_SEL == 2)
 #define QT1_GPIO             USBDM::GpioC<6>
 #define QT1_FN               3
 #endif
@@ -3364,10 +3316,10 @@
 //     <2=> PTF0<selection=PTF0_SIG_SEL,QT2>
 //     <0=> Default
 #define QT2_PIN_SEL          0
-#if QT2_PIN_SEL == 1
+#if (QT2_PIN_SEL == 1)
 #define QT2_GPIO             USBDM::GpioF<7>
 #define QT2_FN               2
-#elif QT2_PIN_SEL == 2
+#elif (QT2_PIN_SEL == 2)
 #define QT2_GPIO             USBDM::GpioF<0>
 #define QT2_FN               3
 #endif
@@ -3380,10 +3332,10 @@
 //     <2=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,QT3>
 //     <0=> Default
 #define QT3_PIN_SEL          0
-#if QT3_PIN_SEL == 1
+#if (QT3_PIN_SEL == 1)
 #define QT3_GPIO             USBDM::GpioE<5>
 #define QT3_FN               2
-#elif QT3_PIN_SEL == 2
+#elif (QT3_PIN_SEL == 2)
 #define QT3_GPIO             USBDM::GpioD<1>
 #define QT3_FN               5
 #endif
@@ -3399,7 +3351,7 @@
 //     <1=> PTC6<selection=PTC6_SIG_SEL,SCI0_CTS>
 //     <0=> Default
 #define SCI0_CTS_PIN_SEL     0
-#if SCI0_CTS_PIN_SEL == 1
+#if (SCI0_CTS_PIN_SEL == 1)
 #define SCI0_CTS_GPIO        USBDM::GpioC<6>
 #define SCI0_CTS_FN          2
 #endif
@@ -3411,7 +3363,7 @@
 //     <1=> PTC5<selection=PTC5_SIG_SEL,SCI0_RTS>
 //     <0=> Default
 #define SCI0_RTS_PIN_SEL     0
-#if SCI0_RTS_PIN_SEL == 1
+#if (SCI0_RTS_PIN_SEL == 1)
 #define SCI0_RTS_GPIO        USBDM::GpioC<5>
 #define SCI0_RTS_FN          2
 #endif
@@ -3424,10 +3376,10 @@
 //     <2=> PTF3<selection=PTF3_SIG_SEL,SCI0_RxD>
 //     <0=> Default
 #define SCI0_RxD_PIN_SEL     0
-#if SCI0_RxD_PIN_SEL == 1
+#if (SCI0_RxD_PIN_SEL == 1)
 #define SCI0_RxD_GPIO        USBDM::GpioD<0>
 #define SCI0_RxD_FN          2
-#elif SCI0_RxD_PIN_SEL == 2
+#elif (SCI0_RxD_PIN_SEL == 2)
 #define SCI0_RxD_GPIO        USBDM::GpioF<3>
 #define SCI0_RxD_FN          4
 #endif
@@ -3440,10 +3392,10 @@
 //     <2=> PTF4<selection=PTF4_SIG_SEL,SCI0_TxD>
 //     <0=> Default
 #define SCI0_TxD_PIN_SEL     0
-#if SCI0_TxD_PIN_SEL == 1
+#if (SCI0_TxD_PIN_SEL == 1)
 #define SCI0_TxD_GPIO        USBDM::GpioC<7>
 #define SCI0_TxD_FN          2
-#elif SCI0_TxD_PIN_SEL == 2
+#elif (SCI0_TxD_PIN_SEL == 2)
 #define SCI0_TxD_GPIO        USBDM::GpioF<4>
 #define SCI0_TxD_FN          4
 #endif
@@ -3460,10 +3412,10 @@
 //     <2=> PTH6<selection=PTH6_SIG_SEL,SCI1_CTS>
 //     <0=> Default
 #define SCI1_CTS_PIN_SEL     0
-#if SCI1_CTS_PIN_SEL == 1
+#if (SCI1_CTS_PIN_SEL == 1)
 #define SCI1_CTS_GPIO        USBDM::GpioD<3>
 #define SCI1_CTS_FN          2
-#elif SCI1_CTS_PIN_SEL == 2
+#elif (SCI1_CTS_PIN_SEL == 2)
 #define SCI1_CTS_GPIO        USBDM::GpioH<6>
 #define SCI1_CTS_FN          2
 #endif
@@ -3476,10 +3428,10 @@
 //     <2=> PTH7<selection=PTH7_SIG_SEL,SCI1_RTS>
 //     <0=> Default
 #define SCI1_RTS_PIN_SEL     0
-#if SCI1_RTS_PIN_SEL == 1
+#if (SCI1_RTS_PIN_SEL == 1)
 #define SCI1_RTS_GPIO        USBDM::GpioD<4>
 #define SCI1_RTS_FN          2
-#elif SCI1_RTS_PIN_SEL == 2
+#elif (SCI1_RTS_PIN_SEL == 2)
 #define SCI1_RTS_GPIO        USBDM::GpioH<7>
 #define SCI1_RTS_FN          2
 #endif
@@ -3492,10 +3444,10 @@
 //     <2=> PTI0<selection=PTI0_SIG_SEL,SCI1_RxD>
 //     <0=> Default
 #define SCI1_RxD_PIN_SEL     0
-#if SCI1_RxD_PIN_SEL == 1
+#if (SCI1_RxD_PIN_SEL == 1)
 #define SCI1_RxD_GPIO        USBDM::GpioD<2>
 #define SCI1_RxD_FN          2
-#elif SCI1_RxD_PIN_SEL == 2
+#elif (SCI1_RxD_PIN_SEL == 2)
 #define SCI1_RxD_GPIO        USBDM::GpioI<0>
 #define SCI1_RxD_FN          2
 #endif
@@ -3508,10 +3460,10 @@
 //     <2=> PTI1<selection=PTI1_SIG_SEL,SCI1_TxD>
 //     <0=> Default
 #define SCI1_TxD_PIN_SEL     0
-#if SCI1_TxD_PIN_SEL == 1
+#if (SCI1_TxD_PIN_SEL == 1)
 #define SCI1_TxD_GPIO        USBDM::GpioD<1>
 #define SCI1_TxD_FN          2
-#elif SCI1_TxD_PIN_SEL == 2
+#elif (SCI1_TxD_PIN_SEL == 2)
 #define SCI1_TxD_GPIO        USBDM::GpioI<1>
 #define SCI1_TxD_FN          2
 #endif
@@ -3527,7 +3479,7 @@
 //     <1=> PTE4<selection=PTE4_SIG_SEL,SCI2_CTS>
 //     <0=> Default
 #define SCI2_CTS_PIN_SEL     0
-#if SCI2_CTS_PIN_SEL == 1
+#if (SCI2_CTS_PIN_SEL == 1)
 #define SCI2_CTS_GPIO        USBDM::GpioE<4>
 #define SCI2_CTS_FN          3
 #endif
@@ -3539,7 +3491,7 @@
 //     <1=> PTE5<selection=PTE5_SIG_SEL,SCI2_RTS>
 //     <0=> Default
 #define SCI2_RTS_PIN_SEL     0
-#if SCI2_RTS_PIN_SEL == 1
+#if (SCI2_RTS_PIN_SEL == 1)
 #define SCI2_RTS_GPIO        USBDM::GpioE<5>
 #define SCI2_RTS_FN          3
 #endif
@@ -3551,7 +3503,7 @@
 //     <1=> PTE6<selection=PTE6_SIG_SEL,SCI2_RxD>
 //     <0=> Default
 #define SCI2_RxD_PIN_SEL     0
-#if SCI2_RxD_PIN_SEL == 1
+#if (SCI2_RxD_PIN_SEL == 1)
 #define SCI2_RxD_GPIO        USBDM::GpioE<6>
 #define SCI2_RxD_FN          3
 #endif
@@ -3563,7 +3515,7 @@
 //     <1=> PTE7<selection=PTE7_SIG_SEL,SCI2_TxD>
 //     <0=> Default
 #define SCI2_TxD_PIN_SEL     0
-#if SCI2_TxD_PIN_SEL == 1
+#if (SCI2_TxD_PIN_SEL == 1)
 #define SCI2_TxD_GPIO        USBDM::GpioE<7>
 #define SCI2_TxD_FN          3
 #endif
@@ -3580,10 +3532,10 @@
 //     <2=> PTD5<selection=PTD5_SIG_SEL,SCI3_CTS>
 //     <0=> Default
 #define SCI3_CTS_PIN_SEL     0
-#if SCI3_CTS_PIN_SEL == 1
+#if (SCI3_CTS_PIN_SEL == 1)
 #define SCI3_CTS_GPIO        USBDM::GpioC<1>
 #define SCI3_CTS_FN          2
-#elif SCI3_CTS_PIN_SEL == 2
+#elif (SCI3_CTS_PIN_SEL == 2)
 #define SCI3_CTS_GPIO        USBDM::GpioD<5>
 #define SCI3_CTS_FN          4
 #endif
@@ -3596,10 +3548,10 @@
 //     <2=> PTD6<selection=PTD6_SIG_SEL,SCI3_RTS>
 //     <0=> Default
 #define SCI3_RTS_PIN_SEL     0
-#if SCI3_RTS_PIN_SEL == 1
+#if (SCI3_RTS_PIN_SEL == 1)
 #define SCI3_RTS_GPIO        USBDM::GpioC<0>
 #define SCI3_RTS_FN          2
-#elif SCI3_RTS_PIN_SEL == 2
+#elif (SCI3_RTS_PIN_SEL == 2)
 #define SCI3_RTS_GPIO        USBDM::GpioD<6>
 #define SCI3_RTS_FN          4
 #endif
@@ -3612,10 +3564,10 @@
 //     <2=> PTD7<selection=PTD7_SIG_SEL,SCI3_RxD>
 //     <0=> Default
 #define SCI3_RxD_PIN_SEL     0
-#if SCI3_RxD_PIN_SEL == 1
+#if (SCI3_RxD_PIN_SEL == 1)
 #define SCI3_RxD_GPIO        USBDM::GpioC<3>
 #define SCI3_RxD_FN          2
-#elif SCI3_RxD_PIN_SEL == 2
+#elif (SCI3_RxD_PIN_SEL == 2)
 #define SCI3_RxD_GPIO        USBDM::GpioD<7>
 #define SCI3_RxD_FN          4
 #endif
@@ -3628,10 +3580,10 @@
 //     <2=> PTE0<selection=PTE0_SIG_SEL,SCI3_TxD>
 //     <0=> Default
 #define SCI3_TxD_PIN_SEL     0
-#if SCI3_TxD_PIN_SEL == 1
+#if (SCI3_TxD_PIN_SEL == 1)
 #define SCI3_TxD_GPIO        USBDM::GpioC<2>
 #define SCI3_TxD_FN          2
-#elif SCI3_TxD_PIN_SEL == 2
+#elif (SCI3_TxD_PIN_SEL == 2)
 #define SCI3_TxD_GPIO        USBDM::GpioE<0>
 #define SCI3_TxD_FN          4
 #endif
@@ -3724,10 +3676,10 @@
 //     <2=> PTD4<selection=PTD4_SIG_SEL,SPI0_MISO>
 //     <0=> Default
 #define SPI0_MISO_PIN_SEL    0
-#if SPI0_MISO_PIN_SEL == 1
+#if (SPI0_MISO_PIN_SEL == 1)
 #define SPI0_MISO_GPIO       USBDM::GpioG<5>
 #define SPI0_MISO_FN         2
-#elif SPI0_MISO_PIN_SEL == 2
+#elif (SPI0_MISO_PIN_SEL == 2)
 #define SPI0_MISO_GPIO       USBDM::GpioD<4>
 #define SPI0_MISO_FN         3
 #endif
@@ -3740,10 +3692,10 @@
 //     <2=> PTD3<selection=PTD3_SIG_SEL,SPI0_MOSI>
 //     <0=> Default
 #define SPI0_MOSI_PIN_SEL    0
-#if SPI0_MOSI_PIN_SEL == 1
+#if (SPI0_MOSI_PIN_SEL == 1)
 #define SPI0_MOSI_GPIO       USBDM::GpioG<4>
 #define SPI0_MOSI_FN         2
-#elif SPI0_MOSI_PIN_SEL == 2
+#elif (SPI0_MOSI_PIN_SEL == 2)
 #define SPI0_MOSI_GPIO       USBDM::GpioD<3>
 #define SPI0_MOSI_FN         3
 #endif
@@ -3756,13 +3708,6 @@
 //     <2=> PTD2<selection=PTD2_SIG_SEL,SPI0_SCK>
 //     <0=> Default
 #define SPI0_SCK_PIN_SEL     0
-#if SPI0_SCK_PIN_SEL == 1
-#define SPI0_SCK_GPIO        USBDM::GpioG<3>
-#define SPI0_SCK_FN          2
-#elif SPI0_SCK_PIN_SEL == 2
-#define SPI0_SCK_GPIO        USBDM::GpioD<2>
-#define SPI0_SCK_FN          3
-#endif
 
 // Pin Mapping for SPI0_SS_B signal
 //   <o> SPI0_SS_B [PTG2, PTD1]<name=SPI0_SS_B_PIN_SEL>
@@ -3772,10 +3717,10 @@
 //     <2=> PTD1 (Alias:LED_BLUE)<selection=PTD1_SIG_SEL,SPI0_SS_B>
 //     <0=> Default
 #define SPI0_SS_B_PIN_SEL    0
-#if SPI0_SS_B_PIN_SEL == 1
+#if (SPI0_SS_B_PIN_SEL == 1)
 #define SPI0_SS_B_GPIO       USBDM::GpioG<2>
 #define SPI0_SS_B_FN         2
-#elif SPI0_SS_B_PIN_SEL == 2
+#elif (SPI0_SS_B_PIN_SEL == 2)
 #define SPI0_SS_B_GPIO       USBDM::GpioD<1>
 #define SPI0_SS_B_FN         3
 #endif
@@ -3793,13 +3738,13 @@
 //     <3=> PTI1<selection=PTI1_SIG_SEL,SPI1_MISO>
 //     <0=> Default
 #define SPI1_MISO_PIN_SEL    0
-#if SPI1_MISO_PIN_SEL == 1
+#if (SPI1_MISO_PIN_SEL == 1)
 #define SPI1_MISO_GPIO       USBDM::GpioF<5>
 #define SPI1_MISO_FN         2
-#elif SPI1_MISO_PIN_SEL == 2
+#elif (SPI1_MISO_PIN_SEL == 2)
 #define SPI1_MISO_GPIO       USBDM::GpioI<0>
 #define SPI1_MISO_FN         4
-#elif SPI1_MISO_PIN_SEL == 3
+#elif (SPI1_MISO_PIN_SEL == 3)
 #define SPI1_MISO_GPIO       USBDM::GpioI<1>
 #define SPI1_MISO_FN         5
 #endif
@@ -3813,13 +3758,13 @@
 //     <3=> PTI0<selection=PTI0_SIG_SEL,SPI1_MOSI>
 //     <0=> Default
 #define SPI1_MOSI_PIN_SEL    0
-#if SPI1_MOSI_PIN_SEL == 1
+#if (SPI1_MOSI_PIN_SEL == 1)
 #define SPI1_MOSI_GPIO       USBDM::GpioF<6>
 #define SPI1_MOSI_FN         2
-#elif SPI1_MOSI_PIN_SEL == 2
+#elif (SPI1_MOSI_PIN_SEL == 2)
 #define SPI1_MOSI_GPIO       USBDM::GpioI<1>
 #define SPI1_MOSI_FN         4
-#elif SPI1_MOSI_PIN_SEL == 3
+#elif (SPI1_MOSI_PIN_SEL == 3)
 #define SPI1_MOSI_GPIO       USBDM::GpioI<0>
 #define SPI1_MOSI_FN         5
 #endif
@@ -3832,13 +3777,6 @@
 //     <2=> PTH7<selection=PTH7_SIG_SEL,SPI1_SCK>
 //     <0=> Default
 #define SPI1_SCK_PIN_SEL     0
-#if SPI1_SCK_PIN_SEL == 1
-#define SPI1_SCK_GPIO        USBDM::GpioF<4>
-#define SPI1_SCK_FN          2
-#elif SPI1_SCK_PIN_SEL == 2
-#define SPI1_SCK_GPIO        USBDM::GpioH<7>
-#define SPI1_SCK_FN          3
-#endif
 
 // Pin Mapping for SPI1_SS_B signal
 //   <o> SPI1_SS_B [PTF3, PTH6]<name=SPI1_SS_B_PIN_SEL>
@@ -3848,10 +3786,10 @@
 //     <2=> PTH6<selection=PTH6_SIG_SEL,SPI1_SS_B>
 //     <0=> Default
 #define SPI1_SS_B_PIN_SEL    0
-#if SPI1_SS_B_PIN_SEL == 1
+#if (SPI1_SS_B_PIN_SEL == 1)
 #define SPI1_SS_B_GPIO       USBDM::GpioF<3>
 #define SPI1_SS_B_FN         2
-#elif SPI1_SS_B_PIN_SEL == 2
+#elif (SPI1_SS_B_PIN_SEL == 2)
 #define SPI1_SS_B_GPIO       USBDM::GpioH<6>
 #define SPI1_SS_B_FN         3
 #endif
@@ -3862,9 +3800,16 @@
 
 //-------- <<< end of configuration section >>> -----------------  
 
+/*
+ * Common Mux settings for PCR
+ */
 #define FIXED_ADC_FN             0                    // Fixed ADC Multiplexing value
 #define FIXED_GPIO_FN            1                    // Fixed GPIO Multiplexing value
 #define FIXED_PORT_CLOCK_REG     SCGC5                // Fixed PORT Clock
+
+/*
+ * Peripheral clock macros
+ */
 #define ADC0_CLOCK_REG       SCGC6
 #define ADC0_CLOCK_MASK      SIM_SCGC6_ADC_MASK
 #define AFE_CLOCK_REG        SCGC6
@@ -3961,5 +3906,172 @@
 #define XBAR_CLOCK_MASK      SIM_SCGC5_XBAR_MASK
 #define PORT_CLOCK_REG       SCGC5
 
+/*
+Clock Information Summary
+ADC0       SCGC6        SIM_SCGC6_ADC_MASK
+AFE        SCGC6        SIM_SCGC6_AFE_MASK
+CMP0       SCGC4        SIM_SCGC4_CMP0_MASK
+CMP1       SCGC4        SIM_SCGC4_CMP1_MASK
+CRC        SCGC6        SIM_SCGC6_CRC_MASK
+DMA        SCGC7        SIM_SCGC7_DMA_MASK
+DMAMUX0    SCGC6        SIM_SCGC6_DMAMUX0_MASK
+DMAMUX1    SCGC6        SIM_SCGC6_DMAMUX1_MASK
+DMAMUX2    SCGC6        SIM_SCGC6_DMAMUX2_MASK
+DMAMUX3    SCGC6        SIM_SCGC6_DMAMUX3_MASK
+EWM        SCGC4        SIM_SCGC4_EWM_MASK
+I2C0       SCGC4        SIM_SCGC4_I2C0_MASK
+I2C1       SCGC4        SIM_SCGC4_I2C1_MASK
+IRTC       SCGC5        SIM_SCGC5_IRTC_MASK
+IRTCREGFILE SCGC5        SIM_SCGC5_IRTCREGFILE_MASK
+LPTMR0     SCGC6        SIM_SCGC6_LPTMR_MASK
+MCG        SCGC4        SIM_SCGC4_MCG_MASK
+MPU        SCGC7        SIM_SCGC7_MPU_MASK
+OSC        SCGC4        SIM_SCGC4_OSC_MASK
+PIT0       SCGC6        SIM_SCGC6_PIT0_MASK
+PIT1       SCGC6        SIM_SCGC6_PIT1_MASK
+PORTA      SCGC5        SIM_SCGC5_PORTA_MASK
+PORTB      SCGC5        SIM_SCGC5_PORTB_MASK
+PORTC      SCGC5        SIM_SCGC5_PORTC_MASK
+PORTD      SCGC5        SIM_SCGC5_PORTD_MASK
+PORTE      SCGC5        SIM_SCGC5_PORTE_MASK
+PORTF      SCGC5        SIM_SCGC5_PORTF_MASK
+PORTG      SCGC5        SIM_SCGC5_PORTG_MASK
+PORTH      SCGC5        SIM_SCGC5_PORTH_MASK
+PORTI      SCGC5        SIM_SCGC5_PORTI_MASK
+RNGA       SCGC6        SIM_SCGC6_RNGA_MASK
+SIM_HP     SCGC6        SIM_SCGC6_SIM_HP_MASK
+SIM_LP     SCGC6        SIM_SCGC6_SIM_LP_MASK
+SLCD       SCGC5        SIM_SCGC5_SLCD_MASK
+SPI0       SCGC4        SIM_SCGC4_SPI0_MASK
+SPI1       SCGC4        SIM_SCGC4_SPI1_MASK
+TMR0       SCGC5        SIM_SCGC5_TMR0_MASK
+TMR1       SCGC5        SIM_SCGC5_TMR1_MASK
+TMR2       SCGC5        SIM_SCGC5_TMR2_MASK
+TMR3       SCGC5        SIM_SCGC5_TMR3_MASK
+UART0      SCGC4        SIM_SCGC4_UART0_MASK
+UART1      SCGC4        SIM_SCGC4_UART1_MASK
+UART2      SCGC4        SIM_SCGC4_UART2_MASK
+UART3      SCGC4        SIM_SCGC4_UART3_MASK
+VREF       SCGC4        SIM_SCGC4_VREF_MASK
+WDOG       SCGC5        SIM_SCGC5_WDOG_MASK
+XBAR       SCGC5        SIM_SCGC5_XBAR_MASK
+*/
+
+namespace USBDM {
+
+/*
+ * Peripheral Pin Tables
+ */
+/**
+* @addtogroup PeripheralPinTables Peripheral Pin Tables
+* @brief Provides information about pins used by a peripheral
+* @{
+*/
+/**
+ * Struct for pin information
+ */
+struct PcrInfo {
+   uint32_t clockMask;   //!< Clock mask for PORT
+   uint32_t pcrAddress;  //!< PCR[x] register address
+   int      muxValue;    //!< PCR mux value to select this function
+};
+/**
+ * Peripheral pin mapping information for Analogue Input
+ */
+constexpr PcrInfo Adc0Info[32] = {
+#if (ADC0_SE0_PIN_SEL == 1)
+ /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]), 0 },
+#else
+ /*  0 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE1_PIN_SEL == 1)
+ /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]), 0 },
+#else
+ /*  1 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE2_PIN_SEL == 1)
+ /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]), 0 },
+#else
+ /*  2 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE3_PIN_SEL == 1)
+ /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]), 0 },
+#else
+ /*  3 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE4_PIN_SEL == 1)
+ /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]), 0 },
+#else
+ /*  4 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE5_PIN_SEL == 1)
+ /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]), 0 },
+#else
+ /*  5 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE6_PIN_SEL == 1)
+ /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]), 0 },
+#else
+ /*  6 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE7_PIN_SEL == 1)
+ /*  7 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]), 0 },
+#else
+ /*  7 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE8_PIN_SEL == 1)
+ /*  8 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]), 0 },
+#else
+ /*  8 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE9_PIN_SEL == 1)
+ /*  9 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]), 0 },
+#else
+ /*  9 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE10_PIN_SEL == 1)
+ /* 10 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]), 0 },
+#else
+ /* 10 */  { 0, 0, 0 },
+#endif
+#if (ADC0_SE11_PIN_SEL == 1)
+ /* 11 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]), 0 },
+#else
+ /* 11 */  { 0, 0, 0 },
+#endif
+};
+
+/**
+ * Peripheral pin mapping information for SPI, Serial Peripheral Interface
+ */
+constexpr PcrInfo Spi0Info[32] = {
+#if (SPI0_SCK_PIN_SEL == 1)
+ /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]), 2 },
+#elif (SPI0_SCK_PIN_SEL == 2)
+ /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]), 3 },
+#else
+ /*  0 */  { 0, 0, 0 },
+#endif
+};
+
+/**
+ * Peripheral pin mapping information for SPI, Serial Peripheral Interface
+ */
+constexpr PcrInfo Spi1Info[32] = {
+#if (SPI1_SCK_PIN_SEL == 1)
+ /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[4]), 2 },
+#elif (SPI1_SCK_PIN_SEL == 2)
+ /*  0 */  { PORTH_CLOCK_MASK, PORTH_BasePtr+offsetof(PORT_Type,PCR[7]), 3 },
+#else
+ /*  0 */  { 0, 0, 0 },
+#endif
+};
+
+/**
+ * @}
+ ** PeripheralPinTables
+ */
+
+} // End namespace USBDM
 
 #endif /* PIN_MAPPING_H_ */

@@ -32,16 +32,19 @@ protected:
    volatile  SPI_Type *spi;
    uint32_t  spiBaudValue;
    uint32_t  interfaceFrequency;  //!< Interface frequency to use
-   uint32_t  pushrMask;
+   uint32_t  pushrMask;           //!< Value to combine with data
 
 protected:
    /**
     * Constructor
     *
-    * @param baseAddress  Base address of SPI
+    * @param baseAddress - Base address of SPI
     */
-   Spi(volatile SPI_Type  *baseAddress);
-   
+   Spi(volatile SPI_Type *baseAddress) :
+      spi(baseAddress), spiBaudValue(0), pushrMask(SPI_PUSHR_PCS_MASK) {
+      setSpeed();   // Use default speed
+   }
+
 public:
    /**
     * Sets Communication speed for SPI
@@ -117,46 +120,75 @@ public:
    void setCTAR1Value(uint32_t ctar) {
       spi->CTAR[1] = spiBaudValue|(ctar&mask);
    }
-
-   void on() {
-
-   }
-
-   void off() {
-
-   }
 };
 
-#if defined(SPI0) && defined(SPI0_SCK_GPIO) && defined(SPI0_SIN_GPIO) && defined(SPI0_SOUT_GPIO)
 /**
- * Class representing SPI0
+ * @brief Template class representing a SPI interface
+ *
+ * @tparam  spiBasePtr     Base address of SPI hardware
+ * @tparam  spiClockReg    Address of SIM register controlling SPI hardware clock
+ * @tparam  spiClockMask   Clock mask for SIM clock register
+ * @tparam  SpiSCK         GpioX used for SCK signal
+ * @tparam  SpiSIN         GpioX used for SIN signal
+ * @tparam  SpiSOUT        GpioX used for SOUT signal
+ * @tparam  Rest...        GpioX used for PCSx
  */
-class Spi0 : public Spi {
+template<uint32_t spiBasePtr, uint32_t spiClockReg, uint32_t spiClockMask, typename SpiSCK, typename  SpiSIN, typename  SpiSOUT, typename ... Rest>
+class Spi_T : public Spi {
 public:
    /**
     * Constructor
     */
-   Spi0();
-};
-#endif
+   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(spiBasePtr)) {
+      // Configure SPI pins
+      SpiSCK::setPCR();
+      SpiSIN::setPCR();
+      processPcrs<SpiSOUT, Rest...>();
 
-#if defined(SPI1) && defined(SPI1_SCK_GPIO) && defined(SPI1_SIN_GPIO) && defined(SPI1_SOUT_GPIO)
+      // Enable SPI module clock
+      *reinterpret_cast<volatile uint32_t*>(spiClockReg) |= spiClockMask;
+
+      spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
+                   SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
+
+      setSpeed(0);   // Use default speed
+      setCTAR0Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
+      setCTAR1Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
+   }
+};
+
+#if defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_SIN_PIN_SEL!=0) && (SPI0_SOUT_PIN_SEL!=0)
 /**
- * Class representing SPI1
+ * @brief Template class representing a SPI0 interface
+ *
+ * @tparam  PCSs...    GpioX used for PCSx
  */
-class Spi1 : public Spi {
-public:
-   /**
-    * Constructor
-    */
-   Spi1();
-};
+template<typename ... PCSs> using  Spi0_T = Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK,
+      spi0_SCK, spi0_SIN, spi0_SOUT, PCSs...>;
+
+/**
+ * @brief Template class representing a SPI0 interface
+ *
+ * @tparam  PCSs...    GpioX used for PCSx
+ */
+using Spi0 = Spi0_T<spi0_PCS0, spi0_PCS1, spi0_PCS2, spi0_PCS3, spi0_PCS4, spi0_PCS5>;
 #endif
 
+#if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_SIN_PIN_SEL!=0) && (SPI1_SOUT_PIN_SEL!=0)
+/**
+ * @brief Template class representing a SPI0 interface
+ *
+ * @tparam  PCSs...    GpioX used for PCSx
+ */
+template<typename ... PCSs> using  Spi1_T = Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK,
+      spi1_SCK, spi1_SIN, spi1_SOUT, PCSs...>;
+
+using Spi1 = Spi1_T<spi1_PCS1, spi1_PCS1, spi1_PCS2, spi1_PCS3>;
+#endif
 /**
  * @}
  */
 
 } // End namespace USBDM
 
-#endif /* SPI_H_ */
+#endif /* INCLUDE_USBDM_SPI_H_ */

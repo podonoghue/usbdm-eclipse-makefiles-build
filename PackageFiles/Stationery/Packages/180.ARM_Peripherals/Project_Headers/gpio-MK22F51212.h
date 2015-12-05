@@ -13,6 +13,7 @@
 #include "gpio_defs.h"
 
 namespace USBDM {
+
 /**
 * @addtogroup DigitalIO_Group Digital Input/Output
 * @brief Allows use of port pins as simple digital inputs or outputs
@@ -151,81 +152,6 @@ using gpioE_26             = const USBDM::GpioE<26>;
 /**
  * @}
  */
-constexpr PcrInfo Adc0Info[32] = {
- /*  0 */  { 0, 0,  0},
- /*  1 */  { 0, 0,  0},
- /*  2 */  { 0, 0,  0},
- /*  3 */  { 0, 0,  0},
-#if (PTC2_SIG_SEL == 0)
- /*  4 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  0},
-#else
- /*  4 */  { 0, 0, 0 },
-#endif
-#if (PTD1_SIG_SEL == 0)
- /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[1]),  0},
-#else
- /*  5 */  { 0, 0, 0 },
-#endif
-#if (PTD5_SIG_SEL == 0)
- /*  6 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  0},
-#else
- /*  6 */  { 0, 0, 0 },
-#endif
-#if (PTD6_SIG_SEL == 0)
- /*  7 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  0},
-#else
- /*  7 */  { 0, 0, 0 },
-#endif
-#if (PTB0_SIG_SEL == 0)
- /*  8 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  0},
-#else
- /*  8 */  { 0, 0, 0 },
-#endif
-#if (PTB1_SIG_SEL == 0)
- /*  9 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  0},
-#else
- /*  9 */  { 0, 0, 0 },
-#endif
- /* 10 */  { 0, 0, 0 },
- /* 11 */  { 0, 0, 0 },
-#if (PTB2_SIG_SEL == 0)
- /* 12 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[2]),  0},
-#else
- /* 12 */  { 0, 0, 0 },
-#endif
-#if (PTB3_SIG_SEL == 0)
- /* 13 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[3]),  0},
-#else
- /* 13 */  { 0, 0, 0 },
-#endif
-#if (PTC0_SIG_SEL == 0)
- /* 14 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[0]),  0},
-#else
- /* 14 */  { 0, 0, 0 },
-#endif
-#if (PTC1_SIG_SEL == 0)
- /* 15 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  0},
-#else
- /* 15 */  { 0, 0, 0 },
-#endif
- /* 16 */  { 0, 0, 0 },
-#if (PTE24_SIG_SEL == 0)
- /* 17 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[24]), 0},
-#else
- /* 17 */  { 0, 0, 0 },
-#endif
-#if (PTE25_SIG_SEL == 0)
- /* 18 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[25]), 0},
-#else
- /* 18 */  { 0, 0, 0 },
-#endif
- /* 19 */  { 0, 0,  0},
- /* 20 */  { 0, 0,  0},
- /* 21 */  { 0, 0, 0 },
- /* 22 */  { 0, 0, 0 },
- /* 23 */  { 0, 0,  0},
-};
-
 /**
  * Convenience templated class representing an ADC
  *
@@ -247,7 +173,7 @@ constexpr PcrInfo Adc0Info[32] = {
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc0 =
-   AnalogueIOT<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+   Analogue_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
 /**
 * @addtogroup AnalogueIO_Group Analogue Input
@@ -257,23 +183,23 @@ template<uint8_t adcChannel> using Adc0 =
 using adc0_se19            = const USBDM::Adc0<19>;
 using adc_J24_3            = const USBDM::Adc0<19>;
 using adc0_se20            = const USBDM::Adc0<20>;
-using adc0_se0             = const USBDM::Adc0< 0>;
-using adc_J24_1            = const USBDM::Adc0< 0>;
-using adc0_se1             = const USBDM::Adc0< 1>;
-using adc0_se3             = const USBDM::Adc0< 3>;
-using adc_J24_5            = const USBDM::Adc0< 3>;
+using adc0_se0             = const USBDM::Adc0<0>;
+using adc_J24_1            = const USBDM::Adc0<0>;
+using adc0_se1             = const USBDM::Adc0<1>;
+using adc0_se3             = const USBDM::Adc0<3>;
+using adc_J24_5            = const USBDM::Adc0<3>;
 using adc0_se23            = const USBDM::Adc0<23>;
 using adc_J24_11           = const USBDM::Adc0<23>;
-using adc0_se2             = const USBDM::Adc0< 2>;
+using adc0_se2             = const USBDM::Adc0<2>;
 #if (PTB0_SIG_SEL == 0)
-using adc0_se8             = const USBDM::Adc0< 8>;
-using adc_A0               = const USBDM::Adc0< 8>;
-using adc_J24_2            = const USBDM::Adc0< 8>;
+using adc0_se8             = const USBDM::Adc0<8>;
+using adc_A0               = const USBDM::Adc0<8>;
+using adc_J24_2            = const USBDM::Adc0<8>;
 #endif
 #if (PTB1_SIG_SEL == 0)
-using adc0_se9             = const USBDM::Adc0< 9>;
-using adc_A1               = const USBDM::Adc0< 9>;
-using adc_J24_4            = const USBDM::Adc0< 9>;
+using adc0_se9             = const USBDM::Adc0<9>;
+using adc_A1               = const USBDM::Adc0<9>;
+using adc_J24_4            = const USBDM::Adc0<9>;
 #endif
 #if (PTB2_SIG_SEL == 0)
 using adc0_se12            = const USBDM::Adc0<12>;
@@ -296,23 +222,23 @@ using adc_A2               = const USBDM::Adc0<15>;
 using adc_J24_6            = const USBDM::Adc0<15>;
 #endif
 #if (PTC2_SIG_SEL == 0)
-using adc0_se4b            = const USBDM::Adc0< 4>;
-using adc_A3               = const USBDM::Adc0< 4>;
-using adc_J24_8            = const USBDM::Adc0< 4>;
+using adc0_se4b            = const USBDM::Adc0<4>;
+using adc_A3               = const USBDM::Adc0<4>;
+using adc_J24_8            = const USBDM::Adc0<4>;
 #endif
 #if (PTD1_SIG_SEL == 0)
-using adc0_se5b            = const USBDM::Adc0< 5>;
+using adc0_se5b            = const USBDM::Adc0<5>;
 #endif
 #if (PTD5_SIG_SEL == 0)
-using adc0_se6b            = const USBDM::Adc0< 6>;
-using adc_D13              = const USBDM::Adc0< 6>;
-using adc_J2_12            = const USBDM::Adc0< 6>;
-using adc_LED_BLUE         = const USBDM::Adc0< 6>;
+using adc0_se6b            = const USBDM::Adc0<6>;
+using adc_D13              = const USBDM::Adc0<6>;
+using adc_J2_12            = const USBDM::Adc0<6>;
+using adc_LED_BLUE         = const USBDM::Adc0<6>;
 #endif
 #if (PTD6_SIG_SEL == 0)
-using adc0_se7b            = const USBDM::Adc0< 7>;
-using adc_D11              = const USBDM::Adc0< 7>;
-using adc_J2_8             = const USBDM::Adc0< 7>;
+using adc0_se7b            = const USBDM::Adc0<7>;
+using adc_D11              = const USBDM::Adc0<7>;
+using adc_J2_8             = const USBDM::Adc0<7>;
 #endif
 #if (PTE24_SIG_SEL == 0)
 using adc0_se17            = const USBDM::Adc0<17>;
@@ -323,77 +249,6 @@ using adc0_se18            = const USBDM::Adc0<18>;
 /**
  * @}
  */
-constexpr PcrInfo Adc1Info[32] = {
- /*  0 */  { 0, 0,  0},
- /*  1 */  { 0, 0,  0},
- /*  2 */  { 0, 0, 0 },
- /*  3 */  { 0, 0, 0 },
-#if (PTC8_SIG_SEL == 0)
- /*  4 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[8]),  0},
-#else
- /*  4 */  { 0, 0, 0 },
-#endif
-#if (PTC9_SIG_SEL == 0)
- /*  5 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[9]),  0},
-#else
- /*  5 */  { 0, 0, 0 },
-#endif
-#if (PTC10_SIG_SEL == 0)
- /*  6 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[10]), 0},
-#else
- /*  6 */  { 0, 0, 0 },
-#endif
-#if (PTC11_SIG_SEL == 0)
- /*  7 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[11]), 0},
-#else
- /*  7 */  { 0, 0, 0 },
-#endif
-#if (PTB0_SIG_SEL == 0)
- /*  8 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  0},
-#else
- /*  8 */  { 0, 0, 0 },
-#endif
-#if (PTB1_SIG_SEL == 0)
- /*  9 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  0},
-#else
- /*  9 */  { 0, 0, 0 },
-#endif
- /* 10 */  { 0, 0, 0 },
- /* 11 */  { 0, 0, 0 },
-#if (PTB6_SIG_SEL == 0)
- /* 12 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[6]),  0},
-#else
- /* 12 */  { 0, 0, 0 },
-#endif
-#if (PTB7_SIG_SEL == 0)
- /* 13 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[7]),  0},
-#else
- /* 13 */  { 0, 0, 0 },
-#endif
-#if (PTB10_SIG_SEL == 0)
- /* 14 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[10]), 0},
-#else
- /* 14 */  { 0, 0, 0 },
-#endif
-#if (PTB11_SIG_SEL == 0)
- /* 15 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[11]), 0},
-#else
- /* 15 */  { 0, 0, 0 },
-#endif
- /* 16 */  { 0, 0, 0 },
-#if (PTA17_SIG_SEL == 0)
- /* 17 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[17]), 0},
-#else
- /* 17 */  { 0, 0, 0 },
-#endif
- /* 18 */  { 0, 0,  0},
- /* 19 */  { 0, 0,  0},
- /* 20 */  { 0, 0,  0},
- /* 21 */  { 0, 0, 0 },
- /* 22 */  { 0, 0, 0 },
- /* 23 */  { 0, 0,  0},
-};
-
 /**
  * Convenience templated class representing an ADC
  *
@@ -415,7 +270,7 @@ constexpr PcrInfo Adc1Info[32] = {
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc1 =
-   AnalogueIOT<getPortClockMask(adcChannel,Adc1Info), getPcrReg(adcChannel,Adc1Info), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+   Analogue_T<getPortClockMask(adcChannel,Adc1Info), getPcrReg(adcChannel,Adc1Info), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
 
 /**
 * @addtogroup AnalogueIO_Group Analogue Input
@@ -424,24 +279,24 @@ template<uint8_t adcChannel> using Adc1 =
 */
 using adc1_se19            = const USBDM::Adc1<19>;
 using adc_J24_7            = const USBDM::Adc1<19>;
-using adc1_se0             = const USBDM::Adc1< 0>;
-//using adc_J24_5            = const USBDM::Adc1< 0>;
+using adc1_se0             = const USBDM::Adc1<0>;
+//using adc_J24_5            = const USBDM::Adc1<0>;
 using adc1_se20            = const USBDM::Adc1<20>;
-using adc1_se1             = const USBDM::Adc1< 1>;
+using adc1_se1             = const USBDM::Adc1<1>;
 using adc1_se18            = const USBDM::Adc1<18>;
 using adc1_se23            = const USBDM::Adc1<23>;
 #if (PTA17_SIG_SEL == 0)
 using adc1_se17            = const USBDM::Adc1<17>;
 #endif
 #if (PTB0_SIG_SEL == 0)
-using adc1_se8             = const USBDM::Adc1< 8>;
-//using adc_A0               = const USBDM::Adc1< 8>;
-//using adc_J24_2            = const USBDM::Adc1< 8>;
+using adc1_se8             = const USBDM::Adc1<8>;
+//using adc_A0               = const USBDM::Adc1<8>;
+//using adc_J24_2            = const USBDM::Adc1<8>;
 #endif
 #if (PTB1_SIG_SEL == 0)
-using adc1_se9             = const USBDM::Adc1< 9>;
-//using adc_A1               = const USBDM::Adc1< 9>;
-//using adc_J24_4            = const USBDM::Adc1< 9>;
+using adc1_se9             = const USBDM::Adc1<9>;
+//using adc_A1               = const USBDM::Adc1<9>;
+//using adc_J24_4            = const USBDM::Adc1<9>;
 #endif
 #if (PTB6_SIG_SEL == 0)
 using adc1_se12            = const USBDM::Adc1<12>;
@@ -456,50 +311,23 @@ using adc1_se14            = const USBDM::Adc1<14>;
 using adc1_se15            = const USBDM::Adc1<15>;
 #endif
 #if (PTC8_SIG_SEL == 0)
-using adc1_se4b            = const USBDM::Adc1< 4>;
-using adc_J1_7             = const USBDM::Adc1< 4>;
+using adc1_se4b            = const USBDM::Adc1<4>;
+using adc_J1_7             = const USBDM::Adc1<4>;
 #endif
 #if (PTC9_SIG_SEL == 0)
-using adc1_se5b            = const USBDM::Adc1< 5>;
-using adc_J1_9             = const USBDM::Adc1< 5>;
+using adc1_se5b            = const USBDM::Adc1<5>;
+using adc_J1_9             = const USBDM::Adc1<5>;
 #endif
 #if (PTC10_SIG_SEL == 0)
-using adc1_se6b            = const USBDM::Adc1< 6>;
-using adc_J1_13            = const USBDM::Adc1< 6>;
+using adc1_se6b            = const USBDM::Adc1<6>;
+using adc_J1_13            = const USBDM::Adc1<6>;
 #endif
 #if (PTC11_SIG_SEL == 0)
-using adc1_se7b            = const USBDM::Adc1< 7>;
+using adc1_se7b            = const USBDM::Adc1<7>;
 #endif
 /**
  * @}
  */
-constexpr PcrInfo Adc1aInfo[32] = {
- /*  0 */  { 0, 0, 0 },
- /*  1 */  { 0, 0, 0 },
- /*  2 */  { 0, 0, 0 },
- /*  3 */  { 0, 0, 0 },
-#if (PTE0_SIG_SEL == 0)
- /*  4 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[0]),  0},
-#else
- /*  4 */  { 0, 0, 0 },
-#endif
-#if (PTE1_SIG_SEL == 0)
- /*  5 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[1]),  0},
-#else
- /*  5 */  { 0, 0, 0 },
-#endif
-#if (PTE2_SIG_SEL == 0)
- /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[2]),  0},
-#else
- /*  6 */  { 0, 0, 0 },
-#endif
-#if (PTE3_SIG_SEL == 0)
- /*  7 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[3]),  0},
-#else
- /*  7 */  { 0, 0, 0 },
-#endif
-};
-
 /**
  * Convenience templated class representing an ADC
  *
@@ -521,7 +349,7 @@ constexpr PcrInfo Adc1aInfo[32] = {
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc1a =
-   AnalogueIOT<getPortClockMask(adcChannel,Adc1aInfo), getPcrReg(adcChannel,Adc1aInfo), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+   Analogue_T<getPortClockMask(adcChannel,Adc1aInfo), getPcrReg(adcChannel,Adc1aInfo), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
 
 /**
 * @addtogroup AnalogueIO_Group Analogue Input
@@ -529,83 +357,26 @@ template<uint8_t adcChannel> using Adc1a =
 * @{
 */
 #if (PTE0_SIG_SEL == 0)
-using adc1_se4a            = const USBDM::Adc1a< 4>;
-using adc_D14              = const USBDM::Adc1a< 4>;
-using adc_J2_18            = const USBDM::Adc1a< 4>;
-using adc_ConTx            = const USBDM::Adc1a< 4>;
+using adc1_se4a            = const USBDM::Adc1a<4>;
+using adc_D14              = const USBDM::Adc1a<4>;
+using adc_J2_18            = const USBDM::Adc1a<4>;
+using adc_ConTx            = const USBDM::Adc1a<4>;
 #endif
 #if (PTE1_SIG_SEL == 0)
-using adc1_se5a            = const USBDM::Adc1a< 5>;
-using adc_D15              = const USBDM::Adc1a< 5>;
-using adc_J2_19            = const USBDM::Adc1a< 5>;
-using adc_ConRx            = const USBDM::Adc1a< 5>;
+using adc1_se5a            = const USBDM::Adc1a<5>;
+using adc_D15              = const USBDM::Adc1a<5>;
+using adc_J2_19            = const USBDM::Adc1a<5>;
+using adc_ConRx            = const USBDM::Adc1a<5>;
 #endif
 #if (PTE2_SIG_SEL == 0)
-using adc1_se6a            = const USBDM::Adc1a< 6>;
+using adc1_se6a            = const USBDM::Adc1a<6>;
 #endif
 #if (PTE3_SIG_SEL == 0)
-using adc1_se7a            = const USBDM::Adc1a< 7>;
+using adc1_se7a            = const USBDM::Adc1a<7>;
 #endif
 /**
  * @}
  */
-constexpr PcrInfo Ftm0Info[32] = {
-#if (PTA3_SIG_SEL == 3)
- /*  0 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[3]),  3},
-#elif (PTC1_SIG_SEL == 4)
- /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[1]),  4},
-#else
- /*  0 */  { 0, 0, 0 },
-#endif
-#if (PTA4_SIG_SEL == 3)
- /*  1 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[4]),  3},
-#elif (PTC2_SIG_SEL == 4)
- /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[2]),  4},
-#else
- /*  1 */  { 0, 0, 0 },
-#endif
-#if (PTA5_SIG_SEL == 3)
- /*  2 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[5]),  3},
-#elif (PTC3_SIG_SEL == 4)
- /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[3]),  4},
-#elif (PTC5_SIG_SEL == 7)
- /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),  7},
-#else
- /*  2 */  { 0, 0, 0 },
-#endif
-#if (PTC4_SIG_SEL == 4)
- /*  3 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[4]),  4},
-#else
- /*  3 */  { 0, 0, 0 },
-#endif
-#if (PTD4_SIG_SEL == 4)
- /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  4},
-#else
- /*  4 */  { 0, 0, 0 },
-#endif
-#if (PTA0_SIG_SEL == 3)
- /*  5 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[0]),  3},
-#elif (PTD5_SIG_SEL == 4)
- /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  4},
-#else
- /*  5 */  { 0, 0, 0 },
-#endif
-#if (PTA1_SIG_SEL == 3)
- /*  6 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),  3},
-#elif (PTD6_SIG_SEL == 4)
- /*  6 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  4},
-#else
- /*  6 */  { 0, 0, 0 },
-#endif
-#if (PTA2_SIG_SEL == 3)
- /*  7 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[2]),  3},
-#elif (PTD7_SIG_SEL == 4)
- /*  7 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  4},
-#else
- /*  7 */  { 0, 0, 0 },
-#endif
-};
-
 /**
  * Convenience templated class representing a FTM
  *
@@ -627,7 +398,7 @@ constexpr PcrInfo Ftm0Info[32] = {
  * @tparam ftmChannel    FTM channel
  */
 template<uint8_t ftmChannel> using Ftm0 =
-   PwmIOT<getPortClockMask(ftmChannel,Ftm0Info), getPcrReg(ftmChannel,Ftm0Info), getPcrMux(ftmChannel,Ftm0Info), FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, ftmChannel>;
+   Ftm_T<getPortClockMask(ftmChannel,Ftm0Info), getPcrReg(ftmChannel,Ftm0Info), getPcrMux(ftmChannel,Ftm0Info), FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, FTM0_SC, ftmChannel>;
 
 /**
 * @addtogroup PwmIO_Group PWM, Input capture, Output compare
@@ -708,23 +479,6 @@ using ftm_J2_10            = const USBDM::Ftm0<7>;
 /**
  * @}
  */
-constexpr PcrInfo Ftm1Info[32] = {
-#if (PTA12_SIG_SEL == 3)
- /*  0 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[12]), 3},
-#elif (PTB0_SIG_SEL == 3)
- /*  0 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  3},
-#else
- /*  0 */  { 0, 0, 0 },
-#endif
-#if (PTA13_SIG_SEL == 3)
- /*  1 */  { PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[13]), 3},
-#elif (PTB1_SIG_SEL == 3)
- /*  1 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  3},
-#else
- /*  1 */  { 0, 0, 0 },
-#endif
-};
-
 /**
  * Convenience templated class representing a FTM
  *
@@ -746,7 +500,7 @@ constexpr PcrInfo Ftm1Info[32] = {
  * @tparam ftmChannel    FTM channel
  */
 template<uint8_t ftmChannel> using Ftm1 =
-   PwmIOT<getPortClockMask(ftmChannel,Ftm1Info), getPcrReg(ftmChannel,Ftm1Info), getPcrMux(ftmChannel,Ftm1Info), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, ftmChannel>;
+   Ftm_T<getPortClockMask(ftmChannel,Ftm1Info), getPcrReg(ftmChannel,Ftm1Info), getPcrMux(ftmChannel,Ftm1Info), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, FTM1_SC, ftmChannel>;
 
 /**
 * @addtogroup PwmIO_Group PWM, Input capture, Output compare
@@ -774,47 +528,111 @@ using ftm_J24_4            = const USBDM::Ftm1<1>;
 /**
  * @}
  */
-#if defined(DO_MAP_PINS_ON_RESET) && (DO_MAP_PINS_ON_RESET>0)
+/**
+ * Convenience templated class representing a FTM
+ *
+ * Example
+ * @code
+ * // Instantiate the ftm channel (for FTM0 CH6)
+ * const USBDM::Ftm0<6>   ftm0_ch6;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.setPwmOutput(200, USBDM::ftm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam ftmChannel    FTM channel
+ */
+template<uint8_t ftmChannel> using Ftm2 =
+   Ftm_T<getPortClockMask(ftmChannel,Ftm2Info), getPcrReg(ftmChannel,Ftm2Info), getPcrMux(ftmChannel,Ftm2Info), FTM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM2_CLOCK_REG), FTM2_CLOCK_MASK, FTM2_SC, ftmChannel>;
+
+/**
+* @addtogroup PwmIO_Group PWM, Input capture, Output compare
+* @brief Allows use of port pins as PWM outputs
+* @{
+*/
+#if (PTB18_SIG_SEL == 3)
+using ftm2_ch0             = const USBDM::Ftm2<0>;
+using ftm_D5               = const USBDM::Ftm2<0>;
+using ftm_J1_12            = const USBDM::Ftm2<0>;
+#endif
+#if (PTB19_SIG_SEL == 3)
+using ftm2_ch1             = const USBDM::Ftm2<1>;
+using ftm_D8               = const USBDM::Ftm2<1>;
+using ftm_J2_2             = const USBDM::Ftm2<1>;
+#endif
+/**
+ * @}
+ */
+/**
+ * Convenience templated class representing an SPI pin
+ *
+ * Example
+ * @code
+ * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
+ * @endcode
+ *
+ * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
+ */
+template<uint8_t spiPinNum> using Spi0Pin =
+   Pcr_T<getPortClockMask(spiPinNum,Spi0Info), getPcrReg(spiPinNum,Spi0Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi0Info))|DEFAULT_PCR>;
+
+/**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+using spi0_PCS0            = const USBDM::Spi0Pin<3>;
+using spi0_SCK             = const USBDM::Spi0Pin<0>;
+using spi0_SOUT            = const USBDM::Spi0Pin<2>;
+using spi0_SIN             = const USBDM::Spi0Pin<1>;
+using spi0_PCS5            = const USBDM::Spi0Pin<8>;
+using spi0_PCS4            = const USBDM::Spi0Pin<7>;
+using spi0_PCS3            = const USBDM::Spi0Pin<6>;
+using spi0_PCS2            = const USBDM::Spi0Pin<5>;
+using spi0_PCS1            = const USBDM::Spi0Pin<4>;
+/**
+ * @}
+ */
+/**
+ * Convenience templated class representing an SPI pin
+ *
+ * Example
+ * @code
+ * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
+ * @endcode
+ *
+ * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
+ */
+template<uint8_t spiPinNum> using Spi1Pin =
+   Pcr_T<getPortClockMask(spiPinNum,Spi1Info), getPcrReg(spiPinNum,Spi1Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi1Info))|DEFAULT_PCR>;
+
+/**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+using spi1_PCS1            = const USBDM::Spi1Pin<4>;
+using spi1_PCS0            = const USBDM::Spi1Pin<3>;
+using spi1_SCK             = const USBDM::Spi1Pin<0>;
+using spi1_SOUT            = const USBDM::Spi1Pin<2>;
+using spi1_SIN             = const USBDM::Spi1Pin<1>;
+using spi1_PCS2            = const USBDM::Spi1Pin<5>;
+using spi1_PCS3            = const USBDM::Spi1Pin<6>;
+/**
+ * @}
+ */
+#if (DO_MAP_PINS_ON_RESET>0)
 /**
  * Used to configure pin-mapping before 1st use of peripherals
  */
 extern void usbdm_PinMapping();
 #endif
-
-/*
-Clock Information 
-ADC0       SCGC6        SIM_SCGC6_ADC0_MASK
-ADC1       SCGC6        SIM_SCGC6_ADC1_MASK
-CMP        SCGC4        SIM_SCGC4_CMP_MASK
-DAC0       SCGC6        SIM_SCGC6_DAC0_MASK
-DMA        SCGC7        SIM_SCGC7_DMA_MASK
-DMAMUX     SCGC6        SIM_SCGC6_DMAMUX_MASK
-EWM        SCGC4        SIM_SCGC4_EWM_MASK
-FTM0       SCGC6        SIM_SCGC6_FTM0_MASK
-FTM1       SCGC6        SIM_SCGC6_FTM1_MASK
-FTM2       SCGC6        SIM_SCGC6_FTM2_MASK
-I2C0       SCGC4        SIM_SCGC4_I2C0_MASK
-I2C1       SCGC4        SIM_SCGC4_I2C1_MASK
-I2S0       SCGC6        SIM_SCGC6_I2S0_MASK
-LPTMR0     SCGC5        SIM_SCGC5_LPTMR_MASK
-LPUART0    SCGC6        SIM_SCGC6_LPUART0_MASK
-PDB0       SCGC6        SIM_SCGC6_PDB0_MASK
-PIT        SCGC6        SIM_SCGC6_PIT_MASK
-PORTA      SCGC5        SIM_SCGC5_PORTA_MASK
-PORTB      SCGC5        SIM_SCGC5_PORTB_MASK
-PORTC      SCGC5        SIM_SCGC5_PORTC_MASK
-PORTD      SCGC5        SIM_SCGC5_PORTD_MASK
-PORTE      SCGC5        SIM_SCGC5_PORTE_MASK
-RNGA       SCGC6        SIM_SCGC6_RNGA_MASK
-RTC        SCGC6        SIM_SCGC6_RTC_MASK
-SPI0       SCGC6        SIM_SCGC6_SPI0_MASK
-SPI1       SCGC6        SIM_SCGC6_SPI1_MASK
-UART0      SCGC4        SIM_SCGC4_UART0_MASK
-UART1      SCGC4        SIM_SCGC4_UART1_MASK
-UART2      SCGC4        SIM_SCGC4_UART2_MASK
-USBOTG     SCGC4        SIM_SCGC4_USBOTG_MASK
-VREF       SCGC4        SIM_SCGC4_VREF_MASK
-*/
 
 } // End namespace USBDM
 

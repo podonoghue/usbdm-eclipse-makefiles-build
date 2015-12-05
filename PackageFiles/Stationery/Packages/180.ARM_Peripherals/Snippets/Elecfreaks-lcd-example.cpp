@@ -41,7 +41,7 @@ using namespace USBDM;
  *
  * @note Done this way so a more sophisticated cursor can be added
  */
-void drawCursor(LCD *lcd, int x, int y, int colour) {
+void drawCursor(Lcd *lcd, int x, int y, int colour) {
    lcd->drawCircle(x, y, CIRCLE_RADIUS, colour);
 //   lcd->drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, false, colour);
 //   lcd->drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, true, colour);
@@ -53,7 +53,7 @@ int main() {
    // Set higher speed to improve LCD draw rate
    spi->setSpeed(1000000);
    // Instantiate LCD interface class
-   LCD *lcd = new LCD(spi);
+   Lcd *lcd = new Lcd(spi);
 
    lcd->clear(BACKGROUND_COLOUR);
    lcd->drawCircle(CENTRE_X, CENTRE_Y, 20, WHITE);
