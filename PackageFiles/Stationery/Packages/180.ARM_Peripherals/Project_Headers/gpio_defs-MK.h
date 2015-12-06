@@ -10,6 +10,7 @@
 
 #include <stddef.h>
 #include "derivative.h"
+#include "bitband.h"
 #include "pin_mapping.h"
 
 /*
@@ -141,13 +142,15 @@ public:
     * Enable clock to port
     */
    static void enableClock() {
-      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
+      bitbandSet(SIM->FIXED_PORT_CLOCK_REG, clockMask);
+//      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
    }
    /**
     * Disable clock to port
     */
    static void disableClock() {
-      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
+      bitbandClear(SIM->FIXED_PORT_CLOCK_REG, clockMask);
+//      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
    }
 };
 
@@ -250,18 +253,20 @@ public:
     *
     * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static void setOutput(uint32_t pcrValue=DEFAULT_PCR) {
+   static void setOutput(uint32_t pcrValue=defPcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|defPcrValue);
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
+      bitbandSet(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, bitNum);
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
    }
    /**
     * Set pin as digital input
     *
     * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static void setInput(uint32_t pcrValue=DEFAULT_PCR) {
+   static void setInput(uint32_t pcrValue=defPcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|defPcrValue);
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
+      bitbandClear(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, bitNum);
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
    }
    /**
     * Write boolean value to digital output

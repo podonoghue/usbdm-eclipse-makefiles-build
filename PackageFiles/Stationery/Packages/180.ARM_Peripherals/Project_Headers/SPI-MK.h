@@ -141,9 +141,7 @@ public:
     */
    Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(spiBasePtr)) {
       // Configure SPI pins
-      SpiSCK::setPCR();
-      SpiSIN::setPCR();
-      processPcrs<SpiSOUT, Rest...>();
+      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>();
 
       // Enable SPI module clock
       *reinterpret_cast<volatile uint32_t*>(spiClockReg) |= spiClockMask;

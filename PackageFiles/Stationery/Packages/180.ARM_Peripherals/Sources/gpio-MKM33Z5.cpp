@@ -231,58 +231,49 @@ void usbdm_PinMapping() {
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTA_CLOCK_MASK;
 #endif
-
 #if (PTB0_SIG_SEL>=0) || \
     (PTB1_SIG_SEL>=0) || (PTB2_SIG_SEL>=0) || (PTB3_SIG_SEL>=0) || (PTB4_SIG_SEL>=0) || \
     (PTB5_SIG_SEL>=0) || (PTB6_SIG_SEL>=0) || (PTB7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTB_CLOCK_MASK;
 #endif
-
 #if (PTC0_SIG_SEL>=0) || (PTC1_SIG_SEL>=0) || \
     (PTC2_SIG_SEL>=0) || (PTC3_SIG_SEL>=0) || (PTC4_SIG_SEL>=0) || (PTC5_SIG_SEL>=0) || \
     (PTC6_SIG_SEL>=0) || (PTC7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTC_CLOCK_MASK;
 #endif
-
 #if (PTD0_SIG_SEL>=0) || (PTD1_SIG_SEL>=0) || (PTD2_SIG_SEL>=0) || \
     (PTD3_SIG_SEL>=0) || (PTD4_SIG_SEL>=0) || (PTD5_SIG_SEL>=0) || (PTD6_SIG_SEL>=0) || \
     (PTD7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTD_CLOCK_MASK;
 #endif
-
 #if (PTE0_SIG_SEL>=0) || (PTE1_SIG_SEL>=0) || (PTE2_SIG_SEL>=0) || (PTE3_SIG_SEL>=0) || \
     (PTE4_SIG_SEL>=0) || (PTE5_SIG_SEL>=0) || (PTE6_SIG_SEL>=0) || (PTE7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTE_CLOCK_MASK;
 #endif
-
 #if (PTF0_SIG_SEL>=0) || \
     (PTF1_SIG_SEL>=0) || (PTF2_SIG_SEL>=0) || (PTF3_SIG_SEL>=0) || (PTF4_SIG_SEL>=0) || \
     (PTF5_SIG_SEL>=0) || (PTF6_SIG_SEL>=0) || (PTF7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTF_CLOCK_MASK;
 #endif
-
 #if (PTG0_SIG_SEL>=0) || (PTG1_SIG_SEL>=0) || \
     (PTG2_SIG_SEL>=0) || (PTG3_SIG_SEL>=0) || (PTG4_SIG_SEL>=0) || (PTG5_SIG_SEL>=0) || \
     (PTG6_SIG_SEL>=0) || (PTG7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTG_CLOCK_MASK;
 #endif
-
 #if (PTH0_SIG_SEL>=0) || (PTH1_SIG_SEL>=0) || (PTH2_SIG_SEL>=0) || \
     (PTH3_SIG_SEL>=0) || (PTH4_SIG_SEL>=0) || (PTH5_SIG_SEL>=0) || (PTH6_SIG_SEL>=0) || \
     (PTH7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTH_CLOCK_MASK;
 #endif
-
 #if (PTI0_SIG_SEL>=0) || (PTI1_SIG_SEL>=0) || (PTI2_SIG_SEL>=0) || (PTI3_SIG_SEL>=0)
    SIM->FIXED_PORT_CLOCK_REG |= PORTI_CLOCK_MASK;
-
 #endif
 
    for (const PinInit *p=pinInit; p<(pinInit+(sizeof(pinInit)/sizeof(pinInit[0]))); p++) {

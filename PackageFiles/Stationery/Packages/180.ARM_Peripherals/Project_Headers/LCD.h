@@ -50,78 +50,78 @@ namespace USBDM {
 //   Lcd Dimension Definitions
 //
 //********************************************************************
-#define ROW_LENGTH   132
-#define COL_HEIGHT   132
-#define ENDPAGE      132
-#define ENDCOL       130
+constexpr int ROW_LENGTH   = 132;
+constexpr int COL_HEIGHT   = 132;
+constexpr int ENDPAGE      = 132;
+constexpr int ENDCOL       = 130;
 
 // Usable area
-#define LCD_X_MIN         (1)
-#define LCD_X_MAX         (130)
-#define LCD_Y_MIN         (1)
-#define LCD_Y_MAX         (130)
+constexpr int LCD_X_MIN    = 1;
+constexpr int LCD_X_MAX    = 130;
+constexpr int LCD_Y_MIN    = 1;
+constexpr int LCD_Y_MAX    = 130;
 
 //*******************************************************
 //   12-Bit Color Definitions
 //*******************************************************
-#define BLACK     0x000
-#define NAVY      0x008
-#define BLUE      0x00F
-#define TEAL      0x088
-#define EMERALD   0x0C5
-#define GREEN     0x0F0
-#define CYAN      0x0FF
-#define SLATE     0x244
-#define INDIGO    0x408
-#define TURQUOISE 0x4ED
-#define OLIVE     0x682
-#define MAROON    0x800
-#define PURPLE    0x808
-#define GRAY      0x888
-#define SKYBLUE   0x8CE
-#define BROWN     0xB22
-#define CRIMSON   0xD13
-#define ORCHID    0xD7D
-#define RED       0xF00
-#define MAGENTA   0xF0F
-//#define ORANGE    0xF40
-#define PINK      0xF6A
-#define CORAL     0xF75
-#define SALMON    0xF87
-#define ORANGE    0xFA0
-#define GOLD      0xFD0
-#define YELLOW    0xFF0
-#define WHITE     0xFFF
+constexpr int BLACK        = 0x000;
+constexpr int NAVY         = 0x008;
+constexpr int BLUE         = 0x00F;
+constexpr int TEAL         = 0x088;
+constexpr int EMERALD      = 0x0C5;
+constexpr int GREEN        = 0x0F0;
+constexpr int CYAN         = 0x0FF;
+constexpr int SLATE        = 0x244;
+constexpr int INDIGO       = 0x408;
+constexpr int TURQUOISE    = 0x4ED;
+constexpr int OLIVE        = 0x682;
+constexpr int MAROON       = 0x800;
+constexpr int PURPLE       = 0x808;
+constexpr int GRAY         = 0x888;
+constexpr int SKYBLUE      = 0x8CE;
+constexpr int BROWN        = 0xB22;
+constexpr int CRIMSON      = 0xD13;
+constexpr int ORCHID       = 0xD7D;
+constexpr int RED          = 0xF00;
+constexpr int MAGENTA      = 0xF0F;
+//constexpr int ORANGE  =  0xF40
+constexpr int PINK         = 0xF6A;
+constexpr int CORAL        = 0xF75;
+constexpr int SALMON       = 0xF87;
+constexpr int ORANGE       = 0xFA0;
+constexpr int GOLD         = 0xFD0;
+constexpr int YELLOW       = 0xFF0;
+constexpr int WHITE        = 0xFFF;
 
 //*******************************************************
 //       Circle Definitions
 //*******************************************************
-#define SECTOR_0_45          0x01
-#define SECTOR_45_90         0x02
-#define SECTOR_90_135        0x04
-#define SECTOR_135_180       0x08
-#define SECTOR_180_225       0x10
-#define SECTOR_225_270       0x20
-#define SECTOR_270_315       0x40
-#define SECTOR_315_360       0x80
+constexpr int SECTOR_0_45      = 0x01;
+constexpr int SECTOR_45_90     = 0x02;
+constexpr int SECTOR_90_135    = 0x04;
+constexpr int SECTOR_135_180   = 0x08;
+constexpr int SECTOR_180_225   = 0x10;
+constexpr int SECTOR_225_270   = 0x20;
+constexpr int SECTOR_270_315   = 0x40;
+constexpr int SECTOR_315_360   = 0x80;
 
-#define QUAD_NORTH_EAST   (SECTOR_0_45|SECTOR_45_90)
-#define QUAD_NORTH_WEST   (SECTOR_90_135|SECTOR_135_180)
-#define QUAD_SOUTH_WEST   (SECTOR_180_225|SECTOR_225_270)  
-#define QUAD_SOUTH_EAST   (SECTOR_270_315|SECTOR_315_360)
+constexpr int QUAD_NORTH_EAST  = (SECTOR_0_45|SECTOR_45_90);
+constexpr int QUAD_NORTH_WEST  = (SECTOR_90_135|SECTOR_135_180);
+constexpr int QUAD_SOUTH_WEST  = (SECTOR_180_225|SECTOR_225_270);
+constexpr int QUAD_SOUTH_EAST  = (SECTOR_270_315|SECTOR_315_360);
 
-#define FULLCIRCLE    (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST)
-#define OPENSOUTH     (QUAD_NORTH_EAST|QUAD_NORTH_WEST)
-#define OPENNORTH     (QUAD_SOUTH_EAST|QUAD_SOUTH_WEST)
-#define OPENEAST      (QUAD_NORTH_WEST|QUAD_SOUTH_WEST)
-#define OPENWEST      (QUAD_NORTH_EAST|QUAD_SOUTH_EAST)
-#define OPENNORTHEAST (QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST)
-#define OPENNORTHWEST (QUAD_NORTH_EAST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST)
-#define OPENSOUTHEAST (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_WEST)
-#define OPENSOUTHWEST (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST)
+constexpr int FULLCIRCLE       = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr int OPENSOUTH        = (QUAD_NORTH_EAST|QUAD_NORTH_WEST);
+constexpr int OPENNORTH        = (QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr int OPENEAST         = (QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
+constexpr int OPENWEST         = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST);
+constexpr int OPENNORTHEAST    = (QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr int OPENNORTHWEST    = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr int OPENSOUTHEAST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
+constexpr int OPENSOUTHWEST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST);
 
-#define DEFAULT_BACKGROUND BLACK
-#define DEFAULT_FOREGROUND WHITE
+constexpr int DEFAULT_BACKGROUND = BLACK;
+constexpr int DEFAULT_FOREGROUND = WHITE;
 
 /**
  * @brief Class representing an LCD

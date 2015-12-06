@@ -227,7 +227,6 @@ void usbdm_PinMapping() {
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTA_CLOCK_MASK;
 #endif
-
 #if (PTB0_SIG_SEL>=0) || (PTB1_SIG_SEL>=0) || \
     (PTB2_SIG_SEL>=0) || (PTB3_SIG_SEL>=0) || (PTB8_SIG_SEL>=0) || (PTB9_SIG_SEL>=0) || \
     (PTB10_SIG_SEL>=0) || (PTB11_SIG_SEL>=0) || (PTB16_SIG_SEL>=0) || (PTB17_SIG_SEL>=0) || \
@@ -235,7 +234,6 @@ void usbdm_PinMapping() {
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTB_CLOCK_MASK;
 #endif
-
 #if (PTC0_SIG_SEL>=0) || (PTC1_SIG_SEL>=0) || (PTC2_SIG_SEL>=0) || \
     (PTC3_SIG_SEL>=0) || (PTC4_SIG_SEL>=0) || (PTC5_SIG_SEL>=0) || (PTC6_SIG_SEL>=0) || \
     (PTC7_SIG_SEL>=0) || (PTC8_SIG_SEL>=0) || (PTC9_SIG_SEL>=0) || (PTC10_SIG_SEL>=0) || \
@@ -244,20 +242,17 @@ void usbdm_PinMapping() {
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTC_CLOCK_MASK;
 #endif
-
 #if (PTD0_SIG_SEL>=0) || (PTD1_SIG_SEL>=0) || (PTD2_SIG_SEL>=0) || (PTD3_SIG_SEL>=0) || \
     (PTD4_SIG_SEL>=0) || (PTD5_SIG_SEL>=0) || (PTD6_SIG_SEL>=0) || (PTD7_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTD_CLOCK_MASK;
 #endif
-
 #if (PTE0_SIG_SEL>=0) || \
     (PTE1_SIG_SEL>=0) || (PTE2_SIG_SEL>=0) || (PTE3_SIG_SEL>=0) || (PTE4_SIG_SEL>=0) || \
     (PTE5_SIG_SEL>=0) || (PTE20_SIG_SEL>=0) || (PTE21_SIG_SEL>=0) || (PTE22_SIG_SEL>=0) || \
     (PTE23_SIG_SEL>=0) || (PTE24_SIG_SEL>=0) || (PTE25_SIG_SEL>=0) || (PTE29_SIG_SEL>=0) || \
     (PTE30_SIG_SEL>=0) || (PTE31_SIG_SEL>=0)
    SIM->FIXED_PORT_CLOCK_REG |= PORTE_CLOCK_MASK;
-
 #endif
 
    for (const PinInit *p=pinInit; p<(pinInit+(sizeof(pinInit)/sizeof(pinInit[0]))); p++) {
