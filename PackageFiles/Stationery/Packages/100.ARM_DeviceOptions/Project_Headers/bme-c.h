@@ -1,8 +1,8 @@
 /**
- * @file     bme.h
+ * @file     bme.h (derived from bme-c.h)
  * @brief    Macros to access bit manipulation engine
- * @version  V4.11.1.70
- * @date     18 June 2015
+ * @version  V4.12.1.50
+ * @date     5 Dec 2015
  */
 #ifndef __BME_H
 #define __BME_H

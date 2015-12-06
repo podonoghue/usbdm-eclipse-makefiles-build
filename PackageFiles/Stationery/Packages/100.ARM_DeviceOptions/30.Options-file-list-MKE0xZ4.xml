@@ -16,7 +16,6 @@
       
       <!-- MKE04 & MKE06 have a BME that can manipulate SRAM_U and a bit-band for SRAM_U as well -->
       <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"          target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
-      <copy source="Project_Headers/bitband-mke.h"                             target="Project_Headers/bitband.h" />
 
       <variable id="projectOptionValue.Clock-setup" 
          name="Clock setup code" 
@@ -44,6 +43,20 @@
          </applyWhen>
          <copy source="Startup_Code/console-mke.c" target="Startup_Code/console.c" />
          <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
+      </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+         </applyWhen>
+         <copy source="Project_Headers/bitband-c-mke.h"                       target="Project_Headers/bitband.h" />
+      </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </applyWhen>
+         <copy source="Project_Headers/bitband-cpp-mke.h"                     target="Project_Headers/bitband.h" />
       </projectActionList>
 
    </projectActionList>

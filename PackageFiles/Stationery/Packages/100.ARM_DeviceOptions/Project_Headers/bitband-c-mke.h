@@ -1,9 +1,15 @@
 /**
- * @file     bitband.h
+ * @file     bitband.h (derived from bitband-c-mke.h)
  * @brief    Macros to access bit-band region
- * @version  V4.11.1.70
- * @date     18 June 2015
+ * @version  V4.12.1.50
+ * @date     5 Dec 2015
  */
+#ifndef BITBAND_H_
+#define BITBAND_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*!
  * @addtogroup BITBAND_group Bit-band access
@@ -43,13 +49,6 @@
  *       It is probably a good idea to use a dedicated segment in SRAM_U for bit-band variables and access globally.
  *       See linker files.
  */
-
-#ifndef BITBAND_H_
-#define BITBAND_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  * Set a bit

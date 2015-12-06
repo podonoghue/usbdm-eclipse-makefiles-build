@@ -1,5 +1,5 @@
 /**
- * @file     bitband.h (derived from bitband-cpp-mk.h)
+ * @file     bitband.h (derived from bitband-cpp-mke.h)
  * @brief    Template functions to access bit-band region
  * @version  V4.12.1.50
  * @date     5 Dec 2015
@@ -11,15 +11,14 @@ namespace USBDM {
 
 /*!
  * @addtogroup BITBAND_group Bit-band access
- * @brief Cortex-M4 bit-band support
+ * @brief MKE bit-band support
  * @{
  *
  * Based on Freescale Application Note AN4838
  * http://cache.freescale.com/files/microcontrollers/doc/app_note/AN4838.pdf
  *
  * Assumes the location has been allocated to:
- *    - SRAM_U           (0x2000_0000-0x200F_FFFF) with bit-band alias (0x2200_0000-0x23FF_FFFF)
- *    - AIPS/GPIO        (0x4000_0000-0x400F_FFFF) with bit-band alias (0x4200_0000-0x43FF_FFFF)
+ *    - SRAM_U           (0x2000_0000-0x2000_02FF) with bit-band alias (0x2200_0000-0x2200_5FFF)
  *
  * Most Global or Local Static variables end up in SRAM_L so are not usable\n
  * Most Parameters and Local variables end up in SRAM_U
@@ -47,8 +46,6 @@ namespace USBDM {
  *
  *       It is probably a good idea to use a dedicated segment in SRAM_U for bit-band variables and access globally.
  *       See linker files.
- *
- *       Fixed locations accessed by casts e.g. GPIOC etc will be very efficient since the calculation is a constant expression.
  */
 
 /**
@@ -67,7 +64,7 @@ namespace USBDM {
 template <typename T>
 inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
    uint32_t addr = (uint32_t)(&ref);
-   const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
+   const uint32_t mappedAddress = 0x22000000 + ((addr&0x3FF)*8*4) + (bitNum*4);
    *(volatile uint32_t *)(mappedAddress) = value;
 }
 
@@ -90,7 +87,7 @@ inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
 template <typename T>
 inline uint32_t bitbandRead(T &ref, const uint32_t bitNum) {
    uint32_t addr = (uint32_t)(&ref);
-   const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
+   const uint32_t mappedAddress = 0x22000000 + ((addr&0x3FF)*8*4) + (bitNum*4);
    return *(volatile uint32_t *)(mappedAddress);
 }
 

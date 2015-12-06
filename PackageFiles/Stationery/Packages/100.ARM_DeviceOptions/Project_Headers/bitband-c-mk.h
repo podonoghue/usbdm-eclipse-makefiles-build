@@ -4,7 +4,6 @@
  * @version  V4.12.1.50
  * @date     5 Dec 2015
  */
-
 #ifndef BITBAND_H_
 #define BITBAND_H_
 
