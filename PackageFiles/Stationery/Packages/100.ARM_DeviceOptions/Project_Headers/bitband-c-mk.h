@@ -1,9 +1,16 @@
 /**
- * @file     bitband.h
+ * @file     bitband.h (derived from bitband-c-mk.h)
  * @brief    Macros to access bit-band region
- * @version  V4.11.1.70
- * @date     18 June 2015
+ * @version  V4.12.1.50
+ * @date     5 Dec 2015
  */
+
+#ifndef BITBAND_H_
+#define BITBAND_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*!
  * @addtogroup BITBAND_group Bit-band access
@@ -47,27 +54,20 @@
  *       Fixed locations accessed by casts e.g. GPIOC etc will be very efficient since the calculation is a constant expression.
  */
 
-#ifndef BITBAND_H_
-#define BITBAND_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * Set a bit
  *
  * @param Addr    Address to manipulate (in SRAM_U)
  * @param Bitnum  Bit number 0-7 (usually)
  */
-#define BIT_BAND_SET(Addr, Bitnum)   ((void)(*(volatile uint32_t *)((((uint32_t)(Addr))&0xF0000000) + 0x02000000 + (((uint32_t)(Addr))&0x7FFFF)*32 + ((uint32_t)(Bitnum))*4) = 1))
+#define BIT_BAND_SET(Addr, Bitnum)   ((void)(*(volatile uint32_t *)((((uint32_t)(Addr))&0xF0000000) + 0x02000000 + (((uint32_t)(Addr))&0x000FFFFF)*32 + ((uint32_t)(Bitnum))*4) = 1))
 /**
  * Clear a bit
  *
  * @param Addr    Address to manipulate (in SRAM_U)
  * @param Bitnum  Bit number 0-7 (usually)
  */
-#define BIT_BAND_CLEAR(Addr, Bitnum) ((void)(*(volatile uint32_t *)((((uint32_t)(Addr))&0xF0000000) + 0x02000000 + (((uint32_t)(Addr))&0x7FFFF)*32 + ((uint32_t)(Bitnum))*4) = 0))
+#define BIT_BAND_CLEAR(Addr, Bitnum) ((void)(*(volatile uint32_t *)((((uint32_t)(Addr))&0xF0000000) + 0x02000000 + (((uint32_t)(Addr))&0x000FFFFF)*32 + ((uint32_t)(Bitnum))*4) = 0))
 
 /*!
  * @}

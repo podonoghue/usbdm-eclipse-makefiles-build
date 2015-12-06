@@ -30,7 +30,6 @@
       <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" replace="true" />
       <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"         target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
 
-      <copy source="Project_Headers/bitband-mk.h"                             target="Project_Headers/bitband.h" />
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
@@ -44,6 +43,21 @@
    
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"            replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+
+      <projectActionList>
+         <applyWhen>
+            <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+         </applyWhen>
+         <copy source="Project_Headers/bitband-c-mk.h"                        target="Project_Headers/bitband.h" />
+      </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </applyWhen>
+         <copy source="Project_Headers/bitband-cpp-mk.h"                      target="Project_Headers/bitband.h" />
+      </projectActionList>
+
    </projectActionList>
 
 </root>
