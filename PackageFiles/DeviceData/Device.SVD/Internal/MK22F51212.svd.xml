@@ -7,7 +7,7 @@
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MK.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
-<!ENTITY DAC0         SYSTEM "peripherals/DAC0_MK_0x40028000.svd.xml">
+<!ENTITY DAC0         SYSTEM "peripherals/DAC0_MK_0x4003F000.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_MK_16CH_EARS.svd.xml">
 <!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_16CH.svd.xml">
 <!ENTITY DWT          SYSTEM "peripherals/DWT_CM4.svd.xml">
@@ -80,7 +80,7 @@
 &CRC;
 &CoreDebug;
 &DAC0;
-<peripheral derivedFrom="DAC0"><name>DAC1</name><prependToName>DAC1</prependToName><baseAddress>0x4003F000</baseAddress></peripheral>
+<peripheral derivedFrom="DAC0"><name>DAC1</name><prependToName>DAC1</prependToName><baseAddress>0x40028000</baseAddress></peripheral>
 &DMA0;
 &DMAMUX;
 &DWT;

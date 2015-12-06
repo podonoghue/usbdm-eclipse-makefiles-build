@@ -800,7 +800,7 @@ typedef struct {                                /*       CRC Structure          
 */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_MK_0x40028000)       ================ */
+/* ================           DAC0 (file:DAC0_MK_0x4003F000)       ================ */
 /* ================================================================================ */
 
 /**
@@ -897,7 +897,7 @@ typedef struct {                                /*       DAC0 Structure         
  */
 
 /* DAC0 - Peripheral instance base addresses */
-#define DAC0_BasePtr                   0x40028000UL //!< Peripheral base address
+#define DAC0_BasePtr                   0x4003F000UL //!< Peripheral base address
 #define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
 #define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
 /**
@@ -918,7 +918,7 @@ typedef struct {                                /*       DAC0 Structure         
  */
 
 /* DAC1 - Peripheral instance base addresses */
-#define DAC1_BasePtr                   0x4003F000UL //!< Peripheral base address
+#define DAC1_BasePtr                   0x40028000UL //!< Peripheral base address
 #define DAC1                           ((DAC_Type *) DAC1_BasePtr) //!< Freescale base pointer
 #define DAC1_BASE_PTR                  (DAC1) //!< Freescale style base pointer
 /**

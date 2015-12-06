@@ -4,6 +4,7 @@ Devices using this peripheral:
       MK12D5
       MK21D5
       MK22D5
+      MK22F51212
 -->
       <peripheral>
          <?sourceFile "DAC0_MK_0x4003F000" ?>
