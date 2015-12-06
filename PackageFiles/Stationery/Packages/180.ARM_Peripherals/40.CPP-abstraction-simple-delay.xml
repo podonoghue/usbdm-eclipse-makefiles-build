@@ -2,20 +2,20 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0">
-   <projectActionList id="abstraction-simple-delay">
+   <projectActionList id="CPP-abstraction-simple-delay">
       <applyWhen>
          <and>
             <variableRef idRef="outputType" condition="matches"  value=".*ProjectType\.exe$" />
             <not><variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue"/></not>
             <not><variableRef idRef="projectOptionValue.Kinetis-PE"         condition="isTrue"/></not>
-            <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
          </and>
       </applyWhen>
 
-      <variable id="projectOptionValue.abstraction-simple-delay"
+      <variable id="projectOptionValue.CPP.abstraction-simple-delay"
          name="Timer" 
-         description="Adds a simple delay timer" 
-         checkGroup="group-peripheral-options" />
+	 description="Adds a simple delay timer" 
+	 checkGroup="group-peripheral-options" />
       <projectActionList>
          <applyWhen>
             <and>
@@ -23,11 +23,11 @@
                   <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
                   <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
                </or>
-               <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
+               <variableRef idRef="projectOptionValue.CPP.abstraction-simple-delay" />
             </and>
          </applyWhen>
-         <copy source="Project_Headers/delay.h" target="Project_Headers/delay.h" />
-         <copy source="Sources/delay-systick.cpp" target="Sources/delay.c" />
+         <copy source="Project_Headers/delay.h"   target="Project_Headers/delay.h" />
+         <copy source="Sources/delay-systick.cpp" target="Sources/delay.cpp" />
       </projectActionList>
 
       <projectActionList>
@@ -37,11 +37,11 @@
                   <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                   <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
                </or>
-               <variableRef idRef="projectOptionValue.abstraction-simple-delay" />
+               <variableRef idRef="projectOptionValue.CPP.abstraction-simple-delay" />
             </and>
          </applyWhen>
          <copy source="Project_Headers/delay.h" target="Project_Headers/delay.h" />
-         <copy source="Sources/delay-dwt.cpp"   target="Sources/delay.c" />
+         <copy source="Sources/delay-dwt.cpp"   target="Sources/delay.cpp" />
       </projectActionList>
    </projectActionList>
 </root>
