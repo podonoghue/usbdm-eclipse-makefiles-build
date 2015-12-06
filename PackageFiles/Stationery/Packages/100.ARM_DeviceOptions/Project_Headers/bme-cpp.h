@@ -1,15 +1,15 @@
 /**
- * @file     bme.h (derived from bme-c.h)
+ * @file     bme.h (derived from bme-cpp.h)
  * @brief    Macros to access bit manipulation engine
  * @version  V4.12.1.50
  * @date     5 Dec 2015
  */
-#ifndef __BME_H
-#define __BME_H
+#ifndef INCLUDE_BME_CPP_H
+#define INCLUDE_BME_CPP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdint.h>
+
+namespace USBDM {
 
 /*!
  * @addtogroup BME_group Bit Manipulation Engine
@@ -24,278 +24,249 @@ extern "C" {
  *    - AIPS Peripherals (0x4000_0000-0x4007_FFFF) with BME alias (0x4400_0000-0x5FFF_FFFF)
  *    - SRAM_U           (0x2000_0000-0x2000_02FF) with BME alias (0x2400_0000-0x3FFF_FFFF) (MKE04 & MKE06 only)
  *
- * Examples:
+ * <b>Examples - </b>
  *
  * Setting a clock enable bit within SIM_SCGC
  * @code{.c}
- *    BME_BIT_TEST_AND_SETw(&SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Set SIM_SCGC6.ADC0 bit
+ *    bmeTestAndSet(SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Set SIM_SCGC6.ADC0 bit
+ *    -- OR --
+ *    bmeOr(SIM->SCGC6, SIM_SCGC6_ADC0_MASK);          // Set SIM_SCGC6.ADC0 bit
  * @endcode
  *
  * Clearing a clock enable bit within SIM_SCGC
  * @code{.c}
- *    BME_BIT_TEST_AND_CLEARw(&SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Clear SIM_SCGC6.ADC0 bit
+ *    bmeTestAndClear(SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Clear SIM_SCGC6.ADC0 bit
+ *    -- OR --
+ *    bmeAnd(SIM->SCGC6, ~SIM_SCGC6_ADC0_MASK);          // Clear SIM_SCGC6.ADC0 bit
  * @endcode
  *
- * Settting multiple bits
+ * Setting multiple bits
  * @code{.c}
- *    BME_ORw(&SIM_SCGC,SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK);
+ *    bmeOr(GPIOC->PDOR, (3<<4)); // Set bits 4 and 5
  * @endcode
  *
  * Clearing multiple bits
  * @code{.c}
- *    BME_ANDw(&SIM_SCGC,~(SIM_SCGC_ACMP0_MASK|SIM_SCGC_ACMP1_MASK));
+ *    bmeAnd(GPIOC->PDOR,~(7<<4)); // Clear bits 4, 5 and 7
+ * @endcode
+ *
+ * Toggling multiple bits
+ * @code{.c}
+ *    bmeXor(GPIOC->PDOR,~(0xF<<4)); // Toggle bits 4 to 7
  * @endcode
  *
  * Spin-lock - Wait until successful at setting the bit i.e. the bit was 0 and now is 1
  * @code{.c}
- *    while(BME_BIT_TEST_AND_SET(&lock, 3) != 0) {
+ *    while(!bmeTestAndSet(lock, 3)) {
  *    }
  * @endcode
  */
 
 // BME operation code
-#define BME_OPCODE_AND           1 //!< Opcode for ANDing a value
-#define BME_OPCODE_OR            2 //!< Opcode for ORing a value
-#define BME_OPCODE_XOR           3 //!< Opcode for XORing a value
-#define BME_OPCODE_BITFIELD      4 //!< Opcode for extracting a bitfield
 
-#define BME_OPCODE_BIT_CLEAR     2 //!< Opcode for Clearing a bit
-#define BME_OPCODE_BIT_SET       3 //!< Opcode for Setting a bit
+constexpr uint8_t BME_OPCODE_AND        = 1; //!< Opcode for ANDing a value
+constexpr uint8_t BME_OPCODE_OR         = 2; //!< Opcode for ORing a value
+constexpr uint8_t BME_OPCODE_XOR        = 3; //!< Opcode for XORing a value
+constexpr uint8_t BME_OPCODE_BITFIELD   = 4; //!< Opcode for extracting a bit-field
+
+constexpr uint8_t BME_OPCODE_BIT_CLEAR  = 2; //!< Opcode for Clearing a bit
+constexpr uint8_t BME_OPCODE_BIT_SET    = 3; //!< Opcode for Setting a bit
 
 /**
- * Mask value is ANDed with a 32 bit memory location
+ *  Create decorated address for bme operation
  *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
+ *  @param addr   Base address
+ *  @param opcode Opcode to use
+ *
+ * <b>Examples - </b>
  *
  */
-#define BME_ANDw(addr, mask)  ((void)((*(volatile uint32_t *)(((uint32_t)(addr)) | (BME_OPCODE_AND<<26))) = ((uint32_t)(mask))))
+constexpr inline uint32_t bmeOp(uint32_t addr, uint8_t opcode) {
+   return (uint32_t)((opcode<<26)|addr);
+}
 
 /**
- * Mask value is ORed with a 32 bit memory location
+ *  Create decorated address for bme operation
  *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
+ *  @param addr      Base address
+ *  @param opcode    Opcode to use
+ *  @param bitOffset Offset of start of field
+ *
+ * <b>Examples - </b>
  *
  */
-#define BME_ORw(addr, mask)   ((void)((*(volatile uint32_t *)(((uint32_t)(addr)) | (BME_OPCODE_OR<<26))) = ((uint32_t)(mask))))
+constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset) {
+   return (uint32_t)((opcode<<26)|(bitOffset<<21)|addr);
+}
 
 /**
- * Mask value is XORed with a 32 bit memory location
+ *  Create decorated address for bme operation
  *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
+ *  @param addr      Base address
+ *  @param opcode    Opcode to use
+ *  @param bitOffset Offset of start of field
+ *  @param width     Width of value to insert/extract
+ *
+ * <b>Examples - </b>
  *
  */
-#define BME_XORw(addr, mask)  ((void)((*(volatile uint32_t *)(((uint32_t)(addr)) | (BME_OPCODE_XOR<<26))) = ((uint32_t)(mask))))
-
+constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset, const uint8_t width) {
+   return (uint32_t)((opcode<<26)|(bitOffset<<23)|(width<<19)|addr);
+}
 
 /**
- * Bit test and clear within 32 bit memory location
+ * Mask value is ANDed with a memory location
+ *
+ * @param ref  Memory location
+ * @param mask Fixed mask value to be used
+ *
+ * <b>Examples - </b>
+ *
+ * Clearing a clock enable bit within SIM_SCGC
+ * @code{.c}
+ *    bmeAnd(SIM->SCGC6, ~SIM_SCGC6_ADC0_MASK);          // Clear SIM_SCGC6.ADC0 bit
+ * @endcode
+ *
+ * Clearing multiple bits
+ * @code{.c}
+ *    bmeAnd(GPIOC->PDOR,~(7<<4)); // Clear bits 4, 5 and 7
+ * @endcode
+ */
+template<typename T> void inline bmeAnd(T &ref, const uint32_t mask) {
+   *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_AND))) = mask;
+}
+
+/**
+ * Mask value is ORed with a memory location
+ *
+ * @param ref  Memory location
+ * @param mask Fixed mask value to be used
+ *
+ * <b>Examples - </b>
+ *
+ * Setting a clock enable bit within SIM_SCGC
+ * @code{.c}
+ *    bmeOr(SIM->SCGC6, SIM_SCGC6_ADC0_MASK);          // Set SIM_SCGC6.ADC0 bit
+ * @endcode
+ *
+ * Setting multiple bits
+ * @code{.c}
+ *    bmeOr(GPIOC->PDOR, (3<<4)); // Set bits 4 and 5
+ * @endcode
+ */
+template<typename T> void inline bmeOr(T &ref, const uint32_t mask) {
+   *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_OR))) = mask;
+}
+
+/**
+ * Mask value is XORed with a memory location
+ *
+ * @param ref  Memory location
+ * @param mask Fixed mask value to be used
+ *
+ * <b>Example - </b>
+ *
+ * Toggling multiple bits
+ * @code{.c}
+ *    bmeXor(GPIOC->PDOR,~(0xF<<4)); // Toggle bits 4 to 7
+ * @endcode
+ */
+template<typename T> void inline bmeXor(T &ref, const uint32_t mask) {
+   *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_XOR))) = mask;
+}
+
+/**
+ * Insert bit field within a memory location
+ *
+ * @param ref     Memory location
+ * @param bitNum  Starting bit number of field
+ * @param width   Width of bit field
+ * @param value   Value to insert
+ *
+ * <b>Example - </b>
+ *
+ * Modify timer field without affecting other bits in register (note: read-modify-write)
+ * @code{.c}
+ *   bmeInsert(TPM0->CONTROLS[3].CnSC, TPM_CnSC_ELS_SHIFT, 2, 1); // Set TPM0->CONTROLS[3].CnSC.ELS to 1
+ * @endcode
+ */
+template<typename T> void inline bmeInsert(T &ref, const uint8_t bitNum, const uint8_t width, const uint32_t value) {
+   *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BITFIELD, bitNum, width-1))) = value<<bitNum;
+}
+
+/**
+ * Extract bit field from a memory location
+ *
+ * @param ref     Memory location
+ * @param bitNum  Starting bit number of field
+ * @param width   Width of bit field
+ *
+ * <b>Example - </b>
+ *
+ * Switch statement testing a 3-bit input control (bits 5,6,7)
+ * @code{.c}
+ * switch(bmeExtract(GPIOA->PDIR, 5, 3)) {
+ * case 0: ...;
+ *    //...
+ * case 7: ...;
+ * }
+ * @endcode
+ */
+template<typename T> uint32_t inline bmeExtract(T &ref, const uint8_t bitNum, const uint8_t width) {
+   return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BITFIELD, bitNum, width-1)));
+}
+
+/**
+ * Bit test and clear a bit within a memory location
  * i.e. Clear 1 bit and return original bit value
  *
- * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
+ * @param ref    Address of memory location
+ * @param bitNum Number of bit to test and clear
  *
+ * <b>Examples - </b>
+ *
+ * @code{.c}
+ *    bmeTestAndClear(SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Clear SIM_SCGC6.ADC0 bit
+ * @endcode
+ *
+ * Spin-lock - Wait until successful at clearing the bit i.e. the bit was 1 and now is 0
+ * @code{.c}
+ *    while(!bmeTestAndClear(lock, 3)) {
+ *    }
+ * @endcode
  */
-#define BME_BIT_TEST_AND_CLEARw(addr, bitNum)        (*(volatile uint32_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_CLEAR <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
+template<typename T> uint32_t inline bmeTestAndClear(T &ref, const uint8_t bitNum) {
+   return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BIT_CLEAR, bitNum)));
+}
 
 /**
- * Bit test and set within 32 bit memory location
+ * Bit test and set a bit within a memory location
  * i.e. Set 1 bit and return original bit value
  *
- * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
+ * @param ref    Address of memory location
+ * @param bitNum Number of bit to test and set
  *
+ * <b>Examples - </b>
+ *
+ * Setting a clock enable bit within SIM_SCGC
+ * @code{.c}
+ *    bmeTestAndSet(SIM->SCGC6, SIM_SCGC6_ADC0_SHIFT); // Set SIM_SCGC6.ADC0 bit
+ * @endcode
+ *
+ * Spin-lock - Wait until successful at setting the bit i.e. the bit was 0 and now is 1
+ * @code{.c}
+ *    while(bmeTestAndClear(lock, 3)) {
+ *    }
+ * @endcode
  */
-#define BME_BIT_TEST_AND_SETw(addr, bitNum)        (*(volatile uint32_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_SET <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
-
-/**
- * Insert bit field within a 32 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- * @param value  Value to insert
- */
-#define BME_BITFIELD_INSERTw(addr, bit, width, value)        ((void)((*(volatile uint32_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19)) = ((value)<<(bit))))
-
-/**
- * Extract a bit field from a 32 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- */
-#define BME_BITFIELD_EXTRACTw(addr, bit, width)        (*(volatile uint32_t *)(((uint32_t)(addr))    \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19))
-
-/**
- * Mask value is ANDed with a 16 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_ANDh(addr, mask)  ((void)((*(volatile uint16_t *)(((uint32_t)(addr)) | (BME_OPCODE_AND<<26))) = ((uint16_t)(mask))))
-
-/**
- * Mask value is ORed with a 16 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_ORh(addr, mask)   ((void)((*(volatile uint16_t *)(((uint32_t)(addr)) | (BME_OPCODE_OR<<26))) = ((uint16_t)(mask))))
-
-/**
- * Mask value is XORed with a 16 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_XORh(addr, mask)  ((void)((*(volatile uint16_t *)(((uint32_t)(addr)) | (BME_OPCODE_XOR<<26))) = ((uint16_t)(mask))))
-
-
-/**
- * Bit test and clear within 16 bit memory location
- * i.e. Clear 1 bit and return original bit value
- *
- * @param addr   Address of memory location
- * @param bitNum Number of bit to test
- *
- */
-#define BME_BIT_TEST_AND_CLEARh(addr, bitNum)        (*(volatile uint16_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_CLEAR <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
-
-/**
- * Bit test and set within 16 bit memory location
- * i.e. Set 1 bit and return original bit value
- *
- * @param addr   Address of memory location
- * @param bitNum Number of bit to test
- *
- */
-#define BME_BIT_TEST_AND_SETh(addr, bitNum)        (*(volatile uint16_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_SET <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
-
-/**
- * Insert bit field within a 16 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- * @param value  Value to insert
- */
-#define BME_BITFIELD_INSERTh(addr, bit, width, value)        ((void)((*(volatile uint16_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19)) = ((value)<<(bit))))
-
-
-/**
- * Extract a bit field from a 16 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- */
-#define BME_BITFIELD_EXTRACTh(addr, bit, width)        (*(volatile uint16_t *)(((uint32_t)(addr))    \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19))
-
-/**
- * Mask value is ANDed with a 8 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_ANDb(addr, mask)  ((void)((*(volatile uint8_t *)(((uint32_t)(addr)) | (BME_OPCODE_AND<<26))) = ((uint8_t)(mask))))
-
-/**
- * Mask value is ORed with a 8 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_ORb(addr, mask)   ((void)((*(volatile uint8_t *)(((uint32_t)(addr)) | (BME_OPCODE_OR<<26))) = ((uint8_t)(mask))))
-
-/**
- * Mask value is XORed with a 8 bit memory location
- *
- * @param addr Address of memory location
- * @param mask Fixed mask value to be used
- *
- */
-#define BME_XORb(addr, mask)  ((void)((*(volatile uint8_t *)(((uint32_t)(addr)) | (BME_OPCODE_XOR<<26))) = ((uint8_t)(mask))))
-
-
-/**
- * Bit test and clear within 8 bit memory location
- * i.e. Clear 1 bit and return original bit value
- *
- * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
- *
- */
-#define BME_BIT_TEST_AND_CLEARb(addr, bitNum)        (*(volatile uint8_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_CLEAR <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
-
-/**
- * Bit test and set within 8 bit memory location
- * i.e. Set 1 bit and return original bit value
- *
- * @param addr   Address of memory location
- * @param bitNum Numbert of bit to test
- *
- */
-#define BME_BIT_TEST_AND_SETb(addr, bitNum)        (*(volatile uint8_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BIT_SET <<26)  \
-                              | (((bitNum & 0x1F))<<21)))
-
-/**
- * Insert bit field within a 8 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- * @param value  Value to insert
- */
-#define BME_BITFIELD_INSERTb(addr, bit, width, value)        ((void)((*(volatile uint8_t *)(((uint32_t)(addr))   \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19)) = ((value)<<(bit))))
-
-
-/**
- * Extract a bit field from a 8 bit memory location
- *
- * @param addr   Address of memory location
- * @param bit    Starting bit number of field
- * @param width  Width of bit field
- */
-#define BME_BITFIELD_EXTRACTb(addr, bit, width)        (*(volatile uint8_t *)(((uint32_t)(addr))    \
-                              | (BME_OPCODE_BITFIELD <<26)  \
-                              | ((((bit) & 0x1F))<<23) | (((width)-1) & 0xF)<<19))
-
+template<typename T> uint32_t inline bmeTestAndSet(T &ref, const uint8_t bitNum) {
+   return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BIT_SET, bitNum)));
+}
 
 /*!
  * @}
  */
 
-#ifdef __cplusplus
-   }
-#endif
+} // End namespace USBDM
 
-#endif // __BME_H
+#endif // INCLUDE_BME_CPP_H
