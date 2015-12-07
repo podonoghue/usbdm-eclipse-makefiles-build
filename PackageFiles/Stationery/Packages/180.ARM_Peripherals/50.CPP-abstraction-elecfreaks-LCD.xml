@@ -28,7 +28,7 @@
             <enableWhen>
                <and>
                   <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-                  <requirement idRef="projectOptionValue.abstraction-simple-delay"/>
+                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
                </and>
             </enableWhen>
          </variable>
