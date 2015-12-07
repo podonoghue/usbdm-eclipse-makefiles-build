@@ -174,7 +174,7 @@ using gpio_D30             = const USBDM::GpioE<31>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc0 =
-   Analogue_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
 #if (PTB0_SIG_SEL == 0)
 using adc0_se8             = const USBDM::Adc0<8>;
@@ -262,7 +262,7 @@ using adc_A6               = const USBDM::Adc0<23>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc0a =
-   Analogue_T<getPortClockMask(adcChannel,Adc0aInfo), getPcrReg(adcChannel,Adc0aInfo), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc0aInfo), getPcrReg(adcChannel,Adc0aInfo), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
 #if (PTE21_SIG_SEL == 0)
 using adc0_se4a            = const USBDM::Adc0a<4>;
@@ -301,90 +301,90 @@ using adc_A8               = const USBDM::Adc0a<7>;
  * @tparam tpmChannel    TPM channel
  */
 template<uint8_t tpmChannel> using Tpm0 =
-   Tmr_T<getPortClockMask(tpmChannel,Tpm0Info), getPcrReg(tpmChannel,Tpm0Info), getPcrMux(tpmChannel,Tpm0Info), TPM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM0_CLOCK_REG), TPM0_CLOCK_MASK, tpmChannel>;
+   Tpm_T<getPortClockMask(tpmChannel,Tpm0Info), getPcrReg(tpmChannel,Tpm0Info), getPcrMux(tpmChannel,Tpm0Info), TPM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM0_CLOCK_REG), TPM0_CLOCK_MASK, TPM0_SC, tpmChannel>;
 
 #if (PTA0_SIG_SEL == 3)
-using tmr0_ch5             = const USBDM::Tmr0<5>;
+using tpm0_ch5             = const USBDM::Tpm0<5>;
 #endif
 #if (PTA3_SIG_SEL == 3)
-using tmr0_ch0             = const USBDM::Tmr0<0>;
+using tpm0_ch0             = const USBDM::Tpm0<0>;
 #endif
 #if (PTA4_SIG_SEL == 3)
-using tmr0_ch1             = const USBDM::Tmr0<1>;
-using tmr_D4               = const USBDM::Tmr0<1>;
+using tpm0_ch1             = const USBDM::Tpm0<1>;
+using tpm_D4               = const USBDM::Tpm0<1>;
 #endif
 #if (PTA5_SIG_SEL == 3)
-using tmr0_ch2             = const USBDM::Tmr0<2>;
-using tmr_D5               = const USBDM::Tmr0<2>;
+using tpm0_ch2             = const USBDM::Tpm0<2>;
+using tpm_D5               = const USBDM::Tpm0<2>;
 #endif
 #if (PTC1_SIG_SEL == 4)
-using tmr0_ch0             = const USBDM::Tmr0<0>;
-using tmr_A5               = const USBDM::Tmr0<0>;
+using tpm0_ch0             = const USBDM::Tpm0<0>;
+using tpm_A5               = const USBDM::Tpm0<0>;
 #endif
 #if (PTC2_SIG_SEL == 4)
-using tmr0_ch1             = const USBDM::Tmr0<1>;
-using tmr_A4               = const USBDM::Tmr0<1>;
+using tpm0_ch1             = const USBDM::Tpm0<1>;
+using tpm_A4               = const USBDM::Tpm0<1>;
 #endif
 #if (PTC3_SIG_SEL == 4)
-using tmr0_ch2             = const USBDM::Tmr0<2>;
-using tmr_D18              = const USBDM::Tmr0<2>;
+using tpm0_ch2             = const USBDM::Tpm0<2>;
+using tpm_D18              = const USBDM::Tpm0<2>;
 #endif
 #if (PTC4_SIG_SEL == 4)
-using tmr0_ch3             = const USBDM::Tmr0<3>;
-using tmr_D19              = const USBDM::Tmr0<3>;
+using tpm0_ch3             = const USBDM::Tpm0<3>;
+using tpm_D19              = const USBDM::Tpm0<3>;
 #endif
 #if (PTC8_SIG_SEL == 3)
-using tmr0_ch4             = const USBDM::Tmr0<4>;
-using tmr_D6               = const USBDM::Tmr0<4>;
+using tpm0_ch4             = const USBDM::Tpm0<4>;
+using tpm_D6               = const USBDM::Tpm0<4>;
 #endif
 #if (PTC9_SIG_SEL == 3)
-using tmr0_ch5             = const USBDM::Tmr0<5>;
-using tmr_D7               = const USBDM::Tmr0<5>;
+using tpm0_ch5             = const USBDM::Tpm0<5>;
+using tpm_D7               = const USBDM::Tpm0<5>;
 #endif
 #if (PTD0_SIG_SEL == 4)
-using tmr0_ch0             = const USBDM::Tmr0<0>;
-using tmr_D10              = const USBDM::Tmr0<0>;
+using tpm0_ch0             = const USBDM::Tpm0<0>;
+using tpm_D10              = const USBDM::Tpm0<0>;
 #endif
 #if (PTD1_SIG_SEL == 4)
-using tmr0_ch1             = const USBDM::Tmr0<1>;
-using tmr_D13              = const USBDM::Tmr0<1>;
-using tmr_LED_BLUE         = const USBDM::Tmr0<1>;
+using tpm0_ch1             = const USBDM::Tpm0<1>;
+using tpm_D13              = const USBDM::Tpm0<1>;
+using tpm_LED_BLUE         = const USBDM::Tpm0<1>;
 #endif
 #if (PTD2_SIG_SEL == 4)
-using tmr0_ch2             = const USBDM::Tmr0<2>;
-using tmr_D11              = const USBDM::Tmr0<2>;
+using tpm0_ch2             = const USBDM::Tpm0<2>;
+using tpm_D11              = const USBDM::Tpm0<2>;
 #endif
 #if (PTD3_SIG_SEL == 4)
-using tmr0_ch3             = const USBDM::Tmr0<3>;
-using tmr_D12              = const USBDM::Tmr0<3>;
+using tpm0_ch3             = const USBDM::Tpm0<3>;
+using tpm_D12              = const USBDM::Tpm0<3>;
 #endif
 #if (PTD4_SIG_SEL == 4)
-using tmr0_ch4             = const USBDM::Tmr0<4>;
-using tmr_D2               = const USBDM::Tmr0<4>;
+using tpm0_ch4             = const USBDM::Tpm0<4>;
+using tpm_D2               = const USBDM::Tpm0<4>;
 #endif
 #if (PTD5_SIG_SEL == 4)
-using tmr0_ch5             = const USBDM::Tmr0<5>;
-using tmr_D9               = const USBDM::Tmr0<5>;
+using tpm0_ch5             = const USBDM::Tpm0<5>;
+using tpm_D9               = const USBDM::Tpm0<5>;
 #endif
 #if (PTE24_SIG_SEL == 3)
-using tmr0_ch0             = const USBDM::Tmr0<0>;
-using tmr_ACCEL_SCL        = const USBDM::Tmr0<0>;
+using tpm0_ch0             = const USBDM::Tpm0<0>;
+using tpm_ACCEL_SCL        = const USBDM::Tpm0<0>;
 #endif
 #if (PTE25_SIG_SEL == 3)
-using tmr0_ch1             = const USBDM::Tmr0<1>;
-using tmr_ACCEL_SDA        = const USBDM::Tmr0<1>;
+using tpm0_ch1             = const USBDM::Tpm0<1>;
+using tpm_ACCEL_SDA        = const USBDM::Tpm0<1>;
 #endif
 #if (PTE29_SIG_SEL == 3)
-using tmr0_ch2             = const USBDM::Tmr0<2>;
-using tmr_A7               = const USBDM::Tmr0<2>;
+using tpm0_ch2             = const USBDM::Tpm0<2>;
+using tpm_A7               = const USBDM::Tpm0<2>;
 #endif
 #if (PTE30_SIG_SEL == 3)
-using tmr0_ch3             = const USBDM::Tmr0<3>;
-using tmr_A6               = const USBDM::Tmr0<3>;
+using tpm0_ch3             = const USBDM::Tpm0<3>;
+using tpm_A6               = const USBDM::Tpm0<3>;
 #endif
 #if (PTE31_SIG_SEL == 3)
-using tmr0_ch4             = const USBDM::Tmr0<4>;
-using tmr_D30              = const USBDM::Tmr0<4>;
+using tpm0_ch4             = const USBDM::Tpm0<4>;
+using tpm_D30              = const USBDM::Tpm0<4>;
 #endif
 /**
  * @}
@@ -415,31 +415,31 @@ using tmr_D30              = const USBDM::Tmr0<4>;
  * @tparam tpmChannel    TPM channel
  */
 template<uint8_t tpmChannel> using Tpm1 =
-   Tmr_T<getPortClockMask(tpmChannel,Tpm1Info), getPcrReg(tpmChannel,Tpm1Info), getPcrMux(tpmChannel,Tpm1Info), TPM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM1_CLOCK_REG), TPM1_CLOCK_MASK, tpmChannel>;
+   Tpm_T<getPortClockMask(tpmChannel,Tpm1Info), getPcrReg(tpmChannel,Tpm1Info), getPcrMux(tpmChannel,Tpm1Info), TPM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM1_CLOCK_REG), TPM1_CLOCK_MASK, TPM0_SC, tpmChannel>;
 
 #if (PTA12_SIG_SEL == 3)
-using tmr1_ch0             = const USBDM::Tmr1<0>;
-using tmr_D3               = const USBDM::Tmr1<0>;
+using tpm1_ch0             = const USBDM::Tpm1<0>;
+using tpm_D3               = const USBDM::Tpm1<0>;
 #endif
 #if (PTA13_SIG_SEL == 3)
-using tmr1_ch1             = const USBDM::Tmr1<1>;
-using tmr_D8               = const USBDM::Tmr1<1>;
+using tpm1_ch1             = const USBDM::Tpm1<1>;
+using tpm_D8               = const USBDM::Tpm1<1>;
 #endif
 #if (PTB0_SIG_SEL == 3)
-using tmr1_ch0             = const USBDM::Tmr1<0>;
-using tmr_A0               = const USBDM::Tmr1<0>;
+using tpm1_ch0             = const USBDM::Tpm1<0>;
+using tpm_A0               = const USBDM::Tpm1<0>;
 #endif
 #if (PTB1_SIG_SEL == 3)
-using tmr1_ch1             = const USBDM::Tmr1<1>;
-using tmr_A1               = const USBDM::Tmr1<1>;
+using tpm1_ch1             = const USBDM::Tpm1<1>;
+using tpm_A1               = const USBDM::Tpm1<1>;
 #endif
 #if (PTE20_SIG_SEL == 3)
-using tmr1_ch0             = const USBDM::Tmr1<0>;
-using tmr_A11              = const USBDM::Tmr1<0>;
+using tpm1_ch0             = const USBDM::Tpm1<0>;
+using tpm_A11              = const USBDM::Tpm1<0>;
 #endif
 #if (PTE21_SIG_SEL == 3)
-using tmr1_ch1             = const USBDM::Tmr1<1>;
-using tmr_A10              = const USBDM::Tmr1<1>;
+using tpm1_ch1             = const USBDM::Tpm1<1>;
+using tpm_A10              = const USBDM::Tpm1<1>;
 #endif
 /**
  * @}
@@ -470,41 +470,41 @@ using tmr_A10              = const USBDM::Tmr1<1>;
  * @tparam tpmChannel    TPM channel
  */
 template<uint8_t tpmChannel> using Tpm2 =
-   Tmr_T<getPortClockMask(tpmChannel,Tpm2Info), getPcrReg(tpmChannel,Tpm2Info), getPcrMux(tpmChannel,Tpm2Info), TPM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM2_CLOCK_REG), TPM2_CLOCK_MASK, tpmChannel>;
+   Tpm_T<getPortClockMask(tpmChannel,Tpm2Info), getPcrReg(tpmChannel,Tpm2Info), getPcrMux(tpmChannel,Tpm2Info), TPM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM2_CLOCK_REG), TPM2_CLOCK_MASK, TPM0_SC, tpmChannel>;
 
 #if (PTA1_SIG_SEL == 3)
-using tmr2_ch0             = const USBDM::Tmr2<0>;
-using tmr_D0               = const USBDM::Tmr2<0>;
-using tmr_ConRx            = const USBDM::Tmr2<0>;
+using tpm2_ch0             = const USBDM::Tpm2<0>;
+using tpm_D0               = const USBDM::Tpm2<0>;
+using tpm_ConRx            = const USBDM::Tpm2<0>;
 #endif
 #if (PTA2_SIG_SEL == 3)
-using tmr2_ch1             = const USBDM::Tmr2<1>;
-using tmr_D1               = const USBDM::Tmr2<1>;
-using tmr_ConTx            = const USBDM::Tmr2<1>;
+using tpm2_ch1             = const USBDM::Tpm2<1>;
+using tpm_D1               = const USBDM::Tpm2<1>;
+using tpm_ConTx            = const USBDM::Tpm2<1>;
 #endif
 #if (PTB2_SIG_SEL == 3)
-using tmr2_ch0             = const USBDM::Tmr2<0>;
-using tmr_A2               = const USBDM::Tmr2<0>;
+using tpm2_ch0             = const USBDM::Tpm2<0>;
+using tpm_A2               = const USBDM::Tpm2<0>;
 #endif
 #if (PTB3_SIG_SEL == 3)
-using tmr2_ch1             = const USBDM::Tmr2<1>;
-using tmr_A3               = const USBDM::Tmr2<1>;
+using tpm2_ch1             = const USBDM::Tpm2<1>;
+using tpm_A3               = const USBDM::Tpm2<1>;
 #endif
 #if (PTB18_SIG_SEL == 3)
-using tmr2_ch0             = const USBDM::Tmr2<0>;
-using tmr_LED_RED          = const USBDM::Tmr2<0>;
+using tpm2_ch0             = const USBDM::Tpm2<0>;
+using tpm_LED_RED          = const USBDM::Tpm2<0>;
 #endif
 #if (PTB19_SIG_SEL == 3)
-using tmr2_ch1             = const USBDM::Tmr2<1>;
-using tmr_LED_GREEN        = const USBDM::Tmr2<1>;
+using tpm2_ch1             = const USBDM::Tpm2<1>;
+using tpm_LED_GREEN        = const USBDM::Tpm2<1>;
 #endif
 #if (PTE22_SIG_SEL == 3)
-using tmr2_ch0             = const USBDM::Tmr2<0>;
-using tmr_A9               = const USBDM::Tmr2<0>;
+using tpm2_ch0             = const USBDM::Tpm2<0>;
+using tpm_A9               = const USBDM::Tpm2<0>;
 #endif
 #if (PTE23_SIG_SEL == 3)
-using tmr2_ch1             = const USBDM::Tmr2<1>;
-using tmr_A8               = const USBDM::Tmr2<1>;
+using tpm2_ch1             = const USBDM::Tpm2<1>;
+using tpm_A8               = const USBDM::Tpm2<1>;
 #endif
 /**
  * @}
@@ -584,7 +584,7 @@ template<uint8_t i2cPinIndex> using I2c0Pcr =
  * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
  */
 template<uint8_t i2cPinIndex> using I2c0Gpio =
-   Digital_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
              getGpioAddress(i2cPinIndex,I2c0Info),   getGpioBit(i2cPinIndex,I2c0Info)>;
 using i2c0_SCLPcr    = const USBDM::I2c0Pcr<0>;
 using i2c0_SCLGpio   = const USBDM::I2c0Gpio<0>;
@@ -622,7 +622,7 @@ template<uint8_t i2cPinIndex> using I2c1Pcr =
  * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
  */
 template<uint8_t i2cPinIndex> using I2c1Gpio =
-   Digital_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
              getGpioAddress(i2cPinIndex,I2c1Info),   getGpioBit(i2cPinIndex,I2c1Info)>;
 using i2c1_SCLPcr    = const USBDM::I2c1Pcr<0>;
 using i2c1_SCLGpio   = const USBDM::I2c1Gpio<0>;

@@ -10,6 +10,7 @@
 
 #include <stddef.h>
 #include "derivative.h"
+#include "bme.h"
 #include "pin_mapping.h"
 
 /*
@@ -51,7 +52,6 @@
 #ifdef SIM_SCGC5_PORTF_MASK
 #define PORTF_CLOCK_MASK  SIM_SCGC5_PORTF_MASK
 #define PORTF_CLOCK_REG   SCGC5
-#define PORTF_GPIO_FN     FIXED_GPIO_FN
 #endif
 #endif
 
@@ -141,13 +141,15 @@ public:
     * Enable clock to port
     */
    static void enableClock() {
-      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
+      bmeOr(SIM->FIXED_PORT_CLOCK_REG, clockMask);
+//      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
    }
    /**
     * Disable clock to port
     */
    static void disableClock() {
-      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
+      bmeAnd(SIM->FIXED_PORT_CLOCK_REG, ~clockMask);
+//      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
    }
 };
 
@@ -170,16 +172,27 @@ static constexpr uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
  */
 static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
 
+#ifndef PORT_PCR_ODE_MASK
+// Some devices don't have ODE function on pin
+// The open-drain mode is automatically selected when I2C function is selected for the pin
+#define PORT_PCR_ODE_MASK 0
+#endif
+/**
+ * Default PCR setting for I2C pins (excluding multiplexor value)
+ * High drive strength + Pull-up + Opendrain (if available)
+ */
+static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
+
 /**
  * @brief Template representing a pin with Digital I/O capability
  *
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::Digital_T<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
+ * USBDM::Gpio_T<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
  *
  * // Set as digital output
- * pta3.setDigitalOutput();
+ * pta3.setOutput();
  *
  * // Set pin high
  * pta3.set();
@@ -197,7 +210,7 @@ static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
  * pta3.write(false);
  *
  * // Set as digital input
- * pta3.setDigitalInput();
+ * pta3.setInput();
  *
  * // Read pin as boolean value
  * bool x = pta3.read();
@@ -206,16 +219,36 @@ static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
  *
  * @tparam portClockMask   Mask for SIM clock register associated with this GPIO
  * @tparam port            PORT hardware associated with this GPIO (for PCR access)
- * @tparam pcrFn           PCR mux value to map the GPIO function to the pin
+ * @tparam defPcrValue     Default value for PCR including mux value
  * @tparam gpio            GPIO hardware
  * @tparam bitNum          Bit number in the port
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t bitNum> class Digital_T {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t defPcrValue, uint32_t gpio, const uint32_t bitNum> class Gpio_T {
 
 public:
-   using Pcr = Pcr_T<portClockMask, port+offsetof(PORT_Type,PCR[bitNum]), PORT_PCR_MUX(pcrFn)|DEFAULT_PCR>; //!< PCR information
+   using Pcr = Pcr_T<portClockMask, pcrReg, defPcrValue>; //!< PCR information
 
 public:
+   /**
+    * Set pin as digital output
+    *
+    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
+    */
+   static void setOutput(uint32_t pcrValue=defPcrValue) {
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(defPcrValue&PORT_PCR_MUX_MASK));
+      bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, 1<<bitNum);
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
+   }
+   /**
+    * Set pin as digital input
+    *
+    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
+    */
+   static void setInput(uint32_t pcrValue=defPcrValue) {
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(defPcrValue&PORT_PCR_MUX_MASK));
+      bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~(1<<bitNum));
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
+   }
    /**
     * Toggle pin
     */
@@ -235,35 +268,12 @@ public:
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PCOR = (1<<bitNum);
    }
    /**
-    * Set pin as digital output
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
-    */
-   static void setOutput(uint32_t pcrValue=DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn));
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
-   }
-   /**
-    * Set pin as digital input
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
-    */
-   static void setInput(uint32_t pcrValue=DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn));
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
-   }
-   /**
     * Write boolean value to digital output
     *
-    * @param value high/low value
+    * @param value true/false value
     */
    static void write(bool value) {
-      if (value) {
-         set();
-      }
-      else {
-         clear();
-      }
+      bmeInsert(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR, bitNum, 1, (value!=0));
    }
    /**
     * Read digital input as boolean
@@ -271,12 +281,12 @@ public:
     * @return true/false reflecting pin value
     */
    static bool read() {
-      return (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR & (1<<bitNum));
+      return bmeExtract(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR, bitNum, 1);
    }
 };
 #ifdef PORTA_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOA bits. See @ref Digital_T
+ * @brief Convenience template for GPIOA bits. See @ref Gpio_T
  *
  * <b>Usage</b>
  * @code
@@ -284,7 +294,7 @@ public:
  * GpioA<3> pta3
  *
  * // Set as digital output
- * pta3.setDigitalOutput();
+ * pta3.setOutput();
  *
  * // Set pin high
  * pta3.set();
@@ -302,7 +312,7 @@ public:
  * pta3.write(false);
  *
  * // Set as digital input
- * pta3.setDigitalInput();
+ * pta3.setInput();
  *
  * // Read pin as boolean value
  * bool x = pta3.read();
@@ -310,11 +320,11 @@ public:
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FIXED_GPIO_FN, GPIOA_BasePtr, bitNum>;
+template<int bitNum> using GpioA = Gpio_T<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOA_BasePtr, bitNum>;
 #endif
 #ifdef PORTB_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOB bits. See @ref Digital_T
+ * @brief Convenience template for GPIOB bits. See @ref Gpio_T
  *
  * <b>Usage</b>
  * @code
@@ -322,7 +332,7 @@ template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FI
  * GpioB<3> ptb3
  *
  * // Set as digital output
- * ptb3.setDigitalOutput();
+ * ptb3.setOutput();
  *
  * // Set pin high
  * ptb3.set();
@@ -340,7 +350,7 @@ template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FI
  * ptb3.write(false);
  *
  * // Set as digital input
- * ptb3.setDigitalInput();
+ * ptb3.setInput();
  *
  * // Read pin as boolean value
  * bool x = ptb3.read();
@@ -348,11 +358,11 @@ template<int bitNum> using GpioA = Digital_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FIXED_GPIO_FN, GPIOB_BasePtr, bitNum>;
+template<int bitNum> using GpioB = Gpio_T<PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOB_BasePtr, bitNum>;
 #endif
 #ifdef PORTC_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOC bits. See @ref Digital_T
+ * @brief Convenience template for GPIOC bits. See @ref Gpio_T
  *
  * <b>Usage</b>
  * @code
@@ -360,7 +370,7 @@ template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FI
  * GpioC<3> ptc3
  *
  * // Set as digital output
- * ptc3.setDigitalOutput();
+ * ptc3.setOutput();
  *
  * // Set pin high
  * ptc3.set();
@@ -378,7 +388,7 @@ template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FI
  * ptc3.write(false);
  *
  * // Set as digital input
- * ptc3.setDigitalInput();
+ * ptc3.setInput();
  *
  * // Read pin as boolean value
  * bool x = ptc3.read();
@@ -386,11 +396,11 @@ template<int bitNum> using GpioB = Digital_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FIXED_GPIO_FN, GPIOC_BasePtr, bitNum>;
+template<int bitNum> using GpioC = Gpio_T<PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOC_BasePtr, bitNum>;
 #endif
 #ifdef PORTD_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOD bits. See @ref Digital_T
+ * @brief Convenience template for GPIOD bits. See @ref Gpio_T
  *
  * @code
  * <b>Usage</b>
@@ -398,7 +408,7 @@ template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FI
  * GpioD<3> ptd3
  *
  * // Set as digital output
- * ptd3.setDigitalOutput();
+ * ptd3.setOutput();
  *
  * // Set pin high
  * ptd3.set();
@@ -416,7 +426,7 @@ template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FI
  * ptd3.write(false);
  *
  * // Set as digital input
- * ptd3.setDigitalInput();
+ * ptd3.setInput();
  *
  * // Read pin as boolean value
  * bool x = ptd3.read();
@@ -424,11 +434,11 @@ template<int bitNum> using GpioC = Digital_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FIXED_GPIO_FN, GPIOD_BasePtr, bitNum>;
+template<int bitNum> using GpioD = Gpio_T<PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOD_BasePtr, bitNum>;
 #endif
 #ifdef PORTE_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOE bits. See @ref Digital_T
+ * @brief Convenience template for GPIOE bits. See @ref Gpio_T
  *
  * <b>Usage</b>
  * @code
@@ -436,7 +446,7 @@ template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FI
  * GpioE<3> pte3
  *
  * // Set as digital output
- * pte3.setDigitalOutput();
+ * pte3.setOutput();
  *
  * // Set pin high
  * pte3.set();
@@ -454,7 +464,7 @@ template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FI
  * pte3.write(false);
  *
  * // Set as digital input
- * pte3.setDigitalInput();
+ * pte3.setInput();
  *
  * // Read pin as boolean value
  * bool x = pte3.read();
@@ -462,11 +472,11 @@ template<int bitNum> using GpioD = Digital_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FIXED_GPIO_FN, GPIOE_BasePtr, bitNum>;
+template<int bitNum> using GpioE = Gpio_T<PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOE_BasePtr, bitNum>;
 #endif
 #ifdef PORTF_CLOCK_MASK
 /**
- * @brief Convenience template for GPIOF bits. See @ref Digital_T
+ * @brief Convenience template for GPIOF bits. See @ref Gpio_T
  *
  * <b>Usage</b>
  * @code
@@ -474,7 +484,7 @@ template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FI
  * GpioF<3> ptf3
  *
  * // Set as digital output
- * ptf3.setDigitalOutput();
+ * ptf3.setOutput();
  *
  * // Set pin high
  * ptf3.set();
@@ -492,7 +502,7 @@ template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FI
  * ptf3.write(false);
  *
  * // Set as digital input
- * ptf3.setDigitalInput();
+ * ptf3.setInput();
  *
  * // Read pin as boolean value
  * bool x = ptf3.read();
@@ -500,9 +510,8 @@ template<int bitNum> using GpioE = Digital_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FI
  *
  * @tparam bitNum        Bit number in the port
  */
-template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN, GPIOF_BasePtr, bitNum>;
+template<int bitNum> using GpioF = Gpio_T<PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[bitNum]), GPIO_DEFAULT_PCR, GPIOF_BasePtr, bitNum>;
 #endif
-
 /**
  * @brief Template representing a field with a port
  *
@@ -512,7 +521,7 @@ template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PO
  * Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, GPIOA_BasePtr, 6, 3> pta6_3;
  *
  * // Set as digital output
- * pta6_3.setDigitalOutput();
+ * pta6_3.setOutput();
  *
  * // Write value to field
  * pta6_3.write(0x53);
@@ -527,7 +536,7 @@ template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PO
  * pta6_3.bitSet(0x3);
  *
  * // Set as digital input
- * pta6_3.setDigitalInput();
+ * pta6_3.setInput();
  *
  * // Read pin as int value
  * int x = pta6_3.read();
@@ -535,12 +544,17 @@ template<int bitNum> using GpioF = Digital_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PO
  *
  * @tparam clockMask      Mask for SIM clock register associated with this GPIO
  * @tparam port           PORT hardware associated with this GPIO (for PCR access)
+ * @tparam defPcrValue    Default value for PCR including mux value
  * @tparam gpio           GPIO hardware
  * @tparam left           Bit number of leftmost bit in port (inclusive)
  * @tparam right          Bit number of rightmost bit in port (inclusive)
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t pcrFn, uint32_t gpio, const uint32_t left, const uint32_t right> class Field_T {
+template<uint32_t portClockMask, uint32_t port, uint32_t defPcrValue, uint32_t gpio, const uint32_t left, const uint32_t right> class Field_T {
 private:
+   /**
+    * Mask for the bits being manipulated
+    */
+   static constexpr uint32_t    MASK = ((1<<(left-right+1))-1)<<right;
    /**
     * Utility function to set multiple PCRs using GPCLR & GPCHR
     *
@@ -548,21 +562,38 @@ private:
     */
    static void setPCRs(uint32_t pcrValue) {
       // Enable clock to GPCLR & GPCHR
-      SIM->FIXED_PORT_CLOCK_REG |= portClockMask;
+//      SIM->FIXED_PORT_CLOCK_REG |= portClockMask;
+      bmeOr(SIM->FIXED_PORT_CLOCK_REG, portClockMask);
 
       // Include the if's as I expect one branch to be removed by optimisation unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
-         reinterpret_cast<volatile PORT_Type*>(port)->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn);
+         reinterpret_cast<volatile PORT_Type*>(port)->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|(defPcrValue&PORT_PCR_MUX_MASK);
       }
       if ((MASK&~0xFFFFUL) != 0) {
-         reinterpret_cast<volatile PORT_Type*>(port)->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pcrFn);
+         reinterpret_cast<volatile PORT_Type*>(port)->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|(defPcrValue&PORT_PCR_MUX_MASK);
       }
    }
 public:
    /**
-    * Mask for the bits being manipulated
+    * Set pin as digital output
+    *
+    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static const uint32_t    MASK = ((1<<(left-right+1))-1)<<right;
+   static void setOutput(uint32_t pcrValue=defPcrValue) {
+      setPCRs(pcrValue);
+      bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, MASK);
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= MASK;
+   }
+   /**
+    * Set pin as digital input
+    *
+    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
+    */
+   static void setInput(uint32_t pcrValue=defPcrValue) {
+      setPCRs(pcrValue);
+      bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~MASK);
+//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~MASK;
+   }
    /**
     * Set bits in field
     *
@@ -580,30 +611,13 @@ public:
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PCOR = (mask<<right)&MASK;
    }
    /**
-    * Set pin as digital output
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
-    */
-   static void setOutput(uint32_t pcrValue=DEFAULT_PCR) {
-      setPCRs(pcrFn);
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= MASK;
-   }
-   /**
-    * Set pin as digital input
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
-    */
-   static void setInput(uint32_t pcrValue=DEFAULT_PCR) {
-      setPCRs(pcrFn);
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~MASK;
-   }
-   /**
     * Read field
     *
     * @return value from field
     */
    static uint32_t read() {
-      return ((reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & MASK)>>right;
+      return bmeExtract(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR, right, left-right+1);
+//      return ((reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & MASK)>>right;
    }
    /**
     * Write field
@@ -611,8 +625,9 @@ public:
     * @param value to insert as field
     */
    static void write(uint32_t value) {
-      uint32_t preserved = (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & ~MASK;
-      (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR) = preserved | ((value<<right)&MASK);
+      bmeInsert(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR, right, left-right+1, value);
+//      uint32_t preserved = (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & ~MASK;
+//      (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR) = preserved | ((value<<right)&MASK);
    }
 };
 #ifdef PORTA_CLOCK_MASK
@@ -625,7 +640,7 @@ public:
  * GpioAField<6,3> ptb12_4
  *
  * // Set as digital output
- * pta6_3.setDigitalOutput();
+ * pta6_3.setOutput();
  *
  * // Write value to field
  * pta6_3.write(0x53);
@@ -640,7 +655,7 @@ public:
  * pta6_3.bitSet(0x3);
  *
  * // Set as digital input
- * pta6_3.setDigitalInput();
+ * pta6_3.setInput();
  *
  * // Read pin as int value
  * int x = pta6_3.read();
@@ -649,7 +664,7 @@ public:
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, FIXED_GPIO_FN,  GPIOA_BasePtr, left, right>;
+template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, GPIO_DEFAULT_PCR, GPIOA_BasePtr, left, right>;
 #endif
 #ifdef PORTB_CLOCK_MASK
 /**
@@ -661,7 +676,7 @@ template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA
  * GpioBField<6,3> ptb12_4
  *
  * // Set as digital output
- * ptb6_3.setDigitalOutput();
+ * ptb6_3.setOutput();
  *
  * // Write value to field
  * ptb6_3.write(0x53);
@@ -676,7 +691,7 @@ template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA
  * ptb6_3.bitSet(0x3);
  *
  * // Set as digital input
- * ptb6_3.setDigitalInput();
+ * ptb6_3.setInput();
  *
  * // Read pin as int value
  * int x = ptb6_3.read();
@@ -685,7 +700,7 @@ template<int left, int right> using GpioAField = Field_T<PORTA_CLOCK_MASK, PORTA
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB_BasePtr, FIXED_GPIO_FN,  GPIOB_BasePtr, left, right>;
+template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB_BasePtr, GPIO_DEFAULT_PCR, GPIOB_BasePtr, left, right>;
 #endif
 #ifdef PORTC_CLOCK_MASK
 /**
@@ -697,7 +712,7 @@ template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB
  * GpioCField<6,3> ptc12_4
  *
  * // Set as digital output
- * ptc6_3.setDigitalOutput();
+ * ptc6_3.setOutput();
  *
  * // Write value to field
  * ptc6_3.write(0x53);
@@ -712,7 +727,7 @@ template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB
  * ptc6_3.bitSet(0x3);
  *
  * // Set as digital input
- * ptc6_3.setDigitalInput();
+ * ptc6_3.setInput();
  *
  * // Read pin as int value
  * int x = ptc6_3.read();
@@ -721,7 +736,7 @@ template<int left, int right> using GpioBField = Field_T<PORTB_CLOCK_MASK, PORTB
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC_BasePtr, FIXED_GPIO_FN,  GPIOC_BasePtr, left, right>;
+template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC_BasePtr, GPIO_DEFAULT_PCR, GPIOC_BasePtr, left, right>;
 #endif
 #ifdef PORTD_CLOCK_MASK
 /**
@@ -733,7 +748,7 @@ template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC
  * GpioDField<6,3> ptd12_4
  *
  * // Set as digital output
- * ptd6_3.setDigitalOutput();
+ * ptd6_3.setOutput();
  *
  * // Write value to field
  * ptd6_3.write(0x53);
@@ -748,7 +763,7 @@ template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC
  * ptd6_3.bitSet(0x3);
  *
  * // Set as digital input
- * ptd6_3.setDigitalInput();
+ * ptd6_3.setInput();
  *
  * // Read pin as int value
  * int x = ptd6_3.read();
@@ -757,7 +772,7 @@ template<int left, int right> using GpioCField = Field_T<PORTC_CLOCK_MASK, PORTC
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD_BasePtr, FIXED_GPIO_FN,  GPIOD_BasePtr, left, right>;
+template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD_BasePtr, GPIO_DEFAULT_PCR, GPIOD_BasePtr, left, right>;
 #endif
 #ifdef PORTE_CLOCK_MASK
 /**
@@ -769,7 +784,7 @@ template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD
  * GpioEField<6,3> pte12_4
  *
  * // Set as digital output
- * pte6_3.setDigitalOutput();
+ * pte6_3.setOutput();
  *
  * // Write value to field
  * pte6_3.write(0x53);
@@ -784,7 +799,7 @@ template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD
  * pte6_3.bitSet(0x3);
  *
  * // Set as digital input
- * pte6_3.setDigitalInput();
+ * pte6_3.setInput();
  *
  * // Read pin as int value
  * int x = pte6_3.read();
@@ -793,7 +808,7 @@ template<int left, int right> using GpioDField = Field_T<PORTD_CLOCK_MASK, PORTD
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE_BasePtr, FIXED_GPIO_FN,  GPIOE_BasePtr, left, right>;
+template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE_BasePtr, GPIO_DEFAULT_PCR, GPIOE_BasePtr, left, right>;
 #endif
 #ifdef PORTF_CLOCK_MASK
 /**
@@ -802,10 +817,10 @@ template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE
  * <b>Usage</b>
  * @code
  * // Instantiate for bit 6 down to 3 of port
- * GpioFField<6,3> ptf12_4
+ * GpioFField<6,3> ptf6_3
  *
  * // Set as digital output
- * ptf6_3.setDigitalOutput();
+ * ptf6_3.setOutput();
  *
  * // Write value to field
  * ptf6_3.write(0x53);
@@ -820,7 +835,7 @@ template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE
  * ptf6_3.bitSet(0x3);
  *
  * // Set as digital input
- * ptf6_3.setDigitalInput();
+ * ptf6_3.setInput();
  *
  * // Read pin as int value
  * int x = ptf6_3.read();
@@ -853,7 +868,7 @@ static constexpr uint32_t    ADC_DEFAULT_PCR = ADC_PORT_FN;
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
  */
-enum ADC_Resolution {
+enum Adc_Resolution {
    resolution_8bit_se    = ADC_CFG1_MODE(0),
    resolution_10bit_se   = ADC_CFG1_MODE(2),
    resolution_12bit_se   = ADC_CFG1_MODE(1),
@@ -870,7 +885,7 @@ enum ADC_Resolution {
  * Example
  * @code
  *  // Instantiate ADC (Assumes adc0_se8 is mapped to PORTB.0)
- *  const Analogue_T<PORTB_CLOCK_MASK,
+ *  const Adc_T<PORTB_CLOCK_MASK,
  *                   PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),
  *                   ADC0_BasePtr,
  *                   SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG),
@@ -893,7 +908,7 @@ enum ADC_Resolution {
  * @tparam adcClockMask  Mask for ADC clock register
  * @tparam adcChannel    ADC channel
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t adc, uint32_t adcClockReg, uint32_t adcClockMask, uint8_t adcChannel> class Analogue_T {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t adc, uint32_t adcClockReg, uint32_t adcClockMask, uint8_t adcChannel> class Adc_T {
 public:
    using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(ADC_PORT_FN)|DEFAULT_PCR>; //!< PCR information
 
@@ -943,23 +958,23 @@ public:
  */
 enum Tmr_ChannelMode {
    //! Capture rising edge
-   tpm_inputCaptureRisingEdge  = TPM_CnSC_ELSA_MASK,
+   tpm_inputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
    //! Capture falling edge
-   tpm_inputCaptureFallingEdge = TPM_CnSC_ELSB_MASK,
+   tpm_inputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
    //! Capture both rising and falling edges
-   tpm_inputCaptureEitherEdge  = TPM_CnSC_ELSB_MASK|TPM_CnSC_ELSA_MASK,
+   tpm_inputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
    //! Output compare operation
-   tpm_outputCompare           = TPM_CnSC_MSA_MASK,
+   tpm_outputCompare           = TPM_CnSC_MS(1),
    //! Toggle pin on output compare
-   tpm_outputCompareToggle     = TPM_CnSC_MSA_MASK|TPM_CnSC_ELSA_MASK,
+   tpm_outputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
    //! Clear pin on output compare
-   tpm_outputCompareClear      = TPM_CnSC_MSA_MASK|TPM_CnSC_ELSB_MASK,
+   tpm_outputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
    //! Set pin on output compare
-   tpm_outputCompareSet        = TPM_CnSC_MSA_MASK|TPM_CnSC_ELSB_MASK|TPM_CnSC_ELSA_MASK,
+   tpm_outputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
    //! PWM with high-true pulses
-   tpm_pwmHighTruePulses       = TPM_CnSC_MSB_MASK|TPM_CnSC_ELSB_MASK,
+   tpm_pwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
    //! PWM with low-true pulses
-   tpm_pwmLowTruePulses        = TPM_CnSC_MSB_MASK|TPM_CnSC_ELSA_MASK,
+   tpm_pwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
 } ;
 
 /**
@@ -978,7 +993,7 @@ enum Tmr_Mode {
  * Example
  * @code
  * // Instantiate the tpm (for FTM0)
- * const USBDM::FtmBase_T<TPM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM0_CLOCK_REG), TPM0_CLOCK_MASK> Ftm0;
+ * const USBDM::TpmBase_T<TPM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM0_CLOCK_REG), TPM0_CLOCK_MASK> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
  * tpm0.setMode(200, USBDM::tpm_leftAlign);
@@ -991,17 +1006,16 @@ enum Tmr_Mode {
  * @tparam tpmClockReg   SIM Clock register for TPM
  * @tparam tpmClockMask  Mask for TPM clock register
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t tpmMuxFn, uint32_t tpm, uint32_t tpmClockReg, uint32_t tpmClockMask, uint32_t tpmChannel> class Tpm_T {
+template<uint32_t tpm, uint32_t tpmClockReg, uint32_t tpmClockMask, uint16_t scValue> class TpmBase_T {
 public:
 
    /**
     * Configure Timer operation
     *
     * @param period  Period in timer ticks
-    * @param mode    Mode of operation see @ref Pwm_Mode
+    * @param mode    Mode of operation see @ref Tmr_Mode
     */
-   static void setMode(int period /* ticks */, Pwm_Mode mode=tpm_centreAlign) {
-      Pcr::setPCR(PORT_PCR_MUX(tpmMuxFn)|DEFAULT_PCR);
+   static void setMode(int period /* ticks */, Tmr_Mode mode=tpm_leftAlign) {
 
       // Enable clock to timer
       *reinterpret_cast<volatile uint32_t*>(tpmClockReg) |= tpmClockMask;
@@ -1030,10 +1044,10 @@ public:
       // Common registers
       reinterpret_cast<volatile TPM_Type*>(tpm)->SC = TPM_SC_PS(0); // Disable FTM so register changes are immediate
 
-      if ((reinterpret_cast<volatile TPM_Type*>(tpm)->SC&FTM_SC_CPWMS_MASK) != 0) {
+      if ((reinterpret_cast<volatile TPM_Type*>(tpm)->SC&TPM_SC_CPWMS_MASK) != 0) {
          reinterpret_cast<volatile TPM_Type*>(tpm)->MOD = period/2;
          // Centre aligned PWM with CPWMS not selected
-         reinterpret_cast<volatile TPM_Type*>(tpm)->SC  = scValue|FTM_SC_CPWMS_MASK;
+         reinterpret_cast<volatile TPM_Type*>(tpm)->SC  = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
          reinterpret_cast<volatile TPM_Type*>(tpm)->MOD = period-1;
@@ -1048,32 +1062,32 @@ public:
  *
  * Example
  * @code
- * // Instantiate the ftm channel (for FTM0 CH6)
- * const USBDM::Ftm0<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),   3,  6>   ftm0_ch6;
+ * // Instantiate the tpm channel (for FTM0 CH6)
+ * const USBDM::Ftm0<PORTA_CLOCK_MASK, PORTA_BasePtr+offsetof(PORT_Type,PCR[1]),   3,  6>   tpm0_ch6;
  *
  * // Initialise PWM with initial period and alignment
- * ftm0_ch6.setPwmOutput(200, PwmIO::ftm_leftAlign);
+ * tpm0_ch6.setPwmOutput(200, PwmIO::tpm_leftAlign);
  *
  * // Change period (in ticks)
- * ftm0_ch6.setPeriod(500);
+ * tpm0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * ftm0_ch6.setDutyCycle(45);
+ * tpm0_ch6.setDutyCycle(45);
  * @endcode
  *
  * @tparam portClockMask Mask for clock register for PORT associated with this TPM
  * @tparam pcrReg        PCR for the PORT pin associated with this TPM
- * @tparam ftmMuxFn      PCR multiplexer selection to map pin to TPM
- * @tparam ftm           TPM hardware
- * @tparam ftmClockReg   SIM Clock register for TPM
- * @tparam ftmClockMask  Mask for TPM clock register
- * @tparam ftmChannel    TPM channel
+ * @tparam tpmMuxFn      PCR multiplexer selection to map pin to TPM
+ * @tparam tpm           TPM hardware
+ * @tparam tpmClockReg   SIM Clock register for TPM
+ * @tparam tpmClockMask  Mask for TPM clock register
+ * @tparam tpmChannel    TPM channel
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue, uint32_t ftmChannel> class Ftm_T :
-      public FtmBase_T<ftm, ftmClockReg, ftmClockMask, scValue> {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t tpmMuxFn, uint32_t tpm, uint32_t tpmClockReg, uint32_t tpmClockMask, uint16_t scValue, uint32_t tpmChannel> class Tpm_T :
+      public TpmBase_T<tpm, tpmClockReg, tpmClockMask, scValue> {
 
 public:
-   using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(ftmMuxFn)|DEFAULT_PCR>;   //!< PCR information
+   using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(tpmMuxFn)|DEFAULT_PCR>;   //!< PCR information
 
    /**
     * Set PWM duty cycle
@@ -1141,16 +1155,83 @@ constexpr uint32_t getPcrMux(unsigned channel, const PcrInfo info[]) {
    return (channel<=32)?info[channel].muxValue:(1/0);
 #pragma GCC diagnostic pop
 }
-
+/**
+ * @brief Get address of GPIO associated with peripheral pin
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel/Pin e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return GPIO address e.g. GPIOC_BasePtr
+ */
+constexpr uint32_t getGpioAddress(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].gpioAddress:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Get GPIO bit number associated with a peripheral channel.
+ * Looks up value in peripheral specific table
+ *
+ * @param channel Channel e.g. FTM0_CH3 => 3, ADC2_Ch1 => 1
+ * @param info    Table of PCR information for peripheral (constexpr array)
+ *
+ * @return  Bit number of GPIO bit
+ */
+constexpr uint32_t getGpioBit(unsigned channel, const PcrInfo info[]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
+   return (channel<=32)?info[channel].gpioBit:(1/0);
+#pragma GCC diagnostic pop
+}
+/**
+ * @brief Templated function to set a PCR to the default value
+ *
+ * @tparam  Last PCR to modify
+ */
 template<typename Last>
 void processPcrs() {
    Last::setPCR();
 }
 
+/**
+ * @brief Templated function to set a collection of PCRs to the default value
+ *
+ * @tparam  Pcr1 PCR to modify
+ * @tparam  Pcr2 PCR to modify
+ * @tparam  Rest remaining PCRs to modify
+ */
 template<typename Pcr1, typename  Pcr2, typename  ... Rest>
 void processPcrs() {
    processPcrs<Pcr1>();
    processPcrs<Pcr2, Rest...>();
+}
+/**
+ * @brief Templated function to set a PCR to the default value
+ *
+ * @param   pcrValue PCR value to set
+ *
+ * @tparam  Last PCR to modify
+ */
+template<typename Last>
+void processPcrs(uint32_t pcrValue) {
+   Last::setPCR(pcrValue);
+}
+
+/**
+ * @brief Templated function to set a collection of PCRs to the default value
+ *
+ * @param pcrValue PCR value to set
+ *
+ * @tparam  Pcr1 PCR to modify
+ * @tparam  Pcr2 PCR to modify
+ * @tparam  Rest remaining PCRs to modify
+ */
+template<typename Pcr1, typename  Pcr2, typename  ... Rest>
+void processPcrs(uint32_t pcrValue) {
+   processPcrs<Pcr1>(pcrValue);
+   processPcrs<Pcr2, Rest...>(pcrValue);
 }
 
 } // End namespace USBDM

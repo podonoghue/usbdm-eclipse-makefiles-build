@@ -42,7 +42,8 @@
 //     <0=> Default
 namespace USBDM {
 
-constexpr uint16_t FTM0_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+constexpr uint16_t FTM0_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+
 } // End namespace
 
 // </h>
@@ -73,7 +74,8 @@ constexpr uint16_t FTM0_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Default
 namespace USBDM {
 
-constexpr uint16_t FTM1_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+constexpr uint16_t FTM1_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+
 } // End namespace
 
 // </h>
@@ -104,7 +106,8 @@ constexpr uint16_t FTM1_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Default
 namespace USBDM {
 
-constexpr uint16_t FTM2_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+constexpr uint16_t FTM2_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+
 } // End namespace
 
 // </h>
@@ -135,7 +138,8 @@ constexpr uint16_t FTM2_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Default
 namespace USBDM {
 
-constexpr uint16_t FTM3_SC = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
+
 } // End namespace
 
 // </h>

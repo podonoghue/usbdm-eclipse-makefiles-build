@@ -40,7 +40,7 @@
 //     <6=> Divide by 64
 //     <7=> Divide by 128
 //     <0=> Default
-#define TPM0_SC              (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0))
+constexpr uint16_t TPM0_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 
 // </h>
 
@@ -68,7 +68,7 @@
 //     <6=> Divide by 64
 //     <7=> Divide by 128
 //     <0=> Default
-#define TPM1_SC              (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0))
+constexpr uint16_t TPM1_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 
 // </h>
 
@@ -96,7 +96,7 @@
 //     <6=> Divide by 64
 //     <7=> Divide by 128
 //     <0=> Default
-#define TPM2_SC              (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0))
+constexpr uint16_t TPM2_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 
 // </h>
 

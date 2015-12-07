@@ -178,7 +178,7 @@ using gpioE_26             = const USBDM::GpioE<26>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc0 =
-   Analogue_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
 using adc0_se19            = const USBDM::Adc0<19>;
 using adc_J24_3            = const USBDM::Adc0<19>;
@@ -275,7 +275,7 @@ using adc0_se18            = const USBDM::Adc0<18>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc1 =
-   Analogue_T<getPortClockMask(adcChannel,Adc1Info), getPcrReg(adcChannel,Adc1Info), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc1Info), getPcrReg(adcChannel,Adc1Info), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
 
 using adc1_se19            = const USBDM::Adc1<19>;
 using adc_J24_7            = const USBDM::Adc1<19>;
@@ -354,7 +354,7 @@ using adc1_se7b            = const USBDM::Adc1<7>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc1a =
-   Analogue_T<getPortClockMask(adcChannel,Adc1aInfo), getPcrReg(adcChannel,Adc1aInfo), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc1aInfo), getPcrReg(adcChannel,Adc1aInfo), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
 
 #if (PTE0_SIG_SEL == 0)
 using adc1_se4a            = const USBDM::Adc1a<4>;
@@ -656,7 +656,7 @@ template<uint8_t i2cPinIndex> using I2c0Pcr =
  * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
  */
 template<uint8_t i2cPinIndex> using I2c0Gpio =
-   Digital_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
              getGpioAddress(i2cPinIndex,I2c0Info),   getGpioBit(i2cPinIndex,I2c0Info)>;
 using i2c0_SCLPcr    = const USBDM::I2c0Pcr<0>;
 using i2c0_SCLGpio   = const USBDM::I2c0Gpio<0>;
@@ -694,7 +694,7 @@ template<uint8_t i2cPinIndex> using I2c1Pcr =
  * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
  */
 template<uint8_t i2cPinIndex> using I2c1Gpio =
-   Digital_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
              getGpioAddress(i2cPinIndex,I2c1Info),   getGpioBit(i2cPinIndex,I2c1Info)>;
 using i2c1_SCLPcr    = const USBDM::I2c1Pcr<0>;
 using i2c1_SCLGpio   = const USBDM::I2c1Gpio<0>;
