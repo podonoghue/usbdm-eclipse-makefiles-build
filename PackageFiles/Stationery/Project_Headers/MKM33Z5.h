@@ -533,6 +533,195 @@ typedef struct {                                /*       CRC Structure          
  * @} */ /* End group CRC_Peripheral_access_layer_GROUP 
  */
 /**
+* @addtogroup DMA_Peripheral_access_layer_GROUP DMA Peripheral Access Layer
+* @brief C Struct for DMA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           DMA0 (file:DMA0_MKM)                 ================ */
+/* ================================================================================ */
+
+/**
+ * @brief DMA Controller
+ */
+/**
+* @addtogroup DMA_structs_GROUP DMA struct
+* @brief Struct for DMA
+* @{
+*/
+typedef struct {                                /*       DMA0 Structure                                               */
+   __I  uint32_t  RESERVED0[64];               
+   struct {
+      __IO uint32_t  SAR;                       /**< 0100: Source Address Register                                      */
+      __IO uint32_t  DAR;                       /**< 0104: Destination Address Register                                 */
+      union {                                   /**< 0100: (size=0004)                                                  */
+         __IO uint32_t  DSR_BCR;                /**< 0108: DMA Status / Byte Count Register                             */
+         struct {                               /**< 0100: (size=0004)                                                  */
+            __I  uint8_t   RESERVED0[3];       
+            __IO uint8_t   DSR;                 /**< 010B: DMA Status Register                                          */
+         };
+      };
+      __IO uint32_t  DCR;                       /**< 010C: DMA Control Register                                         */
+   } DMA[4];                                    /**< 0100: (cluster: size=0x0040, 64)                                   */
+} DMA_Type;
+
+/**
+ * @} */ /* End group DMA_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'DMA0' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup DMA_Register_Masks_GROUP DMA Register Masks
+* @brief Register Masks for DMA
+* @{
+*/
+/* ------- SAR Bit Fields                           ------ */
+/* ------- DAR Bit Fields                           ------ */
+/* ------- DSR_BCR Bit Fields                       ------ */
+#define DMA_DSR_BCR_BCR_MASK                     (0xFFFFFFUL << DMA_DSR_BCR_BCR_SHIFT)               /*!< DMA0_DSR_BCR: BCR Mask                  */
+#define DMA_DSR_BCR_BCR_SHIFT                    0                                                   /*!< DMA0_DSR_BCR: BCR Position              */
+#define DMA_DSR_BCR_BCR(x)                       (((uint32_t)(((uint32_t)(x))<<DMA_DSR_BCR_BCR_SHIFT))&DMA_DSR_BCR_BCR_MASK) /*!< DMA0_DSR_BCR                            */
+#define DMA_DSR_BCR_DONE_MASK                    (0x01UL << DMA_DSR_BCR_DONE_SHIFT)                  /*!< DMA0_DSR_BCR: DONE Mask                 */
+#define DMA_DSR_BCR_DONE_SHIFT                   24                                                  /*!< DMA0_DSR_BCR: DONE Position             */
+#define DMA_DSR_BCR_BSY_MASK                     (0x01UL << DMA_DSR_BCR_BSY_SHIFT)                   /*!< DMA0_DSR_BCR: BSY Mask                  */
+#define DMA_DSR_BCR_BSY_SHIFT                    25                                                  /*!< DMA0_DSR_BCR: BSY Position              */
+#define DMA_DSR_BCR_REQ_MASK                     (0x01UL << DMA_DSR_BCR_REQ_SHIFT)                   /*!< DMA0_DSR_BCR: REQ Mask                  */
+#define DMA_DSR_BCR_REQ_SHIFT                    26                                                  /*!< DMA0_DSR_BCR: REQ Position              */
+#define DMA_DSR_BCR_BED_MASK                     (0x01UL << DMA_DSR_BCR_BED_SHIFT)                   /*!< DMA0_DSR_BCR: BED Mask                  */
+#define DMA_DSR_BCR_BED_SHIFT                    28                                                  /*!< DMA0_DSR_BCR: BED Position              */
+#define DMA_DSR_BCR_BES_MASK                     (0x01UL << DMA_DSR_BCR_BES_SHIFT)                   /*!< DMA0_DSR_BCR: BES Mask                  */
+#define DMA_DSR_BCR_BES_SHIFT                    29                                                  /*!< DMA0_DSR_BCR: BES Position              */
+#define DMA_DSR_BCR_CE_MASK                      (0x01UL << DMA_DSR_BCR_CE_SHIFT)                    /*!< DMA0_DSR_BCR: CE Mask                   */
+#define DMA_DSR_BCR_CE_SHIFT                     30                                                  /*!< DMA0_DSR_BCR: CE Position               */
+/* ------- DSR Bit Fields                           ------ */
+#define DMA_DSR_DONE_MASK                        (0x01UL << DMA_DSR_DONE_SHIFT)                      /*!< DMA0_DSR: DONE Mask                     */
+#define DMA_DSR_DONE_SHIFT                       0                                                   /*!< DMA0_DSR: DONE Position                 */
+#define DMA_DSR_BSY_MASK                         (0x01UL << DMA_DSR_BSY_SHIFT)                       /*!< DMA0_DSR: BSY Mask                      */
+#define DMA_DSR_BSY_SHIFT                        1                                                   /*!< DMA0_DSR: BSY Position                  */
+#define DMA_DSR_REQ_MASK                         (0x01UL << DMA_DSR_REQ_SHIFT)                       /*!< DMA0_DSR: REQ Mask                      */
+#define DMA_DSR_REQ_SHIFT                        2                                                   /*!< DMA0_DSR: REQ Position                  */
+#define DMA_DSR_BED_MASK                         (0x01UL << DMA_DSR_BED_SHIFT)                       /*!< DMA0_DSR: BED Mask                      */
+#define DMA_DSR_BED_SHIFT                        4                                                   /*!< DMA0_DSR: BED Position                  */
+#define DMA_DSR_BES_MASK                         (0x01UL << DMA_DSR_BES_SHIFT)                       /*!< DMA0_DSR: BES Mask                      */
+#define DMA_DSR_BES_SHIFT                        5                                                   /*!< DMA0_DSR: BES Position                  */
+#define DMA_DSR_CE_MASK                          (0x01UL << DMA_DSR_CE_SHIFT)                        /*!< DMA0_DSR: CE Mask                       */
+#define DMA_DSR_CE_SHIFT                         6                                                   /*!< DMA0_DSR: CE Position                   */
+/* ------- DCR Bit Fields                           ------ */
+#define DMA_DCR_LCH2_MASK                        (0x03UL << DMA_DCR_LCH2_SHIFT)                      /*!< DMA0_DCR: LCH2 Mask                     */
+#define DMA_DCR_LCH2_SHIFT                       0                                                   /*!< DMA0_DCR: LCH2 Position                 */
+#define DMA_DCR_LCH2(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_DCR_LCH2_SHIFT))&DMA_DCR_LCH2_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_LCH1_MASK                        (0x03UL << DMA_DCR_LCH1_SHIFT)                      /*!< DMA0_DCR: LCH1 Mask                     */
+#define DMA_DCR_LCH1_SHIFT                       2                                                   /*!< DMA0_DCR: LCH1 Position                 */
+#define DMA_DCR_LCH1(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_DCR_LCH1_SHIFT))&DMA_DCR_LCH1_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_LINKCC_MASK                      (0x03UL << DMA_DCR_LINKCC_SHIFT)                    /*!< DMA0_DCR: LINKCC Mask                   */
+#define DMA_DCR_LINKCC_SHIFT                     4                                                   /*!< DMA0_DCR: LINKCC Position               */
+#define DMA_DCR_LINKCC(x)                        (((uint32_t)(((uint32_t)(x))<<DMA_DCR_LINKCC_SHIFT))&DMA_DCR_LINKCC_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_D_REQ_MASK                       (0x01UL << DMA_DCR_D_REQ_SHIFT)                     /*!< DMA0_DCR: D_REQ Mask                    */
+#define DMA_DCR_D_REQ_SHIFT                      7                                                   /*!< DMA0_DCR: D_REQ Position                */
+#define DMA_DCR_DMOD_MASK                        (0x0FUL << DMA_DCR_DMOD_SHIFT)                      /*!< DMA0_DCR: DMOD Mask                     */
+#define DMA_DCR_DMOD_SHIFT                       8                                                   /*!< DMA0_DCR: DMOD Position                 */
+#define DMA_DCR_DMOD(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_DCR_DMOD_SHIFT))&DMA_DCR_DMOD_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_SMOD_MASK                        (0x0FUL << DMA_DCR_SMOD_SHIFT)                      /*!< DMA0_DCR: SMOD Mask                     */
+#define DMA_DCR_SMOD_SHIFT                       12                                                  /*!< DMA0_DCR: SMOD Position                 */
+#define DMA_DCR_SMOD(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_DCR_SMOD_SHIFT))&DMA_DCR_SMOD_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_START_MASK                       (0x01UL << DMA_DCR_START_SHIFT)                     /*!< DMA0_DCR: START Mask                    */
+#define DMA_DCR_START_SHIFT                      16                                                  /*!< DMA0_DCR: START Position                */
+#define DMA_DCR_DSIZE_MASK                       (0x03UL << DMA_DCR_DSIZE_SHIFT)                     /*!< DMA0_DCR: DSIZE Mask                    */
+#define DMA_DCR_DSIZE_SHIFT                      17                                                  /*!< DMA0_DCR: DSIZE Position                */
+#define DMA_DCR_DSIZE(x)                         (((uint32_t)(((uint32_t)(x))<<DMA_DCR_DSIZE_SHIFT))&DMA_DCR_DSIZE_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_DINC_MASK                        (0x01UL << DMA_DCR_DINC_SHIFT)                      /*!< DMA0_DCR: DINC Mask                     */
+#define DMA_DCR_DINC_SHIFT                       19                                                  /*!< DMA0_DCR: DINC Position                 */
+#define DMA_DCR_SSIZE_MASK                       (0x03UL << DMA_DCR_SSIZE_SHIFT)                     /*!< DMA0_DCR: SSIZE Mask                    */
+#define DMA_DCR_SSIZE_SHIFT                      20                                                  /*!< DMA0_DCR: SSIZE Position                */
+#define DMA_DCR_SSIZE(x)                         (((uint32_t)(((uint32_t)(x))<<DMA_DCR_SSIZE_SHIFT))&DMA_DCR_SSIZE_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_SINC_MASK                        (0x01UL << DMA_DCR_SINC_SHIFT)                      /*!< DMA0_DCR: SINC Mask                     */
+#define DMA_DCR_SINC_SHIFT                       22                                                  /*!< DMA0_DCR: SINC Position                 */
+#define DMA_DCR_EADREQ_MASK                      (0x01UL << DMA_DCR_EADREQ_SHIFT)                    /*!< DMA0_DCR: EADREQ Mask                   */
+#define DMA_DCR_EADREQ_SHIFT                     23                                                  /*!< DMA0_DCR: EADREQ Position               */
+#define DMA_DCR_UMNSM_MASK                       (0x03UL << DMA_DCR_UMNSM_SHIFT)                     /*!< DMA0_DCR: UMNSM Mask                    */
+#define DMA_DCR_UMNSM_SHIFT                      24                                                  /*!< DMA0_DCR: UMNSM Position                */
+#define DMA_DCR_UMNSM(x)                         (((uint32_t)(((uint32_t)(x))<<DMA_DCR_UMNSM_SHIFT))&DMA_DCR_UMNSM_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_CHACR_MASK                       (0x03UL << DMA_DCR_CHACR_SHIFT)                     /*!< DMA0_DCR: CHACR Mask                    */
+#define DMA_DCR_CHACR_SHIFT                      26                                                  /*!< DMA0_DCR: CHACR Position                */
+#define DMA_DCR_CHACR(x)                         (((uint32_t)(((uint32_t)(x))<<DMA_DCR_CHACR_SHIFT))&DMA_DCR_CHACR_MASK) /*!< DMA0_DCR                                */
+#define DMA_DCR_AA_MASK                          (0x01UL << DMA_DCR_AA_SHIFT)                        /*!< DMA0_DCR: AA Mask                       */
+#define DMA_DCR_AA_SHIFT                         28                                                  /*!< DMA0_DCR: AA Position                   */
+#define DMA_DCR_CS_MASK                          (0x01UL << DMA_DCR_CS_SHIFT)                        /*!< DMA0_DCR: CS Mask                       */
+#define DMA_DCR_CS_SHIFT                         29                                                  /*!< DMA0_DCR: CS Position                   */
+#define DMA_DCR_ERQ_MASK                         (0x01UL << DMA_DCR_ERQ_SHIFT)                       /*!< DMA0_DCR: ERQ Mask                      */
+#define DMA_DCR_ERQ_SHIFT                        30                                                  /*!< DMA0_DCR: ERQ Position                  */
+#define DMA_DCR_EINT_MASK                        (0x01UL << DMA_DCR_EINT_SHIFT)                      /*!< DMA0_DCR: EINT Mask                     */
+#define DMA_DCR_EINT_SHIFT                       31                                                  /*!< DMA0_DCR: EINT Position                 */
+/**
+ * @} */ /* End group DMA_Register_Masks_GROUP 
+ */
+
+/* DMA0 - Peripheral instance base addresses */
+#define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
+#define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
+#define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
+* @brief C Struct for DMAMUX
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           DMAMUX (file:DMAMUX_4CH)             ================ */
+/* ================================================================================ */
+
+/**
+ * @brief DMA channel multiplexor
+ */
+/**
+* @addtogroup DMAMUX_structs_GROUP DMAMUX struct
+* @brief Struct for DMAMUX
+* @{
+*/
+typedef struct {                                /*       DMAMUX Structure                                             */
+   __IO uint8_t   CHCFG[4];                     /**< 0000: Channel Configuration Register                               */
+} DMAMUX_Type;
+
+/**
+ * @} */ /* End group DMAMUX_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'DMAMUX' Position & Mask macros                      ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup DMAMUX_Register_Masks_GROUP DMAMUX Register Masks
+* @brief Register Masks for DMAMUX
+* @{
+*/
+/* ------- CHCFG Bit Fields                         ------ */
+#define DMAMUX_CHCFG_SOURCE_MASK                 (0x3FUL << DMAMUX_CHCFG_SOURCE_SHIFT)               /*!< DMAMUX_CHCFG: SOURCE Mask               */
+#define DMAMUX_CHCFG_SOURCE_SHIFT                0                                                   /*!< DMAMUX_CHCFG: SOURCE Position           */
+#define DMAMUX_CHCFG_SOURCE(x)                   (((uint8_t)(((uint8_t)(x))<<DMAMUX_CHCFG_SOURCE_SHIFT))&DMAMUX_CHCFG_SOURCE_MASK) /*!< DMAMUX_CHCFG                            */
+#define DMAMUX_CHCFG_TRIG_MASK                   (0x01UL << DMAMUX_CHCFG_TRIG_SHIFT)                 /*!< DMAMUX_CHCFG: TRIG Mask                 */
+#define DMAMUX_CHCFG_TRIG_SHIFT                  6                                                   /*!< DMAMUX_CHCFG: TRIG Position             */
+#define DMAMUX_CHCFG_ENBL_MASK                   (0x01UL << DMAMUX_CHCFG_ENBL_SHIFT)                 /*!< DMAMUX_CHCFG: ENBL Mask                 */
+#define DMAMUX_CHCFG_ENBL_SHIFT                  7                                                   /*!< DMAMUX_CHCFG: ENBL Position             */
+/**
+ * @} */ /* End group DMAMUX_Register_Masks_GROUP 
+ */
+
+/* DMAMUX - Peripheral instance base addresses */
+#define DMAMUX_BasePtr                 0x40021000UL //!< Peripheral base address
+#define DMAMUX                         ((DMAMUX_Type *) DMAMUX_BasePtr) //!< Freescale base pointer
+#define DMAMUX_BASE_PTR                (DMAMUX) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
+ */
+/**
 * @addtogroup FTFA_Peripheral_access_layer_GROUP FTFA Peripheral Access Layer
 * @brief C Struct for FTFA
 * @{
@@ -1026,6 +1215,27 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C0_BasePtr                   0x40067000UL //!< Peripheral base address
 #define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
 #define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup I2C_Peripheral_access_layer_GROUP I2C Peripheral Access Layer
+* @brief C Struct for I2C
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           I2C1 (derived from I2C0)             ================ */
+/* ================================================================================ */
+
+/**
+ * @brief Inter-Integrated Circuit
+ */
+
+/* I2C1 - Peripheral instance base addresses */
+#define I2C1_BasePtr                   0x40068000UL //!< Peripheral base address
+#define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
+#define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */

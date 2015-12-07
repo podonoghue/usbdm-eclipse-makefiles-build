@@ -5,6 +5,8 @@
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKM.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_MKM.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
+<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKM.svd.xml">
+<!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_4CH.svd.xml">
 <!ENTITY FTFA         SYSTEM "peripherals/FTFA.svd.xml">
 <!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_MKM.svd.xml">
 <!ENTITY I2C0         SYSTEM "peripherals/I2C0_MKM.svd.xml">
@@ -51,6 +53,8 @@
 &ADC0;
 &CRC;
 &CoreDebug;
+&DMA0;
+&DMAMUX;
 &FTFA;
 &GPIOA;
 <peripheral derivedFrom="GPIOA"><name>GPIOB</name><prependToName>GPIOB</prependToName><baseAddress>0x400FF001</baseAddress></peripheral>
@@ -62,6 +66,7 @@
 <peripheral derivedFrom="GPIOA"><name>GPIOH</name><prependToName>GPIOH</prependToName><baseAddress>0x400FF043</baseAddress></peripheral>
 <peripheral derivedFrom="GPIOA"><name>GPIOI</name><prependToName>GPIOI</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
 &I2C0;
+<peripheral derivedFrom="I2C0"><name>I2C1</name><prependToName>I2C1</prependToName><baseAddress>0x40068000</baseAddress></peripheral>
 &LLWU;
 &LPTMR0;
 &MCG;
