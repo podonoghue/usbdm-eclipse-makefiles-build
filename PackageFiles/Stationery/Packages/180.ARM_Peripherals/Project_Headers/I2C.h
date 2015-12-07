@@ -23,25 +23,25 @@ namespace USBDM {
  * @{
  */
 
+/** I2C Operating mode */
+enum I2c_Mode {
+   i2c_polled    = 0,                   //!< Operate in i2c_polled mode
+   i2c_interrupt = I2C_C1_IICIE_MASK,   //!< Operate in i2c_interrupt mode
+};
+
 /**
  * Virtual Base class for I2C interface
  */
 class I2c {
 
 public:
-   /** Operating mode */
-   enum Mode {
-      polled    = 0,                   //!< Operate in polled mode
-      interrupt = I2C_C1_IICIE_MASK,   //!< Operate in interrupt mode
-   };
-
    /** States for the I2C state machine */
    enum I2C_State { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
 
 protected:
    I2C_Type           *i2c;                 //!< I2C hardware instance
    I2C_State           state;               //!< State of current transaction
-   const Mode          mode;                //!< Mode of operation (interrupt/polled)
+   const I2c_Mode      mode;                //!< Mode of operation (i2c_interrupt/i2c_polled)
    uint16_t            rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
    uint16_t            txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
    uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
@@ -56,10 +56,10 @@ protected:
     * Construct I2C interface
     *
     * @param i2c  Base address of I2C hardware
-    * @param mode Mode of operation (interrupt or polled)
+    * @param mode Mode of operation (i2c_interrupt or i2c_polled)
     *
     */
-   I2c(I2C_Type *i2c, I2c::Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
+   I2c(I2C_Type *i2c, I2c_Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
    }
 
    /**
@@ -225,7 +225,7 @@ public:
     * @tparam scl        I2C Clock port
     * @tparam sda        I2C Data port
     */
-   I2C_T(unsigned baud=400000, I2c::Mode mode=I2c::Mode::polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(i2cBasePtr), mode) {
+   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(i2cBasePtr), mode) {
       busHangReset();
       init(myAddress);
       setBPS(baud);
