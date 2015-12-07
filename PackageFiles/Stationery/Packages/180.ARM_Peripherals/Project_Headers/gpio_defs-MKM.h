@@ -962,7 +962,7 @@ template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN,  GPIOF_BasePtr, left, right>;
+template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF_BasePtr, GPIO_DEFAULT_PCR,  GPIOF_BasePtr, left, right>;
 #endif
 #ifdef PORTG_CLOCK_MASK
 /**
@@ -998,7 +998,7 @@ template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioGField = Field_T<PORTG_CLOCK_MASK, PORTG_BasePtr, FIXED_GPIO_FN,  GPIOG_BasePtr, left, right>;
+template<int left, int right> using GpioGField = Field_T<PORTG_CLOCK_MASK, PORTG_BasePtr, GPIO_DEFAULT_PCR,  GPIOG_BasePtr, left, right>;
 #endif
 #ifdef PORTH_CLOCK_MASK
 /**
@@ -1034,7 +1034,7 @@ template<int left, int right> using GpioGField = Field_T<PORTG_CLOCK_MASK, PORTG
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioHField = Field_T<PORTH_CLOCK_MASK, PORTH_BasePtr, FIXED_GPIO_FN,  GPIOH_BasePtr, left, right>;
+template<int left, int right> using GpioHField = Field_T<PORTH_CLOCK_MASK, PORTH_BasePtr, GPIO_DEFAULT_PCR,  GPIOH_BasePtr, left, right>;
 #endif
 #ifdef PORTI_CLOCK_MASK
 /**
@@ -1070,7 +1070,7 @@ template<int left, int right> using GpioHField = Field_T<PORTH_CLOCK_MASK, PORTH
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioIField = Field_T<PORTI_CLOCK_MASK, PORTI_BasePtr, FIXED_GPIO_FN,  GPIOI_BasePtr, left, right>;
+template<int left, int right> using GpioIField = Field_T<PORTI_CLOCK_MASK, PORTI_BasePtr, GPIO_DEFAULT_PCR,  GPIOI_BasePtr, left, right>;
 #endif
 
 /**

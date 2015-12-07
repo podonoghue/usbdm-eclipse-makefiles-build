@@ -18,7 +18,6 @@
       <constant id="demo.cpp.peripheral.i2c"    value="true" />
       <constant id="demo.cpp.peripheral.lptmr"  value="true" />
       <constant id="demo.cpp.peripheral.pit"    value="true" />
-      <constant id="demo.cpp.peripheral.spi"    value="true" />
       <constant id="demo.cpp.peripheral.gps"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 

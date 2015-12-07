@@ -202,7 +202,7 @@ public:
  *
  *  @endcode
  */
-template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, class SclPcr, class SclGpio, class SdaPcr, class SdaGpio> class I2C_T : public I2c {
+template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, IRQn_Type irqNum, class SclPcr, class SclGpio, class SdaPcr, class SdaGpio> class I2C_T : public I2c {
 public:
    static class I2c *thisPtr;
 
@@ -246,9 +246,8 @@ public:
       SclPcr::setPCR();
 
       if (mode&I2C_C1_IICIE_MASK) {
-         NVIC_EnableIRQ(I2C0_IRQn);
+         NVIC_EnableIRQ(irqNum);
       }
-
       // Enable I2C peripheral
       i2c->C1 = I2C_C1_IICEN_MASK|mode;
 
@@ -298,7 +297,7 @@ public:
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2C_0();
+ *  USBDM::I2c *i2c = new USBDM::I2c0();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -318,7 +317,11 @@ public:
  *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
  *  @endcode
  */
-using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
+#ifdef MCU_MKM33Z5
+using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_1_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
+#else
+using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
+#endif
 #endif
 
 #if defined(I2C1) && (I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)
@@ -328,7 +331,7 @@ using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOC
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2C_1();
+ *  USBDM::I2c *i2c = new USBDM::I2c1();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -349,7 +352,11 @@ using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOC
  *  }
  *  @endcode
  */
-using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
+#ifdef MCU_MKM33Z5
+using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C0_1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
+#else
+using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
+#endif
 #endif
 
 #if defined(I2C2) && (I2C2_SCL_PIN_SEL!=0) && (I2C2_SDA_PIN_SEL!=0)
@@ -359,7 +366,7 @@ using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOC
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2C_2();
+ *  USBDM::I2c *i2c = new USBDM::I2c2();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -380,7 +387,7 @@ using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOC
  *  }
  *  @endcode
  */
-using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, i2c2_SCLPcr, i2c2_SCLGpio, i2c2_SDAPcr, i2c2_SDAGpio>;
+using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, I2C2_IRQn, i2c2_SCLPcr, i2c2_SCLGpio, i2c2_SDAPcr, i2c2_SDAGpio>;
 #endif
 
 /**

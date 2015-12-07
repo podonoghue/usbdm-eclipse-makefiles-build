@@ -844,7 +844,7 @@ template<int left, int right> using GpioEField = Field_T<PORTE_CLOCK_MASK, PORTE
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF_BasePtr, PORTF_GPIO_FN,  GPIOF_BasePtr, left, right>;
+template<int left, int right> using GpioFField = Field_T<PORTF_CLOCK_MASK, PORTF_BasePtr, GPIO_DEFAULT_PCR,  GPIOF_BasePtr, left, right>;
 #endif
 
 /**
