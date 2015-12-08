@@ -61,7 +61,9 @@ protected:
    bool                              allowOverwrite;
    FILE                             *fp;
    bool                              discardFF;
-
+   bool                              printHeader;
+   Elf32_Ehdr                        elfHeader;
+   Elf32_Shdr                        stringSectionHeader;
 public:
    FlashImageImp();
    virtual ~FlashImageImp();
@@ -102,9 +104,14 @@ protected:
    void                    fixElfHeaderSex(Elf32_Ehdr *elfHeader);
    void                    printElfHeader(Elf32_Ehdr *elfHeader);
    void                    printElfProgramHeader(Elf32_Phdr *programHeader);
+   void                    printElfSectionHeader(Elf32_Shdr *programHeader);
+   const char *            getElfString(unsigned index);
+
    void                    fixElfProgramHeaderSex(Elf32_Phdr *programHeader);
+   void                    fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader);
    USBDM_ErrorCode         loadElfBlock(FILE *fp, long fOffset, Elf32_Word size, Elf32_Addr addr);
    USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
+   USBDM_ErrorCode         loadElfBlock(Elf32_Shdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);
    USBDM_ErrorCode         checkTargetType(Elf32_Half e_machine, TargetType_t targetType);
    USBDM_ErrorCode         loadS1S9File(const std::string &fileName);
