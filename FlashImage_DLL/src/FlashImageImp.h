@@ -37,6 +37,27 @@ typedef std::tr1::shared_ptr<MemoryPage> MemoryPagePtr;
 
 class FlashImageImp : public FlashImage {
 
+   class Openfile {
+   private:
+      FILE *fp;
+   public:
+      Openfile(const char* filePath, const char* modes) {
+         LOGGING_Q;
+         fp = fopen(filePath, modes);
+         log.print("Opened %s (fp=%p)\n", filePath, fp);
+      }
+      FILE *getfp() {
+         return  fp;
+      }
+      ~Openfile() {
+         LOGGING_Q;
+         log.print("Closing file (fp=%p)\n", fp);
+         if (fp != 0) {
+            fclose(fp);
+         }
+      }
+   };
+
    friend MemoryPage;
    friend EnumeratorImp;
 

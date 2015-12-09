@@ -972,7 +972,8 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    uint8_t      checkSum;
    bool         fileRecognized = false;
 
-   FILE *fp = fopen(fileName.c_str(), "rt");
+   Openfile file(fileName.c_str(), "rt");
+   fp = file.getfp();
 
    if (fp == NULL) {
       log.print("FlashImageImp::MemorySpace::loadS1S9File(\"%s\") - Failed to open input file\n", fileName.c_str());
@@ -991,7 +992,6 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
       // Check if S-record
       if ((*ptr != 'S') && (*ptr != 's')) {
          log.print("- illegal line #%5d-%s", lineNum, buffer);
-         fclose(fp);
          if (fileRecognized) {
             return SFILE_RC_ILLEGAL_LINE;
          }
@@ -1037,7 +1037,6 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          break;
       default:
          log.print("- illegal line #%5d-%s", lineNum, buffer);
-         fclose(fp);
          if (fileRecognized) {
             return SFILE_RC_ILLEGAL_LINE;
          }
@@ -1069,13 +1068,11 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          log.print("- checksum error, Checksum=0x%02X, "
                "Calculated Checksum=0x%02X\n",
                data, (uint8_t)~checkSum);
-         fclose(fp);
          return SFILE_RC_CHECKSUM;
       }
       fileRecognized = true; // Read at least 1 record - assume it's a SREC file
 //      log.print("\n");
    }
-   fclose(fp);
 //   log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
 //   printMemoryMap();
    return SFILE_RC_OK;
@@ -1377,7 +1374,7 @@ const char * FlashImageImp::getElfString(unsigned index) {
 }
 
 /*
- *   Load a ELF file into the buffer. \n
+ * Load a ELF file into the buffer. \n
  *
  * @param filePath         : Path of file to load
  *
@@ -1385,12 +1382,13 @@ const char * FlashImageImp::getElfString(unsigned index) {
  */
 USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    LOGGING_Q;
-   fp = fopen(filePath.c_str(), "rb");
+   Openfile file(filePath.c_str(), "rb");
+   fp = file.getfp();
    if (fp == NULL) {
       log.error("Failed to open input file \'%s\'\n", filePath.c_str());
       return SFILE_RC_FILE_OPEN_FAILED;
    }
-//   log.print("Input file - \'%s\'\n", filePath.c_str());
+   //   log.print("Input file - \'%s\'\n", filePath.c_str());
 
    if (fread(&elfHeader, 1, sizeof(elfHeader), fp) != sizeof(elfHeader)) {
       return SFILE_RC_UNKNOWN_FILE_FORMAT;
@@ -1398,11 +1396,10 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    //   log.print("FlashImageImp::MemorySpace::loadElfFile() - \n");
    //   printElfHeader(&elfHeader);
 
-   if ((elfHeader.e_ident[EI_MAG0] != ELFMAG0V) ||(elfHeader.e_ident[EI_MAG1] != ELFMAG1V) ||
-         (elfHeader.e_ident[EI_MAG2] != ELFMAG2V) ||(elfHeader.e_ident[EI_MAG3] != ELFMAG3V) ||
-         (elfHeader.e_ident[EI_CLASS] != ELFCLASS32)) {
+   if ((elfHeader.e_ident[EI_MAG0]  != ELFMAG0V) || (elfHeader.e_ident[EI_MAG1] != ELFMAG1V) ||
+       (elfHeader.e_ident[EI_MAG2]  != ELFMAG2V) || (elfHeader.e_ident[EI_MAG3] != ELFMAG3V) ||
+       (elfHeader.e_ident[EI_CLASS] != ELFCLASS32)) {
       log.error("Invalid  format\n");
-      fclose(fp);
       return SFILE_RC_UNKNOWN_FILE_FORMAT;
    }
    littleEndian = elfHeader.e_ident[EI_DATA] == ELFDATA2LSB;
@@ -1416,12 +1413,11 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
     */
    if ((elfHeader.e_type != ET_EXEC) || (elfHeader.e_phoff == 0) || (elfHeader.e_phentsize == 0) || (elfHeader.e_phnum == 0)) {
       log.error("Invalid format\n");
-      fclose(fp);
       return SFILE_RC_ELF_FORMAT_ERROR;
    }
 
+#ifdef LOG
    printHeader = true;
-   fseek(fp, elfHeader.e_phoff, SEEK_SET);
    for(Elf32_Half entry=0; entry<elfHeader.e_phnum; entry++) {
       Elf32_Phdr programHeader;
       fseek(fp, elfHeader.e_phoff+entry*elfHeader.e_phentsize, SEEK_SET);
@@ -1434,41 +1430,35 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       printElfProgramHeader(&programHeader);
    }
 
+   printHeader = true;
+   for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
+      Elf32_Shdr sectionHeader;
+      fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
+      size_t sz;
+      if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
+         log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
+         return SFILE_RC_ELF_FORMAT_ERROR;
+      }
+      fixElfSectionHeaderSex(&sectionHeader);
+      printElfSectionHeader(&sectionHeader);
+   }
+#endif
    if (elfHeader.e_shoff == 0) {
-      log.print("No section header present\n");
+      log.print("No section headers present\n");
+      return SFILE_RC_ELF_FORMAT_ERROR;
    }
-   else {
-      printHeader = true;
-      fseek(fp, elfHeader.e_shoff, SEEK_SET);
-      for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
-         Elf32_Shdr sectionHeader;
-         fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
-         size_t sz;
-         if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
-            log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
-            return SFILE_RC_ELF_FORMAT_ERROR;
-         }
-         fixElfSectionHeaderSex(&sectionHeader);
-         printElfSectionHeader(&sectionHeader);
+   // Load image based on suitable sections
+   for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
+      Elf32_Shdr sectionHeader;
+      fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
+      size_t sz;
+      if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
+         log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
+         return SFILE_RC_ELF_FORMAT_ERROR;
       }
-      printHeader = true;
-      fseek(fp, elfHeader.e_shoff, SEEK_SET);
-      for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
-         Elf32_Shdr sectionHeader;
-         fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
-         size_t sz;
-         if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
-            log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
-            return SFILE_RC_ELF_FORMAT_ERROR;
-         }
-         fixElfSectionHeaderSex(&sectionHeader);
-         loadElfBlock(&sectionHeader);
-      }
+      fixElfSectionHeaderSex(&sectionHeader);
+      loadElfBlock(&sectionHeader);
    }
-
-
-
-
 
 //   fseek(fp, elfHeader.e_phoff, SEEK_SET);
 //   for(Elf32_Half entry=0; entry<elfHeader.e_phnum; entry++) {
@@ -1484,8 +1474,7 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
 //         loadElfBlock(&programHeader);
 //      }
 //   }
-   fclose(fp);
-   printMemoryMap();
+//   printMemoryMap();
    return SFILE_RC_OK;
 }
 
@@ -1502,20 +1491,20 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    Elf32_Word size        = sectionHeader->sh_size;
    log.print("loading [0x%08X, 0x%08X]\n", loadAddress, loadAddress+size);
 
-//#if defined(TARGET) && (TARGET == MC56F80xx)
-//   // DSC image uses word addresses
-//   addr /= 2;
-//#endif
-//   if (size == 0) {
-//      log.print("[empty]\n");
-//   }
-//   else {
-//#if defined(TARGET) && (TARGET == MC56F80xx)
-//      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
-//#else
-//      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
-//#endif
-//   }
+#if defined(TARGET) && (TARGET == MC56F80xx)
+   // DSC image uses word addresses
+   addr /= 2;
+#endif
+   if (size == 0) {
+      log.print("[empty]\n");
+   }
+   else {
+#if defined(TARGET) && (TARGET == MC56F80xx)
+      log.print("[0x%08X..0x%08X]\n", loadAddress, loadAddress+size/2-1);
+#else
+      log.print("[0x%08X..0x%08X]\n", loadAddress, loadAddress+size-1);
+#endif
+   }
    fseek(fp, sectionHeader->sh_offset, SEEK_SET);
    while (size>0) {
       uint8_t buff[1000];
@@ -1531,12 +1520,12 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
 //      log.printDump(buff, blockSize, loadAddress);
       for (unsigned index=0; index<blockSize; ) {
          uint16_t value;
-//#if defined(TARGET) && (TARGET == MC56F80xx)
-//         value  = buff[index++];
-//         value += buff[index++]<<8;
-//#else
+#if defined(TARGET) && (TARGET == MC56F80xx)
+         value  = buff[index++];
+         value += buff[index++]<<8;
+#else
          value = buff[index++];
-//#endif
+#endif
          this->setValue(loadAddress++, value);
       }
       size -= blockSize;
@@ -1544,28 +1533,28 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    return SFILE_RC_OK;
 }
 
-USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Phdr *programHeader) {
-
-//   printElfProgramHeader(programHeader);
-
-   Elf32_Addr loadAddress;
-
-   if ((targetType == T_RS08) || (targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_S12Z) || (targetType == T_MC56F80xx)) {
-      // These targets use the virtual address as the load address
-      loadAddress = programHeader->p_vaddr;
-#if defined(TARGET) && (TARGET == MC56F80xx)
-      if ((programHeader->p_flags&PF_X) == 0) {
-         // Indicates X:ROM/X:RAM (not executable)
-         loadAddress += (DataOffset<<1);
-      }
-#endif
-   }
-   else {
-      // Other targets load at the physical address (VADDR is RAM copy destination)
-      loadAddress = programHeader->p_paddr;
-   }
-   return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
-}
+//USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Phdr *programHeader) {
+//
+////   printElfProgramHeader(programHeader);
+//
+//   Elf32_Addr loadAddress;
+//
+//   if ((targetType == T_RS08) || (targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_S12Z) || (targetType == T_MC56F80xx)) {
+//      // These targets use the virtual address as the load address
+//      loadAddress = programHeader->p_vaddr;
+//#if defined(TARGET) && (TARGET == MC56F80xx)
+//      if ((programHeader->p_flags&PF_X) == 0) {
+//         // Indicates X:ROM/X:RAM (not executable)
+//         loadAddress += (DataOffset<<1);
+//      }
+//#endif
+//   }
+//   else {
+//      // Other targets load at the physical address (VADDR is RAM copy destination)
+//      loadAddress = programHeader->p_paddr;
+//   }
+//   return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
+//}
 
 
 USBDM_ErrorCode FlashImageImp::checkTargetType(Elf32_Half e_machine, TargetType_t targetType) {
