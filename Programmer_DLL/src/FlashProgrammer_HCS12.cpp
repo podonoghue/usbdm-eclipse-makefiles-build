@@ -2740,8 +2740,11 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doVerify(FlashImagePtr flashImage) {
    USBDM_ErrorCode rc = PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    progressTimer->restart("Verifying...");
 
+   //TODO - Review handling of linear addresses
+
    // Try target verify then read-back verify
-//   rc = doTargetVerify(flashImage);
+   // This is a bit of a hack to cope with linear addressing failing doReadbackVerify()
+   rc = doTargetVerify(flashImage);
    if (rc == PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS) {
      rc = doReadbackVerify(flashImage);
    }
