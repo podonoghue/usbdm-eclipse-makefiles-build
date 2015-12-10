@@ -102,10 +102,11 @@ int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
 
 void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
    LOGGING;
-   if (!Tcl_InterpDeleted(interp)) {
-      log.print("Tcl_DeleteInterp(@%p)\n", interp);
-      Tcl_DeleteInterp(interp);
-   }
+   // Calling Tcl_DeleteInterp() from the destructor fails badly if a different thread.
+//   if (!Tcl_InterpDeleted(interp)) {
+//      log.print("Tcl_DeleteInterp(@%p)\n", interp);
+//      Tcl_DeleteInterp(interp);
+//   }
    log.print("Tcl_Finalize()\n");
    Tcl_Finalize();
 }
@@ -205,9 +206,11 @@ UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
    Tcl_SetStdChannel(0, TCL_STDERR);
    log.print("After Tcl_SetStdChannel()\n");
    if (tclChannel != 0) {
+      log.print("Before Tcl_UnregisterChannel()\n");
       Tcl_UnregisterChannel(interp.get(), tclChannel);
       log.print("After Tcl_UnregisterChannel()\n");
    }
+   log.print("Before interp.reset()\n");
    interp.reset();
    log.print("After interp.reset()\n");
 }
@@ -421,6 +424,8 @@ static int reportState(Tcl_Interp *interp) {
 
 //! S12Z Mass erase
 static int cmd_massErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   static const uint32_t CMD_CUSTOM_COMMAND  = 18;  //!< Custom command
+
    // massErase
    if (argc != 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "massErase");
@@ -431,7 +436,7 @@ static int cmd_massErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       PRINT("Illegal command (wrong target)");
       return TCL_ERROR;
    }
-   uint8_t s12ZEraseCommand[] = {0x95};
+   uint8_t s12ZEraseCommand[] = {CMD_CUSTOM_COMMAND};
    bdmInterface->bdmCommand(sizeof(s12ZEraseCommand), 1, s12ZEraseCommand);
    return TCL_OK;
 }
