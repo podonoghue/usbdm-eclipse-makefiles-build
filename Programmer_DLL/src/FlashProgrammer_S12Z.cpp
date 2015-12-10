@@ -427,7 +427,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::resetAndConnectTarget(void) {
 USBDM_ErrorCode FlashProgrammer_S12Z::readTargetChipId(uint32_t *targetSDID, bool doInit) {
    LOGGING_E;
    doInit = doInit || (targetType == T_ARM);
-   const int SDIDLength = 2;
+   const int SDIDLength = 4;
    uint8_t SDIDValue[SDIDLength];
 
    *targetSDID = 0x0000;
