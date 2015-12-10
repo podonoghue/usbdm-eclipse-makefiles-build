@@ -30,6 +30,7 @@
 \verbatim
  Change History
 +======================================================================================================
+| 10 Dec 2015 | Fixes to USBDM_BDMCommand() (used for S12z mass erase)              - pgo V4.12.1.50
 |  7 Aug 2015 | Added HCS08_SBDFR handling and changed bdmOptions format            - pgo V4.12.1.10
 | 27 Jul 2015 | Changes to handling of default and required bdmOptions              - pgo V4.10.6.260
 | 10 Mar 2015 | Added initialisation checks                                         - pgo V4.10.6.260
@@ -1174,9 +1175,11 @@ USBDM_ErrorCode USBDM_BDMCommand(unsigned int txSize, unsigned int rxSize, unsig
    if (rxSize > MAX_PACKET_SIZE-10) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
-   log.print("s=%d, d=0x%02X, 0x%02X, \n", txSize, data[0], data[1]);
-
-   USBDM_ErrorCode rc = bdm_usb_transaction(txSize, rxSize, usb_data);
+   log.printDump(data, txSize,0,0);
+//   log.print("txSize=%d, data=[%02X,0x%02X, \n", txSize, data[0], data[1]);
+   usb_data[0] = 0;
+   memccpy(usb_data+1, data, txSize, sizeof(usb_data));
+   USBDM_ErrorCode rc = bdm_usb_transaction(txSize+1, rxSize, usb_data);
    return rc;
 }
 
