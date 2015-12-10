@@ -14,6 +14,7 @@
 #include "HexNumberGridEditor.h"
 #include "MemoryDumpDialogue.h"
 #include "ProgressDialogueFactory.h"
+#include "FlashProgrammer.h"
 
 //! Maximum size of a S-record, should be power of 2
 const int maxSrecSize = (1<<4);
@@ -76,8 +77,10 @@ int  MemoryDumpDialogue::ShowModal() {
    saveSettings();
    return rc;
 }
-
-void MemoryDumpDialogue::OnTargetTypeRadioBox( wxCommandEvent& event ) {
+/**
+ * Radiobox for target has changed
+ */
+void MemoryDumpDialogue::OnTargetTypeRadioBoxSelect( wxCommandEvent& event ) {
    LOGGING;
    setTargetType(getTargetType());
    log.print("Selected target type = %s\n", getTargetTypeName(targetType));
@@ -194,6 +197,10 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
       snprintf(buff, sizeof(buff), "Doing block [0x%06lX, 0x%06lX]", start, end);
       progress->update(0, buff);
       progress->setRange(end-start);
+      uint32_t addressModifier = 0;
+      if ((linearAddressingCheckbox->IsEnabled())&&(linearAddressingCheckbox->IsChecked())) {
+         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
+      }
       while (start <= end) {
          unsigned char data[4096];
          long int size = end-start+1;
@@ -238,7 +245,7 @@ void MemoryDumpDialogue::loadSettings() {
    currentDirectory = appSettings->getValue("directory", "");
    currentFilename  = appSettings->getValue("filename", "");
    keepEmptySRECsCheckbox->SetValue(appSettings->getValue("keepEmptySRECs", false));
-
+   linearAddressingCheckbox->SetValue(appSettings->getValue("linearAddressing", false));
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
       long int start, end, width;
 
@@ -281,6 +288,7 @@ void MemoryDumpDialogue::saveSettings() {
    appSettings->addValue("targetType",       getTargetType());
    appSettings->addValue("targetVdd",        getVdd());
    appSettings->addValue("interfaceSpeed",   getInterfaceSpeed());
+   appSettings->addValue("linearAddressing", linearAddressingCheckbox->IsChecked());
 
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
       long int start, end, width;
@@ -501,6 +509,8 @@ void MemoryDumpDialogue::setInterfaceSpeed(signed speed) {
 
 void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
 
+   this->targetType = targetType;
+
    int selection = 0;
    switch (targetType) {
    case T_RS08 :  selection++;
@@ -516,10 +526,14 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    case T_ARM :
    default: break;
    }
+   bool enableLinearAddressMode = targetType == T_HCS12;
+   bool enableSpeedControl      = (targetType == T_ARM) || (targetType == T_CFVx);
    bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    populateBDMChoices();
    targetTypeRadioBox->SetSelection(selection);
+   linearAddressingCheckbox->Enable(enableLinearAddressMode);
+   interfaceSpeedControl->Enable(enableSpeedControl);
 }
 
 TargetType_t MemoryDumpDialogue::getTargetType() {
@@ -548,4 +562,12 @@ void MemoryDumpDialogue::OnTargetVddControlClick( wxCommandEvent& event ) {
  *  @param event The event to handle
  */
 void MemoryDumpDialogue::OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) {
+}
+
+/*! Handler for LinearAddressingCheckbox
+ *
+ *  @param event The event to handle
+ */
+void MemoryDumpDialogue::onLinearAddressingClick( wxCommandEvent& event ) {
+
 }

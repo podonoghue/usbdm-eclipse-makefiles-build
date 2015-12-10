@@ -19,7 +19,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	wxString targetTypeRadioBoxChoices[] = { wxT("ARM"), wxT("CFV1 "), wxT("CFV2 "), wxT("HCS08 "), wxT("HCS12 "), wxT("RS08 ") };
 	int targetTypeRadioBoxNChoices = sizeof( targetTypeRadioBoxChoices ) / sizeof( wxString );
 	targetTypeRadioBox = new wxRadioBox( this, wxID_ANY, wxT("Device Type"), wxDefaultPosition, wxDefaultSize, targetTypeRadioBoxNChoices, targetTypeRadioBoxChoices, 1, wxRA_SPECIFY_ROWS );
-	targetTypeRadioBox->SetSelection( 0 );
+	targetTypeRadioBox->SetSelection( 3 );
 	targetTypeRadioBox->SetToolTip( wxT("Select Target type") );
 	
 	bSizer1->Add( targetTypeRadioBox, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -52,7 +52,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	wxString targetVddControlChoices[] = { wxT("Off"), wxT("3.3V   "), wxT("5V") };
 	int targetVddControlNChoices = sizeof( targetVddControlChoices ) / sizeof( wxString );
 	targetVddControl = new wxRadioBox( this, wxID_ANY, wxT("Target Vdd Control"), wxDefaultPosition, wxDefaultSize, targetVddControlNChoices, targetVddControlChoices, 1, wxRA_SPECIFY_ROWS );
-	targetVddControl->SetSelection( 2 );
+	targetVddControl->SetSelection( 1 );
 	targetVddControl->SetToolTip( wxT("Off\t- Target Vdd is externally supplied\n3.3V\t- BDM supplies target Vdd @3.3V\n5V\t- BDM supplies target Vdd @5V") );
 	
 	bSizer4->Add( targetVddControl, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -64,6 +64,8 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	int interfaceSpeedControlNChoices = sizeof( interfaceSpeedControlChoices ) / sizeof( wxString );
 	interfaceSpeedControl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, interfaceSpeedControlNChoices, interfaceSpeedControlChoices, 0 );
 	interfaceSpeedControl->SetSelection( 0 );
+	interfaceSpeedControl->Enable( false );
+	
 	sbSizer2->Add( interfaceSpeedControl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -71,6 +73,15 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	
 	
 	bSizer1->Add( bSizer4, 0, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Memory Options") ), wxVERTICAL );
+	
+	linearAddressingCheckbox = new wxCheckBox( this, wxID_ANY, wxT("Linear Addressing"), wxDefaultPosition, wxDefaultSize, 0 );
+	linearAddressingCheckbox->Enable( false );
+	linearAddressingCheckbox->SetToolTip( wxT("Enable Linear Addressing mode on some targets") );
+	
+	sbSizer3->Add( linearAddressingCheckbox, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -116,7 +127,10 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	bSizer5->Add( m_staticText3, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer5, 1, wxEXPAND, 5 );
+	sbSizer3->Add( bSizer5, 1, wxEXPAND, 5 );
+	
+	
+	bSizer1->Add( sbSizer3, 1, wxEXPAND, 5 );
 	
 	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
@@ -157,11 +171,12 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	targetTypeRadioBox->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetTypeRadioBox ), NULL, this );
+	targetTypeRadioBox->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetTypeRadioBoxSelect ), NULL, this );
 	bdmRefreshButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	bdmSelectChoiceControl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	targetVddControl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetVddControlClick ), NULL, this );
 	interfaceSpeedControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
+	linearAddressingCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::onLinearAddressingClick ), NULL, this );
 	readMemoryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );
 	keepEmptySRECsCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnKeepEmptySRECsCheckboxClick ), NULL, this );
@@ -170,11 +185,12 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 MemoryDumpDialogueSkeleton::~MemoryDumpDialogueSkeleton()
 {
 	// Disconnect Events
-	targetTypeRadioBox->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetTypeRadioBox ), NULL, this );
+	targetTypeRadioBox->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetTypeRadioBoxSelect ), NULL, this );
 	bdmRefreshButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnRefreshBDMClick ), NULL, this );
 	bdmSelectChoiceControl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnBdmSelectComboSelected ), NULL, this );
 	targetVddControl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetVddControlClick ), NULL, this );
 	interfaceSpeedControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
+	linearAddressingCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::onLinearAddressingClick ), NULL, this );
 	readMemoryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );
 	keepEmptySRECsCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnKeepEmptySRECsCheckboxClick ), NULL, this );

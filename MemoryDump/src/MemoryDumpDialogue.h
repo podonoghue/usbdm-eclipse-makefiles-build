@@ -31,7 +31,7 @@ protected:
   wxString                    bdmIdentification;   //!< ID of current BDM
   HardwareCapabilities_t      bdmCapabilities;     //!< Capabilities of the connected BDM
 
-  virtual void OnTargetTypeRadioBox( wxCommandEvent& event );
+  virtual void OnTargetTypeRadioBoxSelect( wxCommandEvent& event );
   virtual void OnBdmSelectComboSelected( wxCommandEvent& event );
   virtual void OnRefreshBDMClick( wxCommandEvent& event );
   virtual void OnTargetVddControlClick( wxCommandEvent& event );
@@ -39,6 +39,7 @@ protected:
   virtual void OnReadMemoryButtonClick( wxCommandEvent& event );
   virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event );
   virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event );
+  virtual void onLinearAddressingClick( wxCommandEvent& event );
   virtual void populateBDMChoices();
   virtual void populateInterfaceSpeeds();
   virtual void update();

@@ -22,8 +22,8 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
-#include <wx/grid.h>
 #include <wx/checkbox.h>
+#include <wx/grid.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/dialog.h>
@@ -45,6 +45,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxStaticText* bdmDescriptionStaticControl;
 		wxRadioBox* targetVddControl;
 		wxChoice* interfaceSpeedControl;
+		wxCheckBox* linearAddressingCheckbox;
 		wxGrid* memoryRangesGrid;
 		wxStaticText* m_staticText3;
 		wxPanel* m_panel1;
@@ -55,11 +56,12 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxTextCtrl* statusText;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnTargetTypeRadioBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTargetTypeRadioBoxSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRefreshBDMClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTargetVddControlClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLinearAddressingClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveToFileButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
