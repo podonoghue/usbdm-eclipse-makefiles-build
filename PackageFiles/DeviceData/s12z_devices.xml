@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
 [
-<!ENTITY S12Z-FTMRZ-flash-scripts  SYSTEM "S12Z/S12Z-FTMRZ-flash-scripts.tcl">
+<!ENTITY S12Z-FTMRZ-flash-scripts   SYSTEM "S12Z/S12Z-FTMRZ-flash-scripts.tcl">
 
-<!ENTITY S12Z-FTMRZ-flash-program  SYSTEM "S12Z/S12Z-FTMRZ-flash-program.sx">
+<!ENTITY S12Z-FTMRZ-flash-program   SYSTEM "S12Z/S12Z-FTMRZ-flash-program.sx">
 
 <!ENTITY S12Z-FTMRZ-eeprom-program  SYSTEM "S12Z/S12Z-FTMRZ-flash-program.sx">
 
-<!ENTITY Custom-Devices                   SYSTEM "Custom/custom-s12z.xml">
+<!ENTITY Custom-Devices             SYSTEM "Custom/custom-s12z.xml">
 ]>
 <!-- 
 		V4.10.6.230 - Added MC9S12ZVL-Family, untested
@@ -235,12 +235,13 @@
          <copctlAddress value="0x06CC" />
          <sdidAddress value="0x0000" />
          <sdidMask value="0xFFFFFF00" />
-         <sdid value="0x00170000" />
+         <sdid value="0x04150000" />
          <flashScripts>
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
       </device>
+      <note>MC9S12ZVLRMV1</note>
 
       <device family="S12Z" name=" MC9S12ZVL16">
          <clock type="External" />
@@ -250,12 +251,13 @@
          <copctlAddress value="0x06CC" />
          <sdidAddress value="0x0000" />
          <sdidMask value="0xFFFFFF00" />
-         <sdid value="0x00170000" />
+         <sdid value="0x04150000" />
          <flashScripts>
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
       </device>
+      <note>MC9S12ZVLRMV1</note>
       <device family="S12Z" name="MC9S12ZVLS16" alias="MC9S12ZVL16" />
 
       <device family="S12Z" name=" MC9S12ZVL32">
@@ -266,13 +268,14 @@
          <copctlAddress value="0x06CC" />
          <sdidAddress value="0x0000" />
          <sdidMask value="0xFFFFFF00" />
-         <sdid value="0x00170000" />
          <sdid value="0x04150000" />
          <flashScripts>
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
       </device>
+      <note>MC9S12ZVLRMV1</note>
+      
       <device family="S12Z" name="MC9S12ZVLS32" alias="MC9S12ZVL32" />
 
  <!-- 
