@@ -965,6 +965,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G32">
@@ -985,6 +986,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G48">
@@ -1006,6 +1008,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G64">
@@ -1028,6 +1031,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G96">
@@ -1050,6 +1054,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G128">
@@ -1072,6 +1077,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G192">
@@ -1093,6 +1099,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
 
       <device family="HCS12" name="MC9S12G240">
@@ -1114,6 +1121,7 @@
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12GRMV1</note>
       </device>
       <!-- 
 ==========GA240 definition created by Carl Barnes - Technological Arts===========
@@ -1573,6 +1581,56 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
+      
+<!-- 
+===================================================================================
+ -->      
+      <device family="HCS12" name="MC9S12VR48">
+         <clock type="External" />
+         <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <memoryRange start="0x000400" size="512" />
+         </memory>
+         <memory type="ram">
+            <memoryRange start="0x3800" end="0x3FFF" />
+         </memory>
+         <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange start="0x0600" end="0x37FF" />  <!-- Gap between EEPROM and RAM -->
+            <memoryRange start="0x4000" end="0x7FFF" />
+            <memoryRange start="0x8000" end="0xBFFF" pages="3"  pageEnd="0x0F" />
+            <memoryRange start="0xC000" end="0xFFFF" />
+         </memory>
+         <sdid value="0x3290" mask="0xFFF0"/>
+         <flashScripts>
+            <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12VRRMV3</note>
+      </device>
+      
+      <device family="HCS12" name="MC9S12VR64">
+         <clock type="External" />
+         <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <memoryRange start="0x000400" size="512" />
+         </memory>
+         <memory type="ram">
+            <memoryRange start="0x3800" end="0x3FFF" />
+         </memory>
+         <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
+            <securityEntryRef ref="HCS12-default-security" />
+            <memoryRange start="0x0600" end="0x37FF" />  <!-- Gap between EEPROM and RAM -->
+            <memoryRange start="0x4000" end="0x7FFF" />
+            <memoryRange start="0x8000" end="0xBFFF" pages="4"  pageEnd="0x0F" />
+            <memoryRange start="0xC000" end="0xFFFF" />
+         </memory>
+         <sdid value="0x3290" mask="0xFFF0"/>
+         <flashScripts>
+            <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
+         <note>MC9S12VRRMV3</note>
+      </device>
+      
 <!-- 
 ===================================================================================
  -->      
