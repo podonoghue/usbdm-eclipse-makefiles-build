@@ -1,4 +1,4 @@
-/*! \file
+/** \file
     \brief Version information
 */
 
@@ -6,15 +6,15 @@
 #define USBDM_VERSION_MAJOR  4       //!< DLL Major version #
 #define USBDM_VERSION_MINOR  12      //!< DLL Minor version #
 #define USBDM_VERSION_MICRO  1       //!< DLL Micro version #
-#define USBDM_VERSION_NANO   50      //!< DLL Nano version #
+#define USBDM_VERSION_NANO   60      //!< DLL Nano version #
 
 #ifdef LOG
-#define USBDM_VERSION_STRING "4.12.1.50-Debug" //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.60-Debug" //!< Version as string
 #else
-#define USBDM_VERSION_STRING "4.12.1.50"       //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.60"       //!< Version as string
 #endif
 
-// The version of the GDI standard implemented
+//! The version of the GDI standard implemented
 #define USBDM_GDI_INTERFACE_VERSION (0x126)
 
 //! Name of directory to create in %APPDATA% for usbdm settings
@@ -23,7 +23,9 @@
 //----------------------------------------------------------------------------
 // Revision History
 //-----------+----------------------------------------------------------------
-//    Nov xx | 4.12.1.40 Build                                           - pgo
+//    Dec XX | 4.12.1.60 Build                                           - pgo
+//-----------+----------------------------------------------------------------
+//    Dec 11 | 4.12.1.50 Build                                           - pgo
 //-----------+----------------------------------------------------------------
 //    Nov 10 | 4.12.1.40 Build                                           - pgo
 //-----------+----------------------------------------------------------------
