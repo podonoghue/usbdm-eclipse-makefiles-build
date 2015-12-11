@@ -3623,7 +3623,7 @@ void
 __attribute__ ((destructor))
 #endif
 usbdm_dll_uninitialize(void) {
-   UsbdmSystem::Log::printq("usbdm_dll_uninitialize()");
+//   UsbdmSystem::Log::printq("usbdm_dll_uninitialize()");
 //   fprintf(stderr, "usbdm_dll_uninitialize()\n");
 //   bdm_usb_exit(); // Just in case BDM hasn't been closed etc.
 //   USBDM_Exit();  // Just in case BDM hasn't been closed etc.
