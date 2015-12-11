@@ -69,7 +69,6 @@
 #include <ctype.h>
 #include <stddef.h>
 #include "derivative.h"
-#include "Delay.h"
 #include "utilities.h"
 #include "lcd.h"
 #include "gpio.h"
@@ -85,69 +84,10 @@ using namespace USBDM;
 #define   LCD_SPI_PRIVATE
 #include "LCD_private.h"
 
-#define DEFAULT_LCD_CONTRAST (65) // Philips controller
-
-#ifdef ELEC_FREAKS
-#if LCD_BACKLIGHT_PWM_FEATURE
-// PWM Control for back-light
-#define LCD_PWM USBDM::ftm_D10 // = D10 on Arduino
-#else
-#define LCD_PWM USBDM::gpio_D10 // = D10 on Arduino
-#endif
-#endif
-
-// Display CS
-#define SPI_CSn USBDM::gpio_D9 // = D9 on Arduino
-
-// Display reset
-#define LCD_RSTn USBDM::gpio_D8  // = D8 on Arduino
-
-#ifdef ELEC_FREAKS
 /**
- * Set back-light level
- *
- * @param level 0-100 back-light level as percentage
- */
-void Lcd::backlightSetLevel(int level) {
-#if LCD_BACKLIGHT_PWM_FEATURE
-   LCD_PWM::setMode(1000, PwmIO::ftm_leftAlign);
-   if (level>100) {
-      level = 100;
-   }
-   if (level<0) {
-      level = 0;
-   }
-   LCD_PWM::setDutyCycle(level);
-#else
-   LCD_PWM::setOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
-   LCD_PWM::write(level>0);
-#endif
-}
-#endif
-
-/**
- * Reset LCD
- */
-void Lcd::reset() {
-   // LCD Reset pin
-   LCD_RSTn::setOutput();
-
-   // Reset display
-   LCD_RSTn::clear();
-   waitMS(2);
-   LCD_RSTn::set();
-   waitMS(10);
-}
-
-/**
- *  Constructor
- *
  *  Initialises the LCD
  */
-Lcd::Lcd(Spi *spi) : spi(spi) {
-
-   SPI_CSn::setOutput();
-   SPI_CSn::set();
+void LcdBase::init() {
 
 #ifdef ELEC_FREAKS
    backlightOn();
@@ -226,24 +166,6 @@ Lcd::Lcd(Spi *spi) : spi(spi) {
    clear(BLACK);
 }
 
-/**
- * Send a single command byte to the display
- */
-void Lcd::txCommand(uint8_t command) {
-   SPI_CSn::clear();
-   spi->txRx(command);
-   SPI_CSn::set();
-}
-
-/**
- * Send a single data byte to the display
- */
-void Lcd::txData(uint8_t data) {
-   SPI_CSn::clear();
-   spi->txRx(0x100|data);
-   SPI_CSn::set();
-}
-
 /** Writes the entire LCD screen from a bmp file
  *  Uses Olimex BmpToArray.exe utility
  *
@@ -251,7 +173,7 @@ void Lcd::txData(uint8_t data) {
  *
  * @author Olimex, James P Lynch July 7, 2007
  */
-void Lcd::drawBitmap(uint8_t bmp[131*131]) {
+void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    unsigned j; // loop counter
 
 #ifdef PHILIPS
@@ -312,7 +234,7 @@ void Lcd::drawBitmap(uint8_t bmp[131*131]) {
  *
  * @author James P Lynch July 7, 2007
  */
-void Lcd::clear(int color)
+void LcdBase::clear(int color)
 {
    int i;
 
@@ -367,7 +289,7 @@ void Lcd::clear(int color)
  *
  * @author James P Lynch July 7, 2007
  */
-void Lcd::setXY(int x, int y) {
+void LcdBase::setXY(int x, int y) {
    // Row address set (command 0x2B)
 #ifdef PHILIPS
    txCommand(P_PASET);
@@ -400,7 +322,7 @@ void Lcd::setXY(int x, int y) {
  *
  * @author James P Lynch July 7, 2007
  */
-void Lcd::drawPixel(int x, int y, int color) {
+void LcdBase::drawPixel(int x, int y, int color) {
 #ifdef PHILIPS
    setXY(x, y);
    txCommand(P_RAMWR);
@@ -439,7 +361,7 @@ void Lcd::drawPixel(int x, int y, int color) {
  * @note Taken verbatim from Professor McMillan's presentation: \n
  *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
  */
-void Lcd::drawLine(int x0, int y0, int x1, int y1, int color) {
+void LcdBase::drawLine(int x0, int y0, int x1, int y1, int color) {
    int dy = y1 - y0;
    int dx = x1 - x0;
    int stepx, stepy;
@@ -545,7 +467,7 @@ void Lcd::drawLine(int x0, int y0, int x1, int y1, int color) {
  *       In the case of an unfilled rectangle, drawing four lines with the Bresenham line
  *       drawing algorithm is reasonably efficient.
  */
-void Lcd::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
+void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
    int xmin, xmax, ymin, ymax;
    int i;
    // check if the rectangle is to be filled
@@ -673,7 +595,7 @@ void Lcd::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
  *
  *  @author James P Lynch July 7, 2007
  */
-void Lcd::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
+void LcdBase::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
    unsigned int nCols;
    unsigned int nRows;
    unsigned int nBytes;
@@ -789,11 +711,11 @@ void Lcd::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor, in
  * @note For more information on how this code does it's thing look at this \n
  *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
  */
-void Lcd::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
+void LcdBase::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, int fColor, int bColor) {
    // loop until null-terminator is seen
    while (*pString != 0x00) {
       // draw the character
-      Lcd::putChar(*pString++, x, y, fontSize, fColor, bColor);
+      LcdBase::putChar(*pString++, x, y, fontSize, fColor, bColor);
       // advance the y position
       if (fontSize == Fonts::FontSmall)
          x = x + 6;
@@ -810,7 +732,7 @@ void Lcd::putStr(const char *pString, int x, int y, Fonts::FontSize fontSize, in
  *
  *  @param setting - contrast level (0..127) ?
  */
-void Lcd::setContrast(uint8_t setting) {
+void LcdBase::setContrast(uint8_t setting) {
 #ifdef EPSON
    txCommand(VOLCTR);       // electronic volume, this is the contrast/brightness(EPSON)
    txData(setting);         // volume (contrast) setting - course adjustment,  -- original was 24
@@ -837,7 +759,7 @@ void Lcd::setContrast(uint8_t setting) {
  * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
  *        http://www.wikipedia.org
  */
-void Lcd::drawCircle(int x0, int y0, int radius, int color, int circleType) {
+void LcdBase::drawCircle(int x0, int y0, int radius, int color, int circleType) {
    int f = 1 - radius;
    int ddF_x = 0;
    int ddF_y = -2 * radius;

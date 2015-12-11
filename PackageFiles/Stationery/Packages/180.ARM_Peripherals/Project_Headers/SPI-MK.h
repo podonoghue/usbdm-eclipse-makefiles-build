@@ -157,7 +157,7 @@ public:
 
 #if defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_SIN_PIN_SEL!=0) && (SPI0_SOUT_PIN_SEL!=0)
 /**
- * @brief Template class representing a SPI0 interface
+ * @brief Template class representing a SPI0 interface with optional PCSs
  *
  * @tparam  PCSs...    GpioX used for PCSx
  */
@@ -165,11 +165,9 @@ template<typename ... PCSs> using  Spi0_T = Spi_T<SPI0_BasePtr, SIM_BasePtr+offs
       spi0_SCK, spi0_SIN, spi0_SOUT, PCSs...>;
 
 /**
- * @brief Template class representing a SPI0 interface
- *
- * @tparam  PCSs...    GpioX used for PCSx
+ * @brief Template class representing a SPI0 interface without PCS use
  */
-using Spi0 = Spi0_T<spi0_PCS0, spi0_PCS1, spi0_PCS2, spi0_PCS3, spi0_PCS4, spi0_PCS5>;
+using Spi0 = Spi0_T<>;
 #endif
 
 #if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_SIN_PIN_SEL!=0) && (SPI1_SOUT_PIN_SEL!=0)
@@ -181,7 +179,7 @@ using Spi0 = Spi0_T<spi0_PCS0, spi0_PCS1, spi0_PCS2, spi0_PCS3, spi0_PCS4, spi0_
 template<typename ... PCSs> using  Spi1_T = Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK,
       spi1_SCK, spi1_SIN, spi1_SOUT, PCSs...>;
 
-using Spi1 = Spi1_T<spi1_PCS1, spi1_PCS1, spi1_PCS2, spi1_PCS3>;
+using Spi1 = Spi1_T<>;
 #endif
 /**
  * @}

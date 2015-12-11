@@ -12,6 +12,7 @@
 #define INCLUDES_LCD_H_
 
 #include <stdint.h>
+#include "Delay.h"
 #include "spi.h"
 #include "fonts.h"
 
@@ -123,6 +124,8 @@ constexpr int OPENSOUTHWEST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAS
 constexpr int DEFAULT_BACKGROUND = BLACK;
 constexpr int DEFAULT_FOREGROUND = WHITE;
 
+constexpr int DEFAULT_LCD_CONTRAST = 65;
+
 /**
  * @brief Class representing an LCD
  *
@@ -139,30 +142,59 @@ constexpr int DEFAULT_FOREGROUND = WHITE;
  *
  *  @endcode
  */
-
-class Lcd {
+class LcdBase {
+protected:
    Spi *spi;   //!< SPI interface used to communicate with LCD
+
+   /**
+    * Reset LCD
+    */
+   virtual void reset() = 0;
+
+   /**
+    * Send a single command byte to the display
+    */
+   virtual void txCommand(uint8_t command) = 0;
+
+   /**
+    * Send a single data byte to the display
+    */
+   virtual void txData(uint8_t data) = 0;
+
+   /** Sets the Row and Column addresses
+    *
+    * @param x = row address (0 .. 131)
+    * @param y = column address (0 .. 131)
+    *
+    * @author James P Lynch July 7, 2007
+    */
+   void setXY(int x, int y);
+
+   /**
+    *  Initialises the LCD
+    */
+   void init();
 
 public:
    /**
     *  Constructor
     *
-    *  Initialises the LCD
-    *
     *  @param spi The SPI interface to use to communicate with LCD
     */
-   Lcd(Spi *spi);
+   LcdBase(Spi *spi) : spi(spi) {
+   }
 
 #ifdef ELEC_FREAKS
-   // Only on Elecfreaks model
    /**
     * Set backlight level
     *
     * @param level back-light level as percentage
     * @note  Requires @ref LCD_BACKLIGHT_PWM_FEATURE to be fully implemented.\n
     * Otherwise it falls back to basic on/off
+    *
+    * Note : Only of elecfreaks version of shield
     */
-   void backlightSetLevel(int level);
+   virtual void backlightSetLevel(int level) = 0;
    /**
     * Turn LCD backlight on
     */
@@ -177,7 +209,8 @@ public:
     *
     *  @param setting contrast level (0..127) ?
     */
-   void setContrast(uint8_t setting);
+   virtual void setContrast(uint8_t setting);
+
    /** This function will clear the screen to the given color.
     *
     * @param color   12-bit color value rrrrggggbbbb
@@ -321,30 +354,98 @@ public:
     */
    void putStr(const char *pString, int x, int y, Fonts::FontSize fontSize=Fonts::FontSmall, int fColor=DEFAULT_FOREGROUND, int bColor=DEFAULT_BACKGROUND);
 
-private:
+};
+
+/**
+ * Template for LCD
+ *
+ * tparam SpiCS_n   Display CS     (D9 on Arduino)
+ * tparam Reset_n   Display reset  (D8 on Arduino)
+ * tparam BackLight Display back-light control (may be PWM) (D10 on Arduino)
+ */
+template<typename SpiCS_n, typename Reset_n, typename BackLight>
+class Lcd_T : public LcdBase {
+public:
+   /**
+    *  Constructor
+    *
+    *  Initialises the LCD
+    *
+    *  @param spi The SPI interface to use to communicate with LCD
+    */
+   Lcd_T(Spi *spi) : LcdBase(spi) {
+      // Chip select pin
+      SpiCS_n::setOutput();
+      SpiCS_n::set();         // Set idle high
+
+      // LCD Reset pin
+      Reset_n::setOutput();
+      init();
+   }
+
    /**
     * Reset LCD
     */
-   void reset();
+   virtual void reset() {
+      // Reset display
+      Reset_n::clear();
+      waitMS(2);
+      Reset_n::set();
+      waitMS(10);
+   }
    /**
     * Send a single command byte to the display
     */
-   void txCommand(uint8_t command);
+   virtual void txCommand(uint8_t command) {
+      SpiCS_n::clear();
+      spi->txRx(command);
+      SpiCS_n::set();
+   }
+
    /**
     * Send a single data byte to the display
     */
-   void txData(uint8_t data);
+   virtual void txData(uint8_t data) {
+      SpiCS_n::clear();
+      spi->txRx(0x100|data);
+      SpiCS_n::set();
+   }
 
-   /** Sets the Row and Column addresses
+#ifdef ELEC_FREAKS
+   /**
+    * Set back-light level
     *
-    * @param x = row address (0 .. 131)
-    * @param y = column address (0 .. 131)
-    *
-    * @author James P Lynch July 7, 2007
+    * @param level 0-100 back-light level as percentage
     */
-   void setXY(int x, int y);
+   virtual void backlightSetLevel(int level) {
+#if LCD_BACKLIGHT_PWM_FEATURE
+      BackLight::setMode(1000, PwmIO::ftm_leftAlign);
+      if (level>100) {
+         level = 100;
+      }
+      if (level<0) {
+         level = 0;
+      }
+      BackLight::setDutyCycle(level);
+#else
+      BackLight::setOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
+      BackLight::write(level>0);
+#endif
+   }
+#endif
 
 };
+
+/**
+ *   Convenience type for typical Arduino shield LCD
+ */
+#if LCD_BACKLIGHT_PWM_FEATURE
+// PWM control for back-light brightness
+using Lcd = Lcd_T<USBDM::gpio_D9, USBDM::gpio_D8, USBDM::ftm_D10>;
+#else
+// On/Off control of back-light
+using Lcd = Lcd_T<USBDM::gpio_D9, USBDM::gpio_D8, USBDM::gpio_D10>;
+#endif
 
 /**
  * @}
