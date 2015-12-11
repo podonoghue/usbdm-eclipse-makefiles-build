@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-NRF24L01" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="demo.cpp.peripheral.spi" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+         <and>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </and>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-NRF24L01" 
+            name="NRF24L01 C++ interface" 
+            description="Adds a CPP abstraction layer for NRF24L01 wireless module" 
+            checkGroup="group-spi-peripheral-options" >
+            <enableWhen>
+               <and>
+                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
+                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
+               </and>
+            </enableWhen>
+         </variable>
+   
+         <!-- NRF24L01 CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-NRF24L01" />
+               </applyWhen>
+               <copy source="Project_Headers/nrf24l01.h"                 target="Project_Headers/nrf24l01.h" />
+               <copy source="Sources/nrf24l01.cpp"                       target="Sources/nrf24l01.cpp" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>
