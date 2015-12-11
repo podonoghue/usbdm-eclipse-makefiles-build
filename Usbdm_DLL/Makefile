@@ -50,8 +50,8 @@ ifeq ($(UNAME_S),Windows)
 allWindows: osbdm-jm60 osbdm-jm60-debug usbdm-cff usbdm-cff-debug
 
 cleanWindows:
-	${RMDIR} osbdm-jm60 osbdm-jm60-debug
-	${RMDIR} usbdm-cff  usbdm-cff-debug
+	${RMDIR} osbdm-jm60${BUILDDIR_SUFFIX} osbdm-jm60-debug${BUILDDIR_SUFFIX}
+	${RMDIR} usbdm-cff${BUILDDIR_SUFFIX}  usbdm-cff-debug${BUILDDIR_SUFFIX}
 else
 allWindows:
 cleanWindows:
