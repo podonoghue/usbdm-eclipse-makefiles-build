@@ -50,16 +50,20 @@
          <constant id="demo.cpp.mma845x.i2c"        value="I2c1" />
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />
          <constant id="demo.cpp.mag3110.i2c"        value="I2c1" />
+         <constant id="demo.cpp.nrf24l01.spi"       value="Spi0" />
+         <constant id="demo.cpp.nrf24l01.cs_n"      value="spi0_PCS1" />
+         <constant id="demo.cpp.nrf24l01.ce"        value="GpioC&lt;11&gt;" />
+         <constant id="demo.cpp.nrf24l01.irq"       value="GpioD&lt;0&gt;" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
-         <createFolder        target="Snippets" />
-         <copy source="Snippets/analogue-example.cpp"                    target="Snippets/analogue-example.cpp" />
-         <copy source="Snippets/digital-example1.cpp"                    target="Snippets/digital-example1.cpp" />
-         <copy source="Snippets/digital-example2.cpp"                    target="Snippets/digital-example2.cpp" />
-         <copy source="Snippets/pwm-example.cpp"                         target="Snippets/pwm-example.cpp" />
+         <createFolder   target="Snippets" />
+         <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
+         <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
+         <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
+         <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
          <copy source="Project_Headers/gpio-&DEVICE_SUB_FAMILY;.h"         target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
          <copy source="Project_Headers/pin_mapping-&DEVICE_SUB_FAMILY;.h"  target="Project_Headers/pin_mapping.h" />

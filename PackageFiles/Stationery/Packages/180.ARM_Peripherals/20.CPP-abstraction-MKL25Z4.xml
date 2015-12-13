@@ -43,18 +43,23 @@
          <constant id="demo.cpp.joystick.z"         value="A0" />
          <constant id="demo.cpp.external.switch"    value="D12" />
          <constant id="demo.cpp.external.led"       value="D13" />
-         <constant id="demo.cpp.lcd.spi"            value="Spi0" />
          <constant id="demo.cpp.external.gps"       value="Gps2" />
+         <constant id="demo.cpp.lcd.spi"            value="Spi0Gpio_T" />
          <constant id="demo.cpp.external.i2c"       value="I2c1" />
          <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c1" />
          <constant id="demo.cpp.mag3110.i2c"        value="I2c1" />
+         <constant id="demo.cpp.spi.dma"            value="new USBDM::DMAChannel0(), new USBDM::DMAChannel1()" />
+         <constant id="demo.cpp.nrf24l01.spi"       value="Spi0Gpio" />
+         <constant id="demo.cpp.nrf24l01.cs_n"      value="GpioD&lt;0&gt;" />
+         <constant id="demo.cpp.nrf24l01.ce"        value="GpioD&lt;5&gt;" />
+         <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
-         <createFolder        target="Snippets" />
+         <createFolder   target="Snippets" />
          <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
