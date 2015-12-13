@@ -14,27 +14,8 @@
 
 namespace USBDM {
 
-static const uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
-
-/**
- * Constructor
- *
- * @param baseAddress  Base address of SPI
- * @param dmaTxChannel DMA Channel for transmission
- * @param dmaRxChannel DMA Channel for reception
- * @param rxMuxSource  Receive Mux value
- * @param pcs          Manual PCS select signal
- */
-Spi::Spi(volatile SPI_Type *baseAddress, DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel, uint8_t rxMuxSource) :
-   spi(baseAddress),
-   dmacTxChannel(dmaTxChannel),
-   dmacRxChannel(dmaRxChannel),
-   dmaSpiRxSlot(rxMuxSource),
-   interfaceFrequency(DEFAULT_SPI_FREQUENCY) {
-}
-
-#ifdef SPI0
-#if !defined(SPI0_SCK_GPIO) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
+#if 0 && defined(SPI0)
+#if (SPI0_SCK_PIN_SEL==0) || (SPI0_MOSI_PIN_SEL==0) || (SPI0_MISO_PIN_SEL==0)
 #warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
 #else
 
@@ -83,60 +64,9 @@ void SPI0_IRQHandler(void) {
    Spi0::thisPtr->poll();
 }
 
-#endif // !defined(SPI0_SCK_GPIO) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
+#endif // (SPI0_SCK_PIN_SEL==0) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
 #endif // SPI0
 
-#ifdef SPI1
-#if !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
-#warning "SPI1 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
-#else
-
-/**
- * Constructor
- *
- * @param dmaTxChannel DMA Channel for transmission
- * @param dmaRxChannel DMA Channel for reception
- * @param pcs          Manual PCS select signal
- */
-Spi1::Spi1(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel) :
-      Spi(SPI1, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI1_Rx) {
-
-   thisPtr = this;
-
-   // Enable SPI port pin clocks
-   // MOSI,MISO,SCLK
-   SPI1_SCK_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI1_MOSI_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI1_MISO_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-
-#ifdef SPI1_PCS0_GPIO
-   SPI1_PCS0_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI1_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#define SPI1_C1_SSOE_VALUE SPI_C1_SSOE_MASK
-#endif
-#ifndef SPI1_C1_SSOE_VALUE
-#define SPI1_C1_SSOE_VALUE 0
-#endif
-
-   // Enable SPI module clock
-   SIM->SPI1_CLOCK_REG |= SPI1_CLOCK_MASK;
-
-   setSpeed(0); // default baud
-
-   NVIC_EnableIRQ(SPI1_IRQn);
-
-   spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI1_C1_SSOE_VALUE;
-   spi->C2 = 0;
-}
-
-Spi1 *Spi1::thisPtr = NULL;
-
-extern "C"
-void SPI1_IRQHandler(void) {
-   Spi1::thisPtr->poll();
-}
-
-#endif // !defined(SPI1_SCK_GPIO)  || !defined(SPI1_MOSI_GPIO) || !defined(SPI1_MISO_GPIO)
-#endif // SPI1
 
 static const uint16_t spprFactors[] = {1,2,3,4,5,6,7,8};
 static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
@@ -148,7 +78,7 @@ static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-void Spi::setSpeed(uint32_t targetFrequency = DEFAULT_SPI_FREQUENCY) {
+void Spi::setSpeed(uint32_t targetFrequency) {
 
    int bestSPPR = 0;
    int bestSPR  = 0;
@@ -232,65 +162,10 @@ void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
    };
    dmacTxChannel->configure(&dmaTxInformation);
 
-//   if (pcs != 0) {
-//      pcs->clear();
-//   }
    spi->C2 |= SPI_C2_RXDMAE_MASK|SPI_C2_TXDMAE_MASK;
    dmacTxChannel->wait();
    dmacRxChannel->wait();
    spi->C2 &= ~(SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK);
-//   if (pcs != 0) {
-//      pcs->set();
-//   }
-}
-
-///**
-// *  Transmit and receive a series of bytes
-// *
-// *  @param dataSize  Number of bytes to transfer
-// *  @param dataOut   Transmit bytes (may be NULL for Rx only)
-// *  @param dataIn    Receive byte buffer (may be NULL for Tx only)
-// *
-// *  Note: dataIn may use same buffer as dataOut
-// */
-//void SPI_T::txRxBytes(int dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
-//   __disable_interrupt();
-//   txBytesRemaining = dataSize;
-//   rxBytesRemaining = dataSize;
-//   dataOutPtr       = dataOut;
-//   dataInPtr        = dataIn;
-//   spi->C1 |= SPI_C1_SPTIE_MASK|SPI_C1_SPIE_MASK;
-//   (void)spi->S;
-//   (void)spi->D; // Discard any previous received data
-//   __enable_interrupt();
-//
-////   while (txBytesRemaining>0) {
-//   while ((spi->C1 & SPI_C1_SPIE_MASK) != 0) {
-//      __asm__("nop");
-//   }
-//}
-//
-void Spi::poll() {
-//   uint8_t status = spi->S;
-//   if ((status & SPI_S_SPTEF_MASK) != 0) {
-//      if (txBytesRemaining>0) {
-//         spi->D = *dataOutPtr++;
-//         txBytesRemaining--;
-//      }
-//      else {
-//         spi->C1 &= ~SPI_C1_SPTIE_MASK;
-//      }
-//   }
-//   if ((status & SPI_S_SPRF_MASK) != 0) {
-//      uint8_t dataIn = spi->D;
-//      if (dataInPtr != NULL) {
-//         *dataInPtr++ = dataIn;
-//         rxBytesRemaining--;
-//      }
-//      if (rxBytesRemaining==0) {
-//         spi->C1 &= ~SPI_C1_SPIE_MASK;
-//      }
-//   }
 }
 
 } // End namespace USBDM

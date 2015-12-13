@@ -2412,22 +2412,6 @@ constexpr uint16_t TPM2_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //     <5=> PTE18<selection=PTE18_SIG_SEL,SPI0_MISO>
 //     <0=> Default
 #define SPI0_MISO_PIN_SEL    0
-#if (SPI0_MISO_PIN_SEL == 1)
-#define SPI0_MISO_GPIO       USBDM::GpioC<7>
-#define SPI0_MISO_FN         2
-#elif (SPI0_MISO_PIN_SEL == 2)
-#define SPI0_MISO_GPIO       USBDM::GpioD<3>
-#define SPI0_MISO_FN         2
-#elif (SPI0_MISO_PIN_SEL == 3)
-#define SPI0_MISO_GPIO       USBDM::GpioC<6>
-#define SPI0_MISO_FN         5
-#elif (SPI0_MISO_PIN_SEL == 4)
-#define SPI0_MISO_GPIO       USBDM::GpioD<2>
-#define SPI0_MISO_FN         5
-#elif (SPI0_MISO_PIN_SEL == 5)
-#define SPI0_MISO_GPIO       USBDM::GpioE<18>
-#define SPI0_MISO_FN         5
-#endif
 
 // Pin Mapping for SPI0_MOSI signal
 //   <o> SPI0_MOSI [PTC6, PTD2, PTE18, PTC7, PTD3]<name=SPI0_MOSI_PIN_SEL>
@@ -2440,22 +2424,6 @@ constexpr uint16_t TPM2_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //     <5=> PTD3<selection=PTD3_SIG_SEL,SPI0_MOSI>
 //     <0=> Default
 #define SPI0_MOSI_PIN_SEL    0
-#if (SPI0_MOSI_PIN_SEL == 1)
-#define SPI0_MOSI_GPIO       USBDM::GpioC<6>
-#define SPI0_MOSI_FN         2
-#elif (SPI0_MOSI_PIN_SEL == 2)
-#define SPI0_MOSI_GPIO       USBDM::GpioD<2>
-#define SPI0_MOSI_FN         2
-#elif (SPI0_MOSI_PIN_SEL == 3)
-#define SPI0_MOSI_GPIO       USBDM::GpioE<18>
-#define SPI0_MOSI_FN         2
-#elif (SPI0_MOSI_PIN_SEL == 4)
-#define SPI0_MOSI_GPIO       USBDM::GpioC<7>
-#define SPI0_MOSI_FN         5
-#elif (SPI0_MOSI_PIN_SEL == 5)
-#define SPI0_MOSI_GPIO       USBDM::GpioD<3>
-#define SPI0_MOSI_FN         5
-#endif
 
 // Pin Mapping for SPI0_PCS0 signal
 //   <o> SPI0_PCS0 [PTC4, PTD0, PTE16]<name=SPI0_PCS0_PIN_SEL>
@@ -2495,31 +2463,6 @@ constexpr uint16_t TPM2_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //     <8=> PTE1<selection=PTE1_SIG_SEL,SPI1_MISO>
 //     <0=> Default
 #define SPI1_MISO_PIN_SEL    0
-#if (SPI1_MISO_PIN_SEL == 1)
-#define SPI1_MISO_GPIO       USBDM::GpioB<17>
-#define SPI1_MISO_FN         2
-#elif (SPI1_MISO_PIN_SEL == 2)
-#define SPI1_MISO_GPIO       USBDM::GpioD<7>
-#define SPI1_MISO_FN         2
-#elif (SPI1_MISO_PIN_SEL == 3)
-#define SPI1_MISO_GPIO       USBDM::GpioE<0>
-#define SPI1_MISO_FN         2
-#elif (SPI1_MISO_PIN_SEL == 4)
-#define SPI1_MISO_GPIO       USBDM::GpioB<1>
-#define SPI1_MISO_FN         4
-#elif (SPI1_MISO_PIN_SEL == 5)
-#define SPI1_MISO_GPIO       USBDM::GpioB<0>
-#define SPI1_MISO_FN         5
-#elif (SPI1_MISO_PIN_SEL == 6)
-#define SPI1_MISO_GPIO       USBDM::GpioB<16>
-#define SPI1_MISO_FN         5
-#elif (SPI1_MISO_PIN_SEL == 7)
-#define SPI1_MISO_GPIO       USBDM::GpioD<6>
-#define SPI1_MISO_FN         5
-#elif (SPI1_MISO_PIN_SEL == 8)
-#define SPI1_MISO_GPIO       USBDM::GpioE<1>
-#define SPI1_MISO_FN         5
-#endif
 
 // Pin Mapping for SPI1_MOSI signal
 //   <o> SPI1_MOSI [PTB16, PTD6, PTE1, PTB0, PTB1, PTB17, PTD7]<name=SPI1_MOSI_PIN_SEL>
@@ -2534,28 +2477,6 @@ constexpr uint16_t TPM2_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //     <7=> PTD7 (Alias:D15, ONBOARD_SCL)<selection=PTD7_SIG_SEL,SPI1_MOSI>
 //     <0=> Default
 #define SPI1_MOSI_PIN_SEL    0
-#if (SPI1_MOSI_PIN_SEL == 1)
-#define SPI1_MOSI_GPIO       USBDM::GpioB<16>
-#define SPI1_MOSI_FN         2
-#elif (SPI1_MOSI_PIN_SEL == 2)
-#define SPI1_MOSI_GPIO       USBDM::GpioD<6>
-#define SPI1_MOSI_FN         2
-#elif (SPI1_MOSI_PIN_SEL == 3)
-#define SPI1_MOSI_GPIO       USBDM::GpioE<1>
-#define SPI1_MOSI_FN         2
-#elif (SPI1_MOSI_PIN_SEL == 4)
-#define SPI1_MOSI_GPIO       USBDM::GpioB<0>
-#define SPI1_MOSI_FN         4
-#elif (SPI1_MOSI_PIN_SEL == 5)
-#define SPI1_MOSI_GPIO       USBDM::GpioB<1>
-#define SPI1_MOSI_FN         5
-#elif (SPI1_MOSI_PIN_SEL == 6)
-#define SPI1_MOSI_GPIO       USBDM::GpioB<17>
-#define SPI1_MOSI_FN         5
-#elif (SPI1_MOSI_PIN_SEL == 7)
-#define SPI1_MOSI_GPIO       USBDM::GpioD<7>
-#define SPI1_MOSI_FN         5
-#endif
 
 // Pin Mapping for SPI1_PCS0 signal
 //   <o> SPI1_PCS0 [PTD4, PTC4]<name=SPI1_PCS0_PIN_SEL>
@@ -3156,8 +3077,32 @@ constexpr PcrInfo Spi0Info[32] = {
 #else
  /*  0 */  { 0 },
 #endif
+#if (SPI0_MISO_PIN_SEL == 1)
+ /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOC_BasePtr,  7,  2 },
+#elif (SPI0_MISO_PIN_SEL == 2)
+ /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOD_BasePtr,  3,  2 },
+#elif (SPI0_MISO_PIN_SEL == 3)
+ /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOC_BasePtr,  6,  5 },
+#elif (SPI0_MISO_PIN_SEL == 4)
+ /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOD_BasePtr,  2,  5 },
+#elif (SPI0_MISO_PIN_SEL == 5)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[18]), GPIOE_BasePtr,  18, 5 },
+#else
  /*  1 */  { 0 },
+#endif
+#if (SPI0_MOSI_PIN_SEL == 1)
+ /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOC_BasePtr,  6,  2 },
+#elif (SPI0_MOSI_PIN_SEL == 2)
+ /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOD_BasePtr,  2,  2 },
+#elif (SPI0_MOSI_PIN_SEL == 3)
+ /*  2 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[18]), GPIOE_BasePtr,  18, 2 },
+#elif (SPI0_MOSI_PIN_SEL == 4)
+ /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOC_BasePtr,  7,  5 },
+#elif (SPI0_MOSI_PIN_SEL == 5)
+ /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOD_BasePtr,  3,  5 },
+#else
  /*  2 */  { 0 },
+#endif
 #if (SPI0_PCS0_PIN_SEL == 1)
  /*  3 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOC_BasePtr,  4,  2 },
 #elif (SPI0_PCS0_PIN_SEL == 2)
@@ -3181,8 +3126,42 @@ constexpr PcrInfo Spi1Info[32] = {
 #else
  /*  0 */  { 0 },
 #endif
+#if (SPI1_MISO_PIN_SEL == 1)
+ /*  1 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[17]), GPIOB_BasePtr,  17, 2 },
+#elif (SPI1_MISO_PIN_SEL == 2)
+ /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOD_BasePtr,  7,  2 },
+#elif (SPI1_MISO_PIN_SEL == 3)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOE_BasePtr,  0,  2 },
+#elif (SPI1_MISO_PIN_SEL == 4)
+ /*  1 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOB_BasePtr,  1,  4 },
+#elif (SPI1_MISO_PIN_SEL == 5)
+ /*  1 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOB_BasePtr,  0,  5 },
+#elif (SPI1_MISO_PIN_SEL == 6)
+ /*  1 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[16]), GPIOB_BasePtr,  16, 5 },
+#elif (SPI1_MISO_PIN_SEL == 7)
+ /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOD_BasePtr,  6,  5 },
+#elif (SPI1_MISO_PIN_SEL == 8)
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOE_BasePtr,  1,  5 },
+#else
  /*  1 */  { 0 },
+#endif
+#if (SPI1_MOSI_PIN_SEL == 1)
+ /*  2 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[16]), GPIOB_BasePtr,  16, 2 },
+#elif (SPI1_MOSI_PIN_SEL == 2)
+ /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOD_BasePtr,  6,  2 },
+#elif (SPI1_MOSI_PIN_SEL == 3)
+ /*  2 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOE_BasePtr,  1,  2 },
+#elif (SPI1_MOSI_PIN_SEL == 4)
+ /*  2 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOB_BasePtr,  0,  4 },
+#elif (SPI1_MOSI_PIN_SEL == 5)
+ /*  2 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOB_BasePtr,  1,  5 },
+#elif (SPI1_MOSI_PIN_SEL == 6)
+ /*  2 */  { PORTB_CLOCK_MASK, PORTB_BasePtr+offsetof(PORT_Type,PCR[17]), GPIOB_BasePtr,  17, 5 },
+#elif (SPI1_MOSI_PIN_SEL == 7)
+ /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOD_BasePtr,  7,  5 },
+#else
  /*  2 */  { 0 },
+#endif
 #if (SPI1_PCS0_PIN_SEL == 1)
  /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOD_BasePtr,  4,  2 },
 #elif (SPI1_PCS0_PIN_SEL == 2)

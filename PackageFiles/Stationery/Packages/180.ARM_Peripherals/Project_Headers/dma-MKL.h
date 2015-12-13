@@ -15,7 +15,7 @@ namespace USBDM {
 class DMAChannel {
 public:
    enum {
-      Disabled                     =  0,
+      DMA_Disabled                 =  0,
       DMA_SLOT_UART0_Rx            =  2,
       DMA_SLOT_UART0_Tx            =  3,
       DMA_SLOT_UART1_Rx            =  4,

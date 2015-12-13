@@ -16,7 +16,7 @@
 
 namespace USBDM {
 
-static const uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
+static constexpr uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
 
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface
@@ -29,8 +29,8 @@ static const uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI fre
  */
 class Spi {
 protected:
-   volatile  SPI_Type *spi;
-   uint32_t  spiBaudValue;
+   volatile  SPI_Type *spi;       //!< SPI hardware
+   uint32_t  spiBaudValue;        //!< Current Baud Rate
    uint32_t  interfaceFrequency;  //!< Interface frequency to use
    uint32_t  pushrMask;           //!< Value to combine with data
 
@@ -42,7 +42,6 @@ protected:
     */
    Spi(volatile SPI_Type *baseAddress) :
       spi(baseAddress), spiBaudValue(0), pushrMask(SPI_PUSHR_PCS_MASK) {
-      setSpeed();   // Use default speed
    }
 
 public:
@@ -128,10 +127,10 @@ public:
  * @tparam  spiBasePtr     Base address of SPI hardware
  * @tparam  spiClockReg    Address of SIM register controlling SPI hardware clock
  * @tparam  spiClockMask   Clock mask for SIM clock register
- * @tparam  SpiSCK         GpioX used for SCK signal
- * @tparam  SpiSIN         GpioX used for SIN signal
- * @tparam  SpiSOUT        GpioX used for SOUT signal
- * @tparam  Rest...        GpioX used for PCSx
+ * @tparam  SpiSCK         Pcr used for SCK signal
+ * @tparam  SpiSIN         Pcr used for SIN signal
+ * @tparam  SpiSOUT        Pcr used for SOUT signal
+ * @tparam  Rest...        Pcrs used for PCSx
  */
 template<uint32_t spiBasePtr, uint32_t spiClockReg, uint32_t spiClockMask, typename SpiSCK, typename  SpiSIN, typename  SpiSOUT, typename ... Rest>
 class Spi_T : public Spi {
@@ -149,7 +148,7 @@ public:
       spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
                    SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
 
-      setSpeed(0);   // Use default speed
+      setSpeed();                        // Use default speed
       setCTAR0Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
       setCTAR1Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
    }
@@ -159,26 +158,69 @@ public:
 /**
  * @brief Template class representing a SPI0 interface with optional PCSs
  *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi0_T<USBDM::spi0_PCS1>();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
+ *
  * @tparam  PCSs...    GpioX used for PCSx
  */
 template<typename ... PCSs> using  Spi0_T = Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK,
       spi0_SCK, spi0_SIN, spi0_SOUT, PCSs...>;
 
 /**
- * @brief Template class representing a SPI0 interface without PCS use
+ * @brief Alias representing a SPI0 interface without PCS use
+ *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi0();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
+ *
+ * @tparam  PCSs...    GpioX used for PCSx
  */
 using Spi0 = Spi0_T<>;
 #endif
 
 #if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_SIN_PIN_SEL!=0) && (SPI1_SOUT_PIN_SEL!=0)
 /**
- * @brief Template class representing a SPI0 interface
+ * @brief Template class representing a SPI1 interface with optional PCSs
+ *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi1_T<USBDM::spi1_PCS1>();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
  *
  * @tparam  PCSs...    GpioX used for PCSx
  */
 template<typename ... PCSs> using  Spi1_T = Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK,
       spi1_SCK, spi1_SIN, spi1_SOUT, PCSs...>;
 
+/**
+ * @brief Alias representing a SPI1 interface without PCS use
+ *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi1();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
+ *
+ * @tparam  PCSs...    GpioX used for PCSx
+ */
 using Spi1 = Spi1_T<>;
 #endif
 /**

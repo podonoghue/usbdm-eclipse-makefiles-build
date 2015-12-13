@@ -529,6 +529,8 @@ template<uint8_t spiPinNum> using Spi0Pin =
 
 using spi0_PCS0            = const USBDM::Spi0Pin<3>;
 using spi0_SCK             = const USBDM::Spi0Pin<0>;
+using spi0_MOSI            = const USBDM::Spi0Pin<2>;
+using spi0_MISO            = const USBDM::Spi0Pin<1>;
 /**
  * @}
  */
@@ -552,6 +554,8 @@ template<uint8_t spiPinNum> using Spi1Pin =
 
 using spi1_PCS0            = const USBDM::Spi1Pin<3>;
 using spi1_SCK             = const USBDM::Spi1Pin<0>;
+using spi1_MOSI            = const USBDM::Spi1Pin<2>;
+using spi1_MISO            = const USBDM::Spi1Pin<1>;
 /**
  * @}
  */
