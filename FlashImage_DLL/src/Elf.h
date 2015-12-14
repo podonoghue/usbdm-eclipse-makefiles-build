@@ -96,6 +96,10 @@ typedef struct {
 #define PT_SHLIB     5
 #define PT_PHDR      6
 
+#define PT_ARM_ARCHEXT    0x70000000  // Platform architecture compatibility information
+#define PT_ARM_EXIDX      0x70000001  // Exception
+#define PT_ARM_UNWIND     0x70000001  // Unwind
+
 typedef struct{
    Elf32_Word sh_name;
    Elf32_Word sh_type;
@@ -110,18 +114,32 @@ typedef struct{
 } Elf32_Shdr;
 
 // shtype values
-#define SHT_NULL        0
-#define SHT_PROGBITS    1
-#define SHT_SYMTAB      2
-#define SHT_STRTAB      3
-#define SHT_RELA        4
-#define SHT_HASH        5
-#define SHT_DYNAMIC     6
-#define SHT_NOTE        7
-#define SHT_NOBITS      8
-#define SHT_REL         9
-#define SHT_SHLIB       10
-#define SHT_DYNSYM      11
+#define SHT_NULL           0
+#define SHT_PROGBITS       1
+#define SHT_SYMTAB         2
+#define SHT_STRTAB         3
+#define SHT_RELA           4
+#define SHT_HASH           5
+#define SHT_DYNAMIC        6
+#define SHT_NOTE           7
+#define SHT_NOBITS         8
+#define SHT_REL            9
+#define SHT_SHLIB          10
+#define SHT_DYNSYM         11
+#define SHT_0x0C           12
+#define SHT_0x0D           13
+#define SHT_INIT_ARRAY     14
+#define SHT_FINI_ARRAY     15
+#define SHT_PREINIT_ARRAY  16
+
+#define SHT_ARM_EXIDX            0x70000001  // Exception Index table
+#define SHT_ARM_PREEMPTMAP       0x70000002  // BPABI DLL dynamic linking pre-emption map
+#define SHT_ARM_ATTRIBUTES       0x70000003  // Object file compatibility attributes
+#define SHT_ARM_DEBUGOVERLAY     0x70000004  // See DBGOVL for details
+#define SHT_ARM_OVERLAYSECTION   0x70000005  //
+
+#define SHT_PROC_SPECIFIC  0xF0000000
+
 #define SHT_LOPROC      0x70000000
 #define SHT_HIPROC      0x7fffffff
 #define SHT_LOUSER      0x80000000

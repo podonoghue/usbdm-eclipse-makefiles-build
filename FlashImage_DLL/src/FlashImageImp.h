@@ -37,21 +37,45 @@ typedef std::tr1::shared_ptr<MemoryPage> MemoryPagePtr;
 
 class FlashImageImp : public FlashImage {
 
+   template <typename T> class MallocWrapper {
+   private:
+      T *&ptr;
+   public:
+      MallocWrapper(T *&ptr) : ptr(ptr) {
+      }
+
+      T *alloc(size_t size) {
+         free();
+         ptr = (T*)malloc(size);
+         UsbdmSystem::Log::print("Allocated 0x%p, %ld\n", ptr, (long)size);
+         return ptr;
+      }
+      void free() {
+         if (ptr != 0) {
+            UsbdmSystem::Log::print("Freeing 0x%p\n", ptr);
+            ::free(ptr);
+            ptr = 0;
+         }
+      }
+      ~MallocWrapper() {
+         free();
+      }
+   };
+
    class Openfile {
    private:
       FILE *fp;
    public:
       Openfile(const char* filePath, const char* modes) {
-         LOGGING_Q;
          fp = fopen(filePath, modes);
-         log.print("Opened %s (fp=%p)\n", filePath, fp);
+         UsbdmSystem::Log::print("Opened %s (fp=%p)\n", filePath, fp);
       }
       FILE *getfp() {
          return  fp;
       }
       ~Openfile() {
          LOGGING_Q;
-         log.print("Closing file (fp=%p)\n", fp);
+//         UsbdmSystem::Log::print("Closing file (fp=%p)\n", fp);
          if (fp != 0) {
             fclose(fp);
          }
@@ -85,6 +109,9 @@ protected:
    bool                              printHeader;
    Elf32_Ehdr                        elfHeader;
    Elf32_Shdr                        stringSectionHeader;
+   Elf32_Phdr                       *programHeaders;
+   char                             *symTable;
+
 public:
    FlashImageImp();
    virtual ~FlashImageImp();
@@ -131,8 +158,9 @@ protected:
    void                    fixElfProgramHeaderSex(Elf32_Phdr *programHeader);
    void                    fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader);
    USBDM_ErrorCode         loadElfBlock(FILE *fp, long fOffset, Elf32_Word size, Elf32_Addr addr);
-   USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
+//   USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfBlock(Elf32_Shdr *programHeader);
+   USBDM_ErrorCode         recordElfProgramBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);
    USBDM_ErrorCode         checkTargetType(Elf32_Half e_machine, TargetType_t targetType);
    USBDM_ErrorCode         loadS1S9File(const std::string &fileName);
@@ -140,6 +168,7 @@ protected:
    static uint32_t         pageOffsetToAddress(uint16_t pageNum, uint16_t offset);
    void                    writeSrec(uint8_t *buffer, uint32_t address, unsigned size);
    void                    writeData(uint8_t *buffer, uint32_t address, unsigned size);
+   Elf32_Addr              getLoadAddress(Elf32_Shdr *sectionHeader);
 };
 
 typedef std::tr1::shared_ptr<FlashImage> FlashImagePtr;

@@ -2957,6 +2957,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");
    log.print("===========================================================\n");
+
+   flashImage->printMemoryMap();
 #endif
 
    this->doRamWrites = doRamWrites;

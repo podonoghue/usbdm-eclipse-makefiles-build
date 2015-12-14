@@ -81,19 +81,17 @@ const char* FlashImageImp::get_pFlagsName(unsigned int flags) {
 }
 
 const char* FlashImageImp::get_ptTypeName(unsigned int type) {
-   const char *names[] = {
-         "PT_NULL"    ,
-         "PT_LOAD"    ,
-         "PT_DYNAMIC" ,
-         "PT_INTERP"  ,
-         "PT_NOTE"    ,
-         "PT_SHLIB"   ,
-         "PT_PHDR"    ,
-   };
-   if (type > sizeof(names)/sizeof(names[0])) {
-      return "Unknown";
+   switch (type) {
+   case PT_NULL:      return "PT_NULL";
+   case PT_LOAD:      return "PT_LOAD";
+   case PT_DYNAMIC:   return "PT_DYNAMIC";
+   case PT_INTERP:    return "PT_INTERP";
+   case PT_NOTE:      return "PT_NOTE";
+   case PT_SHLIB:     return "PT_SHLIB";
+   case PT_PHDR:      return "PT_PHDR";
+   case PT_ARM_EXIDX: return "PT_ARM_EXIDX";
+   default :          return "????";
    }
-   return names[type];
 }
 
 /*
@@ -339,7 +337,10 @@ FlashImageImp::FlashImageImp() :
       littleEndian(false),
       allowOverwrite(false),
       fp(0),
-      discardFF(true) {
+      discardFF(true),
+      printHeader(true),
+      programHeaders(0),
+      symTable(0) {
 }
 
 /*!
@@ -1205,11 +1206,11 @@ void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
 void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
    if (printHeader) {
       UsbdmSystem::Log::printq("===================\n"
-            "p_type                  p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n");
+            "p_type                       p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n");
       printHeader = false;
    }
    UsbdmSystem::Log::printq(
-         "0x%08X (%-10s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)\n",
+         "0x%08X (%-15s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)\n",
          programHeader->p_type  , get_ptTypeName(programHeader->p_type),
          programHeader->p_offset,
          programHeader->p_vaddr ,
@@ -1225,26 +1226,35 @@ static const char *getshTypeName(Elf32_Word shtype) {
    static char buff[30] = {0};
    buff[0] = '\0';
    strcat(buff, "(");
-   switch (shtype&0xFF) {
-     case SHT_NULL     : strcat(buff, "NULL ");       break;
-     case SHT_PROGBITS : strcat(buff, "PROGBITS");    break;
-     case SHT_SYMTAB   : strcat(buff, "SYMTAB ");     break;
-     case SHT_STRTAB   : strcat(buff, "STRTAB ");     break;
-     case SHT_RELA     : strcat(buff, "RELA ");       break;
-     case SHT_HASH     : strcat(buff, "HASH ");       break;
-     case SHT_DYNAMIC  : strcat(buff, "DYNAMIC ");    break;
-     case SHT_NOTE     : strcat(buff, "NOTE ");       break;
-     case SHT_NOBITS   : strcat(buff, "NOBITS ");     break;
-     case SHT_REL      : strcat(buff, "REL ");        break;
-     case SHT_SHLIB    : strcat(buff, "SHLIB ");      break;
-     case SHT_DYNSYM   : strcat(buff, "DYNSYM ");     break;
+   switch (shtype) {
+   case SHT_ARM_EXIDX           : strcat(buff, "ARM_EXIDX ");          break;
+   case SHT_ARM_PREEMPTMAP      : strcat(buff, "ARM_PREEMPTMAP ");     break;
+   case SHT_ARM_ATTRIBUTES      : strcat(buff, "ARM_ATTRIBUTES ");     break;
+   case SHT_ARM_DEBUGOVERLAY    : strcat(buff, "ARM_DEBUGOVERLAY ");   break;
+   case SHT_ARM_OVERLAYSECTION  : strcat(buff, "ARM_OVERLAYSECTION "); break;
+
+   case SHT_NULL                : strcat(buff, "NULL ");               break;
+   case SHT_PROGBITS            : strcat(buff, "PROGBITS");            break;
+   case SHT_SYMTAB              : strcat(buff, "SYMTAB ");             break;
+   case SHT_STRTAB              : strcat(buff, "STRTAB ");             break;
+   case SHT_RELA                : strcat(buff, "RELA ");               break;
+   case SHT_HASH                : strcat(buff, "HASH ");               break;
+   case SHT_DYNAMIC             : strcat(buff, "DYNAMIC ");            break;
+   case SHT_NOTE                : strcat(buff, "NOTE ");               break;
+   case SHT_NOBITS              : strcat(buff, "NOBITS ");             break;
+   case SHT_REL                 : strcat(buff, "REL ");                break;
+   case SHT_SHLIB               : strcat(buff, "SHLIB ");              break;
+   case SHT_DYNSYM              : strcat(buff, "DYNSYM ");             break;
+   case SHT_INIT_ARRAY          : strcat(buff, "INIT_ARRAY ");         break;
+   case SHT_FINI_ARRAY          : strcat(buff, "FINI_ARRAY ");         break;
+   case SHT_PREINIT_ARRAY       : strcat(buff, "PREINIT_ARRAY ");      break;
    }
    strcat(buff, ")");
    return buff;
-//#define SHT_LOPROC      0x70000000
-//#define SHT_HIPROC      0x7fffffff
-//#define SHT_LOUSER      0x80000000
-//#define SHT_HIUSER      0xffffffff
+   //#define SHT_LOPROC      0x70000000
+   //#define SHT_HIPROC      0x7fffffff
+   //#define SHT_LOUSER      0x80000000
+   //#define SHT_HIUSER      0xffffffff
 }
 
 static const char *getshFlagName(Elf32_Word shflags) {
@@ -1278,10 +1288,10 @@ void FlashImageImp::printElfSectionHeader(Elf32_Shdr *elfsHeader) {
    if (printHeader) {
       printHeader = false;
       UsbdmSystem::Log::printq("===================\n"
-            "shtype                  shflags                             shaddr,    shoffset   shsize     shlink     shinfo     shaddralign shentsize\n");
+            "shtype                            shflags                             shaddr,    shoffset   shsize     shlink     shinfo     shaddralign shentsize\n");
    }
    UsbdmSystem::Log::printq(
-         "%-10s (0x%08X) %-22s (0x%08X) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X %s\n",
+         "%-20s (0x%08X) %-22s (0x%08X) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X %s\n",
          getshTypeName(elfsHeader->sh_type), elfsHeader->sh_type,
          getshFlagName(elfsHeader->sh_flags), elfsHeader->sh_flags,
          elfsHeader->sh_addr      ,
@@ -1330,7 +1340,6 @@ void FlashImageImp::fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader) {
 }
 
 const char * FlashImageImp::getElfString(unsigned index) {
-   static char *symTable = 0;
    static const char *empty = "-";
    static bool noSymTable = false;
 
@@ -1373,6 +1382,28 @@ const char * FlashImageImp::getElfString(unsigned index) {
    return symTable+index;
 }
 
+/**
+ * Translate section address into load addres (physical address)
+ * Most needed for .data
+ *
+ * @param   sectionAddress  Section address
+ * @return Corresponding load address (may be the same)
+ */
+Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
+   for(Elf32_Phdr *programHeader=programHeaders;
+         programHeader<(programHeaders+elfHeader.e_phnum);
+         programHeader++) {
+      if ((programHeader->p_offset<=sectionHeader->sh_offset) &&
+          ((programHeader->p_offset+programHeader->p_filesz)>=(sectionHeader->sh_offset+sectionHeader->sh_size))) {
+//         Elf32_Addr lAddress = sectionHeader->sh_addr;
+         Elf32_Addr pAddress = sectionHeader->sh_offset - programHeader->p_offset + programHeader->p_paddr;
+//         UsbdmSystem::Log::print("L:0x%08X ==> P:0x%08X\n",lAddress, pAddress);
+         return pAddress;
+      }
+   }
+   throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);
+}
+
 /*
  * Load a ELF file into the buffer. \n
  *
@@ -1383,6 +1414,9 @@ const char * FlashImageImp::getElfString(unsigned index) {
 USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    LOGGING_Q;
    Openfile file(filePath.c_str(), "rb");
+   MallocWrapper<Elf32_Phdr> phWrapper(programHeaders);
+   MallocWrapper<char>       stWrapper(symTable);
+
    fp = file.getfp();
    if (fp == NULL) {
       log.error("Failed to open input file \'%s\'\n", filePath.c_str());
@@ -1416,20 +1450,37 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       return SFILE_RC_ELF_FORMAT_ERROR;
    }
 
-#ifdef LOG
-   printHeader = true;
-   for(Elf32_Half entry=0; entry<elfHeader.e_phnum; entry++) {
-      Elf32_Phdr programHeader;
-      fseek(fp, elfHeader.e_phoff+entry*elfHeader.e_phentsize, SEEK_SET);
-      size_t sz;
-      if ((sz=fread(&programHeader, 1, sizeof(programHeader), fp)) != sizeof(programHeader)) {
-         log.error("Undersize read of Program Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(programHeader), (unsigned long)sz);
-         return SFILE_RC_ELF_FORMAT_ERROR;
-      }
-      fixElfProgramHeaderSex(&programHeader);
-      printElfProgramHeader(&programHeader);
+   /*
+    * Read program headers
+    */
+   if (elfHeader.e_phnum <= 0) {
+      // No program image to load
+      return SFILE_RC_ELF_FORMAT_ERROR;
+   }
+   const size_t totalProgramHeaderSize = elfHeader.e_phnum*sizeof(Elf32_Phdr);
+
+   phWrapper.alloc(totalProgramHeaderSize);
+   if (programHeaders == 0) {
+      return SFILE_RC_ELF_FORMAT_ERROR;
+   }
+   fseek(fp, elfHeader.e_phoff, SEEK_SET);
+   size_t sz;
+   if ((sz=fread(programHeaders, 1, totalProgramHeaderSize, fp)) != totalProgramHeaderSize) {
+      log.error("Undersize read of Header (Expected %lu, read %lu)\n", (unsigned long)totalProgramHeaderSize, (unsigned long)sz);
+      return SFILE_RC_ELF_FORMAT_ERROR;
    }
 
+   printHeader = true;
+   for(Elf32_Phdr *programHeader=programHeaders;
+         programHeader<(programHeaders+elfHeader.e_phnum);
+         programHeader++) {
+      fixElfProgramHeaderSex(programHeader);
+#ifdef LOG
+      printElfProgramHeader(programHeader);
+#endif
+   }
+
+#ifdef LOG
    printHeader = true;
    for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
       Elf32_Shdr sectionHeader;
@@ -1460,36 +1511,20 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       loadElfBlock(&sectionHeader);
    }
 
-//   fseek(fp, elfHeader.e_phoff, SEEK_SET);
-//   for(Elf32_Half entry=0; entry<elfHeader.e_phnum; entry++) {
-//      Elf32_Phdr programHeader;
-//      fseek(fp, elfHeader.e_phoff+entry*elfHeader.e_phentsize, SEEK_SET);
-//      size_t sz;
-//      if ((sz=fread(&programHeader, 1, sizeof(programHeader), fp)) != sizeof(programHeader)) {
-//         log.error("Undersize read of Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(programHeader), (unsigned long)sz);
-//         return SFILE_RC_ELF_FORMAT_ERROR;
-//      }
-//      fixElfProgramHeaderSex(&programHeader);
-//      if ((programHeader.p_type == PT_LOAD) && (programHeader.p_filesz > 0)) {
-//         loadElfBlock(&programHeader);
-//      }
-//   }
-//   printMemoryMap();
    return SFILE_RC_OK;
 }
 
 USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    LOGGING_Q;
 
-   if (sectionHeader->sh_type != SHT_PROGBITS) {
-      return BDM_RC_OK;
-   }
    if ((sectionHeader->sh_flags&SHF_ALLOC) == 0) {
       return BDM_RC_OK;
    }
-   Elf32_Addr loadAddress = sectionHeader->sh_addr;
+   if (sectionHeader->sh_type == SHT_NOBITS) {
+      return BDM_RC_OK;
+   }
+   Elf32_Addr loadAddress = getLoadAddress(sectionHeader);
    Elf32_Word size        = sectionHeader->sh_size;
-   log.print("loading [0x%08X, 0x%08X]\n", loadAddress, loadAddress+size);
 
 #if defined(TARGET) && (TARGET == MC56F80xx)
    // DSC image uses word addresses
@@ -1500,9 +1535,9 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    }
    else {
 #if defined(TARGET) && (TARGET == MC56F80xx)
-      log.print("[0x%08X..0x%08X]\n", loadAddress, loadAddress+size/2-1);
+      log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size/2-1 loadAddress);
 #else
-      log.print("[0x%08X..0x%08X]\n", loadAddress, loadAddress+size-1);
+      log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size-1, loadAddress);
 #endif
    }
    fseek(fp, sectionHeader->sh_offset, SEEK_SET);
