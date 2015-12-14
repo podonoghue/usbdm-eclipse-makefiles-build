@@ -1450,11 +1450,14 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
       log.error("PC verify failed\n");
       return PROGRAMMING_RC_ERROR_BDM_WRITE;
    }
-#if defined(LOG) && 0
+#if defined(LOG)&& 0
    USBDMStatus_t status;
    bdmInterface->getBDMStatus(&status);
 
-   for (int num=0; num<1000; num++) {
+   for (int num=0; num<100; num++) {
+
+      UsbdmSystem::milliSleep(10);
+
       unsigned long currentPC;
       rc = bdmInterface->readPC(&currentPC);
       if (rc != BDM_RC_OK) {
@@ -1464,7 +1467,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
          return rc;
       }
       if ((currentPC<(targetRegPC-0x1000))||(currentPC>(targetRegPC+0x1000))) {
-         log.error("Read PC out of range, PC=0x%08X\n",
+         log.error("Read PC out of range, PC=0x%08lX\n",
                currentPC);
 //         report("executeTargetProgram()");
          return PROGRAMMING_RC_ERROR_BDM;
@@ -1477,10 +1480,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
 //         report("executeTargetProgram()");
          return rc;
       }
-      log.print("Step: PC=0x%06X => %02X %02X %02X %02X\n",
+      log.print("Step: PC=0x%06lX => %02X %02X %02X %02X\n",
              currentPC, iBuffer[3], iBuffer[2], iBuffer[1], iBuffer[0]);
 
-      USBDM_ErrorCode rc = bdmInterface->go();
+      USBDM_ErrorCode rc = bdmInterface->step();
       if (rc != BDM_RC_OK) {
          log.error("TargetStep() Failed, rc=%s\n",
                bdmInterface->getErrorString(rc));
@@ -1555,13 +1558,20 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
             errorCode);
    }
    rc = convertTargetErrorCode((FlashDriverError_t)errorCode);
-   if (rc != BDM_RC_OK) {
+   if (0 || (rc != BDM_RC_OK)) {
       log.error("Raw error code - %d\n", errorCode);
       log.error("Error - %s\n", bdmInterface->getErrorString(rc));
       uint8_t rcm_srs0, rcm_srs1;
+      uint8_t sim_srsid[4];
       bdmInterface->readMemory(MS_Byte, 1, 0x4007F000, &rcm_srs0);
       bdmInterface->readMemory(MS_Byte, 1, 0x4007F001, &rcm_srs1);
-      log.error("Error - SRS0=0x%2.2X, SRS1=0x%2.2X\n", rcm_srs0, rcm_srs1);
+      bdmInterface->readMemory(MS_Long, 4, 0x40048000, sim_srsid);
+
+      uint8_t buffer[2048];
+      bdmInterface->readMemory(MS_Long, sizeof(buffer), 0x1FFFFE00, buffer);
+      log.printDump(buffer, sizeof(buffer), 0x1FFFFE00);
+
+      log.error("Error - SRS0=0x%2.2X, SRS1=0x%2.2X SRSID=0x%02X%02X\n", rcm_srs0, rcm_srs1, sim_srsid[1], sim_srsid[0]);
 #if (TARGET == MC56F80xx) && 0
       executionResult.data = targetToNative16(executionResult.data);
       executionResult.dataSize = targetToNative16(executionResult.dataSize);
