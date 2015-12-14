@@ -385,6 +385,58 @@ using i2c0_SDAGpio   = const USBDM::I2c0Gpio<1>;
 /**
  * @}
  */
+/**
+* @addtogroup DMA_Group Direct Memory Access (DMA)
+* @brief Support for DMA operations
+* @{
+*/
+enum {
+DMA0_SLOT_Disabled                   = 0,
+DMA0_SLOT_UART0_Receive              = 2,
+DMA0_SLOT_UART0_Transmit             = 3,
+DMA0_SLOT_UART1_Receive              = 4,
+DMA0_SLOT_UART1_Transmit             = 5,
+DMA0_SLOT_UART2_Receive              = 6,
+DMA0_SLOT_UART2_Transmit             = 7,
+DMA0_SLOT_I2S0_Receive               = 14,
+DMA0_SLOT_I2S0_Transmit              = 15,
+DMA0_SLOT_SPI0_Receive               = 16,
+DMA0_SLOT_SPI0_Transmit              = 17,
+DMA0_SLOT_I2C0                       = 22,
+DMA0_SLOT_FTM0_Ch_0                  = 24,
+DMA0_SLOT_FTM0_Ch_1                  = 25,
+DMA0_SLOT_FTM0_Ch_2                  = 26,
+DMA0_SLOT_FTM0_Ch_3                  = 27,
+DMA0_SLOT_FTM0_Ch_4                  = 28,
+DMA0_SLOT_FTM0_Ch_5                  = 29,
+DMA0_SLOT_FTM0_Ch_6                  = 30,
+DMA0_SLOT_FTM0_Ch_7                  = 31,
+DMA0_SLOT_FTM1_Ch_0                  = 32,
+DMA0_SLOT_FTM1_Ch_1                  = 33,
+DMA0_SLOT_ADC0                       = 40,
+DMA0_SLOT_CMP0                       = 42,
+DMA0_SLOT_CMP1                       = 43,
+DMA0_SLOT_CMT                        = 47,
+DMA0_SLOT_PDB                        = 48,
+DMA0_SLOT_PortA                      = 49,
+DMA0_SLOT_PortB                      = 50,
+DMA0_SLOT_PortC                      = 51,
+DMA0_SLOT_PortD                      = 52,
+DMA0_SLOT_PortE                      = 53,
+DMA0_SLOT_AlwaysEnabled0             = 54,
+DMA0_SLOT_AlwaysEnabled1             = 55,
+DMA0_SLOT_AlwaysEnabled2             = 56,
+DMA0_SLOT_AlwaysEnabled3             = 57,
+DMA0_SLOT_AlwaysEnabled4             = 48,
+DMA0_SLOT_AlwaysEnabled5             = 59,
+DMA0_SLOT_AlwaysEnabled6             = 60,
+DMA0_SLOT_AlwaysEnabled7             = 61,
+DMA0_SLOT_AlwaysEnabled8             = 62,
+DMA0_SLOT_AlwaysEnabled9             = 63,
+};
+/**
+ * @}
+ */
 #if (DO_MAP_PINS_ON_RESET>0)
 /**
  * Used to configure pin-mapping before 1st use of peripherals

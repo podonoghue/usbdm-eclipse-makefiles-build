@@ -826,6 +826,7 @@ NOTES:
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
+<!-- MKE02Z4 -->
       <device name="MKE02Z16M4" family="CortexM0plus" subfamily="MKE02Z4">
          <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
@@ -835,6 +836,7 @@ NOTES:
          <sdid value="0x02070000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z32M4" family="CortexM0plus" subfamily="MKE02Z4">
          <memoryRef ref="kinetis1K_3K_Ram" />
@@ -845,6 +847,7 @@ NOTES:
          <sdid value="0x02070000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z64M4" family="CortexM0plus" subfamily="MKE02Z4">
          <memoryRef ref="kinetis1K_3K_Ram" />
@@ -855,6 +858,7 @@ NOTES:
          <sdid value="0x02040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02P64M40SF0RM</note>
       </device>
 <!-- MKE04Z4 -->
       <device name="MKE04Z8M4" family="CortexM0plus" subfamily="MKE04Z4">

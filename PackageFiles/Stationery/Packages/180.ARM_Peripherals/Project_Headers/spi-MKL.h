@@ -148,7 +148,7 @@ public:
  * @brief Template class representing a SPI0 interface with PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0<USBDM::spi0_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), 3);
+ * USBDM::Spi *spi = new USBDM::Spi0<USBDM::spi0_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
@@ -172,7 +172,7 @@ public:
     * @param dmaRxChannel DMA Channel for reception
     * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
     */
-   Spi0_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMAChannel::DMA_SLOT_SPI0_Rx) :
+   Spi0_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
       Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, PCS...>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
       NVIC_EnableIRQ(SPI0_IRQn);
       NVIC_SetPriority(SPI0_IRQn, 2);
@@ -197,7 +197,7 @@ using Spi0 = Spi0_T<>;
  * @brief Template class representing a SPI0 interface with GPIO used as select signal
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), 3);
+ * USBDM::Spi *spi = new USBDM::Spi0Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1());
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
@@ -216,7 +216,6 @@ public:
     *
     * @param dmaTxChannel DMA Channel for transmission
     * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
     */
    Spi0Gpio_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel) :
       Spi0(dmaTxChannel, dmaRxChannel) {
@@ -256,7 +255,7 @@ public:
  * @brief Template class representing a SPI1 interface with PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi1<USBDM::spi1_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMAChannel::DMA_SLOT_SPI1_Rx);
+ * USBDM::Spi *spi = new USBDM::Spi1<USBDM::spi1_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
@@ -280,7 +279,7 @@ public:
     * @param dmaRxChannel DMA Channel for reception
     * @param rxMuxSource  Receive Mux value
     */
-   Spi1_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel) :
+   Spi1_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
       Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi1_SCK, spi1_MOSI, spi1_MISO, PCS...>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
       NVIC_EnableIRQ(SPI1_IRQn);
       NVIC_SetPriority(SPI1_IRQn, 2);
@@ -305,7 +304,7 @@ using Spi1 = Spi1_T<>;
  * @brief Template class representing a SPI1 interface with GPIO used as select signal
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi1Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), 3);
+ * USBDM::Spi *spi = new USBDM::Spi1Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1());
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
@@ -324,9 +323,8 @@ public:
     *
     * @param dmaTxChannel DMA Channel for transmission
     * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
     */
-   Spi1Gpio_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMAChannel::DMA_SLOT_SPI1_Rx) :
+   Spi1Gpio_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel) :
       Spi1(dmaTxChannel, dmaRxChannel) {
    }
    /**

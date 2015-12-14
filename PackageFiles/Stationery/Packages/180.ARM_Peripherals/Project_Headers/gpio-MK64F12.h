@@ -764,6 +764,79 @@ using i2c2_SCLGpio   = const USBDM::I2c2Gpio<0>;
 /**
  * @}
  */
+/**
+* @addtogroup DMA_Group Direct Memory Access (DMA)
+* @brief Support for DMA operations
+* @{
+*/
+enum {
+DMA0_SLOT_Disabled                   = 0,
+DMA0_SLOT_UART0_Receive              = 2,
+DMA0_SLOT_UART0_Transmit             = 3,
+DMA0_SLOT_UART1_Receive              = 4,
+DMA0_SLOT_UART1_Transmit             = 5,
+DMA0_SLOT_UART2_Receive              = 6,
+DMA0_SLOT_UART2_Transmit             = 7,
+DMA0_SLOT_UART3_Receive              = 8,
+DMA0_SLOT_UART3_Transmit             = 9,
+DMA0_SLOT_UART4_TransmitReceive      = 10,
+DMA0_SLOT_UART5_TransmitReceive      = 11,
+DMA0_SLOT_I2S0_Receive               = 12,
+DMA0_SLOT_I2S0_Transmit              = 13,
+DMA0_SLOT_SPI0_Receive               = 14,
+DMA0_SLOT_SPI0_Transmit              = 15,
+DMA0_SLOT_SPI1_TransmitReceive       = 16,
+DMA0_SLOT_SPI2_TransmitReceive       = 17,
+DMA0_SLOT_I2C0                       = 18,
+DMA0_SLOT_I2C1_I2C2                  = 19,
+DMA0_SLOT_FTM0_Ch_0                  = 20,
+DMA0_SLOT_FTM0_Ch_1                  = 21,
+DMA0_SLOT_FTM0_Ch_2                  = 22,
+DMA0_SLOT_FTM0_Ch_3                  = 23,
+DMA0_SLOT_FTM0_Ch_4                  = 24,
+DMA0_SLOT_FTM0_Ch_5                  = 25,
+DMA0_SLOT_FTM0_Ch_6                  = 26,
+DMA0_SLOT_FTM0_Ch_7                  = 27,
+DMA0_SLOT_FTM1_Ch_0                  = 28,
+DMA0_SLOT_FTM1_Ch_1                  = 29,
+DMA0_SLOT_FTM2_Ch_0                  = 30,
+DMA0_SLOT_FTM2_Ch_1                  = 31,
+DMA0_SLOT_FTM3_Ch_0                  = 32,
+DMA0_SLOT_FTM3_Ch_1                  = 33,
+DMA0_SLOT_FTM3_Ch_2                  = 34,
+DMA0_SLOT_FTM3_Ch_3                  = 35,
+DMA0_SLOT_FTM3_Ch_4                  = 36,
+DMA0_SLOT_FTM3_Ch_5                  = 37,
+DMA0_SLOT_FTM3_Ch_6                  = 38,
+DMA0_SLOT_FTM3_Ch_7                  = 39,
+DMA0_SLOT_ADC0                       = 40,
+DMA0_SLOT_ADC1                       = 41,
+DMA0_SLOT_CMP0                       = 42,
+DMA0_SLOT_CMP1                       = 43,
+DMA0_SLOT_CMP2                       = 44,
+DMA0_SLOT_DAC0                       = 45,
+DMA0_SLOT_DAC1                       = 46,
+DMA0_SLOT_CMT                        = 47,
+DMA0_SLOT_PDB                        = 48,
+DMA0_SLOT_PortA                      = 49,
+DMA0_SLOT_PortB                      = 50,
+DMA0_SLOT_PortC                      = 51,
+DMA0_SLOT_PortD                      = 52,
+DMA0_SLOT_PortE                      = 53,
+DMA0_SLOT_IEEE1588_Timer0            = 54,
+DMA0_SLOT_IEEE1588_Timer1            = 55,
+DMA0_SLOT_IEEE1588_Timer2            = 56,
+DMA0_SLOT_IEEE1588_Timer3            = 57,
+DMA0_SLOT_AlwaysEnabled0             = 58,
+DMA0_SLOT_AlwaysEnabled1             = 59,
+DMA0_SLOT_AlwaysEnabled2             = 60,
+DMA0_SLOT_AlwaysEnabled3             = 61,
+DMA0_SLOT_AlwaysEnabled4             = 62,
+DMA0_SLOT_AlwaysEnabled5             = 63,
+};
+/**
+ * @}
+ */
 #if (DO_MAP_PINS_ON_RESET>0)
 /**
  * Used to configure pin-mapping before 1st use of peripherals

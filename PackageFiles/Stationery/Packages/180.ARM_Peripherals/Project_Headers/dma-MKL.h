@@ -12,44 +12,12 @@
 
 namespace USBDM {
 
+/**
+* @addtogroup DMA_Group Direct Memory Access (DMA)
+* @brief Support for DMA operations
+* @{
+*/
 class DMAChannel {
-public:
-   enum {
-      DMA_Disabled                 =  0,
-      DMA_SLOT_UART0_Rx            =  2,
-      DMA_SLOT_UART0_Tx            =  3,
-      DMA_SLOT_UART1_Rx            =  4,
-      DMA_SLOT_UART1_Tx            =  5,
-      DMA_SLOT_UART2_Rx            =  6,
-      DMA_SLOT_UART2_Tx            =  7,
-      DMA_SLOT_SPI0_Rx             = 16,
-      DMA_SLOT_SPI0_Tx             = 17,
-      DMA_SLOT_SPI1_Rx             = 18,
-      DMA_SLOT_SPI1_Tx             = 19,
-      DMA_SLOT_TPM0_Ch0            = 24,
-      DMA_SLOT_TPM0_Ch1            = 25,
-      DMA_SLOT_TPM0_Ch2            = 26,
-      DMA_SLOT_TPM0_Ch3            = 27,
-      DMA_SLOT_TPM0_Ch4            = 28,
-      DMA_SLOT_TPM0_Ch5            = 29,
-      DMA_SLOT_TPM1_Ch0            = 32,
-      DMA_SLOT_TPM1_Ch1            = 33,
-      DMA_SLOT_TPM2_Ch0            = 34,
-      DMA_SLOT_TPM2_Ch1            = 35,
-      DMA_SLOT_ADC0                = 40,
-      DMA_SLOT_CMP0                = 42,
-      DMA_SLOT_DAC0                = 45,
-      DMA_SLOT_PORTA               = 49,
-      DMA_SLOT_PORTD               = 52,
-      DMA_SLOT_TPM0_Overflow       = 54,
-      DMA_SLOT_TPM1_Overflow       = 55,
-      DMA_SLOT_TPM2_Overflow       = 56,
-      DMA_SLOT_TSI                 = 57,
-      DMA_SLOT_DMA0_AlwaysEnabled  = 60,
-      DMA_SLOT_DMA1_AlwaysEnabled  = 61,
-      DMA_SLOT_DMA2_AlwaysEnabled  = 62,
-      DMA_SLOT_DMA3_AlwaysEnabled  = 63,
-      };
 
 private:
    volatile DMA_Type    *dmac;
@@ -133,7 +101,9 @@ public:
       thisPtr = this;
    }
 };
-
+/**
+ * @}
+ */
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_DMA_H_ */
