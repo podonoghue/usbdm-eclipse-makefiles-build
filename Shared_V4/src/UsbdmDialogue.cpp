@@ -898,6 +898,10 @@ bool UsbdmDialogue::TransferDataFromWindow() {
       for(unsigned index=0; index<securityMemoryRegionChoice->GetCount(); index++) {
          int memoryIndex = (int)(intptr_t)securityMemoryRegionChoice->GetClientData(index);
          log.print("memoryIndex = %d\n", memoryIndex);
+         if (memoryIndex < 0) {
+            // Not a valid region
+            continue;
+         }
          MemoryRegionPtr memoryRegionPtr = deviceInterface->getCurrentDevice()->getMemoryRegion(memoryIndex);
          if (memoryRegionPtr == NULL) {
             // No matching memory region!
