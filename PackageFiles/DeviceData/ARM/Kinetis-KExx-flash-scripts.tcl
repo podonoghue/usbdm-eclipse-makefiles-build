@@ -20,8 +20,9 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.250 - Simplified
-;#  V4.19.4.240 - Added return error codes
+;#  V4.12.1.60  - Added NMI masking to massErase{}
+;#  V4.10.4.250 - Simplified
+;#  V4.10.4.240 - Added return error codes
 ;#  V4.10.4.140 - Changed Mass erase sequence (added retry etc.)
 ;#  V4.10.4     - Changed return code handling
 ;#              - Changed Mass erase reset to special-software (FDPROT etc wasn't unprotected)
@@ -191,6 +192,9 @@ proc loadSymbols {} {
    set ::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND 115
    set ::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE 116
    
+   set ::SIM_SOPT                       0x40048004
+   set ::SIM_SOPT_NMIE_MASK             0x02                 
+ 
    return
 }
 
@@ -199,7 +203,6 @@ proc loadSymbols {} {
 ;#
 proc initTarget { args } {
    ;# Not used
-   ;# puts [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
    return $::PROGRAMMING_RC_OK
 }
 
@@ -208,8 +211,8 @@ proc initTarget { args } {
 ;#  frequency - Target bus frequency in kHz
 ;#
 proc initFlash { frequency } {
+   ;# Not used
    ;# Uprotecting flash and caching done  by target routines
-   ;# puts [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
    return $::PROGRAMMING_RC_OK
 }
 
@@ -269,11 +272,22 @@ proc massEraseTarget { } {
       }
       after 50
    }
-
+   
    ;# Resetting target using MDM
-   puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET"
-   wcreg $::MDM_AP_Control $::MDM_AP_C_SYSTEM_RESET
+   puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET + MDM_AP_C_CORE_HOLD"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD | $::MDM_AP_C_SYSTEM_RESET]
+
+   ;# Disable NMI here so we can still debug target using Erase-All option
+   puts "massEraseTarget{} - Disabling NMI"
+   catch { connect }
+   set soptValue [rb $::SIM_SOPT]
+   wb  $::SIM_SOPT [ expr $soptValue & ~$::SIM_SOPT_NMIE_MASK]
+   rb $::SIM_SOPT
+
    puts "massEraseTarget{} - Clearing MDM_AP_C_SYSTEM_RESET"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD]
+
+   puts "massEraseTarget{} - Releasing MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control 0
 
    return [ isUnsecure ] 
