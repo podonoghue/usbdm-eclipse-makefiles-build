@@ -22,7 +22,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	targetTypeRadioBox->SetSelection( 3 );
 	targetTypeRadioBox->SetToolTip( wxT("Select Target type") );
 	
-	bSizer1->Add( targetTypeRadioBox, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( targetTypeRadioBox, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Select BDM") ), wxVERTICAL );
@@ -44,7 +44,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	sbSizer1->Add( bdmDescriptionStaticControl, 0, wxALL, 5 );
 	
 	
-	bSizer1->Add( sbSizer1, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( sbSizer1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -52,7 +52,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	wxString targetVddControlChoices[] = { wxT("Off"), wxT("3.3V   "), wxT("5V") };
 	int targetVddControlNChoices = sizeof( targetVddControlChoices ) / sizeof( wxString );
 	targetVddControl = new wxRadioBox( this, wxID_ANY, wxT("Target Vdd Control"), wxDefaultPosition, wxDefaultSize, targetVddControlNChoices, targetVddControlChoices, 1, wxRA_SPECIFY_ROWS );
-	targetVddControl->SetSelection( 1 );
+	targetVddControl->SetSelection( 2 );
 	targetVddControl->SetToolTip( wxT("Off\t- Target Vdd is externally supplied\n3.3V\t- BDM supplies target Vdd @3.3V\n5V\t- BDM supplies target Vdd @5V") );
 	
 	bSizer4->Add( targetVddControl, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -86,18 +86,18 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
-	memoryRangesGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	memoryRangesGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 450,350 ), 0 );
 	
 	// Grid
-	memoryRangesGrid->CreateGrid( 10, 3 );
+	memoryRangesGrid->CreateGrid( 20, 3 );
 	memoryRangesGrid->EnableEditing( true );
 	memoryRangesGrid->EnableGridLines( true );
 	memoryRangesGrid->EnableDragGridSize( false );
 	memoryRangesGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	memoryRangesGrid->SetColSize( 0, 108 );
-	memoryRangesGrid->SetColSize( 1, 116 );
+	memoryRangesGrid->SetColSize( 0, 120 );
+	memoryRangesGrid->SetColSize( 1, 120 );
 	memoryRangesGrid->SetColSize( 2, 80 );
 	memoryRangesGrid->EnableDragColMove( false );
 	memoryRangesGrid->EnableDragColSize( true );
@@ -108,26 +108,26 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	memoryRangesGrid->EnableDragRowSize( true );
+	memoryRangesGrid->EnableDragRowSize( false );
 	memoryRangesGrid->SetRowLabelSize( 80 );
 	memoryRangesGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
 	
 	// Cell Defaults
-	memoryRangesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	memoryRangesGrid->SetDefaultCellAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	memoryRangesGrid->SetToolTip( wxT("Enter one or more memory ranges") );
 	
-	bSizer5->Add( memoryRangesGrid, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer5->Add( memoryRangesGrid, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("\n[Start...End]\nAddress range\n(inclusive)\n\nWidth\nWidth of access\nSet to 0 to disable range "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("\n[Start...End]\nAddress range\n(inclusive)\n\nWidth\nWidth of access\nSet to 0 to disable range "), wxDefaultPosition, wxSize( 100,-1 ), 0 );
 	m_staticText3->Wrap( -1 );
 	m_staticText3->SetToolTip( wxT("Enter one or more memory ranges") );
 	
-	bSizer5->Add( m_staticText3, 0, wxALL|wxEXPAND, 5 );
+	bSizer5->Add( m_staticText3, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizer3->Add( bSizer5, 1, wxEXPAND, 5 );
+	sbSizer3->Add( bSizer5, 1, 0, 5 );
 	
 	
 	bSizer1->Add( sbSizer3, 1, wxEXPAND, 5 );
