@@ -40,27 +40,35 @@
 #include "Utils.h"
 #include "Names.h"
 
+/**
+ * Constructor
+ */
 FlashProgrammerCommon::FlashProgrammerCommon() :
    flashReady(false),
    progressTimer(new ProgressTimer()),
    calculatedClockTrimValue(0) {
-
    LOGGING_E;
-   flashReady = false;
 }
 
+/**
+ * Destructor
+ */
 FlashProgrammerCommon::~FlashProgrammerCommon() {
    LOGGING_E;
 }
 
+/**
+ * Sets target intyerface to use when communicating with BDM
+ *
+ * @param bdmInterface Interface to use
+ */
 USBDM_ErrorCode FlashProgrammerCommon::setTargetInterface(BdmInterfacePtr bdmInterface) {
    this->bdmInterface = bdmInterface;
    return BDM_RC_OK;
 }
-
-//=======================================================================
-// Sets and initialises the TCL interpreter
-//
+/**
+ * Sets and initialises the TCL interpreter
+ */
 USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti) {
    LOGGING;
 
@@ -89,9 +97,9 @@ USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti)
    return PROGRAMMING_RC_OK;
 }
 
-//=======================================================================
-// Initialises TCL support for current target
-//
+/**
+ * Initialises TCL support for current target
+ */
 USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
    LOGGING;
 
@@ -101,19 +109,20 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
    }
    return setTCLInterpreter(UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface));
 }
-
-//=======================================================================
-//  Release the current TCL interpreter
-//
+/**
+ *  Release the current TCL interpreter
+ */
 USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
-   LOGGING;
+   LOGGING_E;
    tclInterpreter.reset();
    return PROGRAMMING_RC_OK;
 }
 
-//=======================================================================
-// Executes a TCL script in the current TCL interpreter
-//
+/**
+ * Executes a TCL script in the current TCL interpreter
+ *
+ * @param script Script to run
+ */
 USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
    LOGGING;
    if (tclInterpreter == NULL) {
@@ -135,14 +144,15 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
    }
    return PROGRAMMING_RC_OK;
 }
-
-//=======================================================================
-// Executes a TCL command previously loaded in the TCL interpreter
-//
+/**
+ * Executes a TCL command previously loaded in the TCL interpreter
+ *
+ * @param command Command to execute
+ */
 USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    LOGGING;
    log.print("Command = '%s'\n", command);
-   log.print("tclInterpreter = %p\n", tclInterpreter.get());
+//   log.print("tclInterpreter = %p\n", tclInterpreter.get());
    if (tclInterpreter == NULL) {
       log.error("No TCL Interpreter\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
@@ -153,14 +163,13 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    }
    return rc;
 }
-
-//=======================================================================
-//! Set device data for flash operations
-//!
-//! @param theParameters   -   data describing the device
-//!
-//! @return error code see \ref USBDM_ErrorCode
-//!
+/**
+ * Set device data for flash operations
+ *
+ * @param theParameters   -   data describing the device
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device) {
    LOGGING_Q;
    currentFlashProgram.reset();
@@ -171,7 +180,7 @@ USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr de
    return PROGRAMMING_RC_OK;
 }
 
-/*======================================================================
+/**
  * Set device data for flash operations
  *
  * @param theParameters   -  data describing the device
@@ -191,17 +200,17 @@ USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr de
 DeviceDataConstPtr FlashProgrammerCommon::getDeviceData() {
    return device;
 }
-
-//! Clock register write with retry
-//!
-//! @param addr : clock register address
-//! @param data : byte to write
-//!
-//! @return BDM_RC_OK => success
-//!
-//! @note writes are retried after a re-connect to cope
-//!  with a possible clock speed change.
-//!
+/**
+ * Clock register write with retry
+ *
+ * @param addr : clock register address
+ * @param data : byte to write
+ *
+ * @return BDM_RC_OK => success
+ *
+ * @note writes are retried after a re-connect to cope
+ *  with a possible clock speed change.
+ */
 USBDM_ErrorCode writeClockRegister(uint32_t addr, uint8_t data) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -221,18 +230,18 @@ USBDM_ErrorCode writeClockRegister(uint32_t addr, uint8_t data) {
    }
    return rc;
 }
-
-//! Configures the ICSCG target clock
-//!
-//! @param busFrequency    - Resulting BDM frequency after clock adjustment
-//! @param clockParameters - Describes clock settings to use
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
-//! @note Assumes that connection with the target has been established so
-//!       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
-//!       a problem programming the target clock.
-//!
+/**
+ * Configures the ICSCG target clock
+ *
+ * @param busFrequency    - Resulting BDM frequency after clock adjustment
+ * @param clockParameters - Describes clock settings to use
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ *
+ * @note Assumes that connection with the target has been established so
+ *       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
+ *       a problem programming the target clock.
+ */
 USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         *busFrequency,
                                                     ICS_ClockParameters_t *clockParameters){
    LOGGING_E;
@@ -286,17 +295,18 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         
    return PROGRAMMING_RC_OK;
 }
 
-//! Configures the ICGCG target clock
-//!
-//! @param busFrequency    - Resulting BDM frequency after clock adjustment
-//! @param clockParameters - Describes clock settings to use
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
-//! @note Assumes that connection with the target has been established so
-//!       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
-//!       a problem programming the target clock.
-//!
+/**
+ * Configures the ICGCG target clock
+ *
+ * @param busFrequency    - Resulting BDM frequency after clock adjustment
+ * @param clockParameters - Describes clock settings to use
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ *
+ * @note Assumes that connection with the target has been established so
+ *       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
+ *       a problem programming the target clock.
+ */
 USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         *busFrequency,
                                                     ICG_ClockParameters_t *clockParameters){
    LOGGING_E;
@@ -345,17 +355,18 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         
    return PROGRAMMING_RC_OK;
 }
 
-//! Configures the MCGCG target clock
-//!
-//! @param busFrequency    - Resulting BDM frequency after clock adjustment
-//! @param clockParameters - Describes clock settings to use
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
-//! @note Assumes that connection with the target has been established so
-//!       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
-//!       a problem programming the target clock.
-//!
+/**
+ *  Configures the MCGCG target clock
+ *
+ * @param busFrequency    - Resulting BDM frequency after clock adjustment
+ * @param clockParameters - Describes clock settings to use
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ *
+ * @note Assumes that connection with the target has been established so
+ *       reports any errors as PROGRAMMING_RC_ERROR_FAILED_CLOCK indicating
+ *       a problem programming the target clock.
+ */
 USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         *busFrequency,
                                                     MCG_ClockParameters_t *clockParameters){
    LOGGING_E;
@@ -419,13 +430,13 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
          bdmFrequency/1000, *busFrequency/1000);
    return PROGRAMMING_RC_OK;
 }
-
-//! Configures the External target clock
-//!
-//! @param busFrequency    - Resulting BDM frequency after clock adjustment (Hz)
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ * Configures the External target clock
+ *
+ * @param busFrequency    - Resulting BDM frequency after clock adjustment (Hz)
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashProgrammerCommon::configureExternal_Clock(unsigned long  *busFrequency){
    LOGGING_E;
    unsigned long bdmFrequency;
@@ -446,15 +457,15 @@ USBDM_ErrorCode FlashProgrammerCommon::configureExternal_Clock(unsigned long  *b
    return PROGRAMMING_RC_OK;
 
 }
-
-//! \brief Configures the target clock appropriately for flash programming
-//!        The speed would be the maximum safe value for an untrimmed target
-//!
-//! @param busFrequency    - Resulting BDM frequency after clock adjustment \n
-//!                          For a HCS08/CFV1 with CLKSW=1 this will be the bus frequency
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ * \brief Configures the target clock appropriately for flash programming
+ *        The speed would be the maximum safe value for an untrimmed target
+ *
+ * @param busFrequency    - Resulting BDM frequency after clock adjustment \n
+ *                          For a HCS08/CFV1 with CLKSW=1 this will be the bus frequency
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashProgrammerCommon::configureTargetClock(unsigned long  *busFrequency) {
    LOGGING_E;
 
@@ -537,22 +548,22 @@ USBDM_ErrorCode FlashProgrammerCommon::configureTargetClock(unsigned long  *busF
    }
    return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
 }
-
-//!  Determines the trim value for the target internal clock.
-//!  The target clock is left trimmed for a bus freq. of targetBusFrequency.
-//!
-//!     Target clock has been suitably configured.
-//!
-//!  @param      trimAddress           Address of trim register.
-//!  @param      targetBusFrequency    Target Bus Frequency to trim to.
-//!  @param      returnTrimValue       Resulting trim value (9-bit number)
-//!  @param      measuredBusFrequency  Resulting Bus Frequency
-//!  @param      do9BitTrim            True to do 9-bit trim (rather than 8-bit)
-//!
-//!  @return
-//!   == \ref PROGRAMMING_RC_OK  => Success \n
-//!   != \ref PROGRAMMING_RC_OK  => Various errors
-//!
+/**
+ *  Determines the trim value for the target internal clock.
+ *  The target clock is left trimmed for a bus freq. of targetBusFrequency.
+ *
+ *     Target clock has been suitably configured.
+ *
+ *  @param      trimAddress           Address of trim register.
+ *  @param      targetBusFrequency    Target Bus Frequency to trim to.
+ *  @param      returnTrimValue       Resulting trim value (9-bit number)
+ *  @param      measuredBusFrequency  Resulting Bus Frequency
+ *  @param      do9BitTrim            True to do 9-bit trim (rather than 8-bit)
+ *
+ *  @return
+ *   == \ref PROGRAMMING_RC_OK  => Success \n
+ *   != \ref PROGRAMMING_RC_OK  => Various errors
+ */
 USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddress,
                                                  unsigned long  targetBusFrequency,
                                                  uint16_t      *returnTrimValue,
@@ -810,6 +821,11 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
    return rc;
 }
 
+/**
+ * Trim clock (must be ICS)
+ *
+ * @param clockParameters Describes the clock
+ */
 USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *clockParameters) {
    LOGGING;
    static const ICS_ClockParameters_t ICS_LowSpeedParameters = {
@@ -891,6 +907,11 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICS_Clock(ICS_ClockParameters_t *cloc
    return rc;
 }
 
+/**
+ * Trim clock (must be MCG)
+ *
+ * @param clockParameters Describes the clock
+ */
 USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *clockParameters) {
    LOGGING_E;
 
@@ -958,6 +979,11 @@ USBDM_ErrorCode FlashProgrammerCommon::trimMCG_Clock(MCG_ClockParameters_t *cloc
    return rc;
 }
 
+/**
+ * Trim clock (must be ICG)
+ *
+ * @param clockParameters Describes the clock
+ */
 USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *clockParameters) {
    LOGGING_E;
 
@@ -1002,17 +1028,17 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *cloc
 
    return rc;
 }
-
-//! Determines trim values for the target clock. \n
-//! The values determined are written to the Flash image for later programming.
-//!
-//! @param flashImage - Flash image to be updated.
-//!
-//! @return error code see \ref USBDM_ErrorCode
-//!
-//! @note If the trim frequency indicated in parameters is zero then no trimming is done.
-//!       This is not an error.
-//!
+/**
+ * Determines trim values for the target clock. \n
+ * The values determined are written to the Flash image for later programming.
+ *
+ * @param flashImage - Flash image to be updated.
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ *
+ * @note If the trim frequency indicated in parameters is zero then no trimming is done.
+ *       This is not an error.
+ */
 USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashImage) {
    LOGGING;
    ClockParameters clockTrimParameters;
@@ -1095,12 +1121,11 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
    }
    return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
 }
-
-//=======================================================================
-//! Updates the memory image from the target flash Clock trim location(s)
-//!
-//! @param flashImage   = Flash image
-//!
+/**
+ * Updates the memory image from the target flash Clock trim location(s)
+ *
+ * @param flashImage   = Flash image
+ */
 USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashImage) {
    LOGGING_Q;
    unsigned size  = 0;
@@ -1155,13 +1180,13 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
    }
    return PROGRAMMING_RC_OK;
 }
-
-//! \brief Maps a Flash action vector to Text
-//!
-//! @param flashOperation => operation to describe
-//!
-//! @return pointer to static string buffer describing the flashOperation
-//!
+/**
+ * \brief Maps a Flash action vector to Text
+ *
+ * @param flashOperation => operation to describe
+ *
+ * @return pointer to static string buffer describing the flashOperation
+ */
 const char *FlashProgrammerCommon::getFlashOperationName(FlashOperation flashOperation) {
    switch (flashOperation) {
    case OpNone                             : return "OpNone";
@@ -1178,14 +1203,14 @@ const char *FlashProgrammerCommon::getFlashOperationName(FlashOperation flashOpe
    return "Op???";
 }
 
-
-//! Probe RAM location
-//!
-//! @param memorySpace - Memory space and size of probe
-//! @param address     - Address to probe
-//!
-//! @return BDM_RC_OK if successful
-//!
+/**
+ * Probe RAM location
+ *
+ * @param memorySpace - Memory space and size of probe
+ * @param address     - Address to probe
+ *
+ * @return BDM_RC_OK if successful
+ */
 USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, uint32_t address) {
    LOGGING_Q;
    static const uint8_t probe1[] = {0xA5, 0xF0,0xA5, 0xF0,};

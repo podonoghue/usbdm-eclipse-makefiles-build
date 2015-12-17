@@ -43,9 +43,9 @@ const string targetBusFrequencyKey(      settingsKey ".targetBusFrequency");
  *           false => index out of range, device is set to the 1st device (index 0)
  */
 USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
-   LOGGING;
+   LOGGING_Q;
 
-   log.print("newDeviceIndex = %d\n", newDeviceIndex);
+//   log.print("newDeviceIndex = %d\n", newDeviceIndex);
    USBDM_ErrorCode rc = BDM_RC_OK;
    if ((newDeviceIndex < 0) || ((unsigned)newDeviceIndex >= deviceDatabase->getNumDevice())) {
       log.print("Index out of range (%d)\n", newDeviceIndex);
@@ -75,7 +75,7 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
  *           false => device not found, device is set to the default device
  */
 USBDM_ErrorCode DeviceInterface::setCurrentDeviceByName(string deviceName) {
-   LOGGING;
+   LOGGING_Q;
    USBDM_ErrorCode rc = BDM_RC_OK;
 
    log.print("Device = \'%s\'\n", deviceName.c_str());

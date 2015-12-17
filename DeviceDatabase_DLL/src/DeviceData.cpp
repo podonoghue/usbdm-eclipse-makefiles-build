@@ -1577,7 +1577,7 @@ int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
  * \brief Loads the known devices list from the configuration file.
  */
 void DeviceDataBase::loadDeviceData() {
-   LOGGING;
+   LOGGING_Q;
    string deviceFile;
    try {
       switch(targetType) {
@@ -1618,7 +1618,7 @@ void DeviceDataBase::loadDeviceData() {
 #if defined(LOG) && 0
    listDevices();
 #endif
-   log.print(" - %lu devices loaded\n", (unsigned long)deviceData.size());
+//   log.print(" - %lu devices loaded\n", (unsigned long)deviceData.size());
 }
 
 void DeviceDataBase::listDevices() const {

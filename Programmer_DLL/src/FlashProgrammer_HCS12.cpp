@@ -1412,24 +1412,9 @@ USBDM_ErrorCode FlashProgrammer_HCS12::executeTargetProgram(uint8_t *pBuffer, ui
    if (rc != BDM_RC_OK) {
       return rc;
    }
-#if 0 && defined(LOG) && (TARGET==ARM)
-   report("FlashProgrammer::executeTargetProgram()");
-#endif
    log.print("Writing Header+Data\n");
 
-#if (TARGET==RS08)
-   MemorySpace_t memorySpace = MS_Byte;
-#elif (TARGET == MC56F80xx)
-   MemorySpace_t memorySpace = MS_XWord;
-#elif (TARGET == ARM)
-   MemorySpace_t memorySpace = MS_Long;
-#elif (TARGET == S12Z)
-   MemorySpace_t memorySpace = MS_Word;
-#elif (TARGET == HCS08) || (TARGET == HCS12)
    MemorySpace_t memorySpace = (MemorySpace_t)(MS_Fast|MS_Byte);
-#else
-   MemorySpace_t memorySpace = MS_Word;
-#endif
 
    // Write the flash parameters & data to target memory
    if (bdmInterface->writeMemory(memorySpace,
@@ -1466,23 +1451,22 @@ USBDM_ErrorCode FlashProgrammer_HCS12::executeTargetProgram(uint8_t *pBuffer, ui
          return rc;
       }
       if ((currentPC<(targetRegPC-0x1000))||(currentPC>(targetRegPC+0x1000))) {
-         log.error("Read PC out of range, PC=0x%08X\n",
-               currentPC);
+         log.error("Read PC out of range, PC=0x%08lX\n", currentPC);
 //         report("executeTargetProgram()");
          return PROGRAMMING_RC_ERROR_BDM;
       }
-      uint8_t  iBuffer[8];
-      rc = bdmInterface->readMemory(1, sizeof(iBuffer), currentPC, (uint8_t *)iBuffer);
+      uint8_t  iBuffer[10];
+      rc = bdmInterface->readMemory(1, sizeof(iBuffer), currentPC, iBuffer);
       if (rc != BDM_RC_OK) {
          log.error("bdmInterface->readMemory() Failed, rc=%s\n",
                bdmInterface->getErrorString(rc));
 //         report("executeTargetProgram()");
          return rc;
       }
-      log.print("Step: PC=0x%06X => %02X %02X %02X %02X\n",
+      log.print("Step: PC=0x%06lX => %02X %02X %02X %02X\n",
              currentPC, iBuffer[0], iBuffer[1], iBuffer[2], iBuffer[3]);
 
-      USBDM_ErrorCode rc = bdmInterface->go();
+      USBDM_ErrorCode rc = bdmInterface->step();
       if (rc != BDM_RC_OK) {
          log.error("TargetStep() Failed, rc=%s\n",
                bdmInterface->getErrorString(rc));

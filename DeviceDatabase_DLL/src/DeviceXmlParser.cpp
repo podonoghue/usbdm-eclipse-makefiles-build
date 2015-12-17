@@ -1734,7 +1734,7 @@ void DeviceXmlParser::parseDeviceXML(void) {
 //!         != 0 => fail
 //!
 void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string &deviceFilePath, DeviceDataBase *deviceDataBase) {
-   LOGGING;
+   LOGGING_Q;
    log.setLoggingLevel(0); // Don't log below this leveln
    try {
       xercesc::XMLPlatformUtils::Initialize();
