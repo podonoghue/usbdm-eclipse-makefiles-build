@@ -11,6 +11,7 @@
 <!ENTITY HCS12-MMCV4-FTS_T-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_T-flash-program.s19">
 <!ENTITY HCS12-PMMC-FTMRCK-flash-program  SYSTEM "HCS12/HCS12-PMMC-FTMRCK-flash-program.s19">
 <!ENTITY HCS12-GMMC-FTMRG-flash-program   SYSTEM "HCS12/HCS12-GMMC-FTMRG-flash-program.s19">
+<!ENTITY HCS12-GMMC-FTMRG-eeprom-program  SYSTEM "HCS12/HCS12-GMMC-FTMRG-eeprom-program.s19">
 <!ENTITY HCS12-XMMC-XFTMRK-flash-program  SYSTEM "HCS12/HCS12-XMMC-XFTMRK-flash-program.s19">
 <!ENTITY HCS12-XMMC-XFTXK-flash-program   SYSTEM "HCS12/HCS12-XMMC-XFTXK-flash-program.s19">
 
@@ -55,6 +56,9 @@
       </flashProgram>
       <flashProgram id="HCS12-GMMC-FTMRG-flash-program">
          &HCS12-GMMC-FTMRG-flash-program;
+      </flashProgram>
+      <flashProgram id="HCS12-GMMC-FTMRG-eeprom-program">
+         &HCS12-GMMC-FTMRG-eeprom-program;
       </flashProgram>
       <flashProgram id="HCS12-XMMC-XFTMRK-flash-program">
          &HCS12-XMMC-XFTMRK-flash-program;
@@ -950,6 +954,7 @@
       <device family="HCS12" name="MC9S12G16">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="0x200" /> <!-- 0.5K -->
          </memory>
          <memory type="ram">
@@ -971,6 +976,7 @@
       <device family="HCS12" name="MC9S12G32">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="1K" />
          </memory>
          <memory type="ram">
@@ -992,6 +998,7 @@
       <device family="HCS12" name="MC9S12G48">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="0x600" /> <!-- 1.5K -->
          </memory>
          <memory type="ram">
@@ -1014,6 +1021,7 @@
       <device family="HCS12" name="MC9S12G64">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="2K" />
          </memory>
          <memory type="ram">
@@ -1037,6 +1045,7 @@
       <device family="HCS12" name="MC9S12G96">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="3K" />
          </memory>
          <memory type="ram">
@@ -1060,6 +1069,7 @@
       <device family="HCS12" name="MC9S12G128">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="4K" />
          </memory>
          <memory type="ram">
@@ -1083,6 +1093,7 @@
       <device family="HCS12" name="MC9S12G192">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="4K" />
          </memory>
          <memory type="ram">
@@ -1105,6 +1116,7 @@
       <device family="HCS12" name="MC9S12G240">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="4K" />
          </memory>
          <memory type="ram">
@@ -1129,6 +1141,7 @@
       <device family="HCS12" name="MC9S12GA240">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="4K" />
          </memory>
          <memory type="ram">
@@ -1588,6 +1601,7 @@
       <device family="HCS12" name="MC9S12VR48">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="512" />
          </memory>
          <memory type="ram">
@@ -1611,6 +1625,7 @@
       <device family="HCS12" name="MC9S12VR64">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
+            <flashProgramRef ref="HCS12-GMMC-FTMRG-eeprom-program" />
             <memoryRange start="0x000400" size="512" />
          </memory>
          <memory type="ram">
