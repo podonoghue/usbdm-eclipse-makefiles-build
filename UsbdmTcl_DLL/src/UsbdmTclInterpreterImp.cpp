@@ -56,7 +56,7 @@ static void printChannel(int ch, const char *format, ...) __attribute__ ((format
 #define PRINT(format, ...)       printChannel(TCL_STDOUT, format, ##__VA_ARGS__)
 #define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
-/*
+/**
  * Create the plugin instance
  */
 extern "C"
@@ -64,7 +64,7 @@ size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
    return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
 }
 
-/*
+/**
  * Create the plugin instance
  */
 extern "C"
@@ -92,14 +92,18 @@ static void checkRC(USBDM_ErrorCode rc) {
    }
 }
 
-/*
- * ===========================================================
+/**
+ * Main function used for interactive TCL interpreter
  */
 int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
    Tcl_Main(argc, argv, appInitProc);
    return EXIT_SUCCESS;
 };
-
+/**
+ * Does clean up of TCL interpreter
+ *
+ * @param interp The interpreter
+ */
 void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
    LOGGING;
    // Calling Tcl_DeleteInterp() from the destructor fails badly if a different thread.
@@ -111,14 +115,14 @@ void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
    Tcl_Finalize();
 }
 
-/**!
+/**
  * Create instance of the TCL interpreter
  *
- * @param doInit - Used to suppress initialisation. should be true if used with
+ * @param doInit - Used to suppress initialisation. Should be true if used with
  *                 UsbdmTclInterpreterImp::main() for shell as it does its own initialisation
  */
 UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
-   LOGGING;
+   LOGGING_E;
 
    tclChannel   = 0;
 
@@ -131,13 +135,16 @@ UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
       setTCLExecutable();
       interp.reset(Tcl_CreateInterp(), deleteInterpreter);
       Tcl_Init(interp.get());
-      log.print("Created interp@%p\n", interp.get());
+//      log.print("Created interp@%p\n", interp.get());
       registerUSBDMCommands(interp.get());
    }
 }
 
+/**
+ * Redirect stdout to log file or nul if no log file open
+ */
 void UsbdmTclInterpreterImp::redirectStdOut() {
-   LOGGING;
+   LOGGING_E;
    FILE *fp = UsbdmSystem::Log::getLogFileHandle();
 
 #ifdef WIN32
@@ -150,11 +157,11 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
    }
    int fileNo = dup(fileno(fp));
 
-   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
+//   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
    HANDLE fileHandle = (HANDLE)_get_osfhandle(fileNo);
-   log.print("createTclInterpreter() fileHandle == %p\n", fileHandle );
+//   log.print("createTclInterpreter() fileHandle == %p\n", fileHandle );
    tclChannel = Tcl_MakeFileChannel(fileHandle, TCL_WRITABLE);
-   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
+//   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
 #else
    if (fp == NULL) {
       // Create sink
@@ -164,25 +171,31 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
       PRINT_ERROR("(fp == NULL)\n");
    }
    long fileNo = dup(fileno(fp));
-   log.print("createTclInterpreter() fileNo == %ld\n", fileNo );
+//   log.print("createTclInterpreter() fileNo == %ld\n", fileNo );
    tclChannel = Tcl_MakeFileChannel((ClientData)fileNo, TCL_WRITABLE);
-   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
+//   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
 #endif
 
    // Register channel
    Tcl_RegisterChannel(interp.get(), tclChannel);
-   log.print("createTclInterpreter() Registered channel = %p\n", tclChannel);
+//   log.print("createTclInterpreter() Registered channel = %p\n", tclChannel);
 
    // Redirect stdout/stderr
-   log.print("createTclInterpreter() Redirecting stdout\n");
+//   log.print("createTclInterpreter() Redirecting stdout\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDOUT);
 
-   log.print("createTclInterpreter() Redirecting stderr\n");
+//   log.print("createTclInterpreter() Redirecting stderr\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDERR);
 
    Tcl_Flush(tclChannel);
 }
 
+/**
+ * Set BDM interface to use to communication with BDM
+ *
+ * @param bdmInterface The interface
+ * @param doRedirect   Redirect stdout to log file or nul if no log file open
+ */
 void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
    LOGGING;
    log.print("doRedirect = %s\n", doRedirect?"TRUE":"FALSE");
@@ -195,29 +208,29 @@ void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool 
    }
 }
 
+/**
+ * Destructor
+ */
 UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
-   LOGGING;
+   LOGGING_E;
    wxPlugin.reset();
-   log.print("After wxPlugin.reset()\n");
    bdmInterface.reset();
-   log.print("After bdmInterface.reset()\n");
-// Following crashes on unload???
+
+   // Following crashes on unload???
    Tcl_SetStdChannel(0, TCL_STDOUT);
    Tcl_SetStdChannel(0, TCL_STDERR);
-   log.print("After Tcl_SetStdChannel()\n");
    if (tclChannel != 0) {
-      log.print("Before Tcl_UnregisterChannel()\n");
       Tcl_UnregisterChannel(interp.get(), tclChannel);
-      log.print("After Tcl_UnregisterChannel()\n");
    }
-   log.print("Before interp.reset()\n");
    interp.reset();
-   log.print("After interp.reset()\n");
 }
 #if defined(__linux__)
 #include <unistd.h>
 #endif
 
+/**
+ * Does setup for TCL interpreter
+ */
 int UsbdmTclInterpreterImp::setTCLExecutable() {
    LOGGING;
 
@@ -246,7 +259,7 @@ int UsbdmTclInterpreterImp::setTCLExecutable() {
 //
 //=============================================================
 //
-/*! \brief Provides a PRINT function which prints data to TCL stdout
+/** \brief Provides a PRINT function which prints data to TCL stdout
  *
  *  @param format Format and parameters as for PRINT()
  */
@@ -305,6 +318,11 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
    return TCL_OK;
 }
 
+/**
+ * Evaluates a TCL script
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
 USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
    LOGGING_Q;
    MyLock lock;
@@ -358,7 +376,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
    return rc;
 }
 
-/*!
+/**
  * @param interp Interpreter to get result from
  *
  * @return a point to the result string (a static buffer)
@@ -560,7 +578,7 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    return TCL_OK;
 }
 
-/*!
+/**
  * This callback will cause connections etc to fail quietly on error rather
  * than use a WxWidget dialogue
  */
@@ -1516,7 +1534,7 @@ static int cmd_writeByte(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    for (count = 0; count < argc-2; count++) {
       // # data
       if (Tcl_GetIntFromObj(interp, argv[count+2], &data) != TCL_OK) {
-         Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>1");
+         Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>...");
          return TCL_ERROR;
       }
       buff[count] = (uint8_t) data;
@@ -3425,6 +3443,11 @@ const char *name;
       { NULL, NULL }
 };
 
+/**
+ * Register USBDM commands in TCL interpreter
+ *
+ * @param interp The interpreter to use
+ */
 void UsbdmTclInterpreterImp::registerUSBDMCommands(Tcl_Interp *interp) {
    int index;
    /*

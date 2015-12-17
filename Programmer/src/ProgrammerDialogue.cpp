@@ -24,7 +24,7 @@ ProgrammerDialogue::~ProgrammerDialogue() {
  *
  */
 uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
-   LOGGING_E;
+   LOGGING_Q;
 
    uint32_t flags = UsbdmDialogue::getTargetProperties(targetType);
 

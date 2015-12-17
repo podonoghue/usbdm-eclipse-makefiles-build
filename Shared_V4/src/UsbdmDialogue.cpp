@@ -1884,7 +1884,7 @@ void UsbdmDialogue::updateFlashNVM() {
 //! Populates securityMemoryRegionChoice with memory regions
 //! The above are based on the current device
 void UsbdmDialogue::populateSecurityControl() {
-   LOGGING;
+   LOGGING_Q;
 
    securityMemoryRegionChoice->Clear();
    if (deviceInterface->getCurrentDevice() == NULL) {
@@ -1909,10 +1909,10 @@ void UsbdmDialogue::populateSecurityControl() {
          // Finished
          break;
       }
-      log.print("memoryRegion[%d] => %s\n", index, memoryRegionPtr->getMemoryTypeName());
+//      log.print("memoryRegion[%d] => %s\n", index, memoryRegionPtr->getMemoryTypeName());
       SecurityEntryConstPtr securityEntry = memoryRegionPtr->getSecurityEntry();
       if (securityEntry != NULL) {
-         log.print("securityEntry => %s\n", securityEntry->toString().c_str());
+//         log.print("securityEntry => %s\n", securityEntry->toString().c_str());
          // Add memory to list as has security area (use first region as description)
          securityRegionsFound++;
          const MemoryRegion::MemoryRange *memoryRange = memoryRegionPtr->getMemoryRange(0);
@@ -1922,21 +1922,21 @@ void UsbdmDialogue::populateSecurityControl() {
          wxString descr;
          descr.Printf(_("%s @ %X"), memoryRegionPtr->getMemoryTypeName(), memoryRange->start);
          int itemIndex = securityMemoryRegionChoice->Append(descr, (void*)(intptr_t)index);
-         log.print("Added item[%d] = %s, ClientData = %d\n",
-               itemIndex, (const char *)securityMemoryRegionChoice->GetString(itemIndex).c_str(), index);
+//         log.print("Added item[%d] = %s, ClientData = %d\n",
+//               itemIndex, (const char *)securityMemoryRegionChoice->GetString(itemIndex).c_str(), index);
 
 
-         log.print("Creating resetValue                          = %s\n", securityEntry->getUnsecureInformation()->toString().c_str());
+//         log.print("Creating resetValue                          = %s\n", securityEntry->getUnsecureInformation()->toString().c_str());
 
          // Add default memory security custom setting value as unsecured
          customSecurityInfo[itemIndex].resetValue = securityEntry->getUnsecureInformation();
-         log.print("Created  customSecurityInfoPtr[%d].resetValue = %s\n", itemIndex, customSecurityInfo[itemIndex].resetValue->toString().c_str());
+//         log.print("Created  customSecurityInfoPtr[%d].resetValue = %s\n", itemIndex, customSecurityInfo[itemIndex].resetValue->toString().c_str());
 
          customSecurityInfo[itemIndex].resetToDefault();
-         log.print("Created  customSecurityInfoPtr[%d].ptr        = %s\n", itemIndex, customSecurityInfo[itemIndex].ptr->toString().c_str());
+//         log.print("Created  customSecurityInfoPtr[%d].ptr        = %s\n", itemIndex, customSecurityInfo[itemIndex].ptr->toString().c_str());
       }
    }
-   log.print("securityRegionsFound = %d\n", securityRegionsFound);
+//   log.print("securityRegionsFound = %d\n", securityRegionsFound);
 
    if (customSecurityIndex >= securityRegionsFound) {
       customSecurityIndex = 0;
@@ -1948,7 +1948,7 @@ void UsbdmDialogue::populateSecurityControl() {
       securityMemoryRegionChoice->Select(0);
    }
    else {
-      log.print("No Memory Regions\n");
+//      log.print("No Memory Regions\n");
       securityMemoryRegionChoice->Append(_("[No memory regions]"));
       securityMemoryRegionChoice->Select(0);
       securityMemoryRegionChoice->SetClientData(0, (void*)-1);
@@ -1961,7 +1961,7 @@ void UsbdmDialogue::populateSecurityControl() {
 //! @return parsed value as a string
 //!
 wxString UsbdmDialogue::parseSecurityValue() {
-   LOGGING;
+   LOGGING_Q;
 
    enum {s_text, s_width, s_escape, s_bits} state = s_text;
 
@@ -1986,7 +1986,7 @@ wxString UsbdmDialogue::parseSecurityValue() {
       log.print("securityDescriptionPtr == NULL\n");
       return _("[no description available]");
    }
-   log.print("parsing...\n");
+//   log.print("parsing...\n");
 
    //      unsigned       size          = securityInfoPtr->getSize();
    const uint8_t *securityValue = ptr->getData();
@@ -2132,29 +2132,30 @@ void UsbdmDialogue::updateSecurityDescription() {
 //! Updates the security information display
 //!
 void UsbdmDialogue::updateSecurity() {
-   LOGGING;
+   LOGGING_Q;
 
    // No security information
    securityDescriptionPtr.reset();
 
-   log.print("securityMemoryRegionIndex = %d\n", customSecurityIndex);
+//   log.print("securityMemoryRegionIndex = %d\n", customSecurityIndex);
    int memoryIndex = (int)(intptr_t)securityMemoryRegionChoice->GetClientData(customSecurityIndex);
-   log.print("memoryIndex = %d\n", memoryIndex);
+//   log.print("memoryIndex = %d\n", memoryIndex);
    if (memoryIndex<0) {
       // Invalid - usually means Database is corrupt
       return;
    }
-   log.print("current device = %s\n", (const char *)deviceInterface->getCurrentDevice()->getTargetName().c_str());
+//   log.print("current device = %s\n", (const char *)deviceInterface->getCurrentDevice()->getTargetName().c_str());
    MemoryRegionConstPtr   memoryRegionPtr = deviceInterface->getCurrentDevice()->getMemoryRegion(memoryIndex);
    if (memoryRegionPtr == NULL) {
       throw new MyException("Memory region cannot be NULL");
    }
-   log.print("memoryRegionPtr = %s\n", memoryRegionPtr->getMemoryTypeName());
+//   log.print("memoryRegionPtr = %s\n", memoryRegionPtr->getMemoryTypeName());
 
    // Security information for region
    SecurityEntryConstPtr securityEntry = memoryRegionPtr->getSecurityEntry();
    if (securityEntry == NULL) {
       log.print("No security information for memory region\n");
+      log.print("memoryRegionPtr = %s\n", memoryRegionPtr->getMemoryTypeName());
       securityValuesTextControl->SetValue(_("[No security region]"));
       return;
    }

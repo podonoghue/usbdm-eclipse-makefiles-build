@@ -63,16 +63,16 @@ protected:
     * @return Smart pointer to object implementing the plug-in interface
     */
    static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING;
+      LOGGING_Q;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-      log.print("Getting size\n");
+//      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
-      log.print("Calling new\n");
+//      log.print("Calling new\n");
       void *p = ::operator new(classSize);
-      log.print("Allocated storage @%p, size = %d\n", p, classSize);
-      log.print("Calling placement constructor\n");
+//      log.print("Allocated storage @%p, size = %d\n", p, classSize);
+//      log.print("Calling placement constructor\n");
       (*newInstance)(p);
       std::tr1::shared_ptr<T> pp((T*)p, deleter);
       instanceCount++;
@@ -86,8 +86,8 @@ protected:
     * @param p object to delete
     */
    static void deleter(T *p) {
-      LOGGING;
-      log.print("Calling destructor\n");
+      LOGGING_Q;
+//      log.print("Calling destructor\n");
       p->~T();
       log.print("Deallocating storage @%p\n", p);
       ::operator delete(p);
@@ -169,7 +169,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException(std::string(buff));
    }
-   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
+//   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
 }
 
 /**
@@ -177,8 +177,8 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
  */
 template <class T>
 void PluginFactory<T>::unloadClass() {
-   LOGGING;
-   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
+   LOGGING_Q;
+//   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (FreeLibrary(moduleHandle) == 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
       printSystemErrorMessage();
