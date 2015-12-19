@@ -6,7 +6,7 @@
  *      Author: podonoghue
  */
 #include "derivative.h"
-#include "Delay.h"
+#include "delay.h"
 
 #ifdef __cplusplus
 namespace USBDM {
