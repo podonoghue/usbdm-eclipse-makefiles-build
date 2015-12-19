@@ -1450,13 +1450,13 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
       log.error("PC verify failed\n");
       return PROGRAMMING_RC_ERROR_BDM_WRITE;
    }
-#if defined(LOG)&& 0
+#if defined(LOG) && 0
    USBDMStatus_t status;
    bdmInterface->getBDMStatus(&status);
 
    for (int num=0; num<100; num++) {
 
-      UsbdmSystem::milliSleep(10);
+//      UsbdmSystem::milliSleep(10);
 
       unsigned long currentPC;
       rc = bdmInterface->readPC(&currentPC);
@@ -1558,20 +1558,23 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
             errorCode);
    }
    rc = convertTargetErrorCode((FlashDriverError_t)errorCode);
-   if (0 || (rc != BDM_RC_OK)) {
+   if (rc != BDM_RC_OK) {
       log.error("Raw error code - %d\n", errorCode);
       log.error("Error - %s\n", bdmInterface->getErrorString(rc));
       uint8_t rcm_srs0, rcm_srs1;
       uint8_t sim_srsid[4];
+      uint8_t wdog_stctrlh[2];
       bdmInterface->readMemory(MS_Byte, 1, 0x4007F000, &rcm_srs0);
       bdmInterface->readMemory(MS_Byte, 1, 0x4007F001, &rcm_srs1);
       bdmInterface->readMemory(MS_Long, 4, 0x40048000, sim_srsid);
+      bdmInterface->readMemory(MS_Word, 2, 0x40052000, wdog_stctrlh);
 
       uint8_t buffer[2048];
       bdmInterface->readMemory(MS_Long, sizeof(buffer), 0x1FFFFE00, buffer);
       log.printDump(buffer, sizeof(buffer), 0x1FFFFE00);
 
-      log.error("Error - SRS0=0x%2.2X, SRS1=0x%2.2X SRSID=0x%02X%02X\n", rcm_srs0, rcm_srs1, sim_srsid[1], sim_srsid[0]);
+      log.error("Error - SRS0=0x%2.2X, SRS1=0x%2.2X SRSID=0x%02X%02X, STCTRLH=0x%02X%02X\n",
+            rcm_srs0, rcm_srs1, sim_srsid[1], sim_srsid[0], wdog_stctrlh[1], wdog_stctrlh[0]);
 #if (TARGET == MC56F80xx) && 0
       executionResult.data = targetToNative16(executionResult.data);
       executionResult.dataSize = targetToNative16(executionResult.dataSize);
