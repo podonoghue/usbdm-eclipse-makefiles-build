@@ -35,7 +35,7 @@ installEclipsePlugins() {
    P2_APPLICATION="org.eclipse.equinox.p2.director"
    local ECLIPSE_DIR="$1"
    local FEATURES="$2"   
-   local REPOS="$3"
+   local REPOS="$2"
    echo 
    echo "Installing Eclipse CDT plugins to ${ECLIPSE_DIR}"
    echo "=================================================================="
