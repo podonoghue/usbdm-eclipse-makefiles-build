@@ -28,22 +28,21 @@ installUSBHardware() {
 #  Eclipse Plugin Installation
 #======================================================
 # $1 - Eclipse directory
-# $2 - Feature Group
-#
+# $2 - Features
+# $3 - Repositories to search
 installEclipsePlugins() {
 
    P2_APPLICATION="org.eclipse.equinox.p2.director"
-
    local ECLIPSE_DIR="$1"
-   local FEATURE_GROUP="$2"
-
+   local FEATURES="$2"   
+   local REPOS="$2"
    echo 
    echo "Installing Eclipse CDT plugins to ${ECLIPSE_DIR}"
    echo "=================================================================="
    for FILENAME in kinetis-design-studio cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
-         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP}
-         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository file:/${USBDM_UPDATE_SITE} -installIU ${FEATURE_GROUP} || true
+         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository ${REPOS} -installIU ${FEATURES}
+         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository ${REPOS} -installIU ${FEATURES} -installIU ${FEATURE_GROUP} || true
          break;
       fi
    done
@@ -63,7 +62,7 @@ installEclipse() {
       echo -n "Looking for Eclipse in '${ECLIPSE_DIR}'"
       if [[ -d ${ECLIPSE_DIR} ]]; then
          echo " - Found"
-         installEclipsePlugins ${ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
+         installEclipsePlugins ${ECLIPSE_DIR} ${CDT_FEATURES} ${CDT_REPOS}
       else
         echo " - Not Found"
       fi
@@ -130,7 +129,7 @@ installKDSInstance() {
    fi
 
    # Add USBDM plugins to eclipse
-   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURE_GROUP}
+   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURES} ${CDT_REPOS}
 }
 
 #======================================================
@@ -263,7 +262,7 @@ installCodewarriorInstance() {
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
-   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${CW_FEATURE_GROUP}
+   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${CW_FEATURE_GROUP} ${CW_REPOS}
 }
 
 #======================================================
@@ -324,8 +323,13 @@ USBDM_UPDATE_SITE="${USBDM_SHARED_DIR}/UpdateSite"
 USBDM_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
 USBDM_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
 
-CDT_FEATURE_GROUP="net.sourceforge.usbdm.cdt.feature.feature.group"
+# CDT Features and where to look for them
+CDT_FEATURES="org.eclipse.cdt.debug.gdbjtag.feature.group,net.sourceforge.usbdm.cdt.feature.feature.group"
+CDT_REPOS="file:/${USBDM_UPDATE_SITE},http://download.eclipse.org/releases/mars"
+
+# CW Features and where to look for them
 CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
+CW_REPOS="file:/${USBDM_UPDATE_SITE}"
 
 # System directories
 LIB_DIR="/usr/lib"
