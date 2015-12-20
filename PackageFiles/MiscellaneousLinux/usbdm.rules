@@ -1,4 +1,4 @@
-#  Should be placed in /etc/udev/usbdm.rules
+#  Should be placed in /etc/udev/rules.d/46-usbdm.rules
 #  Note: HEX numbers must be lower case - yes really!!!!
 #
 # Allow unrestricted access to various BDMs (including USBDM & JS16 bootloader)
