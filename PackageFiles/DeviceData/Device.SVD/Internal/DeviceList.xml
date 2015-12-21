@@ -153,7 +153,12 @@
       <device name="MK70FN1M0M15">     <svdFileName>MK70F12</svdFileName>    </device>
       <device name="MK70FX512M15">     <svdFileName>MK70F12</svdFileName>    </device>
 
-      <device name="SKEAZN8M4">        <svdFileName>MKE04Z8M4</svdFileName>  </device>
+      <device name="S9KEAZN8M4">       <svdFileName>MKE04Z8M4</svdFileName>  </device>
+      <device name="S9KEAZN16M4">      <svdFileName>MKE02Z4</svdFileName>    </device>
+      <device name="S9KEAZN32M4">      <svdFileName>MKE02Z4</svdFileName>    </device>
+      <device name="S9KEAZN64M4">      <svdFileName>MKE04Z4</svdFileName>    </device>
+      <device name="S9KEAZ64M4">       <svdFileName>MKE06Z4</svdFileName>    </device>
+      <device name="S9KEAZ128M4">      <svdFileName>MKE06Z4</svdFileName>    </device>
       
       <device name="MKE02Z16M2">       <svdFileName>MKE02Z2</svdFileName>    </device>
       <device name="MKE02Z32M2">       <svdFileName>MKE02Z2</svdFileName>    </device>

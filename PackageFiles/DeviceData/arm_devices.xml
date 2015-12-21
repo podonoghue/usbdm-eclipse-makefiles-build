@@ -28,6 +28,7 @@ FTMRH - MKE02
 FTMRE - MKE04, MKE06
  -->
 <!-- 
+      V4.12.1.70   - Renamed SKEAxxx to S9KEAxxx
       V4.12.1.50   - Reviewed & corrected flash sector sizes on M5 and M7 devices
       V4.12.1.40   - Renames families (to MKL27Z4, MKL27Z644)
       V4.11.1.70   - Added disable NMI to FTMRH, FTMRE, MKM-FTFA (MKE, MKM family)
@@ -805,6 +806,7 @@ NOTES:
          <sdid value="0x02070000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z32M2" family="CortexM0plus" subfamily="MKE02Z2">
          <memoryRef ref="kinetis1K_3K_Ram" />
@@ -815,6 +817,7 @@ NOTES:
          <sdid value="0x02070000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z64M2" family="CortexM0plus" subfamily="MKE02Z2">
          <memoryRef ref="kinetis1K_3K_Ram" />
@@ -825,6 +828,7 @@ NOTES:
          <sdid value="0x02040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE02Z64M20SF0RM</note>
       </device>
 <!-- MKE02Z4 -->
       <device name="MKE02Z16M4" family="CortexM0plus" subfamily="MKE02Z4">
@@ -869,6 +873,7 @@ NOTES:
          <sdid value="0x04070000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE04P24M48SF0RM</note>
       </device>
       <device name="MKE04Z64M4" family="CortexM0plus" subfamily="MKE04Z4">
          <memoryRef ref="kinetis2K_6K_Ram" />
@@ -878,6 +883,7 @@ NOTES:
          <sdid value="0x04040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE04P80M48SF0RM</note>
       </device>
       <device name="MKE04Z128M4" family="CortexM0plus" subfamily="MKE04Z4">
          <memoryRef ref="kinetis4K_12K_Ram" />
@@ -887,6 +893,7 @@ NOTES:
          <sdid value="0x04040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE04P80M48SF0RM</note>
       </device>
 <!-- MKE06Z4 -->
       <device name="MKE06Z64M4" family="CortexM0plus" subfamily="MKE06Z4">
@@ -897,6 +904,7 @@ NOTES:
          <sdid value="0x06040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE06P80M48SF0RM</note>
       </device>
       <device name="MKE06Z128M4" family="CortexM0plus" subfamily="MKE06Z4">
          <memoryRef ref="kinetis4K_12K_Ram" />
@@ -906,6 +914,7 @@ NOTES:
          <sdid value="0x06040000" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>MKE06P80M48SF0RM</note>
       </device>
 
 <!-- ===================================================================================== -->
@@ -2698,14 +2707,15 @@ NOTES:
       <!-- device name="TWR_KV10Z32"     alias="MKV10Z32 "   hardware="twrkv10z32" / --> 
       <!-- device name="TWR_KV31F"       alias="MKV31Z"      hardware="twrkv31f" / --> 
 
-      <device name="SKEAZN8M4"          alias="MKE04Z8M4" />
+      <device name="S9KEAZN8M4"      alias="MKE04Z8M4" />  <!-- S9KEA8Z24M48SF0RM -->
       
-      <device name="SKEAZN16M4"         alias="MKE02Z16M4" />
-      <device name="SKEAZN32M4"         alias="MKE02Z32M4" />
-      <device name="SKEAZN64M4"         alias="MKE04Z64M4" />
+      <device name="S9KEAZN16M4"     alias="MKE02Z16M4" /> <!-- S9KEA64Z64M20SF0RM -->
+      <device name="S9KEAZN32M4"     alias="MKE02Z32M4" /> <!-- S9KEA64Z64M20SF0RM -->
       
-      <device name="SKEAZ64M4"          alias="MKE06Z64M4" />
-      <device name="SKEAZ128M4"         alias="MKE06Z128M4" />
+      <device name="S9KEAZN64M4"     alias="MKE04Z64M4" /> <!-- S9KEA64Z64M20SF0RM -->
+      
+      <device name="S9KEAZ64M4"      alias="MKE06Z64M4" />  <!-- S9KEA128Z80M48SF0RM -->
+      <device name="S9KEAZ128M4"     alias="MKE06Z128M4" /> <!-- S9KEA128Z80M48SF0RM -->
 
 <!-- Codewarrior IDE aliases -->
       <device name="K10DN32"           alias="MK10DN32M5"        hidden="true"/>
