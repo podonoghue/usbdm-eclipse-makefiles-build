@@ -7,9 +7,9 @@ This disables programming of the target chip!!!
 To restore programming the chip must be erased
 
 To use:
-- Program the usbdm firware to the OpenSDA interface in the usual manner.
+- Program the usbdm firmware to the OpenSDA interface in the usual manner.
 - Use the USBDM programmer to program KL05_SWD_Disable.elf to the target KL05.
-- You can now use the external programming interface
+- You can now use the external programming interface without changing any jumpers or links.
 
 To erase the chip - 
 Pull PTB13 (=A5) low and then plug in the board.  The firmware will erase itself.
