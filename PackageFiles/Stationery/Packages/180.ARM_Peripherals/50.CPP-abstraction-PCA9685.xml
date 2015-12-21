@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9685" />
                </applyWhen>
-               <copy source="Snippets/PCA9685-example.cpp"     target="Snippets/PCA9685-example.cpp" />
-               <copy source="Project_Headers/PCA9685.h"        target="Project_Headers/PCA9685.h" />
-               <copy source="Sources/PCA9685.cpp"              target="Sources/PCA9685.cpp" />
+               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp" />
+               <copy source="Project_Headers/pca9685.h"        target="Project_Headers/pca9685.h" />
+               <copy source="Sources/pca9685.cpp"              target="Sources/pca9685.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>
