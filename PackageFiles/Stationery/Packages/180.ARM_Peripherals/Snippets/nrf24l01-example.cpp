@@ -29,7 +29,7 @@
 int main() {
    USBDM::Spi *spi = new USBDM::$(demo.cpp.nrf24l01.spi:Spi0)_T<USBDM::$(demo.cpp.nrf24l01.cs_n:spi0_PCS0)>($(demo.cpp.spi.dma:));
 
-   USBDM::NRF24L01 *nrf24l01 = new USBDM::NRF24L01_T<USBDM::$(demo.cpp.nrf24l01.ce), USBDM::$(demo.cpp.nrf24l01.irq)>(spi);
+   USBDM::NRF24L01 *nrf24l01 = new USBDM::NRF24L01_T<USBDM::$(demo.cpp.nrf24l01.ce:GpioC<4>), USBDM::$(demo.cpp.nrf24l01.irq:GpioC<5>)>(spi);
 
    for (;;) {
       uint8_t txData[] = {1,2,3,4};

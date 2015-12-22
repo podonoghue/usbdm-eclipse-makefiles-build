@@ -48,12 +48,12 @@
          <constant id="demo.cpp.mma845x.i2c"        value="I2c1" />
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c1" />
          <constant id="demo.cpp.mag3110.i2c"        value="I2c1" />
-         
+
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
-         <createFolder        target="Snippets" />
+         <createFolder   target="Snippets" />
          <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />

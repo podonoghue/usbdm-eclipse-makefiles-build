@@ -21,8 +21,8 @@
 
 int main() {
 
-   USBDM::I2c *i2c = new USBDM::I2c0();
-   USBDM::PCA9685 *pca9685= new USBDM::PCA9685(i2c);
+   USBDM::I2c     *i2c     = new USBDM::I2c0();
+   USBDM::PCA9685 *pca9685 = new USBDM::PCA9685(i2c);
 
    pca9685->set_pin_high(3);
    pca9685->set_pin_pwm(3, 50);
