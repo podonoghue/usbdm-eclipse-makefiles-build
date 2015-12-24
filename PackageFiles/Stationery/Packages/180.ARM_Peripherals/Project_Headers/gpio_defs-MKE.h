@@ -63,8 +63,6 @@ template<uint32_t portPue, uint32_t gpio, const uint32_t bitNum> class Gpio_T {
 public:
    /**
     * Set pin as digital output
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setOutput() {
       bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, 1<<bitNum);
@@ -72,8 +70,6 @@ public:
    }
    /**
     * Set pin as digital input
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setInput() {
       bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~(1<<bitNum));
@@ -286,8 +282,6 @@ private:
 public:
    /**
     * Set pin as digital output
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setOutput() {
       bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, MASK);
@@ -295,8 +289,6 @@ public:
    }
    /**
     * Set pin as digital input
-    *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setInput() {
       bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~MASK);
@@ -304,16 +296,12 @@ public:
    }
    /**
     * Enable Pull-ups on pin
-    *
-    * @param puMask Mask to change PUPs (1=> enables, 0 => no affect)
     */
    static void enablePups() {
       reinterpret_cast<volatile uint32_t *>(portPue) |= MASK;
    }
    /**
     * Disable Pull-ups on pin
-    *
-    * @param puMask Mask to change PUPs (1=> disables, 0 => no affect)
     */
    static void disablePups() {
       reinterpret_cast<volatile uint32_t *>(portPue) &= ~MASK;

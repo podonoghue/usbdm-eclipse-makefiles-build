@@ -894,7 +894,7 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
          UsbdmSystem::milliSleep(backoff); // So we don't monopolise the USB
          backoff *= 2; // Try 1,2,4,8,16 ... ms
       }
-   } while ((rc == LIBUSB_SUCCESS) && (dummyBuffer[0] == BDM_RC_BUSY)  && (backoff<=backoffLimit));
+   } while ((rc == LIBUSB_SUCCESS) && (dummyBuffer[0] == BDM_RC_BUSY) && (backoff<=backoffLimit));
 
    if (rc != LIBUSB_SUCCESS) {
       log.error("Transfer failed (Count = %d, USB error = %s, timeout=%d)\n", count, libusb_error_name((libusb_error)rc), timeoutValue);
