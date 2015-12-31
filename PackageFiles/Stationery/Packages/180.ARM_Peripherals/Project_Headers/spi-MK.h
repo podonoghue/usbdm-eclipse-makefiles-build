@@ -1,7 +1,7 @@
 /**
  * @file     spi.h (derived from spi-MK.h)
  *
- * @brief    Abstracion layer for SPI interface
+ * @brief    Abstraction layer for SPI interface
  *
  * @version   1.1.0
  * @date     2015/12
@@ -17,6 +17,11 @@
 namespace USBDM {
 
 static constexpr uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
+
+static constexpr uint32_t SPI_MODE0 (0                 |0);
+static constexpr uint32_t SPI_MODE1 (0                 |SPI_CTAR_CPHA_MASK);
+static constexpr uint32_t SPI_MODE2 (SPI_CTAR_CPOL_MASK|0);
+static constexpr uint32_t SPI_MODE3 (SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
 
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface
@@ -45,14 +50,17 @@ protected:
    }
 
 public:
+   virtual void enablePins() = 0;
+   virtual void disablePins() = 0;
    /**
     * Sets Communication speed for SPI
     *
-    * @param frequency => Frequency in Hz (0 => use default value)
+    * @param targetFrequency => Frequency in Hz (0 => use default value)
     *
     * Note: Chooses the highest speed that is not greater than frequency.
+    * Note: This will only have effect the next time a CTAR is changed
     */
-   void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
+   void setSpeed(uint32_t targetFrequency = DEFAULT_SPI_FREQUENCY);
    /**
     * Gets current speed of interface
     *
@@ -92,20 +100,21 @@ public:
    void txRxWords(uint32_t dataSize, const uint16_t *dataOut, uint16_t *dataIn=0);
 
    /**
-    * Transmit and receive an 8-bit value over SPI
+    * Transmit and receive a value over SPI
     *
-    * @param data - Data to send
+    * @param data - Data to send (8-16 bits) <br>
+    *               May include other control bits
     *
     * @return Data received
     */
    uint32_t txRx(uint32_t data);
 
-   static const uint32_t mask = ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK|SPI_CTAR_DBR_MASK);
+   static constexpr uint32_t mask = ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK|SPI_CTAR_DBR_MASK);
 
    /*! Set SPI.CTAR0 value
     *
     * @param ctar 32-bit CTAR value (excluding baud related settings)
-    *     e.g. setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_PBR_CPOL|SPI_CTAR_PBR_MASK_CPHA)
+    *     e.g. setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
     */
    void setCTAR0Value(uint32_t ctar) {
       spi->CTAR[0] = spiBaudValue|(ctar&mask);
@@ -114,7 +123,7 @@ public:
    /*! Set SPI.CTAR1 value
     *
     * @param ctar 32-bit CTAR value (excluding baud related settings)
-    *     e.g. setCTAR1Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_PBR_CPOL|SPI_CTAR_PBR_MASK_CPHA)
+    *     e.g. setCTAR1Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
     */
    void setCTAR1Value(uint32_t ctar) {
       spi->CTAR[1] = spiBaudValue|(ctar&mask);
@@ -135,13 +144,20 @@ public:
 template<uint32_t spiBasePtr, uint32_t spiClockReg, uint32_t spiClockMask, typename SpiSCK, typename  SpiSIN, typename  SpiSOUT, typename ... Rest>
 class Spi_T : public Spi {
 public:
+   virtual void enablePins() {
+      // Configure SPI pins
+      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>();
+   }
+
+   virtual void disablePins() {
+      // Configure SPI pins
+      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>(0);
+   }
+
    /**
     * Constructor
     */
    Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(spiBasePtr)) {
-      // Configure SPI pins
-      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>();
-
       // Enable SPI module clock
       *reinterpret_cast<volatile uint32_t*>(spiClockReg) |= spiClockMask;
 
@@ -151,6 +167,9 @@ public:
       setSpeed();                        // Use default speed
       setCTAR0Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
       setCTAR1Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
+
+      // Configure SPI pins
+      enablePins();
    }
 };
 

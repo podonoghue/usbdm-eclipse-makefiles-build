@@ -20,7 +20,7 @@ namespace USBDM {
 /**
  * Sets Communication speed for SPI
  *
- * @param frequency => Frequency in Hz
+ * @param targetFrequency => Frequency in Hz
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed

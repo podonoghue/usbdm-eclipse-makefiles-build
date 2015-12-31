@@ -1,5 +1,18 @@
 /**
- * @file gps-example.cpp
+ * \mainpage GPS shield demonstration
+ *
+ * \section introSection Introduction
+ * This is a simple example of the use of the C++ library routines for the Global Positing System shield.\n
+ *
+ * It may be necessary to change pin mappings to use this example.\n
+ * Open @ref pin_mapping.h file in the Configuration Editor to change these.\n\n
+ *
+ * Refer to the individual files for license conditions as they vary.
+ *
+ * <hr>
+ * \subsection QuickLinks Quick Links
+ *
+ *   - @htmlonly <a href="https://www.itead.cc/itead-gps-shield.html"><b>ITEAD REB-4216 GPS Shield </b></a> @endhtmlonly
  */
 #include <stdio.h>
 #include <string.h>

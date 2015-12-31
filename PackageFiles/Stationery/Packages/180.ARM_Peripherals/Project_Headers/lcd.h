@@ -272,18 +272,18 @@ public:
 
    /** Draws a line circle in the specified colour at center (x0,y0) with radius
     *
-    * @param x          row address (0 .. 131)
-    * @param y          column address (0 .. 131)
-    * @param radius     radius in pixels
-    * @param color      12-bit colour value rrrrggggbbbb
-    * @param sectors    controls which segments of the circle are drawn
+    * @param centreX = row address (0 .. 131)
+    * @param centreY = column address (0 .. 131)
+    * @param radius = radius in pixels
+    * @param color = 12-bit colour value rrrrggggbbbb
+    * @param circleType = controls which segments of the circle are drawn
     *
     * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
     *
     * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
     *        http://www.wikipedia.org
     */
-   void drawCircle(int x, int y, int radius, int color, int sectors=FULLCIRCLE);
+   void drawCircle(int centreX, int centreY, int radius, int color, int circleType=FULLCIRCLE);
    /** Writes the entire LCD screen from a bmp file
     *
     * @param bmp - bitmap to display

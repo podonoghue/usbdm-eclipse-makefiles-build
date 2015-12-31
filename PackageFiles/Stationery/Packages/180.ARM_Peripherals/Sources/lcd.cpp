@@ -524,12 +524,12 @@ void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, int color) {
 
 /** Draws an ASCII character at the specified (x,y) address and color
  *
- * @param c      = character to be displayed
- * @param x      = row address (0 .. 131)
- * @param y      = column address (0 .. 131)
- * @param size   = font pitch (SMALL, MEDIUM, LARGE)
- * @param fcolor = 12-bit foreground color value
- * @param bcolor = 12-bit background color value
+ * @param c          = character to be displayed
+ * @param x          = row address (0 .. 131)
+ * @param y          = column address (0 .. 131)
+ * @param fontSize   = font pitch (SMALL, MEDIUM, LARGE)
+ * @param fColor     = 12-bit foreground color value
+ * @param bColor     = 12-bit background color value
  *
  * @verbatim
  * Notes: Here's an example to display "E" at address (20,20)
@@ -695,12 +695,12 @@ void LcdBase::putChar(char c, int x, int y, Fonts::FontSize fontSize, int fColor
 
 /** Draws a null-terminated character string at the specified (x,y) address and color
  *
- * @param pString = pointer to character string to be displayed
- * @param x = row address (0 .. 131)
- * @param y = column address (0 .. 131)
- * @param Size = font pitch (SMALL, MEDIUM, LARGE)
- * @param fColor = 12-bit foreground colour value rrrrggggbbbb
- * @param bColor = 12-bit background colour value rrrrggggbbbb
+ * @param pString  = pointer to character string to be displayed
+ * @param x        = row address (0 .. 131)
+ * @param y        = column address (0 .. 131)
+ * @param fontSize = font pitch (SMALL, MEDIUM, LARGE)
+ * @param fColor   = 12-bit foreground colour value rrrrggggbbbb
+ * @param bColor   = 12-bit background colour value rrrrggggbbbb
  *
  * @note Here's an example to display "Hello World!" at address (20,20) \n
  *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
@@ -748,8 +748,8 @@ void LcdBase::setContrast(uint8_t setting) {
 
 /** Draws a line circle in the specified colour at center (x0,y0) with radius
  *
- * @param x0 = row address (0 .. 131)
- * @param y0 = column address (0 .. 131)
+ * @param centreX = row address (0 .. 131)
+ * @param centreY = column address (0 .. 131)
  * @param radius = radius in pixels
  * @param color = 12-bit colour value rrrrggggbbbb
  * @param circleType = controls which segments of the circle are drawn
@@ -759,7 +759,7 @@ void LcdBase::setContrast(uint8_t setting) {
  * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
  *        http://www.wikipedia.org
  */
-void LcdBase::drawCircle(int x0, int y0, int radius, int color, int circleType) {
+void LcdBase::drawCircle(int centreX, int centreY, int radius, int color, int circleType) {
    int f = 1 - radius;
    int ddF_x = 0;
    int ddF_y = -2 * radius;
@@ -767,16 +767,16 @@ void LcdBase::drawCircle(int x0, int y0, int radius, int color, int circleType) 
    int y = radius;
 
    if (circleType&(SECTOR_315_360|SECTOR_0_45)) {
-      drawPixel(x0 + radius, y0, color);  // 0,360
+      drawPixel(centreX + radius, centreY, color);  // 0,360
    }
    if (circleType&(SECTOR_45_90|SECTOR_90_135)) {
-      drawPixel(x0, y0 + radius, color);  // 90
+      drawPixel(centreX, centreY + radius, color);  // 90
    }
    if (circleType&(SECTOR_135_180|SECTOR_180_225)) {
-      drawPixel(x0 - radius, y0, color);  // 180
+      drawPixel(centreX - radius, centreY, color);  // 180
    }
    if (circleType&(SECTOR_225_270|SECTOR_270_315)) {
-      drawPixel(x0, y0 - radius, color);  // 270
+      drawPixel(centreX, centreY - radius, color);  // 270
    }
    while (x < y) {
       if (f >= 0) {
@@ -788,28 +788,28 @@ void LcdBase::drawCircle(int x0, int y0, int radius, int color, int circleType) 
       ddF_x += 2;
       f += ddF_x + 1;
       if (circleType&SECTOR_0_45) {
-         drawPixel(x0 + y, y0 + x, color);   // 0-45
+         drawPixel(centreX + y, centreY + x, color);   // 0-45
       }
       if (circleType&SECTOR_45_90) {
-         drawPixel(x0 + x, y0 + y, color);   // 45-90
+         drawPixel(centreX + x, centreY + y, color);   // 45-90
       }
       if (circleType&SECTOR_90_135) {
-         drawPixel(x0 - x, y0 + y, color);   // 90-135
+         drawPixel(centreX - x, centreY + y, color);   // 90-135
       }
       if (circleType&SECTOR_135_180) {
-         drawPixel(x0 - y, y0 + x, color);   // 135-180
+         drawPixel(centreX - y, centreY + x, color);   // 135-180
       }
       if (circleType&SECTOR_180_225) {
-         drawPixel(x0 - y, y0 - x, color);   // 180-225
+         drawPixel(centreX - y, centreY - x, color);   // 180-225
       }
       if (circleType&SECTOR_225_270) {
-         drawPixel(x0 - x, y0 - y, color);   // 225-270
+         drawPixel(centreX - x, centreY - y, color);   // 225-270
       }
       if (circleType&SECTOR_270_315) {
-         drawPixel(x0 + x, y0 - y, color);   // 270-315
+         drawPixel(centreX + x, centreY - y, color);   // 270-315
       }
       if (circleType&SECTOR_315_360) {
-         drawPixel(x0 + y, y0 - x, color);   // 315-360
+         drawPixel(centreX + y, centreY - x, color);   // 315-360
       }
    }
 }

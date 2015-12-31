@@ -1,5 +1,18 @@
 /**
- * @file elecfreaks-lcd-example.cpp
+ * \mainpage Elecfreaks Colour LCD shield demonstration
+ *
+ * \section introSection Introduction
+ * This is a simple example of the use of the C++ library routines for the Elecfreaks LCD shield displays.\n
+ *
+ * It may be necessary to change pin mappings to use this example.\n
+ * Open @ref pin_mapping.h file in the Configuration Editor to change these.\n\n
+ *
+ * Refer to the individual files for license conditions as they vary.
+ *
+ * <hr>
+ * \subsection QuickLinks Quick Links
+ *
+ *   - @htmlonly <a href="http://www.elecfreaks.com/estore/color-lcd-shield-shd-cls.html"><b>Elecfreaks LCD shield</b></a> @endhtmlonly
  */
 #include <stdlib.h>
 #include "lcd.h"
@@ -8,13 +21,6 @@
 
 using namespace USBDM;
 
-/**
- * Example demonstrating Elecfreaks LCD shield
- *
- * You may need to change the pin-mapping of the SPI interface
- * for a particular FRDM board
- *
- */
 
 /// LCD derived dimensions
 #define LCD_WIDTH  (LCD_X_MAX-LCD_X_MIN)
@@ -49,7 +55,7 @@ void drawCursor(Lcd *lcd, int x, int y, int colour) {
 
 int main() {
    // Instantiate SPI interface class
-   Spi *spi = new $(demo.cpp.lcd.spi)();
+   Spi *spi = new $(demo.cpp.external.spi)();
    // Set higher speed to improve LCD draw rate
    spi->setSpeed(1000000);
    // Instantiate LCD interface class

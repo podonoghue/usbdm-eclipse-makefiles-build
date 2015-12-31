@@ -922,6 +922,7 @@ public:
    static void setMode(uint32_t mode = resolution_16bit_se) {
       // Enable clock to ADC
       *reinterpret_cast<volatile uint32_t*>(adcClockReg)  |= adcClockMask;
+      // Set up ADC pin
       Pcr::setPCR(ADC_PORT_FN);
 
       // Configure ADC for software triggered conversion
@@ -988,7 +989,7 @@ enum Tmr_Mode {
 } ;
 
 /**
- * Templated class representing the common functions of an FTM
+ * Templated class representing the functions controlling the shared hardware of an FTM
  *
  * Example
  * @code
@@ -1007,45 +1008,55 @@ enum Tmr_Mode {
  * @tparam ftmClockMask  Mask for FTM clock register
  */
 template<uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue> class FtmBase_T {
-public:
-
+protected:
    /**
     * Configure Timer operation
     *
     * @param period  Period in timer ticks
     * @param mode    Mode of operation see @ref Tmr_Mode
+    *
+    * @note Assumes prescale has been chosen as a appropriate value
     */
-   static void setMode(int period /* ticks */, Tmr_Mode mode=ftm_leftAlign) {
+   static void setMode(int period /* us */, Tmr_Mode mode=ftm_leftAlign) {
 
       // Enable clock to timer
       *reinterpret_cast<volatile uint32_t*>(ftmClockReg) |= ftmClockMask;
 
       // Common registers
-      reinterpret_cast<volatile FTM_Type*>(ftm)->SC      = FTM_SC_CLKS(0); // Disable FTM so register changes are immediate
       reinterpret_cast<volatile FTM_Type*>(ftm)->CNTIN   = 0;
       reinterpret_cast<volatile FTM_Type*>(ftm)->CNT     = 0;
+
       if (mode == ftm_centreAlign) {
-         reinterpret_cast<volatile FTM_Type*>(ftm)->MOD  = period/2;
          // Centre aligned PWM with CPWMS not selected
          reinterpret_cast<volatile FTM_Type*>(ftm)->SC   = scValue|FTM_SC_CPWMS_MASK;
       }
       else {
-         reinterpret_cast<volatile FTM_Type*>(ftm)->MOD  = period-1;
          // Left aligned PWM without CPWMS selected
          reinterpret_cast<volatile FTM_Type*>(ftm)->SC   = scValue;
       }
+      setPeriod(period);
    }
 
+public:
    /**
     * Set period
     *
-    * @param period Period in timer ticks
+    * @param period Period in us
+    *
+    * @note Assumes prescale has been chosen as a appropriate value
     */
    static void setPeriod(int period) {
-      // Common registers
-      reinterpret_cast<volatile FTM_Type*>(ftm)->SC = FTM_SC_CLKS(0); // Disable FTM so register changes are immediate
 
-      if ((reinterpret_cast<volatile FTM_Type*>(ftm)->SC&FTM_SC_CPWMS_MASK) != 0) {
+      // Check if CPWMS is set (affects period)
+      bool ftm_centreAlign = (reinterpret_cast<volatile FTM_Type*>(ftm)->SC&FTM_SC_CPWMS_MASK) != 0;
+
+      uint32_t tickRate = SystemBusClock/(1<<(FTM1_SC&FTM_SC_PS_MASK));
+      period = (period*tickRate)/1000000;
+
+      // Disable FTM so register changes are immediate
+      reinterpret_cast<volatile FTM_Type*>(ftm)->SC      = FTM_SC_CLKS(0);
+
+      if (ftm_centreAlign) {
          reinterpret_cast<volatile FTM_Type*>(ftm)->MOD = period/2;
          // Centre aligned PWM with CPWMS not selected
          reinterpret_cast<volatile FTM_Type*>(ftm)->SC  = scValue|FTM_SC_CPWMS_MASK;
@@ -1090,6 +1101,18 @@ template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ft
 public:
    using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(ftmMuxFn)|DEFAULT_PCR>;   //!< PCR information
 
+   /**
+    * Configure Timer operation
+    *
+    * @param period  Period in timer ticks
+    * @param mode    Mode of operation see @ref Tmr_Mode
+    */
+   static void setMode(int period /* us */, Tmr_Mode mode=ftm_leftAlign) {
+      FtmBase_T<ftm, ftmClockReg, ftmClockMask, scValue>::setMode(period, mode);
+
+      // Set up ADC pin
+      Pcr::setPCR();
+   }
    /**
     * Set PWM duty cycle
     *
@@ -1209,7 +1232,7 @@ void processPcrs() {
    processPcrs<Pcr2, Rest...>();
 }
 /**
- * @brief Templated function to set a PCR to the default value
+ * @brief Templated function to set a PCR to a given value
  *
  * @param   pcrValue PCR value to set
  *
@@ -1221,7 +1244,7 @@ void processPcrs(uint32_t pcrValue) {
 }
 
 /**
- * @brief Templated function to set a collection of PCRs to the default value
+ * @brief Templated function to set a collection of PCRs to a given value
  *
  * @param pcrValue PCR value to set
  *
