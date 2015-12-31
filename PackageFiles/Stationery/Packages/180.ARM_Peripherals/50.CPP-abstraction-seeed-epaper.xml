@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-EPAPER" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="demo.cpp.peripheral.spi" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+         <and>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </and>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-EPAPER" 
+            name="e-Paper C++ interface" 
+            description="Adds a CPP abstraction layer for Seeed Studio e-Paper displays" 
+            checkGroup="group-spi-peripheral-options" >
+            <enableWhen>
+               <and>
+                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
+                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
+               </and>
+            </enableWhen>
+         </variable>
+   
+         <!-- LCD CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-EPAPER" />
+               </applyWhen>
+               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" />
+               <copy source="Project_Headers/epaper.h"              target="Project_Headers/epaper.h" />
+               <copy source="Project_Headers/epd.h"                 target="Project_Headers/epd.h" />
+               <copy source="Project_Headers/seeed_sld00200p.h"     target="Project_Headers/seeed_sld00200p.h" />
+               <copy source="Project_Headers/gt20l16.h"             target="Project_Headers/gt20l16.h" />
+               <copy source="Sources/epaper.cpp"                    target="Sources/epaper.cpp" />
+               <copy source="Sources/epd.cpp"                       target="Sources/epd.cpp" />
+               <copy source="Sources/gt20l16.cpp"                   target="Sources/gt20l16.cpp" />
+               <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+                  <value>EPAPER_AVAILABLE</value>
+               </projectOption>
+               <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+                  <value>EPAPER_AVAILABLE</value>
+               </projectOption>
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>

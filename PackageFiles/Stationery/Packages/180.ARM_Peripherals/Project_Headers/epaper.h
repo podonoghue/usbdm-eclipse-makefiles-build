@@ -11,6 +11,9 @@
  * www.seeedstudio.com
  * 2013-7-2
  *
+ * Modified for Kinetis FRDM boards by Peter O'Donoghue
+ * 2014
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -30,10 +33,18 @@
 #define __EPAPER_H__
 
 #include <string.h>
-#include "SPI.h"
+#include "spi.h"
 #include "seeed_sld00200p.h"
 #include "gt20l16.h"
 #include "epd.h"
+
+namespace USBDM {
+
+/**
+ * @addtogroup EPaper_Group E-paper interface
+ * @brief C++ Class allowing access to E-paper display
+ * @{
+ */
 
 #define BLACK   1
 #define WHITE   0
@@ -59,25 +70,25 @@ public:
 
 private:
    GT20L16         *gt20l16;                 //!< Character generator
-   EPD_size         size;                    //!< EPD size
+   EpdSize          size;                    //!< EPD size
    Orientation      orientation;             //!< Orientation of display
-   EPD             *epd;                     //!< EPD panel driver
+   Epd             *epd;                     //!< EPD panel driver
    unsigned         width;                   //!< Width of display
    unsigned         height;                  //!< Height of display
    uint8_t          frameBuffer[264*176/8];  //!< Frame buffer (max size)
    bool             invertX;                 //!< Invert in x axis
    bool             invertY;                 //!< Invert in y axis
    WriteMode        writeMode;               //!< Write mode (Paint, xor etc)
-   const DigitalIO *cs_n;                    //!< Chip select for interface
 
-   static const uint8_t FONT6x8[97][8];
-   static const uint8_t FONT8x8[97][8];
-   static const uint8_t FONT8x16[97][16];
-
+   /**
+    * Get temperature from temperature sensor
+    *
+    * @return Temperature in Celsius
+    */
    int getTemperature();
 
 public:
-   EPaper(GT20L16 *gt20l16, SPI *spi, EPD_size sz, const DigitalIO *pcs=&EPD_Pin_EPD_CS);
+   EPaper(Spi *spi, const EpdData &epdData);
 
    /**
     * Set vertical inversion
@@ -97,7 +108,7 @@ public:
       invertY = doit;
    }
 
-   /*
+   /**
     * Set write mode
     *
     * @param writeMode Select PAINT, XOR or OR mode
@@ -152,7 +163,7 @@ public:
     * This immediately clears the Electronic Paper Display (sets to white)
     */
    void clearDisplay() {
-      epd->setFactor(getTemperature());  // Adjust for current temperature
+      epd->setDisplayTemperature(getTemperature());  // Adjust for current temperature
       epd->powerOnAndInitialise();       // Power up the EPD panel
       epd->clear();                      // Clear display
       epd->powerOff();                   // Power down EPD panel
@@ -165,7 +176,7 @@ public:
     * @param image Image to send
     */
    void writeImage(const unsigned char *image) {
-      epd->setFactor(getTemperature());  // Adjust for current temperature
+      epd->setDisplayTemperature(getTemperature());  // Adjust for current temperature
       epd->powerOnAndInitialise();       // Power up the EPD panel
       epd->image(image);                 // Send image
       epd->powerOff();                   // Power down EPD panel
@@ -176,9 +187,9 @@ public:
     * It is expected that the various draw functions have been used to create an image beforehand.
     */
    void displayCanvas() {
-      epd->setFactor(getTemperature());  // Adjust for current temperature
+      epd->setDisplayTemperature(getTemperature());  // Adjust for current temperature
       epd->powerOnAndInitialise();       // Power up the EPD panel
-      epd->image_sram(frameBuffer);      // Write to EPD
+      epd->image(frameBuffer);           // Write to EPD
       epd->powerOff();                   // Power down EPD panel
    }
 
@@ -195,9 +206,9 @@ public:
     *
     * @param x       X-coordinate
     * @param y       Y-coordinate
-    * @param color   Colour of pixel
+    * @param colour  Colour of pixel
     */
-   void drawPixel(unsigned x, unsigned y, unsigned char color);
+   void drawPixel(unsigned x, unsigned y, unsigned char colour);
    /**
     * Draw a character to frame buffer
     *
@@ -217,20 +228,20 @@ public:
    /**
     * Draw a long number to frame buffer
     *
-    * @param long_num  Number to draw
+    * @param longNum  Number to draw
     * @param x         X-coordinate
     * @param y         Y-coordinate
     */
-   int  drawNumber(long long_num, unsigned x, unsigned y);
+   int  drawNumber(long longNum, unsigned x, unsigned y);
    /**
     * Draw a number to float number buffer
     *
-    * @param floatNumber  Number to draw
-    * @param decimal      The number of decimal places
-    * @param x            X-coordinate
-    * @param y            Y-coordinate
+    * @param floatNum  Number to draw
+    * @param decimal   The number of decimal places
+    * @param x         X-coordinate
+    * @param y         Y-coordinate
     */
-   int  drawFloat(float floatNumber, unsigned decimal, unsigned x, unsigned y);
+   int  drawFloat(float floatNum, unsigned decimal, unsigned x, unsigned y);
    /**
     * Draw a UNICODE character to frame buffer
     *
@@ -332,4 +343,10 @@ public:
     */
    void drawTriangle(unsigned x1, unsigned y1, unsigned x2, unsigned y2, unsigned x3, unsigned y3);
 };
+
+/**
+ * @}
+ */
+
+} // End namespace USBDM
 #endif

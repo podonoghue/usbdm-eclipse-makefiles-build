@@ -18,20 +18,32 @@
 #include "gpio.h"
 #include "spi.h"
 
-enum EPD_size {
+namespace USBDM {
+
+/**
+ * @addtogroup EPaper_Group E-paper interface
+ * @brief C++ Class allowing access to E-paper display
+ * @{
+ */
+
+/** Display sizes */
+enum EpdSize {
    EPD_1_44,        // 128 x 96
    EPD_2_0,         // 200 x 96
    EPD_2_7          // 264 x 176
 };
 
-enum EPD_stage {    // Image pixel -> Display pixel
+/** Stages in updating display */
+enum EpdStage {    // Image pixel -> Display pixel
    EPD_compensate,  // B -> W, W -> B (Current Image)
    EPD_white,       // B -> N, W -> W (Current Image)
    EPD_inverse,     // B -> N, W -> B (New Image)
    EPD_normal       // B -> B, W -> W (New Image)
 };
 
-struct EPD_Data {
+/** Data for a specific size display */
+struct EpdData {
+   EpdSize        epdSize;
    uint16_t        stage_time;
    uint16_t        dots_per_line;
    uint16_t        lines_per_display;
@@ -42,40 +54,162 @@ struct EPD_Data {
    uint8_t         gate_source;
 };
 
-typedef void EPD_reader(void *buffer, uint32_t address, uint16_t length);
+static constexpr EpdData EPD_1_44_DATA = {
+      /* EpdSize size           */ EPD_1_44,
+      /* stage_time             */ 480,
+      /* dots_per_line;         */ 128,
+      /* lines_per_display;     */ 96,
+      /* bytes_per_line;        */ 128 / 8,
+      /* bytes_per_scan;        */ 96 / 4,
+      /* filler;                */ false,
+      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0x00},
+      /* gate_source;           */ 0x03,
+};
 
-class EPD {
+static constexpr EpdData EPD_2_0_DATA = {
+      /* EpdSize size           */ EPD_2_0,
+      /* stage_time             */ 480,
+      /* dots_per_line;         */ 200,
+      /* lines_per_display;     */ 96,
+      /* bytes_per_line;        */ 200 / 8,
+      /* bytes_per_scan;        */ 96 / 4,
+      /* filler;                */ true,
+      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x00, 0x01, 0xff, 0xe0, 0x00},
+      /* gate_source;           */ 0x03,
+};
 
-private:
-   SPI             *spi;                  // SPI to use
-   EPD_size         size;                 // EPD screen size
-   const EPD_Data  *epdData;              // EPD parameters
-   unsigned         factored_stage_time;  // Stage time in ms
+static constexpr EpdData EPD_2_7_DATA = {
+      /* EpdSize size           */ EPD_2_7,
+      /* stage_time             */ 630,
+      /* dots_per_line;         */ 264,
+      /* lines_per_display;     */ 176,
+      /* bytes_per_line;        */ 264 / 8,
+      /* bytes_per_scan;        */ 176 / 4,
+      /* filler;                */ true,
+      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x7f, 0xff, 0xfe, 0x00, 0x00},
+      /* gate_source;           */ 0x00,
+};
 
-   void txByteAndWait(uint8_t c);
-   void txWriteReg1Byte(const uint8_t regNum, uint8_t data);
-   uint8_t rxReadReg1Byte(const uint8_t regNum);
-   void txWriteRegNBytes(const uint8_t regNum, unsigned length, const uint8_t data[]);
-   void txBytes(uint32_t dataSize, const uint8_t *dataOut);
+/**
+ * Class representing a E-paper display
+ */
+class Epd {
+
+protected:
+   Spi            *spi;                  //!< SPI to use
+   const EpdData  &epdData;              //!< EPD parameters
+   unsigned        factored_stage_time;  //!< Stage time in ms
+
+   /**
+    * Calculates the factored stage time for frame_*_repeat methods
+    * from temperature.
+    *
+    *  @param  temperature Temperature in Celsius
+    *
+    *  @return Scaled stage time in ms
+    */
    int getFactoredStageTime(int temperature);
+   /**
+    *  Send a single byte to EPD and wait for not busy
+    *
+    *  @param data Byte to send
+    */
+   void txByteAndWait(uint8_t data);
+   /**
+    *  Write byte to register
+    *
+    *  @param regNum    Register to write to
+    *  @param data      Data byte for register
+    */
+   void txWriteReg1Byte(const uint8_t regNum, uint8_t data);
+   /**
+    *  Read 1 byte from register
+    *
+    *  @param regNum    Register to read from
+    *
+    *  @return          Data byte from register
+    */
+   uint8_t rxReadReg1Byte(const uint8_t regNum);
+   /**
+    *  Transmit bytes to EPD
+    *
+    *  @param dataSize  Number of bytes to transfer
+    *  @param dataOut   Transmit bytes
+    */
+   void txBytes(uint32_t dataSize, const uint8_t *dataOut);
+   /**
+    * Send line of data to display
+    *
+    * @param   line        Which line of display
+    * @param   data        Data to write (may be NULL)
+    * @param   fixed_value Fixed value used if data == NULL
+    * @param   stage       Stage of the screen rewrite
+    */
+   void sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EpdStage stage);
+   /**
+    * Write full frame of fixed data value
+    *
+    * @param fixedValue Value to write
+    * @param stage      Stage of update process
+    */
+   void frame_fixed(uint8_t fixedValue, EpdStage stage);
+   /**
+    * Write full frame from an image
+    *
+    * @param image   Image to write
+    * @param stage   Stage of update process
+    */
+   void frame_data(const uint8_t *image, EpdStage stage);
+   /**
+    * Write full frame of fixed data value multiple times (over repeat period)
+    *
+    * @param fixedValue Value to write
+    * @param stage      Stage of update process
+    */
+   void frame_fixed_repeat(uint8_t fixedValue, EpdStage stage);
 
-   // single line display - very low-level
-   void sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EPD_stage stage);
-
+   /**
+    * Write full frame from an image multiple times (over repeat period)
+    *
+    * @param image   Image to write
+    * @param stage   Stage of update process
+    */
+   void frame_data_repeat(const uint8_t *image, EpdStage stage);
 
 public:
-
-   EPD(SPI *spi, EPD_size sz);
-
-   void setFactor(int temperature) {
+   /**
+    *  Constructor
+    *
+    *  @param spi       SPI interface to use
+    *  @param epdData   Data describing the EPD panel
+    */
+   Epd(Spi *spi, const EpdData &epdData);
+   /**
+    * Get width of display
+    */
+   unsigned getWidth()  { return epdData.dots_per_line; }
+   /**
+    * Get height of display
+    */
+   unsigned getHeight() { return epdData.lines_per_display; }
+   /**
+    * Sets the temperature dependent parameters of the display\n
+    * If not called then a default temperature of 25C is assumed
+    *
+    * @param temperature The temperature of the display
+    */
+   void setDisplayTemperature(int temperature) {
+      // Set factored_stage_time based on temperature
       this->factored_stage_time = getFactoredStageTime(temperature);
    }
-   unsigned getWidth()  { return epdData->dots_per_line; }
-   unsigned getHeight() { return epdData->lines_per_display; }
+   /**
+    * Power-on and Initialise COG driver
+    */
    void powerOnAndInitialise();
+   /**
+    * Power-off COG driver
+    */
    void powerOff();
-
-
    /*
     * Clear display
     */
@@ -85,11 +219,11 @@ public:
       this->frame_fixed_repeat(0xaa, EPD_inverse);
       this->frame_fixed_repeat(0xaa, EPD_normal);
    }
-
    /*
     *  Write an image to display
     *
     *  @param image Image data
+    *
     *  @note Assumes clear (white) screen
     */
    void image(const uint8_t *image) {
@@ -98,37 +232,12 @@ public:
       this->frame_data_repeat(image, EPD_inverse);
       this->frame_data_repeat(image, EPD_normal);
    }
-
-   /*
-    *  Change from old image to new image (data)
-    *  Old image is in RAM buffer
-    *  @param new_image Image data for new image
-    */
-   void image_sram(unsigned char *new_image) {
-      this->frame_fixed_repeat(0xaa, EPD_compensate);
-      this->frame_fixed_repeat(0xaa, EPD_white);
-      this->frame_sram_repeat(new_image, EPD_inverse);
-      this->frame_sram_repeat(new_image, EPD_normal);
-   }
-
-   // Low level API calls
-   // ===================
-
-   // single frame refresh
-   void frame_fixed(uint8_t fixed_value, EPD_stage stage);
-   void frame_data(const uint8_t *new_image, EPD_stage stage);
-
-   void frame_sram(const uint8_t *new_image, EPD_stage stage);
-   void frame_cb(uint32_t address, EPD_reader *reader, EPD_stage stage);
-
-   // stage_time frame refresh
-   void frame_fixed_repeat(uint8_t fixed_value, EPD_stage stage);
-   void frame_data_repeat(const uint8_t *new_image, EPD_stage stage);
-
-   void frame_sram_repeat(const uint8_t *new_image, EPD_stage stage);
-   void frame_cb_repeat(uint32_t address, EPD_reader *reader, EPD_stage stage);
-
 };
 
+/**
+ * @}
+ */
+
+} // End namespace USBDM
 #endif
 
