@@ -8,12 +8,12 @@
 #ifndef INCLUDE_USBDM_DELAY_H_
 #define INCLUDE_USBDM_DELAY_H_
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 namespace USBDM {
 #endif
 
-#include <stdint.h>
- 
 /**
  * Simple delay routine
  *
