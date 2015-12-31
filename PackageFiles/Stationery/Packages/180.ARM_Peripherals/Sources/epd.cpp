@@ -18,7 +18,7 @@
 #include "epd.h"
 #include "seeed_sld00200p.h"
 
-using namespace USBDM;
+namespace USBDM {
 
 #define CHANNEL_SELECT_REG      0x01
 #define OUTPUT_ENABLE_REG       0x02
@@ -30,119 +30,79 @@ using namespace USBDM;
 #define ADC_REG                 0x08
 #define VCOM_LEVEL_REG          0x09
 
-// Create in-line arrays
-#define ARRAY(type, ...) ((type[]){__VA_ARGS__})
-#define CU8(...) (ARRAY(const uint8_t, __VA_ARGS__))
+constexpr long SPI_FREQUENCY = 12000000;
 
-static const EPD_Data epd_1_44_data = {
-      /* stage_time             */ 480,
-      /* dots_per_line;         */ 128,
-      /* lines_per_display;     */ 96,
-      /* bytes_per_line;        */ 128 / 8,
-      /* bytes_per_scan;        */ 96 / 4,
-      /* filler;                */ false,
-      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0x00},
-      /* gate_source;           */ 0x03,
-};
-
-static const EPD_Data epd_2_0_data = {
-      /* stage_time             */ 480,
-      /* dots_per_line;         */ 200,
-      /* lines_per_display;     */ 96,
-      /* bytes_per_line;        */ 200 / 8,
-      /* bytes_per_scan;        */ 96 / 4,
-      /* filler;                */ true,
-      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x00, 0x01, 0xff, 0xe0, 0x00},
-      /* gate_source;           */ 0x03,
-};
-
-static const EPD_Data epd_2_7_data = {
-      /* stage_time             */ 630,
-      /* dots_per_line;         */ 264,
-      /* lines_per_display;     */ 176,
-      /* bytes_per_line;        */ 264 / 8,
-      /* bytes_per_scan;        */ 176 / 4,
-      /* filler;                */ true,
-      /* channel_select;        */ {0x72, 0x00, 0x00, 0x00, 0x7f, 0xff, 0xfe, 0x00, 0x00},
-      /* gate_source;           */ 0x00,
-};
-
-#define SPI_FREQUENCY 12000000
-
-/*!
+/**
  *  Constructor
  *
  *  @param spi       SPI interface to use
- *  @param size      The EPD panel size
+ *  @param epdData   Data describing the EPD panel
  */
-EPD::EPD(SPI *spi, EPD_size size) : spi(spi), size(size) {
+Epd::Epd(Spi *spi, const EpdData &epdData) : spi(spi), epdData(epdData) {
    uint32_t spiFequency = spi->getSpeed();
    if (spiFequency>SPI_FREQUENCY) {
       spi->setSpeed(SPI_FREQUENCY);
    }
-   EPD_Pin_EPD_CS.setDigitalOutput();
-   EPD_Pin_EPD_CS.set();
-   EPD_Pin_PANEL_ON.setDigitalOutput();
-   EPD_Pin_BORDER.setDigitalOutput();
-   EPD_Pin_DISCHARGE.setDigitalOutput();
-   EPD_Pin_PWM.setPwmOutput(5 /* us */, PwmIO::ftm_leftAlign);
-   EPD_Pin_RESET.setDigitalOutput();
-   EPD_Pin_BUSY.setDigitalInput();
+   EPD_Pin_EPD_CSn::setOutput();
+   EPD_Pin_EPD_CSn::set();
+   EPD_Pin_PANEL_ON::setOutput();
+   EPD_Pin_BORDER::setOutput();
+   EPD_Pin_DISCHARGE::setOutput();
+   EPD_Pin_PWM::setMode(5 /* us */, USBDM::ftm_leftAlign);
 
-   switch (size) {
-   default:
-   case EPD_1_44:
-      epdData = &epd_1_44_data;
-      break;
-   case EPD_2_0:
-      epdData = &epd_2_0_data;
-      break;
-   case EPD_2_7:
-      epdData = &epd_2_7_data;
-      break;
-   }
+   EPD_Pin_RESETn::setOutput();
+   EPD_Pin_BUSY::setInput();
+
+   // Debug counter used for timing
+   CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+
+   // Enable debug counter
+   DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+
    // Set default factor for 25 Celsius
-   setFactor(25);
+   setDisplayTemperature(25);
 }
 
-/*!
+/**
  * Power-on and Initialise COG driver
  */
-void EPD::powerOnAndInitialise() {
+void Epd::powerOnAndInitialise() {
    // ===========================================
    // See Application Note Doc. No. 4P008-00
    // 3. Power On COG Driver
 
    // Everything low & no power
-   EPD_Pin_RESET.clear();
-   EPD_Pin_PANEL_ON.clear();
-   EPD_Pin_DISCHARGE.clear();
-   EPD_Pin_BORDER.clear();
-   EPD_Pin_EPD_CS.clear();
+   EPD_Pin_RESETn::clear();
+   EPD_Pin_PANEL_ON::clear();
+   EPD_Pin_DISCHARGE::clear();
+   EPD_Pin_BORDER::clear();
+   EPD_Pin_EPD_CSn::clear();
 
    // Apply PWM >5ms before powering panel
-   EPD_Pin_PWM.setDutyCycle(50);
+   EPD_Pin_PWM::setDutyCycle(50);
    waitMS(5);
 
    // Power to panel
-   EPD_Pin_PANEL_ON.set();
+   EPD_Pin_PANEL_ON::set();
 
    // PWM toggle 5ms
    waitMS(10);
 
-   EPD_Pin_EPD_CS.set();
-   EPD_Pin_BORDER.set();
-   EPD_Pin_RESET.set();
+   EPD_Pin_EPD_CSn::set();
+//   spi->enablePins();
+
+   EPD_Pin_BORDER::set();
+   EPD_Pin_RESETn::set();
 
    // PWM toggle 5ms
    waitMS(5);
 
-   EPD_Pin_RESET.clear();
+   EPD_Pin_RESETn::clear();
 
    // PWM toggle 5ms
    waitMS(5);
 
-   EPD_Pin_RESET.set();
+   EPD_Pin_RESETn::set();
 
    // PWM toggle 5ms
    waitMS(5);
@@ -155,12 +115,13 @@ void EPD::powerOnAndInitialise() {
    // See Application Note Doc. No. 4P008-00
    // 4 Initialize COG Driver
 
-   while (EPD_Pin_BUSY.read()) {
+   while (EPD_Pin_BUSY::read()) {
       __asm__("nop");
    }
    // Channel select
-   txBytes(2, CU8(0x70, CHANNEL_SELECT_REG));
-   txBytes(sizeof(epdData->channel_select), epdData->channel_select);
+   constexpr uint8_t channelSelect[] = {0x70, CHANNEL_SELECT_REG};
+   txBytes(sizeof(channelSelect), channelSelect);
+   txBytes(sizeof(epdData.channel_select), epdData.channel_select);
 
    // DC/DC frequency settings
    txWriteReg1Byte(DC_DC_FREQUENCY_REG, 0xFF);
@@ -172,11 +133,13 @@ void EPD::powerOnAndInitialise() {
    txWriteReg1Byte(ADC_REG, 0x00);
 
    // Set Vcom level
-   txBytes(2, CU8(0x70, VCOM_LEVEL_REG));
-   txBytes(3, CU8(0x72, 0xd0, 0x00));
+   constexpr uint8_t vCom[] = {0x70, VCOM_LEVEL_REG};
+   constexpr uint8_t vComData[] = {0x72, 0xd0, 0x00};
+   txBytes(sizeof(vCom), vCom);
+   txBytes(sizeof(vComData), vComData);
 
    // Gate and source voltage levels
-   txWriteReg1Byte(GATE_SOURCE_REG,  epdData->gate_source);
+   txWriteReg1Byte(GATE_SOURCE_REG,  epdData.gate_source);
 
    // PWM toggle 5ms
    waitMS(5);
@@ -194,7 +157,7 @@ void EPD::powerOnAndInitialise() {
    waitMS(30);
 
    // Stop PWM & leave low
-   EPD_Pin_PWM.setDutyCycle(0);
+   EPD_Pin_PWM::setDutyCycle(0);
 
    // Charge pump negative voltage on
    txWriteReg1Byte(CHARGE_PUMP_REG, 0x03);
@@ -210,10 +173,10 @@ void EPD::powerOnAndInitialise() {
    txWriteReg1Byte(OUTPUT_ENABLE_REG,0x24);
 }
 
-/*!
+/**
  * Power-off COG driver
  */
-void EPD::powerOff() {
+void Epd::powerOff() {
    // ===========================================
    // See Application Note Doc. No. 4P008-00
    // 6 Power Off COG Driver
@@ -222,7 +185,7 @@ void EPD::powerOff() {
    //frame_fixed(0x55, EPD_normal);
 
    // dummy line and border
-   if (size == EPD_1_44) {
+   if (epdData.epdSize == EPD_1_44) {
       // Only for 1.44" EPD
       sendLine(0x7fffu, 0, 0xaa, EPD_normal);
       waitMS(300);
@@ -231,9 +194,9 @@ void EPD::powerOff() {
       // Other display sizes
       sendLine(0x7fffu, 0, 0x55, EPD_normal);
       waitMS(25);
-      EPD_Pin_BORDER.clear();
+      EPD_Pin_BORDER::clear();
       waitMS(300);
-      EPD_Pin_BORDER.set();
+      EPD_Pin_BORDER::set();
    }
    // Latch reset turn on
    txWriteReg1Byte(DRIVER_LATCH_REG, 0x01);
@@ -272,21 +235,24 @@ void EPD::powerOff() {
    txWriteReg1Byte(GATE_SOURCE_REG, 0x00);
 
    // Turn off power and all signals
-   EPD_Pin_RESET.clear();
-   EPD_Pin_PANEL_ON.clear();
-   EPD_Pin_BORDER.clear();
+   EPD_Pin_RESETn::clear();
+   EPD_Pin_PANEL_ON::clear();
+   EPD_Pin_BORDER::clear();
+
+//   spi->disablePins();
+//   EPD_Pin_EPD_CSn::clear();
 
    // Discharge pulse
-   EPD_Pin_DISCHARGE.set();
+   EPD_Pin_DISCHARGE::set();
    waitMS(1000);
-   EPD_Pin_DISCHARGE.clear();
+   EPD_Pin_DISCHARGE::clear();
 }
 
 struct Pair {
    int16_t threshold;
    int16_t factor;
 };
-static const Pair thresholds[] = {
+static constexpr Pair thresholds[] = {
       {-10, 170},
       { -5, 120},
       {  5,  80},
@@ -296,16 +262,15 @@ static const Pair thresholds[] = {
       { 40,  10},
 };
 
-/*!
+/**
  * Calculates the factored stage time for frame_*_repeat methods
  * from temperature.
  *
  *  @param  temperature Temperature in Celsius
  *
  *  @return Scaled stage time in ms
- *
  */
-int EPD::getFactoredStageTime(int temperature) {
+int Epd::getFactoredStageTime(int temperature) {
    int factor_x10 = 7;
    for (const Pair *pair=thresholds; pair<thresholds+(sizeof(thresholds)/sizeof(thresholds[0])); pair++) {
       if (temperature <= pair->threshold) {
@@ -313,128 +278,115 @@ int EPD::getFactoredStageTime(int temperature) {
          break;
       }
    }
-   return (epdData->stage_time*(int32_t)factor_x10) / 10;
+   return (epdData.stage_time*(int32_t)factor_x10) / 10;
 }
 
-/* One frame of data is the number of lines * rows. For example:
+/* ==================================================================
+ * One frame of data is the number of lines * rows. For example:
  * The 1.44" frame of data is 96 lines * 128 dots.
  * The 2" frame of data is 96 lines * 200 dots.
  * The 2.7" frame of data is 176 lines * 264 dots.
  *
  * The image is arranged by line which matches the display size
  * so smallest would have 96 * 32 bytes
+ * ==================================================================*/
+
+/**
+ * Write full frame of fixed data value
+ *
+ * @param fixedValue Value to write
+ * @param stage      Stage of update process
  */
-void EPD::frame_fixed(uint8_t fixed_value, EPD_stage stage) {
-   for (uint8_t line = 0; line < epdData->lines_per_display ; ++line) {
-      sendLine(line, 0, fixed_value, stage);
+void Epd::frame_fixed(uint8_t fixedValue, EpdStage stage) {
+   for (uint8_t line = 0; line < epdData.lines_per_display ; ++line) {
+      sendLine(line, 0, fixedValue, stage);
    }
 }
 
-void EPD::frame_data( const uint8_t *image, EPD_stage stage) {
-   for (uint8_t line = 0; line < epdData->lines_per_display ; ++line) {
-      sendLine(line, &image[line * epdData->bytes_per_line], 0, stage);
+/**
+ * Write full frame from an image
+ *
+ * @param image  Image to write
+ * @param stage  Stage of update process
+ */
+void Epd::frame_data( const uint8_t *image, EpdStage stage) {
+   for (uint8_t line = 0; line < epdData.lines_per_display ; ++line) {
+      sendLine(line, &image[line * epdData.bytes_per_line], 0, stage);
    }
 }
 
-void EPD::frame_sram(const uint8_t *image, EPD_stage stage) {
-   for (uint8_t line = 0; line < epdData->lines_per_display ; ++line) {
-      sendLine(line, &image[line * epdData->bytes_per_line], 0, stage);
-   }
-}
+/**
+ * Write full frame of fixed data value multiple times (over repeat period)
+ *
+ * @param fixedValue Value to write
+ * @param stage      Stage of update process
+ */
+void Epd::frame_fixed_repeat(uint8_t fixedValue, EpdStage stage) {
+   // Convert duration to DWT ticks
+   int64_t delayct = ((uint64_t)factored_stage_time * SystemCoreClock) / 1000;
 
-void EPD::frame_cb(uint32_t address, EPD_reader *reader, EPD_stage stage) {
-   static uint8_t buffer[264 / 8];
-   for (uint8_t line = 0; line < epdData->lines_per_display; ++line) {
-      reader(buffer, address + line * epdData->bytes_per_line, epdData->bytes_per_line);
-      sendLine(line, buffer, 0, stage);
-   }
-}
+   // Get current tick
+   uint32_t last = DWT->CYCCNT;
 
-void EPD::frame_fixed_repeat(uint8_t fixed_value, EPD_stage stage) {
-   long stage_time = factored_stage_time;
    do {
-      unsigned long t_start = getTicks();
-      frame_fixed(fixed_value, stage);
-      unsigned long t_end = getTicks();
-      if (t_end > t_start) {
-         stage_time -= t_end - t_start;
-      } else {
-         stage_time -= t_start - t_end + 1 + ULONG_MAX;
-      }
-   } while (stage_time > 0);
+      frame_fixed(fixedValue, stage);
+      // Decrement time elapsed
+      // Note: This relies on the loop executing in less than the roll-over time
+      // of the counter i.e. (2^32)/SystemCoreClock
+      uint32_t now = DWT->CYCCNT;
+      delayct -= (uint32_t)(now-last);
+      // Save for next increment
+      last = now;
+   } while (delayct > 0);
 }
 
-void EPD::frame_data_repeat(const uint8_t *image, EPD_stage stage) {
-   long stage_time = factored_stage_time;
+/**
+ * Write full frame from an image multiple times (over repeat period)
+ *
+ * @param image  Image to write
+ * @param stage  Stage of update process
+ */
+void Epd::frame_data_repeat(const uint8_t *image, EpdStage stage) {
+   // Convert duration to DWT ticks
+   int64_t delayct = ((uint64_t)factored_stage_time * SystemCoreClock) / 1000;
 
-#if 1 
+   // Get current tick
+   uint32_t last = DWT->CYCCNT;
+
    do {
-      unsigned long t_start = getTicks();
       frame_data(image, stage);
-      unsigned long t_end = getTicks();
-      if (t_end > t_start) {
-         stage_time -= t_end - t_start;
-      } else {
-         stage_time -= t_start - t_end + 1 + ULONG_MAX;
-      }
-   } while (stage_time > 0);
-#else
-   for(int i=0; i<7; i++) {
-      frame_data(image, stage);
-   }
-#endif
+      // Decrement time elapsed
+      // Note: This relies on the loop executing in less than the roll-over time
+      // of the counter i.e. (2^32)/SystemCoreClock
+      uint32_t now = DWT->CYCCNT;
+      delayct -= (uint32_t)(now-last);
+      // Save for next increment
+      last = now;
+   } while (delayct > 0);
 }
 
-void EPD::frame_sram_repeat(const uint8_t *image, EPD_stage stage) {
-
-#if 1 
-   long stage_time = factored_stage_time;
-   do {
-      unsigned long t_start = getTicks();
-      frame_sram(image, stage);
-      unsigned long t_end = getTicks();
-      if (t_end > t_start) {
-         stage_time -= t_end - t_start;
-      } else {
-         stage_time -= t_start - t_end + 1 + ULONG_MAX;
-      }
-   } while (stage_time > 0);
-#else
-   for(int i=0; i<7; i++) {
-      frame_sram(image, stage);
-   }
-#endif
-}
-
-
-void EPD::frame_cb_repeat(uint32_t address, EPD_reader *reader, EPD_stage stage) {
-   long stage_time = factored_stage_time;
-   do {
-      unsigned long t_start = getTicks();
-      frame_cb(address, reader, stage);
-      unsigned long t_end = getTicks();
-      if (t_end > t_start) {
-         stage_time -= t_end - t_start;
-      } else {
-         stage_time -= t_start - t_end + 1 + ULONG_MAX;
-      }
-   } while (stage_time > 0);
-}
-
-
-void EPD::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EPD_stage stage) {
+/**
+ * Send line of data to display
+ *
+ * @param   line        Which line of display
+ * @param   data        Data to write (may be NULL)
+ * @param   fixed_value Fixed value used if data == NULL
+ * @param   stage       Stage of the screen rewrite
+ */
+void Epd::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EpdStage stage) {
 
    // Charge pump voltage levels
-   txWriteReg1Byte(GATE_SOURCE_REG, epdData->gate_source);
+   txWriteReg1Byte(GATE_SOURCE_REG, epdData.gate_source);
 
    // Send data
-   txBytes(2, CU8(0x70, 0x0a));
+   constexpr uint8_t preamble[] = {0x70, 0x0a};
+   txBytes(sizeof(preamble), preamble);
 
-   EPD_Pin_EPD_CS.clear();
+   EPD_Pin_EPD_CSn::clear();
    txByteAndWait(0x72);
 
    // Even pixels
-   for (uint16_t b = epdData->bytes_per_line; b > 0; --b) {
+   for (uint16_t b = epdData.bytes_per_line; b > 0; --b) {
       if (data != 0) {
          uint8_t pixels;
          pixels = data[b - 1] & 0xaa;
@@ -463,7 +415,7 @@ void EPD::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EPD_
       }
    }
    // Scan line
-   for (uint16_t b = 0; b < epdData->bytes_per_scan; ++b) {
+   for (uint16_t b = 0; b < epdData.bytes_per_scan; ++b) {
       if (line / 4 == b) {
          txByteAndWait(0xc0 >> (2 * (line & 0x03)));
       }
@@ -472,7 +424,7 @@ void EPD::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EPD_
       }
    }
    // Odd pixels
-   for (uint16_t b = 0; b < epdData->bytes_per_line; ++b) {
+   for (uint16_t b = 0; b < epdData.bytes_per_line; ++b) {
       if (0 != data) {
          uint8_t pixels;
          pixels = data[b] & 0x55;
@@ -502,37 +454,37 @@ void EPD::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EPD_
          txByteAndWait(fixed_value);
       }
    }
-   if (epdData->filler) {
+   if (epdData.filler) {
       txByteAndWait(0x00);
    }
-   EPD_Pin_EPD_CS.set();
-   wait10us();
+   EPD_Pin_EPD_CSn::set();
+   waitUS(10);
 
    // Output data to panel
    txWriteReg1Byte(OUTPUT_ENABLE_REG,0x2f);
 }
 
-/*!
+/**
  *  Send a single byte to EPD and wait for not busy
  *
- *  @param data byte to send
+ *  @param data Byte to send
  */
-void EPD::txByteAndWait(uint8_t data) {
+void Epd::txByteAndWait(uint8_t data) {
    spi->txRx(data);
 
    // Wait for EPD ready
-   while(EPD_Pin_BUSY.read()) {
+   while(EPD_Pin_BUSY::read()) {
       __asm__("nop");
    }
 }
 
-/*!
+/**
  *  Write byte to register
  *
  *  @param regNum    Register to write to
  *  @param data      Data byte for register
  */
-void EPD::txWriteReg1Byte(const uint8_t regNum, uint8_t data) {
+void Epd::txWriteReg1Byte(const uint8_t regNum, uint8_t data) {
    uint8_t registerAddressCommand[] = {0x70, regNum};
    uint8_t registerDataValue[]      = {0x72, data};
 
@@ -543,14 +495,14 @@ void EPD::txWriteReg1Byte(const uint8_t regNum, uint8_t data) {
    txBytes(sizeof(registerDataValue), registerDataValue);
 }
 
-/*!
- *  Write byte to register
+/**
+ *  Read 1 byte from register
  *
- *  @param regNum    Register to write to
+ *  @param regNum    Register to read from
  *
  *  @return          Data byte from register
  */
-uint8_t EPD::rxReadReg1Byte(const uint8_t regNum) {
+uint8_t Epd::rxReadReg1Byte(const uint8_t regNum) {
    uint8_t registerAddressCommand[] = {0x70, regNum};
    uint8_t registerDataValue[]      = {0x73, 0};
 
@@ -558,37 +510,38 @@ uint8_t EPD::rxReadReg1Byte(const uint8_t regNum) {
    txBytes(sizeof(registerAddressCommand), registerAddressCommand);
 
    // CS low
-   EPD_Pin_EPD_CS.clear();
+   EPD_Pin_EPD_CSn::clear();
 
    // Send/Receive data
    spi->txRxBytes(sizeof(registerDataValue), registerDataValue, registerDataValue);
 
    // CS high
-   EPD_Pin_EPD_CS.set();
+   EPD_Pin_EPD_CSn::set();
 
    // Make sure CS remains high for at least 10us
-   wait10us();
+   waitUS(10);
 
-   return registerDataValue[2];
+   return registerDataValue[1];
 }
 
-
-/*!
- *  Transmit
+/**
+ *  Transmit bytes to EPD
  *
  *  @param dataSize  Number of bytes to transfer
  *  @param dataOut   Transmit bytes
  */
-void EPD::txBytes(uint32_t dataSize, const uint8_t *dataOut) {
+void Epd::txBytes(uint32_t dataSize, const uint8_t *dataOut) {
    // CS low
-   EPD_Pin_EPD_CS.clear();
+   EPD_Pin_EPD_CSn::clear();
 
    // Send data
    spi->txRxBytes(dataSize, dataOut);
 
    // CS high
-   EPD_Pin_EPD_CS.set();
+   EPD_Pin_EPD_CSn::set();
 
    // Make sure CS remains high for at least 10us
-   wait10us();
+   waitUS(10);
 }
+
+} // End namespace USBDM

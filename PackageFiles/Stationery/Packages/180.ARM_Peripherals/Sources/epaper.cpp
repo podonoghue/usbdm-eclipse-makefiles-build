@@ -34,59 +34,55 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "spi.h"
 #include "epaper.h"
 
-using namespace USBDM;
+namespace USBDM {
 
-/*!
+/**
  * Constructor - Create ePaper interface
  *
- * @param gt20l16 Character generator
  * @param spi     SPI interface to use
- * @param sz      Display size selector
- * @param cs_n    CS for SPI interface
+ * @param epdData Data describing the display
  */
-EPaper::EPaper(GT20L16 *gt20l16, SPI *spi, EPD_size sz, const DigitalIO *cs_n) :
-      gt20l16(gt20l16),
-      size(sz),
+EPaper::EPaper(Spi *spi, const EpdData &epdData) :
+      gt20l16(new USBDM::GT20L16_T<GT20L16_Pin_CSn>(spi)),
       orientation(LANDSCAPE),
-      epd(new EPD(spi, size)),
+      epd(new Epd(spi, epdData)),
       width(epd->getWidth()),
       height(epd->getHeight()),
       invertX(false),
       invertY(false),
-      writeMode(ORMODE),
-      cs_n(cs_n) {
-   cs_n->setDigitalOutput();
-   cs_n->set();
+      writeMode(ORMODE) {
 }
 
-/*!
+/**
  * Get temperature from temperature sensor
  *
  * @return Temperature in Celsius
  */
 int EPaper::getTemperature() {
-   const float ADC_SPAN       = 3.3;
-   const float ADC_RESOLUTION = (float)((1<<16)-1);
+   constexpr float ADC_SPAN       = 3.3;
+   constexpr float ADC_RESOLUTION = (float)((1<<16)-1);
 
-   S8120CN_Pin_TEMP.setAnalogueInput(AnalogueIO::resolution_16bit_se);
+   S8120CN_Pin_TEMP::setMode(Adc_Resolution::resolution_16bit_se);
    uint32_t sum = 0;
    for(int i=0; i<32; i++) {
-      sum += (unsigned)S8120CN_Pin_TEMP.readAnalogue();
+      sum += (unsigned)S8120CN_Pin_TEMP::readAnalogue();
    }
    sum /= 32;
    /*
     * Equation based on Table 6 (for S-8120C Series)
     * From data sheet "CMOS TEMPERATURE SENSOR IC S-8110C/8120C Series Rev.5.0_00"
+    * Using +/- 30 celsius typical values as straight-line approximation.
     */
-   float temperature = (215.41-125.79*(ADC_SPAN*float(sum)/ADC_RESOLUTION))+0.5;
-   return (int)(temperature+0.4999);
+   int temperature = (215.41-125.79*(ADC_SPAN*float(sum)/ADC_RESOLUTION)) + 0.4999;
+   return temperature;
 }
 
-/*!
+/**
  *   Draw a unicode character using generator map
  *
  *   @param matrix  The character generator matrix to draw
@@ -134,7 +130,7 @@ int EPaper::drawUnicode(const uint8_t *matrix, unsigned dataLen, unsigned x, uns
    }
 }
 
-/*!
+/**
  *   Draw a unicode character
  *
  *   @param uniCode The UNICODE to draw
@@ -152,7 +148,7 @@ int EPaper::drawUnicode(unsigned uniCode, unsigned x, unsigned y) {
    return drawUnicode(tMatrix, dataLen, x, y);
 }
 
-/*!
+/**
  *   Draw a unicode character string
  *
  *   @param uniCode  The character generator matrix to draw
@@ -172,7 +168,7 @@ int EPaper::drawUnicodeString(const unsigned *uniCode, unsigned length, unsigned
    return xSum;
 }
 
-/*!
+/**
  *   Draw a unicode character
  *
  *   @param c      The UNICODE to draw
@@ -185,7 +181,7 @@ int EPaper::drawChar(char c, unsigned x, unsigned y) {
    return drawUnicode(c, x, y);
 }
 
-/*!
+/**
  *   Draw a string
  *
  *   @param string   The character generator matrix to draw
@@ -205,32 +201,32 @@ int EPaper::drawString(const char *string, unsigned x, unsigned y) {
    return sumX;
 }
 
-/*!
+/**
  *   Draw a number
  *
- *   @param num      The number to draw
+ *   @param longNum  The number to draw
  *   @param x        X position
  *   @param y        Y position
  *
  *   @return Width of number (for placement of next char)
  */
-int EPaper::drawNumber(long num, unsigned x, unsigned y) {
+int EPaper::drawNumber(long longNum, unsigned x, unsigned y) {
    char tmp[10];
-   sprintf(tmp, "%ld", num);
+   sprintf(tmp, "%ld", longNum);
    return drawString(tmp, x, y);
 }
 
-/*!
+/**
  *   Draw a float number
  *
- *   @param num      The number to draw
+ *   @param floatNum The number to draw
  *   @param decimal  The number of decimal places
  *   @param x        X position
  *   @param y        Y position
  *
  *   @return Width of number (for placement of next char)
  */
-int EPaper::drawFloat(float num, unsigned decimal, unsigned x, unsigned y) {
+int EPaper::drawFloat(float floatNum, unsigned decimal, unsigned x, unsigned y) {
    unsigned long temp=0;
    float decy=0.0;
    float rounding = 0.5;
@@ -240,10 +236,10 @@ int EPaper::drawFloat(float num, unsigned decimal, unsigned x, unsigned y) {
    int sumX    = 0;
    int xPlus   = 0;
 
-   if(num-0.0 < eep) {
+   if(floatNum-0.0 < eep) {
       // floatNumber < 0
       xPlus = drawChar('-',x, y);
-      num = -num;
+      floatNum = -floatNum;
 
       x  += xPlus;
       sumX += xPlus;
@@ -251,8 +247,8 @@ int EPaper::drawFloat(float num, unsigned decimal, unsigned x, unsigned y) {
    for (unsigned char i=0; i<decimal; ++i) {
       rounding /= 10.0;
    }
-   num += rounding;
-   temp = (long)num;
+   floatNum += rounding;
+   temp = (long)floatNum;
    xPlus = drawNumber(temp,x, y);
    x  += xPlus;
    sumX += xPlus;
@@ -265,7 +261,7 @@ int EPaper::drawFloat(float num, unsigned decimal, unsigned x, unsigned y) {
    else {
       return sumX;
    }
-   decy = num - temp;
+   decy = floatNum - temp;
    for(unsigned char i=0; i<decimal; i++) {
       decy *= 10;                        /* for the next decimal         */
       temp = decy;                       /* get the decimal              */
@@ -460,7 +456,7 @@ void EPaper::drawFilledRectangle(unsigned poX, unsigned poY, unsigned width, uns
    }
 }
 
-/*!
+/**
  * Draw pixel to frame buffer
  *
  *  @param x      X coordinate of left
@@ -523,3 +519,6 @@ inline void EPaper::drawPixel(unsigned x, unsigned y, unsigned char colour) {
          break;
    }
 }
+
+
+} // End namespace USBDM

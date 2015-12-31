@@ -23,38 +23,33 @@
 #include "GT20L16.h"
 #include "Delay.h"
 
-using namespace USBDM;
+namespace USBDM {
 
-#define GT20L16_READ_COMMAND        (0x03)
-#define GT20L16_FAST_READ_COMMAND   (0x0B)
+static constexpr uint8_t GT20L16_READ_COMMAND      = (0x03);
+static constexpr uint8_t GT20L16_FAST_READ_COMMAND = (0x0B);
 
-#define SPI_FREQUENCY (12000000)
+static constexpr long SPI_FREQUENCY = (12000000);
 
-/*!
+/**
  * Constructor
  *
  * @param spi - The SPI interface to use
- * @param cs  - The DigitalIO to use as CS*
  */
-GT20L16::GT20L16(SPI *spi, const DigitalIO *cs_n) {
+GT20L16::GT20L16(Spi *spi) {
    this->spi  = spi;
-   this->cs_n = cs_n;
    uint32_t spiFequency = spi->getSpeed();
    if (spiFequency>SPI_FREQUENCY) {
       spi->setSpeed(SPI_FREQUENCY);
    }
-   // Initialise CS* signal (inactive)
-   cs_n->setDigitalOutput();
-   cs_n->set();
 }
 
-/*!
+/**
  *  @param uniCode   Unicode character
  *  @param matrix    Buffer for display data for character
  *
- *  @return size of display data written to buffer
+ *  @return Size of display data written to buffer (either 16 or 32 bytes)
  */
-int GT20L16::getMatrixUnicode(uint32_t uniCode, uint8_t *matrix) {
+int GT20L16::getMatrixUnicode(uint32_t uniCode, uint8_t matrix[32]) {
 
    uint8_t dataLength = 0;
    if(uniCode <= 45632 ) {
@@ -65,42 +60,46 @@ int GT20L16::getMatrixUnicode(uint32_t uniCode, uint8_t *matrix) {
    }
    uint32_t addr=getAddrFromUnicode(uniCode);
 
-   wait10us();
+   waitUS(10);
 
    const uint8_t readDataBytes[] = {GT20L16_READ_COMMAND, (uint8_t)(addr>>16), (uint8_t)(addr>>8), (uint8_t)(addr)};
 
-   cs_n->clear();
+   csEnable();
    spi->txRxBytes(sizeof(readDataBytes), readDataBytes);
    spi->txRxBytes(dataLength, 0, matrix);
-   cs_n->set();
+   csDisable();
 
    return dataLength;
 }
 
-/*!
+/**
+ * Read value from ROM
  *
+ * @param addr ROM address
+ *
+ * @return Value read
  */
-unsigned long GT20L16::GTRead(uint32_t addr)
+unsigned long GT20L16::read(uint32_t addr)
 {
    const uint8_t readDataBytes[] = {GT20L16_READ_COMMAND, (uint8_t)(addr>>16), (uint8_t)(addr>>8), (uint8_t)(addr)};
    unsigned char buffer[2];
 
-   wait10us();
+   waitUS(10);
 
-   cs_n->clear();
+   csEnable();
    spi->txRxBytes(sizeof(readDataBytes), readDataBytes);
    spi->txRxBytes(sizeof(buffer), 0, buffer);
-   cs_n->set();
+   csDisable();
 
    return buffer[0]*256+buffer[1];
 }
 
-/*!
+/**
  *  Maps UNICODE character to lookup table address
  *
  *  @param uniCode character
  *
- *  @return base address
+ *  @return Base address to index ROM
  */
 unsigned long GT20L16::getAddrFromUnicode(uint32_t uniCode) {
 
@@ -141,7 +140,7 @@ unsigned long GT20L16::getAddrFromUnicode(uint32_t uniCode) {
       unsigned char  MSB,LSB;
       unsigned long ChineseTab;
       unsigned int data;
-      unsigned long  chineseAddress;
+      unsigned long  chineseAddress = 0;
       MSB = uniCode>>8;
       LSB = uniCode;
       ZFAdd=36224;
@@ -171,10 +170,11 @@ unsigned long GT20L16::getAddrFromUnicode(uint32_t uniCode) {
          // Chinese 5720~6763
          chineseAddress=(MSB-0xD8)*94+(LSB-0xA1);
          chineseAddress=chineseAddress*2+ChineseTab;
-         data=GTRead(chineseAddress);
+         data=read(chineseAddress);
          chineseAddress=32*data+HZAdd;
       }
       return chineseAddress;
    }
 }
 
+} // End namespace USBDM

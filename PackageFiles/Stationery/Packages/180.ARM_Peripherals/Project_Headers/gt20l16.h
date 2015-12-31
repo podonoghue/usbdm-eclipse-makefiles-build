@@ -28,19 +28,102 @@
 #include "spi.h"
 #include "seeed_sld00200p.h"  // Pin mappings
 
+namespace USBDM {
+
+/**
+ * @addtogroup EPaper_Group E-paper interface
+ * @brief C++ Class allowing access to E-paper display
+ * @{
+ */
+
+/**
+ * Base class for representing an interface to a GT20L16 Character ROM
+ */
 class GT20L16 {
 
 private:
-   SPI *spi;
-   const DigitalIO *cs_n;
+   Spi *spi;   //!< SPI Interface to use
 
 private:
+   /**
+    *  Maps UNICODE character to lookup table address
+    *
+    *  @param uniCode character
+    *
+    *  @return Base address to index ROM
+    */
    uint32_t getAddrFromUnicode(uint32_t uniCode);
-   uint32_t GTRead(uint32_t Address);
+   /**
+    * Read value from ROM
+    *
+    * @param addr ROM address
+    *
+    * @return Value read
+    */
+   uint32_t read(uint32_t addr);
+   /**
+    * Assert CS
+    */
+   virtual void csEnable()  = 0;
+   /**
+    * Unassert CS
+    */
+   virtual void csDisable() = 0;
+
+protected:
+   /**
+    * Constructor
+    *
+    * @param spi - The SPI interface to use
+    */
+   GT20L16(Spi *spi);
 
 public:
-   GT20L16(SPI *spi, const DigitalIO *cs = &GT20L16_Pin_CS);
-   int getMatrixUnicode(uint32_t uniCode, uint8_t *matrix);
+   /**
+    *  @param uniCode   Unicode character
+    *  @param matrix    Buffer for display data for character
+    *
+    *  @return Size of display data written to buffer (either 16 or 32 bytes)
+    */
+   int getMatrixUnicode(uint32_t uniCode, uint8_t matrix[32]);
 };
 
-#endif
+/**
+ * Templated class for representing an interface to a GT20L16
+ *
+ * @tparam cs_n  - The Gpio to use as CS* for ROM
+ */
+template <class cs_n>
+class GT20L16_T : public GT20L16 {
+
+public:
+   /**
+    * Constructor
+    *
+    * @param spi - The SPI interface to use
+    */
+   GT20L16_T(Spi *spi) : GT20L16(spi) {
+      cs_n::setOutput();
+      cs_n::set();
+   }
+   /**
+    * Assert CS
+    */
+   virtual void csEnable() {
+      cs_n::clear();
+   }
+   /**
+    * Unassert CS
+    */
+   virtual void csDisable() {
+      cs_n::set();
+   }
+};
+
+/**
+ * @}
+ */
+
+} // End namespace USBDM
+
+#endif // __GT20L16_DRIVE_H__
