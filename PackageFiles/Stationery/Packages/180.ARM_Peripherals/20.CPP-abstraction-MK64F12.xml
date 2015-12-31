@@ -45,7 +45,7 @@
          <constant id="demo.cpp.external.switch"    value="D12" />
          <constant id="demo.cpp.external.led"       value="D13" />
          <constant id="demo.cpp.external.gps"       value="Gps1" />
-         <constant id="demo.cpp.lcd.spi"            value="Spi0" />
+         <constant id="demo.cpp.external.spi"       value="Spi0" />
          <constant id="demo.cpp.external.i2c"       value="I2c0" />
          <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />
