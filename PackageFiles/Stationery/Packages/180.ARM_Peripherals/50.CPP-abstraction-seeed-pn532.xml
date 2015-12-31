@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-PN532" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="demo.cpp.peripheral.spi" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+         <and>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </and>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-PN532" 
+            name="PN532 NFC C++ interface" 
+            description="Adds a CPP abstraction layer for Seeed Studio PN532 NFC shield" 
+            checkGroup="group-spi-peripheral-options" >
+            <enableWhen>
+               <and>
+                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
+                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
+               </and>
+            </enableWhen>
+         </variable>
+   
+         <!-- LCD CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-PN532" />
+               </applyWhen>
+               <copy source="Snippets/seeed-pn532-example.cpp"     target="Snippets/seeed-pn532-example.cpp" />
+               <copy source="Project_Headers/pn532.h"              target="Project_Headers/pn532.h" />
+               <copy source="Sources/pn532.cpp"                    target="Sources/pn532.cpp" />
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>
