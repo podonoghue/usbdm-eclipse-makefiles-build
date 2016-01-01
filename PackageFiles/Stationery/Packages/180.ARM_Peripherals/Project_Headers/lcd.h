@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     Lcd.h
+ * @file     lcd.h
  *
  * @brief    Abstraction layer for Lcd interface
  *
@@ -12,7 +12,7 @@
 #define INCLUDES_LCD_H_
 
 #include <stdint.h>
-#include "Delay.h"
+#include "delay.h"
 #include "spi.h"
 #include "fonts.h"
 

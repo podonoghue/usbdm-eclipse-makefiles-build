@@ -1,5 +1,5 @@
 /**
- * @file MAG3310.cpp
+ * @file mag3310.cpp
  *
  *  Created on: 22/11/2013
  *      Author: podonoghue

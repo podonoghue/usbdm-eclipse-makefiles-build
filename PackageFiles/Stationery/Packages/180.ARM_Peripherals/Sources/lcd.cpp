@@ -1,5 +1,5 @@
 /*!
- *  @file LCD.cpp
+ *  @file lcd.cpp
  *
  *  @brief  Driver for Nokia 6610 LCD Display (PCF8833 Controller)
  *
@@ -72,7 +72,7 @@
 #include "utilities.h"
 #include "lcd.h"
 #include "gpio.h"
-#include "Fonts.h"
+#include "fonts.h"
 
 using namespace USBDM;
 
@@ -82,7 +82,7 @@ using namespace USBDM;
 #endif
 
 #define   LCD_SPI_PRIVATE
-#include "LCD_private.h"
+#include "lcd_private.h"
 
 /**
  *  Initialises the LCD

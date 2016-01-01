@@ -1,5 +1,5 @@
 /*
- * @file HMC5883L.cpp
+ * @file hmc5883l.cpp
  *
  *  Created on: 10/07/2014
  *      Author: podonoghue

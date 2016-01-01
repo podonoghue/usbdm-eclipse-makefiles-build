@@ -1,5 +1,5 @@
 /*
- * spi-MKL.cpp (derived from spi-MKL.cpp)
+ * spi.cpp (derived from spi-MKL.cpp)
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue

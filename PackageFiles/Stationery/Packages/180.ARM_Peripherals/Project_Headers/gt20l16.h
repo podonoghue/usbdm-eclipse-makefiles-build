@@ -1,5 +1,5 @@
 /*
-  GT20L16.h
+  gt20l16.h
   2013 Copyright (c) Seeed Technology Inc.  All right reserved.
 
   Modified by Loovee

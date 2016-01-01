@@ -1,5 +1,6 @@
 /*
  * @file delay.cpp (derived from delay-dwt.cpp)
+ *
  * @brief Delay routines using DWT->CYCCNT counter
  *
  *  Created on: 5 Oct 2015

@@ -1,5 +1,5 @@
 /*
- * spi-MK.cpp (derived from spi-MK.cpp)
+ * spi.cpp (derived from spi-MK.cpp)
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue

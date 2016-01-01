@@ -1,7 +1,7 @@
 /*
-  @file GT20L16.cpp
+  @file gt20l16.cpp
 
-  Based on GT20L16 (in Chinese!)
+  Based on GT20L16 data sheet(in Chinese!)
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,8 +20,8 @@
 
 #include <stdlib.h>
 
-#include "GT20L16.h"
-#include "Delay.h"
+#include "gt20l16.h"
+#include "delay.h"
 
 namespace USBDM {
 
