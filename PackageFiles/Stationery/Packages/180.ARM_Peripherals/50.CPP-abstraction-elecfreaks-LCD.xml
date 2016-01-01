@@ -44,7 +44,7 @@
                <copy source="Project_Headers/lcd_private.h"         target="Project_Headers/lcd_private.h" />
                <copy source="Project_Headers/fonts.h"               target="Project_Headers/fonts.h" replace="true"/>
                <copy source="Sources/lcd.cpp"                       target="Sources/lcd.cpp" />
-               <copy source="Sources/Fonts.cpp"                     target="Sources/Fonts.cpp" replace="true"/>
+               <copy source="Sources/fonts.cpp"                     target="Sources/fonts.cpp" replace="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>LCD_AVAILABLE</value>
                </projectOption>
