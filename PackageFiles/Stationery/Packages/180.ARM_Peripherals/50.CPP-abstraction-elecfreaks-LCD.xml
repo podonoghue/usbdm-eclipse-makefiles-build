@@ -42,7 +42,7 @@
                <copy source="Snippets/elecfreaks-lcd-example.cpp"   target="Snippets/elecfreaks-lcd-example.cpp" />
                <copy source="Project_Headers/lcd.h"                 target="Project_Headers/lcd.h" />
                <copy source="Project_Headers/lcd_private.h"         target="Project_Headers/lcd_private.h" />
-               <copy source="Project_Headers/Fonts.h"               target="Project_Headers/Fonts.h" replace="true"/>
+               <copy source="Project_Headers/fonts.h"               target="Project_Headers/fonts.h" replace="true"/>
                <copy source="Sources/lcd.cpp"                       target="Sources/lcd.cpp" />
                <copy source="Sources/Fonts.cpp"                     target="Sources/Fonts.cpp" replace="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
