@@ -268,6 +268,18 @@ public:
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR &= ~(1<<bitNum);
    }
    /**
+    * Set pin high
+    */
+   static void high() {
+      set();
+   }
+   /**
+    * Set pin low
+    */
+   static void low() {
+      clear();
+   }
+   /**
     * Write boolean value to digital output
     *
     * @param value true/false value
