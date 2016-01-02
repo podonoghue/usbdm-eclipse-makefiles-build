@@ -37,7 +37,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "spi.h"
 #include "epaper.h"
 
 namespace USBDM {
@@ -45,42 +44,18 @@ namespace USBDM {
 /**
  * Constructor - Create ePaper interface
  *
- * @param spi     SPI interface to use
- * @param epdData Data describing the display
+ * @param gt20l16 Character ROM interface
+ * @param epd     EPD low-level interface
  */
-EPaper::EPaper(Spi *spi, const EpdData &epdData) :
-      gt20l16(new USBDM::GT20L16_T<GT20L16_Pin_CSn>(spi)),
+EPaper::EPaper(GT20L16 *gt20l16, Epd *epd) :
+      gt20l16(gt20l16),
+      epd(epd),
       orientation(LANDSCAPE),
-      epd(new Epd(spi, epdData)),
       width(epd->getWidth()),
       height(epd->getHeight()),
       invertX(false),
       invertY(false),
       writeMode(ORMODE) {
-}
-
-/**
- * Get temperature from temperature sensor
- *
- * @return Temperature in Celsius
- */
-int EPaper::getTemperature() {
-   constexpr float ADC_SPAN       = 3.3;
-   constexpr float ADC_RESOLUTION = (float)((1<<16)-1);
-
-   S8120CN_Pin_TEMP::setMode(Adc_Resolution::resolution_16bit_se);
-   uint32_t sum = 0;
-   for(int i=0; i<32; i++) {
-      sum += (unsigned)S8120CN_Pin_TEMP::readAnalogue();
-   }
-   sum /= 32;
-   /*
-    * Equation based on Table 6 (for S-8120C Series)
-    * From data sheet "CMOS TEMPERATURE SENSOR IC S-8110C/8120C Series Rev.5.0_00"
-    * Using +/- 30 celsius typical values as straight-line approximation.
-    */
-   int temperature = (215.41-125.79*(ADC_SPAN*float(sum)/ADC_RESOLUTION)) + 0.4999;
-   return temperature;
 }
 
 /**
@@ -397,7 +372,6 @@ void EPaper::drawFilledCircle(unsigned poX, unsigned poY, unsigned r) {
  *
  *  Note: probably slower than above algorithm but is works in XOR mode.
  */
-
 void EPaper::drawFilledCircle(unsigned centre_x, unsigned centre_y, unsigned radius) {
 
    int radius_squared = radius*radius;

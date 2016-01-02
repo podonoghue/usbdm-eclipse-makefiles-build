@@ -33,8 +33,6 @@
 #define __EPAPER_H__
 
 #include <string.h>
-#include "spi.h"
-#include "seeed_sld00200p.h"
 #include "gt20l16.h"
 #include "epd.h"
 
@@ -50,7 +48,7 @@ namespace USBDM {
 #define WHITE   0
 
 /**
- * Class supplying drawing routines for EPaper
+ * Base class supplying drawing routines for EPaper
  */
 class EPaper {
 
@@ -68,11 +66,11 @@ public:
       ANDINVERT,  //!< Existing pixel is ANDed with the inversion of new value
    };
 
-private:
+protected:
    GT20L16         *gt20l16;                 //!< Character generator
+   Epd             *epd;                     //!< EPD panel driver
    EpdSize          size;                    //!< EPD size
    Orientation      orientation;             //!< Orientation of display
-   Epd             *epd;                     //!< EPD panel driver
    unsigned         width;                   //!< Width of display
    unsigned         height;                  //!< Height of display
    uint8_t          frameBuffer[264*176/8];  //!< Frame buffer (max size)
@@ -85,10 +83,16 @@ private:
     *
     * @return Temperature in Celsius
     */
-   int getTemperature();
+   virtual int getTemperature() = 0;
 
 public:
-   EPaper(Spi *spi, const EpdData &epdData);
+   /**
+    * Constructor - Create ePaper interface
+    *
+    * @param gt20l16 Character ROM interface
+    * @param epd     EPD low-level interface
+    */
+   EPaper(GT20L16 *gt20l16, Epd *epd);
 
    /**
     * Set vertical inversion
@@ -342,6 +346,47 @@ public:
     *  @param y3  Y coordinate of vertex 3
     */
    void drawTriangle(unsigned x1, unsigned y1, unsigned x2, unsigned y2, unsigned x3, unsigned y3);
+};
+
+/**
+ * Template class supplying drawing routines for EPaper
+ *
+ * @tparam s8120Cadc ADC function connected to S-8120C temperature IC
+ */
+template <class s8120Cadc>
+class EPaper_T : public EPaper {
+public:
+   /**
+    * Constructor - Create ePaper interface
+    *
+    * @param gt20l16 Character ROM interface
+    * @param epd     EPD low-level interface
+    */
+   EPaper_T(GT20L16 *gt20l16, Epd *epd) : EPaper(gt20l16, epd) {
+   }
+   /**
+    Read temperature from temperature sensor
+    *
+    * @return Temperature in Celsius
+    */
+   int getTemperature() {
+      constexpr float ADC_SPAN       = 3.3;
+      constexpr float ADC_RESOLUTION = (float)((1<<16)-1);
+
+      s8120Cadc::setMode(Adc_Resolution::resolution_16bit_se);
+      uint32_t sum = 0;
+      for(int i=0; i<32; i++) {
+         sum += (unsigned)s8120Cadc::readAnalogue();
+      }
+      sum /= 32;
+      /*
+       * Equation based on Table 6 (for S-8120C Series)
+       * From data sheet "CMOS TEMPERATURE SENSOR IC S-8110C/8120C Series Rev.5.0_00"
+       * Using +/- 30 celsius typical values as straight-line approximation.
+       */
+      int temperature = (215.41-125.79*(ADC_SPAN*float(sum)/ADC_RESOLUTION)) + 0.4999;
+      return temperature;
+   }
 };
 
 /**

@@ -16,7 +16,6 @@
 #include <string.h>
 #include "delay.h"
 #include "epd.h"
-#include "seeed_sld00200p.h"
 
 namespace USBDM {
 
@@ -40,18 +39,10 @@ constexpr long SPI_FREQUENCY = 12000000;
  */
 Epd::Epd(Spi *spi, const EpdData &epdData) : spi(spi), epdData(epdData) {
    uint32_t spiFequency = spi->getSpeed();
+
    if (spiFequency>SPI_FREQUENCY) {
       spi->setSpeed(SPI_FREQUENCY);
    }
-   EPD_Pin_EPD_CSn::setOutput();
-   EPD_Pin_EPD_CSn::set();
-   EPD_Pin_PANEL_ON::setOutput();
-   EPD_Pin_BORDER::setOutput();
-   EPD_Pin_DISCHARGE::setOutput();
-   EPD_Pin_PWM::setMode(5 /* us */, USBDM::ftm_leftAlign);
-
-   EPD_Pin_RESETn::setOutput();
-   EPD_Pin_BUSY::setInput();
 
    // Debug counter used for timing
    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -67,59 +58,19 @@ Epd::Epd(Spi *spi, const EpdData &epdData) : spi(spi), epdData(epdData) {
  * Power-on and Initialise COG driver
  */
 void Epd::powerOnAndInitialise() {
-   // ===========================================
-   // See Application Note Doc. No. 4P008-00
-   // 3. Power On COG Driver
 
-   // Everything low & no power
-   EPD_Pin_RESETn::clear();
-   EPD_Pin_PANEL_ON::clear();
-   EPD_Pin_DISCHARGE::clear();
-   EPD_Pin_BORDER::clear();
-   EPD_Pin_EPD_CSn::clear();
-
-   // Apply PWM >5ms before powering panel
-   EPD_Pin_PWM::setDutyCycle(50);
-   waitMS(5);
-
-   // Power to panel
-   EPD_Pin_PANEL_ON::set();
-
-   // PWM toggle 5ms
-   waitMS(10);
-
-   EPD_Pin_EPD_CSn::set();
-//   spi->enablePins();
-
-   EPD_Pin_BORDER::set();
-   EPD_Pin_RESETn::set();
-
-   // PWM toggle 5ms
-   waitMS(5);
-
-   EPD_Pin_RESETn::clear();
-
-   // PWM toggle 5ms
-   waitMS(5);
-
-   EPD_Pin_RESETn::set();
-
-   // PWM toggle 5ms
-   waitMS(5);
-
-   // PWM toggle off????
-
-//   uint8_t value = rxReadReg1Byte(0);
+   // Turn on hardware interface
+   interfaceOn();
 
    // ===========================================
    // See Application Note Doc. No. 4P008-00
    // 4 Initialize COG Driver
 
-   while (EPD_Pin_BUSY::read()) {
+   while (isBusy()) {
       __asm__("nop");
    }
    // Channel select
-   constexpr uint8_t channelSelect[] = {0x70, CHANNEL_SELECT_REG};
+   static constexpr uint8_t channelSelect[] = {0x70, CHANNEL_SELECT_REG};
    txBytes(sizeof(channelSelect), channelSelect);
    txBytes(sizeof(epdData.channel_select), epdData.channel_select);
 
@@ -157,7 +108,7 @@ void Epd::powerOnAndInitialise() {
    waitMS(30);
 
    // Stop PWM & leave low
-   EPD_Pin_PWM::setDutyCycle(0);
+   pwmEnable(0);
 
    // Charge pump negative voltage on
    txWriteReg1Byte(CHARGE_PUMP_REG, 0x03);
@@ -194,9 +145,7 @@ void Epd::powerOff() {
       // Other display sizes
       sendLine(0x7fffu, 0, 0x55, EPD_normal);
       waitMS(25);
-      EPD_Pin_BORDER::clear();
-      waitMS(300);
-      EPD_Pin_BORDER::set();
+      pulseBorder();
    }
    // Latch reset turn on
    txWriteReg1Byte(DRIVER_LATCH_REG, 0x01);
@@ -234,18 +183,7 @@ void Epd::powerOff() {
    // Discharge internal - 3
    txWriteReg1Byte(GATE_SOURCE_REG, 0x00);
 
-   // Turn off power and all signals
-   EPD_Pin_RESETn::clear();
-   EPD_Pin_PANEL_ON::clear();
-   EPD_Pin_BORDER::clear();
-
-//   spi->disablePins();
-//   EPD_Pin_EPD_CSn::clear();
-
-   // Discharge pulse
-   EPD_Pin_DISCHARGE::set();
-   waitMS(1000);
-   EPD_Pin_DISCHARGE::clear();
+   interfaceOff();
 }
 
 struct Pair {
@@ -382,7 +320,7 @@ void Epd::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EpdS
    constexpr uint8_t preamble[] = {0x70, 0x0a};
    txBytes(sizeof(preamble), preamble);
 
-   EPD_Pin_EPD_CSn::clear();
+   csEnable(true);
    txByteAndWait(0x72);
 
    // Even pixels
@@ -457,7 +395,7 @@ void Epd::sendLine(uint16_t line, const uint8_t *data, uint8_t fixed_value, EpdS
    if (epdData.filler) {
       txByteAndWait(0x00);
    }
-   EPD_Pin_EPD_CSn::set();
+   csEnable(false);
    waitUS(10);
 
    // Output data to panel
@@ -473,7 +411,7 @@ void Epd::txByteAndWait(uint8_t data) {
    spi->txRx(data);
 
    // Wait for EPD ready
-   while(EPD_Pin_BUSY::read()) {
+   while(isBusy()) {
       __asm__("nop");
    }
 }
@@ -510,18 +448,42 @@ uint8_t Epd::rxReadReg1Byte(const uint8_t regNum) {
    txBytes(sizeof(registerAddressCommand), registerAddressCommand);
 
    // CS low
-   EPD_Pin_EPD_CSn::clear();
+   csEnable(true);
 
    // Send/Receive data
    spi->txRxBytes(sizeof(registerDataValue), registerDataValue, registerDataValue);
 
    // CS high
-   EPD_Pin_EPD_CSn::set();
+   csEnable(false);
 
    // Make sure CS remains high for at least 10us
    waitUS(10);
 
    return registerDataValue[1];
+}
+
+/**
+ *  Driver ID
+ *  Note: Only implemented on later e-Paper?
+ *
+ *  @return ID byte
+ */
+uint8_t Epd::rxReadId() {
+
+   // CS low
+   csEnable(true);
+
+   // Send/Receive data
+   uint8_t cogDriverId[]      = {0x71, 0};
+   spi->txRxBytes(sizeof(cogDriverId), cogDriverId, cogDriverId);
+
+   // CS high
+   csEnable(false);
+
+   // Make sure CS remains high for at least 10us
+   waitUS(10);
+
+   return cogDriverId[1];
 }
 
 /**
@@ -532,13 +494,13 @@ uint8_t Epd::rxReadReg1Byte(const uint8_t regNum) {
  */
 void Epd::txBytes(uint32_t dataSize, const uint8_t *dataOut) {
    // CS low
-   EPD_Pin_EPD_CSn::clear();
+   csEnable(true);
 
    // Send data
    spi->txRxBytes(dataSize, dataOut);
 
    // CS high
-   EPD_Pin_EPD_CSn::set();
+   csEnable(false);
 
    // Make sure CS remains high for at least 10us
    waitUS(10);

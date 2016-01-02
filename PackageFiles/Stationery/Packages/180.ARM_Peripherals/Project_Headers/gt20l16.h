@@ -26,7 +26,6 @@
 
 #include "gpio.h"
 #include "spi.h"
-#include "seeed_sld00200p.h"  // Pin mappings
 
 namespace USBDM {
 
@@ -44,7 +43,7 @@ class GT20L16 {
 private:
    Spi *spi;   //!< SPI Interface to use
 
-private:
+protected:
    /**
     *  Maps UNICODE character to lookup table address
     *
@@ -69,8 +68,6 @@ private:
     * Unassert CS
     */
    virtual void csDisable() = 0;
-
-protected:
    /**
     * Constructor
     *
@@ -89,7 +86,7 @@ public:
 };
 
 /**
- * Templated class for representing an interface to a GT20L16
+ * Template class for representing an interface to a GT20L16
  *
  * @tparam cs_n  - The Gpio to use as CS* for ROM
  */
