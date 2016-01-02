@@ -80,7 +80,7 @@ extern "C" {
 //
 //   <o> External Reference Clock (Hz) <constant> <name=system_erc_clock>
 //   <i> Derived from the OSCCLK0 (external crystal or clock source on XTAL/EXTAL), RTC_CLOCK(XTAL32/EXTAL32) or IRC48M(Internal 48MHz)
-#define SYSTEM_ERC_CLOCK (48000000UL)
+#define SYSTEM_ERC_CLOCK (8000000UL)
 
 // SYSTEM_SLOW_IRC_CLOCK ==============================
 //
@@ -176,7 +176,7 @@ extern "C" {
 //  <o> FLL Output clock frequency (Hz) <name=fllTargetFrequency>
 //  <i> Used for MCGFLLCLK system clock
 //  <i> Used for main MCGOUTCLK system clock if FEI or FEE mode is selected.
-#define FLL_TARGET_CLOCK 96000000UL
+#define FLL_TARGET_CLOCK 80000000UL
 
 // SYSTEM_MCGOUT_CLOCK =======================================
 //
@@ -432,7 +432,7 @@ extern "C" {
 //      <5=> if RANGE0 = 0 divide by 32, else 1024
 //      <6=> if RANGE0 = 0 divide by 64, else 1280
 //      <7=> if RANGE0 = 0 divide by 128, else 1536
-#define MCG_C1_FRDIV_V 6
+#define MCG_C1_FRDIV_V 3
 #define MCG_C1_FRDIV_M (MCG_C1_FRDIV_V<<MCG_C1_FRDIV_SHIFT)
 
 // MCG_C1_IREFS ================================
@@ -487,7 +487,7 @@ extern "C" {
 //      <0=> Low range
 //      <1=> High range
 //      <2=> Very High range
-#define MCG_C2_RANGE0_V   2
+#define MCG_C2_RANGE0_V   1
 #define MCG_C2_RANGE0_M   (MCG_C2_RANGE0_V<<MCG_C2_RANGE0_SHIFT)
 
 // MCG_C2_HGO0 =============================
@@ -582,7 +582,7 @@ extern "C" {
 //   <o> PLL External Reference Divider (PRDIV0) Divide by: <constant> <name=mcg_c5_prdiv0> <#-1> <1-24>
 //   <i> Determines the amount to divide down the external reference clock for the PLL. [MCG_C5_PRDIV0]
 //   <i> This value is calculated from PLL input and output clock frequencies
-#define MCG_C5_PRDIV0_V    14
+#define MCG_C5_PRDIV0_V    3
 #define MCG_C5_PRDIV0_M   (MCG_C5_PRDIV0_V<<MCG_C5_PRDIV0_SHIFT)
 
 // </h>
@@ -625,7 +625,7 @@ extern "C" {
 //   <o> VCO Divider (VDIV0) Multiply by: <constant> <name=mcg_c6_vdiv0> <#-24> <24-55>
 //   <i> Determines the multiplication factor for the reference clock of the PLL. [MCG_C6_VDIV0]
 //   <i> This value is calculated from PLL input and output clock frequencies
-#define MCG_C6_VDIV0_V    (1)
+#define MCG_C6_VDIV0_V    (16)
 #define MCG_C6_VDIV0_M   (MCG_C6_VDIV0_V<<MCG_C6_VDIV0_SHIFT)
 
 // </h>
@@ -663,7 +663,7 @@ extern "C" {
 //     <0=> Main System Oscillator (OSCCLK)
 //     <1=> 32 kHz RTC Oscillator (OSC32KCLK)
 //     <2=> 48 MHz Internal Oscillator (IRC48M).
-#define MCG_C7_OSCSEL_V  2
+#define MCG_C7_OSCSEL_V  0
 #define MCG_C7_OSCSEL_M (MCG_C7_OSCSEL_V<<MCG_C7_OSCSEL_SHIFT)
 
 // Check if 32kHz clock is available
