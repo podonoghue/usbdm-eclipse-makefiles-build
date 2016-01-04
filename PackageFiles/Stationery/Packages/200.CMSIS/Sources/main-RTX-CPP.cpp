@@ -1,5 +1,7 @@
 /*----------------------------------------------------------------------------
- *   RTX example program
+ * @file main.cpp (derived from main-RTX-CPP.c) 
+ *  
+ * RTX example program
  *----------------------------------------------------------------------------
  */
 #include "cmsis_os.h"                   // CMSIS RTX
@@ -14,35 +16,35 @@ osThreadId tid_lcdThread;               // Thread id of lcdThread
 #define MAIN_SIGNAL  (1<<1)
 #define CLOCK_SIGNAL (1<<8)
 
-#define RED_LED   digitalIO_$(demo.cpp.red.led)
-#define GREEN_LED digitalIO_$(demo.cpp.green.led)
-#define BLUE_LED  digitalIO_$(demo.cpp.blue.led)
+#define RED_LED   USBDM::gpio_$(demo.cpp.red.led)
+#define GREEN_LED USBDM::gpio_$(demo.cpp.green.led)
+#define BLUE_LED  USBDM::gpio_$(demo.cpp.blue.led)
 
 /*----------------------------------------------------------------------------
      Function that turns on Red LED
  *----------------------------------------------------------------------------*/
 void LEDRed_On (void) {
-   RED_LED.clear();
-   GREEN_LED.set();
-   BLUE_LED.set();
+   RED_LED::clear();
+   GREEN_LED::set();
+   BLUE_LED::set();
 }
 
 /*----------------------------------------------------------------------------
      Function that turns on Green LED
  *----------------------------------------------------------------------------*/
 void LEDGreen_On (void) {
-   RED_LED.set();
-   GREEN_LED.clear();
-   BLUE_LED.set();
+   RED_LED::set();
+   GREEN_LED::clear();
+   BLUE_LED::set();
 }
 
 /*----------------------------------------------------------------------------
      Function that turns on Blue LED
  *----------------------------------------------------------------------------*/
 void LEDBlue_On (void) {
-   RED_LED.set();
-   GREEN_LED.set();
-   BLUE_LED.clear();
+   RED_LED::set();
+   GREEN_LED::set();
+   BLUE_LED::clear();
 }
 
 /*----------------------------------------------------------------------------
@@ -112,12 +114,12 @@ void lcdThread (void const *argument __attribute__((unused))) {
 #endif
 
 void led_initialise(void) {
-   RED_LED.setDigitalOutput();
-   GREEN_LED.setDigitalOutput();
-   BLUE_LED.setDigitalOutput();
-   RED_LED.set();
-   GREEN_LED.set();
-   BLUE_LED.set();
+   RED_LED::setOutput();
+   GREEN_LED::setOutput();
+   BLUE_LED::setOutput();
+   RED_LED::set();
+   GREEN_LED::set();
+   BLUE_LED::set();
 }
 
 osThreadDef(redThread,     osPriorityNormal, 1, 0);

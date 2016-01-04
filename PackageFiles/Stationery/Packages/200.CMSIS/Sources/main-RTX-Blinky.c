@@ -1,5 +1,7 @@
 /*----------------------------------------------------------------------------
- *   RTX example program
+ * @file main.c (derived from main-RTX-Blinky.c) 
+ *  
+ * RTX example program
  *----------------------------------------------------------------------------
  */
 #include "cmsis_os.h"                   // CMSIS RTX

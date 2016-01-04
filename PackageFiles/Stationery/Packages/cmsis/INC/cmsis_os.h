@@ -127,6 +127,10 @@ used throughout the whole project.
 
 */
 
+// This seems to fix a bug in the Eclipse indexer for C++ use
+#ifdef  __cplusplus
+#endif
+
 #ifndef _CMSIS_OS_H
 #define _CMSIS_OS_H
 
