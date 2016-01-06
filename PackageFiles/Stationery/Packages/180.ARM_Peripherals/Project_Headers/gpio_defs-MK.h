@@ -122,7 +122,8 @@ namespace USBDM {
  * @tparam pcrReg          PCR to be manipulated
  * @tparam defPcrValue     Default value for PCR
  */
-template<uint32_t clockMask, uint32_t pcrReg, uint32_t defPcrValue> class Pcr_T {
+template<uint32_t clockMask, uint32_t pcrReg, uint32_t defPcrValue>
+class Pcr_T {
 
 public:
    /**
@@ -223,7 +224,8 @@ static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
  * @tparam gpio            GPIO hardware
  * @tparam bitNum          Bit number in the port
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t defPcrValue, uint32_t gpio, const uint32_t bitNum> class Gpio_T {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t defPcrValue, uint32_t gpio, const uint32_t bitNum>
+class Gpio_T {
 
 public:
    using Pcr = Pcr_T<portClockMask, pcrReg, defPcrValue>; //!< PCR information
@@ -566,7 +568,9 @@ template<int bitNum> using GpioF = Gpio_T<PORTF_CLOCK_MASK, PORTF_BasePtr+offset
  * @tparam left           Bit number of leftmost bit in port (inclusive)
  * @tparam right          Bit number of rightmost bit in port (inclusive)
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t defPcrValue, uint32_t gpio, const uint32_t left, const uint32_t right> class Field_T {
+template<uint32_t portClockMask, uint32_t port, uint32_t defPcrValue, uint32_t gpio, const uint32_t left, const uint32_t right>
+class Field_T {
+
 private:
    /**
     * Mask for the bits being manipulated
@@ -607,6 +611,15 @@ public:
    static void setInput(uint32_t pcrValue=defPcrValue) {
       setPCRs(pcrValue);
       reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~MASK;
+   }
+   /**
+    * Set individual pin directions
+    *
+    * @param mask Mask for pin directions (1=>out, 0=>in)
+    */
+   static void setDirection(uint32_t mask) {
+      uint32_t currentPDDR = reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR;
+      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR = (currentPDDR&~MASK)|(mask<<right)&MASK;
    }
    /**
     * Set bits in field
@@ -892,7 +905,7 @@ enum Adc_Resolution {
 };
 
 /**
- * Templated class representing a pin with Analogue Input capability
+ * Template class representing a pin with Analogue Input capability
  *
  * Example
  * @code
@@ -920,7 +933,9 @@ enum Adc_Resolution {
  * @tparam adcClockMask  Mask for ADC clock register
  * @tparam adcChannel    ADC channel
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t adc, uint32_t adcClockReg, uint32_t adcClockMask, uint8_t adcChannel> class Adc_T {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t adc, uint32_t adcClockReg, uint32_t adcClockMask, uint8_t adcChannel>
+class Adc_T {
+
 public:
    using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(ADC_PORT_FN)|DEFAULT_PCR>; //!< PCR information
 
@@ -1001,7 +1016,7 @@ enum Tmr_Mode {
 } ;
 
 /**
- * Templated class representing the functions controlling the shared hardware of an FTM
+ * Template class representing the functions controlling the shared hardware of an FTM
  *
  * Example
  * @code
@@ -1019,7 +1034,9 @@ enum Tmr_Mode {
  * @tparam ftmClockReg   SIM Clock register for FTM
  * @tparam ftmClockMask  Mask for FTM clock register
  */
-template<uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue> class FtmBase_T {
+template<uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue>
+class FtmBase_T {
+
 protected:
    /**
     * Configure Timer operation
@@ -1082,7 +1099,7 @@ public:
 };
 
 /**
- * Templated class representing a pin with PWM capability
+ * Template class representing a pin with PWM capability
  *
  * Example
  * @code
@@ -1107,8 +1124,8 @@ public:
  * @tparam ftmClockMask  Mask for FTM clock register
  * @tparam ftmChannel    FTM channel
  */
-template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue, uint32_t ftmChannel> class Ftm_T :
-      public FtmBase_T<ftm, ftmClockReg, ftmClockMask, scValue> {
+template<uint32_t portClockMask, uint32_t pcrReg, uint32_t ftmMuxFn, uint32_t ftm, uint32_t ftmClockReg, uint32_t ftmClockMask, uint16_t scValue, uint32_t ftmChannel>
+class Ftm_T : public FtmBase_T<ftm, ftmClockReg, ftmClockMask, scValue> {
 
 public:
    using Pcr = Pcr_T<portClockMask, pcrReg, PORT_PCR_MUX(ftmMuxFn)|DEFAULT_PCR>;   //!< PCR information
@@ -1222,7 +1239,7 @@ constexpr uint32_t getGpioBit(unsigned channel, const PcrInfo info[]) {
 #pragma GCC diagnostic pop
 }
 /**
- * @brief Templated function to set a PCR to the default value
+ * @brief Template function to set a PCR to the default value
  *
  * @tparam  Last PCR to modify
  */
@@ -1232,7 +1249,7 @@ void processPcrs() {
 }
 
 /**
- * @brief Templated function to set a collection of PCRs to the default value
+ * @brief Template function to set a collection of PCRs to the default value
  *
  * @tparam  Pcr1 PCR to modify
  * @tparam  Pcr2 PCR to modify
@@ -1244,7 +1261,7 @@ void processPcrs() {
    processPcrs<Pcr2, Rest...>();
 }
 /**
- * @brief Templated function to set a PCR to a given value
+ * @brief Template function to set a PCR to a given value
  *
  * @param   pcrValue PCR value to set
  *
@@ -1256,7 +1273,7 @@ void processPcrs(uint32_t pcrValue) {
 }
 
 /**
- * @brief Templated function to set a collection of PCRs to a given value
+ * @brief Template function to set a collection of PCRs to a given value
  *
  * @param pcrValue PCR value to set
  *
