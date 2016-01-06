@@ -2,10 +2,10 @@
  * @file     $(targetDevice).h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKE04Z8M4.
- *           Equivalent: SKEAZN8M4, MKE04Z8M4, FRDM_KE04Z
+ *           Equivalent: S9KEAZN8M4, MKE04Z8M4, FRDM_KE04Z
  *
  * @version  V0.0
- * @date     2015/12
+ * @date     2016/01
  *
  *******************************************************************************************************/
 
