@@ -3,9 +3,13 @@ be used as cheap Kinetis programmers.
 
 Versions:
 ===========
-Open-SDA Version 1 - Used with most FRDM boards
-OpenSDA.sx              Firmware with serial number 0001
-OpenSDA_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+Open-SDA Version 1 - Used with earlier FRDM boards
+OpenSDAv1.sx              Firmware with serial number 0001
+OpenSDAv1_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+
+Open-SDA Version 1 - Used with newer FRDM boards using OSDAv1 but with target power control e.g. FRDM-KEAZ
+OpenSDAv1_Power.sx              Firmware with serial number 0001
+OpenSDAv1_Power_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
 
 Open-SDA Version 2.0 - Used with FRM-K64F (MBED version of Freedom boards)
 OpenSDAv2_0.sx             Firmware with serial number 0001
@@ -26,11 +30,12 @@ These are OpenSDA application and is loaded by the following actions:
 (Before doing the following install the USBDM drivers).
 
 *  Unplug FRDM-XXXX board
+*  If the board has a RST Push Button bypass link (e.g. FRDM-KV J25, FRDM-KEA J104) make sure it is in position 1-2
 *  Whilst holding the reset switch depressed plug in the FRDM-XXXX board.  The
    green LED should start blinking at about 1Hz (OpenSDA V1 only).  
 *  Open a file explorer and locate the USB drive that has now appeared.  It will have
    the drive name "BOOTLOADER"
-*  Drag the OpenSDAX.sx to the USB drive and wait a short while.  The OpenSDA firmware
+*  Drag the OpenSDAX.xx file to the USB drive and wait a short while.  The OpenSDA firmware
    on the FRDM-XXXX board will program the USBDM firmware into the MK20 debugger chip on the
    board.
 *  In the case of the Open-SDAV2 device the BOOTLOADER Disk will disappear.
