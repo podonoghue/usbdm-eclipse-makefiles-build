@@ -2111,7 +2111,7 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-XMMC-XFTMRK-flash-program" />
       </device>
-      <device family="HCS12" name="MC9S12XEP100">
+      <device family="HCS12" name="MC9S12XEP100-family">
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x2000" end="0x3FFF" />
