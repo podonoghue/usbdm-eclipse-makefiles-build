@@ -1464,7 +1464,7 @@ typedef struct {                                /*       DMA0 Structure         
    __I  uint32_t  RESERVED3;                   
    __IO uint32_t  ERR;                          /**< 002C: Error Register                                               */
    __I  uint32_t  RESERVED4;                   
-   __IO uint32_t  HRS;                          /**< 0034: Hardware Request Status Register                             */
+   __I  uint32_t  HRS;                          /**< 0034: Hardware Request Status Register                             */
    __I  uint32_t  RESERVED5[3];                
    __IO uint32_t  EARS;                         /**< 0044: Enable Asynchronous Request in Stop Register                 */
    __I  uint32_t  RESERVED6[46];               
@@ -1501,7 +1501,7 @@ typedef struct {                                /*       DMA0 Structure         
          __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
          __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
-      __IO uint32_t  DLAST_SGA;                 /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+      __IO uint32_t  DLASTSGA;                  /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
       __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
       union {                                   /**< 1000: (size=0002)                                                  */
          __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
@@ -1798,12 +1798,36 @@ typedef struct {                                /*       DMA0 Structure         
 /* ------- EARS Bit Fields                          ------ */
 #define DMA_EARS_EDREQ_0_MASK                    (0x01UL << DMA_EARS_EDREQ_0_SHIFT)                  /*!< DMA0_EARS: EDREQ_0 Mask                 */
 #define DMA_EARS_EDREQ_0_SHIFT                   0                                                   /*!< DMA0_EARS: EDREQ_0 Position             */
-#define DMA_EARS_EDREQ_1_MASK                    (0x01UL << DMA_EARS_EDREQ_1_SHIFT)                  /*!< DMA0_EARS: EDREQ_1 Mask                 */
-#define DMA_EARS_EDREQ_1_SHIFT                   1                                                   /*!< DMA0_EARS: EDREQ_1 Position             */
-#define DMA_EARS_EDREQ_2_MASK                    (0x01UL << DMA_EARS_EDREQ_2_SHIFT)                  /*!< DMA0_EARS: EDREQ_2 Mask                 */
-#define DMA_EARS_EDREQ_2_SHIFT                   2                                                   /*!< DMA0_EARS: EDREQ_2 Position             */
-#define DMA_EARS_EDREQ_3_MASK                    (0x01UL << DMA_EARS_EDREQ_3_SHIFT)                  /*!< DMA0_EARS: EDREQ_3 Mask                 */
-#define DMA_EARS_EDREQ_3_SHIFT                   3                                                   /*!< DMA0_EARS: EDREQ_3 Position             */
+#define DMA_EARS_EDREQ_1 _MASK                   (0x01UL << DMA_EARS_EDREQ_1 _SHIFT)                 /*!< DMA0_EARS: EDREQ_1  Mask                */
+#define DMA_EARS_EDREQ_1 _SHIFT                  1                                                   /*!< DMA0_EARS: EDREQ_1  Position            */
+#define DMA_EARS_EDREQ_2 _MASK                   (0x01UL << DMA_EARS_EDREQ_2 _SHIFT)                 /*!< DMA0_EARS: EDREQ_2  Mask                */
+#define DMA_EARS_EDREQ_2 _SHIFT                  2                                                   /*!< DMA0_EARS: EDREQ_2  Position            */
+#define DMA_EARS_EDREQ_3 _MASK                   (0x01UL << DMA_EARS_EDREQ_3 _SHIFT)                 /*!< DMA0_EARS: EDREQ_3  Mask                */
+#define DMA_EARS_EDREQ_3 _SHIFT                  3                                                   /*!< DMA0_EARS: EDREQ_3  Position            */
+#define DMA_EARS_EDREQ_4 _MASK                   (0x01UL << DMA_EARS_EDREQ_4 _SHIFT)                 /*!< DMA0_EARS: EDREQ_4  Mask                */
+#define DMA_EARS_EDREQ_4 _SHIFT                  4                                                   /*!< DMA0_EARS: EDREQ_4  Position            */
+#define DMA_EARS_EDREQ_5 _MASK                   (0x01UL << DMA_EARS_EDREQ_5 _SHIFT)                 /*!< DMA0_EARS: EDREQ_5  Mask                */
+#define DMA_EARS_EDREQ_5 _SHIFT                  5                                                   /*!< DMA0_EARS: EDREQ_5  Position            */
+#define DMA_EARS_EDREQ_6 _MASK                   (0x01UL << DMA_EARS_EDREQ_6 _SHIFT)                 /*!< DMA0_EARS: EDREQ_6  Mask                */
+#define DMA_EARS_EDREQ_6 _SHIFT                  6                                                   /*!< DMA0_EARS: EDREQ_6  Position            */
+#define DMA_EARS_EDREQ_7 _MASK                   (0x01UL << DMA_EARS_EDREQ_7 _SHIFT)                 /*!< DMA0_EARS: EDREQ_7  Mask                */
+#define DMA_EARS_EDREQ_7 _SHIFT                  7                                                   /*!< DMA0_EARS: EDREQ_7  Position            */
+#define DMA_EARS_EDREQ_8 _MASK                   (0x01UL << DMA_EARS_EDREQ_8 _SHIFT)                 /*!< DMA0_EARS: EDREQ_8  Mask                */
+#define DMA_EARS_EDREQ_8 _SHIFT                  8                                                   /*!< DMA0_EARS: EDREQ_8  Position            */
+#define DMA_EARS_EDREQ_9 _MASK                   (0x01UL << DMA_EARS_EDREQ_9 _SHIFT)                 /*!< DMA0_EARS: EDREQ_9  Mask                */
+#define DMA_EARS_EDREQ_9 _SHIFT                  9                                                   /*!< DMA0_EARS: EDREQ_9  Position            */
+#define DMA_EARS_EDREQ_10_MASK                   (0x01UL << DMA_EARS_EDREQ_10_SHIFT)                 /*!< DMA0_EARS: EDREQ_10 Mask                */
+#define DMA_EARS_EDREQ_10_SHIFT                  10                                                  /*!< DMA0_EARS: EDREQ_10 Position            */
+#define DMA_EARS_EDREQ_11_MASK                   (0x01UL << DMA_EARS_EDREQ_11_SHIFT)                 /*!< DMA0_EARS: EDREQ_11 Mask                */
+#define DMA_EARS_EDREQ_11_SHIFT                  11                                                  /*!< DMA0_EARS: EDREQ_11 Position            */
+#define DMA_EARS_EDREQ_12_MASK                   (0x01UL << DMA_EARS_EDREQ_12_SHIFT)                 /*!< DMA0_EARS: EDREQ_12 Mask                */
+#define DMA_EARS_EDREQ_12_SHIFT                  12                                                  /*!< DMA0_EARS: EDREQ_12 Position            */
+#define DMA_EARS_EDREQ_13_MASK                   (0x01UL << DMA_EARS_EDREQ_13_SHIFT)                 /*!< DMA0_EARS: EDREQ_13 Mask                */
+#define DMA_EARS_EDREQ_13_SHIFT                  13                                                  /*!< DMA0_EARS: EDREQ_13 Position            */
+#define DMA_EARS_EDREQ_14_MASK                   (0x01UL << DMA_EARS_EDREQ_14_SHIFT)                 /*!< DMA0_EARS: EDREQ_14 Mask                */
+#define DMA_EARS_EDREQ_14_SHIFT                  14                                                  /*!< DMA0_EARS: EDREQ_14 Position            */
+#define DMA_EARS_EDREQ_15_MASK                   (0x01UL << DMA_EARS_EDREQ_15_SHIFT)                 /*!< DMA0_EARS: EDREQ_15 Mask                */
+#define DMA_EARS_EDREQ_15_SHIFT                  15                                                  /*!< DMA0_EARS: EDREQ_15 Position            */
 /* ------- DCHPRI Bit Fields                        ------ */
 #define DMA_DCHPRI_CHPRI_MASK                    (0x0FUL << DMA_DCHPRI_CHPRI_SHIFT)                  /*!< DMA0_DCHPRI: CHPRI Mask                 */
 #define DMA_DCHPRI_CHPRI_SHIFT                   0                                                   /*!< DMA0_DCHPRI: CHPRI Position             */
@@ -1883,10 +1907,10 @@ typedef struct {                                /*       DMA0 Structure         
 #define DMA_CITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<DMA_CITER_ELINKYES_LINKCH_SHIFT))&DMA_CITER_ELINKYES_LINKCH_MASK) /*!< DMA0_CITER_ELINKYES                     */
 #define DMA_CITER_ELINKYES_ELINK_MASK            (0x01UL << DMA_CITER_ELINKYES_ELINK_SHIFT)          /*!< DMA0_CITER_ELINKYES: ELINK Mask         */
 #define DMA_CITER_ELINKYES_ELINK_SHIFT           15                                                  /*!< DMA0_CITER_ELINKYES: ELINK Position     */
-/* ------- DLAST_SGA Bit Fields                     ------ */
-#define DMA_DLAST_SGA_DLASTSGA_MASK              (0xFFFFFFFFUL << DMA_DLAST_SGA_DLASTSGA_SHIFT)      /*!< DMA0_DLAST_SGA: DLASTSGA Mask           */
-#define DMA_DLAST_SGA_DLASTSGA_SHIFT             0                                                   /*!< DMA0_DLAST_SGA: DLASTSGA Position       */
-#define DMA_DLAST_SGA_DLASTSGA(x)                (((uint32_t)(((uint32_t)(x))<<DMA_DLAST_SGA_DLASTSGA_SHIFT))&DMA_DLAST_SGA_DLASTSGA_MASK) /*!< DMA0_DLAST_SGA                          */
+/* ------- DLASTSGA Bit Fields                      ------ */
+#define DMA_DLASTSGA_DLASTSGA_MASK               (0xFFFFFFFFUL << DMA_DLASTSGA_DLASTSGA_SHIFT)       /*!< DMA0_DLASTSGA: DLASTSGA Mask            */
+#define DMA_DLASTSGA_DLASTSGA_SHIFT              0                                                   /*!< DMA0_DLASTSGA: DLASTSGA Position        */
+#define DMA_DLASTSGA_DLASTSGA(x)                 (((uint32_t)(((uint32_t)(x))<<DMA_DLASTSGA_DLASTSGA_SHIFT))&DMA_DLASTSGA_DLASTSGA_MASK) /*!< DMA0_DLASTSGA                           */
 /* ------- CSR Bit Fields                           ------ */
 #define DMA_CSR_START_MASK                       (0x01UL << DMA_CSR_START_SHIFT)                     /*!< DMA0_CSR: START Mask                    */
 #define DMA_CSR_START_SHIFT                      0                                                   /*!< DMA0_CSR: START Position                */
@@ -5026,7 +5050,7 @@ typedef struct {                                /*       LPTMR0 Structure       
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
-   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**

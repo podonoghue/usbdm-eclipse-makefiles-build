@@ -1530,13 +1530,13 @@ typedef struct {                                /*       MCG Structure          
    __IO uint8_t   C4;                           /**< 0003: Control 4 Register                                           */
    __IO uint8_t   C5;                           /**< 0004: Control 5 Register                                           */
    __IO uint8_t   C6;                           /**< 0005: Control 6 Register                                           */
-   __I  uint8_t   S;                            /**< 0006: Status Register                                              */
+   __IO uint8_t   S;                            /**< 0006: Status Register                                              */
    __I  uint8_t   RESERVED0;                   
    __IO uint8_t   SC;                           /**< 0008: Status and Control Register                                  */
    __I  uint8_t   RESERVED1;                   
-   __IO uint8_t   ATCVH;                        /**< 000A: Auto Trim Compare Value High Register                        */
-   __IO uint8_t   ATCVL;                        /**< 000B: Auto Trim Compare Value Low Register                         */
-   __IO uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
+   __IO uint8_t   ATCVH;                        /**< 000A: ATM Compare Value High                                       */
+   __IO uint8_t   ATCVL;                        /**< 000B: ATM Compare Value Low                                        */
+   __I  uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
    __IO uint8_t   C8;                           /**< 000D: Control 8 Register                                           */
    __IO uint8_t   C9;                           /**< 000E: Control 9 Register                                           */
 } MCG_Type;
