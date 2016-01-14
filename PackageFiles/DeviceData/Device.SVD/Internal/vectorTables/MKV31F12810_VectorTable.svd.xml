@@ -1,0 +1,213 @@
+<!--
+Devices using this vector table: 
+   MKV31F12810
+-->
+      <interrupts>
+         <name>MKV31F12810_VectorTable</name>
+         <interrupt>
+            <name>DMA0</name>
+            <description>DMA0 Transfer complete</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>DMA1 Transfer complete</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>DMA2 Transfer complete</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>DMA3 Transfer complete</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>Enhanced direct memory access controller</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>MCM</name>
+            <description>Core Platform Miscellaneous Control Module</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTF</name>
+            <description>Flash Command complete or error</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>Read_Collision</name>
+            <description>Flash Memory Interface</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>LVD_LVW</name>
+            <description>Power Management Controller</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG_EWM</name>
+            <description>External Watchdog Monitor</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C1</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>LPUART0</name>
+            <description>Universal Asynchronous Receiver/Transmitter</description>
+            <value>30</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>31</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>32</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>33</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>34</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>35</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>36</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analog-to-Digital Converter</description>
+            <value>39</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+            <value>40</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP1</name>
+            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+            <value>41</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>FlexTimer Module 0</description>
+            <value>42</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FlexTimer Module 1</description>
+            <value>43</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>FlexTimer Module 2</description>
+            <value>44</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0</name>
+            <description>Periodic Interrupt Timer 0</description>
+            <value>48</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT1</name>
+            <description>Periodic Interrupt Timer 1</description>
+            <value>49</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT2</name>
+            <description>Periodic Interrupt Timer 2</description>
+            <value>50</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT3</name>
+            <description>Periodic Interrupt Timer 3</description>
+            <value>51</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>Programmable Delay Block 0</description>
+            <value>52</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC0</name>
+            <description>12-Bit Digital to Analog Converter 0</description>
+            <value>56</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>Low Power Timer</description>
+            <value>58</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>Port A</description>
+            <value>59</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>Port B</description>
+            <value>60</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTC</name>
+            <description>Port C</description>
+            <value>61</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTD</name>
+            <description>Port D</description>
+            <value>62</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTE</name>
+            <description>Port E</description>
+            <value>63</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC1</name>
+            <description>Analog to Digital Converter 1</description>
+            <value>73</value>
+         </interrupt>
+      </interrupts>
+

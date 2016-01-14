@@ -230,7 +230,7 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>UARTSWAI</name>
-                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
+                     <description>Stops in Wait Mode</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -443,8 +443,7 @@ To clear TDRE, read S1 when TDRE is set and then write to the UART data register
                      <name>RAF</name>
                      <description>Receiver Active Flag\n
 RAF is set when the UART receiver detects a logic 0 during the RT1 time period of the start bit search.\n
-RAF is cleared when the receiver detects an idle character when C7816[ISO7816E] is cleared/disabled.\n
-When C7816[ISO7816E] is enabled, the RAF is cleared if the C7816[TTYPE] = 0 expires or the C7816[TTYPE] = 1 expires</description>
+RAF is cleared when the receiver detects an idle character</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>

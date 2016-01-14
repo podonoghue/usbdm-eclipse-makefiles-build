@@ -45,7 +45,11 @@ Devices using this peripheral:
       MK64F12
       MK70F12
       MK70F15
-      MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "GPIOA_0" ?>

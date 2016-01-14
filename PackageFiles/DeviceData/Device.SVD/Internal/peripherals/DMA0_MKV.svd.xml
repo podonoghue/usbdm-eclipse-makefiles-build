@@ -1,6 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "DMA0_MKV" ?>
@@ -225,12 +225,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Fixed priority arbitration is used for channel selection within each group</description>
+                           <description>Fixed priority arbitration is used for channel selection</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Round robin arbitration is used for channel selection within each group</description>
+                           <description>Round robin arbitration is used for channel selection</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -497,7 +497,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>ERRCHN</name>
-                     <description>Error Channel Number or Cancelled Channel Number</description>
+                     <description>Error Channel Number or Canceled Channel Number</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>2</bitWidth>
                   </field>
@@ -521,18 +521,18 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>ECX</name>
-                     <description>Transfer Cancelled</description>
+                     <description>Transfer Canceled</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No cancelled transfers</description>
+                           <description>No canceled transfers</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The last recorded entry was a cancelled transfer by the error cancel transfer input</description>
+                           <description>The last recorded entry was a canceled transfer by the error cancel transfer input</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -881,7 +881,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SERQ</name>
-                     <description>Set enable request</description>
+                     <description>Set Enable Request</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                   </field>
@@ -1223,12 +1223,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>An error in the corresponding channel has not occurred</description>
+                           <description>An error in this channel has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>An error in the corresponding channel has occurred</description>
+                           <description>An error in this channel has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1241,12 +1241,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>An error in the corresponding channel has not occurred</description>
+                           <description>An error in this channel has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>An error in the corresponding channel has occurred</description>
+                           <description>An error in this channel has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1259,12 +1259,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>An error in the corresponding channel has not occurred</description>
+                           <description>An error in this channel has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>An error in the corresponding channel has occurred</description>
+                           <description>An error in this channel has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1277,12 +1277,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>An error in the corresponding channel has not occurred</description>
+                           <description>An error in this channel has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>An error in the corresponding channel has occurred</description>
+                           <description>An error in this channel has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1293,6 +1293,7 @@ Devices using this peripheral:
                <name>HRS</name>
                <description>Hardware Request Status Register</description>
                <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>HRS0</name>

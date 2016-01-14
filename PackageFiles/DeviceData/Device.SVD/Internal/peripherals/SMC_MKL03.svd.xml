@@ -184,7 +184,9 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
             </register>
             <register>
                <name>STOPCTRL</name>
-               <description>Stop Control Register</description>
+               <description>Stop Control Register\n
+The STOPCTRL register provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0x3</resetValue>
@@ -291,12 +293,12 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>PSTOP1 - Partial Stop with both system and bus clocks disabled</description>
+                           <description>PSTOP1 - System and bus clocks disabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>PSTOP2 - Partial Stop with system clock disabled and bus clock enabled</description>
+                           <description>PSTOP2 - System clock disabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -350,9 +352,19 @@ When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</descri
                            <value>0b00010000</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b00100000</name>
+                           <description>LLS</description>
+                           <value>0b00100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b01000000</name>
                            <description>VLLS</description>
                            <value>0b01000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000000</name>
+                           <description>HSRUN</description>
+                           <value>0b10000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

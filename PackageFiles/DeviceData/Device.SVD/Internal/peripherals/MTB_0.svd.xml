@@ -268,7 +268,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DEVICEARCH</name>
-                     <description>no description available</description>
+                     <description>DEVICEARCH</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -281,7 +281,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DEVICECFG</name>
-                     <description>no description available</description>
+                     <description>DEVICECFG</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -295,7 +295,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DEVICETYPID</name>
-                     <description>no description available</description>
+                     <description>DEVICETYPID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -311,7 +311,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>PERIPHID</name>
-                     <description>no description available</description>
+                     <description>PERIPHID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

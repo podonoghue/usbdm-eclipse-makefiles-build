@@ -17,6 +17,7 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "MTBDWT_MKL" ?>
@@ -279,7 +280,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DEVICECFG</name>
-                     <description>Hardwired to 0x0000_0000</description>
+                     <description>DEVICECFG</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -293,7 +294,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DEVICETYPID</name>
-                     <description>Hardwired to 0x0000_0004</description>
+                     <description>DEVICETYPID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -306,10 +307,11 @@ Devices using this peripheral:
                <description>Peripheral ID Register</description>
                <addressOffset>0xFD0</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PERIPHID</name>
-                     <description>Peripheral ID1 is hardwired to 0x0000_00E0; ID2 to 0x0000_0008; and all the others to 0x0000_0000</description>
+                     <description>PERIPHID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

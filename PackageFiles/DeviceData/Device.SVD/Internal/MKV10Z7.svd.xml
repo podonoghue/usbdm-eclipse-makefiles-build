@@ -6,14 +6,14 @@
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_MKLZ4.svd.xml">
-<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKV.svd.xml">
+<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKV_4CH_EARS.svd.xml">
 <!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_4CH.svd.xml">
 <!ENTITY EWM          SYSTEM "peripherals/EWM_MKV.svd.xml">
+<!ENTITY FGPIOA       SYSTEM "peripherals/FGPIOA_MKV.svd.xml">
 <!ENTITY FTFA         SYSTEM "peripherals/FTFA.svd.xml">
 <!ENTITY FTM0         SYSTEM "peripherals/FTM0_6CH_MKV.svd.xml">
-<!ENTITY FTM1         SYSTEM "peripherals/FTM1_2CH_MKV.svd.xml">
-<!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_0.svd.xml">
-<!ENTITY I2C0         SYSTEM "peripherals/I2C0_MKL_SMB.svd.xml">
+<!ENTITY FTM1         SYSTEM "peripherals/FTM1_2CH.svd.xml">
+<!ENTITY I2C0         SYSTEM "peripherals/I2C0_F12.svd.xml">
 <!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE3_FILT2.svd.xml">
 <!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0.svd.xml">
 <!ENTITY MCG          SYSTEM "peripherals/MCG_MKL_4.svd.xml">
@@ -22,17 +22,19 @@
 <!ENTITY MTB          SYSTEM "peripherals/MTB_MKV.svd.xml">
 <!ENTITY MTBDWT       SYSTEM "peripherals/MTBDWT_MKL.svd.xml">
 <!ENTITY NV           SYSTEM "peripherals/NV_FTFA.svd.xml">
+<!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKL.svd.xml">
 <!ENTITY OSC0         SYSTEM "peripherals/OSC_0.svd.xml">
-<!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_2TRIG_1PO.svd.xml">
+<!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_1TRIG_2PO.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_0.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKL.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MKL.svd.xml">
-<!ENTITY RNG          SYSTEM "peripherals/RNG_1.svd.xml">
 <!ENTITY ROM          SYSTEM "peripherals/ROM_MKL.svd.xml">
+<!ENTITY SCB          SYSTEM "peripherals/SCB_MKV10.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MKV10Z7.svd.xml">
 <!ENTITY SMC          SYSTEM "peripherals/SMC_MKV.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKV.svd.xml">
-<!ENTITY UART0        SYSTEM "peripherals/UART0_MKV.svd.xml">
+<!ENTITY SYST         SYSTEM "peripherals/SysTick_0.svd.xml">
+<!ENTITY UART0        SYSTEM "peripherals/UART0_0.svd.xml">
 <!ENTITY WDOG         SYSTEM "peripherals/WDOG_MK.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
@@ -41,7 +43,7 @@
    <description>MKV10Z7 Freescale Microcontroller</description>
    <cpu>
       <name>CM0PLUS</name>
-      <revision>r1p0</revision>
+      <revision>r0p0</revision>
       <endian>little</endian>
       <mpuPresent>false</mpuPresent>
       <fpuPresent>false</fpuPresent>
@@ -61,15 +63,20 @@
 &DMA0;
 &DMAMUX;
 &EWM;
+&FGPIOA;
+<peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><prependToName>FGPIOB_</prependToName><baseAddress>0xF8000040</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>FGPIOC</name><prependToName>FGPIOC_</prependToName><baseAddress>0xF8000080</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>FGPIOD</name><prependToName>FGPIOD_</prependToName><baseAddress>0xF80000C0</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>FGPIOE</name><prependToName>FGPIOE_</prependToName><baseAddress>0xF8000100</baseAddress></peripheral>
 &FTFA;
 &FTM0;
 &FTM1;
-<peripheral derivedFrom="FTM1"><name>FTM2</name><prependToName>FTM2</prependToName><baseAddress>0x4003A000</baseAddress></peripheral>
-&GPIOA;
-<peripheral derivedFrom="GPIOA"><name>GPIOB</name><prependToName>GPIOB</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOC</name><prependToName>GPIOC</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOD</name><prependToName>GPIOD</prependToName><baseAddress>0x400FF0C0</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOE</name><prependToName>GPIOE</prependToName><baseAddress>0x400FF100</baseAddress></peripheral>
+<peripheral derivedFrom="FTM1"><name>FTM2</name><prependToName>FTM2_</prependToName><baseAddress>0x4003A000</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>GPIOA</name><groupName>GPIO</groupName><prependToName>GPIOA_</prependToName><baseAddress>0x400FF000</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>GPIOB</name><groupName>GPIO</groupName><prependToName>GPIOB_</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>GPIOC</name><groupName>GPIO</groupName><prependToName>GPIOC_</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>GPIOD</name><groupName>GPIO</groupName><prependToName>GPIOD_</prependToName><baseAddress>0x400FF0C0</baseAddress></peripheral>
+<peripheral derivedFrom="FGPIOA"><name>GPIOE</name><groupName>GPIO</groupName><prependToName>GPIOE_</prependToName><baseAddress>0x400FF100</baseAddress></peripheral>
 &I2C0;
 &LLWU;
 &LPTMR0;
@@ -79,20 +86,22 @@
 &MTB;
 &MTBDWT;
 &NV;
+&NVIC;
 &OSC0;
 &PDB0;
 &PMC;
 &PORTA;
-<peripheral derivedFrom="PORTA"><name>PORTB</name><prependToName>PORTB</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
-<peripheral derivedFrom="PORTB"><name>PORTC</name><prependToName>PORTC</prependToName><baseAddress>0x4004B000</baseAddress></peripheral>
-<peripheral derivedFrom="PORTB"><name>PORTD</name><prependToName>PORTD</prependToName><baseAddress>0x4004C000</baseAddress></peripheral>
-<peripheral derivedFrom="PORTB"><name>PORTE</name><prependToName>PORTE</prependToName><baseAddress>0x4004D000</baseAddress></peripheral>
+<peripheral derivedFrom="PORTA"><name>PORTB</name><prependToName>PORTB_</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
+<peripheral derivedFrom="PORTB"><name>PORTC</name><prependToName>PORTC_</prependToName><baseAddress>0x4004B000</baseAddress></peripheral>
+<peripheral derivedFrom="PORTB"><name>PORTD</name><prependToName>PORTD_</prependToName><baseAddress>0x4004C000</baseAddress></peripheral>
+<peripheral derivedFrom="PORTB"><name>PORTE</name><prependToName>PORTE_</prependToName><baseAddress>0x4004D000</baseAddress></peripheral>
 &RCM;
-&RNG;
 &ROM;
+&SCB;
 &SIM;
 &SMC;
 &SPI0;
+&SYST;
 &UART0;
 <peripheral derivedFrom="UART0"><name>UART1</name><prependToName>UART1</prependToName><baseAddress>0x4006B000</baseAddress></peripheral>
 &WDOG;

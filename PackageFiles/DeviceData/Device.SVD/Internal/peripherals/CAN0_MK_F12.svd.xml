@@ -5,6 +5,7 @@ Devices using this peripheral:
       MK24F12
       MK63F12
       MK64F12
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "CAN0_MK_F12" ?>

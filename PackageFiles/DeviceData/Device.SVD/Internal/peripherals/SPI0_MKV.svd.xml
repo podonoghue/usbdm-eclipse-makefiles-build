@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "SPI0_MKV" ?>
@@ -636,7 +637,7 @@ Defines inactive state of the CLK</description>
 The number of bits transferred per frame is equal to the FMSZ field value plus 1.\n
 The minimum valid FMSZ field value is 3</description>
                      <bitOffset>27</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>

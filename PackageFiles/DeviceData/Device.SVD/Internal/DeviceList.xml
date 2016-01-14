@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE DeviceList SYSTEM "DeviceListSchema.dtd" >
 
-<root version="4.10.6">
+<root version="4.12.1.80">
    <description>Lookup table for mapping complete device name to the SVD file that describes the device</description>
    <deviceList>
       <device name="MK10DN32M5">       <svdFileName>MK10D5</svdFileName>     </device>
@@ -216,14 +216,22 @@
       <device name="MKL43Z256M4">      <svdFileName>MKL43Z4</svdFileName>    </device>
       <device name="MKL46Z128M4">      <svdFileName>MKL46Z4</svdFileName>    </device>
       <device name="MKL46Z256M4">      <svdFileName>MKL46Z4</svdFileName>    </device>
-      <device name="MKV10Z32M7">       <svdFileName>MKV10Z7</svdFileName>    </device>
-
+      
+      <device name="MKV10Z32M7">       <svdFileName>MKV10Z7</svdFileName>      </device>
+      <device name="MKV11Z32M7">       <svdFileName>MKV10Z7</svdFileName>      </device>
+      <device name="MKV30F12810">      <svdFileName>MKV30F12810</svdFileName>  </device>
+      <device name="MKV31F12810">      <svdFileName>MKV31F12810</svdFileName>  </device>
+      <device name="MKV31F25612">      <svdFileName>MKV31F25612</svdFileName>  </device>
+      <device name="MKV31F51212">      <svdFileName>MKV31F51212</svdFileName>  </device>
       <device name="MKM14Z64M5">       <svdFileName>MKM33Z5</svdFileName>    </device>
       <device name="MKM14Z128M5">      <svdFileName>MKM33Z5</svdFileName>    </device>
       <device name="MKM33Z64M5">       <svdFileName>MKM33Z5</svdFileName>    </device>
       <device name="MKM33Z128M5">      <svdFileName>MKM33Z5</svdFileName>    </device>
       <device name="MKM34Z128M5">      <svdFileName>MKM33Z5</svdFileName>    </device>
 
+      <device name="FRDM_K20D50M">     <svdFileName>MK20D5</svdFileName>      </device>
+      <device name="FRDM_K22F">        <svdFileName>MK22F51212</svdFileName>  </device>
+      <device name="FRDM_K64F">        <svdFileName>MK64F12</svdFileName>     </device>
       <device name="FRDM_KE02Z">       <svdFileName>MKE02Z2</svdFileName>     </device>
       <device name="FRDM_KE02Z40M">    <svdFileName>MKE02Z4</svdFileName>     </device>
       <device name="FRDM_KE04Z">       <svdFileName>MKE04Z8M4</svdFileName>   </device>
@@ -236,9 +244,7 @@
       <device name="FRDM_KL27Z">       <svdFileName>MKL27Z644</svdFileName>   </device>
       <device name="FRDM_KL43Z">       <svdFileName>MKL43Z4</svdFileName>     </device>
       <device name="FRDM_KL46Z">       <svdFileName>MKL46Z4</svdFileName>     </device>
-      <device name="FRDM_K20D50M">     <svdFileName>MK20D5</svdFileName>      </device>
-      <device name="FRDM_K22F">        <svdFileName>MK22F51212</svdFileName>  </device>
-      <device name="FRDM_K64F">        <svdFileName>MK64F12</svdFileName>     </device>
+      <device name="FRDM_KV10Z">       <svdFileName>MKV10Z7</svdFileName>     </device>
       
       <device name="TWR_K22F120M">    <svdFileName>MK22F51212</svdFileName>  </device>
       <device name="TWR_K24F120M">    <svdFileName>MK24F25612</svdFileName>  </device>

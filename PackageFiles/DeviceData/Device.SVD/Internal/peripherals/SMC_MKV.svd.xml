@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "SMC_MKV" ?>
@@ -49,26 +50,6 @@ any very-low-leakage stop mode (VLLSx)</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>ALLS</name>
-                     <description>Allow Low-Leakage Stop Mode\n
-Provided the appropriate control bits are set up in PMCTRL, this write-once bit allows the MCU to enter
-any low-leakage stop mode (LLS)</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>LLSx modes not allowed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>LLSx modes allowed</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>AVLP</name>
                      <description>Allow Very-Low-Power Modes\n
 Provided the appropriate control bits are set up in PMCTRL, this write-once field allows the MCU to enter
@@ -84,26 +65,6 @@ any very-low-power mode (VLPR, VLPW, and VLPS)</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>VLPR/VLPW/VLPS allowed</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>AHSRUN</name>
-                     <description>Allow High Speed Run mode\n
-Provided the appropriate control bits are set up in PMCTRL, this write-once field allows the MCU to enter
-High Speed Run mode (HSRUN)</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>HSRUN is not allowed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>HSRUN is allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -143,7 +104,7 @@ After any system reset, this field is cleared by hardware on any successful writ
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>High Speed Run mode (HSRUN)</description>
+                           <description>Reserved</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -224,16 +185,18 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
             </register>
             <register>
                <name>STOPCTRL</name>
-               <description>Stop Control Register</description>
+               <description>Stop Control Register\n
+The STOPCTRL register provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0x3</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
-                     <description>LLS or VLLS Mode Control\n
-This field controls which LLS or VLLS sub-mode to enter if STOPM=LLSx or VLLSx</description>
+                     <name>VLLSM</name>
+                     <description>VLLS Mode Control
+This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
@@ -249,7 +212,7 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM=LLSx or VLLSx</
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>VLLS2</description>
+                           <description>Reserved</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -276,6 +239,25 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM=LLSx or VLLSx</
                            <name>0b111</name>
                            <description>Reserved</description>
                            <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPOPO</name>
+                     <description>LPO Power Option\n
+Controls whether the 1 kHz LPO clock is enabled in VLLSx modes</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LPO clock is enabled in VLLSx</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LPO clock is disabled in VLLSx</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -312,12 +294,12 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>PSTOP1 - Partial Stop with both system and bus clocks disabled</description>
+                           <description>PSTOP1 - System and bus clocks disabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>PSTOP2 - Partial Stop with system clock disabled and bus clock enabled</description>
+                           <description>PSTOP2 - System clock disabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -344,7 +326,6 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
 When debug is enabled, the PMSTAT will not update to STOP or VLPS\n
 When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>7</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000001</name>
@@ -373,7 +354,7 @@ When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00100000</name>
-                           <description>LLS</description>
+                           <description>Reserved</description>
                            <value>0b00100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -383,7 +364,7 @@ When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10000000</name>
-                           <description>HSRUN</description>
+                           <description>Reserved</description>
                            <value>0b10000000</value>
                         </enumeratedValue>
                      </enumeratedValues>

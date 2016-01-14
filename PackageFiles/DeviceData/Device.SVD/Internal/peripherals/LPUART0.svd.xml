@@ -275,7 +275,6 @@ the transmitter and receiver are both disabled</description>
                <description>Status Register</description>
                <addressOffset>0x4</addressOffset>
                <resetValue>0xC00000</resetValue>
-               <resetMask>0x7FFFFFFF</resetMask>
                <fields>
                   <field>
                      <name>MA2F</name>
@@ -435,6 +434,7 @@ RDRF is set when the receive buffer (LPUART_DATA) is full. \n
 To clear RDRF, read the LPUART_DATA register</description>
                      <bitOffset>21</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -455,6 +455,7 @@ TC is cleared when there is a transmission in progress or when a preamble or bre
 TC is set when the transmit buffer is empty and no data, preamble, or break character is being transmitted</description>
                      <bitOffset>22</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -475,6 +476,7 @@ TDRE will set when the transmit data register (LPUART_DATA) is empty. To clear T
 LPUART data register (LPUART_DATA)</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -495,6 +497,7 @@ RAF is set when the receiver detects the beginning of a valid start bit, and RAF
 when the receiver detects an idle line</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -824,6 +827,54 @@ The transmitter and the receiver must be enabled to use the loop function</descr
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>IDLECFG</name>
+                     <description>Idle Configuration</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1 idle character</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>2 idle characters</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4 idle characters</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>8 idle characters</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>16 idle characters</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>32 idle characters</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>64 idle characters</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>128 idle characters</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>MA2IE</name>
                      <description>Match 2 Interrupt Enable</description>
                      <bitOffset>14</bitOffset>
@@ -894,7 +945,7 @@ CTRL[WAKE] is set with STAT[RWUID] is clear</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>LPUART receiver in standby waiting for wakeup condition</description>
+                           <description>Receiver in standby waiting for wakeup condition</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1166,6 +1217,19 @@ Indicates the receiver line was idle before receiving the character in DATA[9:0]
 bit can set for the first character received when the receiver is first enabled</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not idle before</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle before</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>RXEMPT</name>
@@ -1174,6 +1238,19 @@ Asserts when there is no data in the receive buffer. This field does not take in
 receive shift register</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>FRETSC</name>
@@ -1184,6 +1261,18 @@ DATA[T9:T0]. T9 is used to indicate a break character when 0 and a idle characte
 DATA[T8:T0] should be zero</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No frame error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Frame error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>PARITYE</name>
@@ -1191,6 +1280,19 @@ DATA[T8:T0] should be zero</description>
 The current received dataword contained in DATA[R9:R0] was received with a parity error</description>
                      <bitOffset>14</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No parity error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Parity error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>NOISY</name>
@@ -1198,6 +1300,19 @@ The current received dataword contained in DATA[R9:R0] was received with a parit
 The current received dataword contained in DATA[R9:R0] was received with noise</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No noise</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Noise error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1210,7 +1325,6 @@ If a match occurs, the following data is transferred to the data register. \n
 If a match fails, the following data is discarded. \n
 Software should only write a MA register when the associated BAUD[MAEN] bit is clear</description>
                <addressOffset>0x10</addressOffset>
-               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>MA1</name>
@@ -1231,8 +1345,116 @@ Software should only write a MA register when the associated BAUD[MAEN] bit is c
                <description>MODEM register\n
 The MODEM register controls options for setting the modem configuration</description>
                <addressOffset>0x14</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
+               <fields>
+                  <field>
+                     <name>TXCTSE</name>
+                     <description>Transmitter clear-to-send enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS has no effect on the transmitter</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables clear-to-send operation. The transmitter checks the state of CTS each time it is ready to send a character. If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains in the mark state and transmission is delayed until CTS is asserted. Changes in CTS as a character is being sent do not affect its transmission</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSE</name>
+                     <description>Transmitter request-to-send enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The transmitter has no effect on RTS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When a character is placed into an empty transmitter data buffer , RTS asserts one bit time before the start bit is transmitted. RTS deasserts one bit time after all characters in the transmitter data buffer and shift register are completely sent, including the last stop bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSPOL</name>
+                     <description>Transmitter request-to-send polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmitter RTS is active low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitter RTS is active high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXRTSE</name>
+                     <description>Receiver request-to-send enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The receiver has no effect on RTS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTS is deasserted if the receiver data register is full or a start bit has been detected that would cause the receiver data register to become full. RTS is asserted if the receiver data register is not full and has not detected a start bit that would cause the receiver data register to become full</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCTSC</name>
+                     <description>Transmit CTS Configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS input is sampled at the start of each character</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CTS input is sampled when the transmitter is idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCTSSRC</name>
+                     <description>Transmit CTS Source</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS input is the LPUART_CTS pin</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CTS input is the inverted Receiver Match result</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
             </register>
          </registers>
       </peripheral>

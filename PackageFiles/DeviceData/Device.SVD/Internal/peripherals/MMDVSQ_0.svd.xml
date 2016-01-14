@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "MMDVSQ_0" ?>

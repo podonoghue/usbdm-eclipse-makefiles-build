@@ -54,7 +54,6 @@ Devices using this peripheral:
                <name>MCR</name>
                <description>Module Control Register</description>
                <addressOffset>0x0</addressOffset>
-               <resetValue>0x2</resetValue>
                <fields>
                   <field>
                      <name>FRZ</name>

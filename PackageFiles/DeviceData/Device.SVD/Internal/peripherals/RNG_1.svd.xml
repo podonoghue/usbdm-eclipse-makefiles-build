@@ -8,7 +8,8 @@ Devices using this peripheral:
       MK63F12
       MK64F12
       MKM33Z5
-      MKV10Z7
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "RNG_1" ?>

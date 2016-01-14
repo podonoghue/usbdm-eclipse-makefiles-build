@@ -16,6 +16,7 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "PORTA_MKL" ?>
@@ -177,7 +178,7 @@ Select Pin Function</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Pin Disabled (Analog)</description>
+                           <description>Pin Disabled (Analogue)</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>

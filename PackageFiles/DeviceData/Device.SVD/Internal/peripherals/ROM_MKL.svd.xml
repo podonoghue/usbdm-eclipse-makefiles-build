@@ -18,6 +18,7 @@ Devices using this peripheral:
       MKL46Z4
       MKM33Z5
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "ROM_MKL" ?>
@@ -66,7 +67,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>MARK</name>
-                     <description>Hardwired to 0x0000_0000</description>
+                     <description>Hardwired</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -80,7 +81,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SYSACCESS</name>
-                     <description>Hardwired to 0x0000_0001</description>
+                     <description>Hardwired</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -96,7 +97,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>PERIPHID</name>
-                     <description>Peripheral IDis hardwired</description>
+                     <description>Peripheral ID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

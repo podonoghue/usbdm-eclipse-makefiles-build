@@ -19,6 +19,7 @@ Devices using this peripheral:
       MKL46Z4
       MKM33Z5
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "FTFA" ?>

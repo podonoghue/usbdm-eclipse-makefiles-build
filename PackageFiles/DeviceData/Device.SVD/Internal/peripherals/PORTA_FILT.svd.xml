@@ -45,6 +45,10 @@ Devices using this peripheral:
       MK64F12
       MK70F12
       MK70F15
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "PORTA_FILT" ?>
@@ -211,7 +215,7 @@ Select Pin Function</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Pin Disabled (Analog)</description>
+                           <description>Pin Disabled (Analogue)</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>

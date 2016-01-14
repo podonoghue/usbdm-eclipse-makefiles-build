@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
       MKV10Z7
+      MKV11Z7
+      MKV30F12810
 -->
       <peripheral>
          <?sourceFile "FTM0_6CH_MKV" ?>

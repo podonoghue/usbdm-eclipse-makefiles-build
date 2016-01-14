@@ -24,6 +24,10 @@ Devices using this peripheral:
       MK53DZ10
       MK60D10
       MK60DZ10
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "FMC_0" ?>
@@ -235,7 +239,7 @@ This 3-bit field defines the replacement algorithm for accesses that are cached<
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>LRU across all four ways</description>
+                           <description>LRU per set across all four ways</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -280,7 +284,7 @@ This field defines the width of the memory bank</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>128 bits</description>
+                           <description>128 bits (if available)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -480,7 +484,7 @@ This field defines the width of the bank memory</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>128 bits</description>
+                           <description>128 bits (if available)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>

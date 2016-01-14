@@ -635,6 +635,7 @@ These bits indicate the current clock mode.\n
 The CLKST bits do not update immediately due to internal synchronisation between clock domains</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -664,6 +665,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
 This bit indicates the current source for the FLL reference clock</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -683,6 +685,7 @@ This bit indicates the current source for the FLL reference clock</description>
 This bit indicates the clock source selected by PLLS</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -703,6 +706,7 @@ This bit indicates whether the PLL has acquired lock.\n
 Lock detection is only enabled when the PLL is enabled</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -945,7 +949,7 @@ Values are used by ATM to compare and adjust IRC trim values during ATM SAR conv
                <fields>
                   <field>
                      <name>OSCSEL</name>
-                     <description>MCG OSC Clock Select\n
+                     <description>OSC Clock Select
 Selects the MCG FLL external reference clock</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>

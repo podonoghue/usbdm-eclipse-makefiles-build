@@ -40,6 +40,11 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "PMC_0" ?>

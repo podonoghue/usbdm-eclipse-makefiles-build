@@ -18,6 +18,9 @@ Devices using this peripheral:
       MKL46Z4
       MKM33Z5
       MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
 -->
       <peripheral>
          <?sourceFile "DMAMUX_4CH" ?>

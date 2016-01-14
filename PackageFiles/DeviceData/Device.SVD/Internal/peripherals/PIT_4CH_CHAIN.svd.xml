@@ -19,6 +19,10 @@ Devices using this peripheral:
       MK60D10
       MK63F12
       MK64F12
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "PIT_4CH_CHAIN" ?>
@@ -47,7 +51,6 @@ Devices using this peripheral:
                <name>MCR</name>
                <description>Module Control Register</description>
                <addressOffset>0x0</addressOffset>
-               <resetValue>0x2</resetValue>
                <fields>
                   <field>
                      <name>FRZ</name>

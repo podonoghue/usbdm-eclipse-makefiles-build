@@ -188,7 +188,6 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
-               <resetValue>0xC0</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -222,12 +221,12 @@ In any other MCG mode, LP bit has no affect</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FLL or PLL not disabled in bypass</description>
+                           <description>Not disabled in bypass</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FLL or PLL disabled in bypass</description>
+                           <description>Disabled in bypass</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -335,7 +334,7 @@ Adjusts the slow internal reference clock frequency</description>
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0bXXXXX</name>
+                           <name>0bXXXXXXXX</name>
                            <description>Slow IRC trim value</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
@@ -740,7 +739,6 @@ LOLS is set if the PLL output frequency moves outside the lock frequency range</
 The LOCS0 indicates when a loss of OSC0 reference clock has occurred</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -827,7 +825,6 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                      <description>Automatic Trim Machine Fail Flag</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>

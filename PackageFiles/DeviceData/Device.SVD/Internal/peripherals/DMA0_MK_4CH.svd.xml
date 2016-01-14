@@ -801,12 +801,12 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request</description>
+                           <description>No request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt pending</description>
+                           <description>Request pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -834,7 +834,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Error occurred</description>
+                           <description>Error</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -848,6 +848,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                <name>HRS</name>
                <description>Hardware Request Status Register</description>
                <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>HRS0</name>
@@ -886,7 +887,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                      <name>CHPRI</name>
                      <description>Channel %s Arbitration Priority</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bXXXX</name>
@@ -1279,7 +1280,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   </fields>
                </register>
                <register>
-                  <name>DLAST_SGA</name>
+                  <name>DLASTSGA</name>
                   <description>Last Destination Address Adjustment/Scatter Gather Address\n
 This is either the:\n
 \t- Destination last address adjustment or

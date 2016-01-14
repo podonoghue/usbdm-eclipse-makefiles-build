@@ -3,6 +3,8 @@ Devices using this peripheral:
       MK21F12
       MK22F12
       MK22F51212
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "DMA0_MK_16CH_EARS" ?>
@@ -831,12 +833,12 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request</description>
+                           <description>No request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt pending</description>
+                           <description>Request pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -876,7 +878,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Error occurred</description>
+                           <description>Error</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -902,6 +904,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                <name>HRS</name>
                <description>Hardware Request Status Register</description>
                <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>HRS0</name>
@@ -951,19 +954,31 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Asynchronous DMA disabled</description>
+                           <description>DMA disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Asynchronous DMA enabled</description>
+                           <description>DMA enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_1</name> <description>Enable asynchronous DMA request in stop for channel 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_2</name> <description>Enable asynchronous DMA request in stop for channel 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_3</name> <description>Enable asynchronous DMA request in stop for channel 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_1 </name> <description>Enable asynchronous DMA request in stop for channel 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_2 </name> <description>Enable asynchronous DMA request in stop for channel 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_3 </name> <description>Enable asynchronous DMA request in stop for channel 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_4 </name> <description>Enable asynchronous DMA request in stop for channel 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_5 </name> <description>Enable asynchronous DMA request in stop for channel 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_6 </name> <description>Enable asynchronous DMA request in stop for channel 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_7 </name> <description>Enable asynchronous DMA request in stop for channel 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_8 </name> <description>Enable asynchronous DMA request in stop for channel 8</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_9 </name> <description>Enable asynchronous DMA request in stop for channel 9</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_10</name> <description>Enable asynchronous DMA request in stop for channel 10</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_11</name> <description>Enable asynchronous DMA request in stop for channel 11</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_12</name> <description>Enable asynchronous DMA request in stop for channel 12</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_13</name> <description>Enable asynchronous DMA request in stop for channel 13</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_14</name> <description>Enable asynchronous DMA request in stop for channel 14</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_15</name> <description>Enable asynchronous DMA request in stop for channel 15</description> <bitOffset>15</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1373,7 +1388,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   </fields>
                </register>
                <register>
-                  <name>DLAST_SGA</name>
+                  <name>DLASTSGA</name>
                   <description>Last Destination Address Adjustment/Scatter Gather Address\n
 This is either the:\n
 \t- Destination last address adjustment or

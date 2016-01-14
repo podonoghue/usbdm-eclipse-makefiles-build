@@ -4,6 +4,7 @@ Devices using this peripheral:
       MKL04Z4
       MKL05Z4
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "RCM_MKL" ?>

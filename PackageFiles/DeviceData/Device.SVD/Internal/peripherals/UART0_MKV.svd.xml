@@ -1,6 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "UART0_MKV" ?>
@@ -45,7 +45,8 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                   </field>
                   <field>
                      <name>SBNS</name>
-                     <description>Stop Bit Number Select</description>
+                     <description>Stop Bit Number Select\n
+SBNS selects the number of stop bits present in a data frame</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -232,7 +233,7 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>UARTSWAI</name>
-                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
+                     <description>Stops in Wait Mode</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

@@ -280,7 +280,7 @@ See LPBOOT for speed options</description>
                   </field>
                   <field>
                      <name>FAST_INIT</name>
-                     <description>The Flash Initialization Enable</description>
+                     <description>Fast Flash Initialization Enable</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

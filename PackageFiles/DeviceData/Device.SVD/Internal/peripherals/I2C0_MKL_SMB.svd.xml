@@ -12,7 +12,7 @@ Devices using this peripheral:
       MKL34Z4
       MKL36Z4
       MKL46Z4
-      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "I2C0_MKL_SMB" ?>

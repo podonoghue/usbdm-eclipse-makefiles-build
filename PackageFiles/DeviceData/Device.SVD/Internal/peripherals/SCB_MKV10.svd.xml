@@ -1,0 +1,491 @@
+<!--
+Devices using this peripheral: 
+      MKV10Z7
+-->
+      <peripheral>
+         <?sourceFile "SCB_MKV10" ?>
+         <name>SCB</name>
+         <description>System Control</description>
+         <groupName>SCB</groupName>
+         <prependToName>SCB</prependToName>
+         <headerStructName>SCB</headerStructName>
+         <baseAddress>0xE000E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD00</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD1C</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>ACTLR</name>
+               <description>Auxiliary Control Register,</description>
+               <addressOffset>0x8</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <name>CPUID</name>
+               <description>CPUID Base Register</description>
+               <addressOffset>0xD00</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>REVISION</name>
+                     <description>Indicates patch release: 0x0 = Patch 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PARTNO</name>
+                     <description>Indicates part number</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>VARIANT</name>
+                     <description>Indicates processor revision: 0x2 = Revision 2</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IMPLEMENTER</name>
+                     <description>Implementer code</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICSR</name>
+               <description>Interrupt Control and State Register</description>
+               <addressOffset>0xD04</addressOffset>
+               <fields>
+                  <field>
+                     <name>VECTPENDING</name>
+                     <description>Exception number of the highest priority pending enabled exception</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PENDSTCLR</name>
+                     <description>SysTick exception clear-pending bit</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>removes the pending state from the SysTick exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSTSET</name>
+                     <description>SysTick exception set-pending bit</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: SysTick exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes SysTick exception state to pending; read: SysTick exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSVCLR</name>
+                     <description>PendSV clear-pending bit</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>removes the pending state from the PendSV exception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PENDSVSET</name>
+                     <description>PendSV set-pending bit</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: PendSV exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes PendSV exception state to pending; read: PendSV exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NMIPENDSET</name>
+                     <description>NMI set-pending bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>write: no effect; read: NMI exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>write: changes NMI exception state to pending; read: NMI exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VTOR</name>
+               <description>Vector Table Offset Register</description>
+               <addressOffset>0xD08</addressOffset>
+               <fields>
+                  <field>
+                     <name>TBLOFF</name>
+                     <description>Vector table base offset</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>25</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AIRCR</name>
+               <description>Application Interrupt and Reset Control Register</description>
+               <addressOffset>0xD0C</addressOffset>
+               <fields>
+                  <field>
+                     <name>VECTCLRACTIVE</name>
+                     <description>Reserved for Debug use</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SYSRESETREQ</name>
+                     <description>System reset request</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no system reset request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>asserts a signal to the outer system that requests a reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENDIANNESS</name>
+                     <description>Data endianness bit</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Little-endian</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Big-endian</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VECTKEY</name>
+                     <description>Register key</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR</name>
+               <description>System Control Register</description>
+               <addressOffset>0xD10</addressOffset>
+               <fields>
+                  <field>
+                     <name>SLEEPONEXIT</name>
+                     <description>Indicates sleep-on-exit when returning from Handler mode to Thread mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>o not sleep when returning to Thread mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enter sleep, or deep sleep, on return from an ISR</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLEEPDEEP</name>
+                     <description>Controls whether the processor uses sleep or deep sleep as its low power mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>sleep</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>deep sleep</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEVONPEND</name>
+                     <description>Send Event on Pending bit</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCR</name>
+               <description>Configuration and Control Register</description>
+               <addressOffset>0xD14</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x208</resetValue>
+               <fields>
+                  <field>
+                     <name>UNALIGN_TRP</name>
+                     <description>Always reads as one, indicates that all unaligned accesses generate a HardFault</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STKALIGN</name>
+                     <description>Indicates stack alignment on exception entry</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHPR2</name>
+               <description>System Handler Priority Register 2</description>
+               <addressOffset>0xD1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_11</name>
+                     <description>Priority of system handler 11, SVCall</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHPR3</name>
+               <description>System Handler Priority Register 3</description>
+               <addressOffset>0xD20</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_14</name>
+                     <description>Priority of system handler 14, PendSV</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_15</name>
+                     <description>Priority of system handler 15, SysTick exception</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHCSR</name>
+               <description>System Handler Control and State Register</description>
+               <addressOffset>0xD24</addressOffset>
+               <fields>
+                  <field>
+                     <name>SVCALLPENDED</name>
+                     <description>SVCall pending bit</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>exception is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>exception is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFSR</name>
+               <description>Debug Fault Status Register</description>
+               <addressOffset>0xD30</addressOffset>
+               <fields>
+                  <field>
+                     <name>HALTED</name>
+                     <description>Indicates a debug event generated by either a C_HALT or C_STEP request, triggered by a write to the DHCSR or a step request triggered by setting DEMCR.MON_STEP to 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No active halt request debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Halt request debug event active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BKPT</name>
+                     <description>Debug event generated by BKPT instruction execution or a breakpoint match in FPB</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No current breakpoint debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one current breakpoint debug event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DWTTRAP</name>
+                     <description>Debug event generated by the DWT</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No current debug events generated by the DWT</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one current debug event generated by the DWT</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VCATCH</name>
+                     <description>Indicates triggering of a Vector catch</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Vector catch triggered</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Vector catch triggered</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTERNAL</name>
+                     <description>Debug event generated because of the assertion of EDBGRQ</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No EDBGRQ debug event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>EDBGRQ debug event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

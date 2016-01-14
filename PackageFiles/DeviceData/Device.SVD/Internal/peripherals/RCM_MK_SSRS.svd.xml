@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
       MK22F51212
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "RCM_MK_SSRS" ?>
@@ -98,7 +100,7 @@ The MCG clock monitor must be enabled for a loss of clock to be detected</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset by loss of clock</description>
+                           <description>Reset by loss of external clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

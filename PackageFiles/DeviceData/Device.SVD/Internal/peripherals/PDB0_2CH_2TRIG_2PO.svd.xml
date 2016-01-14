@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MK22F51212
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "PDB0_2CH_2TRIG_2PO" ?>

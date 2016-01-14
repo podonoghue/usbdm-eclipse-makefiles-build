@@ -9,7 +9,7 @@ Devices using this peripheral:
       MK52DZ10
       MK53DZ10
       MK60DZ10
-      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "PDB0_2CH_2TRIG_1PO" ?>

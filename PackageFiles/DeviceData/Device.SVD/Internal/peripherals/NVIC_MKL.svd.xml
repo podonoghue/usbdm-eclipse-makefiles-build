@@ -22,6 +22,7 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKM33Z5
+      MKV10Z7
 -->
       <peripheral>
          <?sourceFile "NVIC_MKL" ?>
@@ -70,6 +71,19 @@ Devices using this peripheral:
                      <name>SETENA</name>
                      <description>Interrupt set enable bits</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>write: no effect; read: DMA channel 0 transfer complete interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>write: enable DMA channel 0 transfer complete interrupt; read: DMA channel 0 transfer complete interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -82,6 +96,19 @@ Devices using this peripheral:
                      <name>CLRENA</name>
                      <description>Interrupt clear-enable bits</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>write: no effect; read: DMA channel 0 transfer complete interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>write: disable DMA channel 0 transfer complete interrupt; read: DMA channel 0 transfer complete interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -94,6 +121,19 @@ Devices using this peripheral:
                      <name>SETPEND</name>
                      <description>Interrupt set-pending bits</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>write: no effect; read: DMA channel 0 transfer complete interrupt is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>write: changes the DMA channel 0 transfer complete interrupt state to pending; read: DMA channel 0 transfer complete interrupt is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -106,6 +146,19 @@ Devices using this peripheral:
                      <name>CLRPEND</name>
                      <description>Interrupt clear-pending bits</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>write: no effect; read: DMA channel 0 transfer complete interrupt is not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>write: removes pending state from the DMA channel 0 transfer complete interrupt; read: DMA channel 0 transfer complete interrupt is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>

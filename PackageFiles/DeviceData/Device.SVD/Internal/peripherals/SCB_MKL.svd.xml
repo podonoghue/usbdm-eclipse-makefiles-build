@@ -62,7 +62,6 @@ Devices using this peripheral:
                <description>CPUID Base Register</description>
                <addressOffset>0xD00</addressOffset>
                <access>read-only</access>
-               <resetValue>0x410CC600</resetValue>
                <fields>
                   <field>
                      <name>REVISION</name>

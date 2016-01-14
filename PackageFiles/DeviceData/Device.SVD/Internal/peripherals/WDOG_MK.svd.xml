@@ -37,6 +37,11 @@ Devices using this peripheral:
       MK70F12
       MK70F15
       MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "WDOG_MK" ?>
@@ -243,7 +248,7 @@ Effective only if TESTWDOG is set</description>
                   </field>
                   <field>
                      <name>BYTESEL</name>
-                     <description>This 2-bit field select the byte to be tested when the watchdog is in the byte test mode</description>
+                     <description>Select the byte to be tested when the watchdog is in the byte test mode</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

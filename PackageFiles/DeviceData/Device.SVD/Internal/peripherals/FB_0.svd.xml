@@ -36,6 +36,7 @@ Devices using this peripheral:
       MK64F12
       MK70F12
       MK70F15
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "FB_0" ?>

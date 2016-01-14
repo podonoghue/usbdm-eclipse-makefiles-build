@@ -27,12 +27,12 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>DMA_Error</name>
-            <description>DMA3 error</description>
+            <description>DMA error</description>
             <value>4</value>
          </interrupt>
          <interrupt>
-            <name>FTFA</name>
-            <description>FTFA Command complete or error</description>
+            <name>FTF</name>
+            <description>Flash Command complete or error</description>
             <value>5</value>
          </interrupt>
          <interrupt>
@@ -92,22 +92,22 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description></description>
+            <description>Comparator 0</description>
             <value>20</value>
          </interrupt>
          <interrupt>
             <name>CMP1</name>
-            <description></description>
+            <description>Comparator 1</description>
             <value>21</value>
          </interrupt>
          <interrupt>
             <name>WDOG_EWM</name>
-            <description></description>
+            <description>External Watchdog Monitor</description>
             <value>23</value>
          </interrupt>
          <interrupt>
             <name>DAC0</name>
-            <description>Digital to Analogue Converter</description>
+            <description>Digital to Analogue Converter 0</description>
             <value>25</value>
          </interrupt>
          <interrupt>

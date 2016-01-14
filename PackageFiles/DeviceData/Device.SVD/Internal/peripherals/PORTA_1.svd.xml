@@ -162,7 +162,7 @@ Select Pin Function</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Pin Disabled (Analog)</description>
+                           <description>Pin Disabled (Analogue)</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>

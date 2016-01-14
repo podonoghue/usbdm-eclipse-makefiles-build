@@ -7,6 +7,11 @@ Devices using this peripheral:
       MK24F25612
       MK63F12
       MK64F12
+      MKV10Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "I2C0_F12" ?>
@@ -576,7 +581,7 @@ writing 1 to it</description>
                   </field>
                   <field>
                      <name>SSIE</name>
-                     <description>II2C Bus Stop or Start Interrupt Enable\n
+                     <description>Bus Stop or Start Interrupt Enable
 This bit enables the interrupt for I2C bus stop or start detection.\n
 NOTE: To clear the detection interrupt: In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,
  and then clear the IICIF bit in the status register. If this sequence is reversed, the IICIF bit is asserted again</description>

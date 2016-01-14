@@ -233,7 +233,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                   </field>
                   <field>
                      <name>DACSWTRG</name>
-                     <description>DAC Software Trigger</description>
+                     <description>Software Trigger</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>write-only</access>
@@ -252,7 +252,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                   </field>
                   <field>
                      <name>DACTRGSEL</name>
-                     <description>DAC Trigger Select</description>
+                     <description>Trigger Select</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -270,7 +270,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                   </field>
                   <field>
                      <name>DACRFS</name>
-                     <description>DAC Reference Select</description>
+                     <description>Reference Select</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -354,7 +354,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>FIFO mode/Reserved</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -367,22 +367,22 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>1 word</description>
+                           <description>1 word/FIFO&lt;=2</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>2 words</description>
+                           <description>2 words/FIFO&lt;=MAX/4</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>3 words</description>
+                           <description>3 words/FIFO&lt;=MAX/2</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>4 words</description>
+                           <description>4 words/FIFO&lt;=MAX-2</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

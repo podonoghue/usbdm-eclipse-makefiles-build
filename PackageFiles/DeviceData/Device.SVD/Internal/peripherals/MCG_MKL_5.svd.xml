@@ -185,7 +185,6 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
-               <resetValue>0x80</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -219,12 +218,12 @@ In any other MCG mode, LP bit has no affect</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FLL not disabled in bypass</description>
+                           <description>Not disabled in bypass</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FLL disabled in bypass</description>
+                           <description>Disabled in bypass</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -267,7 +266,8 @@ In any other MCG mode, LP bit has no affect</description>
                   </field>
                   <field>
                      <name>RANGE0</name>
-                     <description>Frequency Range Select</description>
+                     <description>Frequency Range Select\n
+Selects the frequency range for the crystal oscillator or external clock source</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -282,26 +282,28 @@ In any other MCG mode, LP bit has no affect</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Encoding 2 - Very high frequency range selected for the crystal oscillator</description>
-                           <value>0b01</value>
+                           <name>0b1X</name>
+                           <description>Very high frequency</description>
+                           <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>LOCRE0</name>
-                     <description>Loss of Clock Reset Enable</description>
+                     <description>Loss of Clock Reset Enable
+Determines whether an interrupt or a reset request is made following a loss of OSC0 external reference clock.\n
+The LOCRE0 only has an affect when CME0 is set</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt request is generated on a loss of OSC0 external reference clock</description>
+                           <description>Interrupt request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Generate a reset request on a loss of OSC0 external reference clock</description>
+                           <description>Reset request</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -313,7 +315,7 @@ In any other MCG mode, LP bit has no affect</description>
                <description>Control 3 Register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetMask>0x0</resetMask>
+               <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>SCTRIM</name>
@@ -335,7 +337,7 @@ Adjusts the slow internal reference clock frequency</description>
                <description>Control 4 Register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
-               <resetMask>0xE0</resetMask>
+               <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>SCFTRIM</name>
@@ -419,7 +421,7 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                <description>Control 5 Register</description>
                <addressOffset>0x4</addressOffset>
                <size>8</size>
-               <access>read-only</access>
+               <access>read-write</access>
                <resetMask>0xFF</resetMask>
             </register>
             <register>
@@ -557,19 +559,19 @@ This bit indicates the current source for the FLL reference clock</description>
                <fields>
                   <field>
                      <name>LOCS0</name>
-                     <description>OSC0 Loss of Clock Status</description>
+                     <description>OSC0 Loss of Clock Status\n
+The LOCS0 indicates when a loss of OSC0 reference clock has occurred</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Loss of OSC0 has not occurred</description>
+                           <description>Loss has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss of OSC0 has occurred</description>
+                           <description>Loss has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -582,60 +584,62 @@ This bit indicates the current source for the FLL reference clock</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Divide Factor is 1</description>
+                           <description>Divide by 1</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>Divide Factor is 2</description>
+                           <description>Divide by 2</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Divide Factor is 4</description>
+                           <description>Divide by 4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Divide Factor is 8</description>
+                           <description>Divide by 8</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Divide Factor is 16</description>
+                           <description>Divide by 16</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>Divide Factor is 32</description>
+                           <description>Divide by 32</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Divide Factor is 64</description>
+                           <description>Divide by 64</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>Divide Factor is 128</description>
+                           <description>Divide by 128</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FLTPRSRV</name>
-                     <description>FLL Filter Preserve Enable</description>
+                     <description>FLL Filter Preserve Enable\n
+This bit will prevent the FLL filter values from resetting allowing the FLL output frequency to remain the
+same during clock mode changes where the FLL/DCO output is still valid</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FLL filter and FLL frequency will reset on changes to currect clock mode</description>
+                           <description>FLL filter reset on mode change</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Fll filter and FLL frequency retain their previous values during new clock mode change</description>
+                           <description>FLL filter preserved during mode change</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -645,7 +649,6 @@ This bit indicates the current source for the FLL reference clock</description>
                      <description>Automatic Trim Machine Fail Flag</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>

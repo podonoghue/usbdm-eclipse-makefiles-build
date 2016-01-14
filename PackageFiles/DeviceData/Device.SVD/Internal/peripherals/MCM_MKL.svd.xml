@@ -16,6 +16,7 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "MCM_MKL" ?>
