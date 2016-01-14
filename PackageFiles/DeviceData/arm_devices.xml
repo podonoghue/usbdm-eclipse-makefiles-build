@@ -7,6 +7,7 @@
 <!ENTITY Kinetis-MK-FTFA-flash-program     SYSTEM "ARM/Kinetis-MK-FTFA-flash-program-gcc.hex">
 <!ENTITY Kinetis-MKL-FTFA-flash-program    SYSTEM "ARM/Kinetis-MKL-FTFA-flash-program-gcc.hex">
 <!ENTITY Kinetis-MKM-FTFA-flash-program    SYSTEM "ARM/Kinetis-MKM-FTFA-flash-program-gcc.hex">
+<!ENTITY Kinetis-MKV10-FTFA-flash-program  SYSTEM "ARM/Kinetis-MKV10-FTFA-flash-program-gcc.hex">
 <!ENTITY Kinetis-FTFE-flash-program        SYSTEM "ARM/Kinetis-FTFE-flash-program-gcc.hex">
 <!ENTITY Kinetis-FTMRH-flash-program       SYSTEM "ARM/Kinetis-FTMRH-flash-program-gcc.hex">
 <!ENTITY Kinetis-FTMRH-eeprom-program      SYSTEM "ARM/Kinetis-FTMRH-eeprom-program-gcc.hex">
@@ -86,6 +87,7 @@ NOTES:
       <flashProgram id="Kinetis-MK-FTFA-flash-program">     &Kinetis-MK-FTFA-flash-program;     </flashProgram>
       <flashProgram id="Kinetis-MKL-FTFA-flash-program">    &Kinetis-MKL-FTFA-flash-program;    </flashProgram>
       <flashProgram id="Kinetis-MKM-FTFA-flash-program">    &Kinetis-MKM-FTFA-flash-program;    </flashProgram>
+      <flashProgram id="Kinetis-MKV10-FTFA-flash-program">  &Kinetis-MKV10-FTFA-flash-program;  </flashProgram>
       <flashProgram id="Kinetis-FTFE-flash-program">        &Kinetis-FTFE-flash-program;        </flashProgram>
       
       <!-- 
@@ -1391,7 +1393,7 @@ NOTES:
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600000" mask="0xFFF00000"/>
          <tclScriptRef ref="Kinetis-KMxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MKM-FTFA-flash-program" />
+         <flashProgramRef ref="Kinetis-MKV10-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV10P48M75RM</note>
       </device>
@@ -1401,18 +1403,18 @@ NOTES:
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600000" mask="0xFFF00000"/>
          <tclScriptRef ref="Kinetis-KMxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MKM-FTFA-flash-program" />
+         <flashProgramRef ref="Kinetis-MKV10-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV10P48M75RM</note>
       </device>
-<!-- MKV10Z7 -->
+<!-- MKV11Z7 -->
       <device name="MKV10Z64M7" family="CortexM0plus" subfamily="MKV11Z7">
          <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600080" mask="0xFFF00F80"/>
          <tclScriptRef ref="Kinetis-KMxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <flashProgramRef ref="Kinetis-MKV10-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV11P64M75RM</note>
       </device>
@@ -1422,7 +1424,7 @@ NOTES:
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600080" mask="0xFFF00F80"/>
          <tclScriptRef ref="Kinetis-KMxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <flashProgramRef ref="Kinetis-MKV10-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV11P64M75RM</note>
       </device>
@@ -1432,7 +1434,7 @@ NOTES:
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x11600080" mask="0xFFF00F80"/>
          <tclScriptRef ref="Kinetis-KMxx-Scripts" />
-         <flashProgramRef ref="Kinetis-MK-FTFA-flash-program" />
+         <flashProgramRef ref="Kinetis-MKV10-FTFA-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KV11P64M75RM</note>
       </device>
@@ -2682,6 +2684,9 @@ NOTES:
 <!-- 
    Aliases used for hardware
  -->
+      <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
+      <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
+      <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
       <device name="FRDM_KE02Z"      alias="MKE02Z64M2"     hardware="frdmke02z" />
       <device name="FRDM_KE02Z40M"   alias="MKE02Z64M4"     hardware="frdmke02z40m" />
       <device name="FRDM_KE04Z"      alias="MKE04Z8M4"      hardware="frdmke04z" />
@@ -2694,9 +2699,8 @@ NOTES:
       <device name="FRDM_KL27Z"      alias="MKL27Z64M4"     hardware="frdmkl27z" />
       <device name="FRDM_KL43Z"      alias="MKL43Z256M4"    hardware="frdmkl43z" />
       <device name="FRDM_KL46Z"      alias="MKL46Z256M4"    hardware="frdmkl46z" />
-      <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
-      <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
-      <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
+      <device name="FRDM_KV10Z"      alias="MKV10Z32M7"     hardware="frdmkv10z" />
+      <device name="FRDM_KV31F"      alias="MKV31F512M12"   hardware="frdmkv31f" />
 
       <device name="TWR_K22F120M"    alias="MK22FN512M12"   hardware="twrk22f120m" /> 
       <device name="TWR_K24F120M"    alias="MK24FN256M12"   hardware="twrk24f120m" /> 
