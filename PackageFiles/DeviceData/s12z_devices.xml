@@ -240,8 +240,8 @@
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
+         <note>MC9S12ZVLRMV1</note>
       </device>
-      <note>MC9S12ZVLRMV1</note>
 
       <device family="S12Z" name=" MC9S12ZVL16">
          <clock type="External" />
@@ -256,8 +256,8 @@
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
+         <note>MC9S12ZVLRMV1</note>
       </device>
-      <note>MC9S12ZVLRMV1</note>
       <device family="S12Z" name="MC9S12ZVLS16" alias="MC9S12ZVL16" />
 
       <device family="S12Z" name=" MC9S12ZVL32">
@@ -273,8 +273,8 @@
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
+         <note>MC9S12ZVLRMV1</note>
       </device>
-      <note>MC9S12ZVLRMV1</note>
       
       <device family="S12Z" name="MC9S12ZVLS32" alias="MC9S12ZVL32" />
 
