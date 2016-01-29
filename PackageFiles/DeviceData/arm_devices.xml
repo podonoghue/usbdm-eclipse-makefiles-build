@@ -29,6 +29,7 @@ FTMRH - MKE02
 FTMRE - MKE04, MKE06
  -->
 <!-- 
+      V4.12.1.80   - Updated KV devices, added FRDM-KV10 and FRDM-KV31F
       V4.12.1.70   - Renamed SKEAxxx to S9KEAxxx
       V4.12.1.50   - Reviewed & corrected flash sector sizes on M5 and M7 devices
       V4.12.1.40   - Renames families (to MKL27Z4, MKL27Z644)
@@ -1439,7 +1440,7 @@ NOTES:
          <note>KV11P64M75RM</note>
       </device>
 <!-- MKV30F10 -->
-      <device name="MKV30F64M10" family="CortexM4F" subfamily="MKV30F10">
+      <device name="MKV30F64M10" family="CortexM4F" subfamily="MKV30F12810">
          <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" /> <!--  check -->
@@ -1449,7 +1450,7 @@ NOTES:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>KV30P64M100SFARM</note>
       </device>
-      <device name="MKV30F128M10" family="CortexM4F" subfamily="MKV30F10">
+      <device name="MKV30F128M10" family="CortexM4F" subfamily="MKV30F12810">
          <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -1460,7 +1461,7 @@ NOTES:
          <note>KV30P64M100SFARM</note>
       </device>
 <!-- MKV31F10-->
-      <device name="MKV31F128M10" family="CortexM4F" subfamily="MKV31F10">
+      <device name="MKV31F128M10" family="CortexM4F" subfamily="MKV31F12810">
          <memoryRef ref="kinetis8K_16K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -1471,7 +1472,7 @@ NOTES:
          <note>KV31P100M100SF9RM</note>
       </device>
 <!-- MKV31F12-->
-      <device name="MKV31F256M12" family="CortexM4F" subfamily="MKV31F12">
+      <device name="MKV31F256M12" family="CortexM4F" subfamily="MKV31F25612">
          <memoryRef ref="kinetis16K_32K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -1482,7 +1483,7 @@ NOTES:
          <note>KV31P100M120SF8RM</note>
          <note>Tested</note>
       </device>
-      <device name="MKV31F512M12" family="CortexM4F" subfamily="MKV31F12">
+      <device name="MKV31F512M12" family="CortexM4F" subfamily="MKV31F51212">
          <memoryRef ref="kinetis32K_64K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
@@ -2682,15 +2683,33 @@ NOTES:
    If re-using a device description for a _different_ device then SDID should be set (use 0 if necessary)
 -->     
 <!-- 
+   Aliases S9KEAZ devices
+ -->
+      <device name="S9KEAZN8M4"      alias="MKE04Z8M4" />  <!-- S9KEA8Z24M48SF0RM -->
+      
+      <device name="S9KEAZN16M4"     alias="MKE02Z16M4" /> <!-- S9KEA64Z64M20SF0RM -->
+      <device name="S9KEAZN32M4"     alias="MKE02Z32M4" /> <!-- S9KEA64Z64M20SF0RM -->
+      
+      <device name="S9KEAZN64M4"     alias="MKE04Z64M4" /> <!-- S9KEA64Z64M20SF0RM -->
+      
+      <device name="S9KEAZ64M4"      alias="MKE06Z64M4" />  <!-- S9KEA128Z80M48SF0RM -->
+      <device name="S9KEAZ128M4"     alias="MKE06Z128M4" /> <!-- S9KEA128Z80M48SF0RM -->
+
+<!-- 
    Aliases used for hardware
  -->
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
+      <device name="FRDM_K22F1M0"    alias="MK22FN1M0M12"   hardware="frdmk22f1m0" />
       <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
       <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
+      
       <device name="FRDM_KE02Z"      alias="MKE02Z64M2"     hardware="frdmke02z" />
       <device name="FRDM_KE02Z40M"   alias="MKE02Z64M4"     hardware="frdmke02z40m" />
       <device name="FRDM_KE04Z"      alias="MKE04Z8M4"      hardware="frdmke04z" />
       <device name="FRDM_KE06Z"      alias="MKE06Z128M4"    hardware="frdmke06z" />
+
+      <device name="FRDM_KEAZ128"    alias="S9KEAZ128M4"    hardware="frdmkeaz128" />
+      
       <device name="FRDM_KL02Z"      alias="MKL02Z32M4"     hardware="frdmkl02z" />
       <device name="FRDM_KL03Z"      alias="MKL03Z32M4"     hardware="frdmkl03z48m" />
       <device name="FRDM_KL05Z"      alias="MKL05Z32M4"     hardware="frdmkl05z" />
@@ -2699,6 +2718,7 @@ NOTES:
       <device name="FRDM_KL27Z"      alias="MKL27Z64M4"     hardware="frdmkl27z" />
       <device name="FRDM_KL43Z"      alias="MKL43Z256M4"    hardware="frdmkl43z" />
       <device name="FRDM_KL46Z"      alias="MKL46Z256M4"    hardware="frdmkl46z" />
+      
       <device name="FRDM_KV10Z"      alias="MKV10Z32M7"     hardware="frdmkv10z" />
       <device name="FRDM_KV31F"      alias="MKV31F512M12"   hardware="frdmkv31f" />
 
@@ -2710,16 +2730,6 @@ NOTES:
       <device name="TWR_K64F120M"    alias="MK64FN1M0M12"   hardware="twrk64f120m" /> 
       <!-- device name="TWR_KV10Z32"     alias="MKV10Z32 "   hardware="twrkv10z32" / --> 
       <!-- device name="TWR_KV31F"       alias="MKV31Z"      hardware="twrkv31f" / --> 
-
-      <device name="S9KEAZN8M4"      alias="MKE04Z8M4" />  <!-- S9KEA8Z24M48SF0RM -->
-      
-      <device name="S9KEAZN16M4"     alias="MKE02Z16M4" /> <!-- S9KEA64Z64M20SF0RM -->
-      <device name="S9KEAZN32M4"     alias="MKE02Z32M4" /> <!-- S9KEA64Z64M20SF0RM -->
-      
-      <device name="S9KEAZN64M4"     alias="MKE04Z64M4" /> <!-- S9KEA64Z64M20SF0RM -->
-      
-      <device name="S9KEAZ64M4"      alias="MKE06Z64M4" />  <!-- S9KEA128Z80M48SF0RM -->
-      <device name="S9KEAZ128M4"     alias="MKE06Z128M4" /> <!-- S9KEA128Z80M48SF0RM -->
 
 <!-- Codewarrior IDE aliases -->
       <device name="K10DN32"           alias="MK10DN32M5"        hidden="true"/>
