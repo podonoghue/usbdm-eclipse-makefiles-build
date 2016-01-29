@@ -2,7 +2,7 @@
  * @file     $(targetDevice).h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MCF5223x.
- *           Equivalent: MCF52231, MCF52230, MCF52233, MCF52232, MCF52235, MCF52234, MCF52236
+ *           Equivalent: 
  *
  * @version  V0.0
  * @date     2016/01

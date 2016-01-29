@@ -2,7 +2,7 @@
  * @file     $(targetDevice).h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MCF51JF.
- *           Equivalent: TWR_JF128, MCF51JF
+ *           Equivalent: 
  *
  * @version  V0.0
  * @date     2016/01
@@ -861,11 +861,11 @@ typedef struct {                                /*       CRC Structure          
 */
 typedef struct {                                /*       DAC0 Structure                                               */
    union {                                      /**< 0000: (size=0020)                                                  */
-      __IO uint16_t  DATA[16];                  /**< 0000: Data Register                                                */
       struct {
          __IO uint8_t   DATH;                   /**< 0000: Data High Register                                           */
          __IO uint8_t   DATL;                   /**< 0001: Data Low Register                                            */
       } DAT[16];                                /**< 0000: (cluster: size=0x0020, 32)                                   */
+      __IO uint16_t  DATA[16];                  /**< 0000: Data Register                                                */
    };
    __IO uint8_t   SR;                           /**< 0020: Status Register                                              */
    __IO uint8_t   C0;                           /**< 0021: Control Register 0                                           */
@@ -886,10 +886,6 @@ typedef struct {                                /*       DAC0 Structure         
 * @brief Register Masks for DAC
 * @{
 */
-/* ------- DATA Bit Fields                          ------ */
-#define DAC_DATA_DATA_MASK                       (0xFFFUL << DAC_DATA_DATA_SHIFT)                    /*!< DAC0_DATA: DATA Mask                    */
-#define DAC_DATA_DATA_SHIFT                      0                                                   /*!< DAC0_DATA: DATA Position                */
-#define DAC_DATA_DATA(x)                         (((uint16_t)(((uint16_t)(x))<<DAC_DATA_DATA_SHIFT))&DAC_DATA_DATA_MASK) /*!< DAC0_DATA                               */
 /* ------- DATH Bit Fields                          ------ */
 #define DAC_DATH_DATA_MASK                       (0x0FUL << DAC_DATH_DATA_SHIFT)                     /*!< DAC0_DATH: DATA Mask                    */
 #define DAC_DATH_DATA_SHIFT                      0                                                   /*!< DAC0_DATH: DATA Position                */
@@ -898,6 +894,10 @@ typedef struct {                                /*       DAC0 Structure         
 #define DAC_DATL_DATA_MASK                       (0xFFUL << DAC_DATL_DATA_SHIFT)                     /*!< DAC0_DATL: DATA Mask                    */
 #define DAC_DATL_DATA_SHIFT                      0                                                   /*!< DAC0_DATL: DATA Position                */
 #define DAC_DATL_DATA(x)                         (((uint8_t)(((uint8_t)(x))<<DAC_DATL_DATA_SHIFT))&DAC_DATL_DATA_MASK) /*!< DAC0_DATL                               */
+/* ------- DATA Bit Fields                          ------ */
+#define DAC_DATA_DATA_MASK                       (0xFFFUL << DAC_DATA_DATA_SHIFT)                    /*!< DAC0_DATA: DATA Mask                    */
+#define DAC_DATA_DATA_SHIFT                      0                                                   /*!< DAC0_DATA: DATA Position                */
+#define DAC_DATA_DATA(x)                         (((uint16_t)(((uint16_t)(x))<<DAC_DATA_DATA_SHIFT))&DAC_DATA_DATA_MASK) /*!< DAC0_DATA                               */
 /* ------- SR Bit Fields                            ------ */
 #define DAC_SR_DACBFRPBF_MASK                    (0x01UL << DAC_SR_DACBFRPBF_SHIFT)                  /*!< DAC0_SR: DACBFRPBF Mask                 */
 #define DAC_SR_DACBFRPBF_SHIFT                   0                                                   /*!< DAC0_SR: DACBFRPBF Position             */
@@ -1812,6 +1812,162 @@ typedef struct {                                /*       FTM1 Structure         
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOA (file:PTA_MCF51)               ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+/**
+* @addtogroup PTA_structs_GROUP PTA struct
+* @brief Struct for PTA
+* @{
+*/
+typedef struct {                                /*       GPIOA Structure                                              */
+   __IO uint8_t   D;                            /**< 0000: Port Data Register                                           */
+   __IO uint8_t   DD;                           /**< 0001: Port Data Direction Register                                 */
+   __I  uint8_t   PV;                           /**< 0002: Port Pin Value Register                                      */
+} PT_Type;
+
+/**
+ * @} */ /* End group PTA_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'GPIOA' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup PTA_Register_Masks_GROUP PTA Register Masks
+* @brief Register Masks for PTA
+* @{
+*/
+/* ------- D Bit Fields                             ------ */
+/* ------- DD Bit Fields                            ------ */
+/* ------- PV Bit Fields                            ------ */
+/**
+ * @} */ /* End group PTA_Register_Masks_GROUP 
+ */
+
+/* GPIOA - Peripheral instance base addresses */
+#define GPIOA_BasePtr                  0xFFFF8000UL //!< Peripheral base address
+#define GPIOA                          ((PT_Type *) GPIOA_BasePtr) //!< Freescale base pointer
+#define GPIOA_BASE_PTR                 (GPIOA) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOB (derived from GPIOA)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+
+/* GPIOB - Peripheral instance base addresses */
+#define GPIOB_BasePtr                  0xFFFF8010UL //!< Peripheral base address
+#define GPIOB                          ((PT_Type *) GPIOB_BasePtr) //!< Freescale base pointer
+#define GPIOB_BASE_PTR                 (GPIOB) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOC (derived from GPIOA)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+
+/* GPIOC - Peripheral instance base addresses */
+#define GPIOC_BasePtr                  0xFFFF8020UL //!< Peripheral base address
+#define GPIOC                          ((PT_Type *) GPIOC_BasePtr) //!< Freescale base pointer
+#define GPIOC_BASE_PTR                 (GPIOC) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOD (derived from GPIOA)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+
+/* GPIOD - Peripheral instance base addresses */
+#define GPIOD_BasePtr                  0xFFFF8030UL //!< Peripheral base address
+#define GPIOD                          ((PT_Type *) GPIOD_BasePtr) //!< Freescale base pointer
+#define GPIOD_BASE_PTR                 (GPIOD) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOE (derived from GPIOA)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+
+/* GPIOE - Peripheral instance base addresses */
+#define GPIOE_BasePtr                  0xFFFF8040UL //!< Peripheral base address
+#define GPIOE                          ((PT_Type *) GPIOE_BasePtr) //!< Freescale base pointer
+#define GPIOE_BASE_PTR                 (GPIOE) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
+* @brief C Struct for PTA
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           GPIOF (derived from GPIOA)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief GPIO Port
+ */
+
+/* GPIOF - Peripheral instance base addresses */
+#define GPIOF_BasePtr                  0xFFFF8050UL //!< Peripheral base address
+#define GPIOF                          ((PT_Type *) GPIOF_BasePtr) //!< Freescale base pointer
+#define GPIOF_BASE_PTR                 (GPIOF) //!< Freescale style base pointer
+/**
+ * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup I2C_Peripheral_access_layer_GROUP I2C Peripheral Access Layer
@@ -4057,210 +4213,6 @@ typedef struct {                                /*       PMC Structure          
  * @} */ /* End group PMC_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTA (file:PTA_MCF51)                 ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-/**
-* @addtogroup PTA_structs_GROUP PTA struct
-* @brief Struct for PTA
-* @{
-*/
-typedef struct {                                /*       PTA Structure                                                */
-   __IO uint8_t   D;                            /**< 0000: Port Data Register                                           */
-   __IO uint8_t   DD;                           /**< 0001: Port Data Direction Register                                 */
-   __I  uint8_t   PV;                           /**< 0002: Port Pin Value Register                                      */
-} PT_Type;
-
-/**
- * @} */ /* End group PTA_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'PTA' Position & Mask macros                         ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup PTA_Register_Masks_GROUP PTA Register Masks
-* @brief Register Masks for PTA
-* @{
-*/
-/* ------- D Bit Fields                             ------ */
-#define PTA_D_PTD0_MASK                          (0x01UL << PTA_D_PTD0_SHIFT)                        /*!< PTA_D: PTD0 Mask                        */
-#define PTA_D_PTD0_SHIFT                         0                                                   /*!< PTA_D: PTD0 Position                    */
-#define PTA_D_PTD1_MASK                          (0x01UL << PTA_D_PTD1_SHIFT)                        /*!< PTA_D: PTD1 Mask                        */
-#define PTA_D_PTD1_SHIFT                         1                                                   /*!< PTA_D: PTD1 Position                    */
-#define PTA_D_PTD2_MASK                          (0x01UL << PTA_D_PTD2_SHIFT)                        /*!< PTA_D: PTD2 Mask                        */
-#define PTA_D_PTD2_SHIFT                         2                                                   /*!< PTA_D: PTD2 Position                    */
-#define PTA_D_PTD3_MASK                          (0x01UL << PTA_D_PTD3_SHIFT)                        /*!< PTA_D: PTD3 Mask                        */
-#define PTA_D_PTD3_SHIFT                         3                                                   /*!< PTA_D: PTD3 Position                    */
-#define PTA_D_PTD4_MASK                          (0x01UL << PTA_D_PTD4_SHIFT)                        /*!< PTA_D: PTD4 Mask                        */
-#define PTA_D_PTD4_SHIFT                         4                                                   /*!< PTA_D: PTD4 Position                    */
-#define PTA_D_PTD5_MASK                          (0x01UL << PTA_D_PTD5_SHIFT)                        /*!< PTA_D: PTD5 Mask                        */
-#define PTA_D_PTD5_SHIFT                         5                                                   /*!< PTA_D: PTD5 Position                    */
-#define PTA_D_PTD6_MASK                          (0x01UL << PTA_D_PTD6_SHIFT)                        /*!< PTA_D: PTD6 Mask                        */
-#define PTA_D_PTD6_SHIFT                         6                                                   /*!< PTA_D: PTD6 Position                    */
-#define PTA_D_PTD7_MASK                          (0x01UL << PTA_D_PTD7_SHIFT)                        /*!< PTA_D: PTD7 Mask                        */
-#define PTA_D_PTD7_SHIFT                         7                                                   /*!< PTA_D: PTD7 Position                    */
-/* ------- DD Bit Fields                            ------ */
-#define PTA_DD_PTDD0_MASK                        (0x01UL << PTA_DD_PTDD0_SHIFT)                      /*!< PTA_DD: PTDD0 Mask                      */
-#define PTA_DD_PTDD0_SHIFT                       0                                                   /*!< PTA_DD: PTDD0 Position                  */
-#define PTA_DD_PTDD1_MASK                        (0x01UL << PTA_DD_PTDD1_SHIFT)                      /*!< PTA_DD: PTDD1 Mask                      */
-#define PTA_DD_PTDD1_SHIFT                       1                                                   /*!< PTA_DD: PTDD1 Position                  */
-#define PTA_DD_PTDD2_MASK                        (0x01UL << PTA_DD_PTDD2_SHIFT)                      /*!< PTA_DD: PTDD2 Mask                      */
-#define PTA_DD_PTDD2_SHIFT                       2                                                   /*!< PTA_DD: PTDD2 Position                  */
-#define PTA_DD_PTDD3_MASK                        (0x01UL << PTA_DD_PTDD3_SHIFT)                      /*!< PTA_DD: PTDD3 Mask                      */
-#define PTA_DD_PTDD3_SHIFT                       3                                                   /*!< PTA_DD: PTDD3 Position                  */
-#define PTA_DD_PTDD4_MASK                        (0x01UL << PTA_DD_PTDD4_SHIFT)                      /*!< PTA_DD: PTDD4 Mask                      */
-#define PTA_DD_PTDD4_SHIFT                       4                                                   /*!< PTA_DD: PTDD4 Position                  */
-#define PTA_DD_PTDD5_MASK                        (0x01UL << PTA_DD_PTDD5_SHIFT)                      /*!< PTA_DD: PTDD5 Mask                      */
-#define PTA_DD_PTDD5_SHIFT                       5                                                   /*!< PTA_DD: PTDD5 Position                  */
-#define PTA_DD_PTDD6_MASK                        (0x01UL << PTA_DD_PTDD6_SHIFT)                      /*!< PTA_DD: PTDD6 Mask                      */
-#define PTA_DD_PTDD6_SHIFT                       6                                                   /*!< PTA_DD: PTDD6 Position                  */
-#define PTA_DD_PTDD7_MASK                        (0x01UL << PTA_DD_PTDD7_SHIFT)                      /*!< PTA_DD: PTDD7 Mask                      */
-#define PTA_DD_PTDD7_SHIFT                       7                                                   /*!< PTA_DD: PTDD7 Position                  */
-/* ------- PV Bit Fields                            ------ */
-#define PTA_PV_PTPV0_MASK                        (0x01UL << PTA_PV_PTPV0_SHIFT)                      /*!< PTA_PV: PTPV0 Mask                      */
-#define PTA_PV_PTPV0_SHIFT                       0                                                   /*!< PTA_PV: PTPV0 Position                  */
-#define PTA_PV_PTPV1_MASK                        (0x01UL << PTA_PV_PTPV1_SHIFT)                      /*!< PTA_PV: PTPV1 Mask                      */
-#define PTA_PV_PTPV1_SHIFT                       1                                                   /*!< PTA_PV: PTPV1 Position                  */
-#define PTA_PV_PTPV2_MASK                        (0x01UL << PTA_PV_PTPV2_SHIFT)                      /*!< PTA_PV: PTPV2 Mask                      */
-#define PTA_PV_PTPV2_SHIFT                       2                                                   /*!< PTA_PV: PTPV2 Position                  */
-#define PTA_PV_PTPV3_MASK                        (0x01UL << PTA_PV_PTPV3_SHIFT)                      /*!< PTA_PV: PTPV3 Mask                      */
-#define PTA_PV_PTPV3_SHIFT                       3                                                   /*!< PTA_PV: PTPV3 Position                  */
-#define PTA_PV_PTPV4_MASK                        (0x01UL << PTA_PV_PTPV4_SHIFT)                      /*!< PTA_PV: PTPV4 Mask                      */
-#define PTA_PV_PTPV4_SHIFT                       4                                                   /*!< PTA_PV: PTPV4 Position                  */
-#define PTA_PV_PTPV5_MASK                        (0x01UL << PTA_PV_PTPV5_SHIFT)                      /*!< PTA_PV: PTPV5 Mask                      */
-#define PTA_PV_PTPV5_SHIFT                       5                                                   /*!< PTA_PV: PTPV5 Position                  */
-#define PTA_PV_PTPV6_MASK                        (0x01UL << PTA_PV_PTPV6_SHIFT)                      /*!< PTA_PV: PTPV6 Mask                      */
-#define PTA_PV_PTPV6_SHIFT                       6                                                   /*!< PTA_PV: PTPV6 Position                  */
-#define PTA_PV_PTPV7_MASK                        (0x01UL << PTA_PV_PTPV7_SHIFT)                      /*!< PTA_PV: PTPV7 Mask                      */
-#define PTA_PV_PTPV7_SHIFT                       7                                                   /*!< PTA_PV: PTPV7 Position                  */
-/**
- * @} */ /* End group PTA_Register_Masks_GROUP 
- */
-
-/* PTA - Peripheral instance base addresses */
-#define PTA_BasePtr                    0xFFFF8000UL //!< Peripheral base address
-#define PTA                            ((PT_Type *) PTA_BasePtr) //!< Freescale base pointer
-#define PTA_BASE_PTR                   (PTA) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTB (derived from PTA)               ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-
-/* PTB - Peripheral instance base addresses */
-#define PTB_BasePtr                    0xFFFF8010UL //!< Peripheral base address
-#define PTB                            ((PT_Type *) PTB_BasePtr) //!< Freescale base pointer
-#define PTB_BASE_PTR                   (PTB) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTC (derived from PTA)               ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-
-/* PTC - Peripheral instance base addresses */
-#define PTC_BasePtr                    0xFFFF8020UL //!< Peripheral base address
-#define PTC                            ((PT_Type *) PTC_BasePtr) //!< Freescale base pointer
-#define PTC_BASE_PTR                   (PTC) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTD (derived from PTA)               ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-
-/* PTD - Peripheral instance base addresses */
-#define PTD_BasePtr                    0xFFFF8030UL //!< Peripheral base address
-#define PTD                            ((PT_Type *) PTD_BasePtr) //!< Freescale base pointer
-#define PTD_BASE_PTR                   (PTD) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTE (derived from PTA)               ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-
-/* PTE - Peripheral instance base addresses */
-#define PTE_BasePtr                    0xFFFF8040UL //!< Peripheral base address
-#define PTE                            ((PT_Type *) PTE_BasePtr) //!< Freescale base pointer
-#define PTE_BASE_PTR                   (PTE) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup PTA_Peripheral_access_layer_GROUP PTA Peripheral Access Layer
-* @brief C Struct for PTA
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           PTF (derived from PTA)               ================ */
-/* ================================================================================ */
-
-/**
- * @brief GPIO Port
- */
-
-/* PTF - Peripheral instance base addresses */
-#define PTF_BasePtr                    0xFFFF8050UL //!< Peripheral base address
-#define PTF                            ((PT_Type *) PTF_BasePtr) //!< Freescale base pointer
-#define PTF_BASE_PTR                   (PTF) //!< Freescale style base pointer
-/**
- * @} */ /* End group PTA_Peripheral_access_layer_GROUP 
- */
-/**
 * @addtogroup RCM_Peripheral_access_layer_GROUP RCM Peripheral Access Layer
 * @brief C Struct for RCM
 * @{
@@ -4372,8 +4324,8 @@ typedef struct {                                /*       RCM Structure          
 typedef struct {                                /*       RFSYS Structure                                              */
    union {                                      /**< 0000: (size=0020)                                                  */
       __IO uint8_t   REGB[32];                  /**< 0000: Battery Backed Register File                                 */
-      __IO uint16_t  REGW[16];                  /**< 0000: Battery Backed Register File                                 */
       __IO uint32_t  REGL[8];                   /**< 0000: Battery Backed Register File                                 */
+      __IO uint16_t  REGW[16];                  /**< 0000: Battery Backed Register File                                 */
    };
 } RFSYS_Type;
 
@@ -4391,8 +4343,8 @@ typedef struct {                                /*       RFSYS Structure        
 * @{
 */
 /* ------- REGB Bit Fields                          ------ */
-/* ------- REGW Bit Fields                          ------ */
 /* ------- REGL Bit Fields                          ------ */
+/* ------- REGW Bit Fields                          ------ */
 /**
  * @} */ /* End group RFSYS_Register_Masks_GROUP 
  */
