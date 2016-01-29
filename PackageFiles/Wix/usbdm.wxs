@@ -401,6 +401,7 @@
             <FeatureRef Id='F.CW_FOR_MCU_V10.6.4'/>
             <FeatureRef Id='F.CW_FOR_MICROCONTROLLERS_V6_3' />
             <FeatureRef Id='F.CWS12_X_V5_1' />
+            <FeatureRef Id='F.CWS12_X_V5_2' />
             <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
             <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
          </Feature>

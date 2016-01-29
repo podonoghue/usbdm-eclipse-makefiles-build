@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
   xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-   <?define CW_Ver="1" ?> 
+   <?define CW_Ver="2" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -48,7 +48,7 @@
          <RegistrySearch Id="Rs.CWS12_X_V5_$(var.CW_Ver)"
                     Root="HKLM"
                     Win64="no"
-                    Key="SOFTWARE\Freescale\CodeWarrior\Product Versions\CWS12(X) v5.$(var.CW_Ver)"
+                    Key="SOFTWARE\Freescale\CodeWarrior\Product Versions\CWS12v5.$(var.CW_Ver)"
                     Name="PATH"
                     Type="directory" />
       </Property>
@@ -114,14 +114,14 @@
            USBDM Installed Marker
      -->
       <DirectoryRef Id="D.CWS12_X_V5_$(var.CW_Ver)">
-         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).Marker' Guid='95ca96fa-f4e0-49b0-b3af-4051c033b06a' >
+         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).Marker' Guid='5ed8146a-42e2-4564-b502-614dbe9e5b52' >
             <File Id='CWS12_X_V5_$(var.CW_Ver)_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
       
       <!-- CW for HCS(X)12 support -->
       <DirectoryRef Id="D.CWS12_X_V5_$(var.CW_Ver)_gdi">
-         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).Files' Guid='0d171f50-4521-4bb2-a140-49e91c0380bd' >
+         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).Files' Guid='8c272ce1-3c91-4910-b2e9-acd6edbc727e' >
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
 
