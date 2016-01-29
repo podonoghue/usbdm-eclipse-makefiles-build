@@ -13,7 +13,7 @@
 
 using namespace USBDM;
 
-#define M_PI      3.14159265358979323846
+constexpr double M_PI = 3.14159265358979323846;
 
 /**
  * Demonstrates use of FXOS8700CQ Accelerometer and Magnetometer over I2C
@@ -37,7 +37,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2c *i2c = new $(demo.cpp.fx0s8700cq.i2c)();
+   I2c *i2c = new $(demo.cpp.fx0s8700cq.i2c:I2c0)();
    FXOS8700CQ *accelmag = new FXOS8700CQ(i2c, FXOS8700CQ::ACCEL_2Gmode);
 
    uint8_t id = accelmag->readID();

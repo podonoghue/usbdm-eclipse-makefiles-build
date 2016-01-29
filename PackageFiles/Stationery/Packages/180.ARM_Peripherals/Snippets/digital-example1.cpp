@@ -5,6 +5,7 @@
 #include "system.h"
 #include "derivative.h"
 #include "gpio.h"
+#include "delay.h"
 
 using namespace USBDM;
 
@@ -12,16 +13,9 @@ using namespace USBDM;
  * Simple example flashing LEDs on digital outputs
  */
 
-// Simple delay - not for real programs!
-void delay(void) {
-   for(int i=0; i<400000; i++) {
-      __asm__("nop");
-   }
-}
-
-// LED connections
-#define RED_LED   gpio_$(demo.cpp.red.led)
-#define GREEN_LED gpio_$(demo.cpp.green.led)
+// Connection mapping - change as required
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
+using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 
 int main() {
    RED_LED::setOutput();
@@ -30,12 +24,12 @@ int main() {
    GREEN_LED::set();
    for(;;) {
       RED_LED::toggle();
-      delay();
+      USBDM::waitMS(100);
       RED_LED::toggle();
-      delay();
+      USBDM::waitMS(100);
       GREEN_LED::toggle();
-      delay();
+      USBDM::waitMS(100);
       GREEN_LED::toggle();
-      delay();
+      USBDM::waitMS(100);
    }
 }

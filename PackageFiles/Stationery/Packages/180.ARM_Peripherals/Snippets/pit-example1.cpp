@@ -15,8 +15,8 @@ using namespace USBDM;
  * Toggles LED use PIT for delay
  */
 
-// LED connections
-#define RED_LED   gpio_$(demo.cpp.red.led)
+// Connection mapping - change as required
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
 
 int main() {
    RED_LED::setOutput();

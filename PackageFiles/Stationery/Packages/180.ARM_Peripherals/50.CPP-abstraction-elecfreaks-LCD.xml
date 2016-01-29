@@ -11,24 +11,21 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
-            <variableRef idRef="demo.cpp.peripheral.lcd" />
+            <variableRef idRef="cpp.peripheral.external.elecfreaks-lcd" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <projectActionList>
          <applyWhen>
-         <and>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
-         </and>
          </applyWhen>
          <variable id="projectOptionValue.CPP-abstraction-LCD" 
-            name="LCD C++ interface" 
+            name="Elecfreaks LCD interface" 
             description="Adds a CPP abstraction layer for Elecfreaks LCD" 
             checkGroup="group-spi-peripheral-options" >
             <enableWhen>
                <and>
                   <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
                </and>
             </enableWhen>
          </variable>

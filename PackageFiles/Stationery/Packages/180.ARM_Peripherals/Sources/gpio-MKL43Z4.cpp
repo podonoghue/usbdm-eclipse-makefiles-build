@@ -1,7 +1,7 @@
  /**
   * @file     gpio.cpp (from gpio-MKL43Z4.cpp)
   *
-  * @brief   Pin declarations for MKL43Z4
+  * @brief   Pin declarations for MKL43Z4, generated from MKL43Z4.csv
   */
 
 #include "gpio.h"

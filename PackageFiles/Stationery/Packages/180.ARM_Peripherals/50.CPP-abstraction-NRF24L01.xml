@@ -11,7 +11,7 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
-            <variableRef idRef="demo.cpp.peripheral.spi" />
+            <variableRef idRef="cpp.peripheral.internal.spi" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -28,7 +28,6 @@
             <enableWhen>
                <and>
                   <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-                  <requirement idRef="projectOptionValue.CPP.abstraction-simple-delay"/>
                </and>
             </enableWhen>
          </variable>

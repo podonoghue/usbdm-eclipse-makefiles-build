@@ -1,11 +1,11 @@
 /**
  * @file      pin_mapping.h (derived from pin_mapping-MK64F12.h)
  * @version   1.1.0
- * @brief     Pin declarations for MK64F12
+ * @brief     Pin declarations for MK64F12, generated from MK64F12.csv
  */
 
-#ifndef PIN_MAPPING_H_
-#define PIN_MAPPING_H_
+#ifndef PROJECT_HEADERS_PIN_MAPPING_H_
+#define PROJECT_HEADERS_PIN_MAPPING_H_
 
 #include <stddef.h>
 #include "derivative.h"
@@ -258,35 +258,35 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 // <h> Port A Pins
 
 // Signal mapping for PTA0 pin
-//   <o> PTA0 (Alias:D8) [GPIOA_0, UART0_CTS_b/UART0_COL_b, FTM0_CH5, JTAG_TCLK/SWD_CLK]<name=PTA0_SIG_SEL>
+//   <o> PTA0 [GPIOA_0, UART0_CTS_b/UART0_COL_b, FTM0_CH5, JTAG_TCLK/SWD_CLK]<name=PTA0_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTA0 pin
-//     <-2=> JTAG_TCLK/SWD_CLK (reset default)<selection=JTAG_TCLK_PIN_SEL,PTA0 (Alias:D8) (reset default)><selection=SWD_CLK_PIN_SEL,PTA0 (Alias:D8) (reset default)>
-//     <1=> GPIOA_0<selection=GPIOA_0_PIN_SEL,PTA0 (Alias:D8)>
-//     <2=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTA0 (Alias:D8)><selection=UART0_COL_b_PIN_SEL,PTA0 (Alias:D8)>
-//     <3=> FTM0_CH5<selection=FTM0_CH5_PIN_SEL,PTA0 (Alias:D8)>
-//     <7=> JTAG_TCLK/SWD_CLK<selection=JTAG_TCLK_PIN_SEL,PTA0 (Alias:D8)><selection=SWD_CLK_PIN_SEL,PTA0 (Alias:D8)>
+//     <-2=> JTAG_TCLK/SWD_CLK (reset default)<selection=JTAG_TCLK_PIN_SEL,PTA0 (reset default)><selection=SWD_CLK_PIN_SEL,PTA0 (reset default)>
+//     <1=> GPIOA_0<selection=GPIOA_0_PIN_SEL,PTA0>
+//     <2=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTA0><selection=UART0_COL_b_PIN_SEL,PTA0>
+//     <3=> FTM0_CH5<selection=FTM0_CH5_PIN_SEL,PTA0>
+//     <7=> JTAG_TCLK/SWD_CLK<selection=JTAG_TCLK_PIN_SEL,PTA0><selection=SWD_CLK_PIN_SEL,PTA0>
 //     <-2=> Default
 #define PTA0_SIG_SEL         -2
 
 // Signal mapping for PTA1 pin
-//   <o> PTA1 (Alias:D3) [GPIOA_1, UART0_RX, FTM0_CH6, JTAG_TDI]<name=PTA1_SIG_SEL>
+//   <o> PTA1 [GPIOA_1, UART0_RX, FTM0_CH6, JTAG_TDI]<name=PTA1_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTA1 pin
-//     <-2=> JTAG_TDI (reset default)<selection=JTAG_TDI_PIN_SEL,PTA1 (Alias:D3) (reset default)>
-//     <1=> GPIOA_1<selection=GPIOA_1_PIN_SEL,PTA1 (Alias:D3)>
-//     <2=> UART0_RX<selection=UART0_RX_PIN_SEL,PTA1 (Alias:D3)>
-//     <3=> FTM0_CH6<selection=FTM0_CH6_PIN_SEL,PTA1 (Alias:D3)>
-//     <7=> JTAG_TDI<selection=JTAG_TDI_PIN_SEL,PTA1 (Alias:D3)>
+//     <-2=> JTAG_TDI (reset default)<selection=JTAG_TDI_PIN_SEL,PTA1 (reset default)>
+//     <1=> GPIOA_1<selection=GPIOA_1_PIN_SEL,PTA1>
+//     <2=> UART0_RX<selection=UART0_RX_PIN_SEL,PTA1>
+//     <3=> FTM0_CH6<selection=FTM0_CH6_PIN_SEL,PTA1>
+//     <7=> JTAG_TDI<selection=JTAG_TDI_PIN_SEL,PTA1>
 //     <1=> Default
 #define PTA1_SIG_SEL         1
 
 // Signal mapping for PTA2 pin
-//   <o> PTA2 (Alias:D5) [GPIOA_2, UART0_TX, FTM0_CH7, JTAG_TDO/TRACE_SWO]<name=PTA2_SIG_SEL>
+//   <o> PTA2 [GPIOA_2, UART0_TX, FTM0_CH7, JTAG_TDO/TRACE_SWO]<name=PTA2_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTA2 pin
-//     <-2=> JTAG_TDO/TRACE_SWO (reset default)<selection=JTAG_TDO_PIN_SEL,PTA2 (Alias:D5) (reset default)><selection=TRACE_SWO_PIN_SEL,PTA2 (Alias:D5) (reset default)>
-//     <1=> GPIOA_2<selection=GPIOA_2_PIN_SEL,PTA2 (Alias:D5)>
-//     <2=> UART0_TX<selection=UART0_TX_PIN_SEL,PTA2 (Alias:D5)>
-//     <3=> FTM0_CH7<selection=FTM0_CH7_PIN_SEL,PTA2 (Alias:D5)>
-//     <7=> JTAG_TDO/TRACE_SWO<selection=JTAG_TDO_PIN_SEL,PTA2 (Alias:D5)><selection=TRACE_SWO_PIN_SEL,PTA2 (Alias:D5)>
+//     <-2=> JTAG_TDO/TRACE_SWO (reset default)<selection=JTAG_TDO_PIN_SEL,PTA2 (reset default)><selection=TRACE_SWO_PIN_SEL,PTA2 (reset default)>
+//     <1=> GPIOA_2<selection=GPIOA_2_PIN_SEL,PTA2>
+//     <2=> UART0_TX<selection=UART0_TX_PIN_SEL,PTA2>
+//     <3=> FTM0_CH7<selection=FTM0_CH7_PIN_SEL,PTA2>
+//     <7=> JTAG_TDO/TRACE_SWO<selection=JTAG_TDO_PIN_SEL,PTA2><selection=TRACE_SWO_PIN_SEL,PTA2>
 //     <1=> Default
 #define PTA2_SIG_SEL         1
 
@@ -591,28 +591,28 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTB1_SIG_SEL         -2
 
 // Signal mapping for PTB2 pin
-//   <o> PTB2 (Alias:A0) [ADC0_SE12, GPIOB_2, I2C0_SCL, UART0_RTS_b, ENET0_1588_TMR0, FTM0_FLT3]<name=PTB2_SIG_SEL>
+//   <o> PTB2 [ADC0_SE12, GPIOB_2, I2C0_SCL, UART0_RTS_b, ENET0_1588_TMR0, FTM0_FLT3]<name=PTB2_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB2 pin
-//     <-2=> ADC0_SE12 (reset default)<selection=ADC0_SE12_PIN_SEL,PTB2 (Alias:A0) (reset default)>
-//     <0=> ADC0_SE12<selection=ADC0_SE12_PIN_SEL,PTB2 (Alias:A0)>
-//     <1=> GPIOB_2<selection=GPIOB_2_PIN_SEL,PTB2 (Alias:A0)>
-//     <2=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTB2 (Alias:A0)>
-//     <3=> UART0_RTS_b<selection=UART0_RTS_b_PIN_SEL,PTB2 (Alias:A0)>
-//     <4=> ENET0_1588_TMR0<selection=ENET0_1588_TMR0_PIN_SEL,PTB2 (Alias:A0)>
-//     <6=> FTM0_FLT3<selection=FTM0_FLT3_PIN_SEL,PTB2 (Alias:A0)>
+//     <-2=> ADC0_SE12 (reset default)<selection=ADC0_SE12_PIN_SEL,PTB2 (reset default)>
+//     <0=> ADC0_SE12<selection=ADC0_SE12_PIN_SEL,PTB2>
+//     <1=> GPIOB_2<selection=GPIOB_2_PIN_SEL,PTB2>
+//     <2=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTB2>
+//     <3=> UART0_RTS_b<selection=UART0_RTS_b_PIN_SEL,PTB2>
+//     <4=> ENET0_1588_TMR0<selection=ENET0_1588_TMR0_PIN_SEL,PTB2>
+//     <6=> FTM0_FLT3<selection=FTM0_FLT3_PIN_SEL,PTB2>
 //     <0=> Default
 #define PTB2_SIG_SEL         0
 
 // Signal mapping for PTB3 pin
-//   <o> PTB3 (Alias:A1) [ADC0_SE13, GPIOB_3, I2C0_SDA, UART0_CTS_b/UART0_COL_b, ENET0_1588_TMR1, FTM0_FLT0]<name=PTB3_SIG_SEL>
+//   <o> PTB3 [ADC0_SE13, GPIOB_3, I2C0_SDA, UART0_CTS_b/UART0_COL_b, ENET0_1588_TMR1, FTM0_FLT0]<name=PTB3_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB3 pin
-//     <-2=> ADC0_SE13 (reset default)<selection=ADC0_SE13_PIN_SEL,PTB3 (Alias:A1) (reset default)>
-//     <0=> ADC0_SE13<selection=ADC0_SE13_PIN_SEL,PTB3 (Alias:A1)>
-//     <1=> GPIOB_3<selection=GPIOB_3_PIN_SEL,PTB3 (Alias:A1)>
-//     <2=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTB3 (Alias:A1)>
-//     <3=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTB3 (Alias:A1)><selection=UART0_COL_b_PIN_SEL,PTB3 (Alias:A1)>
-//     <4=> ENET0_1588_TMR1<selection=ENET0_1588_TMR1_PIN_SEL,PTB3 (Alias:A1)>
-//     <6=> FTM0_FLT0<selection=FTM0_FLT0_PIN_SEL,PTB3 (Alias:A1)>
+//     <-2=> ADC0_SE13 (reset default)<selection=ADC0_SE13_PIN_SEL,PTB3 (reset default)>
+//     <0=> ADC0_SE13<selection=ADC0_SE13_PIN_SEL,PTB3>
+//     <1=> GPIOB_3<selection=GPIOB_3_PIN_SEL,PTB3>
+//     <2=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTB3>
+//     <3=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTB3><selection=UART0_COL_b_PIN_SEL,PTB3>
+//     <4=> ENET0_1588_TMR1<selection=ENET0_1588_TMR1_PIN_SEL,PTB3>
+//     <6=> FTM0_FLT0<selection=FTM0_FLT0_PIN_SEL,PTB3>
 //     <0=> Default
 #define PTB3_SIG_SEL         0
 
@@ -669,39 +669,39 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTB8_SIG_SEL         -2
 
 // Signal mapping for PTB9 pin
-//   <o> PTB9 (Alias:D2) [GPIOB_9, SPI1_PCS1, UART3_CTS_b, FB_AD20]<name=PTB9_SIG_SEL>
+//   <o> PTB9 [GPIOB_9, SPI1_PCS1, UART3_CTS_b, FB_AD20]<name=PTB9_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB9 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOB_9<selection=GPIOB_9_PIN_SEL,PTB9 (Alias:D2)>
-//     <2=> SPI1_PCS1<selection=SPI1_PCS1_PIN_SEL,PTB9 (Alias:D2)>
-//     <3=> UART3_CTS_b<selection=UART3_CTS_b_PIN_SEL,PTB9 (Alias:D2)>
-//     <5=> FB_AD20<selection=FB_AD20_PIN_SEL,PTB9 (Alias:D2)>
+//     <1=> GPIOB_9<selection=GPIOB_9_PIN_SEL,PTB9>
+//     <2=> SPI1_PCS1<selection=SPI1_PCS1_PIN_SEL,PTB9>
+//     <3=> UART3_CTS_b<selection=UART3_CTS_b_PIN_SEL,PTB9>
+//     <5=> FB_AD20<selection=FB_AD20_PIN_SEL,PTB9>
 //     <1=> Default
 #define PTB9_SIG_SEL         1
 
 // Signal mapping for PTB10 pin
-//   <o> PTB10 (Alias:A2) [ADC1_SE14, GPIOB_10, SPI1_PCS0, UART3_RX, FB_AD19, FTM0_FLT1]<name=PTB10_SIG_SEL>
+//   <o> PTB10 [ADC1_SE14, GPIOB_10, SPI1_PCS0, UART3_RX, FB_AD19, FTM0_FLT1]<name=PTB10_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB10 pin
-//     <-2=> ADC1_SE14 (reset default)<selection=ADC1_SE14_PIN_SEL,PTB10 (Alias:A2) (reset default)>
-//     <0=> ADC1_SE14<selection=ADC1_SE14_PIN_SEL,PTB10 (Alias:A2)>
-//     <1=> GPIOB_10<selection=GPIOB_10_PIN_SEL,PTB10 (Alias:A2)>
-//     <2=> SPI1_PCS0<selection=SPI1_PCS0_PIN_SEL,PTB10 (Alias:A2)>
-//     <3=> UART3_RX<selection=UART3_RX_PIN_SEL,PTB10 (Alias:A2)>
-//     <5=> FB_AD19<selection=FB_AD19_PIN_SEL,PTB10 (Alias:A2)>
-//     <6=> FTM0_FLT1<selection=FTM0_FLT1_PIN_SEL,PTB10 (Alias:A2)>
+//     <-2=> ADC1_SE14 (reset default)<selection=ADC1_SE14_PIN_SEL,PTB10 (reset default)>
+//     <0=> ADC1_SE14<selection=ADC1_SE14_PIN_SEL,PTB10>
+//     <1=> GPIOB_10<selection=GPIOB_10_PIN_SEL,PTB10>
+//     <2=> SPI1_PCS0<selection=SPI1_PCS0_PIN_SEL,PTB10>
+//     <3=> UART3_RX<selection=UART3_RX_PIN_SEL,PTB10>
+//     <5=> FB_AD19<selection=FB_AD19_PIN_SEL,PTB10>
+//     <6=> FTM0_FLT1<selection=FTM0_FLT1_PIN_SEL,PTB10>
 //     <0=> Default
 #define PTB10_SIG_SEL        0
 
 // Signal mapping for PTB11 pin
-//   <o> PTB11 (Alias:A3) [ADC1_SE15, GPIOB_11, SPI1_SCK, UART3_TX, FB_AD18, FTM0_FLT2]<name=PTB11_SIG_SEL>
+//   <o> PTB11 [ADC1_SE15, GPIOB_11, SPI1_SCK, UART3_TX, FB_AD18, FTM0_FLT2]<name=PTB11_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB11 pin
-//     <-2=> ADC1_SE15 (reset default)<selection=ADC1_SE15_PIN_SEL,PTB11 (Alias:A3) (reset default)>
-//     <0=> ADC1_SE15<selection=ADC1_SE15_PIN_SEL,PTB11 (Alias:A3)>
-//     <1=> GPIOB_11<selection=GPIOB_11_PIN_SEL,PTB11 (Alias:A3)>
-//     <2=> SPI1_SCK<selection=SPI1_SCK_PIN_SEL,PTB11 (Alias:A3)>
-//     <3=> UART3_TX<selection=UART3_TX_PIN_SEL,PTB11 (Alias:A3)>
-//     <5=> FB_AD18<selection=FB_AD18_PIN_SEL,PTB11 (Alias:A3)>
-//     <6=> FTM0_FLT2<selection=FTM0_FLT2_PIN_SEL,PTB11 (Alias:A3)>
+//     <-2=> ADC1_SE15 (reset default)<selection=ADC1_SE15_PIN_SEL,PTB11 (reset default)>
+//     <0=> ADC1_SE15<selection=ADC1_SE15_PIN_SEL,PTB11>
+//     <1=> GPIOB_11<selection=GPIOB_11_PIN_SEL,PTB11>
+//     <2=> SPI1_SCK<selection=SPI1_SCK_PIN_SEL,PTB11>
+//     <3=> UART3_TX<selection=UART3_TX_PIN_SEL,PTB11>
+//     <5=> FB_AD18<selection=FB_AD18_PIN_SEL,PTB11>
+//     <6=> FTM0_FLT2<selection=FTM0_FLT2_PIN_SEL,PTB11>
 //     <0=> Default
 #define PTB11_SIG_SEL        0
 
@@ -793,35 +793,35 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTB20_SIG_SEL        -2
 
 // Signal mapping for PTB21 pin
-//   <o> PTB21 (Alias:LED_BLUE) [GPIOB_21, SPI2_SCK, FB_AD30, CMP1_OUT]<name=PTB21_SIG_SEL>
+//   <o> PTB21 [GPIOB_21, SPI2_SCK, FB_AD30, CMP1_OUT]<name=PTB21_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB21 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOB_21<selection=GPIOB_21_PIN_SEL,PTB21 (Alias:LED_BLUE)>
-//     <2=> SPI2_SCK<selection=SPI2_SCK_PIN_SEL,PTB21 (Alias:LED_BLUE)>
-//     <5=> FB_AD30<selection=FB_AD30_PIN_SEL,PTB21 (Alias:LED_BLUE)>
-//     <6=> CMP1_OUT<selection=CMP1_OUT_PIN_SEL,PTB21 (Alias:LED_BLUE)>
+//     <1=> GPIOB_21<selection=GPIOB_21_PIN_SEL,PTB21>
+//     <2=> SPI2_SCK<selection=SPI2_SCK_PIN_SEL,PTB21>
+//     <5=> FB_AD30<selection=FB_AD30_PIN_SEL,PTB21>
+//     <6=> CMP1_OUT<selection=CMP1_OUT_PIN_SEL,PTB21>
 //     <1=> Default
 #define PTB21_SIG_SEL        1
 
 // Signal mapping for PTB22 pin
-//   <o> PTB22 (Alias:LED_RED) [GPIOB_22, SPI2_SOUT, FB_AD29, CMP2_OUT]<name=PTB22_SIG_SEL>
+//   <o> PTB22 [GPIOB_22, SPI2_SOUT, FB_AD29, CMP2_OUT]<name=PTB22_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB22 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOB_22<selection=GPIOB_22_PIN_SEL,PTB22 (Alias:LED_RED)>
-//     <2=> SPI2_SOUT<selection=SPI2_SOUT_PIN_SEL,PTB22 (Alias:LED_RED)>
-//     <5=> FB_AD29<selection=FB_AD29_PIN_SEL,PTB22 (Alias:LED_RED)>
-//     <6=> CMP2_OUT<selection=CMP2_OUT_PIN_SEL,PTB22 (Alias:LED_RED)>
+//     <1=> GPIOB_22<selection=GPIOB_22_PIN_SEL,PTB22>
+//     <2=> SPI2_SOUT<selection=SPI2_SOUT_PIN_SEL,PTB22>
+//     <5=> FB_AD29<selection=FB_AD29_PIN_SEL,PTB22>
+//     <6=> CMP2_OUT<selection=CMP2_OUT_PIN_SEL,PTB22>
 //     <1=> Default
 #define PTB22_SIG_SEL        1
 
 // Signal mapping for PTB23 pin
-//   <o> PTB23 (Alias:D4) [GPIOB_23, SPI2_SIN, SPI0_PCS5, FB_AD28]<name=PTB23_SIG_SEL>
+//   <o> PTB23 [GPIOB_23, SPI2_SIN, SPI0_PCS5, FB_AD28]<name=PTB23_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTB23 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOB_23<selection=GPIOB_23_PIN_SEL,PTB23 (Alias:D4)>
-//     <2=> SPI2_SIN<selection=SPI2_SIN_PIN_SEL,PTB23 (Alias:D4)>
-//     <3=> SPI0_PCS5<selection=SPI0_PCS5_PIN_SEL,PTB23 (Alias:D4)>
-//     <5=> FB_AD28<selection=FB_AD28_PIN_SEL,PTB23 (Alias:D4)>
+//     <1=> GPIOB_23<selection=GPIOB_23_PIN_SEL,PTB23>
+//     <2=> SPI2_SIN<selection=SPI2_SIN_PIN_SEL,PTB23>
+//     <3=> SPI0_PCS5<selection=SPI0_PCS5_PIN_SEL,PTB23>
+//     <5=> FB_AD28<selection=FB_AD28_PIN_SEL,PTB23>
 //     <1=> Default
 #define PTB23_SIG_SEL        1
 
@@ -858,43 +858,43 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTC1_SIG_SEL         -2
 
 // Signal mapping for PTC2 pin
-//   <o> PTC2 (Alias:D6) [ADC0_SE4b/CMP1_IN0, GPIOC_2, SPI0_PCS2, UART1_CTS_b, FTM0_CH1, FB_AD12, I2S0_TX_FS]<name=PTC2_SIG_SEL>
+//   <o> PTC2 [ADC0_SE4b/CMP1_IN0, GPIOC_2, SPI0_PCS2, UART1_CTS_b, FTM0_CH1, FB_AD12, I2S0_TX_FS]<name=PTC2_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC2 pin
-//     <-2=> ADC0_SE4b/CMP1_IN0 (reset default)<selection=ADC0_SE4b_PIN_SEL,PTC2 (Alias:D6) (reset default)><selection=CMP1_IN0_PIN_SEL,PTC2 (Alias:D6) (reset default)>
-//     <0=> ADC0_SE4b/CMP1_IN0<selection=ADC0_SE4b_PIN_SEL,PTC2 (Alias:D6)><selection=CMP1_IN0_PIN_SEL,PTC2 (Alias:D6)>
-//     <1=> GPIOC_2<selection=GPIOC_2_PIN_SEL,PTC2 (Alias:D6)>
-//     <2=> SPI0_PCS2<selection=SPI0_PCS2_PIN_SEL,PTC2 (Alias:D6)>
-//     <3=> UART1_CTS_b<selection=UART1_CTS_b_PIN_SEL,PTC2 (Alias:D6)>
-//     <4=> FTM0_CH1<selection=FTM0_CH1_PIN_SEL,PTC2 (Alias:D6)>
-//     <5=> FB_AD12<selection=FB_AD12_PIN_SEL,PTC2 (Alias:D6)>
-//     <6=> I2S0_TX_FS<selection=I2S0_TX_FS_PIN_SEL,PTC2 (Alias:D6)>
+//     <-2=> ADC0_SE4b/CMP1_IN0 (reset default)<selection=ADC0_SE4b_PIN_SEL,PTC2 (reset default)><selection=CMP1_IN0_PIN_SEL,PTC2 (reset default)>
+//     <0=> ADC0_SE4b/CMP1_IN0<selection=ADC0_SE4b_PIN_SEL,PTC2><selection=CMP1_IN0_PIN_SEL,PTC2>
+//     <1=> GPIOC_2<selection=GPIOC_2_PIN_SEL,PTC2>
+//     <2=> SPI0_PCS2<selection=SPI0_PCS2_PIN_SEL,PTC2>
+//     <3=> UART1_CTS_b<selection=UART1_CTS_b_PIN_SEL,PTC2>
+//     <4=> FTM0_CH1<selection=FTM0_CH1_PIN_SEL,PTC2>
+//     <5=> FB_AD12<selection=FB_AD12_PIN_SEL,PTC2>
+//     <6=> I2S0_TX_FS<selection=I2S0_TX_FS_PIN_SEL,PTC2>
 //     <1=> Default
 #define PTC2_SIG_SEL         1
 
 // Signal mapping for PTC3 pin
-//   <o> PTC3 (Alias:D7) [CMP1_IN1, GPIOC_3/LLWU_P7, SPI0_PCS1, UART1_RX, FTM0_CH2, CLKOUT, I2S0_TX_BCLK]<name=PTC3_SIG_SEL>
+//   <o> PTC3 [CMP1_IN1, GPIOC_3/LLWU_P7, SPI0_PCS1, UART1_RX, FTM0_CH2, CLKOUT, I2S0_TX_BCLK]<name=PTC3_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC3 pin
-//     <-2=> CMP1_IN1 (reset default)<selection=CMP1_IN1_PIN_SEL,PTC3 (Alias:D7) (reset default)>
-//     <0=> CMP1_IN1<selection=CMP1_IN1_PIN_SEL,PTC3 (Alias:D7)>
-//     <1=> GPIOC_3/LLWU_P7<selection=GPIOC_3_PIN_SEL,PTC3 (Alias:D7)><selection=LLWU_P7_PIN_SEL,PTC3 (Alias:D7)>
-//     <2=> SPI0_PCS1<selection=SPI0_PCS1_PIN_SEL,PTC3 (Alias:D7)>
-//     <3=> UART1_RX<selection=UART1_RX_PIN_SEL,PTC3 (Alias:D7)>
-//     <4=> FTM0_CH2<selection=FTM0_CH2_PIN_SEL,PTC3 (Alias:D7)>
-//     <5=> CLKOUT<selection=CLKOUT_PIN_SEL,PTC3 (Alias:D7)>
-//     <6=> I2S0_TX_BCLK<selection=I2S0_TX_BCLK_PIN_SEL,PTC3 (Alias:D7)>
+//     <-2=> CMP1_IN1 (reset default)<selection=CMP1_IN1_PIN_SEL,PTC3 (reset default)>
+//     <0=> CMP1_IN1<selection=CMP1_IN1_PIN_SEL,PTC3>
+//     <1=> GPIOC_3/LLWU_P7<selection=GPIOC_3_PIN_SEL,PTC3><selection=LLWU_P7_PIN_SEL,PTC3>
+//     <2=> SPI0_PCS1<selection=SPI0_PCS1_PIN_SEL,PTC3>
+//     <3=> UART1_RX<selection=UART1_RX_PIN_SEL,PTC3>
+//     <4=> FTM0_CH2<selection=FTM0_CH2_PIN_SEL,PTC3>
+//     <5=> CLKOUT<selection=CLKOUT_PIN_SEL,PTC3>
+//     <6=> I2S0_TX_BCLK<selection=I2S0_TX_BCLK_PIN_SEL,PTC3>
 //     <1=> Default
 #define PTC3_SIG_SEL         1
 
 // Signal mapping for PTC4 pin
-//   <o> PTC4 (Alias:D9) [GPIOC_4/LLWU_P8, SPI0_PCS0, UART1_TX, FTM0_CH3, FB_AD11, CMP1_OUT]<name=PTC4_SIG_SEL>
+//   <o> PTC4 [GPIOC_4/LLWU_P8, SPI0_PCS0, UART1_TX, FTM0_CH3, FB_AD11, CMP1_OUT]<name=PTC4_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC4 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOC_4/LLWU_P8<selection=GPIOC_4_PIN_SEL,PTC4 (Alias:D9)><selection=LLWU_P8_PIN_SEL,PTC4 (Alias:D9)>
-//     <2=> SPI0_PCS0<selection=SPI0_PCS0_PIN_SEL,PTC4 (Alias:D9)>
-//     <3=> UART1_TX<selection=UART1_TX_PIN_SEL,PTC4 (Alias:D9)>
-//     <4=> FTM0_CH3<selection=FTM0_CH3_PIN_SEL,PTC4 (Alias:D9)>
-//     <5=> FB_AD11<selection=FB_AD11_PIN_SEL,PTC4 (Alias:D9)>
-//     <6=> CMP1_OUT<selection=CMP1_OUT_PIN_SEL,PTC4 (Alias:D9)>
+//     <1=> GPIOC_4/LLWU_P8<selection=GPIOC_4_PIN_SEL,PTC4><selection=LLWU_P8_PIN_SEL,PTC4>
+//     <2=> SPI0_PCS0<selection=SPI0_PCS0_PIN_SEL,PTC4>
+//     <3=> UART1_TX<selection=UART1_TX_PIN_SEL,PTC4>
+//     <4=> FTM0_CH3<selection=FTM0_CH3_PIN_SEL,PTC4>
+//     <5=> FB_AD11<selection=FB_AD11_PIN_SEL,PTC4>
+//     <6=> CMP1_OUT<selection=CMP1_OUT_PIN_SEL,PTC4>
 //     <1=> Default
 #define PTC4_SIG_SEL         1
 
@@ -965,28 +965,28 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTC9_SIG_SEL         -2
 
 // Signal mapping for PTC10 pin
-//   <o> PTC10 (Alias:A5) [ADC1_SE6b, GPIOC_10, I2C1_SCL, FTM3_CH6, I2S0_RX_FS, FB_AD5]<name=PTC10_SIG_SEL>
+//   <o> PTC10 [ADC1_SE6b, GPIOC_10, I2C1_SCL, FTM3_CH6, I2S0_RX_FS, FB_AD5]<name=PTC10_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC10 pin
-//     <-2=> ADC1_SE6b (reset default)<selection=ADC1_SE6b_PIN_SEL,PTC10 (Alias:A5) (reset default)>
-//     <0=> ADC1_SE6b<selection=ADC1_SE6b_PIN_SEL,PTC10 (Alias:A5)>
-//     <1=> GPIOC_10<selection=GPIOC_10_PIN_SEL,PTC10 (Alias:A5)>
-//     <2=> I2C1_SCL<selection=I2C1_SCL_PIN_SEL,PTC10 (Alias:A5)>
-//     <3=> FTM3_CH6<selection=FTM3_CH6_PIN_SEL,PTC10 (Alias:A5)>
-//     <4=> I2S0_RX_FS<selection=I2S0_RX_FS_PIN_SEL,PTC10 (Alias:A5)>
-//     <5=> FB_AD5<selection=FB_AD5_PIN_SEL,PTC10 (Alias:A5)>
+//     <-2=> ADC1_SE6b (reset default)<selection=ADC1_SE6b_PIN_SEL,PTC10 (reset default)>
+//     <0=> ADC1_SE6b<selection=ADC1_SE6b_PIN_SEL,PTC10>
+//     <1=> GPIOC_10<selection=GPIOC_10_PIN_SEL,PTC10>
+//     <2=> I2C1_SCL<selection=I2C1_SCL_PIN_SEL,PTC10>
+//     <3=> FTM3_CH6<selection=FTM3_CH6_PIN_SEL,PTC10>
+//     <4=> I2S0_RX_FS<selection=I2S0_RX_FS_PIN_SEL,PTC10>
+//     <5=> FB_AD5<selection=FB_AD5_PIN_SEL,PTC10>
 //     <1=> Default
 #define PTC10_SIG_SEL        1
 
 // Signal mapping for PTC11 pin
-//   <o> PTC11 (Alias:A4) [ADC1_SE7b, GPIOC_11/LLWU_P11, I2C1_SDA, FTM3_CH7, I2S0_RXD1, FB_RW_b]<name=PTC11_SIG_SEL>
+//   <o> PTC11 [ADC1_SE7b, GPIOC_11/LLWU_P11, I2C1_SDA, FTM3_CH7, I2S0_RXD1, FB_RW_b]<name=PTC11_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC11 pin
-//     <-2=> ADC1_SE7b (reset default)<selection=ADC1_SE7b_PIN_SEL,PTC11 (Alias:A4) (reset default)>
-//     <0=> ADC1_SE7b<selection=ADC1_SE7b_PIN_SEL,PTC11 (Alias:A4)>
-//     <1=> GPIOC_11/LLWU_P11<selection=GPIOC_11_PIN_SEL,PTC11 (Alias:A4)><selection=LLWU_P11_PIN_SEL,PTC11 (Alias:A4)>
-//     <2=> I2C1_SDA<selection=I2C1_SDA_PIN_SEL,PTC11 (Alias:A4)>
-//     <3=> FTM3_CH7<selection=FTM3_CH7_PIN_SEL,PTC11 (Alias:A4)>
-//     <4=> I2S0_RXD1<selection=I2S0_RXD1_PIN_SEL,PTC11 (Alias:A4)>
-//     <5=> FB_RW_b<selection=FB_RW_b_PIN_SEL,PTC11 (Alias:A4)>
+//     <-2=> ADC1_SE7b (reset default)<selection=ADC1_SE7b_PIN_SEL,PTC11 (reset default)>
+//     <0=> ADC1_SE7b<selection=ADC1_SE7b_PIN_SEL,PTC11>
+//     <1=> GPIOC_11/LLWU_P11<selection=GPIOC_11_PIN_SEL,PTC11><selection=LLWU_P11_PIN_SEL,PTC11>
+//     <2=> I2C1_SDA<selection=I2C1_SDA_PIN_SEL,PTC11>
+//     <3=> FTM3_CH7<selection=FTM3_CH7_PIN_SEL,PTC11>
+//     <4=> I2S0_RXD1<selection=I2S0_RXD1_PIN_SEL,PTC11>
+//     <5=> FB_RW_b<selection=FB_RW_b_PIN_SEL,PTC11>
 //     <1=> Default
 #define PTC11_SIG_SEL        1
 
@@ -1032,24 +1032,24 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTC15_SIG_SEL        -2
 
 // Signal mapping for PTC16 pin
-//   <o> PTC16 (Alias:D0) [GPIOC_16, UART3_RX, ENET0_1588_TMR0, FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b]<name=PTC16_SIG_SEL>
+//   <o> PTC16 [GPIOC_16, UART3_RX, ENET0_1588_TMR0, FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b]<name=PTC16_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC16 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOC_16<selection=GPIOC_16_PIN_SEL,PTC16 (Alias:D0)>
-//     <3=> UART3_RX<selection=UART3_RX_PIN_SEL,PTC16 (Alias:D0)>
-//     <4=> ENET0_1588_TMR0<selection=ENET0_1588_TMR0_PIN_SEL,PTC16 (Alias:D0)>
-//     <5=> FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b<selection=FB_CS5_b_PIN_SEL,PTC16 (Alias:D0)><selection=FB_TSIZ1_PIN_SEL,PTC16 (Alias:D0)><selection=FB_BE23_16_BLS15_8_b_PIN_SEL,PTC16 (Alias:D0)>
+//     <1=> GPIOC_16<selection=GPIOC_16_PIN_SEL,PTC16>
+//     <3=> UART3_RX<selection=UART3_RX_PIN_SEL,PTC16>
+//     <4=> ENET0_1588_TMR0<selection=ENET0_1588_TMR0_PIN_SEL,PTC16>
+//     <5=> FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b<selection=FB_CS5_b_PIN_SEL,PTC16><selection=FB_TSIZ1_PIN_SEL,PTC16><selection=FB_BE23_16_BLS15_8_b_PIN_SEL,PTC16>
 //     <-2=> Default
 #define PTC16_SIG_SEL        -2
 
 // Signal mapping for PTC17 pin
-//   <o> PTC17 (Alias:D1) [GPIOC_17, UART3_TX, ENET0_1588_TMR1, FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b]<name=PTC17_SIG_SEL>
+//   <o> PTC17 [GPIOC_17, UART3_TX, ENET0_1588_TMR1, FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b]<name=PTC17_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTC17 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOC_17<selection=GPIOC_17_PIN_SEL,PTC17 (Alias:D1)>
-//     <3=> UART3_TX<selection=UART3_TX_PIN_SEL,PTC17 (Alias:D1)>
-//     <4=> ENET0_1588_TMR1<selection=ENET0_1588_TMR1_PIN_SEL,PTC17 (Alias:D1)>
-//     <5=> FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b<selection=FB_CS4_b_PIN_SEL,PTC17 (Alias:D1)><selection=FB_TSIZ0_PIN_SEL,PTC17 (Alias:D1)><selection=FB_BE31_24_BLS7_0_b_PIN_SEL,PTC17 (Alias:D1)>
+//     <1=> GPIOC_17<selection=GPIOC_17_PIN_SEL,PTC17>
+//     <3=> UART3_TX<selection=UART3_TX_PIN_SEL,PTC17>
+//     <4=> ENET0_1588_TMR1<selection=ENET0_1588_TMR1_PIN_SEL,PTC17>
+//     <5=> FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b<selection=FB_CS4_b_PIN_SEL,PTC17><selection=FB_TSIZ0_PIN_SEL,PTC17><selection=FB_BE31_24_BLS7_0_b_PIN_SEL,PTC17>
 //     <-2=> Default
 #define PTC17_SIG_SEL        -2
 
@@ -1081,110 +1081,110 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 // <h> Port D Pins
 
 // Signal mapping for PTD0 pin
-//   <o> PTD0 (Alias:D10) [GPIOD_0/LLWU_P12, SPI0_PCS0, UART2_RTS_b, FTM3_CH0, FB_ALE/FB_CS1_b/FB_TS_b]<name=PTD0_SIG_SEL>
+//   <o> PTD0 [GPIOD_0/LLWU_P12, SPI0_PCS0, UART2_RTS_b, FTM3_CH0, FB_ALE/FB_CS1_b/FB_TS_b]<name=PTD0_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD0 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_0/LLWU_P12<selection=GPIOD_0_PIN_SEL,PTD0 (Alias:D10)><selection=LLWU_P12_PIN_SEL,PTD0 (Alias:D10)>
-//     <2=> SPI0_PCS0<selection=SPI0_PCS0_PIN_SEL,PTD0 (Alias:D10)>
-//     <3=> UART2_RTS_b<selection=UART2_RTS_b_PIN_SEL,PTD0 (Alias:D10)>
-//     <4=> FTM3_CH0<selection=FTM3_CH0_PIN_SEL,PTD0 (Alias:D10)>
-//     <5=> FB_ALE/FB_CS1_b/FB_TS_b<selection=FB_ALE_PIN_SEL,PTD0 (Alias:D10)><selection=FB_CS1_b_PIN_SEL,PTD0 (Alias:D10)><selection=FB_TS_b_PIN_SEL,PTD0 (Alias:D10)>
+//     <1=> GPIOD_0/LLWU_P12<selection=GPIOD_0_PIN_SEL,PTD0><selection=LLWU_P12_PIN_SEL,PTD0>
+//     <2=> SPI0_PCS0<selection=SPI0_PCS0_PIN_SEL,PTD0>
+//     <3=> UART2_RTS_b<selection=UART2_RTS_b_PIN_SEL,PTD0>
+//     <4=> FTM3_CH0<selection=FTM3_CH0_PIN_SEL,PTD0>
+//     <5=> FB_ALE/FB_CS1_b/FB_TS_b<selection=FB_ALE_PIN_SEL,PTD0><selection=FB_CS1_b_PIN_SEL,PTD0><selection=FB_TS_b_PIN_SEL,PTD0>
 //     <1=> Default
 #define PTD0_SIG_SEL         1
 
 // Signal mapping for PTD1 pin
-//   <o> PTD1 (Alias:D13) [ADC0_SE5b, GPIOD_1, SPI0_SCK, UART2_CTS_b, FTM3_CH1, FB_CS0_b]<name=PTD1_SIG_SEL>
+//   <o> PTD1 [ADC0_SE5b, GPIOD_1, SPI0_SCK, UART2_CTS_b, FTM3_CH1, FB_CS0_b]<name=PTD1_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD1 pin
-//     <-2=> ADC0_SE5b (reset default)<selection=ADC0_SE5b_PIN_SEL,PTD1 (Alias:D13) (reset default)>
-//     <0=> ADC0_SE5b<selection=ADC0_SE5b_PIN_SEL,PTD1 (Alias:D13)>
-//     <1=> GPIOD_1<selection=GPIOD_1_PIN_SEL,PTD1 (Alias:D13)>
-//     <2=> SPI0_SCK<selection=SPI0_SCK_PIN_SEL,PTD1 (Alias:D13)>
-//     <3=> UART2_CTS_b<selection=UART2_CTS_b_PIN_SEL,PTD1 (Alias:D13)>
-//     <4=> FTM3_CH1<selection=FTM3_CH1_PIN_SEL,PTD1 (Alias:D13)>
-//     <5=> FB_CS0_b<selection=FB_CS0_b_PIN_SEL,PTD1 (Alias:D13)>
+//     <-2=> ADC0_SE5b (reset default)<selection=ADC0_SE5b_PIN_SEL,PTD1 (reset default)>
+//     <0=> ADC0_SE5b<selection=ADC0_SE5b_PIN_SEL,PTD1>
+//     <1=> GPIOD_1<selection=GPIOD_1_PIN_SEL,PTD1>
+//     <2=> SPI0_SCK<selection=SPI0_SCK_PIN_SEL,PTD1>
+//     <3=> UART2_CTS_b<selection=UART2_CTS_b_PIN_SEL,PTD1>
+//     <4=> FTM3_CH1<selection=FTM3_CH1_PIN_SEL,PTD1>
+//     <5=> FB_CS0_b<selection=FB_CS0_b_PIN_SEL,PTD1>
 //     <1=> Default
 #define PTD1_SIG_SEL         1
 
 // Signal mapping for PTD2 pin
-//   <o> PTD2 (Alias:D11) [GPIOD_2/LLWU_P13, SPI0_SOUT, UART2_RX, FTM3_CH2, FB_AD4, I2C0_SCL]<name=PTD2_SIG_SEL>
+//   <o> PTD2 [GPIOD_2/LLWU_P13, SPI0_SOUT, UART2_RX, FTM3_CH2, FB_AD4, I2C0_SCL]<name=PTD2_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD2 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_2/LLWU_P13<selection=GPIOD_2_PIN_SEL,PTD2 (Alias:D11)><selection=LLWU_P13_PIN_SEL,PTD2 (Alias:D11)>
-//     <2=> SPI0_SOUT<selection=SPI0_SOUT_PIN_SEL,PTD2 (Alias:D11)>
-//     <3=> UART2_RX<selection=UART2_RX_PIN_SEL,PTD2 (Alias:D11)>
-//     <4=> FTM3_CH2<selection=FTM3_CH2_PIN_SEL,PTD2 (Alias:D11)>
-//     <5=> FB_AD4<selection=FB_AD4_PIN_SEL,PTD2 (Alias:D11)>
-//     <7=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTD2 (Alias:D11)>
+//     <1=> GPIOD_2/LLWU_P13<selection=GPIOD_2_PIN_SEL,PTD2><selection=LLWU_P13_PIN_SEL,PTD2>
+//     <2=> SPI0_SOUT<selection=SPI0_SOUT_PIN_SEL,PTD2>
+//     <3=> UART2_RX<selection=UART2_RX_PIN_SEL,PTD2>
+//     <4=> FTM3_CH2<selection=FTM3_CH2_PIN_SEL,PTD2>
+//     <5=> FB_AD4<selection=FB_AD4_PIN_SEL,PTD2>
+//     <7=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTD2>
 //     <1=> Default
 #define PTD2_SIG_SEL         1
 
 // Signal mapping for PTD3 pin
-//   <o> PTD3 (Alias:D12) [GPIOD_3, SPI0_SIN, UART2_TX, FTM3_CH3, FB_AD3, I2C0_SDA]<name=PTD3_SIG_SEL>
+//   <o> PTD3 [GPIOD_3, SPI0_SIN, UART2_TX, FTM3_CH3, FB_AD3, I2C0_SDA]<name=PTD3_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD3 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_3<selection=GPIOD_3_PIN_SEL,PTD3 (Alias:D12)>
-//     <2=> SPI0_SIN<selection=SPI0_SIN_PIN_SEL,PTD3 (Alias:D12)>
-//     <3=> UART2_TX<selection=UART2_TX_PIN_SEL,PTD3 (Alias:D12)>
-//     <4=> FTM3_CH3<selection=FTM3_CH3_PIN_SEL,PTD3 (Alias:D12)>
-//     <5=> FB_AD3<selection=FB_AD3_PIN_SEL,PTD3 (Alias:D12)>
-//     <7=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTD3 (Alias:D12)>
+//     <1=> GPIOD_3<selection=GPIOD_3_PIN_SEL,PTD3>
+//     <2=> SPI0_SIN<selection=SPI0_SIN_PIN_SEL,PTD3>
+//     <3=> UART2_TX<selection=UART2_TX_PIN_SEL,PTD3>
+//     <4=> FTM3_CH3<selection=FTM3_CH3_PIN_SEL,PTD3>
+//     <5=> FB_AD3<selection=FB_AD3_PIN_SEL,PTD3>
+//     <7=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTD3>
 //     <1=> Default
 #define PTD3_SIG_SEL         1
 
 // Signal mapping for PTD4 pin
-//   <o> PTD4 (Alias:nRF24L01_cs) [GPIOD_4/LLWU_P14, SPI0_PCS1, UART0_RTS_b, FTM0_CH4, FB_AD2, EWM_IN, SPI1_PCS0]<name=PTD4_SIG_SEL>
+//   <o> PTD4 [GPIOD_4/LLWU_P14, SPI0_PCS1, UART0_RTS_b, FTM0_CH4, FB_AD2, EWM_IN, SPI1_PCS0]<name=PTD4_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD4 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_4/LLWU_P14<selection=GPIOD_4_PIN_SEL,PTD4 (Alias:nRF24L01_cs)><selection=LLWU_P14_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <2=> SPI0_PCS1<selection=SPI0_PCS1_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <3=> UART0_RTS_b<selection=UART0_RTS_b_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <4=> FTM0_CH4<selection=FTM0_CH4_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <5=> FB_AD2<selection=FB_AD2_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <6=> EWM_IN<selection=EWM_IN_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
-//     <7=> SPI1_PCS0<selection=SPI1_PCS0_PIN_SEL,PTD4 (Alias:nRF24L01_cs)>
+//     <1=> GPIOD_4/LLWU_P14<selection=GPIOD_4_PIN_SEL,PTD4><selection=LLWU_P14_PIN_SEL,PTD4>
+//     <2=> SPI0_PCS1<selection=SPI0_PCS1_PIN_SEL,PTD4>
+//     <3=> UART0_RTS_b<selection=UART0_RTS_b_PIN_SEL,PTD4>
+//     <4=> FTM0_CH4<selection=FTM0_CH4_PIN_SEL,PTD4>
+//     <5=> FB_AD2<selection=FB_AD2_PIN_SEL,PTD4>
+//     <6=> EWM_IN<selection=EWM_IN_PIN_SEL,PTD4>
+//     <7=> SPI1_PCS0<selection=SPI1_PCS0_PIN_SEL,PTD4>
 //     <7=> Default
 #define PTD4_SIG_SEL         7
 
 // Signal mapping for PTD5 pin
-//   <o> PTD5 (Alias:nRF24L01_sck) [ADC0_SE6b, GPIOD_5, SPI0_PCS2, UART0_CTS_b/UART0_COL_b, FTM0_CH5, FB_AD1, EWM_OUT_b, SPI1_SCK]<name=PTD5_SIG_SEL>
+//   <o> PTD5 [ADC0_SE6b, GPIOD_5, SPI0_PCS2, UART0_CTS_b/UART0_COL_b, FTM0_CH5, FB_AD1, EWM_OUT_b, SPI1_SCK]<name=PTD5_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD5 pin
-//     <-2=> ADC0_SE6b (reset default)<selection=ADC0_SE6b_PIN_SEL,PTD5 (Alias:nRF24L01_sck) (reset default)>
-//     <0=> ADC0_SE6b<selection=ADC0_SE6b_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <1=> GPIOD_5<selection=GPIOD_5_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <2=> SPI0_PCS2<selection=SPI0_PCS2_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <3=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTD5 (Alias:nRF24L01_sck)><selection=UART0_COL_b_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <4=> FTM0_CH5<selection=FTM0_CH5_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <5=> FB_AD1<selection=FB_AD1_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <6=> EWM_OUT_b<selection=EWM_OUT_b_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
-//     <7=> SPI1_SCK<selection=SPI1_SCK_PIN_SEL,PTD5 (Alias:nRF24L01_sck)>
+//     <-2=> ADC0_SE6b (reset default)<selection=ADC0_SE6b_PIN_SEL,PTD5 (reset default)>
+//     <0=> ADC0_SE6b<selection=ADC0_SE6b_PIN_SEL,PTD5>
+//     <1=> GPIOD_5<selection=GPIOD_5_PIN_SEL,PTD5>
+//     <2=> SPI0_PCS2<selection=SPI0_PCS2_PIN_SEL,PTD5>
+//     <3=> UART0_CTS_b/UART0_COL_b<selection=UART0_CTS_b_PIN_SEL,PTD5><selection=UART0_COL_b_PIN_SEL,PTD5>
+//     <4=> FTM0_CH5<selection=FTM0_CH5_PIN_SEL,PTD5>
+//     <5=> FB_AD1<selection=FB_AD1_PIN_SEL,PTD5>
+//     <6=> EWM_OUT_b<selection=EWM_OUT_b_PIN_SEL,PTD5>
+//     <7=> SPI1_SCK<selection=SPI1_SCK_PIN_SEL,PTD5>
 //     <7=> Default
 #define PTD5_SIG_SEL         7
 
 // Signal mapping for PTD6 pin
-//   <o> PTD6 (Alias:nRF24L01_mosi) [ADC0_SE7b, GPIOD_6/LLWU_P15, SPI0_PCS3, UART0_RX, FTM0_CH6, FB_AD0, FTM0_FLT0, SPI1_SOUT]<name=PTD6_SIG_SEL>
+//   <o> PTD6 [ADC0_SE7b, GPIOD_6/LLWU_P15, SPI0_PCS3, UART0_RX, FTM0_CH6, FB_AD0, FTM0_FLT0, SPI1_SOUT]<name=PTD6_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD6 pin
-//     <-2=> ADC0_SE7b (reset default)<selection=ADC0_SE7b_PIN_SEL,PTD6 (Alias:nRF24L01_mosi) (reset default)>
-//     <0=> ADC0_SE7b<selection=ADC0_SE7b_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <1=> GPIOD_6/LLWU_P15<selection=GPIOD_6_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)><selection=LLWU_P15_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <2=> SPI0_PCS3<selection=SPI0_PCS3_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <3=> UART0_RX<selection=UART0_RX_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <4=> FTM0_CH6<selection=FTM0_CH6_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <5=> FB_AD0<selection=FB_AD0_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <6=> FTM0_FLT0<selection=FTM0_FLT0_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
-//     <7=> SPI1_SOUT<selection=SPI1_SOUT_PIN_SEL,PTD6 (Alias:nRF24L01_mosi)>
+//     <-2=> ADC0_SE7b (reset default)<selection=ADC0_SE7b_PIN_SEL,PTD6 (reset default)>
+//     <0=> ADC0_SE7b<selection=ADC0_SE7b_PIN_SEL,PTD6>
+//     <1=> GPIOD_6/LLWU_P15<selection=GPIOD_6_PIN_SEL,PTD6><selection=LLWU_P15_PIN_SEL,PTD6>
+//     <2=> SPI0_PCS3<selection=SPI0_PCS3_PIN_SEL,PTD6>
+//     <3=> UART0_RX<selection=UART0_RX_PIN_SEL,PTD6>
+//     <4=> FTM0_CH6<selection=FTM0_CH6_PIN_SEL,PTD6>
+//     <5=> FB_AD0<selection=FB_AD0_PIN_SEL,PTD6>
+//     <6=> FTM0_FLT0<selection=FTM0_FLT0_PIN_SEL,PTD6>
+//     <7=> SPI1_SOUT<selection=SPI1_SOUT_PIN_SEL,PTD6>
 //     <7=> Default
 #define PTD6_SIG_SEL         7
 
 // Signal mapping for PTD7 pin
-//   <o> PTD7 (Alias:nRF24L01_miso) [GPIOD_7, CMT_IRO, UART0_TX, FTM0_CH7, FTM0_FLT1, SPI1_SIN]<name=PTD7_SIG_SEL>
+//   <o> PTD7 [GPIOD_7, CMT_IRO, UART0_TX, FTM0_CH7, FTM0_FLT1, SPI1_SIN]<name=PTD7_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTD7 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOD_7<selection=GPIOD_7_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
-//     <2=> CMT_IRO<selection=CMT_IRO_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
-//     <3=> UART0_TX<selection=UART0_TX_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
-//     <4=> FTM0_CH7<selection=FTM0_CH7_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
-//     <6=> FTM0_FLT1<selection=FTM0_FLT1_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
-//     <7=> SPI1_SIN<selection=SPI1_SIN_PIN_SEL,PTD7 (Alias:nRF24L01_miso)>
+//     <1=> GPIOD_7<selection=GPIOD_7_PIN_SEL,PTD7>
+//     <2=> CMT_IRO<selection=CMT_IRO_PIN_SEL,PTD7>
+//     <3=> UART0_TX<selection=UART0_TX_PIN_SEL,PTD7>
+//     <4=> FTM0_CH7<selection=FTM0_CH7_PIN_SEL,PTD7>
+//     <6=> FTM0_FLT1<selection=FTM0_FLT1_PIN_SEL,PTD7>
+//     <7=> SPI1_SIN<selection=SPI1_SIN_PIN_SEL,PTD7>
 //     <7=> Default
 #define PTD7_SIG_SEL         7
 
@@ -1443,38 +1443,38 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 #define PTE12_SIG_SEL        -2
 
 // Signal mapping for PTE24 pin
-//   <o> PTE24 (Alias:D15) [ADC0_SE17, GPIOE_24, UART4_TX, I2C0_SCL, EWM_OUT_b]<name=PTE24_SIG_SEL>
+//   <o> PTE24 [ADC0_SE17, GPIOE_24, UART4_TX, I2C0_SCL, EWM_OUT_b]<name=PTE24_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTE24 pin
-//     <-2=> ADC0_SE17 (reset default)<selection=ADC0_SE17_PIN_SEL,PTE24 (Alias:D15) (reset default)>
-//     <0=> ADC0_SE17<selection=ADC0_SE17_PIN_SEL,PTE24 (Alias:D15)>
-//     <1=> GPIOE_24<selection=GPIOE_24_PIN_SEL,PTE24 (Alias:D15)>
-//     <3=> UART4_TX<selection=UART4_TX_PIN_SEL,PTE24 (Alias:D15)>
-//     <5=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTE24 (Alias:D15)>
-//     <6=> EWM_OUT_b<selection=EWM_OUT_b_PIN_SEL,PTE24 (Alias:D15)>
+//     <-2=> ADC0_SE17 (reset default)<selection=ADC0_SE17_PIN_SEL,PTE24 (reset default)>
+//     <0=> ADC0_SE17<selection=ADC0_SE17_PIN_SEL,PTE24>
+//     <1=> GPIOE_24<selection=GPIOE_24_PIN_SEL,PTE24>
+//     <3=> UART4_TX<selection=UART4_TX_PIN_SEL,PTE24>
+//     <5=> I2C0_SCL<selection=I2C0_SCL_PIN_SEL,PTE24>
+//     <6=> EWM_OUT_b<selection=EWM_OUT_b_PIN_SEL,PTE24>
 //     <1=> Default
 #define PTE24_SIG_SEL        1
 
 // Signal mapping for PTE25 pin
-//   <o> PTE25 (Alias:D14) [ADC0_SE18, GPIOE_25, UART4_RX, I2C0_SDA, EWM_IN]<name=PTE25_SIG_SEL>
+//   <o> PTE25 [ADC0_SE18, GPIOE_25, UART4_RX, I2C0_SDA, EWM_IN]<name=PTE25_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTE25 pin
-//     <-2=> ADC0_SE18 (reset default)<selection=ADC0_SE18_PIN_SEL,PTE25 (Alias:D14) (reset default)>
-//     <0=> ADC0_SE18<selection=ADC0_SE18_PIN_SEL,PTE25 (Alias:D14)>
-//     <1=> GPIOE_25<selection=GPIOE_25_PIN_SEL,PTE25 (Alias:D14)>
-//     <3=> UART4_RX<selection=UART4_RX_PIN_SEL,PTE25 (Alias:D14)>
-//     <5=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTE25 (Alias:D14)>
-//     <6=> EWM_IN<selection=EWM_IN_PIN_SEL,PTE25 (Alias:D14)>
+//     <-2=> ADC0_SE18 (reset default)<selection=ADC0_SE18_PIN_SEL,PTE25 (reset default)>
+//     <0=> ADC0_SE18<selection=ADC0_SE18_PIN_SEL,PTE25>
+//     <1=> GPIOE_25<selection=GPIOE_25_PIN_SEL,PTE25>
+//     <3=> UART4_RX<selection=UART4_RX_PIN_SEL,PTE25>
+//     <5=> I2C0_SDA<selection=I2C0_SDA_PIN_SEL,PTE25>
+//     <6=> EWM_IN<selection=EWM_IN_PIN_SEL,PTE25>
 //     <1=> Default
 #define PTE25_SIG_SEL        1
 
 // Signal mapping for PTE26 pin
-//   <o> PTE26 (Alias:LED_GREEN) [GPIOE_26, ENET_1588_CLKIN, UART4_CTS_b, RTC_CLKOUT, USB_CLKIN]<name=PTE26_SIG_SEL>
+//   <o> PTE26 [GPIOE_26, ENET_1588_CLKIN, UART4_CTS_b, RTC_CLKOUT, USB_CLKIN]<name=PTE26_SIG_SEL>
 //   <i> Selects which peripheral signal is mapped to PTE26 pin
 //     <-2=> Disabled (reset default)
-//     <1=> GPIOE_26<selection=GPIOE_26_PIN_SEL,PTE26 (Alias:LED_GREEN)>
-//     <2=> ENET_1588_CLKIN<selection=ENET_1588_CLKIN_PIN_SEL,PTE26 (Alias:LED_GREEN)>
-//     <3=> UART4_CTS_b<selection=UART4_CTS_b_PIN_SEL,PTE26 (Alias:LED_GREEN)>
-//     <6=> RTC_CLKOUT<selection=RTC_CLKOUT_PIN_SEL,PTE26 (Alias:LED_GREEN)>
-//     <7=> USB_CLKIN<selection=USB_CLKIN_PIN_SEL,PTE26 (Alias:LED_GREEN)>
+//     <1=> GPIOE_26<selection=GPIOE_26_PIN_SEL,PTE26>
+//     <2=> ENET_1588_CLKIN<selection=ENET_1588_CLKIN_PIN_SEL,PTE26>
+//     <3=> UART4_CTS_b<selection=UART4_CTS_b_PIN_SEL,PTE26>
+//     <6=> RTC_CLKOUT<selection=RTC_CLKOUT_PIN_SEL,PTE26>
+//     <7=> USB_CLKIN<selection=USB_CLKIN_PIN_SEL,PTE26>
 //     <1=> Default
 #define PTE26_SIG_SEL        1
 
@@ -1624,8 +1624,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE4b [PTC2]<name=ADC0_SE4b_PIN_SEL>
 //   <i> Shows which pin ADC0_SE4b is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6) (reset default)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0 (reset default)>
-//     <2=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0>
+//     <1=> PTC2 (reset default)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0 (reset default)>
+//     <2=> PTC2<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0>
 //     <0=> Default
 #define ADC0_SE4b_PIN_SEL    0
 
@@ -1633,8 +1633,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE5b [PTD1]<name=ADC0_SE5b_PIN_SEL>
 //   <i> Shows which pin ADC0_SE5b is mapped to
 //     <0=> Disabled
-//     <1=> PTD1 (Alias:D13) (reset default)<selection=PTD1_SIG_SEL,ADC0_SE5b (reset default)>
-//     <2=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,ADC0_SE5b>
+//     <1=> PTD1 (reset default)<selection=PTD1_SIG_SEL,ADC0_SE5b (reset default)>
+//     <2=> PTD1<selection=PTD1_SIG_SEL,ADC0_SE5b>
 //     <0=> Default
 #define ADC0_SE5b_PIN_SEL    0
 
@@ -1642,8 +1642,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE6b [PTD5]<name=ADC0_SE6b_PIN_SEL>
 //   <i> Shows which pin ADC0_SE6b is mapped to
 //     <0=> Disabled
-//     <1=> PTD5 (Alias:nRF24L01_sck) (reset default)<selection=PTD5_SIG_SEL,ADC0_SE6b (reset default)>
-//     <2=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,ADC0_SE6b>
+//     <1=> PTD5 (reset default)<selection=PTD5_SIG_SEL,ADC0_SE6b (reset default)>
+//     <2=> PTD5<selection=PTD5_SIG_SEL,ADC0_SE6b>
 //     <0=> Default
 #define ADC0_SE6b_PIN_SEL    0
 
@@ -1651,8 +1651,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE7b [PTD6]<name=ADC0_SE7b_PIN_SEL>
 //   <i> Shows which pin ADC0_SE7b is mapped to
 //     <0=> Disabled
-//     <1=> PTD6 (Alias:nRF24L01_mosi) (reset default)<selection=PTD6_SIG_SEL,ADC0_SE7b (reset default)>
-//     <2=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,ADC0_SE7b>
+//     <1=> PTD6 (reset default)<selection=PTD6_SIG_SEL,ADC0_SE7b (reset default)>
+//     <2=> PTD6<selection=PTD6_SIG_SEL,ADC0_SE7b>
 //     <0=> Default
 #define ADC0_SE7b_PIN_SEL    0
 
@@ -1696,8 +1696,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE12 [PTB2]<name=ADC0_SE12_PIN_SEL>
 //   <i> Shows which pin ADC0_SE12 is mapped to
 //     <0=> Disabled
-//     <1=> PTB2 (Alias:A0) (reset default)<selection=PTB2_SIG_SEL,ADC0_SE12 (reset default)>
-//     <2=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,ADC0_SE12>
+//     <1=> PTB2 (reset default)<selection=PTB2_SIG_SEL,ADC0_SE12 (reset default)>
+//     <2=> PTB2<selection=PTB2_SIG_SEL,ADC0_SE12>
 //     <2=> Default
 #define ADC0_SE12_PIN_SEL    2
 
@@ -1705,8 +1705,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE13 [PTB3]<name=ADC0_SE13_PIN_SEL>
 //   <i> Shows which pin ADC0_SE13 is mapped to
 //     <0=> Disabled
-//     <1=> PTB3 (Alias:A1) (reset default)<selection=PTB3_SIG_SEL,ADC0_SE13 (reset default)>
-//     <2=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,ADC0_SE13>
+//     <1=> PTB3 (reset default)<selection=PTB3_SIG_SEL,ADC0_SE13 (reset default)>
+//     <2=> PTB3<selection=PTB3_SIG_SEL,ADC0_SE13>
 //     <2=> Default
 #define ADC0_SE13_PIN_SEL    2
 
@@ -1739,8 +1739,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE17 [PTE24]<name=ADC0_SE17_PIN_SEL>
 //   <i> Shows which pin ADC0_SE17 is mapped to
 //     <0=> Disabled
-//     <1=> PTE24 (Alias:D15) (reset default)<selection=PTE24_SIG_SEL,ADC0_SE17 (reset default)>
-//     <2=> PTE24 (Alias:D15)<selection=PTE24_SIG_SEL,ADC0_SE17>
+//     <1=> PTE24 (reset default)<selection=PTE24_SIG_SEL,ADC0_SE17 (reset default)>
+//     <2=> PTE24<selection=PTE24_SIG_SEL,ADC0_SE17>
 //     <0=> Default
 #define ADC0_SE17_PIN_SEL    0
 
@@ -1748,8 +1748,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC0_SE18 [PTE25]<name=ADC0_SE18_PIN_SEL>
 //   <i> Shows which pin ADC0_SE18 is mapped to
 //     <0=> Disabled
-//     <1=> PTE25 (Alias:D14) (reset default)<selection=PTE25_SIG_SEL,ADC0_SE18 (reset default)>
-//     <2=> PTE25 (Alias:D14)<selection=PTE25_SIG_SEL,ADC0_SE18>
+//     <1=> PTE25 (reset default)<selection=PTE25_SIG_SEL,ADC0_SE18 (reset default)>
+//     <2=> PTE25<selection=PTE25_SIG_SEL,ADC0_SE18>
 //     <0=> Default
 #define ADC0_SE18_PIN_SEL    0
 
@@ -1909,8 +1909,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC1_SE6b [PTC10]<name=ADC1_SE6b_PIN_SEL>
 //   <i> Shows which pin ADC1_SE6b is mapped to
 //     <0=> Disabled
-//     <1=> PTC10 (Alias:A5) (reset default)<selection=PTC10_SIG_SEL,ADC1_SE6b (reset default)>
-//     <2=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,ADC1_SE6b>
+//     <1=> PTC10 (reset default)<selection=PTC10_SIG_SEL,ADC1_SE6b (reset default)>
+//     <2=> PTC10<selection=PTC10_SIG_SEL,ADC1_SE6b>
 //     <0=> Default
 #define ADC1_SE6b_PIN_SEL    0
 
@@ -1927,8 +1927,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC1_SE7b [PTC11]<name=ADC1_SE7b_PIN_SEL>
 //   <i> Shows which pin ADC1_SE7b is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4) (reset default)<selection=PTC11_SIG_SEL,ADC1_SE7b (reset default)>
-//     <2=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,ADC1_SE7b>
+//     <1=> PTC11 (reset default)<selection=PTC11_SIG_SEL,ADC1_SE7b (reset default)>
+//     <2=> PTC11<selection=PTC11_SIG_SEL,ADC1_SE7b>
 //     <0=> Default
 #define ADC1_SE7b_PIN_SEL    0
 
@@ -1990,8 +1990,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC1_SE14 [PTB10]<name=ADC1_SE14_PIN_SEL>
 //   <i> Shows which pin ADC1_SE14 is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2) (reset default)<selection=PTB10_SIG_SEL,ADC1_SE14 (reset default)>
-//     <2=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,ADC1_SE14>
+//     <1=> PTB10 (reset default)<selection=PTB10_SIG_SEL,ADC1_SE14 (reset default)>
+//     <2=> PTB10<selection=PTB10_SIG_SEL,ADC1_SE14>
 //     <2=> Default
 #define ADC1_SE14_PIN_SEL    2
 
@@ -1999,8 +1999,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ADC1_SE15 [PTB11]<name=ADC1_SE15_PIN_SEL>
 //   <i> Shows which pin ADC1_SE15 is mapped to
 //     <0=> Disabled
-//     <1=> PTB11 (Alias:A3) (reset default)<selection=PTB11_SIG_SEL,ADC1_SE15 (reset default)>
-//     <2=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,ADC1_SE15>
+//     <1=> PTB11 (reset default)<selection=PTB11_SIG_SEL,ADC1_SE15 (reset default)>
+//     <2=> PTB11<selection=PTB11_SIG_SEL,ADC1_SE15>
 //     <2=> Default
 #define ADC1_SE15_PIN_SEL    2
 
@@ -2093,7 +2093,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin CLKOUT is mapped to
 //     <0=> Disabled
 //     <1=> PTA6<selection=PTA6_SIG_SEL,CLKOUT>
-//     <2=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,CLKOUT>
+//     <2=> PTC3<selection=PTC3_SIG_SEL,CLKOUT>
 //     <0=> Default
 #define CLKOUT_PIN_SEL       0
 #if (CLKOUT_PIN_SEL == 1)
@@ -2162,7 +2162,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> RTC_CLKOUT [PTE26, PTE0]<name=RTC_CLKOUT_PIN_SEL>
 //   <i> Shows which pin RTC_CLKOUT is mapped to
 //     <0=> Disabled
-//     <1=> PTE26 (Alias:LED_GREEN)<selection=PTE26_SIG_SEL,RTC_CLKOUT>
+//     <1=> PTE26<selection=PTE26_SIG_SEL,RTC_CLKOUT>
 //     <2=> PTE0<selection=PTE0_SIG_SEL,RTC_CLKOUT>
 //     <0=> Default
 #define RTC_CLKOUT_PIN_SEL   0
@@ -2294,8 +2294,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> CMP1_IN0 [PTC2]<name=CMP1_IN0_PIN_SEL>
 //   <i> Shows which pin CMP1_IN0 is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6) (reset default)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0 (reset default)>
-//     <2=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0>
+//     <1=> PTC2 (reset default)<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0 (reset default)>
+//     <2=> PTC2<selection=PTC2_SIG_SEL,ADC0_SE4b/CMP1_IN0>
 //     <0=> Default
 #define CMP1_IN0_PIN_SEL     0
 #if (CMP1_IN0_PIN_SEL == 2)
@@ -2307,8 +2307,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> CMP1_IN1 [PTC3]<name=CMP1_IN1_PIN_SEL>
 //   <i> Shows which pin CMP1_IN1 is mapped to
 //     <0=> Disabled
-//     <1=> PTC3 (Alias:D7) (reset default)<selection=PTC3_SIG_SEL,CMP1_IN1 (reset default)>
-//     <2=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,CMP1_IN1>
+//     <1=> PTC3 (reset default)<selection=PTC3_SIG_SEL,CMP1_IN1 (reset default)>
+//     <2=> PTC3<selection=PTC3_SIG_SEL,CMP1_IN1>
 //     <0=> Default
 #define CMP1_IN1_PIN_SEL     0
 #if (CMP1_IN1_PIN_SEL == 2)
@@ -2347,8 +2347,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> CMP1_OUT [PTB21, PTC4]<name=CMP1_OUT_PIN_SEL>
 //   <i> Shows which pin CMP1_OUT is mapped to
 //     <0=> Disabled
-//     <1=> PTB21 (Alias:LED_BLUE)<selection=PTB21_SIG_SEL,CMP1_OUT>
-//     <2=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,CMP1_OUT>
+//     <1=> PTB21<selection=PTB21_SIG_SEL,CMP1_OUT>
+//     <2=> PTC4<selection=PTC4_SIG_SEL,CMP1_OUT>
 //     <0=> Default
 #define CMP1_OUT_PIN_SEL     0
 #if (CMP1_OUT_PIN_SEL == 1)
@@ -2412,7 +2412,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin CMP2_OUT is mapped to
 //     <0=> Disabled
 //     <1=> PTA5<selection=PTA5_SIG_SEL,CMP2_OUT>
-//     <2=> PTB22 (Alias:LED_RED)<selection=PTB22_SIG_SEL,CMP2_OUT>
+//     <2=> PTB22<selection=PTB22_SIG_SEL,CMP2_OUT>
 //     <0=> Default
 #define CMP2_OUT_PIN_SEL     0
 #if (CMP2_OUT_PIN_SEL == 1)
@@ -2431,7 +2431,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> CMT_IRO [PTD7]<name=CMT_IRO_PIN_SEL>
 //   <i> Shows which pin CMT_IRO is mapped to
 //     <0=> Disabled
-//     <1=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,CMT_IRO>
+//     <1=> PTD7<selection=PTD7_SIG_SEL,CMT_IRO>
 //     <0=> Default
 #define CMT_IRO_PIN_SEL      0
 #if (CMT_IRO_PIN_SEL == 1)
@@ -2473,8 +2473,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ENET0_1588_TMR0 [PTB2, PTC16]<name=ENET0_1588_TMR0_PIN_SEL>
 //   <i> Shows which pin ENET0_1588_TMR0 is mapped to
 //     <0=> Disabled
-//     <1=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,ENET0_1588_TMR0>
-//     <2=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,ENET0_1588_TMR0>
+//     <1=> PTB2<selection=PTB2_SIG_SEL,ENET0_1588_TMR0>
+//     <2=> PTC16<selection=PTC16_SIG_SEL,ENET0_1588_TMR0>
 //     <0=> Default
 #define ENET0_1588_TMR0_PIN_SEL 0
 #if (ENET0_1588_TMR0_PIN_SEL == 1)
@@ -2505,8 +2505,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ENET0_1588_TMR1 [PTB3, PTC17]<name=ENET0_1588_TMR1_PIN_SEL>
 //   <i> Shows which pin ENET0_1588_TMR1 is mapped to
 //     <0=> Disabled
-//     <1=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,ENET0_1588_TMR1>
-//     <2=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,ENET0_1588_TMR1>
+//     <1=> PTB3<selection=PTB3_SIG_SEL,ENET0_1588_TMR1>
+//     <2=> PTC17<selection=PTC17_SIG_SEL,ENET0_1588_TMR1>
 //     <0=> Default
 #define ENET0_1588_TMR1_PIN_SEL 0
 #if (ENET0_1588_TMR1_PIN_SEL == 1)
@@ -2541,7 +2541,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> ENET_1588_CLKIN [PTE26]<name=ENET_1588_CLKIN_PIN_SEL>
 //   <i> Shows which pin ENET_1588_CLKIN is mapped to
 //     <0=> Disabled
-//     <1=> PTE26 (Alias:LED_GREEN)<selection=PTE26_SIG_SEL,ENET_1588_CLKIN>
+//     <1=> PTE26<selection=PTE26_SIG_SEL,ENET_1588_CLKIN>
 //     <0=> Default
 #define ENET_1588_CLKIN_PIN_SEL 0
 #if (ENET_1588_CLKIN_PIN_SEL == 1)
@@ -2558,8 +2558,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin EWM_IN is mapped to
 //     <0=> Disabled
 //     <1=> PTB16<selection=PTB16_SIG_SEL,EWM_IN>
-//     <2=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,EWM_IN>
-//     <3=> PTE25 (Alias:D14)<selection=PTE25_SIG_SEL,EWM_IN>
+//     <2=> PTD4<selection=PTD4_SIG_SEL,EWM_IN>
+//     <3=> PTE25<selection=PTE25_SIG_SEL,EWM_IN>
 //     <0=> Default
 #define EWM_IN_PIN_SEL       0
 #if (EWM_IN_PIN_SEL == 1)
@@ -2578,8 +2578,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin EWM_OUT_b is mapped to
 //     <0=> Disabled
 //     <1=> PTB17<selection=PTB17_SIG_SEL,EWM_OUT_b>
-//     <2=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,EWM_OUT_b>
-//     <3=> PTE24 (Alias:D15)<selection=PTE24_SIG_SEL,EWM_OUT_b>
+//     <2=> PTD5<selection=PTD5_SIG_SEL,EWM_OUT_b>
+//     <3=> PTE24<selection=PTE24_SIG_SEL,EWM_OUT_b>
 //     <0=> Default
 #define EWM_OUT_b_PIN_SEL    0
 #if (EWM_OUT_b_PIN_SEL == 1)
@@ -2769,7 +2769,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD0 [PTD6]<name=FB_AD0_PIN_SEL>
 //   <i> Shows which pin FB_AD0 is mapped to
 //     <0=> Disabled
-//     <1=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,FB_AD0>
+//     <1=> PTD6<selection=PTD6_SIG_SEL,FB_AD0>
 //     <0=> Default
 #define FB_AD0_PIN_SEL       0
 #if (FB_AD0_PIN_SEL == 1)
@@ -2781,7 +2781,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD1 [PTD5]<name=FB_AD1_PIN_SEL>
 //   <i> Shows which pin FB_AD1 is mapped to
 //     <0=> Disabled
-//     <1=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,FB_AD1>
+//     <1=> PTD5<selection=PTD5_SIG_SEL,FB_AD1>
 //     <0=> Default
 #define FB_AD1_PIN_SEL       0
 #if (FB_AD1_PIN_SEL == 1)
@@ -2793,7 +2793,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD2 [PTD4]<name=FB_AD2_PIN_SEL>
 //   <i> Shows which pin FB_AD2 is mapped to
 //     <0=> Disabled
-//     <1=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,FB_AD2>
+//     <1=> PTD4<selection=PTD4_SIG_SEL,FB_AD2>
 //     <0=> Default
 #define FB_AD2_PIN_SEL       0
 #if (FB_AD2_PIN_SEL == 1)
@@ -2805,7 +2805,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD3 [PTD3]<name=FB_AD3_PIN_SEL>
 //   <i> Shows which pin FB_AD3 is mapped to
 //     <0=> Disabled
-//     <1=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,FB_AD3>
+//     <1=> PTD3<selection=PTD3_SIG_SEL,FB_AD3>
 //     <0=> Default
 #define FB_AD3_PIN_SEL       0
 #if (FB_AD3_PIN_SEL == 1)
@@ -2817,7 +2817,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD4 [PTD2]<name=FB_AD4_PIN_SEL>
 //   <i> Shows which pin FB_AD4 is mapped to
 //     <0=> Disabled
-//     <1=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,FB_AD4>
+//     <1=> PTD2<selection=PTD2_SIG_SEL,FB_AD4>
 //     <0=> Default
 #define FB_AD4_PIN_SEL       0
 #if (FB_AD4_PIN_SEL == 1)
@@ -2829,7 +2829,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD5 [PTC10]<name=FB_AD5_PIN_SEL>
 //   <i> Shows which pin FB_AD5 is mapped to
 //     <0=> Disabled
-//     <1=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,FB_AD5>
+//     <1=> PTC10<selection=PTC10_SIG_SEL,FB_AD5>
 //     <0=> Default
 #define FB_AD5_PIN_SEL       0
 #if (FB_AD5_PIN_SEL == 1)
@@ -2901,7 +2901,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD11 [PTC4]<name=FB_AD11_PIN_SEL>
 //   <i> Shows which pin FB_AD11 is mapped to
 //     <0=> Disabled
-//     <1=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,FB_AD11>
+//     <1=> PTC4<selection=PTC4_SIG_SEL,FB_AD11>
 //     <0=> Default
 #define FB_AD11_PIN_SEL      0
 #if (FB_AD11_PIN_SEL == 1)
@@ -2913,7 +2913,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD12 [PTC2]<name=FB_AD12_PIN_SEL>
 //   <i> Shows which pin FB_AD12 is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,FB_AD12>
+//     <1=> PTC2<selection=PTC2_SIG_SEL,FB_AD12>
 //     <0=> Default
 #define FB_AD12_PIN_SEL      0
 #if (FB_AD12_PIN_SEL == 1)
@@ -2985,7 +2985,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD18 [PTB11]<name=FB_AD18_PIN_SEL>
 //   <i> Shows which pin FB_AD18 is mapped to
 //     <0=> Disabled
-//     <1=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,FB_AD18>
+//     <1=> PTB11<selection=PTB11_SIG_SEL,FB_AD18>
 //     <0=> Default
 #define FB_AD18_PIN_SEL      0
 #if (FB_AD18_PIN_SEL == 1)
@@ -2997,7 +2997,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD19 [PTB10]<name=FB_AD19_PIN_SEL>
 //   <i> Shows which pin FB_AD19 is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,FB_AD19>
+//     <1=> PTB10<selection=PTB10_SIG_SEL,FB_AD19>
 //     <0=> Default
 #define FB_AD19_PIN_SEL      0
 #if (FB_AD19_PIN_SEL == 1)
@@ -3009,7 +3009,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD20 [PTB9]<name=FB_AD20_PIN_SEL>
 //   <i> Shows which pin FB_AD20 is mapped to
 //     <0=> Disabled
-//     <1=> PTB9 (Alias:D2)<selection=PTB9_SIG_SEL,FB_AD20>
+//     <1=> PTB9<selection=PTB9_SIG_SEL,FB_AD20>
 //     <0=> Default
 #define FB_AD20_PIN_SEL      0
 #if (FB_AD20_PIN_SEL == 1)
@@ -3105,7 +3105,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD28 [PTB23]<name=FB_AD28_PIN_SEL>
 //   <i> Shows which pin FB_AD28 is mapped to
 //     <0=> Disabled
-//     <1=> PTB23 (Alias:D4)<selection=PTB23_SIG_SEL,FB_AD28>
+//     <1=> PTB23<selection=PTB23_SIG_SEL,FB_AD28>
 //     <0=> Default
 #define FB_AD28_PIN_SEL      0
 #if (FB_AD28_PIN_SEL == 1)
@@ -3117,7 +3117,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD29 [PTB22]<name=FB_AD29_PIN_SEL>
 //   <i> Shows which pin FB_AD29 is mapped to
 //     <0=> Disabled
-//     <1=> PTB22 (Alias:LED_RED)<selection=PTB22_SIG_SEL,FB_AD29>
+//     <1=> PTB22<selection=PTB22_SIG_SEL,FB_AD29>
 //     <0=> Default
 #define FB_AD29_PIN_SEL      0
 #if (FB_AD29_PIN_SEL == 1)
@@ -3129,7 +3129,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_AD30 [PTB21]<name=FB_AD30_PIN_SEL>
 //   <i> Shows which pin FB_AD30 is mapped to
 //     <0=> Disabled
-//     <1=> PTB21 (Alias:LED_BLUE)<selection=PTB21_SIG_SEL,FB_AD30>
+//     <1=> PTB21<selection=PTB21_SIG_SEL,FB_AD30>
 //     <0=> Default
 #define FB_AD30_PIN_SEL      0
 #if (FB_AD30_PIN_SEL == 1)
@@ -3153,7 +3153,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_ALE [PTD0]<name=FB_ALE_PIN_SEL>
 //   <i> Shows which pin FB_ALE is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
 //     <0=> Default
 #define FB_ALE_PIN_SEL       0
 #if (FB_ALE_PIN_SEL == 1)
@@ -3189,7 +3189,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_BE23_16_BLS15_8_b [PTC16]<name=FB_BE23_16_BLS15_8_b_PIN_SEL>
 //   <i> Shows which pin FB_BE23_16_BLS15_8_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
+//     <1=> PTC16<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
 //     <0=> Default
 #define FB_BE23_16_BLS15_8_b_PIN_SEL 0
 #if (FB_BE23_16_BLS15_8_b_PIN_SEL == 1)
@@ -3201,7 +3201,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_BE31_24_BLS7_0_b [PTC17]<name=FB_BE31_24_BLS7_0_b_PIN_SEL>
 //   <i> Shows which pin FB_BE31_24_BLS7_0_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
+//     <1=> PTC17<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
 //     <0=> Default
 #define FB_BE31_24_BLS7_0_b_PIN_SEL 0
 #if (FB_BE31_24_BLS7_0_b_PIN_SEL == 1)
@@ -3213,7 +3213,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_CS0_b [PTD1]<name=FB_CS0_b_PIN_SEL>
 //   <i> Shows which pin FB_CS0_b is mapped to
 //     <0=> Disabled
-//     <1=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,FB_CS0_b>
+//     <1=> PTD1<selection=PTD1_SIG_SEL,FB_CS0_b>
 //     <0=> Default
 #define FB_CS0_b_PIN_SEL     0
 #if (FB_CS0_b_PIN_SEL == 1)
@@ -3225,7 +3225,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_CS1_b [PTD0]<name=FB_CS1_b_PIN_SEL>
 //   <i> Shows which pin FB_CS1_b is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
 //     <0=> Default
 #define FB_CS1_b_PIN_SEL     0
 #if (FB_CS1_b_PIN_SEL == 1)
@@ -3261,7 +3261,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_CS4_b [PTC17]<name=FB_CS4_b_PIN_SEL>
 //   <i> Shows which pin FB_CS4_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
+//     <1=> PTC17<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
 //     <0=> Default
 #define FB_CS4_b_PIN_SEL     0
 #if (FB_CS4_b_PIN_SEL == 1)
@@ -3273,7 +3273,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_CS5_b [PTC16]<name=FB_CS5_b_PIN_SEL>
 //   <i> Shows which pin FB_CS5_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
+//     <1=> PTC16<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
 //     <0=> Default
 #define FB_CS5_b_PIN_SEL     0
 #if (FB_CS5_b_PIN_SEL == 1)
@@ -3297,7 +3297,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_RW_b [PTC11]<name=FB_RW_b_PIN_SEL>
 //   <i> Shows which pin FB_RW_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,FB_RW_b>
+//     <1=> PTC11<selection=PTC11_SIG_SEL,FB_RW_b>
 //     <0=> Default
 #define FB_RW_b_PIN_SEL      0
 #if (FB_RW_b_PIN_SEL == 1)
@@ -3333,7 +3333,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_TSIZ0 [PTC17]<name=FB_TSIZ0_PIN_SEL>
 //   <i> Shows which pin FB_TSIZ0 is mapped to
 //     <0=> Disabled
-//     <1=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
+//     <1=> PTC17<selection=PTC17_SIG_SEL,FB_CS4_b/FB_TSIZ0/FB_BE31_24_BLS7_0_b>
 //     <0=> Default
 #define FB_TSIZ0_PIN_SEL     0
 #if (FB_TSIZ0_PIN_SEL == 1)
@@ -3345,7 +3345,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_TSIZ1 [PTC16]<name=FB_TSIZ1_PIN_SEL>
 //   <i> Shows which pin FB_TSIZ1 is mapped to
 //     <0=> Disabled
-//     <1=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
+//     <1=> PTC16<selection=PTC16_SIG_SEL,FB_CS5_b/FB_TSIZ1/FB_BE23_16_BLS15_8_b>
 //     <0=> Default
 #define FB_TSIZ1_PIN_SEL     0
 #if (FB_TSIZ1_PIN_SEL == 1)
@@ -3357,7 +3357,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FB_TS_b [PTD0]<name=FB_TS_b_PIN_SEL>
 //   <i> Shows which pin FB_TS_b is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,FB_ALE/FB_CS1_b/FB_TS_b>
 //     <0=> Default
 #define FB_TS_b_PIN_SEL      0
 #if (FB_TS_b_PIN_SEL == 1)
@@ -3383,7 +3383,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin FTM0_CH1 is mapped to
 //     <0=> Disabled
 //     <1=> PTA4<selection=PTA4_SIG_SEL,FTM0_CH1>
-//     <2=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,FTM0_CH1>
+//     <2=> PTC2<selection=PTC2_SIG_SEL,FTM0_CH1>
 //     <0=> Default
 #define FTM0_CH1_PIN_SEL     0
 
@@ -3392,7 +3392,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin FTM0_CH2 is mapped to
 //     <0=> Disabled
 //     <1=> PTA5<selection=PTA5_SIG_SEL,FTM0_CH2>
-//     <2=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,FTM0_CH2>
+//     <2=> PTC3<selection=PTC3_SIG_SEL,FTM0_CH2>
 //     <3=> PTC5<selection=PTC5_SIG_SEL,FTM0_CH2>
 //     <0=> Default
 #define FTM0_CH2_PIN_SEL     0
@@ -3402,7 +3402,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin FTM0_CH3 is mapped to
 //     <0=> Disabled
 //     <1=> PTA6<selection=PTA6_SIG_SEL,FTM0_CH3>
-//     <2=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,FTM0_CH3>
+//     <2=> PTC4<selection=PTC4_SIG_SEL,FTM0_CH3>
 //     <0=> Default
 #define FTM0_CH3_PIN_SEL     0
 
@@ -3412,7 +3412,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTA7<selection=PTA7_SIG_SEL,FTM0_CH4>
 //     <2=> PTB12<selection=PTB12_SIG_SEL,FTM0_CH4>
-//     <3=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,FTM0_CH4>
+//     <3=> PTD4<selection=PTD4_SIG_SEL,FTM0_CH4>
 //     <0=> Default
 #define FTM0_CH4_PIN_SEL     0
 
@@ -3420,9 +3420,9 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_CH5 [PTA0, PTB13, PTD5]<name=FTM0_CH5_PIN_SEL>
 //   <i> Shows which pin FTM0_CH5 is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,FTM0_CH5>
+//     <1=> PTA0<selection=PTA0_SIG_SEL,FTM0_CH5>
 //     <2=> PTB13<selection=PTB13_SIG_SEL,FTM0_CH5>
-//     <3=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,FTM0_CH5>
+//     <3=> PTD5<selection=PTD5_SIG_SEL,FTM0_CH5>
 //     <0=> Default
 #define FTM0_CH5_PIN_SEL     0
 
@@ -3430,8 +3430,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_CH6 [PTA1, PTD6]<name=FTM0_CH6_PIN_SEL>
 //   <i> Shows which pin FTM0_CH6 is mapped to
 //     <0=> Disabled
-//     <1=> PTA1 (Alias:D3)<selection=PTA1_SIG_SEL,FTM0_CH6>
-//     <2=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,FTM0_CH6>
+//     <1=> PTA1<selection=PTA1_SIG_SEL,FTM0_CH6>
+//     <2=> PTD6<selection=PTD6_SIG_SEL,FTM0_CH6>
 //     <0=> Default
 #define FTM0_CH6_PIN_SEL     0
 
@@ -3439,8 +3439,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_CH7 [PTA2, PTD7]<name=FTM0_CH7_PIN_SEL>
 //   <i> Shows which pin FTM0_CH7 is mapped to
 //     <0=> Disabled
-//     <1=> PTA2 (Alias:D5)<selection=PTA2_SIG_SEL,FTM0_CH7>
-//     <2=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,FTM0_CH7>
+//     <1=> PTA2<selection=PTA2_SIG_SEL,FTM0_CH7>
+//     <2=> PTD7<selection=PTD7_SIG_SEL,FTM0_CH7>
 //     <0=> Default
 #define FTM0_CH7_PIN_SEL     0
 
@@ -3448,8 +3448,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_FLT0 [PTB3, PTD6]<name=FTM0_FLT0_PIN_SEL>
 //   <i> Shows which pin FTM0_FLT0 is mapped to
 //     <0=> Disabled
-//     <1=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,FTM0_FLT0>
-//     <2=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,FTM0_FLT0>
+//     <1=> PTB3<selection=PTB3_SIG_SEL,FTM0_FLT0>
+//     <2=> PTD6<selection=PTD6_SIG_SEL,FTM0_FLT0>
 //     <0=> Default
 #define FTM0_FLT0_PIN_SEL    0
 #if (FTM0_FLT0_PIN_SEL == 1)
@@ -3464,8 +3464,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_FLT1 [PTB10, PTD7]<name=FTM0_FLT1_PIN_SEL>
 //   <i> Shows which pin FTM0_FLT1 is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,FTM0_FLT1>
-//     <2=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,FTM0_FLT1>
+//     <1=> PTB10<selection=PTB10_SIG_SEL,FTM0_FLT1>
+//     <2=> PTD7<selection=PTD7_SIG_SEL,FTM0_FLT1>
 //     <0=> Default
 #define FTM0_FLT1_PIN_SEL    0
 #if (FTM0_FLT1_PIN_SEL == 1)
@@ -3481,7 +3481,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin FTM0_FLT2 is mapped to
 //     <0=> Disabled
 //     <1=> PTA18<selection=PTA18_SIG_SEL,FTM0_FLT2>
-//     <2=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,FTM0_FLT2>
+//     <2=> PTB11<selection=PTB11_SIG_SEL,FTM0_FLT2>
 //     <0=> Default
 #define FTM0_FLT2_PIN_SEL    0
 #if (FTM0_FLT2_PIN_SEL == 1)
@@ -3496,7 +3496,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM0_FLT3 [PTB2]<name=FTM0_FLT3_PIN_SEL>
 //   <i> Shows which pin FTM0_FLT3 is mapped to
 //     <0=> Disabled
-//     <1=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,FTM0_FLT3>
+//     <1=> PTB2<selection=PTB2_SIG_SEL,FTM0_FLT3>
 //     <0=> Default
 #define FTM0_FLT3_PIN_SEL    0
 #if (FTM0_FLT3_PIN_SEL == 1)
@@ -3672,7 +3672,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH0 [PTD0, PTE5]<name=FTM3_CH0_PIN_SEL>
 //   <i> Shows which pin FTM3_CH0 is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,FTM3_CH0>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,FTM3_CH0>
 //     <2=> PTE5<selection=PTE5_SIG_SEL,FTM3_CH0>
 //     <0=> Default
 #define FTM3_CH0_PIN_SEL     0
@@ -3688,7 +3688,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH1 [PTD1, PTE6]<name=FTM3_CH1_PIN_SEL>
 //   <i> Shows which pin FTM3_CH1 is mapped to
 //     <0=> Disabled
-//     <1=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,FTM3_CH1>
+//     <1=> PTD1<selection=PTD1_SIG_SEL,FTM3_CH1>
 //     <2=> PTE6<selection=PTE6_SIG_SEL,FTM3_CH1>
 //     <0=> Default
 #define FTM3_CH1_PIN_SEL     0
@@ -3704,7 +3704,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH2 [PTD2, PTE7]<name=FTM3_CH2_PIN_SEL>
 //   <i> Shows which pin FTM3_CH2 is mapped to
 //     <0=> Disabled
-//     <1=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,FTM3_CH2>
+//     <1=> PTD2<selection=PTD2_SIG_SEL,FTM3_CH2>
 //     <2=> PTE7<selection=PTE7_SIG_SEL,FTM3_CH2>
 //     <0=> Default
 #define FTM3_CH2_PIN_SEL     0
@@ -3720,7 +3720,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH3 [PTD3, PTE8]<name=FTM3_CH3_PIN_SEL>
 //   <i> Shows which pin FTM3_CH3 is mapped to
 //     <0=> Disabled
-//     <1=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,FTM3_CH3>
+//     <1=> PTD3<selection=PTD3_SIG_SEL,FTM3_CH3>
 //     <2=> PTE8<selection=PTE8_SIG_SEL,FTM3_CH3>
 //     <0=> Default
 #define FTM3_CH3_PIN_SEL     0
@@ -3768,7 +3768,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH6 [PTC10, PTE11]<name=FTM3_CH6_PIN_SEL>
 //   <i> Shows which pin FTM3_CH6 is mapped to
 //     <0=> Disabled
-//     <1=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,FTM3_CH6>
+//     <1=> PTC10<selection=PTC10_SIG_SEL,FTM3_CH6>
 //     <2=> PTE11<selection=PTE11_SIG_SEL,FTM3_CH6>
 //     <0=> Default
 #define FTM3_CH6_PIN_SEL     0
@@ -3784,7 +3784,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> FTM3_CH7 [PTC11, PTE12]<name=FTM3_CH7_PIN_SEL>
 //   <i> Shows which pin FTM3_CH7 is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,FTM3_CH7>
+//     <1=> PTC11<selection=PTC11_SIG_SEL,FTM3_CH7>
 //     <2=> PTE12<selection=PTE12_SIG_SEL,FTM3_CH7>
 //     <0=> Default
 #define FTM3_CH7_PIN_SEL     0
@@ -3820,7 +3820,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOA_0 [PTA0]<name=GPIOA_0_PIN_SEL>
 //   <i> Shows which pin GPIOA_0 is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,GPIOA_0>
+//     <1=> PTA0<selection=PTA0_SIG_SEL,GPIOA_0>
 //     <0=> Default
 #define GPIOA_0_PIN_SEL      0
 #if (GPIOA_0_PIN_SEL == 1)
@@ -3832,7 +3832,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOA_1 [PTA1]<name=GPIOA_1_PIN_SEL>
 //   <i> Shows which pin GPIOA_1 is mapped to
 //     <0=> Disabled
-//     <1=> PTA1 (Alias:D3)<selection=PTA1_SIG_SEL,GPIOA_1>
+//     <1=> PTA1<selection=PTA1_SIG_SEL,GPIOA_1>
 //     <1=> Default
 #define GPIOA_1_PIN_SEL      1
 #if (GPIOA_1_PIN_SEL == 1)
@@ -3844,7 +3844,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOA_2 [PTA2]<name=GPIOA_2_PIN_SEL>
 //   <i> Shows which pin GPIOA_2 is mapped to
 //     <0=> Disabled
-//     <1=> PTA2 (Alias:D5)<selection=PTA2_SIG_SEL,GPIOA_2>
+//     <1=> PTA2<selection=PTA2_SIG_SEL,GPIOA_2>
 //     <1=> Default
 #define GPIOA_2_PIN_SEL      1
 #if (GPIOA_2_PIN_SEL == 1)
@@ -4160,7 +4160,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_2 [PTB2]<name=GPIOB_2_PIN_SEL>
 //   <i> Shows which pin GPIOB_2 is mapped to
 //     <0=> Disabled
-//     <1=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,GPIOB_2>
+//     <1=> PTB2<selection=PTB2_SIG_SEL,GPIOB_2>
 //     <0=> Default
 #define GPIOB_2_PIN_SEL      0
 #if (GPIOB_2_PIN_SEL == 1)
@@ -4172,7 +4172,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_3 [PTB3]<name=GPIOB_3_PIN_SEL>
 //   <i> Shows which pin GPIOB_3 is mapped to
 //     <0=> Disabled
-//     <1=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,GPIOB_3>
+//     <1=> PTB3<selection=PTB3_SIG_SEL,GPIOB_3>
 //     <0=> Default
 #define GPIOB_3_PIN_SEL      0
 #if (GPIOB_3_PIN_SEL == 1)
@@ -4244,7 +4244,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_9 [PTB9]<name=GPIOB_9_PIN_SEL>
 //   <i> Shows which pin GPIOB_9 is mapped to
 //     <0=> Disabled
-//     <1=> PTB9 (Alias:D2)<selection=PTB9_SIG_SEL,GPIOB_9>
+//     <1=> PTB9<selection=PTB9_SIG_SEL,GPIOB_9>
 //     <1=> Default
 #define GPIOB_9_PIN_SEL      1
 #if (GPIOB_9_PIN_SEL == 1)
@@ -4256,7 +4256,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_10 [PTB10]<name=GPIOB_10_PIN_SEL>
 //   <i> Shows which pin GPIOB_10 is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,GPIOB_10>
+//     <1=> PTB10<selection=PTB10_SIG_SEL,GPIOB_10>
 //     <0=> Default
 #define GPIOB_10_PIN_SEL     0
 #if (GPIOB_10_PIN_SEL == 1)
@@ -4268,7 +4268,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_11 [PTB11]<name=GPIOB_11_PIN_SEL>
 //   <i> Shows which pin GPIOB_11 is mapped to
 //     <0=> Disabled
-//     <1=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,GPIOB_11>
+//     <1=> PTB11<selection=PTB11_SIG_SEL,GPIOB_11>
 //     <0=> Default
 #define GPIOB_11_PIN_SEL     0
 #if (GPIOB_11_PIN_SEL == 1)
@@ -4364,7 +4364,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_21 [PTB21]<name=GPIOB_21_PIN_SEL>
 //   <i> Shows which pin GPIOB_21 is mapped to
 //     <0=> Disabled
-//     <1=> PTB21 (Alias:LED_BLUE)<selection=PTB21_SIG_SEL,GPIOB_21>
+//     <1=> PTB21<selection=PTB21_SIG_SEL,GPIOB_21>
 //     <1=> Default
 #define GPIOB_21_PIN_SEL     1
 #if (GPIOB_21_PIN_SEL == 1)
@@ -4376,7 +4376,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_22 [PTB22]<name=GPIOB_22_PIN_SEL>
 //   <i> Shows which pin GPIOB_22 is mapped to
 //     <0=> Disabled
-//     <1=> PTB22 (Alias:LED_RED)<selection=PTB22_SIG_SEL,GPIOB_22>
+//     <1=> PTB22<selection=PTB22_SIG_SEL,GPIOB_22>
 //     <1=> Default
 #define GPIOB_22_PIN_SEL     1
 #if (GPIOB_22_PIN_SEL == 1)
@@ -4388,7 +4388,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOB_23 [PTB23]<name=GPIOB_23_PIN_SEL>
 //   <i> Shows which pin GPIOB_23 is mapped to
 //     <0=> Disabled
-//     <1=> PTB23 (Alias:D4)<selection=PTB23_SIG_SEL,GPIOB_23>
+//     <1=> PTB23<selection=PTB23_SIG_SEL,GPIOB_23>
 //     <1=> Default
 #define GPIOB_23_PIN_SEL     1
 #if (GPIOB_23_PIN_SEL == 1)
@@ -4428,7 +4428,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_2 [PTC2]<name=GPIOC_2_PIN_SEL>
 //   <i> Shows which pin GPIOC_2 is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,GPIOC_2>
+//     <1=> PTC2<selection=PTC2_SIG_SEL,GPIOC_2>
 //     <1=> Default
 #define GPIOC_2_PIN_SEL      1
 #if (GPIOC_2_PIN_SEL == 1)
@@ -4440,7 +4440,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_3 [PTC3]<name=GPIOC_3_PIN_SEL>
 //   <i> Shows which pin GPIOC_3 is mapped to
 //     <0=> Disabled
-//     <1=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,GPIOC_3/LLWU_P7>
+//     <1=> PTC3<selection=PTC3_SIG_SEL,GPIOC_3/LLWU_P7>
 //     <1=> Default
 #define GPIOC_3_PIN_SEL      1
 #if (GPIOC_3_PIN_SEL == 1)
@@ -4452,7 +4452,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_4 [PTC4]<name=GPIOC_4_PIN_SEL>
 //   <i> Shows which pin GPIOC_4 is mapped to
 //     <0=> Disabled
-//     <1=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,GPIOC_4/LLWU_P8>
+//     <1=> PTC4<selection=PTC4_SIG_SEL,GPIOC_4/LLWU_P8>
 //     <1=> Default
 #define GPIOC_4_PIN_SEL      1
 #if (GPIOC_4_PIN_SEL == 1)
@@ -4524,7 +4524,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_10 [PTC10]<name=GPIOC_10_PIN_SEL>
 //   <i> Shows which pin GPIOC_10 is mapped to
 //     <0=> Disabled
-//     <1=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,GPIOC_10>
+//     <1=> PTC10<selection=PTC10_SIG_SEL,GPIOC_10>
 //     <1=> Default
 #define GPIOC_10_PIN_SEL     1
 #if (GPIOC_10_PIN_SEL == 1)
@@ -4536,7 +4536,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_11 [PTC11]<name=GPIOC_11_PIN_SEL>
 //   <i> Shows which pin GPIOC_11 is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,GPIOC_11/LLWU_P11>
+//     <1=> PTC11<selection=PTC11_SIG_SEL,GPIOC_11/LLWU_P11>
 //     <1=> Default
 #define GPIOC_11_PIN_SEL     1
 #if (GPIOC_11_PIN_SEL == 1)
@@ -4596,7 +4596,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_16 [PTC16]<name=GPIOC_16_PIN_SEL>
 //   <i> Shows which pin GPIOC_16 is mapped to
 //     <0=> Disabled
-//     <1=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,GPIOC_16>
+//     <1=> PTC16<selection=PTC16_SIG_SEL,GPIOC_16>
 //     <0=> Default
 #define GPIOC_16_PIN_SEL     0
 #if (GPIOC_16_PIN_SEL == 1)
@@ -4608,7 +4608,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOC_17 [PTC17]<name=GPIOC_17_PIN_SEL>
 //   <i> Shows which pin GPIOC_17 is mapped to
 //     <0=> Disabled
-//     <1=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,GPIOC_17>
+//     <1=> PTC17<selection=PTC17_SIG_SEL,GPIOC_17>
 //     <0=> Default
 #define GPIOC_17_PIN_SEL     0
 #if (GPIOC_17_PIN_SEL == 1)
@@ -4648,7 +4648,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_0 [PTD0]<name=GPIOD_0_PIN_SEL>
 //   <i> Shows which pin GPIOD_0 is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,GPIOD_0/LLWU_P12>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,GPIOD_0/LLWU_P12>
 //     <1=> Default
 #define GPIOD_0_PIN_SEL      1
 #if (GPIOD_0_PIN_SEL == 1)
@@ -4660,7 +4660,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_1 [PTD1]<name=GPIOD_1_PIN_SEL>
 //   <i> Shows which pin GPIOD_1 is mapped to
 //     <0=> Disabled
-//     <1=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,GPIOD_1>
+//     <1=> PTD1<selection=PTD1_SIG_SEL,GPIOD_1>
 //     <1=> Default
 #define GPIOD_1_PIN_SEL      1
 #if (GPIOD_1_PIN_SEL == 1)
@@ -4672,7 +4672,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_2 [PTD2]<name=GPIOD_2_PIN_SEL>
 //   <i> Shows which pin GPIOD_2 is mapped to
 //     <0=> Disabled
-//     <1=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,GPIOD_2/LLWU_P13>
+//     <1=> PTD2<selection=PTD2_SIG_SEL,GPIOD_2/LLWU_P13>
 //     <1=> Default
 #define GPIOD_2_PIN_SEL      1
 #if (GPIOD_2_PIN_SEL == 1)
@@ -4684,7 +4684,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_3 [PTD3]<name=GPIOD_3_PIN_SEL>
 //   <i> Shows which pin GPIOD_3 is mapped to
 //     <0=> Disabled
-//     <1=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,GPIOD_3>
+//     <1=> PTD3<selection=PTD3_SIG_SEL,GPIOD_3>
 //     <1=> Default
 #define GPIOD_3_PIN_SEL      1
 #if (GPIOD_3_PIN_SEL == 1)
@@ -4696,7 +4696,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_4 [PTD4]<name=GPIOD_4_PIN_SEL>
 //   <i> Shows which pin GPIOD_4 is mapped to
 //     <0=> Disabled
-//     <1=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,GPIOD_4/LLWU_P14>
+//     <1=> PTD4<selection=PTD4_SIG_SEL,GPIOD_4/LLWU_P14>
 //     <0=> Default
 #define GPIOD_4_PIN_SEL      0
 #if (GPIOD_4_PIN_SEL == 1)
@@ -4708,7 +4708,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_5 [PTD5]<name=GPIOD_5_PIN_SEL>
 //   <i> Shows which pin GPIOD_5 is mapped to
 //     <0=> Disabled
-//     <1=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,GPIOD_5>
+//     <1=> PTD5<selection=PTD5_SIG_SEL,GPIOD_5>
 //     <0=> Default
 #define GPIOD_5_PIN_SEL      0
 #if (GPIOD_5_PIN_SEL == 1)
@@ -4720,7 +4720,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_6 [PTD6]<name=GPIOD_6_PIN_SEL>
 //   <i> Shows which pin GPIOD_6 is mapped to
 //     <0=> Disabled
-//     <1=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,GPIOD_6/LLWU_P15>
+//     <1=> PTD6<selection=PTD6_SIG_SEL,GPIOD_6/LLWU_P15>
 //     <0=> Default
 #define GPIOD_6_PIN_SEL      0
 #if (GPIOD_6_PIN_SEL == 1)
@@ -4732,7 +4732,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOD_7 [PTD7]<name=GPIOD_7_PIN_SEL>
 //   <i> Shows which pin GPIOD_7 is mapped to
 //     <0=> Disabled
-//     <1=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,GPIOD_7>
+//     <1=> PTD7<selection=PTD7_SIG_SEL,GPIOD_7>
 //     <0=> Default
 #define GPIOD_7_PIN_SEL      0
 #if (GPIOD_7_PIN_SEL == 1)
@@ -5000,7 +5000,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOE_24 [PTE24]<name=GPIOE_24_PIN_SEL>
 //   <i> Shows which pin GPIOE_24 is mapped to
 //     <0=> Disabled
-//     <1=> PTE24 (Alias:D15)<selection=PTE24_SIG_SEL,GPIOE_24>
+//     <1=> PTE24<selection=PTE24_SIG_SEL,GPIOE_24>
 //     <1=> Default
 #define GPIOE_24_PIN_SEL     1
 #if (GPIOE_24_PIN_SEL == 1)
@@ -5012,7 +5012,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOE_25 [PTE25]<name=GPIOE_25_PIN_SEL>
 //   <i> Shows which pin GPIOE_25 is mapped to
 //     <0=> Disabled
-//     <1=> PTE25 (Alias:D14)<selection=PTE25_SIG_SEL,GPIOE_25>
+//     <1=> PTE25<selection=PTE25_SIG_SEL,GPIOE_25>
 //     <1=> Default
 #define GPIOE_25_PIN_SEL     1
 #if (GPIOE_25_PIN_SEL == 1)
@@ -5024,7 +5024,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> GPIOE_26 [PTE26]<name=GPIOE_26_PIN_SEL>
 //   <i> Shows which pin GPIOE_26 is mapped to
 //     <0=> Disabled
-//     <1=> PTE26 (Alias:LED_GREEN)<selection=PTE26_SIG_SEL,GPIOE_26>
+//     <1=> PTE26<selection=PTE26_SIG_SEL,GPIOE_26>
 //     <1=> Default
 #define GPIOE_26_PIN_SEL     1
 #if (GPIOE_26_PIN_SEL == 1)
@@ -5065,10 +5065,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin I2C0_SCL is mapped to
 //     <0=> Disabled
 //     <1=> PTB0<selection=PTB0_SIG_SEL,I2C0_SCL>
-//     <2=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,I2C0_SCL>
+//     <2=> PTB2<selection=PTB2_SIG_SEL,I2C0_SCL>
 //     <3=> PTD8<selection=PTD8_SIG_SEL,I2C0_SCL>
-//     <4=> PTE24 (Alias:D15)<selection=PTE24_SIG_SEL,I2C0_SCL>
-//     <5=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,I2C0_SCL>
+//     <4=> PTE24<selection=PTE24_SIG_SEL,I2C0_SCL>
+//     <5=> PTD2<selection=PTD2_SIG_SEL,I2C0_SCL>
 //     <0=> Default
 #define I2C0_SCL_PIN_SEL     0
 
@@ -5077,10 +5077,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin I2C0_SDA is mapped to
 //     <0=> Disabled
 //     <1=> PTB1<selection=PTB1_SIG_SEL,I2C0_SDA>
-//     <2=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,I2C0_SDA>
+//     <2=> PTB3<selection=PTB3_SIG_SEL,I2C0_SDA>
 //     <3=> PTD9<selection=PTD9_SIG_SEL,I2C0_SDA>
-//     <4=> PTE25 (Alias:D14)<selection=PTE25_SIG_SEL,I2C0_SDA>
-//     <5=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,I2C0_SDA>
+//     <4=> PTE25<selection=PTE25_SIG_SEL,I2C0_SDA>
+//     <5=> PTD3<selection=PTD3_SIG_SEL,I2C0_SDA>
 //     <0=> Default
 #define I2C0_SDA_PIN_SEL     0
 
@@ -5092,7 +5092,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> I2C1_SDA [PTC11, PTE0]<name=I2C1_SDA_PIN_SEL>
 //   <i> Shows which pin I2C1_SDA is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,I2C1_SDA>
+//     <1=> PTC11<selection=PTC11_SIG_SEL,I2C1_SDA>
 //     <2=> PTE0<selection=PTE0_SIG_SEL,I2C1_SDA>
 //     <0=> Default
 #define I2C1_SDA_PIN_SEL     0
@@ -5101,7 +5101,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> I2C1_SCL [PTC10, PTE1]<name=I2C1_SCL_PIN_SEL>
 //   <i> Shows which pin I2C1_SCL is mapped to
 //     <0=> Disabled
-//     <1=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,I2C1_SCL>
+//     <1=> PTC10<selection=PTC10_SIG_SEL,I2C1_SCL>
 //     <2=> PTE1<selection=PTE1_SIG_SEL,I2C1_SCL>
 //     <0=> Default
 #define I2C1_SCL_PIN_SEL     0
@@ -5163,7 +5163,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <1=> PTB19<selection=PTB19_SIG_SEL,I2S0_TX_FS>
 //     <2=> PTE11<selection=PTE11_SIG_SEL,I2S0_TX_FS>
 //     <3=> PTA13<selection=PTA13_SIG_SEL,I2S0_TX_FS>
-//     <4=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,I2S0_TX_FS>
+//     <4=> PTC2<selection=PTC2_SIG_SEL,I2S0_TX_FS>
 //     <0=> Default
 #define I2S0_TX_FS_PIN_SEL   0
 #if (I2S0_TX_FS_PIN_SEL == 1)
@@ -5209,7 +5209,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin I2S0_RX_FS is mapped to
 //     <0=> Disabled
 //     <1=> PTC7<selection=PTC7_SIG_SEL,I2S0_RX_FS>
-//     <2=> PTC10 (Alias:A5)<selection=PTC10_SIG_SEL,I2S0_RX_FS>
+//     <2=> PTC10<selection=PTC10_SIG_SEL,I2S0_RX_FS>
 //     <3=> PTE8<selection=PTE8_SIG_SEL,I2S0_RX_FS>
 //     <4=> PTA16<selection=PTA16_SIG_SEL,I2S0_RX_FS>
 //     <0=> Default
@@ -5235,7 +5235,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <1=> PTB18<selection=PTB18_SIG_SEL,I2S0_TX_BCLK>
 //     <2=> PTE12<selection=PTE12_SIG_SEL,I2S0_TX_BCLK>
 //     <3=> PTA5<selection=PTA5_SIG_SEL,I2S0_TX_BCLK>
-//     <4=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,I2S0_TX_BCLK>
+//     <4=> PTC3<selection=PTC3_SIG_SEL,I2S0_TX_BCLK>
 //     <0=> Default
 #define I2S0_TX_BCLK_PIN_SEL 0
 #if (I2S0_TX_BCLK_PIN_SEL == 1)
@@ -5297,7 +5297,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin I2S0_RXD1 is mapped to
 //     <0=> Disabled
 //     <1=> PTE8<selection=PTE8_SIG_SEL,I2S0_RXD1>
-//     <2=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,I2S0_RXD1>
+//     <2=> PTC11<selection=PTC11_SIG_SEL,I2S0_RXD1>
 //     <3=> PTA16<selection=PTA16_SIG_SEL,I2S0_RXD1>
 //     <0=> Default
 #define I2S0_RXD1_PIN_SEL    0
@@ -5340,8 +5340,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> JTAG_TCLK [PTA0]<name=JTAG_TCLK_PIN_SEL>
 //   <i> Shows which pin JTAG_TCLK is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8) (reset default)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK (reset default)>
-//     <2=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK>
+//     <1=> PTA0 (reset default)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK (reset default)>
+//     <2=> PTA0<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK>
 //     <1=> Default
 #define JTAG_TCLK_PIN_SEL    1
 #if (JTAG_TCLK_PIN_SEL == 2)
@@ -5353,8 +5353,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> JTAG_TDI [PTA1]<name=JTAG_TDI_PIN_SEL>
 //   <i> Shows which pin JTAG_TDI is mapped to
 //     <0=> Disabled
-//     <1=> PTA1 (Alias:D3) (reset default)<selection=PTA1_SIG_SEL,JTAG_TDI (reset default)>
-//     <2=> PTA1 (Alias:D3)<selection=PTA1_SIG_SEL,JTAG_TDI>
+//     <1=> PTA1 (reset default)<selection=PTA1_SIG_SEL,JTAG_TDI (reset default)>
+//     <2=> PTA1<selection=PTA1_SIG_SEL,JTAG_TDI>
 //     <0=> Default
 #define JTAG_TDI_PIN_SEL     0
 #if (JTAG_TDI_PIN_SEL == 2)
@@ -5366,8 +5366,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> JTAG_TDO [PTA2]<name=JTAG_TDO_PIN_SEL>
 //   <i> Shows which pin JTAG_TDO is mapped to
 //     <0=> Disabled
-//     <1=> PTA2 (Alias:D5) (reset default)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO (reset default)>
-//     <2=> PTA2 (Alias:D5)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO>
+//     <1=> PTA2 (reset default)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO (reset default)>
+//     <2=> PTA2<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO>
 //     <0=> Default
 #define JTAG_TDO_PIN_SEL     0
 #if (JTAG_TDO_PIN_SEL == 2)
@@ -5418,8 +5418,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SWD_CLK [PTA0]<name=SWD_CLK_PIN_SEL>
 //   <i> Shows which pin SWD_CLK is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8) (reset default)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK (reset default)>
-//     <2=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK>
+//     <1=> PTA0 (reset default)<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK (reset default)>
+//     <2=> PTA0<selection=PTA0_SIG_SEL,JTAG_TCLK/SWD_CLK>
 //     <1=> Default
 #define SWD_CLK_PIN_SEL      1
 #if (SWD_CLK_PIN_SEL == 2)
@@ -5524,8 +5524,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> TRACE_SWO [PTA2]<name=TRACE_SWO_PIN_SEL>
 //   <i> Shows which pin TRACE_SWO is mapped to
 //     <0=> Disabled
-//     <1=> PTA2 (Alias:D5) (reset default)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO (reset default)>
-//     <2=> PTA2 (Alias:D5)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO>
+//     <1=> PTA2 (reset default)<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO (reset default)>
+//     <2=> PTA2<selection=PTA2_SIG_SEL,JTAG_TDO/TRACE_SWO>
 //     <0=> Default
 #define TRACE_SWO_PIN_SEL    0
 #if (TRACE_SWO_PIN_SEL == 2)
@@ -5625,7 +5625,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P7 [PTC3]<name=LLWU_P7_PIN_SEL>
 //   <i> Shows which pin LLWU_P7 is mapped to
 //     <0=> Disabled
-//     <1=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,GPIOC_3/LLWU_P7>
+//     <1=> PTC3<selection=PTC3_SIG_SEL,GPIOC_3/LLWU_P7>
 //     <1=> Default
 #define LLWU_P7_PIN_SEL      1
 #if (LLWU_P7_PIN_SEL == 1)
@@ -5637,7 +5637,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P8 [PTC4]<name=LLWU_P8_PIN_SEL>
 //   <i> Shows which pin LLWU_P8 is mapped to
 //     <0=> Disabled
-//     <1=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,GPIOC_4/LLWU_P8>
+//     <1=> PTC4<selection=PTC4_SIG_SEL,GPIOC_4/LLWU_P8>
 //     <1=> Default
 #define LLWU_P8_PIN_SEL      1
 #if (LLWU_P8_PIN_SEL == 1)
@@ -5673,7 +5673,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P11 [PTC11]<name=LLWU_P11_PIN_SEL>
 //   <i> Shows which pin LLWU_P11 is mapped to
 //     <0=> Disabled
-//     <1=> PTC11 (Alias:A4)<selection=PTC11_SIG_SEL,GPIOC_11/LLWU_P11>
+//     <1=> PTC11<selection=PTC11_SIG_SEL,GPIOC_11/LLWU_P11>
 //     <1=> Default
 #define LLWU_P11_PIN_SEL     1
 #if (LLWU_P11_PIN_SEL == 1)
@@ -5685,7 +5685,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P12 [PTD0]<name=LLWU_P12_PIN_SEL>
 //   <i> Shows which pin LLWU_P12 is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,GPIOD_0/LLWU_P12>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,GPIOD_0/LLWU_P12>
 //     <1=> Default
 #define LLWU_P12_PIN_SEL     1
 #if (LLWU_P12_PIN_SEL == 1)
@@ -5697,7 +5697,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P13 [PTD2]<name=LLWU_P13_PIN_SEL>
 //   <i> Shows which pin LLWU_P13 is mapped to
 //     <0=> Disabled
-//     <1=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,GPIOD_2/LLWU_P13>
+//     <1=> PTD2<selection=PTD2_SIG_SEL,GPIOD_2/LLWU_P13>
 //     <1=> Default
 #define LLWU_P13_PIN_SEL     1
 #if (LLWU_P13_PIN_SEL == 1)
@@ -5709,7 +5709,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P14 [PTD4]<name=LLWU_P14_PIN_SEL>
 //   <i> Shows which pin LLWU_P14 is mapped to
 //     <0=> Disabled
-//     <1=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,GPIOD_4/LLWU_P14>
+//     <1=> PTD4<selection=PTD4_SIG_SEL,GPIOD_4/LLWU_P14>
 //     <0=> Default
 #define LLWU_P14_PIN_SEL     0
 #if (LLWU_P14_PIN_SEL == 1)
@@ -5721,7 +5721,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> LLWU_P15 [PTD6]<name=LLWU_P15_PIN_SEL>
 //   <i> Shows which pin LLWU_P15 is mapped to
 //     <0=> Disabled
-//     <1=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,GPIOD_6/LLWU_P15>
+//     <1=> PTD6<selection=PTD6_SIG_SEL,GPIOD_6/LLWU_P15>
 //     <0=> Default
 #define LLWU_P15_PIN_SEL     0
 #if (LLWU_P15_PIN_SEL == 1)
@@ -6254,8 +6254,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin SPI0_PCS0 is mapped to
 //     <0=> Disabled
 //     <1=> PTA14<selection=PTA14_SIG_SEL,SPI0_PCS0>
-//     <2=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,SPI0_PCS0>
-//     <3=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,SPI0_PCS0>
+//     <2=> PTC4<selection=PTC4_SIG_SEL,SPI0_PCS0>
+//     <3=> PTD0<selection=PTD0_SIG_SEL,SPI0_PCS0>
 //     <0=> Default
 #define SPI0_PCS0_PIN_SEL    0
 
@@ -6263,8 +6263,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI0_PCS1 [PTC3, PTD4]<name=SPI0_PCS1_PIN_SEL>
 //   <i> Shows which pin SPI0_PCS1 is mapped to
 //     <0=> Disabled
-//     <1=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,SPI0_PCS1>
-//     <2=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,SPI0_PCS1>
+//     <1=> PTC3<selection=PTC3_SIG_SEL,SPI0_PCS1>
+//     <2=> PTD4<selection=PTD4_SIG_SEL,SPI0_PCS1>
 //     <0=> Default
 #define SPI0_PCS1_PIN_SEL    0
 
@@ -6272,8 +6272,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI0_PCS2 [PTC2, PTD5]<name=SPI0_PCS2_PIN_SEL>
 //   <i> Shows which pin SPI0_PCS2 is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,SPI0_PCS2>
-//     <2=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,SPI0_PCS2>
+//     <1=> PTC2<selection=PTC2_SIG_SEL,SPI0_PCS2>
+//     <2=> PTD5<selection=PTD5_SIG_SEL,SPI0_PCS2>
 //     <0=> Default
 #define SPI0_PCS2_PIN_SEL    0
 
@@ -6282,7 +6282,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin SPI0_PCS3 is mapped to
 //     <0=> Disabled
 //     <1=> PTC1<selection=PTC1_SIG_SEL,SPI0_PCS3>
-//     <2=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,SPI0_PCS3>
+//     <2=> PTD6<selection=PTD6_SIG_SEL,SPI0_PCS3>
 //     <0=> Default
 #define SPI0_PCS3_PIN_SEL    0
 
@@ -6298,7 +6298,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI0_PCS5 [PTB23]<name=SPI0_PCS5_PIN_SEL>
 //   <i> Shows which pin SPI0_PCS5 is mapped to
 //     <0=> Disabled
-//     <1=> PTB23 (Alias:D4)<selection=PTB23_SIG_SEL,SPI0_PCS5>
+//     <1=> PTB23<selection=PTB23_SIG_SEL,SPI0_PCS5>
 //     <0=> Default
 #define SPI0_PCS5_PIN_SEL    0
 
@@ -6308,7 +6308,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTA15<selection=PTA15_SIG_SEL,SPI0_SCK>
 //     <2=> PTC5<selection=PTC5_SIG_SEL,SPI0_SCK>
-//     <3=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,SPI0_SCK>
+//     <3=> PTD1<selection=PTD1_SIG_SEL,SPI0_SCK>
 //     <0=> Default
 #define SPI0_SCK_PIN_SEL     0
 
@@ -6318,7 +6318,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTA17<selection=PTA17_SIG_SEL,SPI0_SIN>
 //     <2=> PTC7<selection=PTC7_SIG_SEL,SPI0_SIN>
-//     <3=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,SPI0_SIN>
+//     <3=> PTD3<selection=PTD3_SIG_SEL,SPI0_SIN>
 //     <0=> Default
 #define SPI0_SIN_PIN_SEL     0
 
@@ -6328,7 +6328,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTA16<selection=PTA16_SIG_SEL,SPI0_SOUT>
 //     <2=> PTC6<selection=PTC6_SIG_SEL,SPI0_SOUT>
-//     <3=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,SPI0_SOUT>
+//     <3=> PTD2<selection=PTD2_SIG_SEL,SPI0_SOUT>
 //     <0=> Default
 #define SPI0_SOUT_PIN_SEL    0
 
@@ -6340,9 +6340,9 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI1_PCS0 [PTB10, PTE4, PTD4]<name=SPI1_PCS0_PIN_SEL>
 //   <i> Shows which pin SPI1_PCS0 is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,SPI1_PCS0>
+//     <1=> PTB10<selection=PTB10_SIG_SEL,SPI1_PCS0>
 //     <2=> PTE4<selection=PTE4_SIG_SEL,SPI1_PCS0>
-//     <3=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,SPI1_PCS0>
+//     <3=> PTD4<selection=PTD4_SIG_SEL,SPI1_PCS0>
 //     <3=> Default
 #define SPI1_PCS0_PIN_SEL    3
 
@@ -6350,7 +6350,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI1_PCS1 [PTB9, PTE0]<name=SPI1_PCS1_PIN_SEL>
 //   <i> Shows which pin SPI1_PCS1 is mapped to
 //     <0=> Disabled
-//     <1=> PTB9 (Alias:D2)<selection=PTB9_SIG_SEL,SPI1_PCS1>
+//     <1=> PTB9<selection=PTB9_SIG_SEL,SPI1_PCS1>
 //     <2=> PTE0<selection=PTE0_SIG_SEL,SPI1_PCS1>
 //     <0=> Default
 #define SPI1_PCS1_PIN_SEL    0
@@ -6375,9 +6375,9 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI1_SCK [PTB11, PTE2, PTD5]<name=SPI1_SCK_PIN_SEL>
 //   <i> Shows which pin SPI1_SCK is mapped to
 //     <0=> Disabled
-//     <1=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,SPI1_SCK>
+//     <1=> PTB11<selection=PTB11_SIG_SEL,SPI1_SCK>
 //     <2=> PTE2<selection=PTE2_SIG_SEL,SPI1_SCK>
-//     <3=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,SPI1_SCK>
+//     <3=> PTD5<selection=PTD5_SIG_SEL,SPI1_SCK>
 //     <3=> Default
 #define SPI1_SCK_PIN_SEL     3
 
@@ -6387,7 +6387,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTB17<selection=PTB17_SIG_SEL,SPI1_SIN>
 //     <2=> PTE3<selection=PTE3_SIG_SEL,SPI1_SIN>
-//     <3=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,SPI1_SIN>
+//     <3=> PTD7<selection=PTD7_SIG_SEL,SPI1_SIN>
 //     <4=> PTE1<selection=PTE1_SIG_SEL,SPI1_SIN>
 //     <3=> Default
 #define SPI1_SIN_PIN_SEL     3
@@ -6398,7 +6398,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTB16<selection=PTB16_SIG_SEL,SPI1_SOUT>
 //     <2=> PTE1<selection=PTE1_SIG_SEL,SPI1_SOUT>
-//     <3=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,SPI1_SOUT>
+//     <3=> PTD6<selection=PTD6_SIG_SEL,SPI1_SOUT>
 //     <4=> PTE3<selection=PTE3_SIG_SEL,SPI1_SOUT>
 //     <3=> Default
 #define SPI1_SOUT_PIN_SEL    3
@@ -6428,7 +6428,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI2_SCK [PTB21, PTD12]<name=SPI2_SCK_PIN_SEL>
 //   <i> Shows which pin SPI2_SCK is mapped to
 //     <0=> Disabled
-//     <1=> PTB21 (Alias:LED_BLUE)<selection=PTB21_SIG_SEL,SPI2_SCK>
+//     <1=> PTB21<selection=PTB21_SIG_SEL,SPI2_SCK>
 //     <2=> PTD12<selection=PTD12_SIG_SEL,SPI2_SCK>
 //     <0=> Default
 #define SPI2_SCK_PIN_SEL     0
@@ -6437,7 +6437,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI2_SIN [PTB23, PTD14]<name=SPI2_SIN_PIN_SEL>
 //   <i> Shows which pin SPI2_SIN is mapped to
 //     <0=> Disabled
-//     <1=> PTB23 (Alias:D4)<selection=PTB23_SIG_SEL,SPI2_SIN>
+//     <1=> PTB23<selection=PTB23_SIG_SEL,SPI2_SIN>
 //     <2=> PTD14<selection=PTD14_SIG_SEL,SPI2_SIN>
 //     <0=> Default
 #define SPI2_SIN_PIN_SEL     0
@@ -6446,7 +6446,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> SPI2_SOUT [PTB22, PTD13]<name=SPI2_SOUT_PIN_SEL>
 //   <i> Shows which pin SPI2_SOUT is mapped to
 //     <0=> Disabled
-//     <1=> PTB22 (Alias:LED_RED)<selection=PTB22_SIG_SEL,SPI2_SOUT>
+//     <1=> PTB22<selection=PTB22_SIG_SEL,SPI2_SOUT>
 //     <2=> PTD13<selection=PTD13_SIG_SEL,SPI2_SOUT>
 //     <0=> Default
 #define SPI2_SOUT_PIN_SEL    0
@@ -6459,10 +6459,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART0_COL_b [PTA0, PTA16, PTB3, PTD5]<name=UART0_COL_b_PIN_SEL>
 //   <i> Shows which pin UART0_COL_b is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <1=> PTA0<selection=PTA0_SIG_SEL,UART0_CTS_b/UART0_COL_b>
 //     <2=> PTA16<selection=PTA16_SIG_SEL,UART0_CTS_b/UART0_COL_b>
-//     <3=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,UART0_CTS_b/UART0_COL_b>
-//     <4=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <3=> PTB3<selection=PTB3_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <4=> PTD5<selection=PTD5_SIG_SEL,UART0_CTS_b/UART0_COL_b>
 //     <0=> Default
 #define UART0_COL_b_PIN_SEL  0
 #if (UART0_COL_b_PIN_SEL == 1)
@@ -6483,10 +6483,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART0_CTS_b [PTA0, PTA16, PTB3, PTD5]<name=UART0_CTS_b_PIN_SEL>
 //   <i> Shows which pin UART0_CTS_b is mapped to
 //     <0=> Disabled
-//     <1=> PTA0 (Alias:D8)<selection=PTA0_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <1=> PTA0<selection=PTA0_SIG_SEL,UART0_CTS_b/UART0_COL_b>
 //     <2=> PTA16<selection=PTA16_SIG_SEL,UART0_CTS_b/UART0_COL_b>
-//     <3=> PTB3 (Alias:A1)<selection=PTB3_SIG_SEL,UART0_CTS_b/UART0_COL_b>
-//     <4=> PTD5 (Alias:nRF24L01_sck)<selection=PTD5_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <3=> PTB3<selection=PTB3_SIG_SEL,UART0_CTS_b/UART0_COL_b>
+//     <4=> PTD5<selection=PTD5_SIG_SEL,UART0_CTS_b/UART0_COL_b>
 //     <0=> Default
 #define UART0_CTS_b_PIN_SEL  0
 #if (UART0_CTS_b_PIN_SEL == 1)
@@ -6509,8 +6509,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <0=> Disabled
 //     <1=> PTA3<selection=PTA3_SIG_SEL,UART0_RTS_b>
 //     <2=> PTA17<selection=PTA17_SIG_SEL,UART0_RTS_b>
-//     <3=> PTB2 (Alias:A0)<selection=PTB2_SIG_SEL,UART0_RTS_b>
-//     <4=> PTD4 (Alias:nRF24L01_cs)<selection=PTD4_SIG_SEL,UART0_RTS_b>
+//     <3=> PTB2<selection=PTB2_SIG_SEL,UART0_RTS_b>
+//     <4=> PTD4<selection=PTD4_SIG_SEL,UART0_RTS_b>
 //     <0=> Default
 #define UART0_RTS_b_PIN_SEL  0
 #if (UART0_RTS_b_PIN_SEL == 1)
@@ -6531,10 +6531,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART0_RX [PTA1, PTA15, PTB16, PTD6]<name=UART0_RX_PIN_SEL>
 //   <i> Shows which pin UART0_RX is mapped to
 //     <0=> Disabled
-//     <1=> PTA1 (Alias:D3)<selection=PTA1_SIG_SEL,UART0_RX>
+//     <1=> PTA1<selection=PTA1_SIG_SEL,UART0_RX>
 //     <2=> PTA15<selection=PTA15_SIG_SEL,UART0_RX>
 //     <3=> PTB16<selection=PTB16_SIG_SEL,UART0_RX>
-//     <4=> PTD6 (Alias:nRF24L01_mosi)<selection=PTD6_SIG_SEL,UART0_RX>
+//     <4=> PTD6<selection=PTD6_SIG_SEL,UART0_RX>
 //     <0=> Default
 #define UART0_RX_PIN_SEL     0
 #if (UART0_RX_PIN_SEL == 1)
@@ -6555,10 +6555,10 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART0_TX [PTA2, PTA14, PTB17, PTD7]<name=UART0_TX_PIN_SEL>
 //   <i> Shows which pin UART0_TX is mapped to
 //     <0=> Disabled
-//     <1=> PTA2 (Alias:D5)<selection=PTA2_SIG_SEL,UART0_TX>
+//     <1=> PTA2<selection=PTA2_SIG_SEL,UART0_TX>
 //     <2=> PTA14<selection=PTA14_SIG_SEL,UART0_TX>
 //     <3=> PTB17<selection=PTB17_SIG_SEL,UART0_TX>
-//     <4=> PTD7 (Alias:nRF24L01_miso)<selection=PTD7_SIG_SEL,UART0_TX>
+//     <4=> PTD7<selection=PTD7_SIG_SEL,UART0_TX>
 //     <0=> Default
 #define UART0_TX_PIN_SEL     0
 #if (UART0_TX_PIN_SEL == 1)
@@ -6583,7 +6583,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART1_CTS_b [PTC2, PTE2]<name=UART1_CTS_b_PIN_SEL>
 //   <i> Shows which pin UART1_CTS_b is mapped to
 //     <0=> Disabled
-//     <1=> PTC2 (Alias:D6)<selection=PTC2_SIG_SEL,UART1_CTS_b>
+//     <1=> PTC2<selection=PTC2_SIG_SEL,UART1_CTS_b>
 //     <2=> PTE2<selection=PTE2_SIG_SEL,UART1_CTS_b>
 //     <0=> Default
 #define UART1_CTS_b_PIN_SEL  0
@@ -6615,7 +6615,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART1_RX [PTC3, PTE1]<name=UART1_RX_PIN_SEL>
 //   <i> Shows which pin UART1_RX is mapped to
 //     <0=> Disabled
-//     <1=> PTC3 (Alias:D7)<selection=PTC3_SIG_SEL,UART1_RX>
+//     <1=> PTC3<selection=PTC3_SIG_SEL,UART1_RX>
 //     <2=> PTE1<selection=PTE1_SIG_SEL,UART1_RX>
 //     <0=> Default
 #define UART1_RX_PIN_SEL     0
@@ -6631,7 +6631,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART1_TX [PTC4, PTE0]<name=UART1_TX_PIN_SEL>
 //   <i> Shows which pin UART1_TX is mapped to
 //     <0=> Disabled
-//     <1=> PTC4 (Alias:D9)<selection=PTC4_SIG_SEL,UART1_TX>
+//     <1=> PTC4<selection=PTC4_SIG_SEL,UART1_TX>
 //     <2=> PTE0<selection=PTE0_SIG_SEL,UART1_TX>
 //     <0=> Default
 #define UART1_TX_PIN_SEL     0
@@ -6651,7 +6651,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART2_CTS_b [PTD1]<name=UART2_CTS_b_PIN_SEL>
 //   <i> Shows which pin UART2_CTS_b is mapped to
 //     <0=> Disabled
-//     <1=> PTD1 (Alias:D13)<selection=PTD1_SIG_SEL,UART2_CTS_b>
+//     <1=> PTD1<selection=PTD1_SIG_SEL,UART2_CTS_b>
 //     <0=> Default
 #define UART2_CTS_b_PIN_SEL  0
 #if (UART2_CTS_b_PIN_SEL == 1)
@@ -6663,7 +6663,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART2_RTS_b [PTD0]<name=UART2_RTS_b_PIN_SEL>
 //   <i> Shows which pin UART2_RTS_b is mapped to
 //     <0=> Disabled
-//     <1=> PTD0 (Alias:D10)<selection=PTD0_SIG_SEL,UART2_RTS_b>
+//     <1=> PTD0<selection=PTD0_SIG_SEL,UART2_RTS_b>
 //     <0=> Default
 #define UART2_RTS_b_PIN_SEL  0
 #if (UART2_RTS_b_PIN_SEL == 1)
@@ -6675,7 +6675,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART2_RX [PTD2]<name=UART2_RX_PIN_SEL>
 //   <i> Shows which pin UART2_RX is mapped to
 //     <0=> Disabled
-//     <1=> PTD2 (Alias:D11)<selection=PTD2_SIG_SEL,UART2_RX>
+//     <1=> PTD2<selection=PTD2_SIG_SEL,UART2_RX>
 //     <0=> Default
 #define UART2_RX_PIN_SEL     0
 #if (UART2_RX_PIN_SEL == 1)
@@ -6687,7 +6687,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART2_TX [PTD3]<name=UART2_TX_PIN_SEL>
 //   <i> Shows which pin UART2_TX is mapped to
 //     <0=> Disabled
-//     <1=> PTD3 (Alias:D12)<selection=PTD3_SIG_SEL,UART2_TX>
+//     <1=> PTD3<selection=PTD3_SIG_SEL,UART2_TX>
 //     <0=> Default
 #define UART2_TX_PIN_SEL     0
 #if (UART2_TX_PIN_SEL == 1)
@@ -6704,7 +6704,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin UART3_CTS_b is mapped to
 //     <0=> Disabled
 //     <1=> PTB13<selection=PTB13_SIG_SEL,UART3_CTS_b>
-//     <2=> PTB9 (Alias:D2)<selection=PTB9_SIG_SEL,UART3_CTS_b>
+//     <2=> PTB9<selection=PTB9_SIG_SEL,UART3_CTS_b>
 //     <3=> PTC19<selection=PTC19_SIG_SEL,UART3_CTS_b>
 //     <4=> PTE6<selection=PTE6_SIG_SEL,UART3_CTS_b>
 //     <0=> Default
@@ -6751,8 +6751,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART3_RX [PTB10, PTC16, PTE5]<name=UART3_RX_PIN_SEL>
 //   <i> Shows which pin UART3_RX is mapped to
 //     <0=> Disabled
-//     <1=> PTB10 (Alias:A2)<selection=PTB10_SIG_SEL,UART3_RX>
-//     <2=> PTC16 (Alias:D0)<selection=PTC16_SIG_SEL,UART3_RX>
+//     <1=> PTB10<selection=PTB10_SIG_SEL,UART3_RX>
+//     <2=> PTC16<selection=PTC16_SIG_SEL,UART3_RX>
 //     <3=> PTE5<selection=PTE5_SIG_SEL,UART3_RX>
 //     <0=> Default
 #define UART3_RX_PIN_SEL     0
@@ -6771,8 +6771,8 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <o> UART3_TX [PTB11, PTC17, PTE4]<name=UART3_TX_PIN_SEL>
 //   <i> Shows which pin UART3_TX is mapped to
 //     <0=> Disabled
-//     <1=> PTB11 (Alias:A3)<selection=PTB11_SIG_SEL,UART3_TX>
-//     <2=> PTC17 (Alias:D1)<selection=PTC17_SIG_SEL,UART3_TX>
+//     <1=> PTB11<selection=PTB11_SIG_SEL,UART3_TX>
+//     <2=> PTC17<selection=PTC17_SIG_SEL,UART3_TX>
 //     <3=> PTE4<selection=PTE4_SIG_SEL,UART3_TX>
 //     <0=> Default
 #define UART3_TX_PIN_SEL     0
@@ -6796,7 +6796,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin UART4_CTS_b is mapped to
 //     <0=> Disabled
 //     <1=> PTC13<selection=PTC13_SIG_SEL,UART4_CTS_b>
-//     <2=> PTE26 (Alias:LED_GREEN)<selection=PTE26_SIG_SEL,UART4_CTS_b>
+//     <2=> PTE26<selection=PTE26_SIG_SEL,UART4_CTS_b>
 //     <0=> Default
 #define UART4_CTS_b_PIN_SEL  0
 #if (UART4_CTS_b_PIN_SEL == 1)
@@ -6828,7 +6828,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin UART4_RX is mapped to
 //     <0=> Disabled
 //     <1=> PTC14<selection=PTC14_SIG_SEL,UART4_RX>
-//     <2=> PTE25 (Alias:D14)<selection=PTE25_SIG_SEL,UART4_RX>
+//     <2=> PTE25<selection=PTE25_SIG_SEL,UART4_RX>
 //     <0=> Default
 #define UART4_RX_PIN_SEL     0
 #if (UART4_RX_PIN_SEL == 1)
@@ -6844,7 +6844,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin UART4_TX is mapped to
 //     <0=> Disabled
 //     <1=> PTC15<selection=PTC15_SIG_SEL,UART4_TX>
-//     <2=> PTE24 (Alias:D15)<selection=PTE24_SIG_SEL,UART4_TX>
+//     <2=> PTE24<selection=PTE24_SIG_SEL,UART4_TX>
 //     <0=> Default
 #define UART4_TX_PIN_SEL     0
 #if (UART4_TX_PIN_SEL == 1)
@@ -6932,7 +6932,7 @@ constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //   <i> Shows which pin USB_CLKIN is mapped to
 //     <0=> Disabled
 //     <1=> PTA5<selection=PTA5_SIG_SEL,USB_CLKIN>
-//     <2=> PTE26 (Alias:LED_GREEN)<selection=PTE26_SIG_SEL,USB_CLKIN>
+//     <2=> PTE26<selection=PTE26_SIG_SEL,USB_CLKIN>
 //     <0=> Default
 #define USB_CLKIN_PIN_SEL    0
 #if (USB_CLKIN_PIN_SEL == 1)
@@ -7731,6 +7731,791 @@ constexpr PcrInfo I2c2Info[32] = {
  * @}
  ** PeripheralPinTables
  */
+
+} // End namespace USBDM
+
+#include "gpio_defs.h"
+
+namespace USBDM {
+
+/**
+* @addtogroup DigitalIO_Group Digital Input/Output
+* @brief Allows use of port pins as simple digital inputs or outputs
+* @{
+*/
+using gpioA_0              = const USBDM::GpioA<0>;
+using gpioA_1              = const USBDM::GpioA<1>;
+using gpioA_2              = const USBDM::GpioA<2>;
+using gpioA_3              = const USBDM::GpioA<3>;
+using gpioA_4              = const USBDM::GpioA<4>;
+using gpioA_5              = const USBDM::GpioA<5>;
+using gpioA_6              = const USBDM::GpioA<6>;
+using gpioA_7              = const USBDM::GpioA<7>;
+using gpioA_8              = const USBDM::GpioA<8>;
+using gpioA_9              = const USBDM::GpioA<9>;
+using gpioA_10             = const USBDM::GpioA<10>;
+using gpioA_11             = const USBDM::GpioA<11>;
+using gpioA_12             = const USBDM::GpioA<12>;
+using gpioA_13             = const USBDM::GpioA<13>;
+using gpioA_14             = const USBDM::GpioA<14>;
+using gpioA_15             = const USBDM::GpioA<15>;
+using gpioA_16             = const USBDM::GpioA<16>;
+using gpioA_17             = const USBDM::GpioA<17>;
+using gpioA_18             = const USBDM::GpioA<18>;
+using gpioA_19             = const USBDM::GpioA<19>;
+using gpioA_24             = const USBDM::GpioA<24>;
+using gpioA_25             = const USBDM::GpioA<25>;
+using gpioA_26             = const USBDM::GpioA<26>;
+using gpioA_27             = const USBDM::GpioA<27>;
+using gpioA_28             = const USBDM::GpioA<28>;
+using gpioA_29             = const USBDM::GpioA<29>;
+using gpioB_0              = const USBDM::GpioB<0>;
+using gpioB_1              = const USBDM::GpioB<1>;
+using gpioB_2              = const USBDM::GpioB<2>;
+using gpioB_3              = const USBDM::GpioB<3>;
+using gpioB_4              = const USBDM::GpioB<4>;
+using gpioB_5              = const USBDM::GpioB<5>;
+using gpioB_6              = const USBDM::GpioB<6>;
+using gpioB_7              = const USBDM::GpioB<7>;
+using gpioB_8              = const USBDM::GpioB<8>;
+using gpioB_9              = const USBDM::GpioB<9>;
+using gpioB_10             = const USBDM::GpioB<10>;
+using gpioB_11             = const USBDM::GpioB<11>;
+using gpioB_12             = const USBDM::GpioB<12>;
+using gpioB_13             = const USBDM::GpioB<13>;
+using gpioB_16             = const USBDM::GpioB<16>;
+using gpioB_17             = const USBDM::GpioB<17>;
+using gpioB_18             = const USBDM::GpioB<18>;
+using gpioB_19             = const USBDM::GpioB<19>;
+using gpioB_20             = const USBDM::GpioB<20>;
+using gpioB_21             = const USBDM::GpioB<21>;
+using gpioB_22             = const USBDM::GpioB<22>;
+using gpioB_23             = const USBDM::GpioB<23>;
+using gpioC_0              = const USBDM::GpioC<0>;
+using gpioC_1              = const USBDM::GpioC<1>;
+using gpioC_2              = const USBDM::GpioC<2>;
+using gpioC_3              = const USBDM::GpioC<3>;
+using gpioC_4              = const USBDM::GpioC<4>;
+using gpioC_5              = const USBDM::GpioC<5>;
+using gpioC_6              = const USBDM::GpioC<6>;
+using gpioC_7              = const USBDM::GpioC<7>;
+using gpioC_8              = const USBDM::GpioC<8>;
+using gpioC_9              = const USBDM::GpioC<9>;
+using gpioC_10             = const USBDM::GpioC<10>;
+using gpioC_11             = const USBDM::GpioC<11>;
+using gpioC_12             = const USBDM::GpioC<12>;
+using gpioC_13             = const USBDM::GpioC<13>;
+using gpioC_14             = const USBDM::GpioC<14>;
+using gpioC_15             = const USBDM::GpioC<15>;
+using gpioC_16             = const USBDM::GpioC<16>;
+using gpioC_17             = const USBDM::GpioC<17>;
+using gpioC_18             = const USBDM::GpioC<18>;
+using gpioC_19             = const USBDM::GpioC<19>;
+using gpioD_0              = const USBDM::GpioD<0>;
+using gpioD_1              = const USBDM::GpioD<1>;
+using gpioD_2              = const USBDM::GpioD<2>;
+using gpioD_3              = const USBDM::GpioD<3>;
+using gpioD_4              = const USBDM::GpioD<4>;
+using gpioD_5              = const USBDM::GpioD<5>;
+using gpioD_6              = const USBDM::GpioD<6>;
+using gpioD_7              = const USBDM::GpioD<7>;
+using gpioD_8              = const USBDM::GpioD<8>;
+using gpioD_9              = const USBDM::GpioD<9>;
+using gpioD_10             = const USBDM::GpioD<10>;
+using gpioD_11             = const USBDM::GpioD<11>;
+using gpioD_12             = const USBDM::GpioD<12>;
+using gpioD_13             = const USBDM::GpioD<13>;
+using gpioD_14             = const USBDM::GpioD<14>;
+using gpioD_15             = const USBDM::GpioD<15>;
+using gpioE_0              = const USBDM::GpioE<0>;
+using gpioE_1              = const USBDM::GpioE<1>;
+using gpioE_2              = const USBDM::GpioE<2>;
+using gpioE_3              = const USBDM::GpioE<3>;
+using gpioE_4              = const USBDM::GpioE<4>;
+using gpioE_5              = const USBDM::GpioE<5>;
+using gpioE_6              = const USBDM::GpioE<6>;
+using gpioE_7              = const USBDM::GpioE<7>;
+using gpioE_8              = const USBDM::GpioE<8>;
+using gpioE_9              = const USBDM::GpioE<9>;
+using gpioE_10             = const USBDM::GpioE<10>;
+using gpioE_11             = const USBDM::GpioE<11>;
+using gpioE_12             = const USBDM::GpioE<12>;
+using gpioE_24             = const USBDM::GpioE<24>;
+using gpioE_25             = const USBDM::GpioE<25>;
+using gpioE_26             = const USBDM::GpioE<26>;
+using gpioE_27             = const USBDM::GpioE<27>;
+using gpioE_28             = const USBDM::GpioE<28>;
+/**
+ * @}
+ */
+/**
+* @addtogroup AnalogueIO_Group Analogue Input
+* @brief Allows use of port pins as analogue inputs
+* @{
+*/
+/**
+ * Convenience templated class representing an ADC
+ *
+ * Example
+ * @code
+ *  // Instantiate ADC0 single-ended channel #8
+ *  const adc0<8> adc0_se8;
+ *
+ *  // Initialise ADC
+ *  adc0_se8.initialiseADC(USBDM::resolution_12bit_se);
+ *
+ *  // Set as analogue input
+ *  adc0_se8.setAnalogueInput();
+ *
+ *  // Read input
+ *  uint16_t value = adc0_se8.readAnalogue();
+ *  @endcode
+ *
+ * @tparam adcChannel    ADC channel
+ */
+template<uint8_t adcChannel> using Adc0 =
+   Adc_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+
+using adc0_se19            = const USBDM::Adc0<19>;
+using adc0_se20            = const USBDM::Adc0<20>;
+using adc0_se0             = const USBDM::Adc0<0>;
+using adc0_se1             = const USBDM::Adc0<1>;
+using adc0_se16            = const USBDM::Adc0<16>;
+using adc0_se21            = const USBDM::Adc0<21>;
+using adc0_se23            = const USBDM::Adc0<23>;
+using adc0_se3             = const USBDM::Adc0<3>;
+using adc0_se22            = const USBDM::Adc0<22>;
+#if (PTA7_SIG_SEL == 0)
+using adc0_se10            = const USBDM::Adc0<10>;
+#endif
+#if (PTA8_SIG_SEL == 0)
+using adc0_se11            = const USBDM::Adc0<11>;
+#endif
+#if (PTB0_SIG_SEL == 0)
+using adc0_se8             = const USBDM::Adc0<8>;
+#endif
+#if (PTB1_SIG_SEL == 0)
+using adc0_se9             = const USBDM::Adc0<9>;
+#endif
+#if (PTB2_SIG_SEL == 0)
+using adc0_se12            = const USBDM::Adc0<12>;
+#endif
+#if (PTB3_SIG_SEL == 0)
+using adc0_se13            = const USBDM::Adc0<13>;
+#endif
+#if (PTC0_SIG_SEL == 0)
+using adc0_se14            = const USBDM::Adc0<14>;
+#endif
+#if (PTC1_SIG_SEL == 0)
+using adc0_se15            = const USBDM::Adc0<15>;
+#endif
+#if (PTC2_SIG_SEL == 0)
+using adc0_se4b            = const USBDM::Adc0<4>;
+#endif
+#if (PTD1_SIG_SEL == 0)
+using adc0_se5b            = const USBDM::Adc0<5>;
+#endif
+#if (PTD5_SIG_SEL == 0)
+using adc0_se6b            = const USBDM::Adc0<6>;
+#endif
+#if (PTD6_SIG_SEL == 0)
+using adc0_se7b            = const USBDM::Adc0<7>;
+#endif
+#if (PTE2_SIG_SEL == 0)
+using adc0_se2             = const USBDM::Adc0<2>;
+#endif
+#if (PTE24_SIG_SEL == 0)
+using adc0_se17            = const USBDM::Adc0<17>;
+#endif
+#if (PTE25_SIG_SEL == 0)
+using adc0_se18            = const USBDM::Adc0<18>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup AnalogueIO_Group Analogue Input
+* @brief Allows use of port pins as analogue inputs
+* @{
+*/
+/**
+ * Convenience templated class representing an ADC
+ *
+ * Example
+ * @code
+ *  // Instantiate ADC0 single-ended channel #8
+ *  const adc0<8> adc0_se8;
+ *
+ *  // Initialise ADC
+ *  adc0_se8.initialiseADC(USBDM::resolution_12bit_se);
+ *
+ *  // Set as analogue input
+ *  adc0_se8.setAnalogueInput();
+ *
+ *  // Read input
+ *  uint16_t value = adc0_se8.readAnalogue();
+ *  @endcode
+ *
+ * @tparam adcChannel    ADC channel
+ */
+template<uint8_t adcChannel> using Adc1 =
+   Adc_T<getPortClockMask(adcChannel,Adc1Info), getPcrReg(adcChannel,Adc1Info), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+
+using adc1_se19            = const USBDM::Adc1<19>;
+using adc1_se20            = const USBDM::Adc1<20>;
+using adc1_se0             = const USBDM::Adc1<0>;
+using adc1_se1             = const USBDM::Adc1<1>;
+using adc1_se16            = const USBDM::Adc1<16>;
+using adc1_se18            = const USBDM::Adc1<18>;
+using adc1_se23            = const USBDM::Adc1<23>;
+#if (PTA17_SIG_SEL == 0)
+using adc1_se17            = const USBDM::Adc1<17>;
+#endif
+#if (PTB0_SIG_SEL == 0)
+using adc1_se8             = const USBDM::Adc1<8>;
+#endif
+#if (PTB1_SIG_SEL == 0)
+using adc1_se9             = const USBDM::Adc1<9>;
+#endif
+#if (PTB4_SIG_SEL == 0)
+using adc1_se10            = const USBDM::Adc1<10>;
+#endif
+#if (PTB5_SIG_SEL == 0)
+using adc1_se11            = const USBDM::Adc1<11>;
+#endif
+#if (PTB6_SIG_SEL == 0)
+using adc1_se12            = const USBDM::Adc1<12>;
+#endif
+#if (PTB7_SIG_SEL == 0)
+using adc1_se13            = const USBDM::Adc1<13>;
+#endif
+#if (PTB10_SIG_SEL == 0)
+using adc1_se14            = const USBDM::Adc1<14>;
+#endif
+#if (PTB11_SIG_SEL == 0)
+using adc1_se15            = const USBDM::Adc1<15>;
+#endif
+#if (PTC8_SIG_SEL == 0)
+using adc1_se4b            = const USBDM::Adc1<4>;
+#endif
+#if (PTC9_SIG_SEL == 0)
+using adc1_se5b            = const USBDM::Adc1<5>;
+#endif
+#if (PTC10_SIG_SEL == 0)
+using adc1_se6b            = const USBDM::Adc1<6>;
+#endif
+#if (PTC11_SIG_SEL == 0)
+using adc1_se7b            = const USBDM::Adc1<7>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup AnalogueIO_Group Analogue Input
+* @brief Allows use of port pins as analogue inputs
+* @{
+*/
+/**
+ * Convenience templated class representing an ADC
+ *
+ * Example
+ * @code
+ *  // Instantiate ADC0 single-ended channel #8
+ *  const adc0<8> adc0_se8;
+ *
+ *  // Initialise ADC
+ *  adc0_se8.initialiseADC(USBDM::resolution_12bit_se);
+ *
+ *  // Set as analogue input
+ *  adc0_se8.setAnalogueInput();
+ *
+ *  // Read input
+ *  uint16_t value = adc0_se8.readAnalogue();
+ *  @endcode
+ *
+ * @tparam adcChannel    ADC channel
+ */
+template<uint8_t adcChannel> using Adc1a =
+   Adc_T<getPortClockMask(adcChannel,Adc1aInfo), getPcrReg(adcChannel,Adc1aInfo), ADC1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC1_CLOCK_REG), ADC1_CLOCK_MASK, adcChannel>;
+
+#if (PTE0_SIG_SEL == 0)
+using adc1_se4a            = const USBDM::Adc1a<4>;
+#endif
+#if (PTE1_SIG_SEL == 0)
+using adc1_se5a            = const USBDM::Adc1a<5>;
+#endif
+#if (PTE2_SIG_SEL == 0)
+using adc1_se6a            = const USBDM::Adc1a<6>;
+#endif
+#if (PTE3_SIG_SEL == 0)
+using adc1_se7a            = const USBDM::Adc1a<7>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup PwmIO_Group PWM, Input capture, Output compare
+* @brief Allows use of port pins as PWM outputs
+* @{
+*/
+/**
+ * Convenience templated class representing a FTM
+ *
+ * Example
+ * @code
+ * // Instantiate the ftm channel (for FTM0 CH6)
+ * const USBDM::Ftm0<6>   ftm0_ch6;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.setPwmOutput(200, USBDM::ftm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam ftmChannel    FTM channel
+ */
+template<uint8_t ftmChannel> using Ftm0 =
+   Ftm_T<getPortClockMask(ftmChannel,Ftm0Info), getPcrReg(ftmChannel,Ftm0Info), getPcrMux(ftmChannel,Ftm0Info), FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, FTM0_SC, ftmChannel>;
+
+#if (PTA0_SIG_SEL == 3)
+using ftm0_ch5             = const USBDM::Ftm0<5>;
+#endif
+#if (PTA1_SIG_SEL == 3)
+using ftm0_ch6             = const USBDM::Ftm0<6>;
+#endif
+#if (PTA2_SIG_SEL == 3)
+using ftm0_ch7             = const USBDM::Ftm0<7>;
+#endif
+#if (PTA3_SIG_SEL == 3)
+using ftm0_ch0             = const USBDM::Ftm0<0>;
+#endif
+#if (PTA4_SIG_SEL == 3)
+using ftm0_ch1             = const USBDM::Ftm0<1>;
+#endif
+#if (PTA5_SIG_SEL == 3)
+using ftm0_ch2             = const USBDM::Ftm0<2>;
+#endif
+#if (PTA6_SIG_SEL == 3)
+using ftm0_ch3             = const USBDM::Ftm0<3>;
+#endif
+#if (PTA7_SIG_SEL == 3)
+using ftm0_ch4             = const USBDM::Ftm0<4>;
+#endif
+#if (PTB12_SIG_SEL == 4)
+using ftm0_ch4             = const USBDM::Ftm0<4>;
+#endif
+#if (PTB13_SIG_SEL == 4)
+using ftm0_ch5             = const USBDM::Ftm0<5>;
+#endif
+#if (PTC1_SIG_SEL == 4)
+using ftm0_ch0             = const USBDM::Ftm0<0>;
+#endif
+#if (PTC2_SIG_SEL == 4)
+using ftm0_ch1             = const USBDM::Ftm0<1>;
+#endif
+#if (PTC3_SIG_SEL == 4)
+using ftm0_ch2             = const USBDM::Ftm0<2>;
+#endif
+#if (PTC4_SIG_SEL == 4)
+using ftm0_ch3             = const USBDM::Ftm0<3>;
+#endif
+#if (PTC5_SIG_SEL == 7)
+using ftm0_ch2             = const USBDM::Ftm0<2>;
+#endif
+#if (PTD4_SIG_SEL == 4)
+using ftm0_ch4             = const USBDM::Ftm0<4>;
+#endif
+#if (PTD5_SIG_SEL == 4)
+using ftm0_ch5             = const USBDM::Ftm0<5>;
+#endif
+#if (PTD6_SIG_SEL == 4)
+using ftm0_ch6             = const USBDM::Ftm0<6>;
+#endif
+#if (PTD7_SIG_SEL == 4)
+using ftm0_ch7             = const USBDM::Ftm0<7>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup PwmIO_Group PWM, Input capture, Output compare
+* @brief Allows use of port pins as PWM outputs
+* @{
+*/
+/**
+ * Convenience templated class representing a FTM
+ *
+ * Example
+ * @code
+ * // Instantiate the ftm channel (for FTM0 CH6)
+ * const USBDM::Ftm0<6>   ftm0_ch6;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.setPwmOutput(200, USBDM::ftm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam ftmChannel    FTM channel
+ */
+template<uint8_t ftmChannel> using Ftm1 =
+   Ftm_T<getPortClockMask(ftmChannel,Ftm1Info), getPcrReg(ftmChannel,Ftm1Info), getPcrMux(ftmChannel,Ftm1Info), FTM1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM1_CLOCK_REG), FTM1_CLOCK_MASK, FTM1_SC, ftmChannel>;
+
+#if (PTA8_SIG_SEL == 3)
+using ftm1_ch0             = const USBDM::Ftm1<0>;
+#endif
+#if (PTA9_SIG_SEL == 3)
+using ftm1_ch1             = const USBDM::Ftm1<1>;
+#endif
+#if (PTA12_SIG_SEL == 3)
+using ftm1_ch0             = const USBDM::Ftm1<0>;
+#endif
+#if (PTA13_SIG_SEL == 3)
+using ftm1_ch1             = const USBDM::Ftm1<1>;
+#endif
+#if (PTB0_SIG_SEL == 3)
+using ftm1_ch0             = const USBDM::Ftm1<0>;
+#endif
+#if (PTB1_SIG_SEL == 3)
+using ftm1_ch1             = const USBDM::Ftm1<1>;
+#endif
+#if (PTB12_SIG_SEL == 3)
+using ftm1_ch0             = const USBDM::Ftm1<0>;
+#endif
+#if (PTB13_SIG_SEL == 3)
+using ftm1_ch1             = const USBDM::Ftm1<1>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup PwmIO_Group PWM, Input capture, Output compare
+* @brief Allows use of port pins as PWM outputs
+* @{
+*/
+/**
+ * Convenience templated class representing a FTM
+ *
+ * Example
+ * @code
+ * // Instantiate the ftm channel (for FTM0 CH6)
+ * const USBDM::Ftm0<6>   ftm0_ch6;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.setPwmOutput(200, USBDM::ftm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam ftmChannel    FTM channel
+ */
+template<uint8_t ftmChannel> using Ftm2 =
+   Ftm_T<getPortClockMask(ftmChannel,Ftm2Info), getPcrReg(ftmChannel,Ftm2Info), getPcrMux(ftmChannel,Ftm2Info), FTM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM2_CLOCK_REG), FTM2_CLOCK_MASK, FTM2_SC, ftmChannel>;
+
+#if (PTA10_SIG_SEL == 3)
+using ftm2_ch0             = const USBDM::Ftm2<0>;
+#endif
+#if (PTA11_SIG_SEL == 3)
+using ftm2_ch1             = const USBDM::Ftm2<1>;
+#endif
+#if (PTB18_SIG_SEL == 3)
+using ftm2_ch0             = const USBDM::Ftm2<0>;
+#endif
+#if (PTB19_SIG_SEL == 3)
+using ftm2_ch1             = const USBDM::Ftm2<1>;
+#endif
+/**
+ * @}
+ */
+/**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+/**
+ * Convenience templated class representing an SPI pin
+ *
+ * Example
+ * @code
+ * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
+ * @endcode
+ *
+ * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
+ */
+template<uint8_t spiPinNum> using Spi0Pin =
+   Pcr_T<getPortClockMask(spiPinNum,Spi0Info), getPcrReg(spiPinNum,Spi0Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi0Info))|DEFAULT_PCR>;
+
+using spi0_PCS0            = const USBDM::Spi0Pin<3>;
+using spi0_SCK             = const USBDM::Spi0Pin<0>;
+using spi0_SOUT            = const USBDM::Spi0Pin<2>;
+using spi0_SIN             = const USBDM::Spi0Pin<1>;
+using spi0_PCS5            = const USBDM::Spi0Pin<8>;
+using spi0_PCS4            = const USBDM::Spi0Pin<7>;
+using spi0_PCS3            = const USBDM::Spi0Pin<6>;
+using spi0_PCS2            = const USBDM::Spi0Pin<5>;
+using spi0_PCS1            = const USBDM::Spi0Pin<4>;
+/**
+ * @}
+ */
+/**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+/**
+ * Convenience templated class representing an SPI pin
+ *
+ * Example
+ * @code
+ * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
+ * @endcode
+ *
+ * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
+ */
+template<uint8_t spiPinNum> using Spi1Pin =
+   Pcr_T<getPortClockMask(spiPinNum,Spi1Info), getPcrReg(spiPinNum,Spi1Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi1Info))|DEFAULT_PCR>;
+
+using spi1_PCS1            = const USBDM::Spi1Pin<4>;
+using spi1_PCS0            = const USBDM::Spi1Pin<3>;
+using spi1_SCK             = const USBDM::Spi1Pin<0>;
+using spi1_SOUT            = const USBDM::Spi1Pin<2>;
+using spi1_SIN             = const USBDM::Spi1Pin<1>;
+using spi1_PCS2            = const USBDM::Spi1Pin<5>;
+using spi1_PCS3            = const USBDM::Spi1Pin<6>;
+/**
+ * @}
+ */
+/**
+* @addtogroup SpiIO_Group SPI, Serial Peripheral Interface
+* @brief Pins used for SPI functions
+* @{
+*/
+/**
+ * Convenience templated class representing an SPI pin
+ *
+ * Example
+ * @code
+ * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
+ * @endcode
+ *
+ * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
+ */
+template<uint8_t spiPinNum> using Spi2Pin =
+   Pcr_T<getPortClockMask(spiPinNum,Spi2Info), getPcrReg(spiPinNum,Spi2Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi2Info))|DEFAULT_PCR>;
+
+using spi2_PCS0            = const USBDM::Spi2Pin<3>;
+using spi2_SCK             = const USBDM::Spi2Pin<0>;
+using spi2_SOUT            = const USBDM::Spi2Pin<2>;
+using spi2_SIN             = const USBDM::Spi2Pin<1>;
+using spi2_PCS1            = const USBDM::Spi2Pin<4>;
+/**
+ * @}
+ */
+/**
+* @addtogroup I2CIO_Group I2C, Inter-Integrated-Circuit Interface
+* @brief Pins used for I2C functions
+* @{
+*/
+/**
+ * Convenience templated class representing PCR associated with a I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c0Pcr =
+   Pcr_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c0Info))|I2C_DEFAULT_PCR>;
+
+/**
+ * Convenience templated class representing a GPIO used as I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c0Gpio =
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+             getGpioAddress(i2cPinIndex,I2c0Info),   getGpioBit(i2cPinIndex,I2c0Info)>;
+using i2c0_SCLPcr    = const USBDM::I2c0Pcr<0>;
+using i2c0_SCLGpio   = const USBDM::I2c0Gpio<0>;
+using i2c0_SDAPcr    = const USBDM::I2c0Pcr<1>;
+using i2c0_SDAGpio   = const USBDM::I2c0Gpio<1>;
+/**
+ * @}
+ */
+/**
+* @addtogroup I2CIO_Group I2C, Inter-Integrated-Circuit Interface
+* @brief Pins used for I2C functions
+* @{
+*/
+/**
+ * Convenience templated class representing PCR associated with a I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c1Pcr =
+   Pcr_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c1Info))|I2C_DEFAULT_PCR>;
+
+/**
+ * Convenience templated class representing a GPIO used as I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c1Gpio =
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+             getGpioAddress(i2cPinIndex,I2c1Info),   getGpioBit(i2cPinIndex,I2c1Info)>;
+using i2c1_SCLPcr    = const USBDM::I2c1Pcr<0>;
+using i2c1_SCLGpio   = const USBDM::I2c1Gpio<0>;
+using i2c1_SDAPcr    = const USBDM::I2c1Pcr<1>;
+using i2c1_SDAGpio   = const USBDM::I2c1Gpio<1>;
+/**
+ * @}
+ */
+/**
+* @addtogroup I2CIO_Group I2C, Inter-Integrated-Circuit Interface
+* @brief Pins used for I2C functions
+* @{
+*/
+/**
+ * Convenience templated class representing PCR associated with a I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c2Pcr =
+   Pcr_T<getPortClockMask(i2cPinIndex,I2c2Info), getPcrReg(i2cPinIndex,I2c2Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c2Info))|I2C_DEFAULT_PCR>;
+
+/**
+ * Convenience templated class representing a GPIO used as I2C pin
+ *
+ * Example
+ * @code
+ * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
+ * @endcode
+ *
+ * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
+ */
+template<uint8_t i2cPinIndex> using I2c2Gpio =
+   Gpio_T<getPortClockMask(i2cPinIndex,I2c2Info), getPcrReg(i2cPinIndex,I2c2Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
+             getGpioAddress(i2cPinIndex,I2c2Info),   getGpioBit(i2cPinIndex,I2c2Info)>;
+using i2c2_SDAPcr    = const USBDM::I2c2Pcr<1>;
+using i2c2_SDAGpio   = const USBDM::I2c2Gpio<1>;
+using i2c2_SCLPcr    = const USBDM::I2c2Pcr<0>;
+using i2c2_SCLGpio   = const USBDM::I2c2Gpio<0>;
+/**
+ * @}
+ */
+/**
+* @addtogroup DMA_Group Direct Memory Access (DMA)
+* @brief Support for DMA operations
+* @{
+*/
+enum {
+DMA0_SLOT_Disabled                   = 0,
+DMA0_SLOT_UART0_Receive              = 2,
+DMA0_SLOT_UART0_Transmit             = 3,
+DMA0_SLOT_UART1_Receive              = 4,
+DMA0_SLOT_UART1_Transmit             = 5,
+DMA0_SLOT_UART2_Receive              = 6,
+DMA0_SLOT_UART2_Transmit             = 7,
+DMA0_SLOT_UART3_Receive              = 8,
+DMA0_SLOT_UART3_Transmit             = 9,
+DMA0_SLOT_UART4_TransmitReceive      = 10,
+DMA0_SLOT_UART5_TransmitReceive      = 11,
+DMA0_SLOT_I2S0_Receive               = 12,
+DMA0_SLOT_I2S0_Transmit              = 13,
+DMA0_SLOT_SPI0_Receive               = 14,
+DMA0_SLOT_SPI0_Transmit              = 15,
+DMA0_SLOT_SPI1_TransmitReceive       = 16,
+DMA0_SLOT_SPI2_TransmitReceive       = 17,
+DMA0_SLOT_I2C0                       = 18,
+DMA0_SLOT_I2C1_I2C2                  = 19,
+DMA0_SLOT_FTM0_Ch_0                  = 20,
+DMA0_SLOT_FTM0_Ch_1                  = 21,
+DMA0_SLOT_FTM0_Ch_2                  = 22,
+DMA0_SLOT_FTM0_Ch_3                  = 23,
+DMA0_SLOT_FTM0_Ch_4                  = 24,
+DMA0_SLOT_FTM0_Ch_5                  = 25,
+DMA0_SLOT_FTM0_Ch_6                  = 26,
+DMA0_SLOT_FTM0_Ch_7                  = 27,
+DMA0_SLOT_FTM1_Ch_0                  = 28,
+DMA0_SLOT_FTM1_Ch_1                  = 29,
+DMA0_SLOT_FTM2_Ch_0                  = 30,
+DMA0_SLOT_FTM2_Ch_1                  = 31,
+DMA0_SLOT_FTM3_Ch_0                  = 32,
+DMA0_SLOT_FTM3_Ch_1                  = 33,
+DMA0_SLOT_FTM3_Ch_2                  = 34,
+DMA0_SLOT_FTM3_Ch_3                  = 35,
+DMA0_SLOT_FTM3_Ch_4                  = 36,
+DMA0_SLOT_FTM3_Ch_5                  = 37,
+DMA0_SLOT_FTM3_Ch_6                  = 38,
+DMA0_SLOT_FTM3_Ch_7                  = 39,
+DMA0_SLOT_ADC0                       = 40,
+DMA0_SLOT_ADC1                       = 41,
+DMA0_SLOT_CMP0                       = 42,
+DMA0_SLOT_CMP1                       = 43,
+DMA0_SLOT_CMP2                       = 44,
+DMA0_SLOT_DAC0                       = 45,
+DMA0_SLOT_DAC1                       = 46,
+DMA0_SLOT_CMT                        = 47,
+DMA0_SLOT_PDB                        = 48,
+DMA0_SLOT_PortA                      = 49,
+DMA0_SLOT_PortB                      = 50,
+DMA0_SLOT_PortC                      = 51,
+DMA0_SLOT_PortD                      = 52,
+DMA0_SLOT_PortE                      = 53,
+DMA0_SLOT_IEEE1588_Timer0            = 54,
+DMA0_SLOT_IEEE1588_Timer1            = 55,
+DMA0_SLOT_IEEE1588_Timer2            = 56,
+DMA0_SLOT_IEEE1588_Timer3            = 57,
+DMA0_SLOT_AlwaysEnabled0             = 58,
+DMA0_SLOT_AlwaysEnabled1             = 59,
+DMA0_SLOT_AlwaysEnabled2             = 60,
+DMA0_SLOT_AlwaysEnabled3             = 61,
+DMA0_SLOT_AlwaysEnabled4             = 62,
+DMA0_SLOT_AlwaysEnabled5             = 63,
+};
+/**
+ * @}
+ */
+#if (DO_MAP_PINS_ON_RESET>0)
+/**
+ * Used to configure pin-mapping before 1st use of peripherals
+ */
+extern void usbdm_PinMapping();
+#endif
 
 } // End namespace USBDM
 

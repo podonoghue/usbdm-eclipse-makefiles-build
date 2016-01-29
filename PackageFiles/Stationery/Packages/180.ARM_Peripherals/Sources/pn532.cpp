@@ -18,7 +18,6 @@ namespace USBDM {
  * @return true => NFC is ready, false => timeout waiting for ready
  */
 bool PN532Base::waitReady(int timeout) {
-   USBDM::gpio_D0::set();
 
    // Convert duration to DWT ticks
    int64_t delayct = ((uint64_t)timeout * SystemCoreClock) / 1000;
@@ -46,7 +45,6 @@ bool PN532Base::waitReady(int timeout) {
       last = now;
    } while (delayct > 0);
 
-   USBDM::gpio_D0::clear();
    return ready;
 }
 /**

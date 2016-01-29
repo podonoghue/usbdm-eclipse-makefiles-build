@@ -1,7 +1,7 @@
  /**
   * @file     gpio.cpp (from gpio-MK64F12.cpp)
   *
-  * @brief   Pin declarations for MK64F12
+  * @brief   Pin declarations for MK64F12, generated from MK64F12.csv
   */
 
 #include "gpio.h"

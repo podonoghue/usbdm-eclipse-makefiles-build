@@ -44,7 +44,7 @@ using namespace USBDM;
 int main() {
    printf("Starting\n");
 
-   Gps *gps = new $(demo.cpp.external.gps)();
+   Gps *gps = new $(demo.cpp.external.gps:Gps0)();
 
    for(;;) {
       Gps::GpsData gpsData;

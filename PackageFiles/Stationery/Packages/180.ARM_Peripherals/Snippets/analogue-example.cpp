@@ -15,10 +15,10 @@ using namespace USBDM;
  *
  */
 
-// Connection mapping
-#define JOYSTICK_X   adc_A2
-#define JOYSTICK_Y   adc_A1
-#define JOYSTICK_K   gpio_A0
+// Connection mapping - change as required
+using JOYSTICK_X = $(demo.cpp.joystick.x:USBDM::Adc0<0>);
+using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0<1>);
+using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioB<0>);
 
 int main(void) {
    JOYSTICK_X::setMode();

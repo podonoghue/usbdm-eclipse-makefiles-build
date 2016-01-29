@@ -5,7 +5,7 @@
    <projectActionList id="CPP-abstraction-PIT" >
       <applyWhen>
          <and>
-            <variableRef idRef="demo.cpp.peripheral.pit" />
+            <variableRef idRef="cpp.peripheral.internal.pit" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>

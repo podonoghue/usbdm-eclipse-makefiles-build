@@ -11,7 +11,7 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
-            <variableRef idRef="demo.cpp.peripheral.i2c" />
+            <variableRef idRef="cpp.peripheral.internal.i2c" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>

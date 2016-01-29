@@ -17,9 +17,9 @@ using namespace USBDM;
  * Toggles LEDs
  */
 
-// LED connections
-#define RED_LED   gpio_$(demo.cpp.red.led)
-#define GREEN_LED gpio_$(demo.cpp.green.led)
+// Connection mapping - change as required
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
+using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 
 #if PIT_USES_NAKED_HANDLER == 1
 /*

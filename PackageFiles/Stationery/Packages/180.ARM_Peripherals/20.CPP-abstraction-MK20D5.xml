@@ -14,13 +14,11 @@
          </and>
       </applyWhen>
 
-      <!-- These constant enables peripheral features -->
-      <constant id="demo.cpp.peripheral.i2c"    value="true" />
-      <constant id="demo.cpp.peripheral.lptmr"  value="true" />
-      <constant id="demo.cpp.peripheral.pit"    value="true" />
-      <constant id="demo.cpp.peripheral.spi"    value="true" />
-      <constant id="demo.cpp.peripheral.lcd"    value="true" />
-      <constant id="demo.cpp.peripheral.gps"    value="true" />
+      <!-- These constants enable internal peripheral features -->
+      <constant id="cpp.peripheral.internal.i2c"    value="true" />
+      <constant id="cpp.peripheral.internal.lptmr"  value="true" />
+      <constant id="cpp.peripheral.internal.pit"    value="true" />
+      <constant id="cpp.peripheral.internal.spi"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
          name="CPP Hardware abstraction" 
@@ -31,29 +29,11 @@
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
 
+<!--
          <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" config="debug">
             <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
          </projectOption>
-
-         <!-- Definitions used by example program -->
-         <constant id="demo.cpp.red.led"            value="LED_RED" />
-         <constant id="demo.cpp.green.led"          value="LED_GREEN" />
-         <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
-         <constant id="demo.cpp.joystick.x"         value="A2" />
-         <constant id="demo.cpp.joystick.y"         value="A1" />
-         <constant id="demo.cpp.joystick.z"         value="A0" />
-         <constant id="demo.cpp.external.switch"    value="D12" />
-         <constant id="demo.cpp.external.led"       value="D13" />
-         <constant id="demo.cpp.external.gps"       value="Gps1" />
-         <constant id="demo.cpp.external.spi"       value="Spi0" />
-         <constant id="demo.cpp.external.i2c"       value="I2c0" />
-         <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />
-         <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />
-         <constant id="demo.cpp.mag3110.i2c"        value="I2c0" />
-         <constant id="demo.cpp.nrf24l01.spi"       value="Spi0" />
-         <constant id="demo.cpp.nrf24l01.cs_n"      value="spi0_PCS1" />
-         <constant id="demo.cpp.nrf24l01.ce"        value="GpioC&lt;4&gt;" />
-         <constant id="demo.cpp.nrf24l01.irq"       value="GpioC&lt;3&gt;" />
+-->
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
@@ -64,11 +44,11 @@
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
-         <copy source="Project_Headers/gpio-&DEVICE_SUB_FAMILY;.h"         target="Project_Headers/gpio.h" />
+         <copy source="Project_Headers/gpio.h"                             target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
          <copy source="Project_Headers/pin_mapping-&DEVICE_SUB_FAMILY;.h"  target="Project_Headers/pin_mapping.h" />
          <copy source="Sources/gpio-&DEVICE_SUB_FAMILY;.cpp"               target="Sources/gpio.cpp" />
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

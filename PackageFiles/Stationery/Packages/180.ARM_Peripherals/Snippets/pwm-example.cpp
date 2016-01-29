@@ -30,9 +30,9 @@ static void delay(void) {
  * preference was given to mapping to external pins on board (e.g. KL25Z).
  *
  */
- // LED connections
-#define RED_LED   ftm_$(demo.cpp.red.led)
-#define GREEN_LED ftm_$(demo.cpp.green.led)
+// Connection mapping - change as required
+using RED_LED   = $(demo.cpp.pwm.red.led:Ftm0<0>);
+using GREEN_LED = $(demo.cpp.pwm.green.led:Ftm0<1>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"

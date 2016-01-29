@@ -24,7 +24,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2c *i2c = new $(demo.cpp.mag3110.i2c)();
+   I2c *i2c = new $(demo.cpp.mag3110.i2c:I2c0)();
    MAG3310 *magnetometer = new MAG3310(i2c);
 
    uint8_t id = magnetometer->readID();

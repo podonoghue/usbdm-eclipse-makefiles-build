@@ -15,8 +15,8 @@ using namespace USBDM;
  * Demonstrates use of timer call-back
  */
 
-// LED connections
-#define RED_LED   gpio_$(demo.cpp.red.led)
+// Connection mapping - change as required
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
 
 #if LPTMR_USES_NAKED_HANDLER == 1
 /*

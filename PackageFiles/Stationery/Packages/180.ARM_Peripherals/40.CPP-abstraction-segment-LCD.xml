@@ -6,7 +6,7 @@
    <projectActionList id="CPP-abstraction-segment-lcd">
       <applyWhen>
          <and>
-            <variableRef idRef="demo.cpp.peripheral.segment-lcd" />
+            <variableRef idRef="cpp.peripheral.internal.segment-lcd" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>

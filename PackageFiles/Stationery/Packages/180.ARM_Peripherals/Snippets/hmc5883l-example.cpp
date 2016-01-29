@@ -20,7 +20,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2c *i2c = new $(demo.cpp.external.i2c)();
+   I2c *i2c = new $(demo.cpp.external.i2c:I2c0)();
 
    HMC5883L *compass = new HMC5883L(i2c);
 

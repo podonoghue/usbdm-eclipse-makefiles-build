@@ -32,7 +32,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2c *i2c = new USBDM::$(demo.cpp.external.i2c)();
+   I2c *i2c = new USBDM::$(demo.cpp.external.i2c:I2c0)();
 
    // Enable pin will need adjustment e.g.
    // D8 => USBDM::GpioA<13> on FRDM-KL25

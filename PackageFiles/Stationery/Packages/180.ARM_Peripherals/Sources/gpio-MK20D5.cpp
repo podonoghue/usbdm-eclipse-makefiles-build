@@ -1,7 +1,7 @@
  /**
   * @file     gpio.cpp (from gpio-MK20D5.cpp)
   *
-  * @brief   Pin declarations for MK20D5
+  * @brief   Pin declarations for MK20D5, generated from MK20D5.csv
   */
 
 #include "gpio.h"

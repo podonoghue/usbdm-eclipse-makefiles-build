@@ -21,7 +21,6 @@
 
 using namespace USBDM;
 
-
 /// LCD derived dimensions
 #define LCD_WIDTH  (LCD_X_MAX-LCD_X_MIN)
 #define LCD_HEIGHT (LCD_Y_MAX-LCD_Y_MIN)
@@ -55,7 +54,7 @@ void drawCursor(Lcd *lcd, int x, int y, int colour) {
 
 int main() {
    // Instantiate SPI interface class
-   Spi *spi = new $(demo.cpp.external.spi)();
+   Spi *spi = new $(demo.cpp.external.spi:Spi0)();
    // Set higher speed to improve LCD draw rate
    spi->setSpeed(1000000);
    // Instantiate LCD interface class

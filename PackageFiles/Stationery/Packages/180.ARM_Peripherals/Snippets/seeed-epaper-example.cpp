@@ -30,6 +30,7 @@
 #include "epaper.h"
 #include "delay.h"
 
+// Connection mapping assuming an Arduino style board - change as required
 using EPD_PANEL_ON   = USBDM::gpio_D2;   //!< ON/OFF EPD Power
 using EPD_BORDER     = USBDM::gpio_D3;   //!< Border to EPD
 using EPD_PWM        = USBDM::ftm_D5;    //!< PWM to EPD
@@ -59,7 +60,7 @@ public:
 
 int main() {
    // Instantiate SPI interface class
-   USBDM::Spi *spi = new USBDM::$(demo.cpp.external.spi)();
+   USBDM::Spi *spi = new USBDM::$(demo.cpp.external.spi:Spi0)();
 
    // Set higher speed to improve draw rate
    spi->setSpeed(1000000);

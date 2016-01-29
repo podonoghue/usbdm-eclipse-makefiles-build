@@ -30,7 +30,7 @@ int main() {
    printf("Starting\n");
 
    // Instantiate interface
-   I2c *i2c = new $(demo.cpp.mma845x.i2c)();
+   I2c *i2c = new $(demo.cpp.mma845x.i2c:I2c0)();
    MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
 
    uint8_t id = accelerometer->readID();

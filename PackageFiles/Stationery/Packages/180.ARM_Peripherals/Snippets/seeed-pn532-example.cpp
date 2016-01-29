@@ -55,7 +55,7 @@ void reportFirmwareVersion(PN532 *nfc) {
 int main() {
    printf("\n\nStarting\n\n");
    // Instantiate SPI interface class
-   USBDM::Spi *spi = new USBDM::$(demo.cpp.external.spi)();
+   USBDM::Spi *spi = new USBDM::$(demo.cpp.external.spi:Spi0)();
    PN532 *nfc = new PN532(spi);
 
    reportFirmwareVersion(nfc);

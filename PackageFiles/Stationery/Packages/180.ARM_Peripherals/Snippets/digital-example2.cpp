@@ -11,8 +11,8 @@ using namespace USBDM;
 /*
  * Simple Digital I/O example
  *
- * Echos an external switch to an external LED
- * Uses arduino aliases
+ * Echoes an external switch to an external LED
+ * Uses arduino aliases if available
  *
  *  SWITCH + LED
  *  1 x Digital input
@@ -20,9 +20,9 @@ using namespace USBDM;
  *
  */
 
-// Connection mapping
-#define SWITCH    gpio_D12
-#define LED       gpio_D13
+// Connection mapping - change as required
+using SWITCH =   $(demo.cpp.external.switch:USBDM::GpioB<0>);
+using LED    =   $(demo.cpp.external.led:USBDM::GpioB<1>);
 
 int main(void) {
    LED::setOutput();

@@ -1,7 +1,7 @@
  /**
   * @file     gpio.cpp (from gpio-MK22F51212.cpp)
   *
-  * @brief   Pin declarations for MK22F51212
+  * @brief   Pin declarations for MK22F51212, generated from MK22F51212.csv
   */
 
 #include "gpio.h"

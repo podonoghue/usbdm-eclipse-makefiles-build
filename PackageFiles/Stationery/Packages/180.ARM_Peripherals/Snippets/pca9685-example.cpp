@@ -15,14 +15,16 @@
  * See examples in Snippets directory
  */
 
+using namespace USBDM;
+
 // LED connections
 #define RED_LED   USBDM::gpio_LED_RED
 #define GREEN_LED USBDM::gpio_LED_GREEN
 
 int main() {
 
-   USBDM::I2c     *i2c     = new USBDM::I2c0();
-   USBDM::PCA9685 *pca9685 = new USBDM::PCA9685(i2c);
+   I2c *i2c = new $(demo.cpp.external.i2c:I2c0)();
+   PCA9685 *pca9685 = new USBDM::PCA9685(i2c);
 
    pca9685->set_pin_high(3);
    pca9685->set_pin_pwm(3, 50);
