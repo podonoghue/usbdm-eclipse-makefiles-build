@@ -151,25 +151,8 @@ before entering debug mode, but any updates made in debug mode remain</descripti
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DOZE</name>
-                     <description>Doze Mode operation\n
-The read/write DOZE bit controls the function of the PIT in doze mode. Reset clears DOZE</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Stopped</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="DBG" > <name>DOZE</name> <description>Doze Mode operation\n
+The read/write DOZE bit controls the function of the PIT in doze mode. Reset clears DOZE</description> <bitOffset>6</bitOffset> </field>
                   <field>
                      <name>PRE</name>
                      <description>Prescaler\n

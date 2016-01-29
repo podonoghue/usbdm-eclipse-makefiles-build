@@ -1,0 +1,186 @@
+<!--
+Devices using this peripheral: 
+      MKE14D7
+      MKE15D7
+-->
+      <peripheral>
+         <?sourceFile "NV_FTMRA_0" ?>
+         <name>NV</name>
+         <description>Flash configuration field</description>
+         <groupName>NV</groupName>
+         <prependToName>NV</prependToName>
+         <headerStructName>NV</headerStructName>
+         <baseAddress>0x00000400</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>3,2,1,0,7,6,5,4</dimIndex>
+               <name>BACKKEY%s</name>
+               <description>Backdoor Comparison Key %s</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>KEY</name>
+                     <description>Backdoor Comparison Key</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FSEC</name>
+               <description>Non-volatile Flash Security Register</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SEC</name>
+                     <description>Flash Security
+This field controls the MCU security</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Secure</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Secure</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Unsecure</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Secure</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KEYEN</name>
+                     <description>Backdoor Key Security Enable\n
+Allows the MCU to be unsecured if the key is known</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Access disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Access disabled(preferred)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Access enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Access disabled</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FOPT</name>
+               <description>Non-volatile Flash Option Register</description>
+               <addressOffset>0xD</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>FPROT</name>
+               <description>Non-volatile P-Flash Protection Register</description>
+               <addressOffset>0xE</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FPLS</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>FPLDIS</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FPHS</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>FPHDIS</name>
+                     <description>no description available</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FPOPEN</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFPROT</name>
+               <description>Non-volatile D-Flash Protection Register</description>
+               <addressOffset>0xF</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DPS</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>DPOPEN</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

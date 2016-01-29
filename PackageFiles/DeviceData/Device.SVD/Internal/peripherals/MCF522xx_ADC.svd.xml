@@ -541,27 +541,10 @@ It is cleared by writing 1 to all active ADLSTAT[HLS] bits</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LLMTI</name>
-                     <description>Low Limit Interrupt\n
+                  <field derivedFrom="HLMTI" > <name>LLMTI</name> <description>Low Limit Interrupt\n
 If any low limit register (ADLLMTn) is enabled by having a value other than 0x0, low limit checking is enabled.\n
 This bit is set at the completion of an individual conversion which may or may not be the end of a scan.\n
-It is cleared by writing 1 to all active ADLSTAT[LLS] bits</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No Interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt pending</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+It is cleared by writing 1 to all active ADLSTAT[LLS] bits</description> <bitOffset>9</bitOffset> </field>
                   <field>
                      <name>ZCI</name>
                      <description>Zero Crossing Interrupt\n
@@ -874,28 +857,11 @@ needed (APD = 1)</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PD1</name>
-                     <description>Manual Power-Down for Converter B\n
+                  <field derivedFrom="PD0" > <name>PD1</name> <description>Manual Power-Down for Converter B\n
 This bit forces Converter B to power-down. Setting PD1
 powers-down converter B immediately. The results of a scan using converter B is invalid when PD1 is set.
 When PD1 is cleared, converter B is continuously powered-up (APD = 0) or automatically powered-up when
-needed (APD = 1)</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Power-up</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Power-down</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+needed (APD = 1)</description> <bitOffset>1</bitOffset> </field>
                   <field>
                      <name>PD2</name>
                      <description>Power-Down Control for Voltage Reference\n
@@ -973,46 +939,12 @@ converter A</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PSTS1</name>
-                     <description>Converter B Power Status bit\n
+                  <field derivedFrom="PSTS0" > <name>PSTS1</name> <description>Converter B Power Status bit\n
 This bit is asserted immediately after PD1 is set. It is de-asserted PUDELAY
 ADC clock cycles after PD1 is cleared if APD is 0. This bit can be read as a status bit to determine when the
 ADC is ready for operation. During auto power-down mode, this bit indicates the current powered state of
-converter B</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PSTS2</name>
-                     <description>Voltage Reference Power Status bit</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+converter B</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PSTS0" > <name>PSTS2</name> <description>Voltage Reference Power Status bit</description> <bitOffset>12</bitOffset> </field>
                   <field>
                      <name>ASB</name>
                      <description>Auto Standby bit\n

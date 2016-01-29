@@ -1,7 +1,8 @@
 <!--
 Devices using this peripheral: 
-      MKE04Z4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
 -->
       <peripheral>
          <?sourceFile "FTMRE_MKE" ?>
@@ -314,59 +315,20 @@ The FCNFG register enables the flash command complete interrupt and forces ECC f
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>FSFD</name>
-                     <description>Force Single Bit Fault Detect \n
-The FSFD bit allows the user to simulate a single bit fault during flash array read operations and check the associated interrupt routine. This field is cleared by writing a 0 to FSFD</description>
-                     <bitOffset>0</bitOffset>
+                     <name>ERSAREQ</name>
+                     <description>Debugger Mass Erase Request</description>
+                     <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Flash array read operations will set the SFDIF flag in the FERSTAT register only if a single bit fault is detected</description>
+                           <description>No request or request complete</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Flash array read operation will force the SFDIF flag in the FERSTAT register to be set and an interrupt will be generated as long as FERCNFG[SFDIE] is set</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FDFD</name>
-                     <description>Force Double Bit Fault Detect \n
-Allows the user to simulate a double-bit fault during flash array read operations and check the associated interrupt routine. This field is cleared by writing a 0 to FDFD</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Flash array read operations will set the FERSTAT[DFDIF] flag only if a double bit fault is detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Any flash array read operation will force the FERSTAT[DFDIF] flag to be set and an interrupt will be generated as long as FERCNFG[DFDIE] is set</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IGNSF</name>
-                     <description>Ignore Single Bit Fault \n
-Controls single-bit fault reporting in the FERSTAT register</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>All single-bit faults detected during array reads are reported</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Single-bit faults detected during array reads are not reported and the single bit fault interrupt will not \n
-be generated</description>
+                           <description>Request to run the Erase All Blocks command verify the erased state program the security byte in the Flash Configuration Field to the unsecure state release MCU security by setting FSEC[SEC] to the unsecure state</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -465,26 +427,9 @@ The FPHS bits can be written to only while the FPHDIS bit is set</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>2</bitWidth>
                   </field>
-                  <field>
-                     <name>FPHDIS</name>
-                     <description>Flash Protection Higher Address Range Disable \n
+                  <field derivedFrom="FPLDIS" > <name>FPHDIS</name> <description>Flash Protection Higher Address Range Disable \n
 The FPHDIS bit determines whether there is a protected/unprotected area in a specific region of the flash
-memory ending with global address 0x7FFF</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Protection/Unprotection enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Protection/Unprotection disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+memory ending with global address 0x7FFF</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>FPOPEN</name>
                      <description>Flash Protection Operation Enable \n

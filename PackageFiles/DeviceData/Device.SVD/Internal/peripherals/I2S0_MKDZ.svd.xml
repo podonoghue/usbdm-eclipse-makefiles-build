@@ -24,17 +24,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x30</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x38</offset>
-            <size>0x1C</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x54</offset>
-            <size>0x8</size>
+            <size>0x5C</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -477,24 +467,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TUE1</name>
-                     <description>Transmitter Underrun Error 1</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No underrun detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Transmitter underrun error occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TUE0" > <name>TUE1</name> <bitOffset>9</bitOffset> </field>
                   <field>
                      <name>ROE0</name>
                      <description>Receiver Overrun Error 0</description>
@@ -513,24 +486,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ROE1</name>
-                     <description>Receiver Overrun Error 1</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No overrun detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Receiver overrun error occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ROE0" > <name>ROE1</name> <description>Receiver Overrun Error 1</description> <bitOffset>11</bitOffset> </field>
                   <field>
                      <name>TDE0</name>
                      <description>Transmit Data Register Empty 0</description>
@@ -550,25 +506,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TDE1</name>
-                     <description>Transmit Data Register Empty 1</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Data available for transmission</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Data needs to be written by the core for transmission</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TDE0" > <name>TDE1</name> <description>Transmit Data Register Empty 1</description> <bitOffset>13</bitOffset> </field>
                   <field>
                      <name>RDR0</name>
                      <description>Receive Data Ready 0</description>
@@ -588,25 +526,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>RDR1</name>
-                     <description>Receive Data Ready 1</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No new data for core to read</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>New data for core to read</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RDR0" > <name>RDR1</name> <description>Receive Data Ready 1</description> <bitOffset>15</bitOffset> </field>
                   <field>
                      <name>RXT</name>
                      <description>Receive Tag Updated</description>
@@ -726,330 +646,24 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TFE1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFF0EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFF1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RLSEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TLSEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFSEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TFSEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TUE0EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TUE1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ROE0EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ROE1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TDE0EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TDE1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RDR0EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>14</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RDR1EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RXTEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CMDDUEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CMDAUEN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TFE0EN" > <name>TFE1EN</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RFF0EN</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RFF1EN</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RLSEN</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TLSEN</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RFSEN</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TFSEN</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TUE0EN</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TUE1EN</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>ROE0EN</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>ROE1EN</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TDE0EN</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>TDE1EN</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RDR0EN</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RDR1EN</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RXTEN</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>CMDDUEN</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>CMDAUEN</name> <bitOffset>18</bitOffset> </field>
                   <field>
                      <name>TIE</name>
                      <description>Transmit Interrupt Enable</description>
@@ -1122,42 +736,8 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TFRC_EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFRC_EN</name>
-                     <description>Enable Bit</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding status bit cannot issue interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding status bit can issue interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TFE0EN" > <name>TFRC_EN</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="TFE0EN" > <name>RFRC_EN</name> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -2164,11 +1744,6 @@ Devices using this peripheral:
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>8 data word in receive FIFO</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b1001</name>
                            <description>9 data word in receive FIFO</description>
                            <value>0b1001</value>
@@ -2205,363 +1780,10 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TFWM1</name>
-                     <description>Transmit FIFO Empty WaterMark 1</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Reserved</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>TFE set when there are more than or equal to 1 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 14 data</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>TFE set when there are more than or equal to 2 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 13 data</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>TFE set when there are more than or equal to 3 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 12 data</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>TFE set when there are more than or equal to 4 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 11 data</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>TFE set when there are more than or equal to 5 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 10 data</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>TFE set when there are more than or equal to 6 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 9 data</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>TFE set when there are more than or equal to 7 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 8 data</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>TFE set when there are more than or equal to 8 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 7 data</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>TFE set when there are more than or equal to 9 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 6 data</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>TFE set when there are more than or equal to 10 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 5 data</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>TFE set when there are more than or equal to 11 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 4 data</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>TFE set when there are more than or equal to 12 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 3 data</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>TFE set when there are more than or equal to 13 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 2 data</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>TFE set when there are more than or equal to 14 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 1 data</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>TFE set when there are more than or equal to 15 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 0 data</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFWM1</name>
-                     <description>Receive FIFO Full WaterMark 1</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Reserved</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>RFF set when at least one data word have been written to the Receive FIFO Set when RxFIFO = 1,2.....15 data words</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>RFF set when more than or equal to 2 data word have been written to the Receive FIFO. Set when RxFIFO = 2,3.....15 data words</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>RFF set when more than or equal to 3 data word have been written to the Receive FIFO. Set when RxFIFO = 3,4.....15 data words</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>RFF set when more than or equal to 4 data word have been written to the Receive FIFO. Set when RxFIFO = 4,5.....15 data words</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>RFF set when more than or equal to 5 data word have been written to the Receive FIFO. Set when RxFIFO = 5,6.....15 data words</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>RFF set when more than or equal to 6 data word have been written to the Receive. Set when RxFIFO = 6,7......15 data words</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>RFF set when more than or equal to 7 data word have been written to the Receive FIFO. Set when RxFIFO = 7,8......15 data words</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>RFF set when more than or equal to 8 data word have been written to the Receive FIFO. Set when RxFIFO = 8,9......15 data words</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>RFF set when more than or equal to 9 data word have been written to the Receive FIFO. Set when RxFIFO = 9,10.....15 data words</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>RFF set when more than or equal to 10 data word have been written to the Receive FIFO. Set when RxFIFO = 10,11.....15 data words</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>RFF set when more than or equal to 11 data word have been written to the Receive FIFO. Set when RxFIFO = 11,12.....15 data words</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>RFF set when more than or equal to 12 data word have been written to the Receive FIFO. Set when RxFIFO = 12,13.....15 data words</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>RFF set when more than or equal to 13 data word have been written to the Receive FIFO. Set when RxFIFO = 13,14,15data words</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>RFF set when more than or equal to 14 data word have been written to the Receive FIFO. Set when RxFIFO = 14,15 data words</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>RFF set when 15 data word have been written to the Receive FIFO (default). Set when RxFIFO = 15 data words</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TFCNT1</name>
-                     <description>Transmit FIFO Counter1</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>0 data word in transmit FIFO</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>1 data word in transmit FIFO</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>2 data word in transmit FIFO</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>3 data word in transmit FIFO</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>4 data word in transmit FIFO</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>5 data word in transmit FIFO</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>6 data word in transmit FIFO</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>7 data word in transmit FIFO</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>8 data word in transmit FIFO</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>9 data word in transmit FIFO</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>10 data word in transmit FIFO</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>11 data word in transmit FIFO</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>12 data word in transmit FIFO</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>13 data word in transmit FIFO</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>14 data word in transmit FIFO</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>15 data word in transmit FIFO</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RFCNT1</name>
-                     <description>Receive FIFO Counter1</description>
-                     <bitOffset>28</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>0 data word in receive FIFO</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>1 data word in receive FIFO</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>2 data word in receive FIFO</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>3 data word in receive FIFO</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>4 data word in receive FIFO</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>5 data word in receive FIFO</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>6 data word in receive FIFO</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>7 data word in receive FIFO</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>8 data word in receive FIFO</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>8 data word in receive FIFO</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>9 data word in receive FIFO</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>10 data word in receive FIFO</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>11 data word in receive FIFO</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>12 data word in receive FIFO</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>13 data word in receive FIFO</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>14 data word in receive FIFO</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>15 data word in receive FIFO</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TFWM0" > <name>TFWM1</name> <description>Transmit FIFO Empty WaterMark 1</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="RFWM0" > <name>RFWM1</name> <description>Receive FIFO Full WaterMark 1</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="TFCNT0" > <name>TFCNT1</name> <description>Transmit FIFO Counter1</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="RFCNT0" > <name>RFCNT1</name> <description>Receive FIFO Counter1</description> <bitOffset>28</bitOffset> </field>
                </fields>
             </register>
             <register>

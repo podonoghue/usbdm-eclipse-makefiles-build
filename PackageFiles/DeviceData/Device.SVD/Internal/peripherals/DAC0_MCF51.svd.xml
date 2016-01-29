@@ -28,26 +28,6 @@ Devices using this peripheral:
             <usage>registers</usage>
          </addressBlock>
          <registers>
-            <register>
-               <dim>16</dim>
-               <dimIncrement>2</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
-               <name>DATA</name>
-               <description>Data Register\n
-When the DAC Buffer is not enabled DATA controls the output voltage based on the following formula:
-V out = V in * (1 + DATA[0])/4096\n
-When the DAC buffer is enabled, DATA is mapped to the 16-word buffer</description>
-               <addressOffset>0x0</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>DATA</name>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>12</bitWidth>
-                  </field>
-               </fields>
-            </register>
             <cluster>
                <dim>16</dim>
                <dimIncrement>2</dimIncrement>
@@ -83,6 +63,26 @@ When the DAC buffer is enabled, DATA is mapped to the 16-word buffer</descriptio
                   </fields>
                </register>
             </cluster>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>DATA</name>
+               <description>Data Register\n
+When the DAC Buffer is not enabled DATA controls the output voltage based on the following formula:
+V out = V in * (1 + DATA[0])/4096\n
+When the DAC buffer is enabled, DATA is mapped to the 16-word buffer</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
             <register>
                <name>SR</name>
                <description>Status Register</description>

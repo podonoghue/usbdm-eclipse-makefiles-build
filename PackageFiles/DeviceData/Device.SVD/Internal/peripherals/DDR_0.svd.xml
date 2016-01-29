@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK61F12
       MK61F15
-      MK70F12
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "DDR_0" ?>
@@ -399,24 +399,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CCAPEN</name>
-                     <description>Concurrent Auto-Precharge Enable</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="AP" > <name>CCAPEN</name> <description>Concurrent Auto-Precharge Enable</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1049,42 +1032,8 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>RWEN</name>
-                     <description>Read Write same Enable</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SWPEN</name>
-                     <description>Swap Enable</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="PRIEN" > <name>RWEN</name> <description>Read Write same Enable</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PRIEN" > <name>SWPEN</name> <description>Swap Enable</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1491,34 +1440,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>WP0</name>
-                     <description>Port 0 Write command Priority</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Highest</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>-----</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>-----</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Lowest</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RP0" > <name>WP0</name> <description>Port 0 Write command Priority</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1579,34 +1501,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>WP1</name>
-                     <description>Write command priority Port 1</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Highest</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>-----</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>-----</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Lowest</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RP1" > <name>WP1</name> <description>Write command priority Port 1</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1667,34 +1562,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>WP2</name>
-                     <description>Write command priority Port 2</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Highest</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>-----</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>-----</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Lowest</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RP2" > <name>WP2</name> <description>Write command priority Port 2</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1786,90 +1654,9 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>P0PRI1</name>
-                     <description>Port 0 Priority 1 commands</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>P0PRI2</name>
-                     <description>Port 0 Priority 2 commands</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>P0PRI3</name>
-                     <description>Port 0 Priority 3 commands</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="P0PRI0" > <name>P0PRI1</name> <description>Port 0 Priority 1 commands</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="P0PRI0" > <name>P0PRI2</name> <description>Port 0 Priority 2 commands</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="P0PRI0" > <name>P0PRI3</name> <description>Port 0 Priority 3 commands</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1974,62 +1761,8 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>P1PRI2</name>
-                     <description>Port 1 Priority 2 commands</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>P1PRI3</name>
-                     <description>Port 1 Priority 3 commands</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="P1PRI1" > <name>P1PRI2</name> <description>Port 1 Priority 2 commands</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="P1PRI1" > <name>P1PRI3</name> <description>Port 1 Priority 3 commands</description> <bitOffset>16</bitOffset> </field>
                   <field>
                      <name>P1ORD</name>
                      <description>Port 1 Order</description>
@@ -2097,34 +1830,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>P2PRI1</name>
-                     <description>Port 2 Priority 1 commands</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="P2PRI0" > <name>P2PRI1</name> <description>Port 2 Priority 1 commands</description> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -2160,34 +1866,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>P2PRI3</name>
-                     <description>Port 2 Priority 3 commands</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Lowest</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>-----</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>-----</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Highest</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="P2PRI2" > <name>P2PRI3</name> <description>Port 2 Priority 3 commands</description> <bitOffset>8</bitOffset> </field>
                   <field>
                      <name>P2ORD</name>
                      <description>Port 2 Order</description>

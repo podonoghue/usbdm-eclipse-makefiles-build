@@ -2,7 +2,6 @@
 Devices using this peripheral: 
       MK10D5
       MK10D7
-      MK10D10
       MK10DZ10
       MK10F12
       MK20D5
@@ -22,10 +21,10 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
-      MK70F12
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "PIT_4CH" ?>

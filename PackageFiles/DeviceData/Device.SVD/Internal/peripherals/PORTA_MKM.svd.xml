@@ -1,12 +1,14 @@
 <!--
 Devices using this peripheral: 
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "PORTA_MKM" ?>
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
-         <groupName>PORTA</groupName>
+         <groupName>PORT</groupName>
          <prependToName>PORTA</prependToName>
          <headerStructName>PORT</headerStructName>
          <baseAddress>0x40046000</baseAddress>
@@ -16,22 +18,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x20</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x80</offset>
-            <size>0x8</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xA0</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xC0</offset>
-            <size>0xC</size>
+            <size>0xA4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -42,6 +29,7 @@ Devices using this peripheral:
                <name>PCR%s</name>
                <description>Pin Control Register %s</description>
                <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PS</name>
@@ -151,18 +139,19 @@ Select Pin Function</description>
                   </field>
                   <field>
                      <name>LK</name>
-                     <description>Lock Register</description>
+                     <description>Lock Register\n
+Locks PCR bits [15:0]. They cannot be updated until the next system reset</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pin Control Register fields [15:0] are not locked</description>
+                           <description>Not locked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pin Control Register fields [15:0] are locked and cannot be updated until the next system reset</description>
+                           <description>Locked until system reset</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -176,7 +165,7 @@ Configures Interrupt and DMA functions</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0000</name>
-                           <description>Interrupt/DMA Request disabled</description>
+                           <description>Disabled</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -376,77 +365,6 @@ Reflects the interrupt status of each pin</description>
                   <field derivedFrom="ISF0" > <name>ISF29</name> <description>Interrupt Status Flag 29</description> <bitOffset>29</bitOffset> </field>
                   <field derivedFrom="ISF0" > <name>ISF30</name> <description>Interrupt Status Flag 30</description> <bitOffset>30</bitOffset> </field>
                   <field derivedFrom="ISF0" > <name>ISF31</name> <description>Interrupt Status Flag 31</description> <bitOffset>31</bitOffset> </field>
-               </fields>
-            </register>
-            <register>
-               <name>DFER</name>
-               <description>Digital Filter Enable Register</description>
-               <addressOffset>0xC0</addressOffset>
-               <fields>
-                  <field>
-                     <name>DFE</name>
-                     <description>Digital Filter Enable\n
-The digital filter configuration is valid in all digital pin muxing modes. The output of each digital filter is
-reset to zero at system reset and whenever the digital filter is disabled. Each bit in the field enables the
-digital filter of the same number as the field</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Digital filter is disabled on the corresponding pin and output of the digital filter is reset to zero</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Digital filter is enabled on the corresponding pin, if the pin is configured as a digital input</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>DFCR</name>
-               <description>Digital Filter Clock Register</description>
-               <addressOffset>0xC4</addressOffset>
-               <fields>
-                  <field>
-                     <name>CS</name>
-                     <description>Clock Source\n
-The digital filter configuration is valid in all digital pin muxing modes. Configures the clock source for the
-digital input filters. Changing the filter clock source must be done only when all digital filters are disabled</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Digital filters are clocked by the bus clock</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Digital filters are clocked by the 1 kHz LPO clock</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>DFWR</name>
-               <description>Digital Filter Width Register</description>
-               <addressOffset>0xC8</addressOffset>
-               <fields>
-                  <field>
-                     <name>CS</name>
-                     <description>Filter Length\n
-The digital filter configuration is valid in all digital pin muxing modes. Configures the maximum size of the
-glitches, in clock cycles, that the digital filter absorbs for the enabled digital filters. Glitches that are longer
-than this register setting will pass through the digital filter, and glitches that are equal to or less than this
-register setting are filtered. Changing the filter length must be done only after all filters are disabled</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
                </fields>
             </register>
          </registers>

@@ -124,24 +124,7 @@ Controls the auto-acknowledge, address setup and hold times, port size, and numb
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>BSTR</name>
-                        <description>None</description>
-                        <bitOffset>4</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>None</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>None</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="BSTW" > <name>BSTR</name> <bitOffset>4</bitOffset> </field>
                      <field>
                         <name>PS</name>
                         <description>Port size.\n
@@ -303,24 +286,7 @@ Assert FB_CSn on Nth rising clock edge after address is asserted</description>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>SWSEN</name>
-                        <description>None</description>
-                        <bitOffset>23</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>None</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>None</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="BSTW" > <name>SWSEN</name> <bitOffset>23</bitOffset> </field>
                      <field>
                         <name>SWS</name>
                         <description>Unknown</description>

@@ -1,15 +1,27 @@
 <!--
 Devices using this peripheral: 
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK21D5
+      MK21DA5
+      MK21D5WS
+      MK21F12
+      MK21FA12
+      MK22F25612
       MK22F51212
       MK24F12
       MK24F25612
       MK63F12
       MK64F12
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
       MKV31F25612
       MKV31F51212
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "RNG_1" ?>

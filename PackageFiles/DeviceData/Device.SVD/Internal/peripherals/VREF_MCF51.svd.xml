@@ -124,43 +124,9 @@ This bit should be written to 1 to achieve the performance stated in the data sh
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>REGEN</name>
-                     <description>Regulator enable\n
-Enabled the internal 1.75 V regulator</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>VREFEN</name>
-                     <description>Internal Voltage Reference enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ICOMPEN" > <name>REGEN</name> <description>Regulator enable\n
+Enabled the internal 1.75 V regulator</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="ICOMPEN" > <name>VREFEN</name> <description>Internal Voltage Reference enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
          </registers>

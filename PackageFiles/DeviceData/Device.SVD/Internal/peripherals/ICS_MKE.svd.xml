@@ -3,13 +3,16 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "ICS_MKE" ?>
          <name>ICS</name>
-         <description>Clock management</description>
+         <description>Internal clock source</description>
          <groupName>ICS</groupName>
          <prependToName>ICS</prependToName>
          <headerStructName>ICS</headerStructName>
@@ -200,7 +203,8 @@ Controls whether the FLL is disabled in bypass modes</description>
                   </field>
                   <field>
                      <name>BDIV</name>
-                     <description>Bus Frequency Divider</description>
+                     <description>Bus Frequency Divider\n
+ This value can not be written or readback in some devices</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
@@ -299,14 +303,14 @@ Enables generation of a reset on loss of external clock</description>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b00</name>
+                           <name>0b0</name>
                            <description>Monitor disabled</description>
-                           <value>0b00</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01</name>
+                           <name>0b1</name>
                            <description>Monitor enabled</description>
-                           <value>0b01</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -363,7 +367,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Reserved</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -396,12 +400,12 @@ This bit indicates the current source for the FLL reference clock</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FLL is unlocked</description>
+                           <description>Unlocked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FLL is locked</description>
+                           <description>Locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

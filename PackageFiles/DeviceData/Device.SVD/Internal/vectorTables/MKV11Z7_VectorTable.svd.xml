@@ -7,22 +7,22 @@ Devices using this vector table:
          <description>MKV11Z7 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
-            <description>DMA0 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>0</value>
          </interrupt>
          <interrupt>
             <name>DMA1</name>
-            <description>DMA1 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>1</value>
          </interrupt>
          <interrupt>
             <name>DMA2</name>
-            <description>DMA2 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>2</value>
          </interrupt>
          <interrupt>
             <name>DMA3</name>
-            <description>DMA3 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>3</value>
          </interrupt>
          <interrupt>
@@ -31,13 +31,13 @@ Devices using this vector table:
             <value>4</value>
          </interrupt>
          <interrupt>
-            <name>FTF</name>
-            <description>Flash Command complete or error</description>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
             <value>5</value>
          </interrupt>
          <interrupt>
             <name>PMC</name>
-            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <description>Power Management Controller</description>
             <value>6</value>
          </interrupt>
          <interrupt>
@@ -47,62 +47,62 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>I2C0</name>
-            <description>I2C Interface 0</description>
+            <description>Inter-Integrated Circuit</description>
             <value>8</value>
          </interrupt>
          <interrupt>
             <name>SPI0</name>
-            <description>Serial Peripheral Interface 0</description>
+            <description>Serial Peripheral Interface</description>
             <value>10</value>
          </interrupt>
          <interrupt>
             <name>UART0</name>
-            <description>UART0 Status and error</description>
+            <description>Serial Communication Interface</description>
             <value>12</value>
          </interrupt>
          <interrupt>
             <name>UART1</name>
-            <description>UART1 Status and error</description>
+            <description>Serial Communication Interface</description>
             <value>13</value>
          </interrupt>
          <interrupt>
             <name>CAN0</name>
-            <description>FlexCAN 0</description>
+            <description>FlexCAN</description>
             <value>14</value>
          </interrupt>
          <interrupt>
             <name>ADC0</name>
-            <description>Analogue to Digital Converter 0</description>
+            <description>Analogue to Digital Converter</description>
             <value>15</value>
          </interrupt>
          <interrupt>
             <name>ADC1</name>
-            <description>Analogue to Digital Converter 1</description>
+            <description>Analogue to Digital Converter</description>
             <value>16</value>
          </interrupt>
          <interrupt>
             <name>FTM0</name>
-            <description>Timer/PWM Module 0</description>
+            <description>FlexTimer Module</description>
             <value>17</value>
          </interrupt>
          <interrupt>
             <name>FTM1</name>
-            <description>Timer/PWM Module 1</description>
+            <description>FlexTimer Module</description>
             <value>18</value>
          </interrupt>
          <interrupt>
             <name>FTM2</name>
-            <description>Timer/PWM Module 2</description>
+            <description>FlexTimer Module</description>
             <value>19</value>
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description></description>
+            <description>High-Speed Comparator</description>
             <value>20</value>
          </interrupt>
          <interrupt>
             <name>CMP1</name>
-            <description></description>
+            <description>High-Speed Comparator</description>
             <value>21</value>
          </interrupt>
          <interrupt>
@@ -111,7 +111,7 @@ Devices using this vector table:
             <value>22</value>
          </interrupt>
          <interrupt>
-            <name>WDOG_EWM</name>
+            <name>WDOG</name>
             <description>External Watchdog Monitor</description>
             <value>23</value>
          </interrupt>
@@ -122,7 +122,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>DAC0</name>
-            <description>Digital to Analogue Converter 0</description>
+            <description>Digital to Analogue Converter</description>
             <value>25</value>
          </interrupt>
          <interrupt>
@@ -132,7 +132,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>MCG</name>
-            <description>Clock interrupt</description>
+            <description>Multipurpose Clock Generator</description>
             <value>27</value>
          </interrupt>
          <interrupt>
@@ -141,18 +141,18 @@ Devices using this vector table:
             <value>28</value>
          </interrupt>
          <interrupt>
-            <name>PDB0_1</name>
-            <description>Programmable Delay Block 0 and 1</description>
+            <name>PDB0</name>
+            <description>Programmable Delay Block</description>
             <value>29</value>
          </interrupt>
          <interrupt>
             <name>PORTA</name>
-            <description>Port A</description>
+            <description>General Purpose Input/Output</description>
             <value>30</value>
          </interrupt>
          <interrupt>
             <name>PORTBCDE</name>
-            <description>Port B,C,D &amp; Port E</description>
+            <description>General Purpose Input/Output</description>
             <value>31</value>
          </interrupt>
       </interrupts>

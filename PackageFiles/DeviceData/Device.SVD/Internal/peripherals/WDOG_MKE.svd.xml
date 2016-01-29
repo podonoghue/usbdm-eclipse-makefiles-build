@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "WDOG_MKE" ?>

@@ -1,0 +1,280 @@
+<!--
+Devices using this peripheral: 
+      MK02F12810
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK11D5
+      MK11DA5
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21D5
+      MK21DA5
+      MK21F12
+      MK21FA12
+      MK22D5
+      MK22F12
+      MK22F12810
+      MK22F25612
+      MK22F51212
+      MK24F12
+      MK24F25612
+      MK30D7
+      MK30D10
+      MK30DZ10
+      MK40D7
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D7
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK63F12
+      MK64F12
+      MK65F18
+      MK66F18
+      MK70F15
+      MKE02Z2
+      MKE02Z4
+      MKE04Z4
+      MKE04Z1284
+      MKE06Z4
+      MKE14D7
+      MKE15D7
+      MKL02Z4
+      MKL03Z4
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
+      MKM33Z5
+      MKM34Z5
+      MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+      MKW01Z4
+      MKW21D5
+      MKW22D5
+      MKW24D5
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
+-->
+      <peripheral>
+         <?sourceFile "SYST" ?>
+         <name>SYST</name>
+         <description>System timer</description>
+         <groupName>SYST</groupName>
+         <prependToName>SYST</prependToName>
+         <headerStructName>SYST</headerStructName>
+         <baseAddress>0xE000E010</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CSR</name>
+               <description>Control and Status Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>Enable SysTick counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Counter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Counter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TICKINT</name>
+                     <description>Enable SysTick handler to be pend\n
+Enables SysTick exception request when counting down to 0</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Exception masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Exception unmasked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKSOURCE</name>
+                     <description>Clock source</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Processor clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COUNTFLAG</name>
+                     <description>Timer counted to 0 flag\n
+Clears on read by application of any part of the SysTick Control and Status Register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Counter has not reached 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Counter reached 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RVR</name>
+               <description>Reload Value Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>RELOAD</name>
+                     <description>Reload value for counter\n
+Value to load into the SysTick Current Value Register when the counter reaches 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CVR</name>
+               <description>Current Value Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>CURRENT</name>
+                     <description>Counter value\n
+Current value at the time the register is accessed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CALIB</name>
+               <description>Calibration Value Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x80000000</resetValue>
+               <fields>
+                  <field>
+                     <name>TENMS</name>
+                     <description>Reload value to use for 10ms timing</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>SKEW</name>
+                     <description>Indicates whether the 10ms calibration value is exact</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Calibration value is exact</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Calibration value is inexact</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NOREF</name>
+                     <description>Indicates whether the IMPLEMENTATION DEFINED reference clock is implemented</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The reference clock is provided</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The reference clock is not provided</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

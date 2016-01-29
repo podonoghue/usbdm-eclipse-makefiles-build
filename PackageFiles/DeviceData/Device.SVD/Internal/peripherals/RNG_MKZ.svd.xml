@@ -327,25 +327,8 @@ This bit is cleared by hardware reset or a new self test is initiated by setting
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>NSDN</name>
-                     <description>New seed done\n
-Indicates that a new seed is ready for use during the next seed generation process</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Generation incomplete</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Generation complete</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="SDN" > <name>NSDN</name> <description>New seed done\n
+Indicates that a new seed is ready for use during the next seed generation process</description> <bitOffset>6</bitOffset> </field>
                   <field>
                      <name>FIFO_LVL</name>
                      <description>FIFO level\nIndicates the number of random words currently in the output FIFO</description>

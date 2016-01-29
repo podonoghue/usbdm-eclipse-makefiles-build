@@ -226,7 +226,7 @@ Control and status register that is used to enable/disable the digital filter fe
                   <field>
                      <name>FILTSEL</name>
                      <description>Filter Pin Select\n
-Selects 1 out of the 16 wakeup pins to be muxed into the filter</description>
+Selects 1 of the wakeup pins to be muxed into the filter</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>

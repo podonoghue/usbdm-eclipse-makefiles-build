@@ -6,58 +6,58 @@ Devices using this vector table:
          <name>MKL02Z4_VectorTable</name>
          <description>MKL02Z4 VectorTable</description>
          <interrupt>
-            <name>FTFA</name>
-            <description>FTFA Command complete or error</description>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
             <value>5</value>
          </interrupt>
          <interrupt>
-            <name>LVD_LVW</name>
-            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
             <value>6</value>
          </interrupt>
          <interrupt>
             <name>I2C0</name>
-            <description>I2C Interface 0</description>
+            <description>Inter-Integrated Circuit</description>
             <value>8</value>
          </interrupt>
          <interrupt>
             <name>I2C1</name>
-            <description>I2C Interface 1</description>
+            <description>Inter-Integrated Circuit</description>
             <value>9</value>
          </interrupt>
          <interrupt>
             <name>SPI0</name>
-            <description>Serial Peripheral Interface 0</description>
+            <description>Serial Peripheral Interface</description>
             <value>10</value>
          </interrupt>
          <interrupt>
             <name>UART0</name>
-            <description>UART0 Status and error</description>
+            <description>Serial Communication Interface</description>
             <value>12</value>
          </interrupt>
          <interrupt>
             <name>ADC0</name>
-            <description>Analogue to Digital Converter 0</description>
+            <description>Analogue to Digital Converter</description>
             <value>15</value>
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description>Comparator 0</description>
+            <description>High-Speed Comparator</description>
             <value>16</value>
          </interrupt>
          <interrupt>
             <name>TPM0</name>
-            <description>Timer/PWM Module 0</description>
+            <description>Timer/PWM Module</description>
             <value>17</value>
          </interrupt>
          <interrupt>
             <name>TPM1</name>
-            <description>Timer/PWM Module 1</description>
+            <description>Timer/PWM Module</description>
             <value>18</value>
          </interrupt>
          <interrupt>
             <name>MCG</name>
-            <description>Clock interrupt</description>
+            <description>Multipurpose Clock Generator</description>
             <value>27</value>
          </interrupt>
          <interrupt>
@@ -67,12 +67,12 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>PORTA</name>
-            <description>Port A</description>
+            <description>General Purpose Input/Output</description>
             <value>30</value>
          </interrupt>
          <interrupt>
             <name>PORTB</name>
-            <description>Port B</description>
+            <description>General Purpose Input/Output</description>
             <value>31</value>
          </interrupt>
       </interrupts>

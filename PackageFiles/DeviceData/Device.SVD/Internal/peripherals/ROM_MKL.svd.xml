@@ -7,18 +7,23 @@ Devices using this peripheral:
       MKL14Z4
       MKL15Z4
       MKL16Z4
+      MKL17Z4
       MKL24Z4
       MKL25Z4
       MKL26Z4
       MKL27Z4
       MKL27Z644
+      MKL33Z4
       MKL34Z4
       MKL36Z4
       MKL43Z4
       MKL46Z4
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
       MKV10Z7
       MKV11Z7
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "ROM_MKL" ?>

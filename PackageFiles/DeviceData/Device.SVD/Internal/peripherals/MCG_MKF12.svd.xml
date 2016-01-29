@@ -4,15 +4,15 @@ Devices using this peripheral:
       MK20F12
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
-      MK70F12
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "MCG_MKF12" ?>
          <name>MCG</name>
-         <description>Multipurpose Clock Generator module</description>
+         <description>Multipurpose Clock Generator module (3 OSC, 2 PLL)</description>
          <groupName>MCG</groupName>
          <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
@@ -24,25 +24,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x7</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x8</offset>
-            <size>0x1</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0xA</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0xF</offset>
-            <size>0x4</size>
+            <size>0x13</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -83,12 +65,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK inactive</description>
+                           <description>MCGIRCLK disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK active</description>
+                           <description>MCGIRCLK enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -164,7 +146,8 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                   </field>
                   <field>
                      <name>CLKS</name>
-                     <description>Clock Source Select</description>
+                     <description>Clock Source Select\n
+Selects the clock source for MCGOUTCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -231,19 +214,20 @@ In any other MCG mode, LP bit has no affect</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FLL or PLL not disabled in bypass</description>
+                           <description>Not disabled in bypass</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FLL or PLL disabled in bypass</description>
+                           <description>Disabled in bypass</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>EREFS0</name>
-                     <description>External Reference Select\nSelects the source for the external reference clock</description>
+                     <description>External Reference Select\n
+Selects the source for the external reference clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -328,7 +312,7 @@ The LOCRE0 only has an affect when CME0 is set</description>
                <description>Control 3 Register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>SCTRIM</name>
@@ -337,7 +321,7 @@ Adjusts the slow internal reference clock frequency</description>
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0bXXXXX</name>
+                           <name>0bXXXXXXXX</name>
                            <description>Slow IRC trim value</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
@@ -350,7 +334,7 @@ Adjusts the slow internal reference clock frequency</description>
                <description>Control 4 Register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0xE0</resetMask>
                <fields>
                   <field>
                      <name>SCFTRIM</name>
@@ -442,30 +426,38 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
 Selects the amount to divide down the external reference clock for the PLL</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXX</name>
+                           <description>(N+1) Divisor</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>PLLSTEN0</name>
-                     <description>PLL0 Stop Enable</description>
+                     <description>PLL0 Stop Enable\n
+Enables the PLL Clock during Normal Stop mode.\n
+In Low Power Stop mode, the PLL clock is always disabled</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGPLL0CLK and MCGPLL0CLK2X disabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X disabled in Stop</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGPLL0CLK and MCGPLL0CLK2X enabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X enabled in Stop</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PLLCLKEN0</name>
-                     <description>PLL0 Stop Enable\n
-Enables the PLL Clock during Normal Stop mode.\n
-In Low Power Stop mode, the PLL clock is always disabled</description>
+                     <description>PLL Clock Enable\n
+Enables the PLL independent of PLLS and enables the PLL clock for use as MCGPLLCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -517,7 +509,7 @@ Selects the amount to divide the VCO output of the PLL</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bXXXXX</name>
-                           <description>(N+24) Divisor</description>
+                           <description>(N+16) Divisor</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -557,7 +549,7 @@ Controls whether the PLL or FLL output is selected as the MCG source when CLKS[1
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>PLL is selected  
-(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the range of 2-4 MHz prior to setting the PLLS bit)</description>
+(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the correct range prior to setting the PLLS bit)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -597,22 +589,25 @@ Determines if an interrupt request is made following a loss of lock indication</
 The IRCST bit indicates the current source for the internal reference clock select clock (IRCSCLK)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OSCINIT0</name>
-                     <description>OSC Initialization</description>
+                     <description>OSC Initialization Status\n
+This flag, which resets to 0, is set to 1 after the initialization cycles of the crystal oscillator clock are
+completed. After being set, the bit is cleared to 0 if the OSC is subsequently disabled</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -756,7 +751,6 @@ LOLS is set if the PLL output frequency moves outside the lock frequency range</
 The LOCS0 indicates when a loss of OSC0 reference clock has occurred</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -765,7 +759,7 @@ The LOCS0 indicates when a loss of OSC0 reference clock has occurred</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss has occurred</description>
+                           <description>Loss has occurred\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -843,7 +837,6 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                      <description>Automatic Trim Machine Fail Flag</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -852,7 +845,7 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ATM failed</description>
+                           <description>ATM failed\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1129,6 +1122,13 @@ Enables the loss of clock monitoring circuit for the output of the RTC external 
                      <description>PLL1 External Reference Divider</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXX</name>
+                           <description>(N+1) Divisor</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>PLLCS</name>
@@ -1216,6 +1216,13 @@ Enables the loss of clock monitoring circuit for the output of the RTC external 
                      <description>VCO1 Divider</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXXX</name>
+                           <description>(N+16) Divisor</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>CME2</name>

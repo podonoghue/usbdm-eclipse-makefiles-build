@@ -2,9 +2,7 @@
 Devices using this peripheral: 
       MKE02Z2
       MKE02Z4
-      MKE04Z4
-      MKE04Z8M4
-      MKE06Z4
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "NV_FTMRH" ?>
@@ -36,7 +34,7 @@ Devices using this peripheral:
                <dimIncrement>1</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>BACKKEY%s</name>
-               <description>Backdoor Comparison Key</description>
+               <description>Backdoor Comparison Key %s</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -52,7 +50,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>EEPROT</name>
-               <description>Non-volatile EE-Flash Protection Register (If implemented)</description>
+               <description>Non-volatile E-Flash Protection Register (If implemented)</description>
                <addressOffset>0xC</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -60,9 +58,70 @@ Devices using this peripheral:
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>PROT</name>
+                     <name>DPS</name>
                      <description>P-Flash Region Protect</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_001F; protected size: 32 bytes</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_003F; protected size: 64 bytes</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_005F; protected size: 96 bytes</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_007F; protected size: 128 bytes</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_009F; protected size: 160 bytes</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_00BF; protected size: 192 bytes</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_00DF; protected size: 224 bytes</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_00FF; protected size: 256 bytes</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DPOPEN</name>
+                     <description>nProtection Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Enables EEPROM memory protection</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Disables EEPROM memory protection</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -76,9 +135,97 @@ Devices using this peripheral:
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>PROT</name>
-                     <description>P-Flash Region Protect</description>
+                     <name>FPLS</name>
+                     <description>Low region protection</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Address range: 0x00_0000-0x00_07FF; protected size: 2 KB</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Address range: 0x00_0000-0x00_0FFF; protected size: 4 KB</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Address range: 0x00_0000-0x00_1FFF; protected size: 8 KB</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Address range: 0x00_0000-0x00_3FFF; protected size: 16 KB</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPLDIS</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Protection/Unprotection enabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Protection/Unprotection disabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPHS</name>
+                     <description>High region protection</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Address range: 0x00_7C00-0x00_7FFF; protected size: 1 KB</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Address range: 0x00_7800-0x00_7FFF; protected size: 2 KB</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Address range: 0x00_7000-0x00_7FFF; protected size: 4 KB</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Address range: 0x00_6000-0x00_7FFF; protected size: 8 KB</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FPLDIS" > <name>FPHDIS</name> <bitOffset>5</bitOffset> </field>
+                  <field>
+                     <name>FPOPEN</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>FPHDIS and FPLDIS bits define unprotected address ranges as specified by the corresponding FPHS and FPLS bits FPROT1.1</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>FPHDIS and FPLDIS bits enable protection for the address range specified by the corresponding FPHS and FPLS bits</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -93,28 +240,29 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SEC</name>
-                     <description>Flash Security</description>
+                     <description>Flash Security
+This field controls the MCU security</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>MCU security status is unsecure (shipped state)</description>
+                           <description>Unsecure</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -127,77 +275,79 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Freescale factory access granted</description>
+                           <description>Access granted</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Freescale factory access denied</description>
+                           <description>Access denied</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Freescale factory access denied</description>
+                           <description>Access denied</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Freescale factory access granted</description>
+                           <description>Access granted</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MEEN</name>
+                     <description>Mass erase enable</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Mass erase is disabled</description>
+                           <description>Disabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>KEYEN</name>
-                     <description>Backdoor Key Security Enable</description>
+                     <description>Backdoor Key Security Enable\n
+Allows the MCU to be unsecured if the key is known</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Backdoor key access disabled</description>
+                           <description>Access disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Backdoor key access disabled(preferred KEYEN state to disable backdoor key access)</description>
+                           <description>Access disabled(preferred)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Backdoor key access enabled</description>
+                           <description>Access enabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Backdoor key access disabled</description>
+                           <description>Access disabled</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

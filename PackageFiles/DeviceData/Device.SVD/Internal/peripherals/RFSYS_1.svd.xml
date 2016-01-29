@@ -1,0 +1,58 @@
+<!--
+Devices using this peripheral: 
+      MKL03Z4
+-->
+      <peripheral>
+         <?sourceFile "RFSYS_1" ?>
+         <name>RFSYS</name>
+         <description>System register file</description>
+         <groupName>RFSYS</groupName>
+         <prependToName>RFSYS</prependToName>
+         <headerStructName>RFSYS</headerStructName>
+         <baseAddress>0x40041000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>REG%s</name>
+               <description>Register file register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>LL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LH</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HL</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HH</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

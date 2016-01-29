@@ -1,5 +1,7 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
       MKV30F12810
       MKV31F12810
 -->
@@ -18,19 +20,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x7</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x8</offset>
-            <size>0x1</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0xA</offset>
-            <size>0x4</size>
+            <size>0xE</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -185,6 +175,7 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
+               <resetValue>0x80</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -285,7 +276,8 @@ Selects the frequency range for the crystal oscillator or external clock source<
                   </field>
                   <field>
                      <name>FCFTRIM</name>
-                     <description>Fast Internal Reference Clock Fine Trim</description>
+                     <description>Fast Internal Reference Clock Fine Trim\n
+Controls the smallest adjustment of the fast internal reference clock frequency</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -316,7 +308,7 @@ The LOCRE0 only has an affect when CME0 is set</description>
                <description>Control 3 Register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>SCTRIM</name>
@@ -338,7 +330,7 @@ Adjusts the slow internal reference clock frequency</description>
                <description>Control 4 Register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0xE0</resetMask>
                <fields>
                   <field>
                      <name>SCFTRIM</name>
@@ -459,6 +451,7 @@ The LOCRE0 bit will determine if a interrupt or a reset request is generated fol
                <description>Status Register</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
+               <access>read-only</access>
                <resetValue>0x10</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
@@ -767,8 +760,13 @@ Selects the MCG FLL external reference clock</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Selects Oscillator (OSCCLK1)</description>
+                           <description>Selects OSCCLK1 (IRC48M)</description>
                            <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

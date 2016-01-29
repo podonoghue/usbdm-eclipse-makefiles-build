@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "RTC_MKM_RAM" ?>

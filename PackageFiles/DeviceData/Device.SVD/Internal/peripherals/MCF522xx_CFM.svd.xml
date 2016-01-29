@@ -103,63 +103,12 @@ The CCIE bit enables an interrupt in case the command completion flag, CCIF in t
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CBEIE</name>
-                     <description>Command Buffer Empty (CBEIF) Interrupt\n
-The CBEIE bit enables an interrupt in case the command buffer empty flag, CBEIF in the CFMUSTAT register, is set</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>AEIE</name>
-                     <description>Access Error (ACCERR) Interrupt\n
-The AEIE bit enables an interrupt in case the access error flag, ACCERR in the CFMUSTAT register, is set</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PVIE</name>
-                     <description>Protection Violation (PVIOL) Interrupt\n
-The PVIE bit enables an interrupt in case the protection violation flag, PVIOL in the CFMUSTAT register, is set</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CCIE" > <name>CBEIE</name> <description>Command Buffer Empty (CBEIF) Interrupt\n
+The CBEIE bit enables an interrupt in case the command buffer empty flag, CBEIF in the CFMUSTAT register, is set</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CCIE" > <name>AEIE</name> <description>Access Error (ACCERR) Interrupt\n
+The AEIE bit enables an interrupt in case the access error flag, ACCERR in the CFMUSTAT register, is set</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CCIE" > <name>PVIE</name> <description>Protection Violation (PVIOL) Interrupt\n
+The PVIE bit enables an interrupt in case the protection violation flag, PVIOL in the CFMUSTAT register, is set</description> <bitOffset>9</bitOffset> </field>
                   <field>
                      <name>LOCK</name>
                      <description>CFMPROT, CMFSACC, and CFMDACC protection</description>
@@ -268,24 +217,7 @@ that enables the security feature in the CFM (0x4AC81 = HALT instruction)</descr
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>KEYEN</name>
-                     <description>Backdoor access key\nEnable backdoor key access to unlock security</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="SECSTAT" > <name>KEYEN</name> <description>Backdoor access key\nEnable backdoor key access to unlock security</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>

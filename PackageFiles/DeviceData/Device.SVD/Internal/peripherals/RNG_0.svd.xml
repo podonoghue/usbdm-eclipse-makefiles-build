@@ -1,16 +1,18 @@
 <!--
 Devices using this peripheral: 
       MK10F12
-      MK21F12
+      MK20F12
       MK52D10
       MK53D10
       MK60D10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
-      MK70F12
+      MK61F15WS
+      MK65F18
+      MK66F18
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "RNG_0" ?>

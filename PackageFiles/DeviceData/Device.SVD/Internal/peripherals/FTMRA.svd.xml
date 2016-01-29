@@ -1,0 +1,800 @@
+<!--
+Devices using this peripheral: 
+      MKE14D7
+      MKE15D7
+-->
+      <peripheral>
+         <?sourceFile "FTMRA" ?>
+         <name>FTMRA</name>
+         <description>FTMRA Family Flash Module</description>
+         <groupName>FTMRA</groupName>
+         <prependToName>FTMRA</prependToName>
+         <headerStructName>FTMRA</headerStructName>
+         <baseAddress>0x40039000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x12</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>FSEC</name>
+               <description>Flash Security Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SEC</name>
+                     <description>Flash Security</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>MCU security status is secure</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>MCU security status is secure,it is the preferred SEC state to set MCU to secured state</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>MCU security status is unsecure</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>MCU security status is secure</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RNV</name>
+                     <description>Reserved Nonvolatile Bits</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>KEYEN</name>
+                     <description>Backdoor Key Security Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Backdoor key access disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Backdoor key access disabled (preferred KEYEN state to disable backdoor key access)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Backdoor key access enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Backdoor key access disabled</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCLKDIV</name>
+               <description>Flash Clock Divider Register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FDIV</name>
+                     <description>Clock Divider Bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>FDIVLD</name>
+                     <description>Clock Divider Loaded</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FCLKDIV register has not been written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FCLKDIV register has been written since the last reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FECCRIX</name>
+               <description>Flash ECCR Index Register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ECCRIX</name>
+                     <description>ECC Error Register Index</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCCOBIX</name>
+               <description>Flash Common Command Object Index Register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CCOBIX</name>
+                     <description>Common Command Register Index</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FERCNFG</name>
+               <description>Flash Error Configuration Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SFDIE</name>
+                     <description>Single Bit Fault Detect Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SFDIF interrupt disabled whenever the SFDIF flag is set</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt will be requested whenever the SFDIF flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SFDIE" > <name>DFDIE</name> <description>Double Bit Fault Detect Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCNFG</name>
+               <description>Flash Configuration Register</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>FSFD</name>
+                     <description>Force Single Bit Fault Detect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash array read operations will set the SFDIF flag in the FERSTAT register only if a single bit fault is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash array read operation will force the SFDIF flag in the FERSTAT register to be set (see Section 1.3.2.7) and an interrupt will be generated as long as the SFDIE interrupt enable in the FERCNFG register is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FDFD</name>
+                     <description>Force Double Bit Fault Detect</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash array read operations will set the DFDIF flag in the FERSTAT register only if a double bit fault is detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Any flash array read operation will force the FERSTAT[DFDIF] flag to be set and an interrupt will be generated as long as the FERCNFG[DFDIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IGNSF</name>
+                     <description>Ignore Single Bit Fault</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All single bit faults detected during array reads are reported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single bit faults detected during array reads are not reported and the single bit fault interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERSAREQ</name>
+                     <description>Erase All Request</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No request or request complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Request to: run the Erase All Blocks command, verify the erased state, program the security byte in the Flash Configuration Field to the unsecure state, and release MCU security by setting the FSEC[SEC] field to the unsecure state</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIE</name>
+                     <description>Command Complete Interrupt Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Command complete interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Command complete interrupt enabled. An interrupt request is generated whenever the FSTAT[CCIF] flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FERSTAT</name>
+               <description>Flash Error Status Register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SFDIF</name>
+                     <description>Single Bit Fault Detect Interrupt Flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No single bit fault detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single bit fault detected and corrected or an invalid Flash array read operation attempted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFDIF</name>
+                     <description>Double Bit Fault Detect Interrupt Flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No double bit fault detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Double bit fault detected or an invalid Flash array read operation attempted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FSTAT</name>
+               <description>Flash Status Register</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MGSTAT</name>
+                     <description>MGATE Command Completion Status Flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>MGBUSY</name>
+                     <description>MGATE Busy Flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MGATE is idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MGATE is busy executing a Flash command (CCIF = 0)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPVIOL</name>
+                     <description>Flash Protection Violation Flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No protection violation detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protection violation detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACCERR</name>
+                     <description>Flash Access Error Flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No access error detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Access error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCIF</name>
+                     <description>Command Complete Interrupt Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flash command in progress</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash command has completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFPROT</name>
+               <description>D-Flash Protection Register</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DPS</name>
+                     <description>EraseD-Flash Protection Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_00FF; protected size: 256 bytes</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00001</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_01FF; protected size: 512 bytes</description>
+                           <value>0b00001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00010</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_02FF; protected size: 768 bytes</description>
+                           <value>0b00010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00011</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_03FF; protected size: 1024 bytes</description>
+                           <value>0b00011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00100</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_04FF; protected size: 1280 bytes</description>
+                           <value>0b00100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00101</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_05FF; protected size: 1536 bytes</description>
+                           <value>0b00101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00110</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_06FF; protected size: 1792 bytes</description>
+                           <value>0b00110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00111</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_07FF; protected size: 2048 bytes</description>
+                           <value>0b00111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01000</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_08FF; protected size: 2304 bytes</description>
+                           <value>0b01000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01001</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_09FF; protected size: 2560 bytes</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01010</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0AFF; protected size: 2816 bytes</description>
+                           <value>0b01010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01011</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0BFF; protected size: 3072 bytes</description>
+                           <value>0b01011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01100</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0CFF; protected size: 3328 bytes</description>
+                           <value>0b01100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01101</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0DFF; protected size: 3584 bytes</description>
+                           <value>0b01101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01110</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0EFF; protected size: 3840 bytes</description>
+                           <value>0b01110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01111</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_0FFF; protected size: 4096 bytes</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_10FF; protected size: 4352 bytes</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10001</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_11FF; protected size: 4608 bytes</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10010</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_12FF; protected size: 4864 bytes</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10011</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_13FF; protected size: 5120 bytes</description>
+                           <value>0b10011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10100</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_14FF; protected size: 5376 bytes</description>
+                           <value>0b10100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10101</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_15FF; protected size: 5632 bytes</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10110</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_16FF; protected size: 5888 bytes</description>
+                           <value>0b10110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10111</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_17FF; protected size: 6144 bytes</description>
+                           <value>0b10111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11000</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_18FF; protected size: 6400 bytes</description>
+                           <value>0b11000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11001</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_19FF; protected size: 6656 bytes</description>
+                           <value>0b11001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11010</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1AFF; protected size: 6912 bytes</description>
+                           <value>0b11010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11011</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1BFF; protected size: 7168 bytes</description>
+                           <value>0b11011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11100</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1CFF; protected size: 7424 bytes</description>
+                           <value>0b11100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11101</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1DFF; protected size: 7680 bytes</description>
+                           <value>0b11101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11110</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1EFF; protected size: 7936 bytes</description>
+                           <value>0b11110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11111</name>
+                           <description>Flash address range: 0x00_0000 - 0x00_1FFF; protected size: 8192 bytes</description>
+                           <value>0b11111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DPOPEN</name>
+                     <description>D-Flash Protection Control</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enables D-Flash memory protection from program and erase with protected address range defined by DPS bits</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disables D-Flash memory protection from program and erase</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FPROT</name>
+               <description>P-Flash Protection Register</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FPLS</name>
+                     <description>Flash Protection Lower Address Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Address range: 0x00_0000-0x00_07FF; protected size: 2 KB</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Address range: 0x00_0000-0x00_0FFF; protected size: 4 KB</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Address range: 0x00_0000-0x00_1FFF; protected size: 8 KB</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Address range: 0x00_0000-0x00_3FFF; protected size: 16 KB</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPLDIS</name>
+                     <description>Flash Protection Lower Address Range Disable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Protection/Unprotection enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Protection/Unprotection disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FPHS</name>
+                     <description>Flash Protection Higher Address Size</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Address range: 0x00_7C00-0x00_7FFF; protected size: 1 KB</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Address range: 0x00_7800-0x00_7FFF; protected size: 2 KB</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Address range: 0x00_7000-0x00_7FFF; protected size: 4 KB</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Address range: 0x00_6000-0x00_7FFF; protected size: 8 KB</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FPLDIS" > <name>FPHDIS</name> <description>Flash Protection Higher Address Range Disable</description> <bitOffset>5</bitOffset> </field>
+                  <field>
+                     <name>RNV</name>
+                     <description>Reserved Nonvolatile Bit</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>FPOPEN</name>
+                     <description>Flash Protection Operation Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>When FPOPEN is clear, the FPHDIS and FPLDIS bits define unprotected address ranges as specified by the corresponding FPHS and FPLS bits</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When FPOPEN is set, the FPHDIS and FPLDIS bits enable protection for the address range specified by the corresponding FPHS and FPLS bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCCOBLO</name>
+               <description>Flash Common Command Object Low Register</description>
+               <addressOffset>0xA</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CCOBn</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FCCOBHI</name>
+               <description>Flash Common Command Object High Register</description>
+               <addressOffset>0xB</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CCOBn</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FECCRLO</name>
+               <description>Flash ECC Error Results Low Register</description>
+               <addressOffset>0xE</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ECCR</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FECCRHI</name>
+               <description>Flash ECC Error Results High Register</description>
+               <addressOffset>0xF</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ECCR</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FOPT</name>
+               <description>Flash Option Register</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>NV</name>
+                     <description>Nonvolatile Bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

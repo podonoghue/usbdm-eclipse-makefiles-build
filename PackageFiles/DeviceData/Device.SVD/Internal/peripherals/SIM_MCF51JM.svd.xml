@@ -250,26 +250,9 @@ Enables entry to WAIT mode</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>STOPE</name>
-                     <description>Stop mode enable\n
+                  <field derivedFrom="WAITE" > <name>STOPE</name> <description>Stop mode enable\n
 Enables entry to stop mode.\n
-This bit can be written only once after each reset</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+This bit can be written only once after each reset</description> <bitOffset>5</bitOffset> </field>
                </fields>
             </register>
             <register>

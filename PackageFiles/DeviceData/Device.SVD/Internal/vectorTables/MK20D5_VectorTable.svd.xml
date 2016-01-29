@@ -7,22 +7,22 @@ Devices using this vector table:
          <description>MK20D5 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
-            <description>DMA channel 0 transfer complete interrupt</description>
+            <description>Direct memory access controller</description>
             <value>0</value>
          </interrupt>
          <interrupt>
             <name>DMA1</name>
-            <description>DMA channel 1 transfer complete interrupt</description>
+            <description>Direct memory access controller</description>
             <value>1</value>
          </interrupt>
          <interrupt>
             <name>DMA2</name>
-            <description>DMA channel 2 transfer complete interrupt</description>
+            <description>Direct memory access controller</description>
             <value>2</value>
          </interrupt>
          <interrupt>
             <name>DMA3</name>
-            <description>DMA channel 3 transfer complete interrupt</description>
+            <description>Direct memory access controller</description>
             <value>3</value>
          </interrupt>
          <interrupt>
@@ -31,163 +31,163 @@ Devices using this vector table:
             <value>4</value>
          </interrupt>
          <interrupt>
-            <name>FTFL_Command</name>
-            <description>FTFL interrupt</description>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
             <value>6</value>
          </interrupt>
          <interrupt>
-            <name>FTFL_Collision</name>
-            <description>FTFL Read collision interrupt</description>
+            <name>FTF_ReadCollision</name>
+            <description>Flash Memory Interface</description>
             <value>7</value>
          </interrupt>
          <interrupt>
-            <name>LVD_LVW</name>
-            <description>PMC Low Voltage Detect, Low Voltage Warning</description>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
             <value>8</value>
          </interrupt>
          <interrupt>
-            <name>LLW</name>
-            <description>LLW Low Leakage Wakeup</description>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
             <value>9</value>
          </interrupt>
          <interrupt>
-            <name>Watchdog</name>
-            <description>WDOG interrupt</description>
+            <name>WDOG</name>
+            <description>External Watchdog Monitor</description>
             <value>10</value>
          </interrupt>
          <interrupt>
             <name>I2C0</name>
-            <description>I2C0 interrupt</description>
+            <description>Inter-Integrated Circuit</description>
             <value>11</value>
          </interrupt>
          <interrupt>
             <name>SPI0</name>
-            <description>SPI0 interrupt</description>
+            <description>Serial Peripheral Interface</description>
             <value>12</value>
          </interrupt>
          <interrupt>
             <name>I2S0_Tx</name>
-            <description>I2S0 transmit interrupt</description>
+            <description>Synchronous Serial Interface</description>
             <value>13</value>
          </interrupt>
          <interrupt>
             <name>I2S0_Rx</name>
-            <description>I2S0 receive interrupt</description>
+            <description>Synchronous Serial Interface</description>
             <value>14</value>
          </interrupt>
          <interrupt>
             <name>UART0_LON</name>
-            <description>UART0 LON interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>15</value>
          </interrupt>
          <interrupt>
             <name>UART0_RX_TX</name>
-            <description>UART0 receive/transmit interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>16</value>
          </interrupt>
          <interrupt>
             <name>UART0_ERR</name>
-            <description>UART0 error interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>17</value>
          </interrupt>
          <interrupt>
             <name>UART1_RX_TX</name>
-            <description>UART1 receive/transmit interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>18</value>
          </interrupt>
          <interrupt>
             <name>UART1_ERR</name>
-            <description>UART1 error interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>19</value>
          </interrupt>
          <interrupt>
             <name>UART2_RX_TX</name>
-            <description>UART2 receive/transmit interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>20</value>
          </interrupt>
          <interrupt>
             <name>UART2_ERR</name>
-            <description>UART0 error interrupt</description>
+            <description>Serial Communication Interface</description>
             <value>21</value>
          </interrupt>
          <interrupt>
             <name>ADC0</name>
-            <description>ADC0 interrupt</description>
+            <description>Analogue to Digital Converter</description>
             <value>22</value>
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description>CMP0 interrupt</description>
+            <description>High-Speed Comparator</description>
             <value>23</value>
          </interrupt>
          <interrupt>
             <name>CMP1</name>
-            <description>CMP1 interrupt</description>
+            <description>High-Speed Comparator</description>
             <value>24</value>
          </interrupt>
          <interrupt>
             <name>FTM0</name>
-            <description>FTM0 fault, overflow and channels interrupt</description>
+            <description>FlexTimer Module</description>
             <value>25</value>
          </interrupt>
          <interrupt>
             <name>FTM1</name>
-            <description>FTM1 fault, overflow and channels interrupt</description>
+            <description>FlexTimer Module</description>
             <value>26</value>
          </interrupt>
          <interrupt>
             <name>CMT</name>
-            <description>CMT interrupt</description>
+            <description>Carrier Modulator Transmitter</description>
             <value>27</value>
          </interrupt>
          <interrupt>
-            <name>RTC</name>
-            <description>RTC interrupt</description>
+            <name>RTC_Alarm</name>
+            <description>Real Time Clock</description>
             <value>28</value>
          </interrupt>
          <interrupt>
             <name>RTC_Seconds</name>
-            <description>RTC seconds interrupt</description>
+            <description>Real Time Clock</description>
             <value>29</value>
          </interrupt>
          <interrupt>
             <name>PIT0</name>
-            <description>PIT timer channel 0 interrupt</description>
+            <description>Periodic Interrupt Timer</description>
             <value>30</value>
          </interrupt>
          <interrupt>
             <name>PIT1</name>
-            <description>PIT timer channel 1 interrupt</description>
+            <description>Periodic Interrupt Timer</description>
             <value>31</value>
          </interrupt>
          <interrupt>
             <name>PIT2</name>
-            <description>PIT timer channel 2 interrupt</description>
+            <description>Periodic Interrupt Timer</description>
             <value>32</value>
          </interrupt>
          <interrupt>
             <name>PIT3</name>
-            <description>PIT timer channel 3 interrupt</description>
+            <description>Periodic Interrupt Timer</description>
             <value>33</value>
          </interrupt>
          <interrupt>
             <name>PDB0</name>
-            <description>PDB0 Programmable Delay Block interrupt</description>
+            <description>Programmable Delay Block</description>
             <value>34</value>
          </interrupt>
          <interrupt>
             <name>USB0</name>
-            <description>USB0 OTG interrupt</description>
+            <description>Universal Serial Bus</description>
             <value>35</value>
          </interrupt>
          <interrupt>
             <name>USBDCD</name>
-            <description>USBDCD interrupt</description>
+            <description>USB Device Charger Detection</description>
             <value>36</value>
          </interrupt>
          <interrupt>
             <name>TSI0</name>
-            <description>TSI0 interrupt</description>
+            <description>Touch Sense Interface</description>
             <value>37</value>
          </interrupt>
          <interrupt>
@@ -197,32 +197,32 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>LPTMR0</name>
-            <description>LPTMR Low Power Timer interrupt</description>
+            <description>Low Power Timer</description>
             <value>39</value>
          </interrupt>
          <interrupt>
             <name>PORTA</name>
-            <description>Port A interrupt</description>
+            <description>General Purpose Input/Output</description>
             <value>40</value>
          </interrupt>
          <interrupt>
             <name>PORTB</name>
-            <description>Port B interrupt</description>
+            <description>General Purpose Input/Output</description>
             <value>41</value>
          </interrupt>
          <interrupt>
             <name>PORTC</name>
-            <description>Port C interrupt</description>
+            <description>General Purpose Input/Output</description>
             <value>42</value>
          </interrupt>
          <interrupt>
             <name>PORTD</name>
-            <description>Port D interrupt</description>
+            <description>General Purpose Input/Output</description>
             <value>43</value>
          </interrupt>
          <interrupt>
             <name>PORTE</name>
-            <description>Port E interrupt</description>
+            <description>General Purpose Input/Output</description>
             <value>44</value>
          </interrupt>
          <interrupt>

@@ -31,7 +31,7 @@ Devices using this peripheral:
             <register>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>A,B</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>SC1%s</name>
                <description>Status and Control Registers 1</description>
                <addressOffset>0x0</addressOffset>
@@ -39,28 +39,28 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ADCH</name>
-                     <description>Input channel select</description>
+                     <description>Input Channel Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000</name>
-                           <description>AD0 is selected as input</description>
+                           <description>AD0</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00001</name>
-                           <description>AD1 is selected as input</description>
+                           <description>AD1</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00010</name>
-                           <description>AD2 is selected as input</description>
+                           <description>AD2</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00011</name>
-                           <description>AD3 is selected as input</description>
+                           <description>AD3</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -207,7 +207,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>AIEN</name>
-                     <description>Interrupt Enable</description>
+                     <description>Conversion Complete Interrupt</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -279,8 +279,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>MODE</name>
-                     <description>Conversion mode selection\n
-DIFF mode is not supported on all devices</description>
+                     <description>ADC resolution</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -354,18 +353,19 @@ DIFF mode is not supported on all devices</description>
                   </field>
                   <field>
                      <name>ADLPC</name>
-                     <description>Low-Power Configuration</description>
+                     <description>Low-Power Configuration\n
+Controls trade-off between speed and power consumption</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Normal power configuration</description>
+                           <description>Normal power operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Low-power configuration\tThe power is reduced at the expense of maximum clock speed</description>
+                           <description>Low-power operation\tThe power is reduced at the expense of maximum clock speed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -444,18 +444,18 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                   </field>
                   <field>
                      <name>MUXSEL</name>
-                     <description>Mux Select</description>
+                     <description>Mux Select\nSelect between A and B channels</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ADxxa channels are selected</description>
+                           <description>ADxxA channels</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ADxxb channels are selected</description>
+                           <description>ADxxB channels</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -465,7 +465,7 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
             <register>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>A,B</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>R%s</name>
                <description>Data Result Register</description>
                <addressOffset>0x10</addressOffset>
@@ -531,12 +531,12 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA enabled\t Will be asserted when an ADC conversion completes</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -562,20 +562,19 @@ Controls whether a single threshold is used (CV1) or an range defined by CV1 &am
                   </field>
                   <field>
                      <name>ACFGT</name>
-                     <description>Compare Function Greater Than Enable</description>
+                     <description>Compare Function Greater Than Enable\n
+Functionality will be based on the values placed in CV1 and CV2</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Configures less than threshold, outside range not inclusive and inside range not inclusive; 
-                           functionality based on the values placed in CV1 and CV2</description>
+                           <description>Exclusive\t- Configures &lt; threshold, outside and inside range exclusive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Configures greater than or equal to threshold, outside and inside ranges inclusive; 
-                           functionality based on the values placed in CV1 and CV2</description>
+                           <description>Inclusive\t- Configures &gt;= threshold, outside and inside ranges inclusive</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -588,12 +587,12 @@ Controls whether a single threshold is used (CV1) or an range defined by CV1 &am
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Compare function disabled</description>
+                           <description>Compare disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Compare function enabled</description>
+                           <description>Compare enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -606,12 +605,12 @@ Controls whether a single threshold is used (CV1) or an range defined by CV1 &am
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger selected</description>
+                           <description>Software trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware trigger selected</description>
+                           <description>Hardware trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -625,12 +624,12 @@ Controls whether a single threshold is used (CV1) or an range defined by CV1 &am
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Conversion not in progress</description>
+                           <description>Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Conversion in progress</description>
+                           <description>In progress</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -729,9 +728,22 @@ Enables continuous conversions or sets of conversions (when averaging) after an 
                   </field>
                   <field>
                      <name>CAL</name>
-                     <description>Calibration</description>
+                     <description>Calibration\n
+Begins the calibration sequence when set</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Calibration busy</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Calibration idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>

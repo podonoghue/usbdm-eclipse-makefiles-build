@@ -2,8 +2,6 @@
 Devices using this peripheral: 
       MK10D10
       MK20D10
-      MK24F12
-      MK24F25612
       MK30D10
       MK40D10
       MK50D10
@@ -11,8 +9,6 @@ Devices using this peripheral:
       MK52D10
       MK53D10
       MK60D10
-      MK63F12
-      MK64F12
 -->
       <peripheral>
          <?sourceFile "RTC_WAR_RAR_TSIE_WPON" ?>
@@ -28,12 +24,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x20</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x800</offset>
-            <size>0x8</size>
+            <size>0x808</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -140,7 +131,7 @@ The SWR bit is cleared by VBAT POR and by software explicitly clearing it</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset RTC</description>
+                           <description>Reset RTC apart from (SWR, WAR, RAR)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -204,25 +195,6 @@ Protects the registers when locked</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>WPS</name>
-                     <description>Wakeup Pin Select\n
-Select between using the wakeup pin for wakeup function or outputting the RTC 32kHz clock</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Wakeup pin function</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>RTC 32kHz clock</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>OSCE</name>
                      <description>Oscillator Enable\n
 Enables the 32.768 kHz oscillator</description>
@@ -262,72 +234,25 @@ Enables the 32kHz clock to be output to other peripherals</description>
                   </field>
                   <field>
                      <name>SC16P</name>
-                     <description>Oscillator 16pF Load Configure</description>
+                     <description>Oscillator 16pF Load</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>+16pF</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SC8P</name>
-                     <description>Oscillator 8pF Load Configure</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>+8pF</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SC4P</name>
-                     <description>Oscillator 4pF Load Configure</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>+4pF</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SC2P</name>
-                     <description>Oscillator 2pF Load Configure</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>+2pF</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="SC16P" > <name>SC8P</name> <description>Oscillator 8pF Load</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="SC16P" > <name>SC4P</name> <description>Oscillator 4pF Load</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="SC16P" > <name>SC2P</name> <description>Oscillator 2pF Load</description> <bitOffset>13</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -346,12 +271,12 @@ Indicates if the time is valid</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time is valid</description>
+                           <description>Valid</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time is invalid</description>
+                           <description>Invalid</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -371,7 +296,7 @@ Indicates time overflow has occurred</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time overflow</description>
+                           <description>Overflow</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -463,12 +388,12 @@ Write protects the Lock Register</description> <bitOffset>6</bitOffset> </field>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt masked</description>
+                           <description>Masked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -478,8 +403,7 @@ Write protects the Lock Register</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="TIIE" > <name>TSIE</name> <description>Time Seconds Interrupt Enable</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>WPON</name>
-                     <description>Wakeup Pin On\n
-Enables the wakeup pin to assert when enabled</description>
+                     <description>Wakeup Pin On</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -490,7 +414,7 @@ Enables the wakeup pin to assert when enabled</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Wakeup may assert</description>
+                           <description>If the wakeup pin is enabled, then the wakeup pin will assert</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -517,7 +441,7 @@ Protects register against writes.  Any writes are ignored</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Writes successful</description>
+                           <description>Writes OK</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -551,7 +475,7 @@ Protects register against reads.  Any reads are ignored</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reads successful</description>
+                           <description>Reads OK</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

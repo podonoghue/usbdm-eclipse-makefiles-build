@@ -39,11 +39,11 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
 -->
       <peripheral>
@@ -188,120 +188,18 @@ This bit is UNK/SBZP if the NOTRCPKT bit is RAO or the NOCYCCNT bit is RAO</desc
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>EXCTRCENA</name>
-                     <description>Enables generation of exception trace.\n
-This bit is UNK/SBZP if the NOTRCPKT bit is RAO</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CPIEVTENA</name>
-                     <description>Enables generation of the CPI counter overflow event.\n
-This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EXCEVTENA</name>
-                     <description>Enables generation of the Exception overhead counter overflow event.\n
-This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SLEEPEVTENA</name>
-                     <description>Enables generation of the Sleep counter overflow event.\n
-This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>LSUEVTENA</name>
-                     <description>Enables generation of the LSU counter overflow event.\n
-This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FOLDEVTENA</name>
-                     <description>Enables generation of the Folded-instruction counter overflow event.\n
-This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CYCCNTENA" > <name>EXCTRCENA</name> <description>Enables generation of exception trace.\n
+This bit is UNK/SBZP if the NOTRCPKT bit is RAO</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CYCCNTENA" > <name>CPIEVTENA</name> <description>Enables generation of the CPI counter overflow event.\n
+This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CYCCNTENA" > <name>EXCEVTENA</name> <description>Enables generation of the Exception overhead counter overflow event.\n
+This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CYCCNTENA" > <name>SLEEPEVTENA</name> <description>Enables generation of the Sleep counter overflow event.\n
+This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CYCCNTENA" > <name>LSUEVTENA</name> <description>Enables generation of the LSU counter overflow event.\n
+This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CYCCNTENA" > <name>FOLDEVTENA</name> <description>Enables generation of the Folded-instruction counter overflow event.\n
+This bit is UNK/SBZP if the NOPRFCNT bit is RAO</description> <bitOffset>21</bitOffset> </field>
                   <field>
                      <name>CYCEVTENA</name>
                      <description>Enables POSTCNT underflow Event counter packets generation.\n

@@ -271,24 +271,7 @@ The PWMCTL register provides various control of the PWM module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PSWAI</name>
-                     <description>Wait Mode operation</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Stopped</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="PFRZ" > <name>PSWAI</name> <description>Wait Mode operation</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>CON01</name>
                      <description>Concatenate even/odd PWM channels\n

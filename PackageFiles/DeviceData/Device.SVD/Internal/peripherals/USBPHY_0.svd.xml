@@ -1,0 +1,3494 @@
+<!--
+Devices using this peripheral: 
+      MK65F18
+      MK66F18
+-->
+      <peripheral>
+         <?sourceFile "USBPHY_0" ?>
+         <name>USBPHY</name>
+         <description>USBPHY Register Reference Index</description>
+         <groupName>USBPHY</groupName>
+         <prependToName>USBPHY</prependToName>
+         <headerStructName>USBPHY</headerStructName>
+         <baseAddress>0x400A2000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x140</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PWD</name>
+               <description>USB PHY Power-Down Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x1E1C00</resetValue>
+               <fields>
+                  <field>
+                     <name>TXPWDFS</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed drivers. This turns off the current starvation sources and puts the drivers into high-impedance output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDIBIAS</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY current bias block for the transmitter. This bit should be set only when the USB is in suspend mode. This effectively powers down the entire USB transmit path</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDV2I</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY transmit V-to-I converter and the current mirror</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDENV</name>
+                     <description>no description available</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed receiver envelope detector (squelch signal)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWD1PT1</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDDIFF</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDRX</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the entire USB PHY receiver block except for the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWD_SET</name>
+               <description>USB PHY Power-Down Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x1E1C00</resetValue>
+               <fields>
+                  <field>
+                     <name>TXPWDFS</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed drivers. This turns off the current starvation sources and puts the drivers into high-impedance output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDIBIAS</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY current bias block for the transmitter. This bit should be set only when the USB is in suspend mode. This effectively powers down the entire USB transmit path</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDV2I</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY transmit V-to-I converter and the current mirror</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDENV</name>
+                     <description>no description available</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed receiver envelope detector (squelch signal)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWD1PT1</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDDIFF</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDRX</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the entire USB PHY receiver block except for the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWD_CLR</name>
+               <description>USB PHY Power-Down Register</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x1E1C00</resetValue>
+               <fields>
+                  <field>
+                     <name>TXPWDFS</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed drivers. This turns off the current starvation sources and puts the drivers into high-impedance output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDIBIAS</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY current bias block for the transmitter. This bit should be set only when the USB is in suspend mode. This effectively powers down the entire USB transmit path</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDV2I</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY transmit V-to-I converter and the current mirror</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDENV</name>
+                     <description>no description available</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed receiver envelope detector (squelch signal)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWD1PT1</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDDIFF</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDRX</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the entire USB PHY receiver block except for the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWD_TOG</name>
+               <description>USB PHY Power-Down Register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x1E1C00</resetValue>
+               <fields>
+                  <field>
+                     <name>TXPWDFS</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed drivers. This turns off the current starvation sources and puts the drivers into high-impedance output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDIBIAS</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY current bias block for the transmitter. This bit should be set only when the USB is in suspend mode. This effectively powers down the entire USB transmit path</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXPWDV2I</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB PHY transmit V-to-I converter and the current mirror</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDENV</name>
+                     <description>no description available</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed receiver envelope detector (squelch signal)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWD1PT1</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDDIFF</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the USB high-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXPWDRX</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power-down the entire USB PHY receiver block except for the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX</name>
+               <description>USB PHY Transmitter Control Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x10060607</resetValue>
+               <fields>
+                  <field>
+                     <name>D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Maximum current, approximately 19% above nominal</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Nominal</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Minimum current, approximately 19% below nominal</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXCAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>USBPHY_TX_EDGECTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX_SET</name>
+               <description>USB PHY Transmitter Control Register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x10060607</resetValue>
+               <fields>
+                  <field>
+                     <name>D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Maximum current, approximately 19% above nominal</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Nominal</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Minimum current, approximately 19% below nominal</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXCAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>USBPHY_TX_EDGECTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX_CLR</name>
+               <description>USB PHY Transmitter Control Register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x10060607</resetValue>
+               <fields>
+                  <field>
+                     <name>D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Maximum current, approximately 19% above nominal</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Nominal</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Minimum current, approximately 19% below nominal</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXCAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>USBPHY_TX_EDGECTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX_TOG</name>
+               <description>USB PHY Transmitter Control Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x10060607</resetValue>
+               <fields>
+                  <field>
+                     <name>D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Maximum current, approximately 19% above nominal</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Nominal</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Minimum current, approximately 19% below nominal</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXCAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>USBPHY_TX_EDGECTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX</name>
+               <description>USB PHY Receiver Control Register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENVADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.1000 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.1125 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.1250 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.0875 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DISCONADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.56875 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.55000 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.58125 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.60000 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXDBYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the output of the USB_DP single-ended receiver in place of the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_SET</name>
+               <description>USB PHY Receiver Control Register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENVADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.1000 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.1125 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.1250 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.0875 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DISCONADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.56875 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.55000 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.58125 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.60000 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXDBYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the output of the USB_DP single-ended receiver in place of the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_CLR</name>
+               <description>USB PHY Receiver Control Register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENVADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.1000 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.1125 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.1250 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.0875 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DISCONADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.56875 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.55000 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.58125 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.60000 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXDBYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the output of the USB_DP single-ended receiver in place of the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_TOG</name>
+               <description>USB PHY Receiver Control Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENVADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.1000 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.1125 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.1250 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.0875 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DISCONADJ</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Trip-Level Voltage is 0.56875 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Trip-Level Voltage is 0.55000 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Trip-Level Voltage is 0.58125 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Trip-Level Voltage is 0.60000 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXDBYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the output of the USB_DP single-ended receiver in place of the full-speed differential receiver</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>USB PHY General Control Register</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENHOSTDISCONDETECT</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEVPLUGIN_IRQ</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL2</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL3</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTORESUME_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_PHY_PWD</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSDLL_RST_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OTG_ID_VALUE</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HOST_FORCE_LS_SE0</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_SUSPENDM</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFTRST</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL_SET</name>
+               <description>USB PHY General Control Register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENHOSTDISCONDETECT</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEVPLUGIN_IRQ</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL2</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL3</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTORESUME_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_PHY_PWD</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSDLL_RST_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OTG_ID_VALUE</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HOST_FORCE_LS_SE0</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_SUSPENDM</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFTRST</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL_CLR</name>
+               <description>USB PHY General Control Register</description>
+               <addressOffset>0x38</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENHOSTDISCONDETECT</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEVPLUGIN_IRQ</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL2</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL3</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTORESUME_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_PHY_PWD</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSDLL_RST_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OTG_ID_VALUE</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HOST_FORCE_LS_SE0</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_SUSPENDM</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFTRST</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL_TOG</name>
+               <description>USB PHY General Control Register</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENHOSTDISCONDETECT</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEVPLUGIN_IRQ</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL2</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENUTMILEVEL3</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTORESUME_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENAUTOCLR_PHY_PWD</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSDLL_RST_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OTG_ID_VALUE</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HOST_FORCE_LS_SE0</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_SUSPENDM</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFTRST</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATUS</name>
+               <description>USB PHY Status Register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>HOSTDISCONDETECT_STATUS</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DEVPLUGIN_STATUS</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>OTGID_STATUS</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RESUME_STATUS</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG</name>
+               <description>USB PHY Debug Register</description>
+               <addressOffset>0x50</addressOffset>
+               <resetValue>0x7F180000</resetValue>
+               <fields>
+                  <field>
+                     <name>OTGIDPIOLOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEBUG_INTERFACE_HOLD</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENHSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENTX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENSQUELCHRESET</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETLENGTH</name>
+                     <description>no description available</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOST_RESUME_DEBUG</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG_SET</name>
+               <description>USB PHY Debug Register</description>
+               <addressOffset>0x54</addressOffset>
+               <resetValue>0x7F180000</resetValue>
+               <fields>
+                  <field>
+                     <name>OTGIDPIOLOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEBUG_INTERFACE_HOLD</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENHSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENTX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENSQUELCHRESET</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETLENGTH</name>
+                     <description>no description available</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOST_RESUME_DEBUG</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG_CLR</name>
+               <description>USB PHY Debug Register</description>
+               <addressOffset>0x58</addressOffset>
+               <resetValue>0x7F180000</resetValue>
+               <fields>
+                  <field>
+                     <name>OTGIDPIOLOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEBUG_INTERFACE_HOLD</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENHSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENTX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENSQUELCHRESET</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETLENGTH</name>
+                     <description>no description available</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOST_RESUME_DEBUG</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG_TOG</name>
+               <description>USB PHY Debug Register</description>
+               <addressOffset>0x5C</addressOffset>
+               <resetValue>0x7F180000</resetValue>
+               <fields>
+                  <field>
+                     <name>OTGIDPIOLOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEBUG_INTERFACE_HOLD</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENHSTPULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENTX2RXCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETCOUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENSQUELCHRESET</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCHRESETLENGTH</name>
+                     <description>no description available</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOST_RESUME_DEBUG</name>
+                     <description>no description available</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG0_STATUS</name>
+               <description>UTMI Debug Status Register 0</description>
+               <addressOffset>0x60</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LOOP_BACK_FAIL_COUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_RXERROR_FAIL_COUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>SQUELCH_COUNT</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG1</name>
+               <description>UTMI Debug Status Register 1</description>
+               <addressOffset>0x70</addressOffset>
+               <resetValue>0x1000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENTAILADJVD</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Delay is nominal</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Delay is +20%</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Delay is -20%</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Delay is -40%</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG1_SET</name>
+               <description>UTMI Debug Status Register 1</description>
+               <addressOffset>0x74</addressOffset>
+               <resetValue>0x1000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENTAILADJVD</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Delay is nominal</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Delay is +20%</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Delay is -20%</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Delay is -40%</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG1_CLR</name>
+               <description>UTMI Debug Status Register 1</description>
+               <addressOffset>0x78</addressOffset>
+               <resetValue>0x1000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENTAILADJVD</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Delay is nominal</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Delay is +20%</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Delay is -20%</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Delay is -40%</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEBUG1_TOG</name>
+               <description>UTMI Debug Status Register 1</description>
+               <addressOffset>0x7C</addressOffset>
+               <resetValue>0x1000</resetValue>
+               <fields>
+                  <field>
+                     <name>ENTAILADJVD</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Delay is nominal</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Delay is +20%</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Delay is -20%</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Delay is -40%</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VERSION</name>
+               <description>UTMI RTL Version</description>
+               <addressOffset>0x80</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x4030000</resetValue>
+               <fields>
+                  <field>
+                     <name>STEP</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MINOR</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAJOR</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLL_SIC</name>
+               <description>USB PHY PLL Control/Status Register</description>
+               <addressOffset>0xA0</addressOffset>
+               <resetValue>0x12000</resetValue>
+               <fields>
+                  <field>
+                     <name>PLL_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>PLL reference frequency = 24MHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PLL reference frequency = 16MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_EN_USB_CLKS</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_HOLD_RING_OFF</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_POWER</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ENABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_BYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_LOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLL_SIC_SET</name>
+               <description>USB PHY PLL Control/Status Register</description>
+               <addressOffset>0xA4</addressOffset>
+               <resetValue>0x12000</resetValue>
+               <fields>
+                  <field>
+                     <name>PLL_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>PLL reference frequency = 24MHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PLL reference frequency = 16MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_EN_USB_CLKS</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_HOLD_RING_OFF</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_POWER</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ENABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_BYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_LOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLL_SIC_CLR</name>
+               <description>USB PHY PLL Control/Status Register</description>
+               <addressOffset>0xA8</addressOffset>
+               <resetValue>0x12000</resetValue>
+               <fields>
+                  <field>
+                     <name>PLL_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>PLL reference frequency = 24MHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PLL reference frequency = 16MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_EN_USB_CLKS</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_HOLD_RING_OFF</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_POWER</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ENABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_BYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_LOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLL_SIC_TOG</name>
+               <description>USB PHY PLL Control/Status Register</description>
+               <addressOffset>0xAC</addressOffset>
+               <resetValue>0x12000</resetValue>
+               <fields>
+                  <field>
+                     <name>PLL_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>PLL reference frequency = 24MHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>PLL reference frequency = 16MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_EN_USB_CLKS</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_HOLD_RING_OFF</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_POWER</name>
+                     <description>no description available</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ENABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_BYPASS</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_LOCK</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_VBUS_DETECT</name>
+               <description>USB PHY VBUS Detect Control Register</description>
+               <addressOffset>0xC0</addressOffset>
+               <resetValue>0x700004</resetValue>
+               <fields>
+                  <field>
+                     <name>VBUSVALID_THRESH</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>4.0 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4.1 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4.2 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>4.3 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4.4 V (default)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>4.5 V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>4.6 V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>4.7 V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_TO_SESSVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRUP_CMPS</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISCHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_VBUS_DETECT_SET</name>
+               <description>USB PHY VBUS Detect Control Register</description>
+               <addressOffset>0xC4</addressOffset>
+               <resetValue>0x700004</resetValue>
+               <fields>
+                  <field>
+                     <name>VBUSVALID_THRESH</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>4.0 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4.1 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4.2 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>4.3 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4.4 V (default)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>4.5 V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>4.6 V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>4.7 V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_TO_SESSVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRUP_CMPS</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISCHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_VBUS_DETECT_CLR</name>
+               <description>USB PHY VBUS Detect Control Register</description>
+               <addressOffset>0xC8</addressOffset>
+               <resetValue>0x700004</resetValue>
+               <fields>
+                  <field>
+                     <name>VBUSVALID_THRESH</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>4.0 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4.1 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4.2 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>4.3 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4.4 V (default)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>4.5 V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>4.6 V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>4.7 V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_TO_SESSVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRUP_CMPS</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISCHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_VBUS_DETECT_TOG</name>
+               <description>USB PHY VBUS Detect Control Register</description>
+               <addressOffset>0xCC</addressOffset>
+               <resetValue>0x700004</resetValue>
+               <fields>
+                  <field>
+                     <name>VBUSVALID_THRESH</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>4.0 V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4.1 V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>4.2 V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>4.3 V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4.4 V (default)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>4.5 V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>4.6 V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>4.7 V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_TO_SESSVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRUP_CMPS</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISCHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHARGE_VBUS</name>
+                     <description>no description available</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_VBUS_DET_STAT</name>
+               <description>USB PHY VBUS Detector Status Register</description>
+               <addressOffset>0xD0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SESSEND</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AVALID</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUS_VALID</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUS_VALID_3V</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANACTRL</name>
+               <description>USB PHY Analog Control Register</description>
+               <addressOffset>0x100</addressOffset>
+               <resetValue>0x402</resetValue>
+               <fields>
+                  <field>
+                     <name>TESTCLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_FRAC</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_PULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_PULSE_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_CUR_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_STABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANACTRL_SET</name>
+               <description>USB PHY Analog Control Register</description>
+               <addressOffset>0x104</addressOffset>
+               <resetValue>0x402</resetValue>
+               <fields>
+                  <field>
+                     <name>TESTCLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_FRAC</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_PULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_PULSE_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_CUR_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_STABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANACTRL_CLR</name>
+               <description>USB PHY Analog Control Register</description>
+               <addressOffset>0x108</addressOffset>
+               <resetValue>0x402</resetValue>
+               <fields>
+                  <field>
+                     <name>TESTCLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_FRAC</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_PULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_PULSE_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_CUR_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_STABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANACTRL_TOG</name>
+               <description>USB PHY Analog Control Register</description>
+               <addressOffset>0x10C</addressOffset>
+               <resetValue>0x402</resetValue>
+               <fields>
+                  <field>
+                     <name>TESTCLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLKGATE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_CLK_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_FRAC</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_PULLDOWN</name>
+                     <description>no description available</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_PULSE_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMPH_CUR_CTRL</name>
+                     <description>no description available</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PFD_STABLE</name>
+                     <description>no description available</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK</name>
+               <description>USB PHY Loopback Control/Status Register</description>
+               <addressOffset>0x110</addressOffset>
+               <resetValue>0x550000</resetValue>
+               <fields>
+                  <field>
+                     <name>UTMI_TESTSTART</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_LS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HIZ</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSTI_HSFS_MODE_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTPKT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_SET</name>
+               <description>USB PHY Loopback Control/Status Register</description>
+               <addressOffset>0x114</addressOffset>
+               <resetValue>0x550000</resetValue>
+               <fields>
+                  <field>
+                     <name>UTMI_TESTSTART</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_LS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HIZ</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSTI_HSFS_MODE_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTPKT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_CLR</name>
+               <description>USB PHY Loopback Control/Status Register</description>
+               <addressOffset>0x118</addressOffset>
+               <resetValue>0x550000</resetValue>
+               <fields>
+                  <field>
+                     <name>UTMI_TESTSTART</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_LS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HIZ</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSTI_HSFS_MODE_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTPKT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_TOG</name>
+               <description>USB PHY Loopback Control/Status Register</description>
+               <addressOffset>0x11C</addressOffset>
+               <resetValue>0x550000</resetValue>
+               <fields>
+                  <field>
+                     <name>UTMI_TESTSTART</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMI_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_LS_MODE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_TX_HIZ</name>
+                     <description>no description available</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST0</name>
+                     <description>no description available</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>UTMO_DIG_TST1</name>
+                     <description>no description available</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSTI_HSFS_MODE_EN</name>
+                     <description>no description available</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTPKT</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_HSFSCNT</name>
+               <description>USB PHY Loopback Packet Number Select Register</description>
+               <addressOffset>0x120</addressOffset>
+               <resetValue>0x40010</resetValue>
+               <fields>
+                  <field>
+                     <name>TSTI_HS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_FS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_HSFSCNT_SET</name>
+               <description>USB PHY Loopback Packet Number Select Register</description>
+               <addressOffset>0x124</addressOffset>
+               <resetValue>0x40010</resetValue>
+               <fields>
+                  <field>
+                     <name>TSTI_HS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_FS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_HSFSCNT_CLR</name>
+               <description>USB PHY Loopback Packet Number Select Register</description>
+               <addressOffset>0x128</addressOffset>
+               <resetValue>0x40010</resetValue>
+               <fields>
+                  <field>
+                     <name>TSTI_HS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_FS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_LOOPBACK_HSFSCNT_TOG</name>
+               <description>USB PHY Loopback Packet Number Select Register</description>
+               <addressOffset>0x12C</addressOffset>
+               <resetValue>0x40010</resetValue>
+               <fields>
+                  <field>
+                     <name>TSTI_HS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTI_FS_NUMBER</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRIM_OVERRIDE_EN</name>
+               <description>USB PHY Trim Override Enable Register</description>
+               <addressOffset>0x130</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRIM_DIV_SEL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_ENV_TAIL_ADJ_VD_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_D_CAL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DP_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DM_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_PLL_CTRL0_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USB_REG_ENV_TAIL_ADJ_VD</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRIM_OVERRIDE_EN_SET</name>
+               <description>USB PHY Trim Override Enable Register</description>
+               <addressOffset>0x134</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRIM_DIV_SEL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_ENV_TAIL_ADJ_VD_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_D_CAL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DP_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DM_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_PLL_CTRL0_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USB_REG_ENV_TAIL_ADJ_VD</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRIM_OVERRIDE_EN_CLR</name>
+               <description>USB PHY Trim Override Enable Register</description>
+               <addressOffset>0x138</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRIM_DIV_SEL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_ENV_TAIL_ADJ_VD_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_D_CAL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DP_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DM_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_PLL_CTRL0_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USB_REG_ENV_TAIL_ADJ_VD</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRIM_OVERRIDE_EN_TOG</name>
+               <description>USB PHY Trim Override Enable Register</description>
+               <addressOffset>0x13C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TRIM_DIV_SEL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_ENV_TAIL_ADJ_VD_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_D_CAL_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DP_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_TX_CAL45DM_OVERRIDE</name>
+                     <description>no description available</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM_PLL_CTRL0_DIV_SEL</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USB_REG_ENV_TAIL_ADJ_VD</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_D_CAL</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DP</name>
+                     <description>no description available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TRIM_USBPHY_TX_CAL45DM</name>
+                     <description>no description available</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

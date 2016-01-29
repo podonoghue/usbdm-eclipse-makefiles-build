@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "GPIOA_MKM" ?>

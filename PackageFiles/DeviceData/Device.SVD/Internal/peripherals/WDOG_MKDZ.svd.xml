@@ -14,7 +14,7 @@ Devices using this peripheral:
          <?sourceFile "WDOG_MKDZ" ?>
          <?preferredAccessWidth "16" ?>
          <name>WDOG</name>
-         <description>Generation 2008 Watchdog Timer</description>
+         <description>Watchdog Timer</description>
          <groupName>WDOG</groupName>
          <prependToName>WDOG</prependToName>
          <headerStructName>WDOG</headerStructName>
@@ -233,7 +233,7 @@ Effective only if TESTWDOG is set</description>
                   </field>
                   <field>
                      <name>BYTESEL</name>
-                     <description>This 2-bit field select the byte to be tested when the watchdog is in the byte test mode</description>
+                     <description>Select the byte to be tested when the watchdog is in the byte test mode</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

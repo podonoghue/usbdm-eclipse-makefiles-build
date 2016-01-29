@@ -3,9 +3,9 @@
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKE06Z4_VectorTable.svd.xml">
 <!ENTITY ACMP0        SYSTEM "peripherals/ACMP0_MKE.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKE_HWT.svd.xml">
-<!ENTITY BP           SYSTEM "peripherals/BP_1_MKE.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKE04.svd.xml">
+<!ENTITY BP           SYSTEM "peripherals/BP_CM0.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DWT          SYSTEM "peripherals/DWT_CM0Plus.svd.xml">
 <!ENTITY FGPIOA       SYSTEM "peripherals/FGPIOA_MKE.svd.xml">
@@ -17,28 +17,29 @@
 <!ENTITY I2C0         SYSTEM "peripherals/I2C0_MKE.svd.xml">
 <!ENTITY ICS          SYSTEM "peripherals/ICS_MKE.svd.xml">
 <!ENTITY IRQ          SYSTEM "peripherals/IRQ_MKE.svd.xml">
-<!ENTITY KBI0         SYSTEM "peripherals/KBI0_MKE_2.svd.xml">
-<!ENTITY MCM          SYSTEM "peripherals/MCM_MKE.svd.xml">
-<!ENTITY MSCAN        SYSTEM "peripherals/MSCAN.svd.xml">
-<!ENTITY NV           SYSTEM "peripherals/NV_FTMRH.svd.xml">
-<!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKL.svd.xml">
+<!ENTITY KBI0         SYSTEM "peripherals/KBI0_MKE06.svd.xml">
+<!ENTITY MCM          SYSTEM "peripherals/MCM_MKE02Z2.svd.xml">
+<!ENTITY MSCAN        SYSTEM "peripherals/MSCAN_0.svd.xml">
+<!ENTITY NV           SYSTEM "peripherals/NV_FTMRE.svd.xml">
+<!ENTITY NVIC         SYSTEM "peripherals/NVIC_CM0.svd.xml">
 <!ENTITY OSC          SYSTEM "peripherals/OSC_MKE.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_2CH_CHAIN.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MKE.svd.xml">
-<!ENTITY PORT         SYSTEM "peripherals/PORT_MKE_2.svd.xml">
+<!ENTITY PORT         SYSTEM "peripherals/PORT_MKE06.svd.xml">
 <!ENTITY PWT          SYSTEM "peripherals/PWT_MKE.svd.xml">
+<!ENTITY ROM          SYSTEM "peripherals/ROM_0.svd.xml">
 <!ENTITY RTC          SYSTEM "peripherals/RTC_MKE.svd.xml">
-<!ENTITY SCB          SYSTEM "peripherals/SCB_MKE.svd.xml">
-<!ENTITY SIM          SYSTEM "peripherals/SIM_MKE04Z4.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKE.svd.xml">
-<!ENTITY SYST         SYSTEM "peripherals/SysTick_0.svd.xml">
+<!ENTITY SCB          SYSTEM "peripherals/SCB_CM0.svd.xml">
+<!ENTITY SIM          SYSTEM "peripherals/SIM_MKE06Z4.svd.xml">
+<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKE02Z2.svd.xml">
+<!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
 <!ENTITY UART0        SYSTEM "peripherals/UART0_MKE.svd.xml">
 <!ENTITY WDOG         SYSTEM "peripherals/WDOG_MKE.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MKE06Z4</name>
-   <version>0.0</version>
-   <description>Freescale Kinetis MKE06ZxxM4</description>
+   <version>1.6</version>
+   <description>Freescale Kinetis MKE06Z64M4, MKE06Z128M4 (MKE06P80M48SF0RM)</description>
    <cpu>
       <name>CM0PLUS</name>
       <revision>r1p0</revision>
@@ -84,6 +85,7 @@
 &PMC;
 &PORT;
 &PWT;
+&ROM;
 &RTC;
 &SCB;
 &SIM;

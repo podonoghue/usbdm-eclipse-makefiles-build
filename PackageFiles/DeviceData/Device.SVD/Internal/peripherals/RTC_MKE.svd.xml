@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "RTC_MKE" ?>
@@ -37,7 +40,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>0 Real-time counter output disabled</description>
+                           <description>Real-time counter output disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -1,0 +1,1339 @@
+<!--
+Devices using this peripheral: 
+      MK11D5WS
+      MK21D5WS
+-->
+      <peripheral>
+         <?sourceFile "RTC_MK11D5WS" ?>
+         <name>RTC</name>
+         <description>Secure Real Time Clock</description>
+         <groupName>RTC</groupName>
+         <prependToName>RTC</prependToName>
+         <headerStructName>RTC</headerStructName>
+         <baseAddress>0x4003D000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x808</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>TSR</name>
+               <description>Time Seconds Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>TSR</name>
+                     <description>Time Seconds Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TPR</name>
+               <description>Time Prescaler Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>TPR</name>
+                     <description>Time Prescaler Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAR</name>
+               <description>Time Alarm Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TAR</name>
+                     <description>Time Alarm Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR</name>
+               <description>Time Compensation Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>TCR</name>
+                     <description>Time Compensation Register\n
+This number is subtracted from the nominal 32768 counts per second</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXXXXXX</name>
+                           <description>(32768-N) counts</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CIR</name>
+                     <description>Compensation Interval Register\n
+Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should
+adjust the number of 32.768 kHz cycles in each second</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCV</name>
+                     <description>Time Compensation Value\n
+Current value used by the compensation logic for the present second interval. Updated once a second if
+the CIC equals 0 with the contents of the TCR field</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CIC</name>
+                     <description>Compensation Interval Counter\n
+Current value of the compensation interval counter</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>Control Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>SWR</name>
+                     <description>Software Reset\n
+Resets all RTC registers except for the SWR bit and the RTC_WAR and RTC_RAR registers.\n
+The SWR bit is cleared by VBAT POR and by software explicitly clearing it</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset RTC apart from (SWR, WAR, RAR)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WPE</name>
+                     <description>Wakeup Pin Enable\n
+Enables the RTC wakeup pin</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Wakeup pin disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wakeup pin enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SUP</name>
+                     <description>Supervisor Access\n
+Protects the RTC from non-supervisor access.\n
+When protected, non-supervisor accesses generate a bus error</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Protected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Unprotected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UM</name>
+                     <description>Update Mode\n
+Protects the registers when locked</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Protected when locked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Unprotected when locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSCE</name>
+                     <description>Oscillator Enable\n
+Enables the 32.768 kHz oscillator</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Oscillator disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Oscillator enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKO</name>
+                     <description>Clock Output\n
+Enables the 32kHz clock to be output to other peripherals</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Output available</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output not available</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SC16P</name>
+                     <description>Oscillator 16pF Load</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SC16P" > <name>SC8P</name> <description>Oscillator 8pF Load</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="SC16P" > <name>SC4P</name> <description>Oscillator 4pF Load</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="SC16P" > <name>SC2P</name> <description>Oscillator 2pF Load</description> <bitOffset>13</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>Status Register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>TIF</name>
+                     <description>Time Invalid Flag\n
+Indicates if the time is valid</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Invalid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TOF</name>
+                     <description>Time Overflow Flag\n
+Indicates time overflow has occurred</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No overflow</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overflow</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TAF</name>
+                     <description>Time Alarm Flag\n
+Set when alarm time reached</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No alarm</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Alarm occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MOF</name>
+                     <description>Monotonic Overflow Flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Monotonic counter overflow has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Monotonic counter overflow has occurred and monotonic counter is read as zero</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TCE</name>
+                     <description>Time Counter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LR</name>
+               <description>Lock Register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>TCL</name>
+                     <description>Time Compensation Lock\n
+Write protects the Time Compensation Register</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Protected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Unprotected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TCL" > <name>CRL</name> <description>Control Register Lock\n
+Write protects the Control Register</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>SRL</name> <description>Status Register Lock\n
+Write protects the Status Register</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>LRL</name> <description>Lock Register Lock\n
+Write protects the Lock Register</description> <bitOffset>6</bitOffset> </field>
+                  <field>
+                     <name>TTSL</name>
+                     <description>Tamper Time Seconds Lock</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper Time Seconds Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tamper Time Seconds Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MEL</name>
+                     <description>Monotonic Enable Lock</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Monotonic Enable Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Monotonic Enable Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MCLL</name>
+                     <description>Monotonic Counter Low Lock</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Monotonic Counter Low Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Monotonic Counter Low Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MCHL</name>
+                     <description>Monotonic Counter High Lock</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Monotonic Counter High Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Monotonic Counter High Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TEL</name>
+                     <description>Tamper Enable Lock</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper Enable Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tamper Enable Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDL</name>
+                     <description>Tamper Detect Lock</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper Detect Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tamper Detect Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTL</name>
+                     <description>Tamper Trim Lock</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper Trim Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tamper Trim Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIL</name>
+                     <description>Tamper Interrupt Lock</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper Interrupt Register is locked and writes are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tamper Interrupt Register is not locked and writes complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IER</name>
+               <description>Interrupt Enable Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x7</resetValue>
+               <fields>
+                  <field>
+                     <name>TIIE</name>
+                     <description>Time Invalid Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TIIE" > <name>TOIE</name> <description>Time Overflow Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TIIE" > <name>TAIE</name> <description>Time Alarm Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TIIE" > <name>MOIE</name> <description>Monotonic Overflow Interrupt Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="TIIE" > <name>TSIE</name> <description>Time Seconds Interrupt Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field>
+                     <name>WPON</name>
+                     <description>Wakeup Pin On</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>If the wakeup pin is enabled, then the wakeup pin will assert</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TTSR</name>
+               <description>Tamper Time Seconds Register</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>TTS</name>
+                     <description>Tamper Time Seconds</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MER</name>
+               <description>Monotonic Enable Register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>MCE</name>
+                     <description>Monotonic Counter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the monotonic counter load the counter with the value written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the monotonic counter increment the counter</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MCLR</name>
+               <description>Monotonic Counter Low Register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>MCL</name>
+                     <description>Monotonic Counter Low</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MCHR</name>
+               <description>Monotonic Counter High Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MCH</name>
+                     <description>Monotonic Counter High</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TER</name>
+               <description>Tamper Enable Register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>DTE</name>
+                     <description>DryIce Tamper Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the DryIce tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VTE</name>
+                     <description>Voltage Tamper Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the voltage tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTE</name>
+                     <description>Clock Tamper Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the clock tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTE</name>
+                     <description>Temperature Tamper Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the temperature tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSE</name>
+                     <description>Flash Security Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the flash security flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TME</name>
+                     <description>Test Mode Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper source disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Set the time invalid flag if the test mode flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TDR</name>
+               <description>Tamper Detect Register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>DTF</name>
+                     <description>DryIce Tamper Flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DryIce tamper detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VTF</name>
+                     <description>Voltage Tamper Flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Voltage tampering detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTF</name>
+                     <description>Clock Tamper Flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock tampering detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTF</name>
+                     <description>Temperature Tamper Flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Temperature tampering detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSF</name>
+                     <description>Flash Security Flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flash security tamper detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMF</name>
+                     <description>Test Mode Flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tamper not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Test mode tamper detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TTR</name>
+               <description>Tamper Trim Register</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>VDTL</name>
+                     <description>Voltage Detect Trim Low</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>VDTH</name>
+                     <description>Voltage Detect Trim High</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>CDTL</name>
+                     <description>Clock Detect Trim Low</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>CDTH</name>
+                     <description>Clock Detect Trim High</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TDTH</name>
+                     <description>Temperature Detect Trim High</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TDTL</name>
+                     <description>Temperature Detect Trim Low</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIR</name>
+               <description>Tamper Interrupt Register</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DTIE</name>
+                     <description>DryIce Tamper Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when DryIce tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VTIE</name>
+                     <description>Voltage Tamper Interrupt Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when the voltage tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTIE</name>
+                     <description>Clock Tamper Interrupt Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when the clock tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTIE</name>
+                     <description>Temperature Tamper Interrupt Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when the temperature tamper flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSIE</name>
+                     <description>Flash Security Interrupt Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when the flash security flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMIE</name>
+                     <description>Test Mode Interrupt Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>An interrupt is generated when the test mode flag is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WAR</name>
+               <description>Write Access Register\n
+Protects register against writes.  Any writes are ignored</description>
+               <addressOffset>0x800</addressOffset>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>TSRW</name>
+                     <description>Time Seconds Register Write Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes OK</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TSRW" > <name>TPRW</name> <description>Time Prescaler Register Write Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>TARW</name> <description>Time Alarm Register Write Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>TCRW</name> <description>Time Compensation Register Write Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>CRW</name> <description>Control Register Write Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>SRW</name> <description>Status Register Write Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>LRW</name> <description>Lock Register Write Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TSRW" > <name>IERW</name> <description>Interrupt Enable Register Write Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>TTSW</name>
+                     <description>Tamper Time Seconds Write</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Tamper Time Seconds Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Tamper Time Seconds Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MERW</name>
+                     <description>Monotonic Enable Register Write</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Monotonic Enable Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Monotonic Enable Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MCLW</name>
+                     <description>Monotonic Counter Low Write</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Monotonic Counter Low Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Monotonic Counter Low Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MCHW</name>
+                     <description>Monotonic Counter High Write</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Monotonic Counter High Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Monotonic Counter High Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TERW</name>
+                     <description>Tamper Enable Register Write</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Tamper Enable Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Tamper Enable Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRW</name>
+                     <description>Tamper Detect Register Write</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Tamper Detect Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Tamper Detect Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTRW</name>
+                     <description>Tamper Trim Register Write</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Tamper Trim Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Tamper Trim Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIRW</name>
+                     <description>Tamper Interrupt Register Write</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes to the Tamper Interrupt Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes to the Tamper Interrupt Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RAR</name>
+               <description>Read Access Register\n
+Protects register against reads.  Any reads are ignored</description>
+               <addressOffset>0x804</addressOffset>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>TSRR</name>
+                     <description>Time Seconds Register Read Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads OK</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TSRR" > <name>TPRR</name> <description>Time Prescaler Register Read Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>TARR</name> <description>Time Alarm Register Read Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>TCRR</name> <description>Time Compensation Register Read Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>CRR</name> <description>Control Register Read Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>SRR</name> <description>Status Register Read Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>LRR</name> <description>Lock Register Read Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>IERR</name> <description>Interrupt Enable Register Read Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>TTSR</name> <description>Tamper Time Seconds Read</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>MERR</name> <description>Monotonic Enable Register Read</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="TSRR" > <name>MCLR</name> <description>Monotonic Counter Low Read</description> <bitOffset>10</bitOffset> </field>
+                  <field>
+                     <name>MCHR</name>
+                     <description>Monotonic Counter High Read</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads from the Monotonic Counter High Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads from the Monotonic Counter High Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TERR</name>
+                     <description>Tamper Enable Register Read</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads to the Tamper Enable Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads to the Tamper Enable Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRR</name>
+                     <description>Tamper Detect Register Read</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads to the Tamper Detect Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads to the Tamper Detect Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TTRR</name>
+                     <description>Tamper Trim Register Read</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads to the Tamper Trim Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads to the Tamper Trim Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TIRR</name>
+                     <description>Tamper Interrupt Register Read</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Reads to the Tamper Interrupt Register are ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reads to the Tamper Interrupt Register complete as normal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

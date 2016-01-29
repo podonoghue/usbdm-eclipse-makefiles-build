@@ -1,6 +1,9 @@
 <!--
 Devices using this peripheral: 
+      MK22F25612
       MK22F51212
+      MK65F18
+      MK66F18
       MKV31F25612
       MKV31F51212
 -->
@@ -19,19 +22,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x2</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x4</offset>
-            <size>0x2</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x7</offset>
-            <size>0x3</size>
+            <size>0xA</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -100,7 +91,7 @@ The MCG clock monitor must be enabled for a loss of clock to be detected</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset by loss of external clock</description>
+                           <description>Reset by loss of clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

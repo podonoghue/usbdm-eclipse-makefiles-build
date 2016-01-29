@@ -235,24 +235,7 @@ Enables change in the ID Signal Interrupts</description> <bitOffset>7</bitOffset
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BSESSEND</name>
-                     <description>Session B End\nIndicates if the VBUS voltage is above the B session end threshold</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Invalid</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Valid</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="AVBUSVLD" > <name>BSESSEND</name> <description>Session B End\nIndicates if the VBUS voltage is above the B session end threshold</description> <bitOffset>2</bitOffset> </field>
                   <field>
                      <name>SESS_VLD</name>
                      <description>Session Valid\nIndicates if the VBUS voltage is below the B session valid threshold</description>
@@ -632,26 +615,9 @@ Setting this bit to 1 resets all the BDT ODD ping/pong fields to 0, which then s
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>RESUME</name>
-                     <description>Resume signalling\n
+                  <field derivedFrom="ODDRST" > <name>RESUME</name> <description>Resume signalling\n
 When set to 1 this bit enables the USB Module to execute resume signaling.\n
-This allows the USB Module to perform remote wake-up</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Inactive</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Active</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+This allows the USB Module to perform remote wake-up</description> <bitOffset>2</bitOffset> </field>
                   <field>
                      <name>HOSTMODEEN</name>
                      <description>Host mode enable\n

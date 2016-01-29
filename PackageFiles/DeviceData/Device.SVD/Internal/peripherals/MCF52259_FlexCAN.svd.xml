@@ -333,27 +333,10 @@ Determines whether the FlexCAN module samples each received bit one time or thre
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LPB</name>
-                     <description>Loop back\n
+                  <field derivedFrom="TSYNC" > <name>LPB</name> <description>Loop back\n
 Configures FlexCAN to operate in loop-back mode. In this mode, FlexCAN performs an internal loop
 back that can be used for self test operation. The bit stream output of the transmitter is fed back internally to the
-receiver input</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+receiver input</description> <bitOffset>12</bitOffset> </field>
                   <field>
                      <name>CLK_SRC</name>
                      <description>Clock source\n
@@ -392,24 +375,7 @@ This bit should only be changed while the module is disabled</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BOFFMSK</name>
-                     <description>Bus off interrupt mask</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ERRMSK" > <name>BOFFMSK</name> <description>Bus off interrupt mask</description> <bitOffset>15</bitOffset> </field>
                   <field>
                      <name>PSEG2</name>
                      <description>Phase buffer segment 2\n
@@ -530,26 +496,9 @@ The user must write a 1 to clear this bit</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BOFFINT</name>
-                     <description>Buss off interrupt\n
+                  <field derivedFrom="ERRINT" > <name>BOFFINT</name> <description>Buss off interrupt\n
 Used to request an interrupt when the FlexCAN enters the bus off state.\n
-The user must write a 1 to clear this bit</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt request</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+The user must write a 1 to clear this bit</description> <bitOffset>2</bitOffset> </field>
                   <field>
                      <name>FLTCONF</name>
                      <description>Fault confinement state\n

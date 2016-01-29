@@ -1,0 +1,2025 @@
+<!--
+Devices using this peripheral: 
+      MK10D10
+      MK20D10
+      MK30D10
+      MK40D10
+      MK50D10
+      MK51D10
+      MK52D10
+      MK53D10
+      MK60D10
+-->
+      <peripheral>
+         <?sourceFile "SDHC_MK10D10" ?>
+         <name>SDHC</name>
+         <description>Secured Digital Host Controller</description>
+         <groupName>SDHC</groupName>
+         <prependToName>SDHC</prependToName>
+         <headerStructName>SDHC</headerStructName>
+         <baseAddress>0x400B1000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x48</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x50</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x54</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DSADDR</name>
+               <description>DMA System Address Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>DSADDR</name>
+                     <description>DMA System Address</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>30</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BLKATTR</name>
+               <description>Block Attributes Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>BLKSIZE</name>
+                     <description>Transfer Block Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No data transfer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1 Byte</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>2 Bytes</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>3 Bytes</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>4 Bytes</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111111</name>
+                           <description>511 Bytes</description>
+                           <value>0b111111111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000000000</name>
+                           <description>512 Bytes</description>
+                           <value>0b1000000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000000000</name>
+                           <description>2048 Bytes</description>
+                           <value>0b100000000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000000000000</name>
+                           <description>4096 Bytes</description>
+                           <value>0b1000000000000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BLKCNT</name>
+                     <description>Blocks Count For Current Transfer</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Stop count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1 block</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>2 blocks</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111111111111111</name>
+                           <description>65535 blocks</description>
+                           <value>0b1111111111111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMDARG</name>
+               <description>Command Argument Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>CMDARG</name>
+                     <description>Command Argument</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XFERTYP</name>
+               <description>Transfer Type Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>DMA Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DMAEN" > <name>BCEN</name> <description>Block Count Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DMAEN" > <name>AC12EN</name> <description>Auto CMD12 Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>DTDSEL</name>
+                     <description>Data Transfer Direction Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Write (host to card)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Read (card to host)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSBSEL</name>
+                     <description>Multi/Single Block Select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Single block</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Multiple blocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSPTYP</name>
+                     <description>Response Type Select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No response</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Response length 136</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Response length 48</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Response length 48, check busy after response</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DMAEN" > <name>CCCEN</name> <description>Command CRC Check Enable</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="DMAEN" > <name>CICEN</name> <description>Command Index Check Enable</description> <bitOffset>20</bitOffset> </field>
+                  <field>
+                     <name>DPSEL</name>
+                     <description>Data Present Select</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No data present</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Data present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CMDTYP</name>
+                     <description>Command Type</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Normal other commands</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Suspend CMD52 for writing bus suspend in CCCR</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Resume CMD52 for writing function select in CCCR</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Abort CMD12, CMD52 for writing I/O abort in CCCR</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CMDINX</name>
+                     <description>Command Index</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CMDRSP%s</name>
+               <description>Command Response %s</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CMDRSP0</name>
+                     <description>Command Response 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATPORT</name>
+               <description>Buffer Data Port Register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATCONT</name>
+                     <description>Data Content</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PRSSTAT</name>
+               <description>Present State Register</description>
+               <addressOffset>0x24</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CIHB</name>
+                     <description>Command Inhibit (CMD)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Can issue command using only CMD line</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Cannot issue command</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CDIHB</name>
+                     <description>Command Inhibit (DAT)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Can issue command which uses the DAT line</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Cannot issue command which uses the DAT line</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DLA</name>
+                     <description>Data Line Active</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DAT line inactive</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DAT line active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SDSTB</name>
+                     <description>SD Clock Stable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock is changing frequency and not stable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock is stable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPGOFF</name>
+                     <description>Bus Clock Internal Gating</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Bus clock is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Bus clock is gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HCKOFF</name>
+                     <description>System Clock Gated Off Internally</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>System clock is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>System clock is gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PEROFF</name>
+                     <description>SDHC clock Gated Off Internally</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SDHC clock is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SDHC clock is gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SDOFF</name>
+                     <description>SD Clock Gated Off Internally</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SD clock is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SD clock is gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WTA</name>
+                     <description>Write Transfer Active</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No valid data</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transferring data</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="WTA" > <name>RTA</name> <description>Read Transfer Active</description> <bitOffset>9</bitOffset> </field>
+                  <field>
+                     <name>BWEN</name>
+                     <description>Buffer Write Enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Write disable, the buffer can hold valid data less than the write watermark level</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write enable, the buffer can hold valid data greater than the write watermark level</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BREN</name>
+                     <description>Buffer Read Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Read disable, valid data less than the watermark level exist in the buffer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Read enable, valid data greater than the watermark level exist in the buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CINS</name>
+                     <description>Card Inserted</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Power on reset or no card</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Card inserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLSL</name>
+                     <description>CMD Line Signal Level</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DLSL</name>
+                     <description>DAT Line Signal Level</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PROCTL</name>
+               <description>Protocol Control Register</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x20</resetValue>
+               <fields>
+                  <field>
+                     <name>LCTL</name>
+                     <description>LED Control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LED off</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LED on</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DTW</name>
+                     <description>Data Transfer Width</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>1-bit mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>4-bit mode</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>8-bit mode</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>D3CD</name>
+                     <description>DAT3 as Card Detection Pin</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DAT3 does not monitor card Insertion</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DAT3 as card detection pin</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EMODE</name>
+                     <description>Endian Mode</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Big endian mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Half word big endian mode</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Little endian mode</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CDTL</name>
+                     <description>Card Detect Test Level</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Card detect test level is 0, no card inserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Card detect test level is 1, card inserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CDSS</name>
+                     <description>Card Detect Signal Selection</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Card detection level is selected (for normal purpose)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Card detection test level is selected (for test purpose)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAS</name>
+                     <description>DMA Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No DMA or simple DMA is selected</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>ADMA1 is selected</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>ADMA2 is selected</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SABGREQ</name>
+                     <description>Stop At Block Gap Request</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transfer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stop</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CREQ</name>
+                     <description>Continue Request</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Restart</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWCTL</name>
+                     <description>Read Wait Control</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable read wait control, and stop SD clock at block gap when SABGREQ is set</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable read wait control, and assert read wait without stopping SD clock at block gap when SABGREQ bit is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IABG</name>
+                     <description>Interrupt At Block Gap</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IABG" > <name>WECINT</name> <description>Wakeup Event Enable On Card Interrupt</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="IABG" > <name>WECINS</name> <description>Wakeup Event Enable On SD Card Insertion</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="IABG" > <name>WECRM</name> <description>Wakeup Event Enable On SD Card Removal</description> <bitOffset>26</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSCTL</name>
+               <description>System Control Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x8008</resetValue>
+               <fields>
+                  <field>
+                     <name>IPGEN</name>
+                     <description>IPG Clock Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Bus clock will be internally gated off</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Bus clock will not be automatically gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HCKEN</name>
+                     <description>System Clock Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>System clock will be internally gated off</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>System clock will not be automatically gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PEREN</name>
+                     <description>Peripheral Clock Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SDHC clock will be internally gated off</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SDHC clock will not be automatically gated off</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SDCLKEN</name>
+                     <description>SD Clock Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DVS</name>
+                     <description>Divisor</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Divisor by 1</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Divisor by 2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Divisor by 15</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Divisor by 16</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SDCLKFS</name>
+                     <description>SDCLK Frequency Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Base clock divided by 2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Base clock divided by 4</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Base clock divided by 8</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Base clock divided by 16</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000</name>
+                           <description>Base clock divided by 32</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Base clock divided by 64</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000000</name>
+                           <description>Base clock divided by 128</description>
+                           <value>0b1000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000000</name>
+                           <description>Base clock divided by 256</description>
+                           <value>0b10000000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DTOCV</name>
+                     <description>Data Timeout Counter Value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>SDCLK x 2^13</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>SDCLK x 2^14</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>SDCLK x 2^27</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSTA</name>
+                     <description>Software Reset For ALL</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RSTA" > <name>RSTC</name> <description>Software Reset For CMD Line</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="RSTA" > <name>RSTD</name> <description>Software Reset For DAT Line</description> <bitOffset>26</bitOffset> </field>
+                  <field>
+                     <name>INITA</name>
+                     <description>Initialization Active</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IRQSTAT</name>
+               <description>Interrupt Status Register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>CC</name>
+                     <description>Command Complete</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Command not complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Command complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transfer Complete</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transfer not complete</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transfer complete</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BGE</name>
+                     <description>Block Gap Event</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No block gap event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transaction stopped at block gap</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DINT</name>
+                     <description>DMA Interrupt</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No DMA Interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA Interrupt is generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BWR</name>
+                     <description>Buffer Write Ready</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not ready to write buffer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Ready to write buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BRR</name>
+                     <description>Buffer Read Ready</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not ready to read buffer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Ready to read buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CINS</name>
+                     <description>Card Insertion</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Card state unstable or removed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Card inserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRM</name>
+                     <description>Card Removal</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Card state unstable or inserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Card removed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CINT</name>
+                     <description>Card Interrupt</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Card Interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate Card Interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTOE</name>
+                     <description>Command Timeout Error</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Time out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCE</name>
+                     <description>Command CRC Error</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CRC Error Generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CEBE</name>
+                     <description>Command End Bit Error</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>End Bit Error Generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CIE</name>
+                     <description>Command Index Error</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CTOE" > <name>DTOE</name> <description>Data Timeout Error</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CIE" > <name>DCE</name> <description>Data CRC Error</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="CIE" > <name>DEBE</name> <description>Data End Bit Error</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="CIE" > <name>AC12E</name> <description>Auto CMD12 Error</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CIE" > <name>DMAE</name> <description>DMA Error</description> <bitOffset>28</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IRQSTATEN</name>
+               <description>Interrupt Status Enable Register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0x117F013F</resetValue>
+               <fields>
+                  <field>
+                     <name>CCSEN</name>
+                     <description>Command Complete Status Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CCSEN" > <name>TCSEN</name> <description>Transfer Complete Status Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>BGESEN</name> <description>Block Gap Event Status Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>DINTSEN</name> <description>DMA Interrupt Status Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>BWRSEN</name> <description>Buffer Write Ready Status Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>BRRSEN</name> <description>Buffer Read Ready Status Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CINSEN</name> <description>Card Insertion Status Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CRMSEN</name> <description>Card Removal Status Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CINTSEN</name> <description>Card Interrupt Status Enable</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CTOESEN</name> <description>Command Timeout Error Status Enable</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CCESEN</name> <description>Command CRC Error Status Enable</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CEBESEN</name> <description>Command End Bit Error Status Enable</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>CIESEN</name> <description>Command Index Error Status Enable</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>DTOESEN</name> <description>Data Timeout Error Status Enable</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>DCESEN</name> <description>Data CRC Error Status Enable</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>DEBESEN</name> <description>Data End Bit Error Status Enable</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>AC12ESEN</name> <description>Auto CMD12 Error Status Enable</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CCSEN" > <name>DMAESEN</name> <description>DMA Error Status Enable</description> <bitOffset>28</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IRQSIGEN</name>
+               <description>Interrupt Signal Enable Register</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>CCIEN</name>
+                     <description>Command Complete Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CCIEN" > <name>TCIEN</name> <description>Transfer Complete Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>BGEIEN</name> <description>Block Gap Event Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>DINTIEN</name> <description>DMA Interrupt Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>BWRIEN</name> <description>Buffer Write Ready Interrupt Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>BRRIEN</name> <description>Buffer Read Ready Interrupt Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CINSIEN</name> <description>Card Insertion Interrupt Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CRMIEN</name> <description>Card Removal Interrupt Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CINTIEN</name> <description>Card Interrupt Enable</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CTOEIEN</name> <description>Command Timeout Error Interrupt Enable</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CCEIEN</name> <description>Command CRC Error Interrupt Enable</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CEBEIEN</name> <description>Command End Bit Error Interrupt Enable</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>CIEIEN</name> <description>Command Index Error Interrupt Enable</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>DTOEIEN</name> <description>Data Timeout Error Interrupt Enable</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>DCEIEN</name> <description>Data CRC Error Interrupt Enable</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>DEBEIEN</name> <description>Data End Bit Error Interrupt Enable</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>AC12EIEN</name> <description>Auto CMD12 Error Interrupt Enable</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CCIEN" > <name>DMAEIEN</name> <description>DMA Error Interrupt Enable</description> <bitOffset>28</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>AC12ERR</name>
+               <description>Auto CMD12 Error Status Register</description>
+               <addressOffset>0x3C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>AC12NE</name>
+                     <description>Auto CMD12 Not Executed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Executed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Not executed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AC12TOE</name>
+                     <description>Auto CMD12 Timeout Error</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Time out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AC12EBE</name>
+                     <description>Auto CMD12 End Bit Error</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>End bit error generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AC12CE</name>
+                     <description>Auto CMD12 CRC Error</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No CRC error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CRC Error met in auto CMD12 Response</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AC12IE</name>
+                     <description>Auto CMD12 Index Error</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error, the CMD index in response is not CMD12</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CNIBAC12E</name>
+                     <description>Command Not Issued By Auto CMD12 Error</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Not issued</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HTCAPBLT</name>
+               <description>Host Controller Capabilities</description>
+               <addressOffset>0x40</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x7F30000</resetValue>
+               <fields>
+                  <field>
+                     <name>MBL</name>
+                     <description>Max Block Length</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>512 bytes</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>1024 bytes</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>2048 bytes</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>4096 bytes</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADMAS</name>
+                     <description>ADMA Support</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Advanced DMA not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Advanced DMA supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HSS</name>
+                     <description>High Speed Support</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>High speed not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High speed supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAS</name>
+                     <description>DMA Support</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRS</name>
+                     <description>Suspend/Resume Support</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS33</name>
+                     <description>Voltage Support 3.3 V</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>3.3 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>3.3 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS30</name>
+                     <description>Voltage Support 3.0 V</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>3.0 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>3.0 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS18</name>
+                     <description>Voltage Support 1.8 V</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.8 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1.8 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WML</name>
+               <description>Watermark Level Register</description>
+               <addressOffset>0x44</addressOffset>
+               <resetValue>0x100010</resetValue>
+               <fields>
+                  <field>
+                     <name>RDWML</name>
+                     <description>Read Watermark Level</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRWML</name>
+                     <description>Write Watermark Level</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FEVT</name>
+               <description>Force Event Register</description>
+               <addressOffset>0x50</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>AC12NE</name>
+                     <description>Force Event Auto Command 12 Not Executed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AC12TOE</name>
+                     <description>Force Event Auto Command 12 Time Out Error</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AC12CE</name>
+                     <description>Force Event Auto Command 12 CRC Error</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AC12EBE</name>
+                     <description>Force Event Auto Command 12 End Bit Error</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AC12IE</name>
+                     <description>Force Event Auto Command 12 Index Error</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CNIBAC12E</name>
+                     <description>Force Event Command Not Executed By Auto Command 12 Error</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTOE</name>
+                     <description>Force Event Command Time Out Error</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCE</name>
+                     <description>Force Event Command CRC Error</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CEBE</name>
+                     <description>Force Event Command End Bit Error</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CIE</name>
+                     <description>Force Event Command Index Error</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DTOE</name>
+                     <description>Force Event Data Time Out Error</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCE</name>
+                     <description>Force Event Data CRC Error</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEBE</name>
+                     <description>Force Event Data End Bit Error</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AC12E</name>
+                     <description>Force Event Auto Command 12 Error</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DMAE</name>
+                     <description>Force Event DMA Error</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CINT</name>
+                     <description>Force Event Card Interrupt</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADMAES</name>
+               <description>ADMA Error Status Register</description>
+               <addressOffset>0x54</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>ADMAES</name>
+                     <description>ADMA Error State (when ADMA Error has occurred.)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADMALME</name>
+                     <description>ADMA Length Mismatch Error</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ADMALME" > <name>ADMADCE</name> <description>ADMA Descriptor Error</description> <bitOffset>3</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADSADDR</name>
+               <description>ADMA System Address Register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADSADDR</name>
+                     <description>ADMA System Address</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>30</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VENDOR</name>
+               <description>Vendor Specific Register</description>
+               <addressOffset>0xC0</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>EXTDMAEN</name>
+                     <description>External DMA Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>In any scenario, SDHC does not send out external DMA request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When internal DMA is not active, the external DMA request will be sent out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXBLKNU</name>
+                     <description>Exact Block Number Block Read Enable For SDIO CMD53</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No exact block read</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Exact block read for SDIO CMD53</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTSTVAL</name>
+                     <description>Internal State Value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MMCBOOT</name>
+               <description>MMC Boot Register</description>
+               <addressOffset>0xC4</addressOffset>
+               <fields>
+                  <field>
+                     <name>DTOCVACK</name>
+                     <description>Boot ACK Time Out Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>SDCLK x 2^8</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>SDCLK x 2^9</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>SDCLK x 2^10</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>SDCLK x 2^11</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>SDCLK x 2^12</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>SDCLK x 2^13</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>SDCLK x 2^14</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>SDCLK x 2^15</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>SDCLK x 2^22</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOOTACK</name>
+                     <description>Boot Ack Mode Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No ack</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Ack</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOOTMODE</name>
+                     <description>Boot Mode Select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal boot</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Alternative boot</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOOTEN</name>
+                     <description>Boot Mode Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fast boot disable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Fast boot enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AUTOSABGEN</name>
+                     <description>When boot, enable auto stop at block gap function. This function will be triggered, and host will stop at block gap when received card block cnt is equal to BOOTBLKCNT</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BOOTBLKCNT</name>
+                     <description>This value defines the stop at block gap value of automatic mode. When received card block cnt is equal to BOOTBLKCNT and AUTOSABGEN is 1, then stop at block gap</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HOSTVER</name>
+               <description>Host Controller Version</description>
+               <addressOffset>0xFC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x1201</resetValue>
+               <fields>
+                  <field>
+                     <name>SVN</name>
+                     <description>Specification Version Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SD host specification version 2.0, supports test event register and ADMA</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VVN</name>
+                     <description>Vendor Version Number</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Freescale SDHC version 1.0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000</name>
+                           <description>Freescale SDHC version 2.0</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10001</name>
+                           <description>Freescale SDHC version 2.1</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10010</name>
+                           <description>Freescale SDHC version 2.2</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

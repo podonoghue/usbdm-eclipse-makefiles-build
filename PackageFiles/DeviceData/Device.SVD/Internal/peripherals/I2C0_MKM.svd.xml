@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "I2C0_MKM" ?>
@@ -222,24 +224,7 @@ Controls if an acknowledge signal is sent to the bus on the following receiving 
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IICEN</name>
-                     <description>Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IICIE" > <name>IICEN</name> <description>Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -365,24 +350,7 @@ This bit is set by any of the following conditions:\n
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IAAS</name>
-                     <description>Addressed As A Slave</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not addressed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Addressed as a slave</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RAM" > <name>IAAS</name> <description>Addressed As A Slave</description> <bitOffset>6</bitOffset> </field>
                   <field>
                      <name>TCF</name>
                      <description>Transfer Complete Flag</description>
@@ -539,7 +507,7 @@ Selecte between 7-bit and 9-bit address schemes</description>
 Controls the width of the glitch, in terms of I2C module clock cycles, that the filter must absorb.\n
 For any glitch whose size is less than or equal to this width setting, the filter does not allow the glitch to pass</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -549,10 +517,30 @@ For any glitch whose size is less than or equal to this width setting, the filte
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>STOPIE</name>
-                     <description>II2C Bus Stop Interrupt Enable\n
-This bit enables the interrupt for I2C bus stop\n
-NOTE: To clear the I2C bus stop detection interrupt: In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,
+                     <name>STARTF</name>
+                     <description>Bus Start Detect Flag\n
+Hardware sets this bit when the I2C bus&apos;s start status is detected. The STARTF bit must be cleared by
+writing 1 to it</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No start happens on I2C bus</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start detected on I2C bus</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSIE</name>
+                     <description>Bus Stop or Start Interrupt Enable
+This bit enables the interrupt for I2C bus stop or start detection.\n
+NOTE: To clear the detection interrupt: In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,
  and then clear the IICIF bit in the status register. If this sequence is reversed, the IICIF bit is asserted again</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -691,26 +679,9 @@ This bit is cleared automatically</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SLTF</name>
-                     <description>SCL Low Timeout Flag\n
+                  <field derivedFrom="SHTF1" > <name>SLTF</name> <description>SCL Low Timeout Flag\n
 This bit is set when the SLT register (consisting of the SLTH and SLTL registers) is loaded with a non-zero value (LoValue) and an SCL low timeout occurs
-Software clears this bit by writing a logic 1 to it</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No timeout occurs</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Timeout occurs</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+Software clears this bit by writing a logic 1 to it</description> <bitOffset>3</bitOffset> <access>read-write</access> </field>
                   <field>
                      <name>TCKSEL</name>
                      <description>Timeout Counter Clock Select\n
@@ -814,7 +785,7 @@ This field is used on the device default address or other related addresses</des
                <fields>
                   <field>
                      <name>SSLT</name>
-                     <description>Most significant byte of SCL low timeout value that determines the timeout period of SCL low</description>
+                     <description>MSB of SCL low timeout value</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -828,7 +799,7 @@ This field is used on the device default address or other related addresses</des
                <fields>
                   <field>
                      <name>SSLT</name>
-                     <description>Least significant byte of SCL low timeout value that determines the timeout period of SCL low</description>
+                     <description>LSB of SCL low timeout value</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

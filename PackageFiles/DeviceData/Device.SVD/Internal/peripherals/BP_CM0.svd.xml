@@ -1,0 +1,183 @@
+<!--
+Devices using this peripheral: 
+      MKE02Z2
+      MKE02Z4
+      MKE04Z4
+      MKE04Z1284
+      MKE06Z4
+      MKL02Z4
+      MKL03Z4
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
+-->
+      <peripheral>
+         <?sourceFile "BP_CM0" ?>
+         <name>BP</name>
+         <description>Breakpoint Unit</description>
+         <groupName>BP</groupName>
+         <prependToName>BP</prependToName>
+         <headerStructName>BP</headerStructName>
+         <baseAddress>0xE0002000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFD0</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>FlashPatch Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x30</resetValue>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>Enable bit for the FPB.\n
+A Power-on reset clears this bit to 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FPB disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FPB enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>KEY</name>
+                     <description>KEY bit. On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NUM_CODE</name>
+                     <description>NUM_CODE[3:0]. The least significant bits of NUM_CODE, the number of instruction address comparators.\n
+If NUM_CODE[6:0] is zero, the implementation does not support any instruction address comparators</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>COMP%s</name>
+               <description>FlashPatch Comparator Register %s</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>Enable bit for this comparator.\n
+A Power-on reset clears this bit to 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Comparator disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Comparator enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMP</name>
+                     <description>COMP bits. Bits [28:2] of the address to compare with addresses from the Code memory region. Bits [31:29] and [1:0] of the address for comparison are zero.\n
+If a match occurs:\n
+- for an instruction address comparator, the REPLACE field defines the required action\n
+- for a literal address comparator, the FPB remaps the access.\n
+The reset value of this field is UNKNOWN</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>27</bitWidth>
+                  </field>
+                  <field>
+                     <name>BP_MATCH</name>
+                     <description>BP_MATCH defines the behavior when the COMP address is matched</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>no breakpoint matching</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>breakpoint on lower halfword, upper is unaffected</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>breakpoint on upper halfword, lower is unaffected</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>breakpoint on both lower and upper halfwords</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>4,5,6,7,0,1,2,3</dimIndex>
+               <name>PID%s</name>
+               <description>Peripheral Identification Register %s</description>
+               <addressOffset>0xFD0</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CID%s</name>
+               <description>Component Identification Register 0</description>
+               <addressOffset>0xFF0</addressOffset>
+               <size>32</size>
+               <access>read-only</access>
+            </register>
+         </registers>
+      </peripheral>

@@ -1,6 +1,8 @@
 <!--
 Devices using this peripheral: 
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "WDOG_MKM" ?>
@@ -27,7 +29,6 @@ Devices using this peripheral:
                <description>Status and Control Register High</description>
                <addressOffset>0x0</addressOffset>
                <size>16</size>
-               <resetValue>0x1D3</resetValue>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
@@ -160,24 +161,6 @@ Enables updates to watchdog write-once registers through a unlock sequence</desc
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>WAITEN</name>
-                     <description>Enables or disables WDOG in Wait mode</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled in Wait mode</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled in Wait mode</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>TESTWDOG</name>
                      <description>Puts the watchdog in the functional test mode\n
 In this mode the watchdog timer and the associated compare and reset generation logic is tested for correct operation.\n
@@ -207,7 +190,7 @@ Effective only if TESTWDOG is set</description>
                   </field>
                   <field>
                      <name>BYTESEL</name>
-                     <description>This 2-bit field select the byte to be tested when the watchdog is in the byte test mode</description>
+                     <description>Select the byte to be tested when the watchdog is in the byte test mode</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

@@ -7,32 +7,32 @@ Devices using this vector table:
          <description>MKL27Z4 (32K and 64K) VectorTable</description>
          <interrupt>
             <name>DMA0</name>
-            <description>DMA0 Transfer complete or error</description>
+            <description>DMA Controller</description>
             <value>0</value>
          </interrupt>
          <interrupt>
             <name>DMA1</name>
-            <description>DMA1 Transfer complete or error</description>
+            <description>DMA Controller</description>
             <value>1</value>
          </interrupt>
          <interrupt>
             <name>DMA2</name>
-            <description>DMA2 Transfer complete or error</description>
+            <description>DMA Controller</description>
             <value>2</value>
          </interrupt>
          <interrupt>
             <name>DMA3</name>
-            <description>DMA3 Transfer complete or error</description>
+            <description>DMA Controller</description>
             <value>3</value>
          </interrupt>
          <interrupt>
-            <name>FTFA</name>
-            <description>FTFA Command complete or error</description>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
             <value>5</value>
          </interrupt>
          <interrupt>
-            <name>LVD_LVW</name>
-            <description>PMC Low-voltage detect, low-voltage warning</description>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
             <value>6</value>
          </interrupt>
          <interrupt>
@@ -42,32 +42,32 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>I2C0</name>
-            <description>I2C Interface 0</description>
+            <description>Inter-Integrated Circuit</description>
             <value>8</value>
          </interrupt>
          <interrupt>
             <name>I2C1</name>
-            <description>I2C Interface 1</description>
+            <description>Inter-Integrated Circuit</description>
             <value>9</value>
          </interrupt>
          <interrupt>
             <name>SPI0</name>
-            <description>Serial Peripheral Interface 0</description>
+            <description>Serial Peripheral Interface</description>
             <value>10</value>
          </interrupt>
          <interrupt>
             <name>SPI1</name>
-            <description>Serial Peripheral Interface 1</description>
+            <description>Serial Peripheral Interface</description>
             <value>11</value>
          </interrupt>
          <interrupt>
-            <name>LPUART0</name>
-            <description>UART0 Status and error</description>
+            <name>LPUART0_RX_TX</name>
+            <description>Serial Communication Interface</description>
             <value>12</value>
          </interrupt>
          <interrupt>
             <name>LPUART1</name>
-            <description>UART1 Status and error</description>
+            <description>Serial Communication Interface</description>
             <value>13</value>
          </interrupt>
          <interrupt>
@@ -77,47 +77,47 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>ADC0</name>
-            <description>Analogue to Digital Converter 0</description>
+            <description>Analogue to Digital Converter</description>
             <value>15</value>
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description>Comparator 0</description>
+            <description>High-Speed Comparator</description>
             <value>16</value>
          </interrupt>
          <interrupt>
             <name>TPM0</name>
-            <description>Timer/PWM Module 0</description>
+            <description>Timer/PWM Module</description>
             <value>17</value>
          </interrupt>
          <interrupt>
             <name>TPM1</name>
-            <description>Timer/PWM Module 1</description>
+            <description>Timer/PWM Module</description>
             <value>18</value>
          </interrupt>
          <interrupt>
             <name>TPM2</name>
-            <description>Timer/PWM Module 2</description>
+            <description>Timer/PWM Module</description>
             <value>19</value>
          </interrupt>
          <interrupt>
-            <name>RTC</name>
-            <description>Real Time Clock Alarm</description>
+            <name>RTC_Alarm</name>
+            <description>Real Time Clock</description>
             <value>20</value>
          </interrupt>
          <interrupt>
             <name>RTC_Seconds</name>
-            <description>Real Time Clock Seconds</description>
+            <description>Real Time Clock</description>
             <value>21</value>
          </interrupt>
          <interrupt>
             <name>PIT</name>
-            <description>Programmable Interrupt Timer (All channels)</description>
+            <description>Periodic Interrupt Timer (All channels)</description>
             <value>22</value>
          </interrupt>
          <interrupt>
             <name>USB0</name>
-            <description>USBB On The Go</description>
+            <description>Universal Serial Bus</description>
             <value>24</value>
          </interrupt>
          <interrupt>
@@ -127,12 +127,12 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>PORTA</name>
-            <description>Port A</description>
+            <description>General Purpose Input/Output</description>
             <value>30</value>
          </interrupt>
          <interrupt>
-            <name>PORTC_PORTD</name>
-            <description>Port C &amp; D</description>
+            <name>PORTBCDE</name>
+            <description>General Purpose Input/Output</description>
             <value>31</value>
          </interrupt>
       </interrupts>

@@ -6,6 +6,8 @@ Devices using this peripheral:
       MK10DZ10
       MK10F12
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK12D5
       MK20D5
       MK20D7
@@ -13,7 +15,10 @@ Devices using this peripheral:
       MK20DZ10
       MK20F12
       MK21D5
+      MK21DA5
+      MK21D5WS
       MK21F12
+      MK21FA12
       MK22D5
       MK22F12
       MK24F12
@@ -38,12 +43,17 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
+      MK61F15WS
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
+      MK70F15WS
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "CMT_0" ?>
@@ -239,45 +249,11 @@ Requests to enable a CPU interrupt when EOCF is set if EOCIE is high</descriptio
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BASE</name>
-                     <description>Baseband Operation Enable\n
+                  <field derivedFrom="MCGEN" > <name>BASE</name> <description>Baseband Operation Enable\n
 When set, BASE disables the carrier generator and forces the carrier output high for generation of baseband protocols.\n
 When BASE is cleared, the carrier generator is enabled and the carrier output toggles at the frequency determined by values stored
-in the carrier data</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EXSPC</name>
-                     <description>Extended Space Enable\nEnables the extended space operation</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+in the carrier data</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MCGEN" > <name>EXSPC</name> <description>Extended Space Enable\nEnables the extended space operation</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>CMTDIV</name>
                      <description>Clock Divide Prescaler\n
@@ -487,7 +463,7 @@ Divides the CMT clock to generate the Intermediate Frequency clock enable to the
             </register>
             <register>
                <name>DMA</name>
-               <description>Direct Memory Access Register</description>
+               <description>Direct Memory Access</description>
                <addressOffset>0xB</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>

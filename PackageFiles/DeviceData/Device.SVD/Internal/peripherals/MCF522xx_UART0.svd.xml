@@ -313,29 +313,7 @@ clock as the clocking source for the transmitter and receiver</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>RCS</name>
-                     <description>Receiver clock select\nSelects the clock source for the receiver</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>Prescaled internal bus clock (fsys)</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>DTINn divided by 16</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>DTINn</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TCS" > <name>RCS</name> <description>Receiver clock select\nSelects the clock source for the receiver</description> <bitOffset>4</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -831,26 +809,8 @@ Indicates the receiver detected the beginning or end of a break</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>COS</name>
-                     <description>Change-of-state\n
-Change-of-state detected and was programmed in UACRn[IEC] to cause an interrupt</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-write</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="DB" > <name>COS</name> <description>Change-of-state\n
+Change-of-state detected and was programmed in UACRn[IEC] to cause an interrupt</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

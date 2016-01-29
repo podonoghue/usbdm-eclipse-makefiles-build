@@ -1,12 +1,14 @@
 <!--
 Devices using this peripheral: 
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "DMA0_MKM" ?>
          <name>DMA0</name>
-         <description>DMA Controller</description>
-         <groupName>DMA</groupName>
+         <description>Enhanced direct memory access controller</description>
+         <groupName>DMA0</groupName>
          <prependToName>DMA0</prependToName>
          <headerStructName>DMA</headerStructName>
          <baseAddress>0x40008000</baseAddress>
@@ -639,28 +641,11 @@ The following table defines the access of each mode for each value of CHACR</des
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>AA</name>
-                        <description>Auto-align\n
+                     <field derivedFrom="EADREQ" > <name>AA</name> <description>Auto-align\n
                         If enabled:\n
                         If SSIZE indicates a transfer no smaller than DSIZE, source accesses are auto-aligned; otherwise, destination accesses are auto-aligned.\n
                         Source alignment takes precedence over destination alignment.\n
-                        If auto-alignment is enabled, the appropriate address register increments, regardless of DINC or SINC</description>
-                        <bitOffset>28</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Disabled</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Enabled</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                        If auto-alignment is enabled, the appropriate address register increments, regardless of DINC or SINC</description> <bitOffset>28</bitOffset> </field>
                      <field>
                         <name>CS</name>
                         <description>Cycle steal\n

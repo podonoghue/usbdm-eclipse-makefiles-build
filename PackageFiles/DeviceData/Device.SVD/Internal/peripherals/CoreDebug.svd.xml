@@ -39,16 +39,16 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
       MKL02Z4
       MKL03Z4
@@ -57,6 +57,7 @@ Devices using this peripheral:
       MKL14Z4
       MKL15Z4
       MKL16Z4
+      MKL17Z4
       MKL24Z4
       MKL25Z4
       MKL26Z4
@@ -67,6 +68,7 @@ Devices using this peripheral:
       MKL43Z4
       MKL46Z4
       MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
          <?sourceFile "CoreDebug" ?>

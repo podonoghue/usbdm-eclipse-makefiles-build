@@ -5,12 +5,16 @@ Devices using this peripheral:
       MK10D10
       MK10DZ10
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK12D5
       MK20D5
       MK20D7
       MK20D10
       MK20DZ10
       MK21D5
+      MK21DA5
+      MK21D5WS
       MK22D5
       MK30D7
       MK30D10
@@ -19,17 +23,14 @@ Devices using this peripheral:
       MK40D10
       MK40DZ10
       MK50D7
-      MK50D10
-      MK50DZ10
       MK51D7
-      MK51D10
-      MK51DZ10
-      MK52D10
-      MK52DZ10
       MK53D10
       MK53DZ10
       MK60D10
       MK60DZ10
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "FTFL" ?>
@@ -46,13 +47,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x14</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x16</offset>
-            <size>0x2</size>
+            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

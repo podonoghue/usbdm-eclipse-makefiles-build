@@ -1,0 +1,1028 @@
+<!--
+Devices using this peripheral: 
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+-->
+      <peripheral>
+         <?sourceFile "AOI_0" ?>
+         <name>AOI</name>
+         <description>AND/OR/INVERT module</description>
+         <groupName>AOI</groupName>
+         <prependToName>AOI</prependToName>
+         <headerStructName>AOI</headerStructName>
+         <baseAddress>0x4005B000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>BFCRT010</name>
+               <description>Boolean Function Term 0 and 1 Configuration Register for EVENTn</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT1_DC</name>
+                     <description>Product term 1, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_CC</name>
+                     <description>Product term 1, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_BC</name>
+                     <description>Product term 1, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_AC</name>
+                     <description>Product term 1, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT1_DC" > <name>PT0_DC</name> <description>Product term 0, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT1_CC" > <name>PT0_CC</name> <description>Product term 0, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT1_BC" > <name>PT0_BC</name> <description>Product term 0, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT1_AC" > <name>PT0_AC</name> <description>Product term 0, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT230</name>
+               <description>Boolean Function Term 2 and 3 Configuration Register for EVENTn</description>
+               <addressOffset>0x2</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT3_DC</name>
+                     <description>Product term 3, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_CC</name>
+                     <description>Product term 3, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_BC</name>
+                     <description>Product term 3, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_AC</name>
+                     <description>Product term 3, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT3_DC" > <name>PT2_DC</name> <description>Product term 2, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT3_CC" > <name>PT2_CC</name> <description>Product term 2, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT3_BC" > <name>PT2_BC</name> <description>Product term 2, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT3_AC" > <name>PT2_AC</name> <description>Product term 2, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT011</name>
+               <description>Boolean Function Term 0 and 1 Configuration Register for EVENTn</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT1_DC</name>
+                     <description>Product term 1, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_CC</name>
+                     <description>Product term 1, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_BC</name>
+                     <description>Product term 1, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_AC</name>
+                     <description>Product term 1, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT1_DC" > <name>PT0_DC</name> <description>Product term 0, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT1_CC" > <name>PT0_CC</name> <description>Product term 0, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT1_BC" > <name>PT0_BC</name> <description>Product term 0, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT1_AC" > <name>PT0_AC</name> <description>Product term 0, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT231</name>
+               <description>Boolean Function Term 2 and 3 Configuration Register for EVENTn</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT3_DC</name>
+                     <description>Product term 3, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_CC</name>
+                     <description>Product term 3, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_BC</name>
+                     <description>Product term 3, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_AC</name>
+                     <description>Product term 3, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT3_DC" > <name>PT2_DC</name> <description>Product term 2, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT3_CC" > <name>PT2_CC</name> <description>Product term 2, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT3_BC" > <name>PT2_BC</name> <description>Product term 2, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT3_AC" > <name>PT2_AC</name> <description>Product term 2, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT012</name>
+               <description>Boolean Function Term 0 and 1 Configuration Register for EVENTn</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT1_DC</name>
+                     <description>Product term 1, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_CC</name>
+                     <description>Product term 1, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_BC</name>
+                     <description>Product term 1, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_AC</name>
+                     <description>Product term 1, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT1_DC" > <name>PT0_DC</name> <description>Product term 0, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT1_CC" > <name>PT0_CC</name> <description>Product term 0, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT1_BC" > <name>PT0_BC</name> <description>Product term 0, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT1_AC" > <name>PT0_AC</name> <description>Product term 0, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT232</name>
+               <description>Boolean Function Term 2 and 3 Configuration Register for EVENTn</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT3_DC</name>
+                     <description>Product term 3, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_CC</name>
+                     <description>Product term 3, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_BC</name>
+                     <description>Product term 3, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_AC</name>
+                     <description>Product term 3, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT3_DC" > <name>PT2_DC</name> <description>Product term 2, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT3_CC" > <name>PT2_CC</name> <description>Product term 2, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT3_BC" > <name>PT2_BC</name> <description>Product term 2, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT3_AC" > <name>PT2_AC</name> <description>Product term 2, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT013</name>
+               <description>Boolean Function Term 0 and 1 Configuration Register for EVENTn</description>
+               <addressOffset>0xC</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT1_DC</name>
+                     <description>Product term 1, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_CC</name>
+                     <description>Product term 1, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_BC</name>
+                     <description>Product term 1, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT1_AC</name>
+                     <description>Product term 1, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT1_DC" > <name>PT0_DC</name> <description>Product term 0, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT1_CC" > <name>PT0_CC</name> <description>Product term 0, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT1_BC" > <name>PT0_BC</name> <description>Product term 0, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT1_AC" > <name>PT0_AC</name> <description>Product term 0, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFCRT233</name>
+               <description>Boolean Function Term 2 and 3 Configuration Register for EVENTn</description>
+               <addressOffset>0xE</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT3_DC</name>
+                     <description>Product term 3, D input configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the D input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the D input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the D input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the D input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_CC</name>
+                     <description>Product term 3, C input configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the C input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the C input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the C input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the C input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_BC</name>
+                     <description>Product term 3, B input configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the B input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the B input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the B input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the B input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PT3_AC</name>
+                     <description>Product term 3, A input configuration</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Force the A input in this product term to a logical zero</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Pass the A input in this product term</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Complement the A input in this product term</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Force the A input in this product term to a logical one</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PT3_DC" > <name>PT2_DC</name> <description>Product term 2, D input configuration</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PT3_CC" > <name>PT2_CC</name> <description>Product term 2, C input configuration</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PT3_BC" > <name>PT2_BC</name> <description>Product term 2, B input configuration</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PT3_AC" > <name>PT2_AC</name> <description>Product term 2, A input configuration</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

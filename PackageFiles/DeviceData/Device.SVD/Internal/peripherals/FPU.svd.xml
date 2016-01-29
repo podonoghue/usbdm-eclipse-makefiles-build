@@ -9,11 +9,11 @@ Devices using this peripheral:
       MK24F25612
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
 -->
       <peripheral>
@@ -72,34 +72,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CP11</name>
-                     <description>Co-processor 11 access control</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Access denied. Any attempted access generates a NOCP UsageFault</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Privileged access only. An unprivileged access generates a NOCP fault</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Reserved. The result of any access is Unpredictable</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Full access</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CP10" > <name>CP11</name> <description>Co-processor 11 access control</description> <bitOffset>22</bitOffset> </field>
                </fields>
             </register>
             <register>

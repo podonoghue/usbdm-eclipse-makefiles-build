@@ -8,18 +8,23 @@ Devices using this peripheral:
       MKL14Z4
       MKL15Z4
       MKL16Z4
+      MKL17Z4
       MKL24Z4
       MKL25Z4
       MKL26Z4
       MKL27Z4
       MKL27Z644
+      MKL33Z4
       MKL34Z4
       MKL36Z4
       MKL43Z4
       MKL46Z4
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
       MKV10Z7
       MKV11Z7
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "FTFA" ?>
@@ -381,7 +386,7 @@ These bits are loaded from flash to this register at reset</description>
             <register>
                <dim>12</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>3:Flash address [7..0],2:Flash address [15..8],1:Flash address [23..16],0:FCMD (a code that defines the flash command),7:Data Byte 3,6:Data Byte 2,5:Data Byte 1,4:Data Byte 0,B:Data Byte 7,A:Data Byte 6,9:Data Byte 5,8:Data Byte 4</dimIndex>
+               <dimIndex>3:Flash address [7..0],2:Flash address [15..8],1:Flash address [23..16],0:FCMD (Flash command),7:Data Byte 3,6:Data Byte 2,5:Data Byte 1,4:Data Byte 0,B:Data Byte 7,A:Data Byte 6,9:Data Byte 5,8:Data Byte 4</dimIndex>
                <name>FCCOB%s</name>
                <description>FCCOB %s - Usually %m \n
 The Flash Common Command Object registers provides a command code and relevant parameters to the memory controller.\n

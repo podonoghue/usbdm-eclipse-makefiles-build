@@ -1,24 +1,21 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
       MK10D7
       MK10D10
       MK10DZ10
       MK10F12
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK12D5
-      MK20D5
       MK20D7
       MK20D10
       MK20DZ10
       MK20F12
       MK21D5
-      MK21F12
+      MK21DA5
+      MK21D5WS
       MK22D5
-      MK22F12
-      MK22F51212
-      MK24F12
-      MK24F25612
       MK30D7
       MK30D10
       MK30DZ10
@@ -39,22 +36,19 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
-      MK63F12
-      MK64F12
-      MK70F12
+      MK61F15WS
       MK70F15
-      MKV30F12810
-      MKV31F12810
-      MKV31F25612
-      MKV31F51212
+      MK70F15WS
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "PORTA_FILT" ?>
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
-         <groupName>PORTA</groupName>
+         <groupName>PORT</groupName>
          <prependToName>PORTA</prependToName>
          <headerStructName>PORT</headerStructName>
          <baseAddress>0x40049000</baseAddress>
@@ -64,22 +58,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x80</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x80</offset>
-            <size>0x8</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xA0</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xC0</offset>
-            <size>0xC</size>
+            <size>0xCC</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -90,6 +69,7 @@ Devices using this peripheral:
                <name>PCR%s</name>
                <description>Pin Control Register %s</description>
                <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PS</name>
@@ -258,7 +238,7 @@ Select Pin Function</description>
                   <field>
                      <name>LK</name>
                      <description>Lock Register\n
-Locks PCR bits [15:0]. They cannot be updated until the next system reset</description>
+Locks PCR bits [15..0]. They cannot be updated until the next system reset</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -283,7 +263,7 @@ Configures Interrupt and DMA functions</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0000</name>
-                           <description>Interrupt/DMA Request disabled</description>
+                           <description>Disabled</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>

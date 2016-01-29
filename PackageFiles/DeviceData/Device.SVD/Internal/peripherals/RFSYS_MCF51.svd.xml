@@ -34,6 +34,16 @@ Devices using this peripheral:
                <access>read-write</access>
             </register>
             <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>REGL[%s]</name>
+               <description>Battery Backed Register File</description>
+               <addressOffset>0x0</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
+            <register>
                <dim>16</dim>
                <dimIncrement>2</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
@@ -42,16 +52,6 @@ Devices using this peripheral:
                <description>Battery Backed Register File</description>
                <addressOffset>0x0</addressOffset>
                <size>16</size>
-               <access>read-write</access>
-            </register>
-            <register>
-               <dim>8</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
-               <name>REGL[%s]</name>
-               <description>Battery Backed Register File</description>
-               <addressOffset>0x0</addressOffset>
-               <size>32</size>
                <access>read-write</access>
             </register>
          </registers>

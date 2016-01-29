@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE device
 [
-<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKM33Z4_VectorTable.svd.xml">
+<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKM33Z5_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKM.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_MKM.svd.xml">
+<!ENTITY AFE          SYSTEM "peripherals/AFE_0.svd.xml">
+<!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_MKM.svd.xml">
+<!ENTITY CMP0         SYSTEM "peripherals/CMP0_0x40072000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40034000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKM.svd.xml">
-<!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_4CH.svd.xml">
+<!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_1CH.svd.xml">
+<!ENTITY EWM          SYSTEM "peripherals/EWM_2.svd.xml">
 <!ENTITY FTFA         SYSTEM "peripherals/FTFA.svd.xml">
 <!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_MKM.svd.xml">
 <!ENTITY I2C0         SYSTEM "peripherals/I2C0_MKM.svd.xml">
+<!ENTITY LCD          SYSTEM "peripherals/LCD_MKM.svd.xml">
 <!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE3_FILT2.svd.xml">
-<!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_MKM.svd.xml">
-<!ENTITY MCG          SYSTEM "peripherals/MCG_MKM.svd.xml">
-<!ENTITY MCM          SYSTEM "peripherals/MCM_MKM.svd.xml">
-<!ENTITY NV           SYSTEM "peripherals/NV_FTFA.svd.xml">
-<!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKL.svd.xml">
+<!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0x4003C000.svd.xml">
+<!ENTITY MCG          SYSTEM "peripherals/MCG_MKM335.svd.xml">
+<!ENTITY MCM          SYSTEM "peripherals/MCM_MKM14ZA5.svd.xml">
+<!ENTITY MPU          SYSTEM "peripherals/MPU_MKM14ZA5_R8.svd.xml">
+<!ENTITY MTB          SYSTEM "peripherals/MTB.svd.xml">
+<!ENTITY MTBDWT       SYSTEM "peripherals/MTBDWT_MKL.svd.xml">
+<!ENTITY NV           SYSTEM "peripherals/NV_MKM.svd.xml">
+<!ENTITY NVIC         SYSTEM "peripherals/NVIC_CM0.svd.xml">
 <!ENTITY OSC0         SYSTEM "peripherals/OSC_MKM.svd.xml">
-<!ENTITY PIT0         SYSTEM "peripherals/PIT0_2CH_MKM.svd.xml">
+<!ENTITY PIT0         SYSTEM "peripherals/PIT0_2CH_CHAIN_MKM.svd.xml">
+<!ENTITY PMC          SYSTEM "peripherals/PMC_MKM.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKM.svd.xml">
-<!ENTITY RCM          SYSTEM "peripherals/RCM_MKM.svd.xml">
+<!ENTITY PORTE        SYSTEM "peripherals/PORTE_MKM_FILT.svd.xml">
+<!ENTITY RCM          SYSTEM "peripherals/RCM_MKM14ZA5.svd.xml">
 <!ENTITY RNG          SYSTEM "peripherals/RNG_1.svd.xml">
 <!ENTITY ROM          SYSTEM "peripherals/ROM_MKL.svd.xml">
-<!ENTITY RTC          SYSTEM "peripherals/RTC_MKM.svd.xml">
+<!ENTITY RTC          SYSTEM "peripherals/RTC_MKM14ZA5.svd.xml">
 <!ENTITY RTC_RAM      SYSTEM "peripherals/RTC_MKM_RAM.svd.xml">
-<!ENTITY SIM          SYSTEM "peripherals/SIM_MKMxxZxxM5.svd.xml">
-<!ENTITY SMC          SYSTEM "peripherals/SMC_MKM.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKM.svd.xml">
-<!ENTITY SPI1         SYSTEM "peripherals/SPI1_MKM_FIFO.svd.xml">
-<!ENTITY SYST         SYSTEM "peripherals/SysTick_0.svd.xml">
-<!ENTITY UART0        SYSTEM "peripherals/UART0_MKM_C7816.svd.xml">
+<!ENTITY SIM          SYSTEM "peripherals/SIM_MKM33ZA5.svd.xml">
+<!ENTITY SMC          SYSTEM "peripherals/SMC_MKM14ZA5.svd.xml">
+<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKM33ZA5.svd.xml">
+<!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
+<!ENTITY TMR0         SYSTEM "peripherals/TMR0_MKM.svd.xml">
+<!ENTITY TMR1         SYSTEM "peripherals/TMR1_MKM.svd.xml">
+<!ENTITY UART0        SYSTEM "peripherals/UART0_MKM14ZA5.svd.xml">
+<!ENTITY UART1        SYSTEM "peripherals/UART1_MKM14ZA5_C7816.svd.xml">
 <!ENTITY VREF         SYSTEM "peripherals/VREF_MKM.svd.xml">
 <!ENTITY WDOG         SYSTEM "peripherals/WDOG_MKM.svd.xml">
+<!ENTITY XBAR         SYSTEM "peripherals/XBAR_MKM.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MKM33Z5</name>
-   <version>0.0</version>
+   <version>1.6</version>
    <description>Freescale Kinetis MKM33Z5 Family</description>
    <cpu>
       <name>CM0PLUS</name>
@@ -51,10 +64,18 @@
    <width>32</width>
    <peripherals>
 &ADC0;
+&AFE;
+&AIPS0;
+&CMP0;
+<peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40072008</baseAddress></peripheral>
 &CRC;
 &CoreDebug;
 &DMA0;
-&DMAMUX;
+&DMAMUX0;
+<peripheral derivedFrom="DMAMUX0"><name>DMAMUX1</name><prependToName>DMAMUX1</prependToName><baseAddress>0x40022000</baseAddress></peripheral>
+<peripheral derivedFrom="DMAMUX0"><name>DMAMUX2</name><prependToName>DMAMUX2</prependToName><baseAddress>0x40023000</baseAddress></peripheral>
+<peripheral derivedFrom="DMAMUX0"><name>DMAMUX3</name><prependToName>DMAMUX3</prependToName><baseAddress>0x40024000</baseAddress></peripheral>
+&EWM;
 &FTFA;
 &GPIOA;
 <peripheral derivedFrom="GPIOA"><name>GPIOB</name><prependToName>GPIOB</prependToName><baseAddress>0x400FF001</baseAddress></peripheral>
@@ -67,20 +88,25 @@
 <peripheral derivedFrom="GPIOA"><name>GPIOI</name><prependToName>GPIOI</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
 &I2C0;
 <peripheral derivedFrom="I2C0"><name>I2C1</name><prependToName>I2C1</prependToName><baseAddress>0x40068000</baseAddress></peripheral>
+&LCD;
 &LLWU;
 &LPTMR0;
 &MCG;
 &MCM;
+&MPU;
+&MTB;
+&MTBDWT;
 &NV;
 &NVIC;
 &OSC0;
 &PIT0;
 <peripheral derivedFrom="PIT0"><name>PIT1</name><prependToName>PIT1</prependToName><baseAddress>0x4002E000</baseAddress></peripheral>
+&PMC;
 &PORTA;
 <peripheral derivedFrom="PORTA"><name>PORTB</name><prependToName>PORTB</prependToName><baseAddress>0x40047000</baseAddress></peripheral>
 <peripheral derivedFrom="PORTA"><name>PORTC</name><prependToName>PORTC</prependToName><baseAddress>0x40048000</baseAddress></peripheral>
 <peripheral derivedFrom="PORTA"><name>PORTD</name><prependToName>PORTD</prependToName><baseAddress>0x40049000</baseAddress></peripheral>
-<peripheral derivedFrom="PORTA"><name>PORTE</name><prependToName>PORTE</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
+&PORTE;
 <peripheral derivedFrom="PORTA"><name>PORTF</name><prependToName>PORTF</prependToName><baseAddress>0x4004B000</baseAddress></peripheral>
 <peripheral derivedFrom="PORTA"><name>PORTG</name><prependToName>PORTG</prependToName><baseAddress>0x4004C000</baseAddress></peripheral>
 <peripheral derivedFrom="PORTA"><name>PORTH</name><prependToName>PORTH</prependToName><baseAddress>0x4004D000</baseAddress></peripheral>
@@ -93,14 +119,19 @@
 &SIM;
 &SMC;
 &SPI0;
-&SPI1;
+<peripheral derivedFrom="SPI0"><name>SPI1</name><prependToName>SPI1</prependToName><baseAddress>0x40076000</baseAddress></peripheral>
 &SYST;
+&TMR0;
+&TMR1;
+<peripheral derivedFrom="TMR1"><name>TMR2</name><prependToName>TMR2</prependToName><baseAddress>0x40059000</baseAddress></peripheral>
+<peripheral derivedFrom="TMR1"><name>TMR3</name><prependToName>TMR3</prependToName><baseAddress>0x4005A000</baseAddress></peripheral>
 &UART0;
-<peripheral derivedFrom="UART0"><name>UART1</name><prependToName>UART1</prependToName><baseAddress>0x4006B000</baseAddress></peripheral>
+&UART1;
 <peripheral derivedFrom="UART0"><name>UART2</name><prependToName>UART2</prependToName><baseAddress>0x4006C000</baseAddress></peripheral>
 <peripheral derivedFrom="UART1"><name>UART3</name><prependToName>UART3</prependToName><baseAddress>0x4006D000</baseAddress></peripheral>
 &VREF;
 &WDOG;
+&XBAR;
    </peripherals>
    <vendorExtensions>
 &VECTOR_TABLE;

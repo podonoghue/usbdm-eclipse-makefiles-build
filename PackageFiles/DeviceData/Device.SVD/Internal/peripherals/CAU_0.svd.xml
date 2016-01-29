@@ -1,8 +1,13 @@
 <!--
 Devices using this peripheral: 
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK21D5
+      MK21DA5
+      MK21D5WS
       MK21F12
+      MK21FA12
       MK24F12
       MK52D10
       MK52DZ10
@@ -12,12 +17,17 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
+      MK61F15WS
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
+      MK70F15WS
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "CAU_0" ?>

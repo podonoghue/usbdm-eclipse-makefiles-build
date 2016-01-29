@@ -16,37 +16,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x8</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1004</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x100C</offset>
-            <size>0x8</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1018</offset>
-            <size>0x8</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1024</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1034</offset>
-            <size>0x14</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x104C</offset>
-            <size>0x18</size>
+            <size>0x1064</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -64,47 +34,47 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>8 KB</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>16 KB</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>24 KB</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>32 KB</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>48 KB</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>64 KB</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>96 KB</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>128 KB</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>256 KB</description>
                            <value>0b1011</value>
                         </enumeratedValue>
@@ -112,22 +82,22 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSC32KOUT</name>
-                     <description>32K Oscillator Clock Output</description>
+                     <description>32 kHz oscillator Clock Output</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>ERCLK32K is not output</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>ERCLK32K is output on PTE0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>ERCLK32K is output on PTE26</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -135,17 +105,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSC32KSEL</name>
-                     <description>32K oscillator clock select</description>
+                     <description>32 kHz Oscillator</description>
                      <bitOffset>18</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>System oscillator (OSC32KCLK)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>LPO 1 kHz</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -168,32 +138,32 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>CLKOUTSEL</name>
-                     <description>CLKOUT select</description>
+                     <description>Clock Out Select</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Flash clock</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>LPO clock (1 kHz)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>MCGIRCLK</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>OSCERCLK0</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>IRC 48 MHz clock</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -206,12 +176,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>MCGOUTCLK</description>
+                           <name>0b0</name>
+                           <description>MCGCLKOUT</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Core/system clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -224,17 +194,17 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>MCGFLLCLK clock</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>MCGPLLCLK clock</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>IRC48 MHz clock</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -247,22 +217,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Clock disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>MCGFLLCLK , or MCGPLLCLK , or IRC48M clock as selected by SOPT2[PLLFLLSEL]</description>
+                           <name>0b01</name>
+                           <description>MCGFLLCLK , or MCGPLLCLK , or IRC48M clock as selected by SOPT2.PLLFLLSEL</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>OSCERCLK clock</description>
+                           <name>0b10</name>
+                           <description>OSCERCLK</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>MCGIRCLK clock</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -277,72 +247,72 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>FTM0FLT0</name>
-                     <description>FTM0 Fault 0 Select</description>
+                     <description>FTM0 Fault 0 Drive Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_FLT0 pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>CMP0 out</description>
+                           <name>0b1</name>
+                           <description>CMP0_OUT</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM0FLT1</name>
-                     <description>FTM0 Fault 1 Select</description>
+                     <description>FTM0 Fault 1 Drive Select</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_FLT1 pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>CMP1 out</description>
+                           <name>0b1</name>
+                           <description>CMP1_OUT</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM1FLT0</name>
-                     <description>FTM1 Fault 0 Select</description>
+                     <description>FTM1 Fault 0 Drive Select</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM1_FLT0 pin</description>
+                           <name>0b0</name>
+                           <description>FTM1_FLT0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>CMP0 out</description>
+                           <name>0b1</name>
+                           <description>CMP0_OUT</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM2FLT0</name>
-                     <description>FTM2 Fault 0 Select</description>
+                     <description>FTM2 Fault 0 Drive Select</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM2_FLT0 pin</description>
+                           <name>0b0</name>
+                           <description>FTM2_FLT0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>CMP0 out</description>
+                           <name>0b1</name>
+                           <description>CMP0_OUT</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -354,18 +324,18 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>FTM1_CH0 signal</description>
+                           <name>0b00</name>
+                           <description>FTM1_CH0</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>CMP0 output</description>
+                           <name>0b01</name>
+                           <description>CMP0_OUT</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>CMP1 output</description>
+                           <name>0b10</name>
+                           <description>CMP1_OUT</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -377,18 +347,18 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>FTM2_CH0 signal</description>
+                           <name>0b00</name>
+                           <description>FTM2_CH0</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>CMP0 output</description>
+                           <name>0b01</name>
+                           <description>CMP0_OUT</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>CMP1 output</description>
+                           <name>0b10</name>
+                           <description>CMP1_OUT</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -400,12 +370,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM2_CH1 signal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Exclusive OR of FTM2_CH1, FTM2_CH0 and FTM1_CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -413,90 +383,56 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>FTM0CLKSEL</name>
-                     <description>FlexTimer 0 External Clock Pin Select</description>
+                     <description>FTM0 External Clock Pin Select</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM_CLK0 pin</description>
+                           <name>0b0</name>
+                           <description>FTM_CLK0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM_CLK1 pin</description>
+                           <name>0b1</name>
+                           <description>FTM_CLK1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>FTM1CLKSEL</name>
-                     <description>FTM1 External Clock Pin Select</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM_CLK0 pin</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM_CLK1 pin</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM2CLKSEL</name>
-                     <description>FlexTimer 2 External Clock Pin Select</description>
-                     <bitOffset>26</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM2 external clock driven by FTM_CLK0 pin</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM2 external clock driven by FTM_CLK1 pin</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FTM0CLKSEL" > <name>FTM1CLKSEL</name> <description>FTM1 External Clock Pin Select</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="FTM0CLKSEL" > <name>FTM2CLKSEL</name> <description>FTM2 External Clock Pin Select</description> <bitOffset>26</bitOffset> </field>
                   <field>
                      <name>FTM0TRG0SRC</name>
-                     <description>FlexTimer 0 Hardware Trigger 0 Source Select</description>
+                     <description>FTM0 Hardware Trigger 0 Source Select</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>HSCMP0 output drives FTM0 hardware trigger 0</description>
+                           <name>0b0</name>
+                           <description>CMP0_OUT drives FTM0 hardware trigger 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM1 channel match drives FTM0 hardware trigger 0</description>
+                           <name>0b1</name>
+                           <description>FTM1 channel match trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM0TRG1SRC</name>
-                     <description>FlexTimer 0 Hardware Trigger 1 Source Select</description>
+                     <description>FTM0 Hardware Trigger 1 Source Select</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>PDB output trigger 1 drives FTM0 hardware trigger 1</description>
+                           <name>0b0</name>
+                           <description>PDB output trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM2 channel match drives FTM0 hardware trigger 1</description>
+                           <name>0b1</name>
+                           <description>FTM2 channel match trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -510,45 +446,45 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>UART0TXSRC</name>
-                     <description>UART 0 transmit data source select</description>
+                     <description>UART0 Transmit Data Source Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>UART0_TX pin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>UART0_TX pin modulated with FTM1 channel 0 output</description>
+                           <name>0b01</name>
+                           <description>UART0_TX pin modulated by FTM1 CH0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>UART0_TX pin modulated with FTM2 channel 0 output</description>
+                           <name>0b10</name>
+                           <description>UART0_TX pin modulated by FTM2 CH0</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>UART0RXSRC</name>
-                     <description>UART 0 receive data source select</description>
+                     <description>UART0 Receive Data Source Select</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>UART0_RX pin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>CMP0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>CMP1</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -556,45 +492,45 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>UART1TXSRC</name>
-                     <description>UART 1 transmit data source select</description>
+                     <description>UART1 Transmit Data Source Select</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>UART1_TX pin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>UART1_TX pin modulated with FTM1 channel 0 output</description>
+                           <name>0b01</name>
+                           <description>UART1_TX pin modulated by FTM1 CH0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>UART1_TX pin modulated with FTM2 channel 0 output</description>
+                           <name>0b10</name>
+                           <description>UART1_TX pin modulated by FTM2 CH0</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>UART1RXSRC</name>
-                     <description>UART 1 receive data source select</description>
+                     <description>UART1 Receive Data Source Select</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>UART1_RX pin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>CMP0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>CMP1</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -602,23 +538,23 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>LPUART0RXSRC</name>
-                     <description>LPUART0 receive data source select</description>
+                     <description>LPUART0 Receive Data Source Select</description>
                      <bitOffset>18</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>LPUART0_RX pin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>CMP0 output</description>
+                           <name>0b01</name>
+                           <description>CMP0_OUT</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>CMP1 output</description>
+                           <name>0b10</name>
+                           <description>CMP1_OUT</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -632,62 +568,62 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ADC0TRGSEL</name>
-                     <description>ADC0 trigger select</description>
+                     <description>ADC0 Trigger Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
-                           <description>PDB external trigger pin input (PDB0_EXTRG)</description>
+                           <name>0b0000</name>
+                           <description>PDB external trigger</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
-                           <description>High speed comparator 0 output</description>
+                           <name>0b0001</name>
+                           <description>CMP1 out</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
-                           <description>High speed comparator 1 output</description>
+                           <name>0b0010</name>
+                           <description>CMP1 out</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>PIT trigger 0</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>PIT trigger 1</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>PIT trigger 2</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>PIT trigger 3</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>FTM0 trigger</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>FTM1 trigger</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>FTM2 trigger</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>Low-power timer (LPTMR) trigger</description>
                            <value>0b1110</value>
                         </enumeratedValue>
@@ -695,135 +631,73 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>ADC0PRETRGSEL</name>
-                     <description>ADC0 pretrigger select</description>
+                     <description>ADC0 PreTrigger Select</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Pre-trigger A</description>
+                           <name>0b0</name>
+                           <description>Pretrigger A</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Pre-trigger B</description>
+                           <name>0b1</name>
+                           <description>Pretrigger B</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADC0ALTTRGEN</name>
-                     <description>ADC0 alternate trigger enable</description>
+                     <description>ADC0 Alternate Trigger Enable</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>PDB trigger selected for ADC0</description>
+                           <name>0b0</name>
+                           <description>PDB Trigger Selected for ADC0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Alternate trigger selected for ADC0</description>
+                           <name>0b1</name>
+                           <description>Alternate Trigger Selected for ADC0</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ADC1TRGSEL</name>
-                     <description>ADC1 trigger select</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0000</name>
-                           <description>PDB external trigger pin input (PDB0_EXTRG)</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0001</name>
-                           <description>High speed comparator 0 output</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0010</name>
-                           <description>High speed comparator 1 output</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0100</name>
-                           <description>PIT trigger 0</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0101</name>
-                           <description>PIT trigger 1</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0110</name>
-                           <description>PIT trigger 2</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0111</name>
-                           <description>PIT trigger 3</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1000</name>
-                           <description>FTM0 trigger</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1001</name>
-                           <description>FTM1 trigger</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1010</name>
-                           <description>FTM2 trigger</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1110</name>
-                           <description>Low-power timer (LPTMR) trigger</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ADC0TRGSEL" > <name>ADC1TRGSEL</name> <description>ADC1 Trigger Select</description> <bitOffset>8</bitOffset> </field>
                   <field>
                      <name>ADC1PRETRGSEL</name>
-                     <description>ADC1 pre-trigger select</description>
+                     <description>ADC1 PreTrigger Select</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Pre-trigger A selected for ADC1</description>
+                           <name>0b0</name>
+                           <description>Pretrigger A selected for ADC1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Pre-trigger B selected for ADC1</description>
+                           <name>0b1</name>
+                           <description>Pretrigger B selected for ADC1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADC1ALTTRGEN</name>
-                     <description>ADC1 alternate trigger enable</description>
+                     <description>ADC1 Alternate Trigger Enable</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>PDB trigger selected for ADC1</description>
+                           <name>0b0</name>
+                           <description>PDB trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Alternate trigger selected for ADC1 as defined by ADC1TRGSEL</description>
+                           <name>0b1</name>
+                           <description>Alternate trigger(ADC1TRGSEL)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -842,12 +716,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write 1 to assert the TRIG0 input to FTM0, software must clear this bit to allow other trigger sources to assert</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -860,12 +734,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write 1 to assert the TRIG0 input to FTM1, software must clear this bit to allow other trigger sources to assert</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -878,12 +752,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write 1 to assert the TRIG0 input to FTM2, software must clear this bit to allow other trigger sources to assert</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -891,36 +765,36 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>FTM0OCH0SRC</name>
-                     <description>FTM0 channel 0 output source</description>
+                     <description>FTM0 CH0 source</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM0_CH0 pin is output of FTM0 channel 0 output</description>
+                           <name>0b0</name>
+                           <description>FTM0_CH0 pin is output of FTM0 CH0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH0 pin is output of FTM0 channel 0 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH0 pin is output of FTM0 CH0, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM0OCH1SRC</name>
-                     <description>FTM0 channel 1 output source</description>
+                     <description>FTM0 CH1 source</description>
                      <bitOffset>17</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FTM0_CH1 pin is output of FTM0 channel 1 output</description>
+                           <name>0b0</name>
+                           <description>FTM0_CH1 pin is output of FTM0 CH1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH1 pin is output of FTM0 channel 1 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH1 pin is output of FTM0 CH1, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -932,13 +806,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH2 pin is output of FTM0 channel 2 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH2 pin is output of FTM0 channel 2 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH2 pin is output of FTM0 channel 2 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -950,13 +824,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH3 pin is output of FTM0 channel 3 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH3 pin is output of FTM0 channel 3 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH3 pin is output of FTM0 channel 3 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -968,13 +842,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH4 pin is output of FTM0 channel 4 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH4 pin is output of FTM0 channel 4 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH4 pin is output of FTM0 channel 4 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -986,13 +860,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH5 pin is output of FTM0 channel 5 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH5 pin is output of FTM0 channel 5 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH5 pin is output of FTM0 channel 5 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1004,13 +878,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH6 pin is output of FTM0 channel 6 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH6 pin is output of FTM0 channel 6 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH6 pin is output of FTM0 channel 6 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1022,13 +896,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FTM0_CH7 pin is output of FTM0 channel 7 output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FTM0_CH7 pin is output of FTM0 channel 7 output, modulated by FTM1 channel 1 output</description>
+                           <name>0b1</name>
+                           <description>FTM0_CH7 pin is output of FTM0 channel 7 output, modulated by FTM1 CH1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1045,62 +919,62 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>PINID</name>
-                     <description>Pincount identification</description>
+                     <description>Pincount Identification</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>32-pin</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>48-pin</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>64-pin</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>80-pin</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>81-pin or 121-pin</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>100-pin</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>121-pin</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>144-pin</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>Custom pinout (WLCSP)</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>169-pin</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>256-pin</description>
                            <value>0b1110</value>
                         </enumeratedValue>
@@ -1108,13 +982,13 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>DIEID</name>
-                     <description>Device die number</description>
+                     <description>Device Die Number</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>5</bitWidth>
                   </field>
                   <field>
                      <name>REVID</name>
-                     <description>Device revision number</description>
+                     <description>Device Revision Number</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
@@ -1125,22 +999,22 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>Kinetis K series</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>Kinetis L series</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>Kinetis W series</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>Kinetis V series</description>
                            <value>0b0110</value>
                         </enumeratedValue>
@@ -1153,37 +1027,37 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>KVx0 Subfamily</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>KVx1 Subfamily</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>KVx2 Subfamily</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>KVx3 Subfamily</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>KVx4 Subfamily</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>KVx5 Subfamily</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>KVx6 Subfamily</description>
                            <value>0b0110</value>
                         </enumeratedValue>
@@ -1196,32 +1070,32 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>KV1x Family</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>KV2x Family</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>KV3x Family</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>KV4x Family</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>KV6x Family</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>KV7x Family</description>
                            <value>0b0111</value>
                         </enumeratedValue>
@@ -1242,143 +1116,24 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Clock disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Clock enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>I2C0</name>
-                     <description>I2C0 Clock Gate Control</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>I2C1</name>
-                     <description>I2C1 Clock Gate Control</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART0</name>
-                     <description>UART0 Clock Gate Control</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART1</name>
-                     <description>UART1 Clock Gate Control</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART2</name>
-                     <description>UART2 Clock Gate Control</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CMP</name>
-                     <description>Comparator Clock Gate Control</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>VREF</name>
-                     <description>VREF Clock Gate Control</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="EWM" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>UART0</name> <description>UART0 Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1394,12 +1149,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Access disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Access enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1412,89 +1167,21 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Clock disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Clock enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PORTB</name>
-                     <description>Port B Clock Gate Control</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PORTC</name>
-                     <description>Port C Clock Gate Control</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PORTD</name>
-                     <description>Port D Clock Gate Control</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PORTE</name>
-                     <description>Port E Clock Gate Control</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="PORTA" > <name>PORTB</name> <description>Port B Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTC</name> <description>Port C Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTD</name> <description>Port D Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>PORTE</name> <description>Port E Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1505,262 +1192,41 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>FTF</name>
-                     <description>Flash Memory Clock Gate Control</description>
+                     <description>Flash Clock Gate Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Clock disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Clock enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DMAMUX</name>
-                     <description>DMA Mux Clock Gate Control</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ADC1</name>
-                     <description>ADC1 Clock Gate Control</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
                   <field>
                      <name>RNGA</name>
                      <description>RNGA Clock Gate Control</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
-                  <field>
-                     <name>LPUART0</name>
-                     <description>LPUART0 Clock Gate Control</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SPI0</name>
-                     <description>SPI0 Clock Gate Control</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SPI1</name>
-                     <description>SPI1 Clock Gate Control</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CRC</name>
-                     <description>CRC Clock Gate Control</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PDB</name>
-                     <description>PDB Clock Gate Control</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PIT</name>
-                     <description>PIT Clock Gate Control</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM0</name>
-                     <description>FTM0 Clock Gate Control</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM1</name>
-                     <description>FTM1 Clock Gate Control</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM2</name>
-                     <description>FTM2 Clock Gate Control</description>
-                     <bitOffset>26</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ADC0</name>
-                     <description>ADC0 Clock Gate Control</description>
-                     <bitOffset>27</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>DAC0</name>
-                     <description>DAC0 Clock Gate Control</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FTF" > <name>LPUART0</name> <description>LPUART0 Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>PDB</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>FTM0</name> <description>FTM0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>ADC0</name> <description>ADC0 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1776,12 +1242,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Clock disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Clock enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1797,268 +1263,94 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>OUTDIV4</name>
-                     <description>Clock 4 output divider value</description>
+                     <description>Clock 4 Output Divider value</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>Divide-by-1</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>Divide-by-2</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>Divide-by-3</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>Divide-by-4</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>Divide-by-5</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>Divide-by-6</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>Divide-by-7</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>Divide-by-8</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>Divide-by-9</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>Divide-by-10</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>Divide-by-11</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>Divide-by-12</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>Divide-by-13</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>Divide-by-14</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>Divide-by-15</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>Divide-by-16</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>OUTDIV2</name>
-                     <description>Clock 2 output divider value</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0000</name>
-                           <description>Divide-by-1</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0001</name>
-                           <description>Divide-by-2</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0010</name>
-                           <description>Divide-by-3</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0011</name>
-                           <description>Divide-by-4</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0100</name>
-                           <description>Divide-by-5</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0101</name>
-                           <description>Divide-by-6</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0110</name>
-                           <description>Divide-by-7</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0111</name>
-                           <description>Divide-by-8</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1000</name>
-                           <description>Divide-by-9</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1001</name>
-                           <description>Divide-by-10</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1010</name>
-                           <description>Divide-by-11</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1011</name>
-                           <description>Divide-by-12</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1100</name>
-                           <description>Divide-by-13</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1101</name>
-                           <description>Divide-by-14</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1110</name>
-                           <description>Divide-by-15</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1111</name>
-                           <description>Divide-by-16</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>OUTDIV1</name>
-                     <description>Clock 1 output divider value</description>
-                     <bitOffset>28</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0000</name>
-                           <description>Divide-by-1</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0001</name>
-                           <description>Divide-by-2</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0010</name>
-                           <description>Divide-by-3</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0011</name>
-                           <description>Divide-by-4</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0100</name>
-                           <description>Divide-by-5</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0101</name>
-                           <description>Divide-by-6</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0110</name>
-                           <description>Divide-by-7</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0111</name>
-                           <description>Divide-by-8</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1000</name>
-                           <description>Divide-by-9</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1001</name>
-                           <description>Divide-by-10</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1010</name>
-                           <description>Divide-by-11</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1011</name>
-                           <description>Divide-by-12</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1100</name>
-                           <description>Divide-by-13</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1101</name>
-                           <description>Divide-by-14</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1110</name>
-                           <description>Divide-by-15</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1111</name>
-                           <description>Divide-by-16</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="OUTDIV4" > <name>OUTDIV2</name> <description>Clock 2 Output Divider value</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="OUTDIV4" > <name>OUTDIV1</name> <description>Clock 1 Output Divider value</description> <bitOffset>28</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -2074,12 +1366,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Flash is enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Flash is disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -2092,12 +1384,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Flash remains enabled during Wait mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Flash is disabled for the duration of Wait mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -2105,43 +1397,43 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PFSIZE</name>
-                     <description>Program flash size</description>
+                     <description>Program Flash Size</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>32 KB of program flash memory</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>64 KB of program flash memory</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>128 KB of program flash memory</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>256 KB of program flash memory</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>512 KB of program flash memory</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>1024 KB of program flash memory</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>256 KB of program flash memory</description>
                            <value>0b1111</value>
                         </enumeratedValue>

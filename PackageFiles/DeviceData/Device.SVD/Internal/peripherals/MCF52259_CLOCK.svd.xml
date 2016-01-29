@@ -264,27 +264,10 @@ cleared before entering stop mode with the PLL disabled</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LOLRE</name>
-                     <description>Loss-of-lock reset enable\nDetermines how the system manages a loss-of-lock indication. When operating
+                  <field derivedFrom="LOCRE" > <name>LOLRE</name> <description>Loss-of-lock reset enable\nDetermines how the system manages a loss-of-lock indication. When operating
 in normal mode, the PLL must be locked before setting the LOLRE bit. Otherwise, reset is immediately
 asserted. To prevent an immediate reset, the LOLRE bit must be cleared before writing the MFD[2:0] bits
-or entering stop mode with the PLL disabled</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No reset</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Reset</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+or entering stop mode with the PLL disabled</description> <bitOffset>15</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -764,25 +747,8 @@ This bit configures the RTC oscillator for operation with an external crystal or
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>EXTALEN</name>
-                     <description>Enables RTC_EXTAL pin\n
-This allows current draw to be reduced if the RTC is not used</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="OSCEN" > <name>EXTALEN</name> <description>Enables RTC_EXTAL pin\n
+This allows current draw to be reduced if the RTC is not used</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>

@@ -1,11 +1,14 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
       MK10D5
       MK10D7
       MK10D10
       MK10DZ10
       MK10F12
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK12D5
       MK20D5
       MK20D7
@@ -13,9 +16,14 @@ Devices using this peripheral:
       MK20DZ10
       MK20F12
       MK21D5
+      MK21DA5
+      MK21D5WS
       MK21F12
+      MK21FA12
       MK22D5
       MK22F12
+      MK22F12810
+      MK22F25612
       MK22F51212
       MK24F12
       MK24F25612
@@ -39,12 +47,14 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
+      MK61F15WS
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
+      MK70F15WS
       MKL02Z4
       MKL03Z4
       MKL04Z4
@@ -52,11 +62,13 @@ Devices using this peripheral:
       MKL14Z4
       MKL15Z4
       MKL16Z4
+      MKL17Z4
       MKL24Z4
       MKL25Z4
       MKL26Z4
       MKL27Z4
       MKL27Z644
+      MKL33Z4
       MKL34Z4
       MKL36Z4
       MKL43Z4
@@ -67,6 +79,15 @@ Devices using this peripheral:
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+      MKW01Z4
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "LPTMR0_0" ?>

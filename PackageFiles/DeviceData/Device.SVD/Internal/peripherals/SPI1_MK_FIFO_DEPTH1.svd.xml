@@ -1,6 +1,5 @@
 <!--
 Devices using this peripheral: 
-      MK22F12
       MK22F51212
       MK24F12
       MK24F25612
@@ -111,21 +110,8 @@ Writing a 1 clears the RX Counter</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CLR_TXF</name>
-                     <description>Clear TX FIFO\n
-Writing a 1 clear the Tx FIFO counter</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>write-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0bX</name>
-                           <description>Write 1 to clear</description>
-                           <isDefault>true</isDefault>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CLR_RXF" > <name>CLR_TXF</name> <description>Clear TX FIFO\n
+Writing a 1 clear the Tx FIFO counter</description> <bitOffset>11</bitOffset> </field>
                   <field>
                      <name>DIS_RXF</name>
                      <description>Disable Receive FIFO</description>
@@ -134,54 +120,20 @@ Writing a 1 clear the Tx FIFO counter</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Rx FIFO enabled</description>
+                           <description>Enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Rx FIFO disabled</description>
+                           <description>Disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DIS_TXF</name>
-                     <description>Disable Transmit FIFO</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Tx FIFO enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Tx FIFO disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MDIS</name>
-                     <description>Module Disable\n
+                  <field derivedFrom="DIS_RXF" > <name>DIS_TXF</name> <description>Disable Transmit FIFO</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="DIS_RXF" > <name>MDIS</name> <description>Module Disable\n
 Allows the clock to be stopped to the non-memory mapped logic in the DSPI effectively putting the DSPI
-in a software-controlled power-saving state</description>
-                     <bitOffset>14</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clocks enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clocks disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+in a software-controlled power-saving state</description> <bitOffset>14</bitOffset> </field>
                   <field>
                      <name>DOZE</name>
                      <description>Doze Enable\n
@@ -240,24 +192,6 @@ Controls whether the Rx FIFO discards new data when overflowing</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>PCSSE</name>
-                     <description>Peripheral Chip Select Strobe Enable</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>PCS5/ PCSS is used as the Peripheral Chip Select[5] signal</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>PCS5/ PCSS is used as an active-low PCS Strobe signal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>MTFE</name>
                      <description>Modified Timing Format Enable</description>
                      <bitOffset>26</bitOffset>
@@ -296,14 +230,14 @@ Control whether the module is disabled in Debug mode</description>
                   </field>
                   <field>
                      <name>DCONF</name>
-                     <description>SPI Configuration</description>
+                     <description>Configuration</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>2</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>SPI mode</description>
+                           <description>Mode</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -358,7 +292,7 @@ Control whether the module is disabled in Debug mode</description>
                <fields>
                   <field>
                      <name>SPI_TCNT</name>
-                     <description>SPI Transfer Counter</description>
+                     <description>Transfer Counter</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
@@ -455,62 +389,8 @@ and the assertion of PCS at the beginning of the next frame</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PASC</name>
-                     <description>After SCK Delay Prescaler</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Prescaler is 1</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Prescaler is 3</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Prescaler is 5</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Prescaler is 7</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PCSSCK</name>
-                     <description>PCS to SCK Delay Prescaler</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Prescaler is 1</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Prescaler is 3</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Prescaler is 5</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Prescaler is 7</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="PDT" > <name>PASC</name> <description>After SCK Delay Prescaler</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PDT" > <name>PCSSCK</name> <description>PCS to SCK Delay Prescaler</description> <bitOffset>22</bitOffset> </field>
                   <field>
                      <name>LSBFE</name>
                      <description>LSB First\n
@@ -605,7 +485,7 @@ Allows the baud rate to be doubled but the duty cycle depends on the Baud Rate P
                </fields>
             </register>
             <register>
-               <name>CTAR0_SLAVE</name>
+               <name>CTAR_SLAVE</name>
                <description>Clock and Transfer Attributes Register (In Slave Mode)</description>
                <addressOffset>0xC</addressOffset>
                <resetValue>0x78000000</resetValue>
@@ -667,7 +547,7 @@ The minimum valid FMSZ field value is 3</description>
             </register>
             <register>
                <name>SR</name>
-               <description>Status Register</description>
+               <description>Status register</description>
                <addressOffset>0x2C</addressOffset>
                <resetValue>0x2000000</resetValue>
                <fields>
@@ -790,7 +670,7 @@ The bit remains set until it is cleared by writing a 1 to it</description>
                   <field>
                      <name>EOQF</name>
                      <description>End of Queue Flag\n
-Inidicates if EOQ is set in the executing command</description>
+Indicates if EOQ is set in the executing command</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -927,83 +807,15 @@ Selects between generating a DMA request or an interrupt request</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TFFF_RE</name>
-                     <description>Transmit FIFO Fill Request Enable\n
+                  <field derivedFrom="RFDF_RE" > <name>TFFF_RE</name> <description>Transmit FIFO Fill Request Enable\n
 Enables the TFFF flag in the SR to generate a request. The TFFF_DIRS bit selects between generating
-an interrupt request or a DMA request</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Requests disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Requests enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TFUF_RE</name>
-                     <description>Transmit FIFO Underflow Request Enable\n
-Enables the TFUF flag in the SR to generate an interrupt request</description>
-                     <bitOffset>27</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EOQF_RE</name>
-                     <description>DSPI Finished Request Enable\n
-Enables the EOQF flag in the SR to generate an interrupt request</description>
-                     <bitOffset>28</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TCF_RE</name>
-                     <description>Transmission Complete Request Enable\n
-Enables TCF flag in the SR to generate an interrupt request</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+an interrupt request or a DMA request</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="RFOF_RE" > <name>TFUF_RE</name> <description>Transmit FIFO Underflow Request Enable\n
+Enables the TFUF flag in the SR to generate an interrupt request</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="RFOF_RE" > <name>EOQF_RE</name> <description>DSPI Finished Request Enable\n
+Enables the EOQF flag in the SR to generate an interrupt request</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="RFOF_RE" > <name>TCF_RE</name> <description>Transmission Complete Request Enable\n
+Enables TCF flag in the SR to generate an interrupt request</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1129,7 +941,7 @@ Determines if PCS remains asserted between transfers</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PCSx stay asserted\tbetween transfers</description>
+                           <description>PCSx stays asserted\tbetween transfers</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

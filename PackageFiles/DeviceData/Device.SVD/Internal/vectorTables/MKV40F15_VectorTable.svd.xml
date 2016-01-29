@@ -1,0 +1,353 @@
+<!--
+Devices using this vector table: 
+   MKV40F15
+-->
+      <interrupts>
+         <name>MKV40F15_VectorTable</name>
+         <interrupt>
+            <name>DMA0</name>
+            <description>Direct memory access controller</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>Direct memory access controller</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>Direct memory access controller</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>Direct memory access controller</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA4</name>
+            <description>Direct memory access controller</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA5</name>
+            <description>Direct memory access controller</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA6</name>
+            <description>Direct memory access controller</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA7</name>
+            <description>Direct memory access controller</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA8</name>
+            <description>Direct memory access controller</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA9</name>
+            <description>Direct memory access controller</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA10</name>
+            <description>Direct memory access controller</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA11</name>
+            <description>Direct memory access controller</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA12</name>
+            <description>Direct memory access controller</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA13</name>
+            <description>Direct memory access controller</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA14</name>
+            <description>Direct memory access controller</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA15</name>
+            <description>Direct memory access controller</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>Direct memory access controller</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>MCM</name>
+            <description>Miscellaneous Control Module</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTF_ReadCollision</name>
+            <description>Flash Memory Interface</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>External Watchdog Monitor</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI</name>
+            <description>Serial Peripheral Interface</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>31</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>32</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>33</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>34</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC_ERR</name>
+            <description>Analogue to digital converter</description>
+            <value>38</value>
+         </interrupt>
+         <interrupt>
+            <name>ADCA</name>
+            <description>Analogue to digital converter</description>
+            <value>39</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description>High-Speed Comparator</description>
+            <value>40</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP1</name>
+            <description>High-Speed Comparator</description>
+            <value>41</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>FlexTimer Module</description>
+            <value>42</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FlexTimer Module</description>
+            <value>43</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>48</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT1</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>49</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT2</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>50</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT3</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>51</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>Programmable Delay Block</description>
+            <value>52</value>
+         </interrupt>
+         <interrupt>
+            <name>XBARA</name>
+            <description>Crossbar Switch</description>
+            <value>54</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB1</name>
+            <description>Programmable Delay Block</description>
+            <value>55</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Multipurpose Clock Generator</description>
+            <value>57</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>Low Power Timer</description>
+            <value>58</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>General Purpose Input/Output</description>
+            <value>59</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>General Purpose Input/Output</description>
+            <value>60</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTC</name>
+            <description>General Purpose Input/Output</description>
+            <value>61</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTD</name>
+            <description>General Purpose Input/Output</description>
+            <value>62</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTE</name>
+            <description>General Purpose Input/Output</description>
+            <value>63</value>
+         </interrupt>
+         <interrupt>
+            <name>ENC_COMPARE</name>
+            <description>Quadrature Decoder</description>
+            <value>66</value>
+         </interrupt>
+         <interrupt>
+            <name>ENC_HOME</name>
+            <description>Quadrature Decoder</description>
+            <value>67</value>
+         </interrupt>
+         <interrupt>
+            <name>ENC_WDOG_SAB</name>
+            <description>Quadrature Decoder</description>
+            <value>68</value>
+         </interrupt>
+         <interrupt>
+            <name>ENC_INDEX</name>
+            <description>Quadrature Decoder</description>
+            <value>69</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP2</name>
+            <description>High-Speed Comparator</description>
+            <value>70</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM3</name>
+            <description>FlexTimer Module</description>
+            <value>71</value>
+         </interrupt>
+         <interrupt>
+            <name>ADCB</name>
+            <description>Analogue to digital converter</description>
+            <value>73</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Message</name>
+            <description>Flex Controller Area Network module</description>
+            <value>75</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_BusOff</name>
+            <description>Flex Controller Area Network module</description>
+            <value>76</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Error</name>
+            <description>Flex Controller Area Network module</description>
+            <value>77</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Tx</name>
+            <description>Flex Controller Area Network module</description>
+            <value>78</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_Rx</name>
+            <description>Flex Controller Area Network module</description>
+            <value>79</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN0_WakeUp</name>
+            <description>Flex Controller Area Network module</description>
+            <value>80</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP3</name>
+            <description>High-Speed Comparator</description>
+            <value>92</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_Message</name>
+            <description>Flex Controller Area Network module</description>
+            <value>94</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_BusOff</name>
+            <description>Flex Controller Area Network module</description>
+            <value>95</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_Error</name>
+            <description>Flex Controller Area Network module</description>
+            <value>96</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_Tx</name>
+            <description>Flex Controller Area Network module</description>
+            <value>97</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_Rx</name>
+            <description>Flex Controller Area Network module</description>
+            <value>98</value>
+         </interrupt>
+         <interrupt>
+            <name>CAN1_WakeUp</name>
+            <description>Flex Controller Area Network module</description>
+            <value>99</value>
+         </interrupt>
+      </interrupts>
+

@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "PMC_MKE" ?>
@@ -27,7 +30,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>SPMSC1</name>
-               <description>Low Voltage Detect Status and Control 1 Register</description>
+               <description>System Power Management Status and Control 1 Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0x1C</resetValue>
@@ -59,12 +62,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>LVD logic is disabled</description>
+                           <description>LVD logic disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>LVD logic is enabled</description>
+                           <description>LVD logic enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -77,12 +80,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low-voltage detect is disabled during Stop mode</description>
+                           <description>Low-voltage detect disabled during stop mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Low-voltage detect is enabled during Stop mode</description>
+                           <description>Low-voltage detect enabled during stop mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -94,13 +97,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>LVD events do not generate hardware resets</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Forces an MCU reset when an enabled low-voltage detect event occurs</description>
+                           <name>0b1</name>
+                           <description>Force an MCU reset when an enabled low-voltage detect event occurs</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

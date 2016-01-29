@@ -379,25 +379,8 @@ Reflects the state of the MS pin during the last Chip Reset</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>EZP_MS</name>
-                     <description>EZP_MS_B pin state\n
-Reflects the state of the EZP_MS pin during the last Chip Reset</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Negated (logic 1)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Asserted (logic 0)</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="MS" > <name>EZP_MS</name> <description>EZP_MS_B pin state\n
+Reflects the state of the EZP_MS pin during the last Chip Reset</description> <bitOffset>1</bitOffset> </field>
                </fields>
             </register>
          </registers>

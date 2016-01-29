@@ -317,24 +317,7 @@ If a core reset is required, the watchdog interrupt should set the soft reset bi
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CWE</name>
-                     <description>Core watchdog enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CWTA" > <name>CWE</name> <description>Core watchdog enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

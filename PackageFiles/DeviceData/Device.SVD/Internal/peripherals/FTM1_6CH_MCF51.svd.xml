@@ -910,60 +910,9 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DTEN</name>
-                     <description>Deadtime Enable for Channels %s</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SYNCEN</name>
-                     <description>PWM Synchronization Enable for Channels %s</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FAULTEN</name>
-                     <description>Fault Control Enable for Channels %s</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="DECAPEN" > <name>DTEN</name> <description>Deadtime Enable for Channels %s</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DECAPEN" > <name>SYNCEN</name> <description>PWM Synchronization Enable for Channels %s</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DECAPEN" > <name>FAULTEN</name> <description>Fault Control Enable for Channels %s</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1427,44 +1376,10 @@ Selects the encoding mode used in the quadrature decoder mode</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PHBFLTREN</name>
-                     <description>Phase B Input Filter Enable\n
-Enables the filter for the quadrature decoder phase B input</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PHAFLTREN</name>
-                     <description>Phase A Input Filter Enable\n
-Enables the filter for the quadrature decoder phase A input</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="QUADEN" > <name>PHBFLTREN</name> <description>Phase B Input Filter Enable\n
+Enables the filter for the quadrature decoder phase B input</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="QUADEN" > <name>PHAFLTREN</name> <description>Phase A Input Filter Enable\n
+Enables the filter for the quadrature decoder phase A input</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
          </registers>

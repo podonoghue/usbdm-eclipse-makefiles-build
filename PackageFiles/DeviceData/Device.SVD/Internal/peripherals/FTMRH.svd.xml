@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MKE02Z2
       MKE02Z4
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "FTMRH" ?>
@@ -518,25 +519,8 @@ The FPHS bits determine the size of the protected/unprotected area in flash memo
                      <bitOffset>3</bitOffset>
                      <bitWidth>2</bitWidth>
                   </field>
-                  <field>
-                     <name>FPHDIS</name>
-                     <description>Flash Protection Higher Address Range Disable \n
-The FPHDIS bit determines whether there is a protected/unprotected area in a specific region of the flash memory ending with global address 0x7FFF</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Protection/Unprotection enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Protection/Unprotection disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FPLDIS" > <name>FPHDIS</name> <description>Flash Protection Higher Address Range Disable \n
+The FPHDIS bit determines whether there is a protected/unprotected area in a specific region of the flash memory ending with global address 0x7FFF</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>FPOPEN</name>
                      <description>Flash Protection Operation Enable \n

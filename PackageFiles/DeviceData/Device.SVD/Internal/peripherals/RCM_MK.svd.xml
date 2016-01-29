@@ -2,9 +2,10 @@
 Devices using this peripheral: 
       MK10F12
       MK20F12
-      MK21F12
       MK60F12
       MK60F15
+      MK61F15
+      MK70F15
 -->
       <peripheral>
          <?sourceFile "RCM_MK" ?>

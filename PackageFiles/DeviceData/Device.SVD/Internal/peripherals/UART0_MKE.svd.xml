@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "UART0_MKE" ?>
@@ -61,40 +64,23 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                   </field>
                   <field>
                      <name>RXEDGIE</name>
-                     <description>RxD Input Active Edge Interrupt Enable (RXEDGIF)</description>
+                     <description>RxD Input Active Edge Interrupt Enable</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupts disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupts enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LBKDIE</name>
-                     <description>LIN Break Detect Interrupt Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RXEDGIE" > <name>LBKDIE</name> <description>LIN Break Detect Interrupt Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -107,7 +93,7 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                <fields>
                   <field>
                      <name>SBR</name>
-                     <description>Baud Rate Modulo Divisor (see BDH[SBR])</description>
+                     <description>Baud Rate Bits</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -145,12 +131,12 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Parity disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Parity enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -205,7 +191,7 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>9-bit\t- Start + 9 data bits stop</description>
+                           <description>9-bit\t- Start + 9 data bits + stop</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -230,7 +216,7 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>UARTSWAI</name>
-                     <description>Stops in Wait Mode</description>
+                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -330,48 +316,14 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TE</name>
-                     <description>Transmitter Enable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ILIE</name>
-                     <description>Idle Line Interrupt Enable\n
-Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Requests disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Requests enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="ILIE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="ILIE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-Controls interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="ILIE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TE</name> <description>Transmitter Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
+		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
+		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
+		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -393,12 +345,12 @@ To clear PF, read S1 with PF set and then read D</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Flag cleared</description>
+                           <description>No error</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Flag set</description>
+                           <description>Error</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -408,28 +360,94 @@ FE is set when a logic 0 is accepted as the stop bit.\n
 To clear FE, read S1 with FE set and then read D</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="PF" > <name>NF</name> <description>Noise Flag\n
 NF is set when the UART detects noise on the receiver input.\n
-To clear NF, read S1 and then read D. When EN709 is enabled, noise flag is not set</description> <bitOffset>2</bitOffset> </field>
+To clear NF, read S1 and then read D</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="PF" > <name>OR</name> <description>Receiver Overrun Flag\n
 OR is set when software fails to prevent the receive data register from overflowing with data.\n
 To clear OR, read S1 when OR is set and then read D</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>IDLE</name> <description>Idle Line Flag\n
+                  <field>
+                     <name>IDLE</name>
+                     <description>Idle Line Flag\n
 After the IDLE flag is cleared, a frame must be received or a LIN break character must set the S2[LBKDIF] flag before an idle
 condition can set the IDLE flag.\n
-To clear IDLE, read UART status S1 with IDLE set and then read D</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>RDRF</name> <description>Receive Data Register Full Flag\n
+To clear IDLE, read S1 with IDLE set and then read D</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RDRF</name>
+                     <description>Receive Data Register Full Flag\n
 RDRF is set when the number of datawords in the receive buffer is equal to or more than the number indicated by RWFIFO[RXWATER].\n
-To clear RDRF, read S1 when RDRF is set and then read D</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>TC</name> <description>Transmit Complete Flag\n
-TC is cleared when there is a transmission in progress or when a preamble or break character is loaded.\n
-TC is set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
-TC is cleared by reading S1 with TC set and then doing one of the following:\n
-- Writing to D to transmit new data.\n
-- Queuing a preamble by clearing and then setting C2[TE].\n
-- Queuing a break character by writing 1 to SBK in C2</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>TDRE</name> <description>Transmit Data Register Empty Flag\n
-TDRE will set when the number of datawords in the transmit buffer (D and C3[T8])is equal to or less than
-the number indicated by TWFIFO[TXWATER].\n
-To clear TDRE, read S1 when TDRE is set and then write to the UART data register</description> <bitOffset>7</bitOffset> </field>
+To clear RDRF, read S1 when RDRF is set and then read D</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Rx FIFO level &lt; RXWATER</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rx FIFO level &gt;= RXWATER</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transmit Complete Flag\n
+Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
+Cleared by reading S1 with TC set and then doing one of the following:\n
+- Write to the data register to transmit new data\n
+- Queue a preamble by changing TE from 0 to 1\n
+- Queue a break character by writing 1 to C2.SBK</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Transmit Data Register Empty Flag\n
+Set when the number of words in the transmit buffer is &lt;= TWFIFO[TXWATER]\n
+To clear TDRE, read S1 when TDRE is set and then write to the data register</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tx FIFO level &gt; TXWATER</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO level &lt;= TXWATERd</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -463,19 +481,19 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Selects a longer break character detection length.\n
+Enables break character detection.\n
 While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short Break detection\t- Break length of 10 bit times (C1[M] = 0), 11 (C1[M] = 1 and C4[M10] = 0), or 12 (C1[M] = 1, C4[M10] = 1, and S1[PE] = 1)</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long Break detection\t- Break length of 11 bits times (if C1[M] = 0 or 12 bits time (if C1[M] = 1)</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -489,12 +507,12 @@ Determines whether the transmit break character is 10, 11, or 12 bits long, or 1
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short Breaks\t- Break character is 10, 11, or 12 bits long</description>
+                           <description>Short</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long Breaks\t- Break character is 13 or 14 bits long</description>
+                           <description>Long</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -528,12 +546,12 @@ Setting this field reverses the polarity of the received data input</description
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Inverted</description>
+                           <description>RxD not inverted</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Not inverted</description>
+                           <description>RxD inverted</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -549,36 +567,19 @@ RXEDGIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No active edge</description>
+                           <description>No interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Active edge detected</description>
+                           <description>Interrupt pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LBKDIF</name>
-                     <description>LIN Break Detect Interrupt Flag\n
+                  <field derivedFrom="RXEDGIF" > <name>LBKDIF</name> <description>LIN Break Detect Interrupt Flag\n
 LBKDIF is set when LBKDE is set and a LIN break character is detected on the receiver input.\n
-LBKDIF is cleared by writing a 1 to it</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No LIN break</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>LIN break detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+LBKDIF is cleared by writing a 1 to it</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -596,70 +597,19 @@ LBKDIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PF interrupt disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PF interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>FEIE</name>
-                     <description>Framing Error Interrupt Enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>FE interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>FE interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>NEIE</name>
-                     <description>Noise Error Interrupt Enable</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>NF interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>NF interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ORIE</name>
-                     <description>Overrun Error Interrupt Enable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>OR interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>OR interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="PEIE" > <name>FEIE</name> <description>Framing Error Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PEIE" > <name>NEIE</name> <description>Noise Error Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PEIE" > <name>ORIE</name> <description>Overrun Error Interrupt Enable</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>TXINV</name>
                      <description>Transmit Data Inversion</description>
@@ -668,12 +618,12 @@ LBKDIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not inverted</description>
+                           <description>TxD not inverted</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Tx data inverted</description>
+                           <description>TxD inverted</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -686,12 +636,12 @@ LBKDIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TXD pin is input</description>
+                           <description>TxD pin is input</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>TXD pin is output</description>
+                           <description>TxD pin is output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

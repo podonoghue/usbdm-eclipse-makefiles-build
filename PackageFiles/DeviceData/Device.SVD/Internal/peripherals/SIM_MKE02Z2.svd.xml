@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MKE02Z2
       MKE02Z4
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "SIM_MKE02Z2" ?>
@@ -25,6 +26,7 @@ Devices using this peripheral:
                <name>SRSID</name>
                <description>System Reset Status and ID Register</description>
                <addressOffset>0x0</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>LVD</name>
@@ -202,7 +204,7 @@ Indicates that after an attempt to enter Stop mode, a reset has been caused by t
                   </field>
                   <field>
                      <name>PINID</name>
-                     <description>Pincount identification</description>
+                     <description>Pincount Identification</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
@@ -260,7 +262,7 @@ Indicates that after an attempt to enter Stop mode, a reset has been caused by t
                   </field>
                   <field>
                      <name>REVID</name>
-                     <description>Device revision number</description>
+                     <description>Device Revision Number</description>
                      <bitOffset>20</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
@@ -409,12 +411,12 @@ Connects the output of ACMP0 to FTM1 input channel 0</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ACMP0 output is not connected to FTM1 input channel 0</description>
+                           <description>ACMP0_OUT is not connected to FTM1 input channel 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ACMP0 output is connected to FTM1 input channel 0</description>
+                           <description>ACMP0_OUT is connected to FTM1 input channel 0</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -633,7 +635,8 @@ Selects the RTCO port pins</description>
                   </field>
                   <field>
                      <name>SPI0PS</name>
-                     <description>SPI0 Pin Select</description>
+                     <description>SPI0 Pin Select\n
+Selects the SPI0 Pinouts</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -836,348 +839,25 @@ Selects the RTCO port pins</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PIT</name>
-                     <description>PIT Clock Gate Control</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM0</name>
-                     <description>FTM0 Clock Gate Control</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM1</name>
-                     <description>FTM1 Clock Gate Control</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FTM2</name>
-                     <description>FTM2 Clock Gate Control</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CRC</name>
-                     <description>CRC Clock Gate Control</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FLASH</name>
-                     <description>FLASH Clock Gate Control</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SWD</name>
-                     <description>SWD Clock Gate Control</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>I2C</name>
-                     <description>I2C Clock Gate Control</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SPI0</name>
-                     <description>SPI0 Clock Gate Control</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SPI1</name>
-                     <description>SPI1 Clock Gate Control</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART0</name>
-                     <description>UART0 Clock Gate Control</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART1</name>
-                     <description>UART1 Clock Gate Control</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UART2</name>
-                     <description>UART2 Clock Gate Control</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>KBI0</name>
-                     <description>KBI0 Clock Gate Control</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>KBI1</name>
-                     <description>KBI1 Clock Gate Control</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IRQ</name>
-                     <description>IRQ Clock Gate Control</description>
-                     <bitOffset>27</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ADC</name>
-                     <description>ADC Clock Gate Control</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ACMP0</name>
-                     <description>ACMP0 Clock Gate Control</description>
-                     <bitOffset>30</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ACMP1</name>
-                     <description>ACMP1 Clock Gate Control</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RTC" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>FTM0</name> <description>FTM0 Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>FLASH</name> <description>FLASH Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>SWD</name> <description>SWD Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>I2C</name> <description>I2C Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>UART0</name> <description>UART0 Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>KBI0</name> <description>KBI0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>KBI1</name> <description>KBI1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>IRQ</name> <description>IRQ Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>ADC</name> <description>ADC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>ACMP0</name> <description>ACMP0 Clock Gate Control</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>ACMP1</name> <description>ACMP1 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>

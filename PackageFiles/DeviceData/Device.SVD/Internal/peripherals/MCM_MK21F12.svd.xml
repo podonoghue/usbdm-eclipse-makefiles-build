@@ -1,0 +1,382 @@
+<!--
+Devices using this peripheral: 
+      MK21F12
+      MK22F12
+-->
+      <peripheral>
+         <?sourceFile "MCM_MK21F12" ?>
+         <name>MCM</name>
+         <description>Core Platform Miscellaneous Control Module</description>
+         <groupName>MCM</groupName>
+         <prependToName>MCM</prependToName>
+         <headerStructName>MCM</headerStructName>
+         <baseAddress>0xE0080000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PLASC</name>
+               <description>Crossbar Switch (AXBS) Slave Configuration\n
+PLASC is a 16-bit read-only register identifying the presence/absence of bus slave connections to the device&apos;s crossbar switch</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x1F</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ASC</name>
+                     <description>Each bit in the ASC field indicates whether there is a corresponding connection to the crossbar switch&apos;s slave input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus slave connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus slave connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLAMC</name>
+               <description>Crossbar Switch (AXBS) Master Configuration\n
+PLAMC is a 16-bit read-only register identifying the presence/absence of bus master connections to the device&apos;s crossbar switch</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x37</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>AMC</name>
+                     <description>Each bit in the AMC field indicates whether there is a corresponding connection to the AXBS master input port</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A bus master connection to AXBS input port n is absent</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A bus master connection to AXBS input port n is present</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PLACR</name>
+               <description>Crossbar Switch (AXBS) Control Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>ARB</name>
+                     <description>Arbitration select</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Fixed-priority arbitration for the crossbar masters</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Round-robin arbitration for the crossbar masters</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ISCR</name>
+               <description>Interrupt Status and Control Register\n
+The MCM_ISCR register includes the enable and status bits associated with the core&apos;s
+floating-point exceptions. The individual event indicators are first qualified with their
+exception enables and then logically summed to form an interrupt request sent to the
+core&apos;s NVIC</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>IRQ</name>
+                     <description>Normal Interrupt Pending</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No pending interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Due to the ETB counter expiring, a normal interrupt is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NMI</name>
+                     <description>Nonmaskable Interrupt Pending</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No pending NMI</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Due to the ETB counter expiring, an NMI is pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DHREQ</name>
+                     <description>Debug Halt Request Indicator</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No debug halt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Debug halt request initiated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FIOC</name>
+                     <description>FPU invalid operation interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IOC] bit and signals an illegal operation has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IOC] bit</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FIOC" > <name>FDZC</name> <description>FPU divide-by-zero interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[DZC] bit and signals a divide by zero has been detected
+in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[DZC] bit</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FOFC</name> <description>FPU overflow interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[OFC] bit and signals an overflow has been detected in
+the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[OFC] bit</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FUFC</name> <description>FPU underflow interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[UFC] bit and signals an underflow has been detected in
+the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[UFC] bit</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FIXC</name> <description>FPU inexact interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IXC] bit and signals an inexact number has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IXC] bit</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FIDC</name> <description>FPU input denormal interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IDC] bit and signals input denormalized number has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IDC] bit</description> <bitOffset>15</bitOffset> </field>
+                  <field>
+                     <name>FIOCE</name>
+                     <description>FPU invalid operation interrupt enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FIOCE" > <name>FDZCE</name> <description>FPU divide-by-zero interrupt enable</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="FIOCE" > <name>FOFCE</name> <description>FPU overflow interrupt enable</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="FIOCE" > <name>FUFCE</name> <description>FPU underflow interrupt enable</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="FIOCE" > <name>FIXCE</name> <description>FPU inexact interrupt enable</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="FIOCE" > <name>FIDCE</name> <description>FPU input denormal interrupt enable</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ETBCC</name>
+               <description>ETB Counter Control register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>CNTEN</name>
+                     <description>Counter Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>ETB counter disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ETB counter enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSPT</name>
+                     <description>Response Type</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No response when the ETB count expires</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Generate a normal interrupt when the ETB count expires</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Generate an NMI when the ETB count expires</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Generate a debug halt when the ETB count expires</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RLRQ</name>
+                     <description>Reload Request</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clears pending debug halt, NMI, or IRQ interrupt requests</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ETDIS</name>
+                     <description>ETM-To-TPIU Disable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>ETM-to-TPIU trace path enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ETM-to-TPIU trace path disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ITDIS</name>
+                     <description>ITM-To-TPIU Disable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>ITM-to-TPIU trace path enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ITM-to-TPIU trace path disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ETBRL</name>
+               <description>ETB Reload register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>RELOAD</name>
+                     <description>Byte Count Reload Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ETBCNT</name>
+               <description>ETB Counter Value register</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNTER</name>
+                     <description>Byte Count Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PID</name>
+               <description>Process ID register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>PID</name>
+                     <description>M0_PID and M1_PID for MPU</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

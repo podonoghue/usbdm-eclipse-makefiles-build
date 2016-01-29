@@ -1,0 +1,1205 @@
+<!--
+Devices using this peripheral: 
+      MK10F12
+      MK20F12
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK70F15
+      MK70F15WS
+-->
+      <peripheral>
+         <?sourceFile "UART2_MK10F12" ?>
+         <name>UART2</name>
+         <description>Universal Asynchronous Receiver/Transmitter</description>
+         <groupName>UART</groupName>
+         <prependToName>UART2</prependToName>
+         <headerStructName>UART2</headerStructName>
+         <baseAddress>0x4006C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x17</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>BDH</name>
+               <description>Baud Rate Register: High</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SBR</name>
+                     <description>Baud Rate Modulo Divisor\n
+The 13 bits in SBR[12:0] are referred to collectively as BR. They set the modulo divide rate for the\n
+UART baud rate generator. When BR is cleared, the UART baud rate generator is disabled to reduce\n
+supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXEDGIE</name>
+                     <description>RxD Input Active Edge Interrupt Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXEDGIE" > <name>LBKDIE</name> <description>LIN Break Detect Interrupt Enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BDL</name>
+               <description>Baud Rate Register: Low</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetValue>0x4</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SBR</name>
+                     <description>Baud Rate Bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C1</name>
+               <description>Control Register 1</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PT</name>
+                     <description>Parity Type</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Even parity</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Odd parity</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PE</name>
+                     <description>Parity Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ILT</name>
+                     <description>Idle Line Type Select\n
+Determines if idle character bit count starts after start bit or stop bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>After start bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>After stop bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE</name>
+                     <description>Receiver Wakeup Method Select</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle-line wakeup</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Address-mark wakeup</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>M</name>
+                     <description>9-Bit or 8-Bit Mode Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>8-bit\t- Start + 8 data bits + stop</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>9-bit\t- Start + 9 data bits + stop</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSRC</name>
+                     <description>Receiver Source Select\nSelect between loop-back and single-wire mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Internal loop back mode\t- The receiver input is internally connected to transmitter output</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Single-wire mode\t- The receiver input is connected to the transmit pin input signal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UARTSWAI</name>
+                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Enable in Wait mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Freeze in Wait mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOOPS</name>
+                     <description>Loop Mode Select\n
+Controls loop mode where transmitter output is internally connected to receiver input. [See also RSRC]</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Loop mode\t where output internally connected to input</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C2</name>
+               <description>Control Register 2</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SBK</name>
+                     <description>Send Break</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Queue break character</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWU</name>
+                     <description>Receiver Wakeup Control\n
+Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n 
+Normally, hardware wakes the receiver by automatically clearing RWU</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wakeup function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RE</name>
+                     <description>Receiver Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RE" > <name>TE</name> <description>Transmitter Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
+		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
+		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
+		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>S1</name>
+               <description>Status Register 1</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetValue>0xC0</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PF</name>
+                     <description>Parity Error Flag\n
+PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+To clear PF, read S1 with PF set and then read D</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PF" > <name>FE</name> <description>Framing Error Flag\n
+FE is set when a logic 0 is accepted as the stop bit.\n
+To clear FE, read S1 with FE set and then read D</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>NF</name> <description>Noise Flag\n
+NF is set when the UART detects noise on the receiver input.\n
+To clear NF, read S1 and then read D</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>OR</name> <description>Receiver Overrun Flag\n
+OR is set when software fails to prevent the receive data register from overflowing with data.\n
+To clear OR, read S1 when OR is set and then read D</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>IDLE</name> <description>Idle Line Flag\n
+After the IDLE flag is cleared, a frame must be received or a LIN break character must set the S2[LBKDIF] flag before an idle
+condition can set the IDLE flag.\n
+To clear IDLE, read S1 with IDLE set and then read D</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>RDRF</name> <description>Receive Data Register Full Flag\n
+RDRF is set when the number of datawords in the receive buffer is equal to or more than the number indicated by RWFIFO[RXWATER].\n
+To clear RDRF, read S1 when RDRF is set and then read D</description> <bitOffset>5</bitOffset> </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transmit Complete Flag\n
+Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
+Cleared by reading S1 with TC set and then doing one of the following:\n
+- Write to the data register to transmit new data\n
+- Queue a preamble by changing TE from 0 to 1\n
+- Queue a break character by writing 1 to C2.SBK</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Transmit Data Register Empty Flag\n
+Set when the number of words in the transmit buffer is &lt;= TWFIFO[TXWATER]\n
+To clear TDRE, read S1 when TDRE is set and then write to the data register</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tx FIFO level &gt; TXWATER</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO level &lt;= TXWATERd</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>S2</name>
+               <description>Status Register 2</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAF</name>
+                     <description>Receiver Active Flag\n
+RAF is set when the UART receiver detects a logic 0 during the RT1 time period of the start bit search.\n
+RAF is cleared when the receiver detects an idle character</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receiver idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receiver active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBKDE</name>
+                     <description>LIN Break Detection Enable\n
+Selects a longer break character detection length.\n
+While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Short Break detection\t- Break length of 10 bit times (C1[M] = 0), 11 (C1[M] = 1 and C4[M10] = 0), or 12 (C1[M] = 1, C4[M10] = 1, and S1[PE] = 1)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Long Break detection\t- Break length of 11 bits times (if C1[M] = 0 or 12 bits time (if C1[M] = 1)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BRK13</name>
+                     <description>Break Transmit Character Length\n
+Determines whether the transmit break character is 10, 11, or 12 bits long, or 13 or 14 bits long</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Short</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Long</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RWUID</name>
+                     <description>Receive Wakeup Idle Detect\n
+When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
+receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle detect doesn&apos;t set S1.IDLE</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle detect sets S1.IDLE</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXINV</name>
+                     <description>Receive Data Inversion\n
+Setting this field reverses the polarity of the received data input</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RxD not inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RxD inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSBF</name>
+                     <description>Most Significant Bit First\n
+Setting this field reverses the order of the bits that are transmitted and received on the wire</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LSB first</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MSB first</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXEDGIF</name>
+                     <description>RxD Pin Active Edge Interrupt Flag\n
+RXEDGIF is set when an active edge occurs on the RxD pin.\n
+The active edge is falling if RXINV = 0, and rising if RXINV=1.\n
+RXEDGIF is cleared by writing a 1 to it</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBKDIF</name>
+                     <description>LIN Break Detect Interrupt Flag\n
+LBKDIF is set when LBKDE is set and a LIN break character is detected on the receiver input.\n
+LBKDIF is cleared by writing a 1 to it</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C3</name>
+               <description>Control Register 3</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PEIE</name>
+                     <description>Parity Error Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PEIE" > <name>FEIE</name> <description>Framing Error Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PEIE" > <name>NEIE</name> <description>Noise Error Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PEIE" > <name>ORIE</name> <description>Overrun Error Interrupt Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>TXINV</name>
+                     <description>Transmit Data Inversion</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TxD not inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TxD inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXDIR</name>
+                     <description>Transmitter Pin Direction in Single-Wire mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TxD pin is input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TxD pin is output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T8</name>
+                     <description>Transmit Bit 8</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>R8</name>
+                     <description>Received Bit 8</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>D</name>
+               <description>Data Register\n
+Reads return the contents of the read-only receive data buffer and \n
+writes go to the write-only transmit data buffer. \n
+Reads and writes of this register are also involved in the automatic flag clearing mechanisms for the UART status flags</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RT</name>
+                     <description>Read receive data or write transmit data</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>1,2</dimIndex>
+               <name>MA%s</name>
+               <description>Match Address Registers %s</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MA</name>
+                     <description>Match Address</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C4</name>
+               <description>Control Register 4</description>
+               <addressOffset>0xA</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BRFA</name>
+                     <description>Baud Rate Fine Adjust\n
+This bit field is used to add more timing resolution to the average baud frequency, in increments of 1/32</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>M10</name>
+                     <description>10-bit Mode select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>8 or 9-bit chars</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>10-bit chars</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAEN2</name>
+                     <description>Match Address Mode Enable 2</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All data received is transferred to the data buffer if MAEN1 is cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All data received with the most significant bit cleared, is discarded. 
+All data received with the most significant bit set, is compared with contents of MA2 register. 
+If no match occurs, the data is discarded. 
+If match occurs, data is transferred to the data buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAEN1</name>
+                     <description>Match Address Mode Enable 1</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All data received is transferred to the data buffer if MAEN2 is cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All data received with the most significant bit cleared, is discarded. 
+All data received with the most significant bit set, is compared with contents of MA1 register. 
+If no match occurs, the data is discarded. 
+If match occurs, data is transferred to the data buffer</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C5</name>
+               <description>Control Register 5</description>
+               <addressOffset>0xB</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RDMAS</name>
+                     <description>Receiver Full Interrupt/DMA Select\n
+Selects between DMA and interrupt requests when C2[RIE] and S1[RDRF] flags are set</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RDMAS" > <name>TDMAS</name> <description>Transmitter Interrupt/DMA Select\n
+Selects between DMA and interrupt requests when C2[TIE] and S1[TDRE] flags are set</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ED</name>
+               <description>Extended Data Register\n
+This register contains additional information flags that are stored with a received dataword</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PARITYE</name>
+                     <description>Parity Error\n
+Indicates if the current received dataword contained in D and C3[R8] was received with a parity error</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PARITYE" > <name>NOISY</name> <description>Noise Error\n
+The current received dataword contained in D and C3[R8] was received with noise</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODEM</name>
+               <description>Modem Register</description>
+               <addressOffset>0xD</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TXCTSE</name>
+                     <description>Transmitter clear-to-send enable\n
+If enabled, the transmitter checks the state of CTS each time it is ready to send a character. \n
+If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains in the mark state and transmission is delayed until CTS is asserted.\n 
+Changes in CTS as a character is being sent do not affect its transmission</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS ignored</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CTS controls transmission</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSE</name>
+                     <description>Transmitter request-to-send enable\n
+If enabled, when a character is placed into an empty transmitter data buffer(FIFO), RTS asserts one bit time before the start bit is transmitted. \n
+RTS deasserts one bit time after all characters in the transmitter data buffer(FIFO) and shift register are completely sent, including the last stop bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RTS unaffected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTS controlled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSPOL</name>
+                     <description>Transmitter request-to-send polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXRTSE</name>
+                     <description>Receiver request-to-send enable\n
+If enabled RTS is deasserted if the number of characters in the receiver data register (FIFO) is equal to or greater than RWFIFO[RXWATER].\n
+RTS is asserted when the number of characters in the receiver data register (FIFO) is less than RWFIFO[RXWATER]</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RTS unaffectd</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTS controlled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IR</name>
+               <description>Infrared Register</description>
+               <addressOffset>0xE</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TNP</name>
+                     <description>Transmitter narrow pulse</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>3/16</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>1/16</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>1/32</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>1/4</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IREN</name>
+                     <description>Infrared enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IR disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>IR enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PFIFO</name>
+               <description>FIFO Parameters</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXFIFOSIZE</name>
+                     <description>Receive FIFO Depth</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>1 dataword</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>4 datawords</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>8 datawords</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>16 datawords</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>32 datawords</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>64 datawords</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>128 datawords</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXFE</name>
+                     <description>Receive FIFO Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXFIFOSIZE" > <name>TXFIFOSIZE</name> <description>Transmit FIFO Buffer Depth</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RXFE" > <name>TXFE</name> <description>Transmit FIFO Enable</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFIFO</name>
+               <description>FIFO Control Register</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXUFE</name>
+                     <description>Receive FIFO Underflow Interrupt Enable\n
+If this bit is set, the RXUF flag generates an interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXUFE" > <name>TXOFE</name> <description>Transmit FIFO Overflow Interrupt Enable\n
+If this bit is set, the TXOF flag generates an interrupt</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="RXUFE" > <name>RXOFE</name> <description>Receive FIFO Overflow Interrupt Enable\n
+If this bit is set, the RXOF flag generates an interrupt</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>RXFLUSH</name>
+                     <description>Receive FIFO/Buffer Flush\n
+Writing to this field causes all data that is stored in the receive FIFO/buffer to be flushed.\n
+This does not affect data that is in the receive shift register</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to flush</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXFLUSH" > <name>TXFLUSH</name> <description>Transmit FIFO/Buffer Flush\n
+Writing to this field causes all data that is stored in the transmit FIFO/buffer to be flushed.\n
+This does not affect data that is in the transmit shift register</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFIFO</name>
+               <description>FIFO Status Register</description>
+               <addressOffset>0x12</addressOffset>
+               <size>8</size>
+               <resetValue>0xC0</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXUF</name>
+                     <description>Receiver Buffer Underflow Flag\n
+Indicates that more data has been read from the receive buffer than was present</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXUF" > <name>TXOF</name> <description>Transmitter Buffer Overflow Flag\n
+Indicates that more data has been written to the transmit buffer than it can hold</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="RXUF" > <name>RXOF</name> <description>Receiver Buffer Overflow Flag\n
+Indicates that more data has been written to the receive buffer than it can hold</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>RXEMPT</name>
+                     <description>Receive Buffer/FIFO Empty</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Buffer not empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Buffer empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXEMPT" > <name>TXEMPT</name> <description>Transmit Buffer/FIFO Empty</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>TWFIFO</name>
+               <description>FIFO Transmit Watermark</description>
+               <addressOffset>0x13</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TXWATER</name>
+                     <description>Transmit Watermark</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCFIFO</name>
+               <description>FIFO Transmit Count</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TXCOUNT</name>
+                     <description>Transmit Counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RWFIFO</name>
+               <description>FIFO Receive Watermark</description>
+               <addressOffset>0x15</addressOffset>
+               <size>8</size>
+               <resetValue>0x1</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXWATER</name>
+                     <description>Receive Watermark</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RCFIFO</name>
+               <description>FIFO Receive Count</description>
+               <addressOffset>0x16</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXCOUNT</name>
+                     <description>Receive Counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

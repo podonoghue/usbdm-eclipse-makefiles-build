@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "FTM2_6CH_MKE" ?>
@@ -783,61 +786,10 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DTEN0</name>
-                     <description>Deadtime Enable for Channels 0 &amp; 1\n
-Deadtime insertion</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SYNCEN0</name>
-                     <description>PWM Synchronization Enable for Channels 0 &amp; 1</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FAULTEN0</name>
-                     <description>Fault Control Enable for Channels 0 &amp; 1</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="DECAPEN0" > <name>DTEN0</name> <description>Deadtime Enable for Channels 0 &amp; 1\n
+Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DECAPEN0" > <name>SYNCEN0</name> <description>PWM Synchronization Enable for Channels 0 &amp; 1</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DECAPEN0" > <name>FAULTEN0</name> <description>Fault Control Enable for Channels 0 &amp; 1</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE1</name> <description>Combine Channels 2 &amp; 3</description> <bitOffset>8</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP1</name> <description>Complement for Channels 2 &amp; 3</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN1</name> <description>Dual Edge Capture Mode Enable for Channels 2 &amp; 3</description> <bitOffset>10</bitOffset> </field>

@@ -1,11 +1,20 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
+      MK22F25612
+      MK22F51212
       MKV10Z7
       MKV11Z7
       MKV30F12810
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
 -->
       <peripheral>
          <?sourceFile "CMP0_MKV" ?>
@@ -63,48 +72,49 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>FILTER_CNT</name>
-                     <description>Filter Sample Count</description>
+                     <description>Filter Sample Count\n
+Controls the number of consecutive samples required to agree</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Filter is disabled. If SE = 1, then COUT is a logic 0. This is not a legal state, and is not recommended. If SE = 0, COUT = COUTA</description>
+                           <description>Filter is disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>One sample must agree. The comparator output is simply sampled</description>
+                           <description>1 sample</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>2 consecutive samples must agree</description>
+                           <description>2 samples</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>3 consecutive samples must agree</description>
+                           <description>3 samples</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>4 consecutive samples must agree</description>
+                           <description>4 samples</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>5 consecutive samples must agree</description>
+                           <description>5 samples</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>6 consecutive samples must agree</description>
+                           <description>6 samples</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>7 consecutive samples must agree</description>
+                           <description>7 samples</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -126,84 +136,85 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Analog Comparator is disabled</description>
+                           <description>Comparator disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Analog Comparator is enabled</description>
+                           <description>Comparator enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OPE</name>
-                     <description>Comparator Output Pin Enable</description>
+                     <description>Comparator Output Pin Enable\n
+Controls availability of the comparator output on the associated CMPO output pin</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The comparator output (CMPO) is not available on the associated CMPO output pin</description>
+                           <description>Not available on pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The comparator output (CMPO) is available on the associated CMPO output pin</description>
+                           <description>Available on pin</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>COS</name>
-                     <description>Comparator Output Select</description>
+                     <description>Comparator Output Select\nSelects direct or filtered output for CMPO</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Set CMPO to equal COUT (filtered comparator output)</description>
+                           <description>Filtered output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Set CMPO to equal COUTA (unfiltered comparator output)</description>
+                           <description>Unfiltered output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INV</name>
-                     <description>Comparator INVERT</description>
+                     <description>Comparator output inversion</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Does not invert the comparator output</description>
+                           <description>Normal output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Inverts the comparator output</description>
+                           <description>Inverted output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PMODE</name>
-                     <description>Power Mode Select</description>
+                     <description>Power Mode Select\Controls comparison speed and power consumption</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low Speed (LS) comparison mode selected. In this mode, CMP has slower output propagation delay and lower current consumption</description>
+                           <description>Low speed and power</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>High Speed (HS) comparison mode selected. In this mode, CMP has faster output propagation delay and higher current consumption</description>
+                           <description>High speed and power</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -234,34 +245,17 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Windowing mode is not selected</description>
+                           <description>Not selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Windowing mode is selected</description>
+                           <description>Selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SE</name>
-                     <description>Sample Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Sampling mode is not selected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Sampling mode is selected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="WE" > <name>SE</name> <description>Sample Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -294,36 +288,36 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CFF</name>
-                     <description>Analog Comparator Flag Falling</description>
+                     <description>Analog Comparator Flag Falling\nDetects falling edges on COUT</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Falling-edge on COUT has not been detected</description>
+                           <description>No falling-edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Falling-edge on COUT has occurred</description>
+                           <description>Falling-edge occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CFR</name>
-                     <description>Analog Comparator Flag Rising</description>
+                     <description>Analog Comparator Flag Rising\nDetects rising edges on COUT</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Rising-edge on COUT has not been detected</description>
+                           <description>No rising-edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Rising-edge on COUT has occurred</description>
+                           <description>Rising-edge occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -336,34 +330,17 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt is disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt is enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IER</name>
-                     <description>Comparator Interrupt Enable Rising</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IEF" > <name>IER</name> <description>Comparator Interrupt Enable Rising</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>DMAEN</name>
                      <description>DMA Enable Control</description>
@@ -372,12 +349,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA is disabled</description>
+                           <description>DMA disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA is enabled</description>
+                           <description>DMA enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -405,12 +382,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Vin1 is selected as resistor ladder network supply reference Vin</description>
+                           <description>Vin1 is reference Vin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Vin2 is selected as resistor ladder network supply reference Vin</description>
+                           <description>Vin2 is reference Vin</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -490,54 +467,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PSEL</name>
-                     <description>Plus Input Mux Control</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b000</name>
-                           <description>IN0</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b001</name>
-                           <description>IN1</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b010</name>
-                           <description>IN2</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b011</name>
-                           <description>IN3</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100</name>
-                           <description>IN4</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b101</name>
-                           <description>IN5</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b110</name>
-                           <description>IN6</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b111</name>
-                           <description>IN7</description>
-                           <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="MSEL" > <name>PSEL</name> <description>Plus Input Mux Control</description> <bitOffset>3</bitOffset> </field>
                </fields>
             </register>
          </registers>

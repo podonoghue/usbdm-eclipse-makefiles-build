@@ -2,68 +2,68 @@
 <!DOCTYPE device
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MK51DZ10_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MK_PGA.svd.xml">
-<!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_6CH.svd.xml">
-<!ENTITY AXBS         SYSTEM "peripherals/AXBS_6M_5S.svd.xml">
-<!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKDZ10.svd.xml">
+<!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_PGA_A.svd.xml">
+<!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_5M.svd.xml">
+<!ENTITY AXBS         SYSTEM "peripherals/AXBS_5M01245_5S_E.svd.xml">
+<!ENTITY CMP0         SYSTEM "peripherals/CMP0_SMELB_4.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_0.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
-<!ENTITY DAC0         SYSTEM "peripherals/DAC0_MK_0x400CC000.svd.xml">
-<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MK_16CH.svd.xml">
-<!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_16CH.svd.xml">
+<!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_0x400CC000.svd.xml">
+<!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH.svd.xml">
+<!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_16CH.svd.xml">
 <!ENTITY DWT          SYSTEM "peripherals/DWT_CM4.svd.xml">
 <!ENTITY ETB          SYSTEM "peripherals/ETB_0.svd.xml">
 <!ENTITY ETF          SYSTEM "peripherals/ETF_0.svd.xml">
 <!ENTITY ETM          SYSTEM "peripherals/ETM_0.svd.xml">
-<!ENTITY EWM          SYSTEM "peripherals/EWM_MKZ.svd.xml">
+<!ENTITY EWM          SYSTEM "peripherals/EWM_4.svd.xml">
 <!ENTITY FB           SYSTEM "peripherals/FB_0.svd.xml">
-<!ENTITY FMC          SYSTEM "peripherals/FMC_0.svd.xml">
+<!ENTITY FMC          SYSTEM "peripherals/FMC_MK10D7.svd.xml">
 <!ENTITY FPB          SYSTEM "peripherals/FPB.svd.xml">
-<!ENTITY FTFL         SYSTEM "peripherals/FTFL.svd.xml">
+<!ENTITY FTFL         SYSTEM "peripherals/FTFL_MK50D10.svd.xml">
 <!ENTITY FTM0         SYSTEM "peripherals/FTM0_8CH.svd.xml">
 <!ENTITY FTM1         SYSTEM "peripherals/FTM1_2CH.svd.xml">
-<!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_0.svd.xml">
-<!ENTITY I2C0         SYSTEM "peripherals/I2C0_MK.svd.xml">
+<!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_0x400FF000.svd.xml">
+<!ENTITY I2C0         SYSTEM "peripherals/I2C0_MK10D5.svd.xml">
 <!ENTITY I2S0         SYSTEM "peripherals/I2S0_MKDZ.svd.xml">
 <!ENTITY ITM          SYSTEM "peripherals/ITM_0.svd.xml">
-<!ENTITY LCD          SYSTEM "peripherals/LCD_1.svd.xml">
-<!ENTITY LLWU         SYSTEM "peripherals/LLWU_MKDZ.svd.xml">
+<!ENTITY LCD          SYSTEM "peripherals/LCD_MK.svd.xml">
+<!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE4_MKDZ.svd.xml">
 <!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0.svd.xml">
 <!ENTITY MC           SYSTEM "peripherals/MC_0.svd.xml">
 <!ENTITY MCG          SYSTEM "peripherals/MCG_MKDZ.svd.xml">
-<!ENTITY MCM          SYSTEM "peripherals/MCM_2.svd.xml">
-<!ENTITY MPU          SYSTEM "peripherals/MPU_0.svd.xml">
-<!ENTITY NV           SYSTEM "peripherals/NV_FTFE.svd.xml">
-<!ENTITY NVIC         SYSTEM "peripherals/NVIC_MKDZ.svd.xml">
-<!ENTITY OPAMP0       SYSTEM "peripherals/OPAMP0_MKD10.svd.xml">
-<!ENTITY OSC0         SYSTEM "peripherals/OSC_0.svd.xml">
-<!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_2TRIG_1PO.svd.xml">
+<!ENTITY MCM          SYSTEM "peripherals/MCM_MK10DZ10.svd.xml">
+<!ENTITY MPU          SYSTEM "peripherals/MPU_MK10D10_12R.svd.xml">
+<!ENTITY NV           SYSTEM "peripherals/NV_MK50.svd.xml">
+<!ENTITY NVIC         SYSTEM "peripherals/NVIC_CM4.svd.xml">
+<!ENTITY OPAMP0       SYSTEM "peripherals/OPAMP0_INV.svd.xml">
+<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK_X.svd.xml">
+<!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_2TRIG_2DAC_1PO.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH.svd.xml">
-<!ENTITY PMC          SYSTEM "peripherals/PMC_3.svd.xml">
+<!ENTITY PMC          SYSTEM "peripherals/PMC_MK10DZ10.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA_FILT.svd.xml">
 <!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_0.svd.xml">
 <!ENTITY RFVBAT       SYSTEM "peripherals/RFVBAT_0.svd.xml">
 <!ENTITY RTC          SYSTEM "peripherals/RTC_WAR_RAR.svd.xml">
-<!ENTITY SCB          SYSTEM "peripherals/SCB_MK.svd.xml">
-<!ENTITY SDHC         SYSTEM "peripherals/SDHC_1.svd.xml">
+<!ENTITY SCB          SYSTEM "peripherals/SCB_CM4.svd.xml">
+<!ENTITY SDHC         SYSTEM "peripherals/SDHC_MK10DZ10.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MK51DZ10.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK.svd.xml">
-<!ENTITY SYST         SYSTEM "peripherals/SysTick_0.svd.xml">
+<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK10D10.svd.xml">
+<!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
 <!ENTITY TPIU         SYSTEM "peripherals/TPIU_0.svd.xml">
 <!ENTITY TRIAMP0      SYSTEM "peripherals/TRIAMP0_0.svd.xml">
-<!ENTITY TSI0         SYSTEM "peripherals/TSI0_MKDZ.svd.xml">
-<!ENTITY UART0        SYSTEM "peripherals/UART0_MK_C7816.svd.xml">
-<!ENTITY UART1        SYSTEM "peripherals/UART1_0.svd.xml">
-<!ENTITY USB0         SYSTEM "peripherals/USB0_MKDZ.svd.xml">
-<!ENTITY USBDCD       SYSTEM "peripherals/USBDCD_V1.1.svd.xml">
-<!ENTITY VREF         SYSTEM "peripherals/VREF_MK_2.svd.xml">
+<!ENTITY TSI0         SYSTEM "peripherals/TSI0_MK10DZ10.svd.xml">
+<!ENTITY UART0        SYSTEM "peripherals/UART0_MK10D7_C7816.svd.xml">
+<!ENTITY UART1        SYSTEM "peripherals/UART1_MK10D5.svd.xml">
+<!ENTITY USB0         SYSTEM "peripherals/USB0_OTG_A.svd.xml">
+<!ENTITY USBDCD       SYSTEM "peripherals/USBDCD_V1_1.svd.xml">
+<!ENTITY VREF         SYSTEM "peripherals/VREF_A.svd.xml">
 <!ENTITY WDOG         SYSTEM "peripherals/WDOG_MKDZ.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MK51DZ10</name>
-   <version>0.0</version>
-   <description>Freescale Kinetis MK51DN256Z</description>
+   <version>1.6</version>
+   <description>Freescale Kinetis MK51DZ10</description>
    <cpu>
       <name>CM4</name>
       <revision>r1p0</revision>
@@ -91,7 +91,7 @@
 &DAC0;
 <peripheral derivedFrom="DAC0"><name>DAC1</name><prependToName>DAC1</prependToName><baseAddress>0x400CD000</baseAddress></peripheral>
 &DMA0;
-&DMAMUX;
+&DMAMUX0;
 &DWT;
 &ETB;
 &ETF;

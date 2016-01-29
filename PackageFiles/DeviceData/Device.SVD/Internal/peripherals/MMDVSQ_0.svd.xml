@@ -8,7 +8,7 @@ Devices using this peripheral:
          <name>MMDVSQ</name>
          <description>Memory-Mapped Divide and Square Root</description>
          <groupName>MMDVSQ</groupName>
-         <prependToName>MMDVSQ_</prependToName>
+         <prependToName>MMDVSQ</prependToName>
          <headerStructName>MMDVSQ</headerStructName>
          <baseAddress>0xF0004000</baseAddress>
          <size>32</size>
@@ -61,12 +61,12 @@ Devices using this peripheral:
                      <access>write-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No operation initiated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>If CSR[DFS] = 1, then initiate a divide calculation, else ignore</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -79,12 +79,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Perform a signed divide</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Perform an unsigned divide</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -97,12 +97,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Return the quotient in the RES for the divide calculation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Return the remainder in the RES for the divide calculation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -115,12 +115,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Reads of the RES register return the register contents</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>If CSR[DZ] = 1, an attempted read of RES register is error terminated to signal a divide-by-zero, else the register contents are returned</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -134,12 +134,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The last divide operation had a non-zero divisor, that is, DSOR != 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The last divide operation had a zero divisor, that is, DSOR = 0</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -152,12 +152,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>A divide operation is initiated by a write to the DSOR register</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A divide operation is initiated by a write to the CSR register with CSR[SRT] = 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -171,12 +171,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Current or last MMDVSQ operation was not a square root</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Current or last MMDVSQ operation was a square root</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -190,12 +190,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Current or last MMDVSQ operation was not a divide</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Current or last MMDVSQ operation was a divide</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -209,12 +209,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>MMDVSQ is idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>MMDVSQ is busy performing a divide or square root calculation</description>
                            <value>0b1</value>
                         </enumeratedValue>

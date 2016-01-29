@@ -39,11 +39,11 @@ Devices using this peripheral:
       MK60DZ10
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
       MK63F12
       MK64F12
-      MK70F12
+      MK65F18
+      MK66F18
       MK70F15
 -->
       <peripheral>
@@ -174,60 +174,9 @@ Bit [3] = stimulus port [31:24]</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TSENA</name>
-                     <description>Enables Local timestamp generation</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SYNCENA</name>
-                     <description>Enables Synchronization packet transmission for a synchronous TPIU</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TXENA</name>
-                     <description>Enables forwarding of hardware event packet from the DWT unit to the TPIU</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ITMENA" > <name>TSENA</name> <description>Enables Local timestamp generation</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="ITMENA" > <name>SYNCENA</name> <description>Enables Synchronization packet transmission for a synchronous TPIU</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="ITMENA" > <name>TXENA</name> <description>Enables forwarding of hardware event packet from the DWT unit to the TPIU</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>SWOENA</name>
                      <description>Enables asynchronous clocking of the timestamp counter</description>

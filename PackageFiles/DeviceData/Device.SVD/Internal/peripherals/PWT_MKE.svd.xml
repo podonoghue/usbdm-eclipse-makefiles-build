@@ -1,8 +1,10 @@
 <!--
 Devices using this peripheral: 
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
 -->
       <peripheral>
          <?sourceFile "PWT_MKE" ?>
@@ -312,8 +314,21 @@ Captured positive pulse width value. It is suggested to use half-word (16-bit) o
                <name>R2</name>
                <description>Pulse Width Timer Register 2</description>
                <addressOffset>0x4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>NPW</name>
+                     <description>Negative Pulse Width.\tIt is suggested to use half-word (16-bit) or word (32-bit) to read out this value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWTC</name>
+                     <description>PWT Counter.\tIt is suggested to use half-word (16-bit) or word (32-bit) to read out this value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
          </registers>
       </peripheral>

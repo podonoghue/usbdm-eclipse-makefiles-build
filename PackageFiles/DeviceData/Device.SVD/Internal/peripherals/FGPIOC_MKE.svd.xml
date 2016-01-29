@@ -1,7 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKE04Z4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "FGPIOC_MKE" ?>
@@ -299,7 +301,7 @@ Disables a pin as General Purpose Input. Corresponding Pin Data Input Register b
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Input reads as 0</description>
                            <value>0b1</value>
                         </enumeratedValue>

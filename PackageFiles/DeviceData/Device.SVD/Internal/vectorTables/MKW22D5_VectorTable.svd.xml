@@ -1,0 +1,304 @@
+<!--
+Devices using this vector table: 
+   MKW22D5
+   MKW24D5
+-->
+      <interrupts>
+         <name>MKW22D5_VectorTable</name>
+         <interrupt>
+            <name>DMA0</name>
+            <description>Direct memory access controller</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>Direct memory access controller</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>Direct memory access controller</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>Direct memory access controller</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA4</name>
+            <description>Direct memory access controller</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA5</name>
+            <description>Direct memory access controller</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA6</name>
+            <description>Direct memory access controller</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA7</name>
+            <description>Direct memory access controller</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA8</name>
+            <description>Direct memory access controller</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA9</name>
+            <description>Direct memory access controller</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA10</name>
+            <description>Direct memory access controller</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA11</name>
+            <description>Direct memory access controller</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA12</name>
+            <description>Direct memory access controller</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA13</name>
+            <description>Direct memory access controller</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA14</name>
+            <description>Direct memory access controller</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA15</name>
+            <description>Direct memory access controller</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>Direct memory access controller</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>MCM</name>
+            <description>Miscellaneous Control Module</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTF_Command</name>
+            <description>Flash Memory Interface</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTF_ReadCollision</name>
+            <description>Flash Memory Interface</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>LLWU</name>
+            <description>Low Leakage Wakeup</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>External Watchdog Monitor</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>RNG</name>
+            <description>Random Number Generator</description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C1</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>I2S0_Tx</name>
+            <description>Synchronous Serial Interface</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>I2S0_Rx</name>
+            <description>Synchronous Serial Interface</description>
+            <value>29</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>31</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>32</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>33</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>34</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_RX_TX</name>
+            <description>Serial Communication Interface</description>
+            <value>35</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2_ERR</name>
+            <description>Serial Communication Interface</description>
+            <value>36</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analogue to Digital Converter</description>
+            <value>39</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP0</name>
+            <description>High-Speed Comparator</description>
+            <value>40</value>
+         </interrupt>
+         <interrupt>
+            <name>CMP1</name>
+            <description>High-Speed Comparator</description>
+            <value>41</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>FlexTimer Module</description>
+            <value>42</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FlexTimer Module</description>
+            <value>43</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>FlexTimer Module</description>
+            <value>44</value>
+         </interrupt>
+         <interrupt>
+            <name>CMT</name>
+            <description>Carrier Modulator Transmitter</description>
+            <value>45</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC_Alarm</name>
+            <description>Real Time Clock</description>
+            <value>46</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC_Seconds</name>
+            <description>Real Time Clock</description>
+            <value>47</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>48</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT1</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>49</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT2</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>50</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT3</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>51</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>Programmable Delay Block</description>
+            <value>52</value>
+         </interrupt>
+         <interrupt>
+            <name>USB0</name>
+            <description>Universal Serial Bus</description>
+            <value>53</value>
+         </interrupt>
+         <interrupt>
+            <name>USBDCD</name>
+            <description>USB Device Charger Detection</description>
+            <value>54</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Multipurpose Clock Generator</description>
+            <value>57</value>
+         </interrupt>
+         <interrupt>
+            <name>LPTMR0</name>
+            <description>Low Power Timer</description>
+            <value>58</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>General Purpose Input/Output</description>
+            <value>59</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>General Purpose Input/Output</description>
+            <value>60</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTC</name>
+            <description>General Purpose Input/Output</description>
+            <value>61</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTD</name>
+            <description>General Purpose Input/Output</description>
+            <value>62</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTE</name>
+            <description>General Purpose Input/Output</description>
+            <value>63</value>
+         </interrupt>
+      </interrupts>
+

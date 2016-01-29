@@ -163,24 +163,7 @@ Defines inactive state of the CLK</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SPIE</name>
-                     <description>Interrupt enable: for SPRF and MODF</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="SPTIE" > <name>SPIE</name> <description>Interrupt enable: for SPRF and MODF</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

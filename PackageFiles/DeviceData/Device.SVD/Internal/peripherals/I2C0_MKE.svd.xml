@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "I2C0_MKE" ?>
@@ -199,24 +202,7 @@ Controls if an acknowledge signal is sent to the bus on the following receiving 
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IICEN</name>
-                     <description>Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IICIE" > <name>IICEN</name> <description>Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -342,24 +328,7 @@ This bit is set by any of the following conditions:\n
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IAAS</name>
-                     <description>Addressed As A Slave</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not addressed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Addressed as a slave</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RAM" > <name>IAAS</name> <description>Addressed As A Slave</description> <bitOffset>6</bitOffset> </field>
                   <field>
                      <name>TCF</name>
                      <description>Transfer Complete Flag</description>
@@ -670,26 +639,9 @@ This bit is cleared automatically</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SLTF</name>
-                     <description>SCL Low Timeout Flag\n
+                  <field derivedFrom="SHTF1" > <name>SLTF</name> <description>SCL Low Timeout Flag\n
 This bit is set when the SLT register (consisting of the SLTH and SLTL registers) is loaded with a non-zero value (LoValue) and an SCL low timeout occurs
-Software clears this bit by writing a logic 1 to it</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No timeout occurs</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Timeout occurs</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+Software clears this bit by writing a logic 1 to it</description> <bitOffset>3</bitOffset> <access>read-write</access> </field>
                   <field>
                      <name>TCKSEL</name>
                      <description>Timeout Counter Clock Select\n
@@ -793,7 +745,7 @@ This field is used on the device default address or other related addresses</des
                <fields>
                   <field>
                      <name>SSLT</name>
-                     <description>Most significant byte of SCL low timeout value that determines the timeout period of SCL low</description>
+                     <description>MSB of SCL low timeout value</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -807,7 +759,7 @@ This field is used on the device default address or other related addresses</des
                <fields>
                   <field>
                      <name>SSLT</name>
-                     <description>Least significant byte of SCL low timeout value that determines the timeout period of SCL low</description>
+                     <description>LSB of SCL low timeout value</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

@@ -4,10 +4,10 @@ Devices using this peripheral:
       MK20F12
       MK60F12
       MK60F15
-      MK61F12
       MK61F15
-      MK70F12
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "NFC_0" ?>
@@ -334,24 +334,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ACT1</name>
-                     <description>DMA channel 1 status</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Inactive</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Active, and transfers to memory when triggered</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ACT2" > <name>ACT1</name> <description>DMA channel 1 status</description> <bitOffset>1</bitOffset> </field>
                   <field>
                      <name>OFFSET2</name>
                      <description>256-byte offset for DMA channel 2. DMA channel 2 transfer starts at this offset count x 256 bytes. For example, if OFFSET2 = 0x2, DMA channel 2 transfer starts at 0x200</description>

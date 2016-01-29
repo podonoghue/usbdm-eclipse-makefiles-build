@@ -1,0 +1,663 @@
+<!--
+Devices using this peripheral: 
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10F12
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20F12
+      MK30D7
+      MK30D10
+      MK40D7
+      MK40D10
+      MK50D7
+      MK50D10
+      MK51D7
+      MK51D10
+      MK52D10
+      MK53D10
+      MK60D10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK70F15
+      MK70F15WS
+-->
+      <peripheral>
+         <?sourceFile "TSI0_MK10D10" ?>
+         <name>TSI0</name>
+         <description>Touch Sensing Input</description>
+         <groupName>TSI</groupName>
+         <prependToName>TSI0</prependToName>
+         <headerStructName>TSI</headerStructName>
+         <baseAddress>0x40045000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>GENCS</name>
+               <description>General Control and Status Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>STPE</name>
+                     <description>TSI STOP Enable\n
+Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in low power</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in low power</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STM</name>
+                     <description>Scan Trigger Mode\n
+Selects between software and hardware triggers.\n
+This bit-field can only be changed if the TSI module is disabled (TSIEN bit = 0)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Software trigger scan</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Periodical Scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ESOR</name>
+                     <description>EOS or OOR Interrupt select\n
+Selects between End-of-Scan or Out-of-Range Interrupt</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Out-of-Range</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>End-of-Scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERIE</name>
+                     <description>Error Interrupt Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ERIE" > <name>TSIIE</name> <description>Interrupt Enable</description> <bitOffset>6</bitOffset> </field>
+                  <field>
+                     <name>TSIEN</name>
+                     <description>Module Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SWTS</name>
+                     <description>Software trigger start\n
+Setting this bit starts a scan sequence.\n
+Writing zero to this bit has no effect</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to Trigger</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SCNIP</name>
+                     <description>Scan In Progress status</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No scan active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Scan in progress</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OVRF</name>
+                     <description>Overrun error Flag\n
+This flag is set when a scan trigger occurs while a scan is still in progress.\n
+Writing 1 to this bit will clear the flag to 0</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No overrun</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Overrun occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTERF</name>
+                     <description>External Electrode Error\n
+Indicates that the external electrode appears shorted</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No fault</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Short to VDD/VSS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTRGF</name>
+                     <description>Out of Range Flag\n
+This flag is set when Out of Range is detected.\n
+Write 1 to clear</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Out Of Range not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Out of Range detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOSF</name>
+                     <description>End of Scan Flag\n
+This flag is set when End of Scan is reached.\n
+Write 1 to clear</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>End of scan</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Not end of scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PS</name>
+                     <description>Electrode Oscillator Prescaler</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Divide by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Divide by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Divide by 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Divide by 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Divide by 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Divide by 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Divide by 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Divide by 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NSCN</name>
+                     <description>Consecutive Scan number\n
+Number of Consecutive Scans Per Electrode</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXXX</name>
+                           <description>(N+1) per electrode</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPSCNITV</name>
+                     <description>Low-Power Mode Scan Interval</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>1 ms interval</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>5 ms interval</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>10 ms interval</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>15 ms interval</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>20 ms interval</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>30 ms interval</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>40 ms interval</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>50 ms interval</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>75 ms interval</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>100 ms interval</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>125 ms interval</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>150 ms interval</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>200 ms interval</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>300 ms interval</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>400 ms interval</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>500 ms interval</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPCLKS</name>
+                     <description>Low-Power Mode Clock Source</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LPOCLK</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>VLPOSCCLK</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCANC</name>
+               <description>SCAN Control Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>AMPSC</name>
+                     <description>Active Mode Prescaler\n
+Input Clock Source division factor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Divided by 1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Divided by 2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Divided by 4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Divided by 8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Divided by 16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Divided by 32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Divided by 64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Divided by 128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AMCLKS</name>
+                     <description>Active Mode Clock Source</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>LPOSCCLK</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>MCGIRCLK</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>OSCERCLK</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Not valid</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SMOD</name>
+                     <description>Scan Modulus</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000000</name>
+                           <description>Continuous Scan</description>
+                           <value>0b00000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bXXXXXXXX</name>
+                           <description>Scan Period Modulo</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTCHRG</name>
+                     <description>External OSC Charge Current Select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>2*N uA Charge current</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>Ref OSC Charge Current select</description> <bitOffset>24</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PEN</name>
+               <description>Pin Enable Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>PEN0</name>
+                     <description>Pin 0 enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PEN0" > <name>PEN1</name> <description>Pin 1 enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN2</name> <description>Pin 2 enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN3</name> <description>Pin 3 enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN4</name> <description>Pin 4 enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN5</name> <description>Pin 5 enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN6</name> <description>Pin 6 enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN7</name> <description>Pin 7 enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN8</name> <description>Pin 8 enable</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN9</name> <description>Pin 9 enable</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN10</name> <description>Pin 10 enable</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN11</name> <description>Pin 11 enable</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN12</name> <description>Pin 12 enable</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN13</name> <description>Pin 13 enable</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN14</name> <description>Pin 14 enable</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PEN0" > <name>PEN15</name> <description>Pin 15 enable</description> <bitOffset>15</bitOffset> </field>
+                  <field>
+                     <name>LPSP</name>
+                     <description>Low-Power Scan Pin\n
+Selects which input is active in low-power mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXX</name>
+                           <description>Active pin number</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WUCNTR</name>
+               <description>Wake-Up Channel Counter Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>WUCNT</name>
+                     <description>Touch Sensing Wake-Up Channel 16-bit Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,3,5,7,9,11,13,15</dimIndex>
+               <name>CNTR%s</name>
+               <description>Counter Register %s</description>
+               <addressOffset>0x100</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CTN1</name>
+                     <description>Touch Sensing Channel %s-1 16-bit Counter Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTN</name>
+                     <description>Touch Sensing Channel %s 16-bit Counter Value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>THRESHOLD</name>
+               <description>Low Power Channel Threshold Register</description>
+               <addressOffset>0x120</addressOffset>
+               <fields>
+                  <field>
+                     <name>HTHH</name>
+                     <description>High Threshold Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>LTHH</name>
+                     <description>Low Threshold Value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

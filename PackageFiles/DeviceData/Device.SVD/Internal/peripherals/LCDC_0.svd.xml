@@ -1,7 +1,7 @@
 <!--
 Devices using this peripheral: 
-      MK70F12
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "LCDC_0" ?>
@@ -390,60 +390,9 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LPPOL</name>
-                     <description>Line pulse polarity</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Active high</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Active low</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FLMPOL</name>
-                     <description>First line marker polarity</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Active high</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Active low</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PIXPOL</name>
-                     <description>Pixel polarity</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Active high</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Active low</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="OEPOL" > <name>LPPOL</name> <description>Line pulse polarity</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="OEPOL" > <name>FLMPOL</name> <description>First line marker polarity</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="OEPOL" > <name>PIXPOL</name> <description>Pixel polarity</description> <bitOffset>24</bitOffset> </field>
                   <field>
                      <name>BPIX</name>
                      <description>Bits per pixel</description>
@@ -847,96 +796,11 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>EOF_EN</name>
-                     <description>End of frame interrupt enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Mask interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UDR_ERR_EN</name>
-                     <description>Under run error interrupt enable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Mask interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GW_BOF_EN</name>
-                     <description>Graphic window beginning of frame interrupt enable</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Mask interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GW_EOF_EN</name>
-                     <description>Graphic window end of frame interrupt enable</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Mask interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GW_UDR_ERR_EN</name>
-                     <description>Graphic window under run error interrupt enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Mask interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="BOF_EN" > <name>EOF_EN</name> <description>End of frame interrupt enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="BOF_EN" > <name>UDR_ERR_EN</name> <description>Under run error interrupt enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="BOF_EN" > <name>GW_BOF_EN</name> <description>Graphic window beginning of frame interrupt enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="BOF_EN" > <name>GW_EOF_EN</name> <description>Graphic window end of frame interrupt enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="BOF_EN" > <name>GW_UDR_ERR_EN</name> <description>Graphic window under run error interrupt enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -963,78 +827,10 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>EOF</name>
-                     <description>End of frame</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UDR_ERR</name>
-                     <description>Under run error</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GW_BOF</name>
-                     <description>Graphic window beginning of frame</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GW_EOF</name>
-                     <description>Graphic window end of frame</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="BOF" > <name>EOF</name> <description>End of frame</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="BOF" > <name>UDR_ERR</name> <description>Under run error</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="BOF" > <name>GW_BOF</name> <description>Graphic window beginning of frame</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="BOF" > <name>GW_EOF</name> <description>Graphic window end of frame</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>GW_UDR_ERR</name>
                      <description>Graphic window under run error</description>

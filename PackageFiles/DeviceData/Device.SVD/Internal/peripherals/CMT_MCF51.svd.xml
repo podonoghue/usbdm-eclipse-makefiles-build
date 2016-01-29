@@ -197,45 +197,11 @@ Requests to enable a CPU interrupt when EOCF is set if EOCIE is high</descriptio
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BASE</name>
-                     <description>Baseband Operation Enable\n
+                  <field derivedFrom="MCGEN" > <name>BASE</name> <description>Baseband Operation Enable\n
 When set, BASE disables the carrier generator and forces the carrier output high for generation of baseband protocols.\n
 When BASE is cleared, the carrier generator is enabled and the carrier output toggles at the frequency determined by values stored
-in the carrier data</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EXSPC</name>
-                     <description>Extended Space Enable\nEnables the extended space operation</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+in the carrier data</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MCGEN" > <name>EXSPC</name> <description>Extended Space Enable\nEnables the extended space operation</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>CMTDIV</name>
                      <description>Clock Divide Prescaler\n

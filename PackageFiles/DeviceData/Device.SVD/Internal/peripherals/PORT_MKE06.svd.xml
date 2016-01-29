@@ -1,0 +1,434 @@
+<!--
+Devices using this peripheral: 
+      MKE04Z1284
+      MKE06Z4
+      SKEAZ1284
+-->
+      <peripheral>
+         <?sourceFile "PORT_MKE06" ?>
+         <name>PORT</name>
+         <description>Port control</description>
+         <groupName>PORT</groupName>
+         <prependToName>PORT</prependToName>
+         <headerStructName>PORT</headerStructName>
+         <baseAddress>0x40049000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IOFLT0</name>
+               <description>Port Filter Register 0</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xC00000</resetValue>
+               <fields>
+                  <field>
+                     <name>FLTA</name>
+                     <description>Filter Selection for Input from PTA</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>BUSCLK</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>FLTDIV1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>FLTDIV2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FLTDIV3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FLTA" > <name>FLTB</name> <description>Filter Selection for Input from PTB</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTC</name> <description>Filter Selection for Input from PTC</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTD</name> <description>Filter Selection for Input from PTD</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTE</name> <description>Filter Selection for Input from PTE</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTF</name> <description>Filter Selection for Input from PTF</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTG</name> <description>Filter Selection for Input from PTG</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="FLTA" > <name>FLTH</name> <description>Filter Selection for Input from PTH</description> <bitOffset>14</bitOffset> </field>
+                  <field>
+                     <name>FLTRST</name>
+                     <description>Filter Selection for Input from RESET/IRQ</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No filter</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Selects FLTDIV1, and will switch to FLTDIV3 in Stop mode automatically</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Selects FLTDIV2, and will switch to FLTDIV3 in Stop mode automatically</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FLTDIV3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FLTRST" > <name>FLTKBI0</name> <description>Filter Selection for Input from KBI0</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="FLTRST" > <name>FLTKBI1</name> <description>Filter Selection for Input from KBI1</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="FLTRST" > <name>FLTNMI</name> <description>Filter Selection for Input from NMI</description> <bitOffset>22</bitOffset> </field>
+                  <field>
+                     <name>FLTDIV1</name>
+                     <description>Filter Division Set 1</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>BUSCLK/2</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>BUSCLK/4</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>BUSCLK/8</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>BUSCLK/16</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLTDIV2</name>
+                     <description>Filter Division Set 2</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>BUSCLK/32</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>BUSCLK/64</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>BUSCLK/128</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>BUSCLK/256</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>BUSCLK/512</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>BUSCLK/1024</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>BUSCLK/2048</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>BUSCLK/4096</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLTDIV3</name>
+                     <description>Filter Division Set 3</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>LPOCLK</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>LPOCLK/2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>LPOCLK/4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>LPOCLK/8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>LPOCLK/16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>LPOCLK/32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>LPOCLK/64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>LPOCLK/128</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IOFLT1</name>
+               <description>Port Filter Register 1</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>FLTI</name>
+                     <description>Filter Selection for Input from PTI</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>BUSCLK</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>FLTDIV1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>FLTDIV2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FLTDIV3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLTIRQ</name>
+                     <description>Filter Selection for Input from IRQ</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No Filter</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Selects FLTDIV1, (switches to FLTDIV3 in Stop mode)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Selects FLTDIV2, (switches to FLTDIV3 in Stop mode)</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FLTDIV3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLTFTM0</name>
+                     <description>Filter Selection for Input from FTM0 Channels</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No Filter</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>FLTDIV1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>FLTDIV2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>FLTDIV3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FLTFTM0" > <name>FLTFTM1</name> <description>Filter Selection for Input from FTM1 Channels</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="FLTFTM0" > <name>FLTPWT</name> <description>Filter Selection for Input from PWT_IN1/PWT_IN0</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FLTFTM0" > <name>FLTI2C0</name> <description>Filter Selection for Input from SCL0/SDA0</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="FLTFTM0" > <name>FLTI2C1</name> <description>Filter Selection for Input from SCL1/SDA1</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUE0</name>
+               <description>Port Pull-up Enable Register 0</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x100000</resetValue>
+               <fields>
+                  <field>
+                     <name>PTAPE</name>
+                     <description>Pull-up control for Port A</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pull-up disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pull-up enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTAPE" > <name>PTBPE</name> <description>Pull-up control for Port B</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PTAPE" > <name>PTCPE</name> <description>Pull-up control for Port C</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PTAPE" > <name>PTDPE</name> <description>Pull-up control for Port D</description> <bitOffset>24</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUE1</name>
+               <description>Port Pull-up Enable Register 1</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTEPE</name>
+                     <description>Pull-up control for Port E</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pull-up disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pull-up enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTEPE" > <name>PTFPE</name> <description>Pull-up control for Port F</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PTEPE" > <name>PTGPE</name> <description>Pull-up control for Port G</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PTEPE" > <name>PTHPE</name> <description>Pull-up control for Port H</description> <bitOffset>24</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUE2</name>
+               <description>Port Pull-up Enable High Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x10000</resetValue>
+               <fields>
+                  <field>
+                     <name>PTIPE</name>
+                     <description>Pull-up control for Port I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pull-up disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pull-up enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HDRVE</name>
+               <description>Port High Drive Enable Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>PTB4</name>
+                     <description>High drive enable for Port B bit 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low drive strength</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High drive strength</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTB4" > <name>PTB5</name> <description>High drive enable for Port B bit 5</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTD0</name> <description>High drive enable for Port D bit 0</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTD1</name> <description>High drive enable for Port D bit 1</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTE0</name> <description>High drive enable for Port E bit 0</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTE1</name> <description>High drive enable for Port E bit 1</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTH0</name> <description>High drive enable for Port H bit 0</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTB4" > <name>PTH1</name> <description>High drive enable for Port H bit 1</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

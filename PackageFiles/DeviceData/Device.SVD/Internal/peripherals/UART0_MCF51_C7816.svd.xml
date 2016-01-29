@@ -68,24 +68,7 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LBKDIE</name>
-                     <description>LIN Break Detect Interrupt Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RXEDGIE" > <name>LBKDIE</name> <description>LIN Break Detect Interrupt Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -321,24 +304,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TE</name>
-                     <description>Transmitter Enable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RE" > <name>TE</name> <description>Transmitter Enable</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>ILIE</name>
                      <description>Idle Line Interrupt Enable\n
@@ -1071,55 +1037,7 @@ RTS is asserted when the number of characters in the receiver data register (FIF
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TXFIFOSIZE</name>
-                     <description>Transmit FIFO. Buffer Depth</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b000</name>
-                           <description>1 Dataword</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b001</name>
-                           <description>4 Datawords</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b010</name>
-                           <description>8 Datawords</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b011</name>
-                           <description>16 Datawords</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100</name>
-                           <description>32 Datawords</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b101</name>
-                           <description>64 Datawords</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b110</name>
-                           <description>128 Datawords</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b111</name>
-                           <description>Reserved</description>
-                           <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RXFIFOSIZE" > <name>TXFIFOSIZE</name> <description>Transmit FIFO. Buffer Depth</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>TXFE</name>
                      <description>Transmit FIFO Enable</description>
@@ -1385,25 +1303,8 @@ A NACK may be automatically generated if a parity error is detected or if an inv
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ONACK</name>
-                     <description>Generate NACK on Overflow\n
-A NACK may be automatically sent if a receive buffer overrun occurs</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Send NACK</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ANACK" > <name>ONACK</name> <description>Generate NACK on Overflow\n
+A NACK may be automatically sent if a receive buffer overrun occurs</description> <bitOffset>4</bitOffset> </field>
                </fields>
             </register>
             <register>

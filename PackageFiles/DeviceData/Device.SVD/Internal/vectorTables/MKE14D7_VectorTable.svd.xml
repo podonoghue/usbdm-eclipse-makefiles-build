@@ -1,0 +1,155 @@
+<!--
+Devices using this vector table: 
+   MKE14D7
+   MKE15D7
+-->
+      <interrupts>
+         <name>MKE14D7_VectorTable</name>
+         <description>MKE14D7 VectorTable</description>
+         <interrupt>
+            <name>DMA0</name>
+            <description>Direct memory access controller</description>
+            <value>0</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA1</name>
+            <description>Direct memory access controller</description>
+            <value>1</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA2</name>
+            <description>Direct memory access controller</description>
+            <value>2</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA3</name>
+            <description>Direct memory access controller</description>
+            <value>3</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA4</name>
+            <description>Direct memory access controller</description>
+            <value>4</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA5</name>
+            <description>Direct memory access controller</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA6</name>
+            <description>Direct memory access controller</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA7</name>
+            <description>Direct memory access controller</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA8</name>
+            <description>Direct memory access controller</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA9</name>
+            <description>Direct memory access controller</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA10</name>
+            <description>Direct memory access controller</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA11</name>
+            <description>Direct memory access controller</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA12</name>
+            <description>Direct memory access controller</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA13</name>
+            <description>Direct memory access controller</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>DMA_Error</name>
+            <description>Direct memory access controller</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>FTMRA</name>
+            <description>FTMRA Family Flash Module</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>External Watchdog Monitor</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC2</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface</description>
+            <value>26</value>
+         </interrupt>
+         <interrupt>
+            <name>PDB0</name>
+            <description>Serial Communication Interface</description>
+            <value>49</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>53</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT1</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>54</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTA</name>
+            <description>General Purpose Input/Output</description>
+            <value>59</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTB</name>
+            <description>General Purpose Input/Output</description>
+            <value>60</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTC</name>
+            <description>General Purpose Input/Output</description>
+            <value>61</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTD</name>
+            <description>General Purpose Input/Output</description>
+            <value>62</value>
+         </interrupt>
+         <interrupt>
+            <name>PORTE</name>
+            <description>General Purpose Input/Output</description>
+            <value>63</value>
+         </interrupt>
+      </interrupts>
+

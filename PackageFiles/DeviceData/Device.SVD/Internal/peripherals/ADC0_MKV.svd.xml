@@ -1,0 +1,1520 @@
+<!--
+Devices using this peripheral: 
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+-->
+      <peripheral>
+         <?sourceFile "ADC0_MKV" ?>
+         <name>ADC0</name>
+         <description>Analog to digital converter</description>
+         <groupName>ADC</groupName>
+         <prependToName>ADC</prependToName>
+         <headerStructName>ADC</headerStructName>
+         <baseAddress>0x4005C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xAC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL1</name>
+               <description>ADC Control Register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
+               <resetValue>0x5005</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SMODE</name>
+                     <description>ADC Scan Mode Control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Once (single) sequential</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Once parallel</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Loop sequential</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Loop parallel</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Triggered sequential</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Triggered parallel (default)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CHNCFG_L</name>
+                     <description>CHCNF (Channel Configure Low) bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HLMTIE</name>
+                     <description>High Limit Interrupt Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="HLMTIE" > <name>LLMTIE</name> <description>Low Limit Interrupt Enable</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="HLMTIE" > <name>ZCIE</name> <description>Zero Crossing Interrupt Enable</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="HLMTIE" > <name>EOSIE0</name> <description>End Of Scan Interrupt Enable</description> <bitOffset>11</bitOffset> </field>
+                  <field>
+                     <name>SYNC0</name>
+                     <description>SYNC0 Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Scan is initiated by a write to CTRL1[START0] only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use a SYNC0 input pulse or CTRL1[START0] to initiate a scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>START0</name>
+                     <description>START0 Conversion</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start command is issued</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOP0</name>
+                     <description>Stop</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAEN0</name>
+                     <description>DMA enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL2</name>
+               <description>ADC Control Register 2</description>
+               <addressOffset>0x2</addressOffset>
+               <size>16</size>
+               <resetValue>0x5044</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DIV0</name>
+                     <description>Clock Divisor Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIMULT</name>
+                     <description>Simultaneous mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Parallel scans done independently</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Parallel scans done simultaneously (default)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CHNCFG_H</name>
+                     <description>CHCNF (Channel Configure High) bits</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOSIE1</name>
+                     <description>End Of Scan Interrupt Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNC1</name>
+                     <description>SYNC1 Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>B converter parallel scan is initiated by a write to CTRL2[START1] bit only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use a SYNC1 input pulse or CTRL2[START1] bit to initiate a B converter parallel scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>START1</name>
+                     <description>START1 Conversion</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start command is issued</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOP1</name>
+                     <description>Stop</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAEN1</name>
+                     <description>DMA enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZXCTRL1</name>
+               <description>ADC Zero Crossing Control 1 Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ZCE0</name>
+                     <description>Zero crossing enable 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Zero Crossing disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Zero Crossing enabled for positive to negative sign change</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Zero Crossing enabled for negative to positive sign change</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Zero Crossing enabled for any sign change</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE1</name> <description>Zero crossing enable 1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE2</name> <description>Zero crossing enable 2</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE3</name> <description>Zero crossing enable 3</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE4</name> <description>Zero crossing enable 4</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE5</name> <description>Zero crossing enable 5</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE6</name> <description>Zero crossing enable 6</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="ZCE0" > <name>ZCE7</name> <description>Zero crossing enable 7</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZXCTRL2</name>
+               <description>ADC Zero Crossing Control 2 Register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ZCE8</name>
+                     <description>Zero crossing enable 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Zero Crossing disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Zero Crossing enabled for positive to negative sign change</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Zero Crossing enabled for negative to positive sign change</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Zero Crossing enabled for any sign change</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE9</name> <description>Zero crossing enable 9</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE10</name> <description>Zero crossing enable 10</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE11</name> <description>Zero crossing enable 11</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE12</name> <description>Zero crossing enable 12</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE13</name> <description>Zero crossing enable 13</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE14</name> <description>Zero crossing enable 14</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="ZCE8" > <name>ZCE15</name> <description>Zero crossing enable 15</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLIST1</name>
+               <description>ADC Channel List Register 1</description>
+               <addressOffset>0x8</addressOffset>
+               <size>16</size>
+               <resetValue>0x3210</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SAMPLE0</name>
+                     <description>Sample Field 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Single Ended: ANA0, Differential: ANA0+, ANA1-</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Single Ended: ANA1, Differential: ANA0+, ANA1-</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Single Ended: ANA2, Differential: ANA2+, ANA3-</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Single Ended: ANA3, Differential: ANA2+, ANA3-</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Single Ended: ANA4, Differential: ANA4+, ANA5-</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Single Ended: ANA5, Differential: ANA4+, ANA5-</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Single Ended: ANA6, Differential: ANA6+, ANA7-</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Single Ended: ANA7, Differential: ANA6+, ANA7-</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Single Ended: ANB0, Differential: ANB0+, ANB1-</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Single Ended: ANB1, Differential: ANB0+, ANB1-</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Single Ended: ANB2, Differential: ANB2+, ANB3-</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Single Ended: ANB3, Differential: ANB2+, ANB3-</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Single Ended: ANB4, Differential: ANB4+, ANB5-</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Single Ended: ANB5, Differential: ANB4+, ANB5-</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Single Ended: ANB6, Differential: ANB6+, ANB7-</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Single Ended: ANB7, Differential: ANB6+, ANB7-</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SAMPLE0" > <name>SAMPLE1</name> <description>Sample Field 1</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SAMPLE0" > <name>SAMPLE2</name> <description>Sample Field 2</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SAMPLE0" > <name>SAMPLE3</name> <description>Sample Field 3</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLIST2</name>
+               <description>ADC Channel List Register 2</description>
+               <addressOffset>0xA</addressOffset>
+               <size>16</size>
+               <resetValue>0x7654</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SAMPLE4</name>
+                     <description>Sample Field 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Single Ended: ANA0, Differential: ANA0+, ANA1-</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Single Ended: ANA1, Differential: ANA0+, ANA1-</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Single Ended: ANA2, Differential: ANA2+, ANA3-</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Single Ended: ANA3, Differential: ANA2+, ANA3-</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Single Ended: ANA4, Differential: ANA4+, ANA5-</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Single Ended: ANA5, Differential: ANA4+, ANA5-</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Single Ended: ANA6, Differential: ANA6+, ANA7-</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Single Ended: ANA7, Differential: ANA6+, ANA7-</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Single Ended: ANB0, Differential: ANB0+, ANB1-</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Single Ended: ANB1, Differential: ANB0+, ANB1-</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Single Ended: ANB2, Differential: ANB2+, ANB3-</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Single Ended: ANB3, Differential: ANB2+, ANB3-</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Single Ended: ANB4, Differential: ANB4+, ANB5-</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Single Ended: ANB5, Differential: ANB4+, ANB5-</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Single Ended: ANB6, Differential: ANB6+, ANB7-</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Single Ended: ANB7, Differential: ANB6+, ANB7-</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SAMPLE4" > <name>SAMPLE5</name> <description>Sample Field 5</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SAMPLE4" > <name>SAMPLE6</name> <description>Sample Field 6</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SAMPLE4" > <name>SAMPLE7</name> <description>Sample Field 7</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLIST3</name>
+               <description>ADC Channel List Register 3</description>
+               <addressOffset>0xC</addressOffset>
+               <size>16</size>
+               <resetValue>0xBA98</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SAMPLE8</name>
+                     <description>Sample Field 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Single Ended: ANA0, Differential: ANA0+, ANA1-</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Single Ended: ANA1, Differential: ANA0+, ANA1-</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Single Ended: ANA2, Differential: ANA2+, ANA3-</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Single Ended: ANA3, Differential: ANA2+, ANA3-</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Single Ended: ANA4, Differential: ANA4+, ANA5-</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Single Ended: ANA5, Differential: ANA4+, ANA5-</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Single Ended: ANA6, Differential: ANA6+, ANA7-</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Single Ended: ANA7, Differential: ANA6+, ANA7-</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Single Ended: ANB0, Differential: ANB0+, ANB1-</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Single Ended: ANB1, Differential: ANB0+, ANB1-</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Single Ended: ANB2, Differential: ANB2+, ANB3-</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Single Ended: ANB3, Differential: ANB2+, ANB3-</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Single Ended: ANB4, Differential: ANB4+, ANB5-</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Single Ended: ANB5, Differential: ANB4+, ANB5-</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Single Ended: ANB6, Differential: ANB6+, ANB7-</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Single Ended: ANB7, Differential: ANB6+, ANB7-</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SAMPLE8" > <name>SAMPLE9</name> <description>Sample Field 9</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SAMPLE8" > <name>SAMPLE10</name> <description>Sample Field 10</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SAMPLE8" > <name>SAMPLE11</name> <description>Sample Field 11</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLIST4</name>
+               <description>ADC Channel List Register 4</description>
+               <addressOffset>0xE</addressOffset>
+               <size>16</size>
+               <resetValue>0xFEDC</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SAMPLE12</name>
+                     <description>Sample Field 12</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Single Ended: ANA0, Differential: ANA0+, ANA1-</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Single Ended: ANA1, Differential: ANA0+, ANA1-</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Single Ended: ANA2, Differential: ANA2+, ANA3-</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Single Ended: ANA3, Differential: ANA2+, ANA3-</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Single Ended: ANA4, Differential: ANA4+, ANA5-</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Single Ended: ANA5, Differential: ANA4+, ANA5-</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Single Ended: ANA6, Differential: ANA6+, ANA7-</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Single Ended: ANA7, Differential: ANA6+, ANA7-</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Single Ended: ANB0, Differential: ANB0+, ANB1-</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Single Ended: ANB1, Differential: ANB0+, ANB1-</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Single Ended: ANB2, Differential: ANB2+, ANB3-</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Single Ended: ANB3, Differential: ANB2+, ANB3-</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Single Ended: ANB4, Differential: ANB4+, ANB5-</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Single Ended: ANB5, Differential: ANB4+, ANB5-</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Single Ended: ANB6, Differential: ANB6+, ANB7-</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Single Ended: ANB7, Differential: ANB6+, ANB7-</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SAMPLE12" > <name>SAMPLE13</name> <description>Sample Field 13</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SAMPLE12" > <name>SAMPLE14</name> <description>Sample Field 14</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SAMPLE12" > <name>SAMPLE15</name> <description>Sample Field 15</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SDIS</name>
+               <description>ADC Sample Disable Register</description>
+               <addressOffset>0x10</addressOffset>
+               <size>16</size>
+               <resetValue>0xF0F0</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>DS</name>
+                     <description>Disable Sample Bits</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SAMPLEx channel is enabled for ADC scan</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SAMPLEx channel is disabled for ADC scan and corresponding channels after SAMPLEx also doesn not occur in an ADC scan</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>ADC Status Register</description>
+               <addressOffset>0x12</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>UNDEFINED</name>
+                     <description>no description available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HLMTI</name>
+                     <description>High Limit Interrupt</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No high limit interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High limit exceeded, IRQ pending if CTRL1[HLMTIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LLMTI</name>
+                     <description>Low Limit Interrupt</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No low limit interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Low limit exceeded, IRQ pending if CTRL1[LLMTIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ZCI</name>
+                     <description>Zero Crossing Interrupt</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No zero crossing interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Zero crossing encountered, IRQ pending if CTRL1[ZCIE] is set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOSI0</name>
+                     <description>End of Scan Interrupt</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>A scan cycle has not been completed, no end of scan IRQ pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A scan cycle has been completed, end of scan IRQ pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EOSI0" > <name>EOSI1</name> <bitOffset>12</bitOffset> </field>
+                  <field>
+                     <name>CIP1</name>
+                     <description>Conversion in Progress</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle state</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A scan cycle is in progress. The ADC will ignore all sync pulses or start commands</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CIP1" > <name>CIP0</name> <bitOffset>15</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>RDY</name>
+               <description>ADC Ready Register</description>
+               <addressOffset>0x14</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RDY</name>
+                     <description>Ready Sample</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sample not ready or has been read</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sample ready to be read</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LOLIMSTAT</name>
+               <description>ADC Low Limit Status Register</description>
+               <addressOffset>0x16</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LLS</name>
+                     <description>Low Limit Status Bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HILIMSTAT</name>
+               <description>ADC High Limit Status Register</description>
+               <addressOffset>0x18</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>HLS</name>
+                     <description>High Limit Status Bits</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZXSTAT</name>
+               <description>ADC Zero Crossing Status Register</description>
+               <addressOffset>0x1A</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>ZCS</name>
+                     <description>Zero Crossing Status</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Either: A sign change did not occur in a comparison between the current channelx result and the previous channelx result, or Zero crossing control is disabled for channelx in the zero crossing control register, ZXCTRL</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>In a comparison between the current channelx result and the previous channelx result, a sign change condition occurred as defined in the zero crossing control register (ZXCTRL)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>RSLT%s</name>
+               <description>ADC Result Registers with sign extension</description>
+               <addressOffset>0x1C</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RSLT</name>
+                     <description>Digital Result of the Conversion</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEXT</name>
+                     <description>Sign Extend</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>LOLIM%s</name>
+               <description>ADC Low Limit</description>
+               <addressOffset>0x3C</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LLMT</name>
+                     <description>Low Limit Bits</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>HILIM%s</name>
+               <description>ADC High Limit</description>
+               <addressOffset>0x5C</addressOffset>
+               <size>16</size>
+               <resetValue>0x7FF8</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>HLMT</name>
+                     <description>High Limit Bits</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>OFFST%s</name>
+               <description>ADC Offset</description>
+               <addressOffset>0x7C</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>OFFSET</name>
+                     <description>ADC Offset Bits</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWR</name>
+               <description>ADC Power Control Register</description>
+               <addressOffset>0x9C</addressOffset>
+               <size>16</size>
+               <resetValue>0x1DA7</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PD0</name>
+                     <description>Manual Power Down for Converter A</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Power Up ADC converter A</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power Down ADC converter A</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PD1</name>
+                     <description>Manual Power Down for Converter B</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Power Up ADC converter B</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Power Down ADC converter B</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>APD</name>
+                     <description>Auto Powerdown</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Auto Powerdown Mode is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Auto Powerdown Mode is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PUDELAY</name>
+                     <description>Power Up Delay</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSTS0</name>
+                     <description>ADC Converter A Power Status</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>ADC Converter A is currently powered up</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ADC Converter A is currently powered down</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PSTS1</name>
+                     <description>ADC Converter B Power Status</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>ADC Converter B is currently powered up</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ADC Converter B is currently powered down</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ASB</name>
+                     <description>Auto Standby</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Auto standby mode disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Auto standby mode enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAL</name>
+               <description>ADC Calibration Register</description>
+               <addressOffset>0x9E</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SEL_VREFLO_A</name>
+                     <description>Select V REFLO Source</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VREFL pad</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ANA3</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEL_VREFH_A</name>
+                     <description>Select V REFH Source</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VREFH pad</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ANA2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEL_VREFLO_B</name>
+                     <description>Select V REFLO Source</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VREFL pad</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ANB3</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEL_VREFH_B</name>
+                     <description>Select V REFH Source</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>VREFH pad</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>ANB2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GC1</name>
+               <description>Gain Control 1 Register</description>
+               <addressOffset>0xA0</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GAIN0</name>
+                     <description>Gain Control Bit 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>x1 amplification</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>x2 amplification</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>x4 amplification</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN1</name> <description>Gain Control Bit 1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN2</name> <description>Gain Control Bit 2</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN3</name> <description>Gain Control Bit 3</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN4</name> <description>Gain Control Bit 4</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN5</name> <description>Gain Control Bit 5</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN6</name> <description>Gain Control Bit 6</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="GAIN0" > <name>GAIN7</name> <description>Gain Control Bit 7</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>GC2</name>
+               <description>Gain Control 2 Register</description>
+               <addressOffset>0xA2</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>GAIN8</name>
+                     <description>Gain Control Bit 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>x1 amplification</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>x2 amplification</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>x4 amplification</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN9</name> <description>Gain Control Bit 9</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN10</name> <description>Gain Control Bit 10</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN11</name> <description>Gain Control Bit 11</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN12</name> <description>Gain Control Bit 12</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN13</name> <description>Gain Control Bit 13</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN14</name> <description>Gain Control Bit 14</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="GAIN8" > <name>GAIN15</name> <description>Gain Control Bit 15</description> <bitOffset>14</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCTRL</name>
+               <description>ADC Scan Control Register</description>
+               <addressOffset>0xA4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SC</name>
+                     <description>Scan Control Bits</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Perform sample immediately after the completion of the current sample</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Delay sample until a new sync input occurs</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWR2</name>
+               <description>ADC Power Control Register</description>
+               <addressOffset>0xA6</addressOffset>
+               <size>16</size>
+               <resetValue>0x400</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SPEEDA</name>
+                     <description>ADCA Speed Control Bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Conversion clock frequency &lt;= 6.25 MHz; current consumption per converter = 6 mA</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Conversion clock frequency &lt;= 12.5 MHz; current consumption per converter = 10.8 mA</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Conversion clock frequency &lt;= 18.75 MHz; current consumption per converter = 18 mA</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Conversion clock frequency &lt;= 25 MHz; current consumption per converter = 25.2 mA</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SPEEDA" > <name>SPEEDB</name> <description>ADCB Speed Control Bits</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>DIV1</name>
+                     <description>Clock Divisor Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL3</name>
+               <description>ADC Control Register 3</description>
+               <addressOffset>0xA8</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SCNT0</name>
+                     <description>Sample Window Count 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>SCNT1</name>
+                     <description>Sample Window Count 1</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DMASRC</name>
+                     <description>DMA Trigger Source</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA trigger source is end of scan interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA trigger source is RDY bits</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCHLTEN</name>
+               <description>ADC Scan Interrupt Enable Register</description>
+               <addressOffset>0xAA</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SCHLTEN</name>
+                     <description>Scan Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Scan interrupt is not enabled for this sample</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Scan interrupt is enabled for this sample</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

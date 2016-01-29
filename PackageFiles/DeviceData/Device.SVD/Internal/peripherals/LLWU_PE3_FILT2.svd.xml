@@ -1,25 +1,29 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
+      MK22F25612
       MK22F51212
-      MKL14Z4
-      MKL15Z4
       MKL16Z4
-      MKL24Z4
-      MKL25Z4
+      MKL17Z4
       MKL26Z4
       MKL27Z4
       MKL27Z644
+      MKL33Z4
       MKL34Z4
       MKL36Z4
       MKL43Z4
       MKL46Z4
+      MKM14ZA5
       MKM33Z5
+      MKM34Z5
       MKV10Z7
       MKV11Z7
       MKV30F12810
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "LLWU_PE3_FILT2" ?>
@@ -350,6 +354,17 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                </fields>
             </register>
             <register>
+               <name>MF0</name>
+               <description>Module Flag 0 Register\n
+Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
+This flag reflects the flag in the related peripheral.\n
+To clear this flag it is necessary to clear the flag in the peripheral</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
                <dim>2</dim>
                <dimIncrement>1</dimIncrement>
                <dimIndex>1,2</dimIndex>
@@ -363,7 +378,7 @@ Control and status register that is used to enable/disable the digital filter fe
                   <field>
                      <name>FILTSEL</name>
                      <description>Filter Pin Select\n
-Selects 1 out of the 16 wakeup pins to be muxed into the filter</description>
+Selects 1 of the wakeup pins to be muxed into the filter</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>

@@ -3,8 +3,11 @@ Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
-      MKE04Z8M4
+      MKE04Z1284
       MKE06Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "FTM0_2CH_MKE" ?>
@@ -100,7 +103,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Fixed freq. clock</description>
+                           <description>Fixed frequency clock</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>

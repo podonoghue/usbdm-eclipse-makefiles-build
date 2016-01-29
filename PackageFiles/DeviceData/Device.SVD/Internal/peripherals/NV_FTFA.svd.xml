@@ -1,6 +1,5 @@
 <!--
 Devices using this peripheral: 
-      MK24F25612
       MKL02Z4
       MKL04Z4
       MKL05Z4
@@ -13,9 +12,9 @@ Devices using this peripheral:
       MKL34Z4
       MKL36Z4
       MKL46Z4
-      MKM33Z5
       MKV10Z7
       MKV11Z7
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "NV_FTFA" ?>
@@ -85,28 +84,29 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SEC</name>
-                     <description>Flash Security</description>
+                     <description>Flash Security
+This field controls the MCU security</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>MCU security status is unsecure (shipped state)</description>
+                           <description>Unsecure</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>MCU security status is secure</description>
+                           <description>Secure</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -119,77 +119,79 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Freescale factory access granted</description>
+                           <description>Access granted</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Freescale factory access denied</description>
+                           <description>Access denied</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Freescale factory access denied</description>
+                           <description>Access denied</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Freescale factory access granted</description>
+                           <description>Access granted</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MEEN</name>
+                     <description>Mass erase enable</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Mass erase is disabled</description>
+                           <description>Disabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Mass erase is enabled</description>
+                           <description>Enabled</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>KEYEN</name>
-                     <description>Backdoor Key Security Enable</description>
+                     <description>Backdoor Key Security Enable\n
+Allows the MCU to be unsecured if the key is known</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Backdoor key access disabled</description>
+                           <description>Access disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Backdoor key access disabled(preferred KEYEN state to disable backdoor key access)</description>
+                           <description>Access disabled(preferred)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Backdoor key access enabled</description>
+                           <description>Access enabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Backdoor key access disabled</description>
+                           <description>Access disabled</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

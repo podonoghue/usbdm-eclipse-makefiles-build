@@ -325,24 +325,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IER</name>
-                     <description>Comparator Rising-edge Interrupt Enable</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IEF" > <name>IER</name> <description>Comparator Rising-edge Interrupt Enable</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>DMAEN</name>
                      <description>DMA Enable Control</description>
@@ -469,54 +452,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PSEL</name>
-                     <description>Plus Input Mux Control</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b000</name>
-                           <description>IN0</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b001</name>
-                           <description>IN1</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b010</name>
-                           <description>IN2</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b011</name>
-                           <description>IN3</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100</name>
-                           <description>IN4</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b101</name>
-                           <description>IN5</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b110</name>
-                           <description>IN6</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b111</name>
-                           <description>IN7</description>
-                           <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="MSEL" > <name>PSEL</name> <description>Plus Input Mux Control</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>MEN</name>
                      <description>MMUX Enable\n

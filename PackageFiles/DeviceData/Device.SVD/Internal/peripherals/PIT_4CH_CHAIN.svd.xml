@@ -1,12 +1,21 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK10D10
       MK11D5
+      MK11DA5
+      MK11D5WS
       MK12D5
       MK20D10
       MK21D5
+      MK21DA5
+      MK21D5WS
       MK21F12
+      MK21FA12
       MK22D5
       MK22F12
+      MK22F12810
+      MK22F25612
       MK22F51212
       MK24F12
       MK24F25612
@@ -23,6 +32,14 @@ Devices using this peripheral:
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+      MKW21D5
+      MKW22D5
+      MKW24D5
 -->
       <peripheral>
          <?sourceFile "PIT_4CH_CHAIN" ?>
@@ -168,7 +185,7 @@ Enables interrupt requests from Timer</description>
                      <field>
                         <name>CHN</name>
                         <description>Chain Mode\n
-Allows this timer to bee chained to the previous timer\n
+Allows this timer to be chained to the previous timer\n
 For example, for Channel 2, if this field is set, Timer 2 is chained to Timer 1</description>
                         <bitOffset>2</bitOffset>
                         <bitWidth>1</bitWidth>

@@ -1,0 +1,372 @@
+<!--
+Devices using this peripheral: 
+      MKL02Z4
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL24Z4
+      MKL25Z4
+-->
+      <peripheral>
+         <?sourceFile "FGPIOA_0xF80FF000" ?>
+         <?refreshWholePeripheral?>
+         <name>FGPIOA</name>
+         <description>General Purpose Input/Output</description>
+         <groupName>FGPIO</groupName>
+         <prependToName>FGPIOA</prependToName>
+         <headerStructName>GPIO</headerStructName>
+         <baseAddress>0xF80FF000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PDOR</name>
+               <description>Port Data Output Register\n
+Controls the level driven on pin provided it is configured as GPIO output</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDO0</name>
+                     <description>Port Data Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDO0" > <name>PDO1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PDO0" > <name>PDO31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PSOR</name>
+               <description>Port Set Output Register\n
+Writing 1 to a bit sets the corresponding bit in the PDOR</description>
+               <addressOffset>0x4</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>PTSO0</name>
+                     <description>Port Set Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to set</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PTSO0" > <name>PTSO31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PCOR</name>
+               <description>Port Clear Output Register\n
+Writing 1 to a bit clears the corresponding bit in the PDOR</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>PTCO0</name>
+                     <description>Port Clear Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to clear</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PTCO0" > <name>PTCO31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PTOR</name>
+               <description>Port Toggle Output Register\n
+Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
+               <addressOffset>0xC</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>PTTO0</name>
+                     <description>Port Toggle Output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to toggle</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PTTO0" > <name>PTTO31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDIR</name>
+               <description>Port Data Input Register\n
+This register directly reflects the value on the port pins if configured as GPIO</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PDI0</name>
+                     <description>Port Data Input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Pin is low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pin is high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDI0" > <name>PDI1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PDI0" > <name>PDI31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDDR</name>
+               <description>Port Data Direction Register\n
+Controls the direction of port pins</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>PDD0</name>
+                     <description>Port Data Direction</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Output</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="PDD0" > <name>PDD1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD9</name> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD10</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD11</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD12</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD13</name> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD14</name> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD15</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD16</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD17</name> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD18</name> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD19</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD20</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD21</name> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD22</name> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD23</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD24</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD25</name> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD26</name> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD27</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD28</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD29</name> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD30</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="PDD0" > <name>PDD31</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

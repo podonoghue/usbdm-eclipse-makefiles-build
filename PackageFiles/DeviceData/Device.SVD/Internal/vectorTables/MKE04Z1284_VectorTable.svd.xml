@@ -1,0 +1,129 @@
+<!--
+Devices using this vector table: 
+   MKE04Z1284
+-->
+      <interrupts>
+         <name>MKE04Z1284_VectorTable</name>
+         <description>MKE04Z1284 VectorTable</description>
+         <interrupt>
+            <name>FTMRE</name>
+            <description>Flash Memory</description>
+            <value>5</value>
+         </interrupt>
+         <interrupt>
+            <name>PMC</name>
+            <description>Power Management Controller</description>
+            <value>6</value>
+         </interrupt>
+         <interrupt>
+            <name>IRQ</name>
+            <description>External Interrupt</description>
+            <value>7</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C0</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>8</value>
+         </interrupt>
+         <interrupt>
+            <name>I2C1</name>
+            <description>Inter-Integrated Circuit</description>
+            <value>9</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI0</name>
+            <description>Serial Peripheral Interface</description>
+            <value>10</value>
+         </interrupt>
+         <interrupt>
+            <name>SPI1</name>
+            <description>Serial Peripheral Interface</description>
+            <value>11</value>
+         </interrupt>
+         <interrupt>
+            <name>UART0</name>
+            <description>Serial Communication Interface</description>
+            <value>12</value>
+         </interrupt>
+         <interrupt>
+            <name>UART1</name>
+            <description>Serial Communication Interface</description>
+            <value>13</value>
+         </interrupt>
+         <interrupt>
+            <name>UART2</name>
+            <description>Serial Communication Interface</description>
+            <value>14</value>
+         </interrupt>
+         <interrupt>
+            <name>ADC0</name>
+            <description>Analogue to Digital Converter</description>
+            <value>15</value>
+         </interrupt>
+         <interrupt>
+            <name>ACMP0</name>
+            <description>Analogue comparator</description>
+            <value>16</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM0</name>
+            <description>FlexTimer Module</description>
+            <value>17</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FlexTimer Module</description>
+            <value>18</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM2</name>
+            <description>FlexTimer Module</description>
+            <value>19</value>
+         </interrupt>
+         <interrupt>
+            <name>RTC_Alarm</name>
+            <description>Real Time Clock</description>
+            <value>20</value>
+         </interrupt>
+         <interrupt>
+            <name>ACMP1</name>
+            <description>Analogue comparator</description>
+            <value>21</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT0</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>22</value>
+         </interrupt>
+         <interrupt>
+            <name>PIT1</name>
+            <description>Periodic Interrupt Timer</description>
+            <value>23</value>
+         </interrupt>
+         <interrupt>
+            <name>KBI0</name>
+            <description>Keyboard Interrupt</description>
+            <value>24</value>
+         </interrupt>
+         <interrupt>
+            <name>KBI1</name>
+            <description>Keyboard Interrupt</description>
+            <value>25</value>
+         </interrupt>
+         <interrupt>
+            <name>ICS</name>
+            <description>Clock Management</description>
+            <value>27</value>
+         </interrupt>
+         <interrupt>
+            <name>WDOG</name>
+            <description>Watchdog Timer</description>
+            <value>28</value>
+         </interrupt>
+         <interrupt>
+            <name>PWT</name>
+            <description>Pulse Width Timer</description>
+            <value>29</value>
+         </interrupt>
+      </interrupts>
+

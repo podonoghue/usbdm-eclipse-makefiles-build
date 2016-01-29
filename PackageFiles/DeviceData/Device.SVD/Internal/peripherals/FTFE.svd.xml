@@ -1,18 +1,7 @@
 <!--
 Devices using this peripheral: 
-      MK10F12
-      MK20F12
-      MK21F12
-      MK22F12
       MK24F12
-      MK60F12
-      MK60F15
-      MK61F12
-      MK61F15
       MK63F12
-      MK64F12
-      MK70F12
-      MK70F15
 -->
       <peripheral>
          <?sourceFile "FTFE" ?>
@@ -30,12 +19,6 @@ Devices using this peripheral:
             <?width "8" ?>
             <offset>0x0</offset>
             <size>0x14</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <?width "8" ?>
-            <offset>0x16</offset>
-            <size>0x2</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -504,61 +487,6 @@ Each PROT bit protects 1/32 of the total program flash from program and erase op
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Program flash region is not protected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FEPROT</name>
-               <description>EEPROM Protection Register\n
-Each EPROT bit protects 1/8 of the configured EEPROM data from program and erase operations.\n
-(Only applicable to devices with EEPROM)</description>
-               <addressOffset>0x16</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>EPROT</name>
-                     <description>EEPROM Region Protection</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Region is protected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Region is unprotected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FDPROT</name>
-               <description>Data Flash Protection Register \n
-Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase operations</description>
-               <addressOffset>0x17</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>DPROT</name>
-                     <description>Data Flash Region Protect</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Data Flash region is protected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Data Flash region is not protected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

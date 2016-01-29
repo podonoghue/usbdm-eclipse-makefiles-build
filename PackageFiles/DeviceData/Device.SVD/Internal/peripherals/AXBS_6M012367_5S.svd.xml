@@ -1,0 +1,299 @@
+<!--
+Devices using this peripheral: 
+      MK60F15
+-->
+      <peripheral>
+         <?sourceFile "AXBS_6M012367_5S" ?>
+         <name>AXBS</name>
+         <description>Crossbar switch</description>
+         <groupName>AXBS</groupName>
+         <prependToName>AXBS</prependToName>
+         <headerStructName>AXBS</headerStructName>
+         <baseAddress>0x40004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xF04</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>5</dim>
+               <dimIncrement>256</dimIncrement>
+               <dimIndex>0,1,2,3,4</dimIndex>
+               <name>SLAVE,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>PRS</name>
+                  <description>Priority Registers Slave</description>
+                  <addressOffset>0x0</addressOffset>
+                  <resetValue>0x76543210</resetValue>
+                  <fields>
+                     <field>
+                        <name>M0</name>
+                        <description>Master 0 Priority. Sets the arbitration priority for this port on the associated slave port</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>Level 1</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>Level 2</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>Level 3</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>Level 4</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>Level 5</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>Level 6</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>Level 7</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>Level 8</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field derivedFrom="M0" > <name>M1</name> <description>Master 1 Priority. Sets the arbitration priority for this port on the associated slave port</description> <bitOffset>4</bitOffset> </field>
+                     <field derivedFrom="M0" > <name>M2</name> <description>Master 2 Priority. Sets the arbitration priority for this port on the associated slave port</description> <bitOffset>8</bitOffset> </field>
+                     <field derivedFrom="M0" > <name>M3</name> <description>Master 3 Priority. Sets the arbitration priority for this port on the associated slave port</description> <bitOffset>12</bitOffset> </field>
+                     <field derivedFrom="M0" > <name>M6</name> <description>Master 6 Priority. Sets the arbitration priority for this port on the associated slave port</description> <bitOffset>24</bitOffset> </field>
+                     <field derivedFrom="M0" > <name>M7</name> <description>Master 7 Priority. Sets the arbitration priority for this port on the associated slave port</description> <bitOffset>28</bitOffset> </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CRS</name>
+                  <description>Control Register</description>
+                  <addressOffset>0x10</addressOffset>
+                  <fields>
+                     <field>
+                        <name>PARK</name>
+                        <description>Park</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>Park on master port M0</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>Park on master port M1</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>Park on master port M2</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>Park on master port M3</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>Park on master port M4</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>Park on master port M5</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>Park on master port M6</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>Park on master port M7</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>PCTL</name>
+                        <description>Parking Control</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>When no master makes a request, the arbiter parks the slave port on the master port defined by the PARK field</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>When no master makes a request, the arbiter parks the slave port on the last master to be in control of the slave port</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>When no master makes a request, the slave port is not parked on a master and the arbiter drives all outputs to a constant safe state</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Reserved</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ARB</name>
+                        <description>Arbitration Mode</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Fixed priority</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Round-robin, or rotating, priority</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Reserved</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Reserved</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>HLP</name>
+                        <description>Halt Low Priority</description>
+                        <bitOffset>30</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>The low power mode request has the highest priority for arbitration on this slave port</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>The low power mode request has the lowest initial priority for arbitration on this slave port</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RO</name>
+                        <description>Read Only</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>The slave port&apos;s registers are writeable</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>The slave port&apos;s registers are read-only and cannot be written. Attempted writes have no effect on the registers and result in a bus error response</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <register>
+               <name>MGPCR0</name>
+               <description>Master General Purpose Control Register</description>
+               <addressOffset>0x800</addressOffset>
+               <fields>
+                  <field>
+                     <name>AULB</name>
+                     <description>Arbitrates On Undefined Length Bursts</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>No arbitration is allowed during an undefined length burst</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Arbitration is allowed at any time during an undefined length burst</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Arbitration is allowed after four beats of an undefined length burst</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Arbitration is allowed after eight beats of an undefined length burst</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Arbitration is allowed after 16 beats of an undefined length burst</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register derivedFrom="MGPCR0"> <name>MGPCR1</name> <addressOffset>0x900</addressOffset> </register>
+            <register derivedFrom="MGPCR0"> <name>MGPCR2</name> <addressOffset>0xA00</addressOffset> </register>
+            <register derivedFrom="MGPCR0"> <name>MGPCR3</name> <addressOffset>0xB00</addressOffset> </register>
+            <register derivedFrom="MGPCR0"> <name>MGPCR6</name> <addressOffset>0xE00</addressOffset> </register>
+            <register derivedFrom="MGPCR0"> <name>MGPCR7</name> <addressOffset>0xF00</addressOffset> </register>
+         </registers>
+      </peripheral>

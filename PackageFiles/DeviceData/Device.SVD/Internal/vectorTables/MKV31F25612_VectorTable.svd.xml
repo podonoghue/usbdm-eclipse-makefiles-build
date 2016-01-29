@@ -6,106 +6,106 @@ Devices using this vector table:
          <name>MKV31F25612_VectorTable</name>
          <interrupt>
             <name>DMA0</name>
-            <description>DMA0 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>0</value>
          </interrupt>
          <interrupt>
             <name>DMA1</name>
-            <description>DMA1 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>1</value>
          </interrupt>
          <interrupt>
             <name>DMA2</name>
-            <description>DMA2 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>2</value>
          </interrupt>
          <interrupt>
             <name>DMA3</name>
-            <description>DMA3 Transfer complete</description>
+            <description>Direct memory access controller</description>
             <value>3</value>
          </interrupt>
          <interrupt>
             <name>DMA4</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>4</value>
          </interrupt>
          <interrupt>
             <name>DMA5</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>5</value>
          </interrupt>
          <interrupt>
             <name>DMA6</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>6</value>
          </interrupt>
          <interrupt>
             <name>DMA7</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>7</value>
          </interrupt>
          <interrupt>
             <name>DMA8</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>8</value>
          </interrupt>
          <interrupt>
             <name>DMA9</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>9</value>
          </interrupt>
          <interrupt>
             <name>DMA10</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>10</value>
          </interrupt>
          <interrupt>
             <name>DMA11</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>11</value>
          </interrupt>
          <interrupt>
             <name>DMA12</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>12</value>
          </interrupt>
          <interrupt>
             <name>DMA13</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>13</value>
          </interrupt>
          <interrupt>
             <name>DMA14</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>14</value>
          </interrupt>
          <interrupt>
             <name>DMA15</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>15</value>
          </interrupt>
          <interrupt>
             <name>DMA_Error</name>
-            <description>Enhanced direct memory access controller</description>
+            <description>Direct memory access controller</description>
             <value>16</value>
          </interrupt>
          <interrupt>
             <name>MCM</name>
-            <description>Core Platform Miscellaneous Control Module</description>
+            <description>Miscellaneous Control Module</description>
             <value>17</value>
          </interrupt>
          <interrupt>
-            <name>FTF</name>
+            <name>FTF_Command</name>
             <description>Flash Command complete or error</description>
             <value>18</value>
          </interrupt>
          <interrupt>
-            <name>Read_Collision</name>
+            <name>FTF_ReadCollision</name>
             <description>Flash Memory Interface</description>
             <value>19</value>
          </interrupt>
          <interrupt>
-            <name>LVD_LVW</name>
+            <name>PMC</name>
             <description>Power Management Controller</description>
             <value>20</value>
          </interrupt>
@@ -115,13 +115,13 @@ Devices using this vector table:
             <value>21</value>
          </interrupt>
          <interrupt>
-            <name>WDOG_EWM</name>
+            <name>WDOG</name>
             <description>External Watchdog Monitor</description>
             <value>22</value>
          </interrupt>
          <interrupt>
             <name>RNG</name>
-            <description>Random Number Generator Accelerator</description>
+            <description>Random Number Generator</description>
             <value>23</value>
          </interrupt>
          <interrupt>
@@ -145,8 +145,8 @@ Devices using this vector table:
             <value>27</value>
          </interrupt>
          <interrupt>
-            <name>LPUART0</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
+            <name>LPUART0_RX_TX</name>
+            <description>Serial Communication Interface</description>
             <value>30</value>
          </interrupt>
          <interrupt>
@@ -181,47 +181,47 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>ADC0</name>
-            <description>Analog-to-Digital Converter</description>
+            <description>Analogue to Digital Converter</description>
             <value>39</value>
          </interrupt>
          <interrupt>
             <name>CMP0</name>
-            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+            <description>High-Speed Comparator</description>
             <value>40</value>
          </interrupt>
          <interrupt>
             <name>CMP1</name>
-            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+            <description>High-Speed Comparator</description>
             <value>41</value>
          </interrupt>
          <interrupt>
             <name>FTM0</name>
-            <description>FlexTimer Module 0</description>
+            <description>FlexTimer Module</description>
             <value>42</value>
          </interrupt>
          <interrupt>
             <name>FTM1</name>
-            <description>FlexTimer Module 1</description>
+            <description>FlexTimer Module</description>
             <value>43</value>
          </interrupt>
          <interrupt>
             <name>FTM2</name>
-            <description>FlexTimer Module 2</description>
+            <description>FlexTimer Module</description>
             <value>44</value>
          </interrupt>
          <interrupt>
             <name>PIT0</name>
-            <description>Periodic Interrupt Timer 0</description>
+            <description>Periodic Interrupt Timer</description>
             <value>48</value>
          </interrupt>
          <interrupt>
             <name>PIT1</name>
-            <description>Periodic Interrupt Timer 1</description>
+            <description>Periodic Interrupt Timer</description>
             <value>49</value>
          </interrupt>
          <interrupt>
             <name>PIT2</name>
-            <description>Periodic Interrupt Timer 2</description>
+            <description>Periodic Interrupt Timer</description>
             <value>50</value>
          </interrupt>
          <interrupt>
@@ -231,12 +231,12 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>PDB0</name>
-            <description>Programmable Delay Block 0</description>
+            <description>Programmable Delay Block</description>
             <value>52</value>
          </interrupt>
          <interrupt>
             <name>DAC0</name>
-            <description>12-Bit Digital to Analog Converter 0</description>
+            <description>12-Bit Digital to Analogue Converter</description>
             <value>56</value>
          </interrupt>
          <interrupt>
@@ -246,32 +246,32 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>PORTA</name>
-            <description>Port A</description>
+            <description>General Purpose Input/Output</description>
             <value>59</value>
          </interrupt>
          <interrupt>
             <name>PORTB</name>
-            <description>Port B</description>
+            <description>General Purpose Input/Output</description>
             <value>60</value>
          </interrupt>
          <interrupt>
             <name>PORTC</name>
-            <description>Port C</description>
+            <description>General Purpose Input/Output</description>
             <value>61</value>
          </interrupt>
          <interrupt>
             <name>PORTD</name>
-            <description>Port D</description>
+            <description>General Purpose Input/Output</description>
             <value>62</value>
          </interrupt>
          <interrupt>
             <name>PORTE</name>
-            <description>Port E</description>
+            <description>General Purpose Input/Output</description>
             <value>63</value>
          </interrupt>
          <interrupt>
             <name>ADC1</name>
-            <description>Analog to Digital Converter 1</description>
+            <description>Analogue to Digital Converter</description>
             <value>73</value>
          </interrupt>
       </interrupts>

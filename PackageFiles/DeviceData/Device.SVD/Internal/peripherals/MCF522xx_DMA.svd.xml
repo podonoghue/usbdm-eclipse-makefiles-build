@@ -179,27 +179,10 @@ Indicates the DMA channel terminated with a bus error during the read portion of
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>CE</name>
-                        <description>Configuration error\n
+                     <field derivedFrom="BED" > <name>CE</name> <description>Configuration error\n
 Occurs when BCR, SAR, or DAR does not match the requested transfer size, or\n
 if BCR equals 0 when the DMA receives a start condition. 
-CE is cleared at hardware reset or by writing a 1 to DSR[DONE]</description>
-                        <bitOffset>6</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>No error</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Error</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+CE is cleared at hardware reset or by writing a 1 to DSR[DONE]</description> <bitOffset>6</bitOffset> </field>
                   </fields>
                </register>
                <register>
@@ -236,35 +219,8 @@ Indicates the DMA channel assigned as link channel 2</description>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>LCH1</name>
-                        <description>Link channel 1\n
-Indicates the DMA channel assigned as link channel 1</description>
-                        <bitOffset>2</bitOffset>
-                        <bitWidth>2</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b00</name>
-                              <description>Channel 0</description>
-                              <value>0b00</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b01</name>
-                              <description>Channel 1</description>
-                              <value>0b01</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b10</name>
-                              <description>Channel 2</description>
-                              <value>0b10</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b11</name>
-                              <description>Channel 3</description>
-                              <value>0b11</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="LCH2" > <name>LCH1</name> <description>Link channel 1\n
+Indicates the DMA channel assigned as link channel 1</description> <bitOffset>2</bitOffset> </field>
                      <field>
                         <name>LINKCC</name>
                         <description>Link channel control\n
@@ -405,34 +361,7 @@ Controls whether a destination address increments after each successful transfer
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>SSIZE</name>
-                        <description>None</description>
-                        <bitOffset>20</bitOffset>
-                        <bitWidth>2</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b00</name>
-                              <description>Longword</description>
-                              <value>0b00</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b01</name>
-                              <description>Byte</description>
-                              <value>0b01</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b10</name>
-                              <description>Word</description>
-                              <value>0b10</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b11</name>
-                              <description>16 byte burst</description>
-                              <value>0b11</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="DSIZE" > <name>SSIZE</name> <description>None</description> <bitOffset>20</bitOffset> </field>
                      <field>
                         <name>SINC</name>
                         <description>None</description>
@@ -559,25 +488,8 @@ Care should be taken because a collision can occur between the START bit and DRE
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>INT</name>
-                        <description>Interrupt on completion of transfer\n
-Determines whether an interrupt is generated by completing a transfer or by the occurrence of an error condition</description>
-                        <bitOffset>31</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Disabled</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Enabled</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="EEXT" > <name>INT</name> <description>Interrupt on completion of transfer\n
+Determines whether an interrupt is generated by completing a transfer or by the occurrence of an error condition</description> <bitOffset>31</bitOffset> </field>
                   </fields>
                </register>
             </cluster>
