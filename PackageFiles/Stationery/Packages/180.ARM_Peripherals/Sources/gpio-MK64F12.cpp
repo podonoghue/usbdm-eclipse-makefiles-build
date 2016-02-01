@@ -1,8 +1,10 @@
- /**
-  * @file     gpio.cpp (from gpio-MK64F12.cpp)
-  *
-  * @brief   Pin declarations for MK64F12, generated from MK64F12.csv
-  */
+/**
+ * @file      gpio.cpp (from gpio-MK64F12.cpp)
+ *
+ * @brief     Pin declarations for MK64F12, generated from MK64F12.csv
+ *            Devices   [MK64F12]
+ *            Reference [MK64F12]
+ */
 
 #include "gpio.h"
 #include "pin_mapping.h"

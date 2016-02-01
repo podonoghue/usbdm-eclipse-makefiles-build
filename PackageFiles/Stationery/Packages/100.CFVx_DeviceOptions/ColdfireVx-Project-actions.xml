@@ -29,9 +29,23 @@
       <copy source="Project_Headers/system.h"                                  target="Project_Headers/system.h" />
       <copy source="Project_Headers/utilities.h"                               target="Project_Headers/utilities.h" />
       <copy source="Project_Headers/core_cfv2.h"                               target="Project_Headers/core_cfv2.h" />
-      <copy source="Sources/main.c"                                            target="Sources/main.c" />
 
       <copy source="$(externalVectorTable)"                                    target="Startup_Code/vectors.c" replace="true" />
       <copy source="$(externalHeaderFile)"                                     target="Project_Headers/$(targetDevice).h" replace="true" />
+
+      <projectActionList>
+         <applyWhen>
+            <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+         </applyWhen>
+         <copy source="Sources/main.c"                                target="Sources/main.c" />
+      </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </applyWhen>
+         <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
+      </projectActionList>
+
    </projectActionList>
 </root>

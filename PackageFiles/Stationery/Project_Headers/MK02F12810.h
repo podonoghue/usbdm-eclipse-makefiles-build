@@ -3666,7 +3666,7 @@ typedef struct {                                /*       PORTA Structure        
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
    __I  uint32_t  RESERVED0[6];                
    __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
-} PORTA_Type;
+} PORT_Type;
 
 /**
  * @} */ /* End group PORT_structs_GROUP 
@@ -3725,7 +3725,7 @@ typedef struct {                                /*       PORTA Structure        
 
 /* PORTA - Peripheral instance base addresses */
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
-#define PORTA                          ((PORTA_Type *) PORTA_BasePtr) //!< Freescale base pointer
+#define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -3746,7 +3746,7 @@ typedef struct {                                /*       PORTA Structure        
 
 /* PORTB - Peripheral instance base addresses */
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
-#define PORTB                          ((PORTA_Type *) PORTB_BasePtr) //!< Freescale base pointer
+#define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -3767,7 +3767,7 @@ typedef struct {                                /*       PORTA Structure        
 
 /* PORTC - Peripheral instance base addresses */
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
-#define PORTC                          ((PORTA_Type *) PORTC_BasePtr) //!< Freescale base pointer
+#define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -3854,7 +3854,7 @@ typedef struct {                                /*       PORTD Structure        
 
 /* PORTE - Peripheral instance base addresses */
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
-#define PORTE                          ((PORTA_Type *) PORTE_BasePtr) //!< Freescale base pointer
+#define PORTE                          ((PORT_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 

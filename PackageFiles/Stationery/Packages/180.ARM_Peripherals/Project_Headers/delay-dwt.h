@@ -1,6 +1,6 @@
 /**
- * @file delay.h
- * @brief Simple busy-waiting delay routines using SYST counter
+ * @file delay.h derived from delay-dwt.h
+ * @brief Simple busy-waiting delay routines using DWT counter
  *
  *  Created on: 5 Oct 2015
  *      Author: podonoghue
@@ -16,16 +16,7 @@ namespace USBDM {
 #endif
 
 // Mask for maximum timer value
-static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
-
-/**
- * Convert Milliseconds to timer ticks
- *
- * @return Time value in timer ticks
- */
-static inline int64_t convertMSToTicks(uint32_t ms) {
-   return ((uint64_t)ms * SystemCoreClock) / 1000;
-}
+static constexpr uint32_t TIMER_MASK = -1;
 
 /**
  * Enable timer
@@ -33,6 +24,12 @@ static inline int64_t convertMSToTicks(uint32_t ms) {
  * Note this is only required if getTicks() is used by itself
  */
 static inline void enableTimer() {
+#ifdef DEBUG_BUILD
+   if ((DWT->CTRL&DWT_CTRL_NOCYCCNT_Msk) != 0) {
+      // No CYCCNT
+      __asm__("bkpt");
+   }
+#endif
    // Reload with maximum value 2^24
    SYST->RVR = -1;
 
@@ -43,8 +40,6 @@ static inline void enableTimer() {
 
 /**
  * Gets the number of ticks since the timer was started
- *
- * Note: the timer rolls over at TIMER_MASK ticks
  *
  * @return Number of ticks
  */

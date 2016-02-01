@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file main-stm.c
+ * @file main-stm.cpp
  *
  *  Created on: 04/12/2012
  *      Author: podonoghue

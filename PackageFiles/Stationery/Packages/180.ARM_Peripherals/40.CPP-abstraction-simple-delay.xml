@@ -11,52 +11,18 @@
          </and>
       </applyWhen>
 
+      <copy source="Project_Headers/delay.h"   target="Project_Headers/delay.h" />
       <projectActionList>
          <applyWhen>
-            <and>
-               <or>
-                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
-                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
-               </or>
-            </and>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
-         <copy source="Project_Headers/delay.h"   target="Project_Headers/delay.h" />
-         <projectActionList>
-            <applyWhen>
-               <variableRef idRef="hasCCNature" condition="isTrue" />
-            </applyWhen>
-            <copy source="Sources/delay-systick.cpp" target="Sources/delay.cpp" />
-         </projectActionList>
-         <projectActionList>
-            <applyWhen>
-               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
-            </applyWhen>
-            <copy source="Sources/delay-systick.cpp" target="Sources/delay.c" />
-         </projectActionList>
+         <copy source="Sources/delay.cpp" target="Sources/delay.cpp" />
       </projectActionList>
-
       <projectActionList>
          <applyWhen>
-            <and>
-               <or>
-                  <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
-                  <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
-               </or>
-            </and>
+            <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
-         <copy source="Project_Headers/delay.h" target="Project_Headers/delay.h" />
-         <projectActionList>
-            <applyWhen>
-               <variableRef idRef="hasCCNature" condition="isTrue" />
-            </applyWhen>
-            <copy source="Sources/delay-dwt.cpp"   target="Sources/delay.cpp" />
-         </projectActionList>
-         <projectActionList>
-            <applyWhen>
-               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
-            </applyWhen>
-            <copy source="Sources/delay-dwt.cpp"   target="Sources/delay.c" />
-         </projectActionList>
+         <copy source="Sources/delay.cpp" target="Sources/delay.c" />
       </projectActionList>
    </projectActionList>
 </root>

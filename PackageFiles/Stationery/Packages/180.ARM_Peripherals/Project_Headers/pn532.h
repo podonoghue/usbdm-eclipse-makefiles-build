@@ -220,7 +220,8 @@ protected:
     */
    PN532Base(USBDM::Spi *spi) : spi(spi) {
       spi->setSpeed(2000000);
-      spi->setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_LSBFE_MASK|USBDM::SPI_MODE0|SPI_CTAR_PASC(1)|SPI_CTAR_ASC(1));
+      spi->setMode(SPI_LSBF|SPI_MODE0);
+//      spi->setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_LSBFE_MASK|USBDM::SPI_MODE0|SPI_CTAR_PASC(1)|SPI_CTAR_ASC(1));
       USBDM::waitUS(1000);
    }
 

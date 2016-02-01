@@ -1,8 +1,10 @@
- /**
-  * @file     gpio.cpp (from gpio-MK22F51212.cpp)
-  *
-  * @brief   Pin declarations for MK22F51212, generated from MK22F51212.csv
-  */
+/**
+ * @file      gpio.cpp (from gpio-MK22F51212.cpp)
+ *
+ * @brief     Pin declarations for MK22F51212, generated from MK22F51212.csv
+ *            Devices   [MK22FN512M12, MK22FN256M12]
+ *            Reference [K22P121M120SF7RM, K22P121M120SF8RM]
+ */
 
 #include "gpio.h"
 #include "pin_mapping.h"

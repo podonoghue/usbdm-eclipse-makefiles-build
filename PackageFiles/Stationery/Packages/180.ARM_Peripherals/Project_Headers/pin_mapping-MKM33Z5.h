@@ -1,7 +1,9 @@
 /**
  * @file      pin_mapping.h (derived from pin_mapping-MKM33Z5.h)
- * @version   1.1.0
+ * @version   1.2.0
  * @brief     Pin declarations for MKM33Z5, generated from MKM33Z5.csv
+ *            Devices   [MKM33Z5]
+ *            Reference [MKM33Z5]
  */
 
 #ifndef PROJECT_HEADERS_PIN_MAPPING_H_
@@ -3735,6 +3737,9 @@
 /*
  * Common Mux settings for PCR
  */
+#undef FIXED_ADC_FN            
+#undef FIXED_GPIO_FN           
+#undef FIXED_PORT_CLOCK_REG    
 #define FIXED_ADC_FN             0                    // Fixed ADC Multiplexing value
 #define FIXED_GPIO_FN            1                    // Fixed GPIO Multiplexing value
 #define FIXED_PORT_CLOCK_REG     SCGC5                // Fixed PORT Clock
@@ -3900,77 +3905,67 @@ namespace USBDM {
 * @{
 */
 /**
- * Struct for pin information
- */
-struct PcrInfo {
-   uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t pcrAddress;  //!< PCR[x] register address
-   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   uint8_t  gpioBit;     //!< Bit number of pin in GPIO
-   uint8_t  muxValue;    //!< PCR mux value to select this function
-};
-/**
  * Peripheral pin mapping information for Analogue Input
  */
 constexpr PcrInfo Adc0Info[32] = {
  //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (ADC0_SE0_PIN_SEL == 1)
- /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOC_BasePtr,  5,  0 },
+ /*  0 */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  5,  0 },
 #else
  /*  0 */  { 0 },
 #endif
 #if (ADC0_SE1_PIN_SEL == 1)
- /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOC_BasePtr,  6,  0 },
+ /*  1 */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  6,  0 },
 #else
  /*  1 */  { 0 },
 #endif
 #if (ADC0_SE2_PIN_SEL == 1)
- /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOC_BasePtr,  7,  0 },
+ /*  2 */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  7,  0 },
 #else
  /*  2 */  { 0 },
 #endif
 #if (ADC0_SE3_PIN_SEL == 1)
- /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOD_BasePtr,  4,  0 },
+ /*  3 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  4,  0 },
 #else
  /*  3 */  { 0 },
 #endif
 #if (ADC0_SE4_PIN_SEL == 1)
- /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOD_BasePtr,  5,  0 },
+ /*  4 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  5,  0 },
 #else
  /*  4 */  { 0 },
 #endif
 #if (ADC0_SE5_PIN_SEL == 1)
- /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOD_BasePtr,  6,  0 },
+ /*  5 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  6,  0 },
 #else
  /*  5 */  { 0 },
 #endif
 #if (ADC0_SE6_PIN_SEL == 1)
- /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOE_BasePtr,  7,  0 },
+ /*  6 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  7,  0 },
 #else
  /*  6 */  { 0 },
 #endif
 #if (ADC0_SE7_PIN_SEL == 1)
- /*  7 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOF_BasePtr,  0,  0 },
+ /*  7 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  0,  0 },
 #else
  /*  7 */  { 0 },
 #endif
 #if (ADC0_SE8_PIN_SEL == 1)
- /*  8 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOF_BasePtr,  1,  0 },
+ /*  8 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  1,  0 },
 #else
  /*  8 */  { 0 },
 #endif
 #if (ADC0_SE9_PIN_SEL == 1)
- /*  9 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOF_BasePtr,  2,  0 },
+ /*  9 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  2,  0 },
 #else
  /*  9 */  { 0 },
 #endif
 #if (ADC0_SE10_PIN_SEL == 1)
- /* 10 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOG_BasePtr,  1,  0 },
+ /* 10 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  1,  0 },
 #else
  /* 10 */  { 0 },
 #endif
 #if (ADC0_SE11_PIN_SEL == 1)
- /* 11 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOG_BasePtr,  2,  0 },
+ /* 11 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  2,  0 },
 #else
  /* 11 */  { 0 },
 #endif
@@ -3982,23 +3977,23 @@ constexpr PcrInfo Adc0Info[32] = {
 constexpr PcrInfo Spi0Info[32] = {
  //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (SPI0_SCK_PIN_SEL == 1)
- /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOG_BasePtr,  3,  2 },
+ /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  3,  2 },
 #elif (SPI0_SCK_PIN_SEL == 2)
- /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOD_BasePtr,  2,  3 },
+ /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  2,  3 },
 #else
  /*  0 */  { 0 },
 #endif
 #if (SPI0_MISO_PIN_SEL == 1)
- /*  1 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOG_BasePtr,  5,  2 },
+ /*  1 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  5,  2 },
 #elif (SPI0_MISO_PIN_SEL == 2)
- /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOD_BasePtr,  4,  3 },
+ /*  1 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  4,  3 },
 #else
  /*  1 */  { 0 },
 #endif
 #if (SPI0_MOSI_PIN_SEL == 1)
- /*  2 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOG_BasePtr,  4,  2 },
+ /*  2 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  4,  2 },
 #elif (SPI0_MOSI_PIN_SEL == 2)
- /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOD_BasePtr,  3,  3 },
+ /*  2 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  3,  3 },
 #else
  /*  2 */  { 0 },
 #endif
@@ -4010,27 +4005,27 @@ constexpr PcrInfo Spi0Info[32] = {
 constexpr PcrInfo Spi1Info[32] = {
  //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (SPI1_SCK_PIN_SEL == 1)
- /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOF_BasePtr,  4,  2 },
+ /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  4,  2 },
 #elif (SPI1_SCK_PIN_SEL == 2)
- /*  0 */  { PORTH_CLOCK_MASK, PORTH_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOH_BasePtr,  7,  3 },
+ /*  0 */  { PORTH_CLOCK_MASK, PORTH_BasePtr,  GPIOH_BasePtr,  7,  3 },
 #else
  /*  0 */  { 0 },
 #endif
 #if (SPI1_MISO_PIN_SEL == 1)
- /*  1 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOF_BasePtr,  5,  2 },
+ /*  1 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  5,  2 },
 #elif (SPI1_MISO_PIN_SEL == 2)
- /*  1 */  { PORTI_CLOCK_MASK, PORTI_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOI_BasePtr,  0,  4 },
+ /*  1 */  { PORTI_CLOCK_MASK, PORTI_BasePtr,  GPIOI_BasePtr,  0,  4 },
 #elif (SPI1_MISO_PIN_SEL == 3)
- /*  1 */  { PORTI_CLOCK_MASK, PORTI_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOI_BasePtr,  1,  5 },
+ /*  1 */  { PORTI_CLOCK_MASK, PORTI_BasePtr,  GPIOI_BasePtr,  1,  5 },
 #else
  /*  1 */  { 0 },
 #endif
 #if (SPI1_MOSI_PIN_SEL == 1)
- /*  2 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOF_BasePtr,  6,  2 },
+ /*  2 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  6,  2 },
 #elif (SPI1_MOSI_PIN_SEL == 2)
- /*  2 */  { PORTI_CLOCK_MASK, PORTI_BasePtr+offsetof(PORT_Type,PCR[1]),  GPIOI_BasePtr,  1,  4 },
+ /*  2 */  { PORTI_CLOCK_MASK, PORTI_BasePtr,  GPIOI_BasePtr,  1,  4 },
 #elif (SPI1_MOSI_PIN_SEL == 3)
- /*  2 */  { PORTI_CLOCK_MASK, PORTI_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOI_BasePtr,  0,  5 },
+ /*  2 */  { PORTI_CLOCK_MASK, PORTI_BasePtr,  GPIOI_BasePtr,  0,  5 },
 #else
  /*  2 */  { 0 },
 #endif
@@ -4042,20 +4037,20 @@ constexpr PcrInfo Spi1Info[32] = {
 constexpr PcrInfo I2c0Info[32] = {
  //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (I2C0_SCL_PIN_SEL == 1)
- /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOD_BasePtr,  7,  2 },
+ /*  0 */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  7,  2 },
 #elif (I2C0_SCL_PIN_SEL == 2)
- /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOG_BasePtr,  3,  3 },
+ /*  0 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  3,  3 },
 #elif (I2C0_SCL_PIN_SEL == 3)
- /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOE_BasePtr,  6,  5 },
+ /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  6,  5 },
 #else
  /*  0 */  { 0 },
 #endif
 #if (I2C0_SDA_PIN_SEL == 1)
- /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[0]),  GPIOE_BasePtr,  0,  2 },
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  0,  2 },
 #elif (I2C0_SDA_PIN_SEL == 2)
- /*  1 */  { PORTG_CLOCK_MASK, PORTG_BasePtr+offsetof(PORT_Type,PCR[4]),  GPIOG_BasePtr,  4,  3 },
+ /*  1 */  { PORTG_CLOCK_MASK, PORTG_BasePtr,  GPIOG_BasePtr,  4,  3 },
 #elif (I2C0_SDA_PIN_SEL == 3)
- /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[7]),  GPIOE_BasePtr,  7,  5 },
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  7,  5 },
 #else
  /*  1 */  { 0 },
 #endif
@@ -4067,16 +4062,16 @@ constexpr PcrInfo I2c0Info[32] = {
 constexpr PcrInfo I2c1Info[32] = {
  //          clockMask pcrAddress gpioAddress gpioBit muxValue
 #if (I2C1_SCL_PIN_SEL == 1)
- /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[5]),  GPIOF_BasePtr,  5,  3 },
+ /*  0 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  5,  3 },
 #elif (I2C1_SCL_PIN_SEL == 2)
- /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[3]),  GPIOE_BasePtr,  3,  4 },
+ /*  0 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  3,  4 },
 #else
  /*  0 */  { 0 },
 #endif
 #if (I2C1_SDA_PIN_SEL == 1)
- /*  1 */  { PORTF_CLOCK_MASK, PORTF_BasePtr+offsetof(PORT_Type,PCR[6]),  GPIOF_BasePtr,  6,  3 },
+ /*  1 */  { PORTF_CLOCK_MASK, PORTF_BasePtr,  GPIOF_BasePtr,  6,  3 },
 #elif (I2C1_SDA_PIN_SEL == 2)
- /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr+offsetof(PORT_Type,PCR[2]),  GPIOE_BasePtr,  2,  4 },
+ /*  1 */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  2,  4 },
 #else
  /*  1 */  { 0 },
 #endif
@@ -4198,7 +4193,7 @@ using gpioI_3              = const USBDM::GpioI<3>;
  * @tparam adcChannel    ADC channel
  */
 template<uint8_t adcChannel> using Adc0 =
-   Adc_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
+   Adc_T<getPortClockMask(adcChannel,Adc0Info), getPcrReg(adcChannel,Adc0Info), getGpioBit(adcChannel,Adc0Info), ADC0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, ADC0_CLOCK_REG), ADC0_CLOCK_MASK, adcChannel>;
 
 #if (PTC5_SIG_SEL == 0)
 using adc0_se0             = const USBDM::Adc0<0>;
@@ -4244,22 +4239,9 @@ using adc0_se11            = const USBDM::Adc0<11>;
 * @brief Pins used for SPI functions
 * @{
 */
-/**
- * Convenience templated class representing an SPI pin
- *
- * Example
- * @code
- * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
- * @endcode
- *
- * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
- */
-template<uint8_t spiPinNum> using Spi0Pin =
-   Pcr_T<getPortClockMask(spiPinNum,Spi0Info), getPcrReg(spiPinNum,Spi0Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi0Info))|DEFAULT_PCR>;
-
-using spi0_SCK             = const USBDM::Spi0Pin<0>;
-using spi0_MOSI            = const USBDM::Spi0Pin<2>;
-using spi0_MISO            = const USBDM::Spi0Pin<1>;
+using spi0_SCK             = const USBDM::PcrTable_T<0, Spi0Info>;
+using spi0_MOSI            = const USBDM::PcrTable_T<2, Spi0Info>;
+using spi0_MISO            = const USBDM::PcrTable_T<1, Spi0Info>;
 /**
  * @}
  */
@@ -4268,22 +4250,9 @@ using spi0_MISO            = const USBDM::Spi0Pin<1>;
 * @brief Pins used for SPI functions
 * @{
 */
-/**
- * Convenience templated class representing an SPI pin
- *
- * Example
- * @code
- * using spi0_PCS0 = const USBDM::Spi0Pin<3>;
- * @endcode
- *
- * @tparam spiPinNum    SPI pin number (index into SpiInfo[])
- */
-template<uint8_t spiPinNum> using Spi1Pin =
-   Pcr_T<getPortClockMask(spiPinNum,Spi1Info), getPcrReg(spiPinNum,Spi1Info), PORT_PCR_MUX(getPcrMux(spiPinNum, Spi1Info))|DEFAULT_PCR>;
-
-using spi1_SCK             = const USBDM::Spi1Pin<0>;
-using spi1_MISO            = const USBDM::Spi1Pin<1>;
-using spi1_MOSI            = const USBDM::Spi1Pin<2>;
+using spi1_SCK             = const USBDM::PcrTable_T<0, Spi1Info>;
+using spi1_MISO            = const USBDM::PcrTable_T<1, Spi1Info>;
+using spi1_MOSI            = const USBDM::PcrTable_T<2, Spi1Info>;
 /**
  * @}
  */
@@ -4292,36 +4261,10 @@ using spi1_MOSI            = const USBDM::Spi1Pin<2>;
 * @brief Pins used for I2C functions
 * @{
 */
-/**
- * Convenience templated class representing PCR associated with a I2C pin
- *
- * Example
- * @code
- * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
- * @endcode
- *
- * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
- */
-template<uint8_t i2cPinIndex> using I2c0Pcr =
-   Pcr_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c0Info))|I2C_DEFAULT_PCR>;
-
-/**
- * Convenience templated class representing a GPIO used as I2C pin
- *
- * Example
- * @code
- * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
- * @endcode
- *
- * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
- */
-template<uint8_t i2cPinIndex> using I2c0Gpio =
-   Gpio_T<getPortClockMask(i2cPinIndex,I2c0Info), getPcrReg(i2cPinIndex,I2c0Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
-             getGpioAddress(i2cPinIndex,I2c0Info),   getGpioBit(i2cPinIndex,I2c0Info)>;
-using i2c0_SCLPcr    = const USBDM::I2c0Pcr<0>;
-using i2c0_SCLGpio   = const USBDM::I2c0Gpio<0>;
-using i2c0_SDAPcr    = const USBDM::I2c0Pcr<1>;
-using i2c0_SDAGpio   = const USBDM::I2c0Gpio<1>;
+using i2c0_SCLPcr    = const USBDM::PcrTable_T<0, I2c0Info>;
+using i2c0_SCLGpio   = const USBDM::GpioTable_T<0, I2c0Info>;
+using i2c0_SDAPcr    = const USBDM::PcrTable_T<1, I2c0Info>;
+using i2c0_SDAGpio   = const USBDM::GpioTable_T<1, I2c0Info>;
 /**
  * @}
  */
@@ -4330,36 +4273,10 @@ using i2c0_SDAGpio   = const USBDM::I2c0Gpio<1>;
 * @brief Pins used for I2C functions
 * @{
 */
-/**
- * Convenience templated class representing PCR associated with a I2C pin
- *
- * Example
- * @code
- * using i2c0_SCLPin = const USBDM::I2c0Pin<3>;
- * @endcode
- *
- * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
- */
-template<uint8_t i2cPinIndex> using I2c1Pcr =
-   Pcr_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(getPcrMux(i2cPinIndex, I2c1Info))|I2C_DEFAULT_PCR>;
-
-/**
- * Convenience templated class representing a GPIO used as I2C pin
- *
- * Example
- * @code
- * using i2c0_SCLGpio = const USBDM::I2c0Gpio<3>;
- * @endcode
- *
- * @tparam i2cPinIndex    I2C pin number (index into I2cInfo[])
- */
-template<uint8_t i2cPinIndex> using I2c1Gpio =
-   Gpio_T<getPortClockMask(i2cPinIndex,I2c1Info), getPcrReg(i2cPinIndex,I2c1Info), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR,
-             getGpioAddress(i2cPinIndex,I2c1Info),   getGpioBit(i2cPinIndex,I2c1Info)>;
-using i2c1_SDAPcr    = const USBDM::I2c1Pcr<1>;
-using i2c1_SDAGpio   = const USBDM::I2c1Gpio<1>;
-using i2c1_SCLPcr    = const USBDM::I2c1Pcr<0>;
-using i2c1_SCLGpio   = const USBDM::I2c1Gpio<0>;
+using i2c1_SDAPcr    = const USBDM::PcrTable_T<1, I2c1Info>;
+using i2c1_SDAGpio   = const USBDM::GpioTable_T<1, I2c1Info>;
+using i2c1_SCLPcr    = const USBDM::PcrTable_T<0, I2c1Info>;
+using i2c1_SCLGpio   = const USBDM::GpioTable_T<0, I2c1Info>;
 /**
  * @}
  */

@@ -33,7 +33,7 @@
          <constant id="demo.cpp.external.switch"    value="D12" />              <!-- Digital I/O from switch (Arduino) -->
          <constant id="demo.cpp.external.led"       value="D13" />              <!-- Digital I/O to LED (Arduino) -->
          <constant id="demo.cpp.external.gps"       value="Gps2" />             <!-- GPS module connected by serial -->
-         <constant id="demo.cpp.external.spi"       value="Spi0Gpio_T" />       <!-- SPI interface to off-board device -->
+         <constant id="demo.cpp.external.spi"       value="Spi0" />             <!-- SPI interface to off-board device -->
          <constant id="demo.cpp.external.i2c"       value="I2c1" />             <!-- I2C interface to off-board device -->
          <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />             <!-- I2C interface to MMA845x -->
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />             <!-- I2C interface to FX0S8700CQ -->

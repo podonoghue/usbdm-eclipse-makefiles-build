@@ -19,11 +19,11 @@ namespace USBDM {
  */
 bool PN532Base::waitReady(int timeout) {
 
-   // Convert duration to DWT ticks
-   int64_t delayct = ((uint64_t)timeout * SystemCoreClock) / 1000;
+   // Convert duration to Timer ticks
+   int64_t delayct = convertMSToTicks(timeout);
 
    // Get current tick
-   uint32_t last = DWT->CYCCNT;
+   uint32_t last = getTicks();
    bool ready;
    do {
       enable();
@@ -38,12 +38,11 @@ bool PN532Base::waitReady(int timeout) {
       }
       // Decrement time elapsed
       // Note: This relies on the loop executing in less than the roll-over time
-      // of the counter i.e. (2^32)/SystemCoreClock
-      uint32_t now = DWT->CYCCNT;
-      delayct -= (uint32_t)(now-last);
-      // Save for next increment
+      // of the counter i.e. (TIMER_MASK+1)/SystemCoreClock
+      uint32_t now = getTicks();
+      delayct -= (uint32_t)(TIMER_MASK&(last-now));
       last = now;
-   } while (delayct > 0);
+      } while (delayct > 0);
 
    return ready;
 }

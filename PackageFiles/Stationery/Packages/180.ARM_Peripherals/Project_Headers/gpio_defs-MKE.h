@@ -58,7 +58,8 @@ namespace USBDM {
  * @tparam gpio            GPIO hardware
  * @tparam bitNum          Bit number in the port
  */
-template<uint32_t portPue, uint32_t gpio, const uint32_t bitNum> class Gpio_T {
+template<uint32_t portPue, uint32_t gpio, const uint32_t bitNum> 
+class Gpio_T {
 
 public:
    /**
@@ -216,7 +217,7 @@ template<int bitNum> using GpioB = Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE1)
  *
  * <b>Usage</b>
  * @code
- * // Instantiate for bit 4 of port
+ * // Instantiate for bit 3 of port
  * GpioC<3> ptc3
  *
  * // Set as digital output
@@ -284,7 +285,9 @@ template<int bitNum> using GpioC = Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE2)
  * @tparam left            Bit number of leftmost bit in port (inclusive)
  * @tparam right           Bit number of rightmost bit in port (inclusive)
  */
-template<uint32_t portPue, uint32_t gpio, const uint32_t left, const uint32_t right> class Field_T {
+template<uint32_t portPue, uint32_t gpio, const uint32_t left, const uint32_t right> 
+class Field_T {
+
 private:
    /**
     * Mask for the bits being manipulated

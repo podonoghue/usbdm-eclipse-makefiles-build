@@ -39,7 +39,6 @@ Cortex-M0
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
-      <copy source="Sources/main.c"                                           target="Sources/main.c" />
 
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
@@ -49,6 +48,7 @@ Cortex-M0
             <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
          <copy source="Project_Headers/bme-c.h"                       target="Project_Headers/bme.h" />
+         <copy source="Sources/main.c"                                target="Sources/main.c" />
       </projectActionList>
 
       <projectActionList>
@@ -56,6 +56,7 @@ Cortex-M0
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
          <copy source="Project_Headers/bme-cpp.h"                     target="Project_Headers/bme.h" />
+         <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
       </projectActionList>
 
       <!-- No Start up files for devices with very limited RAM -->

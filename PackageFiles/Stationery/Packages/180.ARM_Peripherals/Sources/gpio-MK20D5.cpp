@@ -1,8 +1,10 @@
- /**
-  * @file     gpio.cpp (from gpio-MK20D5.cpp)
-  *
-  * @brief   Pin declarations for MK20D5, generated from MK20D5.csv
-  */
+/**
+ * @file      gpio.cpp (from gpio-MK20D5.cpp)
+ *
+ * @brief     Pin declarations for MK20D5, generated from MK20D5.csv
+ *            Devices   [MK20D5]
+ *            Reference [MK20D5]
+ */
 
 #include "gpio.h"
 #include "pin_mapping.h"

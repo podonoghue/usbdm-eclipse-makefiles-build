@@ -39,8 +39,6 @@
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
 
-      <copy source="Sources/main.c"                                           target="Sources/main.c" />
-   
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"            replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
@@ -48,14 +46,16 @@
          <applyWhen>
             <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
-         <copy source="Project_Headers/bitband-c-mk.h"                        target="Project_Headers/bitband.h" />
+         <copy source="Project_Headers/bitband-c-mk.h"                target="Project_Headers/bitband.h" />
+         <copy source="Sources/main.c"                                target="Sources/main.c" />
       </projectActionList>
 
       <projectActionList>
          <applyWhen>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
-         <copy source="Project_Headers/bitband-cpp-mk.h"                      target="Project_Headers/bitband.h" />
+         <copy source="Project_Headers/bitband-cpp-mk.h"                target="Project_Headers/bitband.h" />
+         <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
       </projectActionList>
 
    </projectActionList>

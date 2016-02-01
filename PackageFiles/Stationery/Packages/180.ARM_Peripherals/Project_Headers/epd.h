@@ -288,7 +288,7 @@ public:
       epdPower::setOutput();
       epdBorder::setOutput();
       epdDischarge::setOutput();
-      epdPwm::setMode(5 /* us */, USBDM::ftm_leftAlign);
+      epdPwm::setMode(5 /* us */);
       epdReset_n::setOutput();
       epdBusy::setInput();
 

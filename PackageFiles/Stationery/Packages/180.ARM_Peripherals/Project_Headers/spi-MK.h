@@ -16,13 +16,17 @@
 
 namespace USBDM {
 
+static constexpr uint32_t SPI_CPHA = SPI_CTAR_CPHA_MASK;     // Clock phase    - First edge on SPSCK occurs at the start of the first cycle of a data transfer
+static constexpr uint32_t SPI_CPOL = SPI_CTAR_CPOL_MASK;     // Clock polarity - Active-low SPI clock (idles high)
+static constexpr uint32_t SPI_LSBF = SPI_CTAR_LSBFE_MASK;    // LSB transmitted  first
+
+static constexpr uint32_t SPI_MODE0 (0       |0);
+static constexpr uint32_t SPI_MODE1 (0       |SPI_CPHA);
+static constexpr uint32_t SPI_MODE2 (SPI_CPOL|0);
+static constexpr uint32_t SPI_MODE3 (SPI_CPOL|SPI_CPHA);
+
 static constexpr uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
-
-static constexpr uint32_t SPI_MODE0 (0                 |0);
-static constexpr uint32_t SPI_MODE1 (0                 |SPI_CTAR_CPHA_MASK);
-static constexpr uint32_t SPI_MODE2 (SPI_CTAR_CPOL_MASK|0);
-static constexpr uint32_t SPI_MODE3 (SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
-
+static constexpr uint32_t DEFAULT_SPI_MODE      = SPI_MODE0;    //!< Default SPI mode for TxRx
 /**
  * @addtogroup SPI_Group Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
@@ -55,12 +59,21 @@ public:
    /**
     * Sets Communication speed for SPI
     *
-    * @param targetFrequency => Frequency in Hz (0 => use default value)
+    * @param frequency => Frequency in Hz (0 => use default value)
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
     */
-   void setSpeed(uint32_t targetFrequency = DEFAULT_SPI_FREQUENCY);
+   void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
+   /**
+    * Sets Communication mode for SPI
+    *
+    * @param mode => Mode to set combination of spi_CPHA etc
+    */
+   void setMode(uint32_t mode=DEFAULT_SPI_MODE) {
+      // Sets the default CTAR value with 8 bits
+      setCTAR0Value((mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF))|SPI_CTAR_FMSZ(8-1));
+   }
    /**
     * Gets current speed of interface
     *
@@ -70,7 +83,7 @@ public:
       return interfaceFrequency;
    }
    /**
-    * Set value combined with data for PUSHR register
+    * Set value that is combined with data for PUSHR register
     * For example this may be used to control which CTAR is used or which SPI_PCSx signal is asserted
     *
     * @param pushrMask Value to combine with Tx data before writing to PUSHR register

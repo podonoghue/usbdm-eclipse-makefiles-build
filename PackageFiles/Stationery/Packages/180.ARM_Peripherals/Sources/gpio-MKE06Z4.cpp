@@ -1,8 +1,10 @@
- /**
-  * @file     gpio.cpp (from gpio-MKE06Z4.cpp)
-  *
-  * @brief   Pin declarations for MKE06Z4, generated from MKE06Z4.csv
-  */
+/**
+ * @file      gpio.cpp (from gpio-MKE06Z4.cpp)
+ *
+ * @brief     Pin declarations for MKE06Z4, generated from MKE06Z4.csv
+ *            Devices   [MKE06Z4]
+ *            Reference [MKE06Z4]
+ */
 
 #include "gpio.h"
 #include "pin_mapping.h"

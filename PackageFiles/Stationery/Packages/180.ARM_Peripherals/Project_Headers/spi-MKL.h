@@ -17,7 +17,19 @@
 
 namespace USBDM {
 
+static constexpr uint16_t SPI_CPHA = SPI_C1_CPHA_MASK;     // Clock phase    - First edge on SPSCK occurs at the start of the first cycle of a data transfer
+static constexpr uint16_t SPI_CPOL = SPI_C1_CPOL_MASK;     // Clock polarity - Active-low SPI clock (idles high)
+static constexpr uint16_t SPI_LSBF = SPI_C1_LSBFE_MASK;    // LSB transmitted  first
+static constexpr uint16_t SPI_MSTR = SPI_C1_MSTR_MASK;     // Master mode
+static constexpr uint16_t SPI_SSOE = SPI_C1_SSOE_MASK;     // Slave select output enable (master mode, MODFEN=1)
+
+static constexpr uint32_t SPI_MODE0 (0       |0);
+static constexpr uint32_t SPI_MODE1 (0       |SPI_CPHA);
+static constexpr uint32_t SPI_MODE2 (SPI_CPOL|0);
+static constexpr uint32_t SPI_MODE3 (SPI_CPOL|SPI_CPHA);
+
 static constexpr uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
+static constexpr uint32_t DEFAULT_SPI_MODE      = SPI_MODE0;    //!< Default SPI mode for TxRx
 
 extern "C" void SPI0_IRQHandler(void);
 extern "C" void SPI1_IRQHandler(void);
@@ -40,12 +52,21 @@ class Spi {
    /** Allow access from ISR */
    friend void SPI2_IRQHandler(void);
 
+   /**
+    * Note on MODFEN/SSOE use
+    *  SSOE  MODFEN     MASTER      SLAVE
+    *   0     0         GPIO        SS-in
+    *   0     1         FAULT       SS-in
+    *   1     0         GPIO        SS-in
+    *   1     1         SS-out      SS-in
+    */
 protected:
    volatile SPI_Type   *spi;                 //!< SPI hardware
    DMAChannel          *dmacTxChannel;       //!< DMA hardware
    DMAChannel          *dmacRxChannel;       //!< DMA hardware
-   uint8_t              dmaSpiRxSlot;        //!<
+   uint8_t              dmaSpiRxSlot;        //!< DMA slot (1st of Tx/Rx pair)
    uint32_t             interfaceFrequency;  //!< Interface frequency to use
+   uint8_t              spiC1BaseValue;      //!< Base value for spi->C1
 
 protected:
    /**
@@ -62,17 +83,13 @@ protected:
       dmacRxChannel(dmaRxChannel),
       dmaSpiRxSlot(rxMuxSource),
       interfaceFrequency(DEFAULT_SPI_FREQUENCY) {
-   }
-   /**
-    * Initialise the SPI
-    */
-   void init() {
-      setSpeed();   // Use default speed
-      spi->C2 = SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
-      spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;//|SPI0_C1_SSOE_VALUE;//|SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK;
+
+      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
    }
 
 public:
+   virtual void enablePins() = 0;
+   virtual void disablePins() = 0;
    /**
     * Sets Communication speed for SPI
     *
@@ -81,6 +98,15 @@ public:
     * Note: Chooses the highest speed that is not greater than frequency.
     */
    void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
+   /**
+    * Sets Communication mode for SPI
+    *
+    * @param mode => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
+    */
+   void setMode(uint32_t mode=DEFAULT_SPI_MODE) {
+      // Note: always master mode
+      spi->C1 = (mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF))|SPI_C1_SSOE_MASK|SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
+   }
    /**
     * Gets current speed of interface
     *
@@ -118,11 +144,22 @@ public:
  * @tparam  SpiSCK         Pcr used for SCK signal
  * @tparam  SpiMISO        Pcr used for MISO signal
  * @tparam  SpiMOSI        Pcr used for MOSI signal
- * @tparam  Rest...        GpioX used for PCSx
+ * @tparam  Rest...        Pcr used for PCSx (These are initialised but not used)
  */
 template<uint32_t spiBasePtr, uint32_t spiClockReg, uint32_t spiClockMask, typename SpiSCK, typename  SpiMISO, typename  SpiMOSI, typename ... Rest>
 class Spi_T : public Spi {
 public:
+   virtual void enablePins() {
+      // Configure SPI pins
+      processPcrs<SpiSCK, SpiMISO, SpiMOSI, Rest...>();
+   }
+
+   virtual void disablePins() {
+      // Configure SPI pins
+      processPcrs<SpiSCK, SpiMISO, SpiMOSI, Rest...>(0);
+   }
+
+protected:
    /**
     * Constructor
     *
@@ -133,33 +170,32 @@ public:
    Spi_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource) :
       Spi(reinterpret_cast<volatile SPI_Type*>(spiBasePtr), dmaTxChannel, dmaRxChannel, rxMuxSource) {
 
-      // Configure SPI pins
-      processPcrs<SpiSCK, SpiMISO, SpiMOSI, Rest...>();
-
       // Enable SPI module clock
       *reinterpret_cast<volatile uint32_t*>(spiClockReg) |= spiClockMask;
 
-      init();
+      // Configure SPI pins
+      enablePins();
+
+      // Use default speed
+      setSpeed();
    }
 };
 
 #if defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
+#if (SPI0_PCS0_PIN_SEL!=0)
 /**
- * @brief Template class representing a SPI0 interface with PCS
+ * @brief Class representing SPI0 interface with hardware PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0<USBDM::spi0_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
+ * USBDM::Spi *spi = new USBDM::Spi0pcs(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
  *
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
- *
- * @tparam  PCS...        Pcr used for PCSx
  */
-template<typename ... PCS>
-class Spi0_T : public Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, PCS...> {
+class Spi0 : public Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, spi0_PCS0> {
 
 protected:
    class Spi0_T *thisPtr;
@@ -172,29 +208,58 @@ public:
     * @param dmaRxChannel DMA Channel for reception
     * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
     */
-   Spi0_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
-      Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, PCS...>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
+   Spi0(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
+      Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, spi0_PCS0>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
       NVIC_EnableIRQ(SPI0_IRQn);
       NVIC_SetPriority(SPI0_IRQn, 2);
+
+      spi->C2 |= SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK; // Hardware SS output (since SSOE will be set)
+      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI_C1_SSOE_MASK;
+      setMode();
    }
 };
-
+#else
 /**
- * @brief Alias for SPI0 interface without PCS
+ * @brief Class representing SPI0 interface without hardware PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMAChannel::DMA_SLOT_SPI0_Rx);
+ * USBDM::Spi *spi = new USBDM::Spi0(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
  *
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
+ *
+ * @tparam  PCS...        Pcr used for PCSx
  */
-using Spi0 = Spi0_T<>;
+class Spi0 : public Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO> {
+
+protected:
+   class Spi0_T *thisPtr;
+
+public:
+   /**
+    * Constructor
+    *
+    * @param dmaTxChannel DMA Channel for transmission
+    * @param dmaRxChannel DMA Channel for reception
+    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
+    */
+   Spi0(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
+      Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
+      NVIC_EnableIRQ(SPI0_IRQn);
+      NVIC_SetPriority(SPI0_IRQn, 2);
+
+      spi->C2 |= SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
+      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
+      setMode();
+   }
+};
+#endif
 
 /**
- * @brief Template class representing a SPI0 interface with GPIO used as select signal
+ * @brief Template class representing SPI0 interface with GPIO used as select signal
  *
  * @code
  * USBDM::Spi *spi = new USBDM::Spi0Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1());
@@ -251,22 +316,20 @@ public:
 #endif // defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
 
 #if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
+#if (SPI1_PCS0_PIN_SEL!=0)
 /**
- * @brief Template class representing a SPI1 interface with PCS
+ * @brief Class representing SPI1 interface with hardware PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi1<USBDM::spi1_PCS0>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
+ * USBDM::Spi *spi = new USBDM::Spi1pcs(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
  *
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
- *
- * @tparam  PCS...        Pcr used for PCSx
  */
-template<typename ... PCS>
-class Spi1_T : public Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi1_SCK, spi1_MOSI, spi1_MISO, PCS...> {
+class Spi1 : public Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, spi0_PCS0> {
 
 protected:
    class Spi1_T *thisPtr;
@@ -277,31 +340,60 @@ public:
     *
     * @param dmaTxChannel DMA Channel for transmission
     * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value
+    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
     */
-   Spi1_T(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
-      Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi1_SCK, spi1_MOSI, spi1_MISO, PCS...>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
+   Spi1(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
+      Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO, spi0_PCS0>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
       NVIC_EnableIRQ(SPI1_IRQn);
       NVIC_SetPriority(SPI1_IRQn, 2);
+
+      spi->C2 |= SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK; // Hardware SS output (since SSOE will be set)
+      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI_C1_SSOE_MASK;
+      setMode();
    }
 };
-
+#else
 /**
- * @brief Alias for SPI0 interface without PCS
+ * @brief Class representing SPI1 interface without hardware PCS
  *
  * @code
- * USBDM::Spi *spi = new USBDM::Spi1(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), 3);
+ * USBDM::Spi *spi = new USBDM::Spi1(new USBDM::DMAChannel0(), new USBDM::DMAChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
  *
  * uint8_t txData[] = {1,2,3,4};
  * uint8_t rxData[sizeof(txData)];
  *
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
+ *
+ * @tparam  PCS...        Pcr used for PCSx
  */
-using Spi1 = Spi1_T<>;
+class Spi1 : public Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO> {
+
+protected:
+   class Spi1_T *thisPtr;
+
+public:
+   /**
+    * Constructor
+    *
+    * @param dmaTxChannel DMA Channel for transmission
+    * @param dmaRxChannel DMA Channel for reception
+    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
+    */
+   Spi1(USBDM::DMAChannel *dmaTxChannel, USBDM::DMAChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
+      Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK, spi0_SCK, spi0_MOSI, spi0_MISO>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
+      NVIC_EnableIRQ(SPI1_IRQn);
+      NVIC_SetPriority(SPI1_IRQn, 2);
+
+      spi->C2 |= SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
+      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
+      setMode();
+   }
+};
+#endif
 
 /**
- * @brief Template class representing a SPI1 interface with GPIO used as select signal
+ * @brief Template class representing SPI1 interface with GPIO used as select signal
  *
  * @code
  * USBDM::Spi *spi = new USBDM::Spi1Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DMAChannel0(), new USBDM::DMAChannel1());

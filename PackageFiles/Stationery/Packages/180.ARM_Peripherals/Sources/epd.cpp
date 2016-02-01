@@ -44,11 +44,7 @@ Epd::Epd(Spi *spi, const EpdData &epdData) : spi(spi), epdData(epdData) {
       spi->setSpeed(SPI_FREQUENCY);
    }
 
-   // Debug counter used for timing
-   CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-
-   // Enable debug counter
-   DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+   enableTimer();
 
    // Set default factor for 25 Celsius
    setDisplayTemperature(25);
@@ -261,21 +257,21 @@ void Epd::frame_data( const uint8_t *image, EpdStage stage) {
  */
 void Epd::frame_fixed_repeat(uint8_t fixedValue, EpdStage stage) {
    // Convert duration to DWT ticks
-   int64_t delayct = ((uint64_t)factored_stage_time * SystemCoreClock) / 1000;
+   int64_t delayct = convertMSToTicks(factored_stage_time);
 
    // Get current tick
-   uint32_t last = DWT->CYCCNT;
+   uint32_t last = getTicks();
 
    do {
       frame_fixed(fixedValue, stage);
+
       // Decrement time elapsed
       // Note: This relies on the loop executing in less than the roll-over time
-      // of the counter i.e. (2^32)/SystemCoreClock
-      uint32_t now = DWT->CYCCNT;
-      delayct -= (uint32_t)(now-last);
-      // Save for next increment
+      // of the counter i.e. (TIMER_MASK+1)/SystemCoreClock
+      uint32_t now = getTicks();
+      delayct -= (uint32_t)(TIMER_MASK&(last-now));
       last = now;
-   } while (delayct > 0);
+      } while (delayct > 0);
 }
 
 /**
@@ -286,21 +282,21 @@ void Epd::frame_fixed_repeat(uint8_t fixedValue, EpdStage stage) {
  */
 void Epd::frame_data_repeat(const uint8_t *image, EpdStage stage) {
    // Convert duration to DWT ticks
-   int64_t delayct = ((uint64_t)factored_stage_time * SystemCoreClock) / 1000;
+   int64_t delayct = convertMSToTicks(factored_stage_time);
 
    // Get current tick
-   uint32_t last = DWT->CYCCNT;
+   uint32_t last = getTicks();
 
    do {
       frame_data(image, stage);
+
       // Decrement time elapsed
       // Note: This relies on the loop executing in less than the roll-over time
-      // of the counter i.e. (2^32)/SystemCoreClock
-      uint32_t now = DWT->CYCCNT;
-      delayct -= (uint32_t)(now-last);
-      // Save for next increment
+      // of the counter i.e. (TIMER_MASK+1)/SystemCoreClock
+      uint32_t now = getTicks();
+      delayct -= (uint32_t)(TIMER_MASK&(last-now));
       last = now;
-   } while (delayct > 0);
+      } while (delayct > 0);
 }
 
 /**

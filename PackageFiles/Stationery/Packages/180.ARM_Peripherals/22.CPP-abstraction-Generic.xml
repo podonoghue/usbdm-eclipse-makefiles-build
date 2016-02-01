@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
 <!ENTITY DEVICE_SUB_FAMILY  "MK">
+<!ENTITY FILE_NAME          "Generic-MK">
 ]>
 
 <root version="1.0" >
@@ -14,18 +15,13 @@
          </and>
       </applyWhen>
 
-      <!-- These constants enable internal peripheral features -->
-      <constant id="cpp.peripheral.internal.i2c"    value="true" />
-      <constant id="cpp.peripheral.internal.lptmr"  value="true" />
-      <constant id="cpp.peripheral.internal.pit"    value="true" />
-
-      <variable id="projectOptionValue.CPP-abstraction" 
+      <variable id="projectOptionValue.CPP-abstractionX" 
          name="Base CPP Hardware abstraction (&DEVICE_SUB_FAMILY; family)" 
-         description="Adds a CPP abstraction layer for hardware\n(GPIO)"
+         description="Adds a CPP abstraction layer for hardware\n(GPIO) - &DEVICE_SUB_FAMILY;"
          checkGroup="group-additional-options" />
       <projectActionList>
          <applyWhen >
-            <variableRef idRef="projectOptionValue.CPP-abstraction" />
+            <variableRef idRef="projectOptionValue.CPP-abstractionX" />
          </applyWhen>
 
 <!--
@@ -37,29 +33,20 @@
          <constant id="demo.cpp.red.led"            value="LED_RED" />
          <constant id="demo.cpp.green.led"          value="LED_GREEN" />
          <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
-         <constant id="demo.cpp.joystick.x"         value="PTC5" />
-         <constant id="demo.cpp.joystick.y"         value="PTC6" />
-         <constant id="demo.cpp.joystick.z"         value="PTB0" />
          <constant id="demo.cpp.external.switch"    value="PTA0" />
          <constant id="demo.cpp.external.led"       value="PTA1" />
-         <constant id="demo.cpp.external.gps"       value="Gps2" />
-         <constant id="demo.cpp.external.i2c"       value="I2c0" />
-         <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />
-         <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />
-         <constant id="demo.cpp.mag3110.i2c"        value="I2c0" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/main.cpp" />
          <createFolder   target="Snippets" />
-         <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
-         <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
-         <copy source="Project_Headers/gpio-&DEVICE_SUB_FAMILY;.h"         target="Project_Headers/gpio.h" />
+         <copy source="Project_Headers/gpio-Generic.h"                     target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_SUB_FAMILY;.h"    target="Project_Headers/gpio_defs.h" />
-         <copy source="Sources/gpio-GENERIC.cpp"                           target="Sources/gpio.cpp" />
+         <copy source="Project_Headers/pin_mapping-&FILE_NAME;.h"          target="Project_Headers/pin_mapping.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>

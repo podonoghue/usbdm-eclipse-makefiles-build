@@ -1,7 +1,9 @@
 /**
  * @file      pin_mapping.h (derived from pin_mapping-MKE06Z4.h)
- * @version   1.1.0
+ * @version   1.2.0
  * @brief     Pin declarations for MKE06Z4, generated from MKE06Z4.csv
+ *            Devices   [MKE06Z4]
+ *            Reference [MKE06Z4]
  */
 
 #ifndef PROJECT_HEADERS_PIN_MAPPING_H_
@@ -3693,6 +3695,9 @@ constexpr uint16_t FTM2_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 /*
  * Common Mux settings for PCR
  */
+#undef FIXED_ADC_FN            
+#undef FIXED_GPIO_FN           
+#undef FIXED_PORT_CLOCK_REG    
 #define FIXED_ADC_FN             0                    // Fixed ADC Multiplexing value
 #define FIXED_GPIO_FN            1                    // Fixed GPIO Multiplexing value
 #define FIXED_PORT_CLOCK_REG     SCGC5                // Fixed PORT Clock
@@ -3782,16 +3787,6 @@ namespace USBDM {
 * @brief Provides information about pins used by a peripheral
 * @{
 */
-/**
- * Struct for pin information
- */
-struct PcrInfo {
-   uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t pcrAddress;  //!< PCR[x] register address
-   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   uint8_t  gpioBit;     //!< Bit number of pin in GPIO
-   uint8_t  muxValue;    //!< PCR mux value to select this function
-};
 /**
  * @}
  ** PeripheralPinTables

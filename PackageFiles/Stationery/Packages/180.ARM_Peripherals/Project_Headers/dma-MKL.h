@@ -9,6 +9,7 @@
 #define INCLUDE_USBDM_DMA_H_
 
 #include "derivative.h"
+#include "gpio.h"
 
 namespace USBDM {
 
@@ -40,7 +41,7 @@ public:
    }
 
    void configure(DMAInformation *information) {
-      SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;
+      SIM->DMAMUX0_CLOCK_REG |= DMAMUX0_CLOCK_MASK;
       dmaMux->CHCFG[channel]      = 0;
       dmac->DMA[channel].DSR_BCR  = DMA_DSR_BCR_BCR(information->byteCount);
       dmac->DMA[channel].SAR      = information->source;
@@ -64,7 +65,7 @@ private:
    friend void DMA0_IRQHandler(void);
 
 public:
-   DMAChannel0() : DMAChannel(DMA0, DMAMUX, 0) {
+   DMAChannel0() : DMAChannel(DMA0, DMAMUX0, 0) {
       thisPtr = this;
    }
 };
@@ -75,7 +76,7 @@ private:
    friend void DMA1_IRQHandler(void);
 
 public:
-   DMAChannel1() : DMAChannel(DMA0, DMAMUX, 1) {
+   DMAChannel1() : DMAChannel(DMA0, DMAMUX0, 1) {
       thisPtr = this;
    }
 };
@@ -86,7 +87,7 @@ private:
    friend void DMA2_IRQHandler(void);
 
 public:
-   DMAChannel2() : DMAChannel(DMA0, DMAMUX, 2) {
+   DMAChannel2() : DMAChannel(DMA0, DMAMUX0, 2) {
       thisPtr = this;
    }
 };
@@ -97,7 +98,7 @@ private:
    friend void DMA3_IRQHandler(void);
 
 public:
-   DMAChannel3() : DMAChannel(DMA0, DMAMUX, 3) {
+   DMAChannel3() : DMAChannel(DMA0, DMAMUX0, 3) {
       thisPtr = this;
    }
 };
