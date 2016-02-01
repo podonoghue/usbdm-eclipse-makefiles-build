@@ -19,7 +19,12 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x9C</size>
+            <size>0x3C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4C</offset>
+            <size>0x50</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

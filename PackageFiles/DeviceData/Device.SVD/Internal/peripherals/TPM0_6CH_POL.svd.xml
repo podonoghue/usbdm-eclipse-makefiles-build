@@ -29,6 +29,11 @@ Devices using this peripheral:
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
+            <offset>0x70</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
             <offset>0x84</offset>
             <size>0x4</size>
             <usage>registers</usage>

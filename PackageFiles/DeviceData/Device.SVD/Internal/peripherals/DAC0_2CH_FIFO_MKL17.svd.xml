@@ -18,8 +18,15 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
+            <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x24</size>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x20</offset>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

@@ -22,6 +22,9 @@ Devices using this peripheral:
       MKL36Z4
       MKL43Z4
       MKL46Z4
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "DWT_CM0Plus" ?>

@@ -1,6 +1,6 @@
 <!--
 Devices using this vector table: 
-   MKM14ZA5
+   MKM14Z5
 -->
       <interrupts>
          <name>MKM14Z5_VectorTable</name>

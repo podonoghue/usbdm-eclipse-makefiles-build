@@ -1,6 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MKM14ZA5
+      MKM14Z5
       MKM33Z5
       MKM34Z5
 -->
@@ -18,7 +18,22 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x820</size>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x400</offset>
+            <size>0x80</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x800</offset>
+            <size>0x20</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

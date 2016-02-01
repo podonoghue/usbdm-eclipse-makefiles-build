@@ -9,6 +9,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "FTFL_MK50D10" ?>
+         <?preferredAccessWidth "32" ?>
          <name>FTFL</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFL</groupName>
@@ -20,7 +21,6 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
-            <?width "8" ?>
             <offset>0x0</offset>
             <size>0x14</size>
             <usage>registers</usage>

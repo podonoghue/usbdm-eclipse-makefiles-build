@@ -33,7 +33,7 @@ Devices using this peripheral:
       MK66F18
       MK70F15
       MK70F15WS
-      MKM14ZA5
+      MKM14Z5
       MKM33Z5
       MKM34Z5
       MKV40F15
@@ -60,7 +60,19 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x1</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x2</offset>
+            <size>0x2</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

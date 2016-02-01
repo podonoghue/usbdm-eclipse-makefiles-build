@@ -3,7 +3,7 @@
 [
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV11Z7_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
-<!ENTITY CAN0         SYSTEM "peripherals/CAN0_MK.svd.xml">
+<!ENTITY CAN0         SYSTEM "peripherals/CAN0_2MASK.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_2CH_MKV.svd.xml">

@@ -8,7 +8,6 @@ Devices using this peripheral:
       MK20F12
       MK21F12
       MK21FA12
-      MK22F12
       MK24F12
       MK30D7
       MK30D10
@@ -28,7 +27,7 @@ Devices using this peripheral:
       MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "CAN0_MK" ?>
+         <?sourceFile "CAN0_2MASK" ?>
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
@@ -41,7 +40,27 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x8C0</size>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x44</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x880</offset>
+            <size>0x40</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

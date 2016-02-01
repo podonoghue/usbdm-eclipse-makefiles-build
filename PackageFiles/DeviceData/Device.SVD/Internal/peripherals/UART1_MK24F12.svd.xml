@@ -7,6 +7,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART1_MK24F12" ?>
+         <?forcedBlockWidth "32" ?>
          <name>UART1</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
@@ -20,7 +21,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x17</size>
+            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -477,8 +478,7 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection.\n
-While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
+Enables break character detection</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

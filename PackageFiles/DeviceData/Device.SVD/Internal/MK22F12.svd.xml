@@ -4,7 +4,7 @@
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MK22F12_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
 <!ENTITY AXBS         SYSTEM "peripherals/AXBS_5M01245_5S_E.svd.xml">
-<!ENTITY CAN0         SYSTEM "peripherals/CAN0_MK.svd.xml">
+<!ENTITY CAN0         SYSTEM "peripherals/CAN0_1MASK.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM7.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_0.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
@@ -49,6 +49,7 @@
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MK22F12.svd.xml">
 <!ENTITY SMC          SYSTEM "peripherals/SMC_MK22F12.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK21F12.svd.xml">
+<!ENTITY SPI1         SYSTEM "peripherals/SPI1_MK_FIFO_DEPTH1.svd.xml">
 <!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
 <!ENTITY TPIU         SYSTEM "peripherals/TPIU_0.svd.xml">
 <!ENTITY UART0        SYSTEM "peripherals/UART0_MK11D5_C7816.svd.xml">
@@ -138,8 +139,8 @@
 &SIM;
 &SMC;
 &SPI0;
-<peripheral derivedFrom="SPI0"><name>SPI1</name><prependToName>SPI1</prependToName><baseAddress>0x4002D000</baseAddress></peripheral>
-<peripheral derivedFrom="SPI0"><name>SPI2</name><prependToName>SPI2</prependToName><baseAddress>0x400AC000</baseAddress></peripheral>
+&SPI1;
+<peripheral derivedFrom="SPI1"><name>SPI2</name><prependToName>SPI2</prependToName><baseAddress>0x400AC000</baseAddress></peripheral>
 &SYST;
 &TPIU;
 &UART0;

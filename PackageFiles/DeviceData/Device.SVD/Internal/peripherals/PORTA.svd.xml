@@ -31,7 +31,7 @@ Devices using this peripheral:
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
          <prependToName>PORTA</prependToName>
-         <headerStructName>PORTA</headerStructName>
+         <headerStructName>PORT</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -39,7 +39,17 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0xA4</size>
+            <size>0x80</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

@@ -11,6 +11,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART1_MK10F12_C7816" ?>
+         <?forcedBlockWidth "32" ?>
          <name>UART1</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
@@ -502,7 +503,7 @@ Determines whether the transmit break character is 10, 11, or 12 bits long, or 1
                      <name>RWUID</name>
                      <description>Receive Wakeup Idle Detect\n
 When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
-receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled</description>
+receiver sets S1[IDLE]</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

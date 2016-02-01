@@ -1,13 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK10DZ10
-      MK20DZ10
-      MK30DZ10
-      MK40DZ10
-      MK60DZ10
+      MK22F12
 -->
       <peripheral>
-         <?sourceFile "CAN0_MKDZ" ?>
+         <?sourceFile "CAN0_1MASK" ?>
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
@@ -25,7 +21,17 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x10</offset>
-            <size>0x2C</size>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x28</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0xC</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -157,19 +163,20 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>DOZE</name>
-                     <description>Doze Mode Enable</description>
-                     <bitOffset>18</bitOffset>
+                     <name>WAKSRC</name>
+                     <description>Wake Up Source\n
+Not present in all devices</description>
+                     <bitOffset>19</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FlexCAN is not enabled to enter low power mode when Doze Mode is requested</description>
+                           <description>FlexCAN uses the unfiltered Rx input to detect recessive to dominant edges on the CAN bus</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FlexCAN is enabled to enter low power mode when Doze Mode is requested</description>
+                           <description>FlexCAN uses the filtered Rx input to detect recessive to dominant edges on the CAN bus</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1087,31 +1094,6 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>IMASK2</name>
-               <description>Interrupt Masks 2 Register\n
-Not present in all devices</description>
-               <addressOffset>0x24</addressOffset>
-               <fields>
-                  <field>
-                     <name>BUFHM</name>
-                     <description>Buffer MBi Mask</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The corresponding buffer Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The corresponding buffer Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
                <name>IMASK1</name>
                <description>Interrupt Masks 1 register</description>
                <addressOffset>0x28</addressOffset>
@@ -1129,31 +1111,6 @@ Not present in all devices</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>The corresponding buffer Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>IFLAG2</name>
-               <description>Interrupt Flags 2 Register\n
-Not present in all devices</description>
-               <addressOffset>0x2C</addressOffset>
-               <fields>
-                  <field>
-                     <name>BUFHI</name>
-                     <description>Buffer MBi Interrupt</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The corresponding buffer has no occurrence of successfully completed transmission or reception</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The corresponding buffer has successfully completed transmission or reception</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

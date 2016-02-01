@@ -5,6 +5,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART1_MK65F18" ?>
+         <?forcedBlockWidth "32" ?>
          <name>UART1</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
@@ -18,7 +19,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x17</size>
+            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -314,9 +315,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
 		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -331,7 +332,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                <fields>
                   <field>
                      <name>PF</name>
-                     <description>Parity Error Flag</description>
+                     <description>Parity Error Flag\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
+To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -347,12 +350,21 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="PF" > <name>FE</name> <description>Framing Error Flag</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>NF</name> <description>Noise Flag</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>OR</name> <description>Receiver Overrun Flag</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>FE</name> <description>Framing Error Flag\n
+FE is set when a logic 0 is accepted as the stop bit.\n
+To clear FE, read S1 with FE set and then read D</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>NF</name> <description>Noise Flag\n
+NF is set when the UART detects noise on the receiver input.\n
+To clear NF, read S1 and then read D</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="PF" > <name>OR</name> <description>Receiver Overrun Flag\n
+OR is set when software fails to prevent the receive data register from overflowing with data.\n
+To clear OR, read S1 when OR is set and then read D</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>IDLE</name>
-                     <description>Idle-line Flag</description>
+                     <description>Idle Line Flag\n
+After the IDLE flag is cleared, a frame must be received or a LIN break character must set the S2[LBKDIF] flag before an idle
+condition can set the IDLE flag.\n
+To clear IDLE, read S1 with IDLE set and then read D</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -370,7 +382,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   </field>
                   <field>
                      <name>RDRF</name>
-                     <description>Receive Data Register Full Flag</description>
+                     <description>Receive Data Register Full Flag\n
+RDRF is set when the number of datawords in the receive buffer is equal to or more than the number indicated by RWFIFO[RXWATER].\n
+To clear RDRF, read S1 when RDRF is set and then read D</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -388,7 +402,12 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   </field>
                   <field>
                      <name>TC</name>
-                     <description>Transmit Complete Flag</description>
+                     <description>Transmit Complete Flag\n
+Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
+Cleared by reading S1 with TC set and then doing one of the following:\n
+- Write to the data register to transmit new data\n
+- Queue a preamble by changing TE from 0 to 1\n
+- Queue a break character by writing 1 to C2.SBK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -406,7 +425,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   </field>
                   <field>
                      <name>TDRE</name>
-                     <description>Transmit Data Register Empty Flag</description>
+                     <description>Transmit Data Register Empty Flag\n
+Set when the number of words in the transmit buffer is &lt;= TWFIFO[TXWATER]\n
+To clear TDRE, read S1 when TDRE is set and then write to the data register</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -494,13 +515,13 @@ Determines whether the transmit break character is 10, 11, or 12 bits long, or 1
                      <name>RWUID</name>
                      <description>Receive Wakeup Idle Detect\n
 When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
-receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled</description>
+receiver sets S1[IDLE]</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Idle detect doesn&apos;t set S1.IDLE</description>
+                           <description>Idle chars ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1090,7 +1111,7 @@ If this bit is set, the RXUF flag generates an interrupt</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="RXUFE" > <name>TXOFE</name> <description>Transmit FIFO Overflow Interrupt Enable\n
-If this field is set, the TXOF flag generates an interrupt to the host</description> <bitOffset>1</bitOffset> </field>
+If this bit is set, the TXOF flag generates an interrupt</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="RXUFE" > <name>RXOFE</name> <description>Receive FIFO Overflow Interrupt Enable\n
 If this bit is set, the RXOF flag generates an interrupt</description> <bitOffset>2</bitOffset> </field>
                   <field>
@@ -1141,7 +1162,7 @@ Indicates that more data has been read from the receive buffer than was present<
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="RXUF" > <name>TXOF</name> <description>Receiver Buffer Overflow Flag\n
+                  <field derivedFrom="RXUF" > <name>TXOF</name> <description>Transmitter Buffer Overflow Flag\n
 Indicates that more data has been written to the transmit buffer than it can hold</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="RXUF" > <name>RXOF</name> <description>Receiver Buffer Overflow Flag\n
 Indicates that more data has been written to the receive buffer than it can hold</description> <bitOffset>2</bitOffset> </field>

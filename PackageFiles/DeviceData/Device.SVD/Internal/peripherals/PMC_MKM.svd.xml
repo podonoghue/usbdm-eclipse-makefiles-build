@@ -1,6 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MKM14ZA5
+      MKM14Z5
       MKM33Z5
       MKM34Z5
       MKV40F15
@@ -22,6 +22,7 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
+            <?width "8" ?>
             <offset>0x0</offset>
             <size>0x3</size>
             <usage>registers</usage>

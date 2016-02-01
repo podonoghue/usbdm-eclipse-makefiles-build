@@ -16,6 +16,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "FTFA_XACCH" ?>
+         <?preferredAccessWidth "32" ?>
          <name>FTFA</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFA</groupName>
@@ -27,7 +28,6 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
-            <?width "8" ?>
             <offset>0x0</offset>
             <size>0x14</size>
             <usage>registers</usage>
@@ -386,7 +386,7 @@ These bits are loaded from flash to this register at reset</description>
             <register>
                <dim>12</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>3:Flash address [7..0],2:Flash address [15..8],1:Flash address [23..16],0:FCMD (a code that defines the flash command),7:Data Byte 3,6:Data Byte 2,5:Data Byte 1,4:Data Byte 0,B:Data Byte 7,A:Data Byte 6,9:Data Byte 5,8:Data Byte 4</dimIndex>
+               <dimIndex>3:Flash address [7..0],2:Flash address [15..8],1:Flash address [23..16],0:FCMD (Flash command),7:Data Byte 3,6:Data Byte 2,5:Data Byte 1,4:Data Byte 0,B:Data Byte 7,A:Data Byte 6,9:Data Byte 5,8:Data Byte 4</dimIndex>
                <name>FCCOB%s</name>
                <description>FCCOB %s - Usually %m \n
 The Flash Common Command Object registers provides a command code and relevant parameters to the memory controller.\n

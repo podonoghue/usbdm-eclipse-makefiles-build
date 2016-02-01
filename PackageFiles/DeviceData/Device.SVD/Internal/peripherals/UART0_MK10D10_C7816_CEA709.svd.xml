@@ -22,6 +22,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART0_MK10D10_C7816_CEA709" ?>
+         <?forcedBlockWidth "32" ?>
          <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter (C7816, CEA709)</description>
          <groupName>UART</groupName>
@@ -35,7 +36,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x32</size>
+            <size>0x34</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -474,8 +475,7 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Selects a longer break character detection length.\n
-While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
+Selects a longer break character detection length</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -729,7 +729,6 @@ Reads and writes of this register are also involved in the automatic flag cleari
                <description>Control Register 4</description>
                <addressOffset>0xA</addressOffset>
                <size>8</size>
-               <resetValue>0xF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>

@@ -16,6 +16,8 @@ Devices using this peripheral:
       MK21F12
       MK22D5
       MK22F12
+      MK22F12810
+      MK22F25612
       MK22F51212
       MK24F12
       MK24F25612
@@ -69,6 +71,9 @@ Devices using this peripheral:
       MKL46Z4
       MKM33Z5
       MKM34Z5
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
          <?sourceFile "CoreDebug" ?>

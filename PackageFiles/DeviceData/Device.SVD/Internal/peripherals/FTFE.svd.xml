@@ -5,6 +5,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "FTFE" ?>
+         <?preferredAccessWidth "32" ?>
          <name>FTFE</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFE</groupName>
@@ -16,7 +17,6 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
-            <?width "8" ?>
             <offset>0x0</offset>
             <size>0x14</size>
             <usage>registers</usage>

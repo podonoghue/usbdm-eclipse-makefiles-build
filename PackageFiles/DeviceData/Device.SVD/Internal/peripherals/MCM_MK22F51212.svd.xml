@@ -19,7 +19,17 @@ Devices using this peripheral:
          <addressBlock>
             <?width "16" ?>
             <offset>0x8</offset>
-            <size>0x3C</size>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

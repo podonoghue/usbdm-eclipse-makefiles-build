@@ -23,7 +23,12 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x1000</size>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFCC</offset>
+            <size>0x34</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

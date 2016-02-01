@@ -14,6 +14,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART0_MK11D5_C7816" ?>
+         <?forcedBlockWidth "32" ?>
          <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
