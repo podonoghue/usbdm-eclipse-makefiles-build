@@ -1955,7 +1955,7 @@ NOTES:
          <note>K22P48M50SF4RM,K22P64M50SF4RM,K22P80M50SF4RM,K22P121M50SF4RM</note>
       </device>
 <!-- MK22-M10 -->
-      <device name="MK22FN128M10" family="CortexM4F" subfamily="K22F12810">
+      <device name="MK22FN128M10" family="CortexM4F" subfamily="MK22F12810">
          <memoryRef ref="kinetis8K_16K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
