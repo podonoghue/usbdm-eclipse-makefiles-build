@@ -308,7 +308,7 @@ public:
  * @tparam index           Index into table
  * @tparam pcrTable        PcrInfo table
  */
-template<uint8_t index, const PcrInfo pcrTable[]> using Pcr_Table_T =
+template<uint8_t index, const PcrInfo pcrTable[]> using PcrTable_T =
    Pcr_T<getPortClockMask(index,pcrTable), getPcrReg(index,pcrTable), getGpioBit(index,pcrTable), PORT_PCR_MUX(getPcrMux(index, pcrTable))|DEFAULT_PCR>;
 
 /**
@@ -469,7 +469,7 @@ public:
  * @tparam index        Index into the table
  * @tparam pcrTable     Table with pin-specific information
  */
-template<uint8_t index, const PcrInfo pcrTable[]> using Gpio_Table_T =
+template<uint8_t index, const PcrInfo pcrTable[]> using GpioTable_T =
    Gpio_T<getPortClockMask(index,pcrTable), getPcrReg(index,pcrTable), getGpioBit(index,pcrTable), getGpioAddress(index,pcrTable), PORT_PCR_MUX(FIXED_GPIO_FN)|I2C_DEFAULT_PCR>;
 
 #ifdef PORTA_CLOCK_MASK

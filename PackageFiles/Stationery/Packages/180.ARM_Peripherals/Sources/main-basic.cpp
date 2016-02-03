@@ -27,4 +27,5 @@ int main() {
       Led::toggle();
       USBDM::waitMS(100);
    }
+   return 0;
 }

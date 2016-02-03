@@ -153,7 +153,7 @@ template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMux
  *
  * @tparam channel    FTM channel
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMuxFn, uint8_t channel> using Tmr1 =
+template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMuxFn, uint8_t channel> using Tmr2 =
       TmrBase_T<portClockMask, port, bitNum, ftmMuxFn, FTM2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM2_CLOCK_REG), FTM2_CLOCK_MASK, FTM2_SC, channel>;
 #endif // FTM2_CLOCK_REG
 
@@ -179,7 +179,7 @@ template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMux
  *
  * @tparam channel    FTM channel
  */
-template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMuxFn, uint8_t channel> using Tmr1 =
+template<uint32_t portClockMask, uint32_t port, uint32_t bitNum, uint32_t ftmMuxFn, uint8_t channel> using Tmr3 =
       TmrBase_T<portClockMask, port, bitNum, ftmMuxFn, FTM3_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM3_CLOCK_REG), FTM3_CLOCK_MASK, FTM3_SC, channel>;
 #endif // FTM3_CLOCK_REG
 

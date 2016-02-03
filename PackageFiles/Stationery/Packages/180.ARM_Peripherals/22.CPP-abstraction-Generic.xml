@@ -9,7 +9,7 @@
    <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
       <applyWhen>
          <and>
-            <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;.*</deviceSubfamilyMatches>
+            <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;\d*.*</deviceSubfamilyMatches>
             <variableRef idRef="hasCCNature" condition="isTrue" />
             <not><variableRef idRef="projectOptionValue.CPP-abstraction" condition="isDefined" /></not>
          </and>

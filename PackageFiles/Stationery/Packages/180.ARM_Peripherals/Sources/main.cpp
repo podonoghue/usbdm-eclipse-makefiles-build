@@ -41,4 +41,5 @@ int main() {
       GREEN_LED::toggle();
       delay();
    }
+   return 0;
 }
