@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/01
+ * @date     2016/02
  *
  *******************************************************************************************************/
 
@@ -271,17 +271,17 @@ extern void I2S1_Rx_IRQHandler(void);          /**< Synchronous Serial Interface
 * @brief Configuration of the cm4 Processor and Core Peripherals
 * @{
 */
-#define __CM3_REV                 0x0100     /**< CPU Revision                                        */
+#define __CM4_REV                 0x0100     /**< CPU Revision                                        */
 #define __MPU_PRESENT             0          /**< Whether MPU is present                              */
-#define __NVIC_PRIO_BITS          0          /**< Number of implemented bits in NVIC PRIO register    */
+#define __NVIC_PRIO_BITS          4          /**< Number of implemented bits in NVIC PRIO register    */
 #define __Vendor_SysTickConfig    0          /**< Whether Vendor implemented SYSTICK timer is present */
-#define __FPU_PRESENT             0          /**< Whether FPU is present                              */
+#define __FPU_PRESENT             1          /**< Whether FPU is present                              */
 #define __VTOR_PRESENT            1          /**< Whether VTOR register is present                    */
 
 /**
  * @} */ /* End group Cortex_Core_Configuration_GROUP 
  */
-#include "core_cm3.h"           /* Processor and core peripherals     */
+#include "core_cm4.h"           /* Processor and core peripherals     */
 #include "system.h"             /* Device specific configuration file */
 
 #ifndef __IO
@@ -723,7 +723,7 @@ typedef struct {                                /*       AXBS Structure         
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_MK)                  ================ */
+/* ================           CAN0 (file:CAN0_2MASK)               ================ */
 /* ================================================================================ */
 
 /**
@@ -9850,7 +9850,7 @@ typedef struct {                                /*       SMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SPI0 (file:SPI0_MK61F15WS)           ================ */
+/* ================           SPI0 (file:SPI0_MK65F18)             ================ */
 /* ================================================================================ */
 
 /**

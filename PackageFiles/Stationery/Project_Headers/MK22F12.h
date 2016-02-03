@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/01
+ * @date     2016/02
  *
  *******************************************************************************************************/
 
@@ -617,7 +617,7 @@ typedef struct {                                /*       AXBS Structure         
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_MK)                  ================ */
+/* ================           CAN0 (file:CAN0_1MASK)               ================ */
 /* ================================================================================ */
 
 /**
@@ -638,24 +638,24 @@ typedef struct {                                /*       CAN0 Structure         
    __IO uint32_t  RX15MASK;                     /**< 0018: Rx 15 Mask register                                          */
    __IO uint32_t  ECR;                          /**< 001C: Error Counter                                                */
    __IO uint32_t  ESR1;                         /**< 0020: Error and Status 1 register                                  */
-   __IO uint32_t  IMASK2;                       /**< 0024: Interrupt Masks 2 Register                                   */
+   __I  uint32_t  RESERVED1;                   
    __IO uint32_t  IMASK1;                       /**< 0028: Interrupt Masks 1 register                                   */
-   __IO uint32_t  IFLAG2;                       /**< 002C: Interrupt Flags 2 Register                                   */
+   __I  uint32_t  RESERVED2;                   
    __IO uint32_t  IFLAG1;                       /**< 0030: Interrupt Flags 1 register                                   */
    __IO uint32_t  CTRL2;                        /**< 0034: Control 2 Register                                           */
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
-   __I  uint32_t  RESERVED1[2];                
+   __I  uint32_t  RESERVED3[2];                
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
    __IO uint32_t  RXFGMASK;                     /**< 0048: Rx FIFO Global Mask register                                 */
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
-   __I  uint32_t  RESERVED2[12];               
+   __I  uint32_t  RESERVED4[12];               
    struct {
       __IO uint32_t  CS;                        /**< 0080: Message Buffer 0 CS Register                                 */
       __IO uint32_t  ID;                        /**< 0084: Message Buffer 0 ID Register                                 */
       __IO uint32_t  WORD0;                     /**< 0088: Message Buffer 0 WORD0 Register                              */
       __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
    } MB[16];                                    /**< 0080: (cluster: size=0x0100, 256)                                  */
-   __I  uint32_t  RESERVED3[448];              
+   __I  uint32_t  RESERVED5[448];              
    __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
 
@@ -812,18 +812,10 @@ typedef struct {                                /*       CAN0 Structure         
 #define CAN_ESR1_TWRNINT_SHIFT                   17                                                  /*!< CAN0_ESR1: TWRNINT Position             */
 #define CAN_ESR1_SYNCH_MASK                      (0x01UL << CAN_ESR1_SYNCH_SHIFT)                    /*!< CAN0_ESR1: SYNCH Mask                   */
 #define CAN_ESR1_SYNCH_SHIFT                     18                                                  /*!< CAN0_ESR1: SYNCH Position               */
-/* ------- IMASK2 Bit Fields                        ------ */
-#define CAN_IMASK2_BUFHM_MASK                    (0xFFFFFFFFUL << CAN_IMASK2_BUFHM_SHIFT)            /*!< CAN0_IMASK2: BUFHM Mask                 */
-#define CAN_IMASK2_BUFHM_SHIFT                   0                                                   /*!< CAN0_IMASK2: BUFHM Position             */
-#define CAN_IMASK2_BUFHM(x)                      (((uint32_t)(((uint32_t)(x))<<CAN_IMASK2_BUFHM_SHIFT))&CAN_IMASK2_BUFHM_MASK) /*!< CAN0_IMASK2                             */
 /* ------- IMASK1 Bit Fields                        ------ */
 #define CAN_IMASK1_BUFLM_MASK                    (0xFFFFFFFFUL << CAN_IMASK1_BUFLM_SHIFT)            /*!< CAN0_IMASK1: BUFLM Mask                 */
 #define CAN_IMASK1_BUFLM_SHIFT                   0                                                   /*!< CAN0_IMASK1: BUFLM Position             */
 #define CAN_IMASK1_BUFLM(x)                      (((uint32_t)(((uint32_t)(x))<<CAN_IMASK1_BUFLM_SHIFT))&CAN_IMASK1_BUFLM_MASK) /*!< CAN0_IMASK1                             */
-/* ------- IFLAG2 Bit Fields                        ------ */
-#define CAN_IFLAG2_BUFHI_MASK                    (0xFFFFFFFFUL << CAN_IFLAG2_BUFHI_SHIFT)            /*!< CAN0_IFLAG2: BUFHI Mask                 */
-#define CAN_IFLAG2_BUFHI_SHIFT                   0                                                   /*!< CAN0_IFLAG2: BUFHI Position             */
-#define CAN_IFLAG2_BUFHI(x)                      (((uint32_t)(((uint32_t)(x))<<CAN_IFLAG2_BUFHI_SHIFT))&CAN_IFLAG2_BUFHI_MASK) /*!< CAN0_IFLAG2                             */
 /* ------- IFLAG1 Bit Fields                        ------ */
 #define CAN_IFLAG1_BUF4TO0I_MASK                 (0x1FUL << CAN_IFLAG1_BUF4TO0I_SHIFT)               /*!< CAN0_IFLAG1: BUF4TO0I Mask              */
 #define CAN_IFLAG1_BUF4TO0I_SHIFT                0                                                   /*!< CAN0_IFLAG1: BUF4TO0I Position          */
@@ -7837,16 +7829,69 @@ typedef struct {                                /*       SPI0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           SPI1 (derived from SPI0)             ================ */
+/* ================           SPI1 (file:SPI1_MK_FIFO_DEPTH1)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief Serial Peripheral Interface
  */
+/**
+* @addtogroup SPI_structs_GROUP SPI struct
+* @brief Struct for SPI
+* @{
+*/
+typedef struct {                                /*       SPI1 Structure                                               */
+   __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
+   __I  uint32_t  RESERVED0;                   
+   __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
+   union {                                      /**< 0000: (size=0008)                                                  */
+      __IO uint32_t  CTAR[2];                   /**< 000C: Clock and Transfer Attributes Register (In Master Mode)      */
+      __IO uint32_t  CTAR_SLAVE;                /**< 000C: Clock and Transfer Attributes Register (In Slave Mode)       */
+   };
+   __I  uint32_t  RESERVED1[6];                
+   __IO uint32_t  SR;                           /**< 002C: Status register                                              */
+   __IO uint32_t  RSER;                         /**< 0030: DMA/Interrupt Request Select and Enable Register             */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  PUSHR;                     /**< 0034: PUSH TX FIFO Register In Master Mode                         */
+      __IO uint32_t  PUSHR_SLAVE;               /**< 0034: PUSH TX FIFO Register In Slave Mode                          */
+   };
+   __I  uint32_t  POPR;                         /**< 0038: POP RX FIFO Register                                         */
+   __I  uint32_t  TXFR[1];                      /**< 003C: Transmit FIFO                                                */
+   __I  uint32_t  RESERVED2[15];               
+   __I  uint32_t  RXFR[1];                      /**< 007C: Receive FIFO                                                 */
+} SPI1_Type;
+
+/**
+ * @} */ /* End group SPI_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'SPI1' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup SPI_Register_Masks_GROUP SPI Register Masks
+* @brief Register Masks for SPI
+* @{
+*/
+/* ------- MCR Bit Fields                           ------ */
+/* ------- TCR Bit Fields                           ------ */
+/* ------- CTAR Bit Fields                          ------ */
+/* ------- CTAR_SLAVE Bit Fields                    ------ */
+/* ------- SR Bit Fields                            ------ */
+/* ------- RSER Bit Fields                          ------ */
+/* ------- PUSHR Bit Fields                         ------ */
+/* ------- PUSHR_SLAVE Bit Fields                   ------ */
+/* ------- POPR Bit Fields                          ------ */
+/* ------- TXFR Bit Fields                          ------ */
+/* ------- RXFR Bit Fields                          ------ */
+/**
+ * @} */ /* End group SPI_Register_Masks_GROUP 
+ */
 
 /* SPI1 - Peripheral instance base addresses */
 #define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
-#define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
+#define SPI1                           ((SPI1_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
@@ -7858,7 +7903,7 @@ typedef struct {                                /*       SPI0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           SPI2 (derived from SPI0)             ================ */
+/* ================           SPI2 (derived from SPI1)             ================ */
 /* ================================================================================ */
 
 /**
@@ -7867,7 +7912,7 @@ typedef struct {                                /*       SPI0 Structure         
 
 /* SPI2 - Peripheral instance base addresses */
 #define SPI2_BasePtr                   0x400AC000UL //!< Peripheral base address
-#define SPI2                           ((SPI_Type *) SPI2_BasePtr) //!< Freescale base pointer
+#define SPI2                           ((SPI1_Type *) SPI2_BasePtr) //!< Freescale base pointer
 #define SPI2_BASE_PTR                  (SPI2) //!< Freescale style base pointer
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
