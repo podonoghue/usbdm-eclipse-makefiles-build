@@ -61,50 +61,30 @@
       <!--======================================================
             Actions
       =======================================================-->
-      <!-- Patch HCS08 Wizard XLM-->
+      <!-- Patch Wizard XLM-->
       <CustomAction
-         Id="Ca.CreateHCS08MergeCommand_V6_$(var.CW_Ver)"
-         Property="Ca.MergeHCS08Command_V6_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot; "
+         Id="Ca.CreateMergeCommand_CWMCU_V6_$(var.CW_Ver)"
+         Property="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot; "
          Execute="immediate"/>
-      <CustomAction Id="Ca.MergeHCS08Command_V6_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
-      <!-- Unpatch HCS08 Wizard XLM-->
+      <!-- Unpatch Wizard XLM-->
       <CustomAction
-         Id="Ca.CreateHCS08UnMergeCommand_V6_$(var.CW_Ver)"
-         Property="Ca.UnMergeHCS08Command_V6_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml.original&quot;"
+         Id="Ca.CreateUnMergeCommand_CWMCU_V6_$(var.CW_Ver)"
+         Property="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml.original|MCF51*.xml.original&quot;"
          Execute="immediate"/>
-      <CustomAction Id="Ca.UnMergeHCS08Command_V6_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
-
-      <!-- Patch MCF51 Wizard XLM-->
-      <CustomAction
-         Id="Ca.CreateMCF51MergeCommand_V6_$(var.CW_Ver)"
-         Property="Ca.MergeMCF51Command_V6_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot; "
-         Execute="immediate"/>
-      <CustomAction Id="Ca.MergeMCF51Command_V6_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
-
-      <!-- Unpatch MCF51 Wizard XLM-->
-      <CustomAction
-         Id="Ca.CreateMCF51UnMergeCommand_V6_$(var.CW_Ver)"
-         Property="Ca.UnMergeMCF51Command_V6_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;MCF51*.xml.original&quot;"
-         Execute="immediate"/>
-      <CustomAction Id="Ca.UnMergeMCF51Command_V6_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
           <!-- These actions set Properties used by later actions -->
-          <Custom Action="Ca.CreateHCS08MergeCommand_V6_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateHCS08UnMergeCommand_V6_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.CreateMCF51MergeCommand_V6_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateMCF51UnMergeCommand_V6_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.CreateMergeCommand_CWMCU_V6_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.CreateUnMergeCommand_CWMCU_V6_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
           
           <!-- These actions patch or restore the various Codewarrior XML files -->
-          <Custom Action="Ca.MergeHCS08Command_V6_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.UnMergeHCS08Command_V6_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.MergeMCF51Command_V6_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.UnMergeMCF51Command_V6_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
       </InstallExecuteSequence>
 
       <!--======================================================
@@ -139,34 +119,20 @@
          </Component>
       </DirectoryRef>
 
-      <!-- Patch HCS08 Codewarrior Wizard shortcut -->
+      <!-- Patch Codewarrior Wizard shortcut -->
       <DirectoryRef Id="D.ProgramMenuPatchDir">
-         <Component Id='C.PatchCodewarriorWizardsMenu_HCS08_$(var.CW_Ver)' Guid='*'>
+         <Component Id='C.PatchCodewarriorWizardsMenu_CWMCU_$(var.CW_Ver)' Guid='*'>
             <Shortcut Id="Sc.PatchCW_HCS08_$(var.CW_Ver)" 
-               Name = "Modify Codewarrior for Microcontroller V6.$(var.CW_Ver) New Project Wizard (HCS08)"
+               Name = "Modify Codewarrior for Microcontroller V6.$(var.CW_Ver) New Project Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
-               Description="Adds HCS08 Open Source BDM targets to Codewarrior for Microcontroller New Project Wizard"
+               Description="Adds Open Source BDM targets to Codewarrior for Microcontroller New Project Wizard"
                WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"/>                            
+               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"/>                            
             <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorWizardsMenu_HCS08_V6_$(var.CW_Ver)' Value="" KeyPath='yes' />
+                           Type='string' Name='PatchCodewarriorWizardsMenu_CWMCU_V6_$(var.CW_Ver)' Value="" KeyPath='yes' />
          </Component>
       </DirectoryRef>
-
-      <!-- Patch CFV1 Codewarrior shortcut -->
-      <DirectoryRef Id="D.ProgramMenuPatchDir">
-         <Component Id='C.PatchCodewarriorWizardsMenu_CFV1_$(var.CW_Ver)' Guid='*'>
-            <Shortcut Id="Sc.PatchCW_CFV1_$(var.CW_Ver)" 
-               Name = "Modify Codewarrior for Microcontroller V6.$(var.CW_Ver) New Project Wizard (CFv1)"
-               Target="[INSTALLDIR]mergeXml.exe"
-               Description="Adds CFv1 Open Source BDM targets to Codewarrior for Microcontroller New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"/>                            
-            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorWizardsMenu_CFV1_V6_$(var.CW_Ver)' Value="" KeyPath='yes' />
-         </Component>
-      </DirectoryRef>
-            
+           
       <!--======================================================
             Features
       =======================================================-->
@@ -182,8 +148,7 @@
          <ComponentRef Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Marker' />
          <ComponentRef Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files' />
          <ComponentGroupRef Id='Cg.PatchCodewarriorWizardsCommon' />
-         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_HCS08_$(var.CW_Ver)' />
-         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_CFV1_$(var.CW_Ver)' />
+         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_CWMCU_$(var.CW_Ver)' />
       </Feature>
 
    </Fragment>

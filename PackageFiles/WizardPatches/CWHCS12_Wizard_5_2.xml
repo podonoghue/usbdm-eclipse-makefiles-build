@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<WIZARD>
+   <WIZARDELEMENTLIST>
+      <WIZARDELEMENT name="ConnectionList" term="Connections"
+         id="ID_CONNECTION_LIST">
+         <WIZARDELEMENTLIST>
+            <!-- ===== HC12 USBDM - Added pgo ========================================== -->
+            <WIZARDELEMENT merge-actions="insert" name="Target"
+               term="USBDM" id="ID_CONN_USBDM">
+               <DESCRIPTION>Connect to a board using USBDM interface.</DESCRIPTION>
+               <SETTINGSLIST>
+                  <SETTINGS>
+                     <FILELIST>
+                        <COPYFILE>
+                           <SOURCE>
+                              <FILE name="Cmd\p&amp;e_erase_unsecure_$$UNSECURE_TYPE$$.cmd" />
+                           </SOURCE>
+                           <DESTINATION>
+                              <FILE name="Cmd\USBDM_Erase_unsecure.cmd" priority="10" reconfigAction="RecreateIfMissing" />
+                           </DESTINATION>
+                        </COPYFILE>
+                     </FILELIST>
+                  </SETTINGS>
+                  <SETTINGS>
+                     <FILELIST>
+                        <GENERATEFILE>
+                           <FILE name="Cmd\USBDM_Vppon.cmd" priority="10" reconfigAction="RecreateIfMissing" />
+                           <INPUT>// Before programming the flash, the commands written below will be executed</INPUT>
+                        </GENERATEFILE>
+                        <GENERATEFILE>
+                           <FILE name="Cmd\USBDM_Vppoff.cmd" priority="10" reconfigAction="RecreateIfMissing" />
+                           <INPUT>// After programming the flash, the commands written below will be executed</INPUT>
+                        </GENERATEFILE>
+                     </FILELIST>
+                     <OPTIONLIST>
+                        <OPTION pluginname="Build Extras" fieldname="DebuggerCmdLineArgs" value="%targetFilePath -Prod=%projectFileDir\USBDM.ini -instance=usbdm" />
+                     </OPTIONLIST>
+                     <APPLYTEMPLATE idref="TMPL_DBG_FILES">
+                        <PARAMETER>USBDM</PARAMETER>
+                        <PARAMETER>USBDM.ini</PARAMETER>
+                        <PARAMETER>Project</PARAMETER>
+                     </APPLYTEMPLATE>
+                  </SETTINGS>
+               </SETTINGSLIST>
+            </WIZARDELEMENT>
+         </WIZARDELEMENTLIST>
+      </WIZARDELEMENT>
+   </WIZARDELEMENTLIST>
+
+</WIZARD>

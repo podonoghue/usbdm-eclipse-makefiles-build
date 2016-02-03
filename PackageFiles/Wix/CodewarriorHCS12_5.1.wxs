@@ -23,14 +23,16 @@
       <DirectoryRef Id='TARGETDIR'>
          <!-- Directory structure for CodeWarrior Development Studio for S12(X) V5.1 -->
          <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)"  Name="NotFound_CWS12_X_V5_$(var.CW_Ver)">
-            <Directory Id="CWS12_X_V5_$(var.CW_Ver)_prog" Name="prog">
+            <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_prog" Name="prog">
                <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_gdi" Name="gdi" />
             </Directory>
-            <Directory Id="CWS12_X_V5_$(var.CW_Ver)_bin" Name="bin">
-               <Directory Id="CWS12_X_V5_$(var.CW_Ver)_Plugins" Name="Plugins">
-                  <Directory Id="CWS12_X_V5_$(var.CW_Ver)_Support" Name="Support">
-                     <Directory Id="CWS12_X_V5_$(var.CW_Ver)_HC12Wizard" Name="HC12Wizard">
-                        <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_XML" Name="XML">
+            <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_bin" Name="bin">
+               <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_Plugins" Name="Plugins">
+                  <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_Support" Name="Support">
+                     <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_HC12Wizard" Name="HC12Wizard">
+                        <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_XML" Name="XML"/>
+                        <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_DataBase" Name="DataBase">
+                           <Directory Id="D.CWS12_X_V5_$(var.CW_Ver)_ini" Name="ini"/>
                         </Directory>
                      </Directory>
                   </Directory>
@@ -53,7 +55,7 @@
                     Type="directory" />
       </Property>
 
-      <!-- Modify default install path for CodeWarrior Development Studio for S12(X) V5.1 -->
+      <!-- Modify default install path for CodeWarrior Development Studio for S12(X) V5.x -->
       <Property Id="D.CWS12_X_V5_$(var.CW_Ver)">
          <RegistrySearchRef Id="Rs.CWS12_X_V5_$(var.CW_Ver)" />
       </Property>
@@ -61,50 +63,50 @@
       <!--======================================================
             Actions
       =======================================================-->
-      <!-- Patch HCS12 Wizard XLM-->
+      <!-- Patch HCS12 Device XLM-->
       <CustomAction
-         Id="Ca.CreateHCS12MergeCommand_V5_$(var.CW_Ver)"
-         Property="Ca.MergeHCS12Command_V5_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MC9S12*.xml &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "
+         Id="Ca.CreateHCS12MergeDeviceCommand_V5_$(var.CW_Ver)"
+         Property="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "
          Execute="immediate"/>
-      <CustomAction Id="Ca.MergeHCS12Command_V5_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"     BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+      <!-- Unpatch HCS12 Device XLM-->
+      <CustomAction
+         Id="Ca.CreateHCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"
+         Property="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot;"
+         Execute="immediate"/>
+      <CustomAction Id="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <!-- Patch HCS12 Wizard XLM-->
       <CustomAction
-         Id="Ca.CreateHCS12MergeCommand_V5_a_$(var.CW_Ver)"
-         Property="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MM912*.xml &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "
+         Id="Ca.CreateHCS12MergeWizardCommand_V5_$(var.CW_Ver)"
+         Property="Ca.HCS12MergeWizardCommand_V5_$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_HC12Wizard]\&quot; &quot;wizard.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Wizard_5_$(var.CW_Ver).xml&quot; "
          Execute="immediate"/>
-      <CustomAction Id="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.HCS12MergeWizardCommand_V5_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <!-- Unpatch HCS12 Wizard XLM-->
       <CustomAction
-         Id="Ca.CreateHCS12UnMergeCommand_V5_$(var.CW_Ver)"
-         Property="Ca.UnMergeHCS12Command_V5_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MC9S12*.xml.original"
+         Id="Ca.CreateHCS12UnMergeWizardCommand_V5_$(var.CW_Ver)"
+         Property="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)"
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_HC12Wizard]\&quot; &quot;wizard.xml&quot;"
          Execute="immediate"/>
-      <CustomAction Id="Ca.UnMergeHCS12Command_V5_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
-
-      <!-- Unpatch HCS12 Wizard XLM-->
-      <CustomAction
-         Id="Ca.CreateHCS12UnMergeCommand_V5_a_$(var.CW_Ver)"
-         Property="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; MM912*.xml.original"
-         Execute="immediate"/>
-      <CustomAction Id="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+      <CustomAction Id="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
           <!-- These actions set Properties used by later actions -->
-          <Custom Action="Ca.CreateHCS12MergeCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateHCS12UnMergeCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.CreateHCS12MergeCommand_V5_a_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateHCS12UnMergeCommand_V5_a_$(var.CW_Ver)" After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.CreateHCS12MergeDeviceCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.CreateHCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.CreateHCS12MergeWizardCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.CreateHCS12UnMergeWizardCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
 
           <!-- These actions patch or restore the various Codewarrior XML files -->
-          <Custom Action="Ca.MergeHCS12Command_V5_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.UnMergeHCS12Command_V5_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.MergeHCS12Command_V5_a_$(var.CW_Ver)"         After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.UnMergeHCS12Command_V5_a_$(var.CW_Ver)"       Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.HCS12MergeWizardCommand_V5_$(var.CW_Ver)"            After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)"          Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
       </InstallExecuteSequence>
 
       <!--======================================================
@@ -125,47 +127,43 @@
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
 
-            <!--
-            <File Id='CWS12_X_V5_$(var.CW_Ver)WxWidgets_1'     DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)WxWidgets_2'     DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            -->
             <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
             <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
             <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll'/>
             <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll'/>
 	    
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3'   DiskId='1' Source='$(var.SrcDir)\bin\tbdml.dll'   KeyPath='yes' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3d'  DiskId='1' Source='$(var.SrcDir)\bin\tbdml-debug.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.dll'    KeyPath='yes' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_4'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm_gdi12.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <DirectoryRef Id="D.CWS12_X_V5_$(var.CW_Ver)_ini">
+         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).ini' Guid='706f50dd-2840-4ee4-a0ca-0594ef5c232f' >
+            <File Id='CWS12_X_V5_$(var.CW_Ver)_ini' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\USBDM.ini' KeyPath='yes' />
+         </Component>
+      </DirectoryRef>
+      
+      <DirectoryRef Id="D.CWS12_X_V5_$(var.CW_Ver)_prog">
+         <Component Id='C.CWS12_X_V5_$(var.CW_Ver).tgt' Guid='69991dcf-b2d8-4916-934b-070bf04d8cb2' >
+            <File Id='CWS12_X_V5_$(var.CW_Ver)_tgt' DiskId='1' Source='$(var.SrcDir)\bin\usbdm.tgt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
 
       <!-- Patch HCS12 Codewarrior shortcut -->
       <DirectoryRef Id="D.ProgramMenuPatchDir">
-         <Component Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_$(var.CW_Ver)' Guid='*'>
+         <Component Id='C.PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Guid='*'>
             <Shortcut Id="Sc.PatchCW_HCS12_V5_$(var.CW_Ver)" 
-               Name = "Modify CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (9S12)"
+               Name = "Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver)"
                Target="[INSTALLDIR]mergeXml.exe"
-               Description="Adds TBDML targets to CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (9S12 targets)"
+               Description="Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
                WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml&quot; &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "/>
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12|MM912*.xml*.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "/>
             <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorWizardsMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
+                           Type='string' Name='PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
          </Component>
       </DirectoryRef>
 
-      <!-- Patch HCS12 Codewarrior shortcut -->
-      <DirectoryRef Id="D.ProgramMenuPatchDir">
-         <Component Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' Guid='*'>
-            <Shortcut Id="Sc.PatchCW_HCS12_V5_a_$(var.CW_Ver)" 
-               Name = "Modify CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (MM912)"
-               Target="[INSTALLDIR]mergeXml.exe"
-               Description="Adds TBDML targets to CodeWarrior for S12(X) V5.$(var.CW_Ver) New Project Wizard (9S12 targets)"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MM912*.xml&quot; &quot;[D.WizardPatchData]TBDML_Wizard_5_$(var.CW_Ver).xml&quot; "/>
-            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' Value="" KeyPath='yes' />
-         </Component>
-      </DirectoryRef>
 
       <!--======================================================
             Features
@@ -181,9 +179,10 @@
          </Condition>
          <ComponentRef Id='C.CWS12_X_V5_$(var.CW_Ver).Marker' />
          <ComponentRef Id='C.CWS12_X_V5_$(var.CW_Ver).Files' />
+         <ComponentRef Id='C.CWS12_X_V5_$(var.CW_Ver).ini' />
+         <ComponentRef Id='C.CWS12_X_V5_$(var.CW_Ver).tgt' />
          <ComponentGroupRef Id='Cg.PatchCodewarriorWizardsCommon' />
-         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_$(var.CW_Ver)' />
-         <ComponentRef Id='C.PatchCodewarriorWizardsMenu_HCS12_V5_a_$(var.CW_Ver)' />
+         <ComponentRef Id='C.PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' />
       </Feature>
 
    </Fragment>
