@@ -62,13 +62,13 @@
    <version>1.6</version>
    <description>MK61F15WS Freescale Microcontroller</description>
    <cpu>
-      <name>CM3</name>
+      <name>CM4</name>
       <revision>r1p0</revision>
       <endian>little</endian>
       <mpuPresent>false</mpuPresent>
-      <fpuPresent>false</fpuPresent>
+      <fpuPresent>true</fpuPresent>
       <vtorPresent>true</vtorPresent>
-      <nvicPrioBits>0</nvicPrioBits>
+      <nvicPrioBits>4</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>
    <addressUnitBits>8</addressUnitBits>
