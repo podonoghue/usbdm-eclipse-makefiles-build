@@ -139,24 +139,34 @@ int convertDirectory(const wxString &dirPath, const wxString &filename, MyTraver
 
 /*!   Converts multiple directories/files matching given patterns
  *
- *    @param inputFilenameMask - path to directory, may include wild-cards in last element
+ *    @param directoryPath - path to directory, may include wild-cards in last element
  *
- *    @param filename          - name of file, may include wild-cards
+ *    @param filename      - names of files separated by '|', may include wild-cards
  */
-int convertPattern(const char *inputFilenameMask, const char *filename, MyTraverser &converter) {
+int modifyFiles(const char *directoryPath, const char *filename, MyTraverser &converter) {
 
-   fprintf(stdout, "convertPattern(): \n"
+   char buff[100];
+   strncpy(buff, filename, sizeof(buff));
+   char *filePattern = strtok(buff, "|\n");
+   if (filePattern == 0){
+      fprintf(stderr, "Missing pattern p=%s\n", filePattern);
+      exit(-1);
+   }
+   fprintf(stdout, "modifyFiles(): \n"
                    "   inputFilenameMask = \'%s\'\n"
                    "   filename= \'%s\'\n",
-         inputFilenameMask,
+         directoryPath,
          filename);
-   wxString f = wxFindFirstFile(wxString(inputFilenameMask, wxConvUTF8), wxDIR);
-   while (!f.empty()) {
-      int rc = convertDirectory(f, wxString(filename, wxConvUTF8), converter);
-      if (rc != 0)
-         return rc;
-      f = wxFindNextFile();
-   }
+   do {
+      wxString f = wxFindFirstFile(wxString(directoryPath, wxConvUTF8), wxDIR);
+      while (!f.empty()) {
+         int rc = convertDirectory(f, wxString(filePattern, wxConvUTF8), converter);
+         if (rc != 0)
+            return rc;
+         f = wxFindNextFile();
+      }
+      filePattern = strtok(0, "|\n");
+   } while (filePattern != 0);
    return 0;
 }
 
@@ -178,22 +188,59 @@ void usage(void) {
          "options = -p - pause before exit\n\n");
 }
 
+/**
+ *  Strips trailing \ (unless root e.g. "c:\")
+ *
+ * @param filePath Path to process
+ */
+void fixPath(char *filePath) {
+   int length = strlen(filePath);
+   if ((length > 2) && (filePath[length-1] == '\\') && (filePath[length-2] != ':')) {
+      filePath[length-1] = '\0';
+   }
+}
+
+//void doCommandFile(const char *scriptFile) {
+//   cerr << "Reading from script file '" << scriptFile << "\n";
+//   FILE *fp = fopen(scriptFile, "rt");
+//   if (fp == 0) {
+//      fprintf(stderr, "Failed to open %s\n", scriptFile);
+//      exit(-1);
+//   }
+//   char buff[100];
+//   while (fgets(buff, sizeof(buff), fp) != 0) {
+//      const char *f1 = strtok(buff, ", \t\n");
+//      const char *f2 = strtok(0, ", \t\n");
+//      const char *f3 = strtok(0, ", \t\n");
+//      if ((f1 == 0) && (f2 == 0) && (f3 == 0)) {
+//         continue;
+//      }
+//      if ((f1 == 0) || (f2 == 0) || (f3 == 0)) {
+//         fprintf(stderr, "Illegal/missing args f1=%s, f2=%s, f3=%s\n", f1, f2, f3);
+//         exit(-1);
+//      }
+//      fprintf(stderr, "Processing args f1=%s, f2=%s, f3=%s\n", f1, f2, f3);
+//   }
+//   waitForKeypress();
+//}
+
 int main(int  argc, char *argv[]){
    int fileArg = 1;
    if ((argc >= 2) && (strcasecmp(argv[1], "-p")==0)) {
       fileArg++;
       doPause = true;
    }
+//   if ((strcasecmp(argv[fileArg], "-f")==0)) {
+//      doCommandFile(argv[fileArg+1]);
+//      return 0;
+//   }
    if (argc < fileArg+2) {
       fprintf(stderr, "Arguments(s) missing\n");
       usage();
       return 1;
    }
    // Strip trailing \ (unless root e.g. "c:\")
-   int length = strlen(argv[fileArg]);
-   if ((length > 2) && (argv[fileArg][length-1] == '\\') && (argv[fileArg][length-2] != ':')) {
-      argv[fileArg][length-1] = '\0';
-   }
+   fixPath(argv[fileArg]);
    if (argc == (fileArg+3)) {
       fprintf(stdout, "==================================================================\n");
       fprintf(stdout, "directoryPathMask = \'%s\'\n", argv[fileArg]);
@@ -201,7 +248,7 @@ int main(int  argc, char *argv[]){
       fprintf(stdout, "mergeFile = \'%s\'\n",         argv[fileArg+2]);
       fprintf(stdout, "==================================================================\n");
       ConvertTraverser traverser(argv[fileArg+2]);
-      int rc = convertPattern(argv[fileArg], argv[fileArg+1], traverser);
+      int rc = modifyFiles(argv[fileArg], argv[fileArg+1], traverser);
       waitForKeypress();
       return rc;
    }
@@ -211,7 +258,7 @@ int main(int  argc, char *argv[]){
       fprintf(stdout, "filenameMask = \'%s\'\n",      argv[fileArg+1]);
       fprintf(stdout, "==================================================================\n");
       RestoreTraverser traverser;
-      int rc = convertPattern(argv[fileArg], argv[fileArg+1], traverser);
+      int rc = modifyFiles(argv[fileArg], argv[fileArg+1], traverser);
       waitForKeypress();
       return rc;
    }
