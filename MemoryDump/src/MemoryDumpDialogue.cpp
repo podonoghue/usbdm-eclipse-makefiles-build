@@ -172,14 +172,17 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
       wxString widthValue = memoryRangesGrid->GetCellValue(row,2);
 
       if (startValue.IsEmpty() && endValue.IsEmpty() && widthValue.IsEmpty()) {
+         // Skip empty rows
          continue;
       }
+      // Validate width
       if (!widthValue.ToLong(&width) || ((width!=0) && (width!=1) && (width!=2) && (width!=4))) {
          writeStatus("Illegal width (entry #%d), \'%s\'\n", row+1, (const char *)widthValue.c_str());
          return BDM_RC_ILLEGAL_PARAMS;
       }
       if (width == 0) {
-         break;
+         // Skip disabled rows
+         continue;
       }
       if (!startValue.ToLong(&start, 16)) {
          writeStatus("Illegal start address (entry #%d), \'%s\'\n", row+1, (const char *)startValue.c_str());
