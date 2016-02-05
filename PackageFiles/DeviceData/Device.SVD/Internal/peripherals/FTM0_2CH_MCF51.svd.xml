@@ -591,12 +591,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Capture test mode is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Capture test mode is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -609,22 +609,22 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Fault control is disabled for all channels</description>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Fault control is enabled for even channels only (channels 0, 2, 4, and 6), and the selected mode is the manual fault clearing</description>
+                           <description>Even channels with manual fault clearing</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the manual fault clearing</description>
+                           <description>All channels with manual fault clearing</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the automatic fault clearing</description>
+                           <description>All channels with automatic fault clearing</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -637,12 +637,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Fault control interrupt is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Fault control interrupt is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -662,12 +662,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The minimum loading point is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The minimum loading point is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -680,12 +680,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The maximum loading point is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The maximum loading point is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -698,30 +698,30 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FTM counter continues to count normally</description>
+                           <description>Counts normally</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM counter is updated with its initial value when the selected trigger is detected</description>
+                           <description>Updated with initial value on triggerd</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SYNCHOM</name>
-                     <description>Output Mask Synchronization</description>
+                     <description>Output Mask Synchronization with buffer</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>OUTMASK register is updated with the value of its buffer in all rising edges of the system clock</description>
+                           <description>Rising edges of the system clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>OUTMASK register is updated with the value of its buffer only by the PWM synchronization</description>
+                           <description>PWM synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -734,12 +734,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Trigger is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Trigger is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -754,12 +754,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger is not selected</description>
+                           <description>Not selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Software trigger is selected</description>
+                           <description>Selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1291,12 +1291,12 @@ Indicates if the TOF bit was set on the top or the bottom of counting</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bottom of counting\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
+                           <description>Bottom of counting.\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Top of counting\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
+                           <description>Top of counting.\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
