@@ -22,10 +22,11 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
+#include <wx/radiobut.h>
+#include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/grid.h>
 #include <wx/panel.h>
-#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,7 +46,12 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxStaticText* bdmDescriptionStaticControl;
 		wxRadioBox* targetVddControl;
 		wxChoice* interfaceSpeedControl;
-		wxCheckBox* linearAddressingCheckbox;
+		wxRadioButton* flatAddressRadioButton;
+		wxRadioButton* pagedAddressRadioButton;
+		wxStaticText* pageRegisterStaticText;
+		wxTextCtrl* pageTextCntrl;
+		wxCheckBox* initializationCheckbox;
+		wxTextCtrl* initialializeTextCntrl;
 		wxGrid* memoryRangesGrid;
 		wxStaticText* m_staticText3;
 		wxPanel* m_panel1;
@@ -61,7 +67,10 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTargetVddControlClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onLinearAddressingClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFlatAddressSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPagedAddressSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPageAddressChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveToFileButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
@@ -69,7 +78,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 	
 	public:
 		
-		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~MemoryDumpDialogueSkeleton();
 	
 };

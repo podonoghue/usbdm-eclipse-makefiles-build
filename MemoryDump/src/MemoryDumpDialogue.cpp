@@ -8,6 +8,8 @@
 #include <stdio.h>
 
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/tokenzr.h>
 
 #include "UsbdmSystem.h"
 #include "Names.h"
@@ -42,10 +44,12 @@ static const DropDownType CFVx_Speeds[] = {
 
 MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings) :
    MemoryDumpDialogueSkeleton(parent),
-   targetType(T_ARM),
+   targetType(T_NONE),
    appSettings(appSettings),
    bdmDeviceNum(-1),
-   bdmCapabilities(BDM_CAP_NONE)
+   bdmCapabilities(BDM_CAP_NONE),
+   hcs08PPageAddress(0x08),
+   hcs12PPageAddress(0x30)
 {
    memoryRangesGrid->SetColFormatNumber(2);
    saveToFileButton->Enable(false);
@@ -141,6 +145,10 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
       if (rc != BDM_RC_OK) {
          break;
       }
+      rc = doTargetInitializationString();
+      if (rc != BDM_RC_OK) {
+         break;
+      }
       rc = readMemoryBlocks(ProgressDialogueFactory::create("Accessing Target", 100, this));
       if (rc != BDM_RC_OK) {
          break;
@@ -148,6 +156,7 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
    } while (0);
    bdmInterface->closeBdm();
    if (rc != BDM_RC_OK) {
+      wxMessageBox(bdmInterface->getErrorString(rc), "Operation Failed", wxICON_ERROR | wxOK, this);
       writeStatus("Failed, reason = %s\n", bdmInterface->getErrorString(rc));
       flashImage.reset();
    }
@@ -163,8 +172,53 @@ struct MemoryRange {
    uint32_t end;
 };
 
+/**
+ * Processes the target initialization string
+ * e.g. (address, data, data...)*
+ *
+ *
+ */
+USBDM_ErrorCode MemoryDumpDialogue::doTargetInitializationString() {
+   bool doTargetInit = initializationCheckbox->IsEnabled() && initializationCheckbox->GetValue();
+   if (!doTargetInit) {
+      return BDM_RC_OK;
+   }
+   writeStatus("Doing custom initialization...\n");
+
+   wxStringTokenizer tokenizer(initialializeTextCntrl->GetValue(), "()", wxTOKEN_STRTOK);
+
+   wxString token = tokenizer.GetNextToken();
+   do  {
+      wxStringTokenizer subTokenizer(token, ",", wxTOKEN_STRTOK);
+      wxString subToken = subTokenizer.GetNextToken();
+      long address;
+      if ((subToken.IsEmpty()) || !subToken.ToLong(&address, 16)) {
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      subToken = subTokenizer.GetNextToken();
+      do {
+         long lData;
+         if (!subToken.ToLong(&lData, 16) || ((lData&~0xFF) != 0)) {
+            return BDM_RC_ILLEGAL_PARAMS;
+         }
+         uint8_t data = (uint8_t)lData;
+         writeStatus("  WriteMemory(0x%04lX, 0x%02X)\n", address, data);
+         bdmInterface->writeMemory(1, 1, address++, &data);
+         subToken = subTokenizer.GetNextToken();
+      } while (!subToken.IsEmpty());
+      token = tokenizer.GetNextToken();
+   } while (!token.IsEmpty());
+   return BDM_RC_OK;
+}
+/**
+ * Read memory
+ *
+ * @param progress Progress dialogue to display
+ */
 USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progress) {
    LOGGING;
+   USBDM_ErrorCode rc;
+
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
       long int start, end, width;
       wxString startValue = memoryRangesGrid->GetCellValue(row,0);
@@ -200,9 +254,17 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
       snprintf(buff, sizeof(buff), "Doing block [0x%06lX, 0x%06lX]", start, end);
       progress->update(0, buff);
       progress->setRange(end-start);
-      uint32_t addressModifier = 0;
-      if ((linearAddressingCheckbox->IsEnabled())&&(linearAddressingCheckbox->IsChecked())) {
-         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
+//      uint32_t addressModifier = 0;
+//      if ((flatAddressRadioButton->IsEnabled())&&(flatAddressRadioButton->GetValue())) {
+//         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
+//      }
+      long currentPPageAddress = 0;
+      bool isPaged = pagedAddressRadioButton->GetValue();
+      if (isPaged) {
+         // Get current page value
+         currentPPageAddress = 0;
+         pageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16);
+         writeStatus("Using paged addresses (PPAGE address=0x%02lx)\n", currentPPageAddress);
       }
       while (start <= end) {
          unsigned char data[4096];
@@ -210,8 +272,44 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          if (size>(long)sizeof(data)) {
             size = sizeof(data);
          }
-         writeStatus("Reading memory-block[0x%06lX, 0x%06lX, %ld]...\n", start, start+size-1, width);
-         USBDM_ErrorCode rc = bdmInterface->readMemory(width, size, start, data);
+         if (isPaged) {
+            uint8_t page = (start>>16)&0xFF;
+            long int pagedStart = start & 0xFFFF;
+            if (((end>>16)&0xFF) != page) {
+               writeStatus("Illegal range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
+               return BDM_RC_ILLEGAL_PARAMS;
+            }
+            long int pagedEnd = pagedStart+size-1;
+            if ((start<0x8000) && (pagedEnd>=0x8000)) {
+               // Stop at end of unpaged area
+               end = 0x7FFF;
+            }
+            if ((pagedStart<0xC000) && (pagedEnd>=0xC000)) {
+               // Stop at end of paged area
+               end = 0xC000;
+            }
+            if ((pagedStart>=0x8000) && (pagedEnd<0xC000)) {
+               // Within paged area
+               rc = bdmInterface->writeMemory(1, 1, currentPPageAddress, &page);
+               if (rc != BDM_RC_OK) {
+                  return rc;
+               }
+            }
+            else {
+               // Non-paged area - validate address
+               if (page != 0) {
+                  writeStatus("Non-paged area with non-zero page number (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
+                  return BDM_RC_ILLEGAL_PARAMS;
+               }
+            }
+            size = pagedEnd-pagedStart+1;
+            writeStatus("Reading memory-block[0x%02X:%04lX, 0x%02X:%04lX, %ld]...\n", page, pagedStart, page, pagedStart+size-1, width);
+            rc = bdmInterface->readMemory(width, size, pagedStart, data);
+         }
+         else {
+            writeStatus("Reading memory-block[0x%06lX, 0x%06lX, %ld]...\n", start, start+size-1, width);
+            rc = bdmInterface->readMemory(width, size, start, data);
+         }
          progress->incrementalUpdate(size);
          if (rc != BDM_RC_OK) {
             return rc;
@@ -245,10 +343,19 @@ void MemoryDumpDialogue::writeStatus(const char *format, ...) {
 void MemoryDumpDialogue::loadSettings() {
    LOGGING_E;
 
+   hcs08PPageAddress = appSettings->getValue("hcs08PPageAddress", 0x08);
+   hcs12PPageAddress = appSettings->getValue("hcs12PPageAddress", 0x30);
+
    currentDirectory = appSettings->getValue("directory", "");
    currentFilename  = appSettings->getValue("filename", "");
+
    keepEmptySRECsCheckbox->SetValue(appSettings->getValue("keepEmptySRECs", false));
-   linearAddressingCheckbox->SetValue(appSettings->getValue("linearAddressing", false));
+   flatAddressRadioButton->SetValue(appSettings->getValue("pagedAddressing", false));
+   pagedAddressRadioButton->SetValue(!appSettings->getValue("pagedAddressing", false));
+
+   initializationCheckbox->SetValue(appSettings->getValue("initializeTarget", false));
+   initialializeTextCntrl->SetValue(wxString(appSettings->getValue("initializationString", "")));
+
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
       long int start, end, width;
 
@@ -271,11 +378,13 @@ void MemoryDumpDialogue::loadSettings() {
       memoryRangesGrid->SetCellValue(startValue, row, 0);
       memoryRangesGrid->SetCellValue(endValue,   row, 1);
    }
+
+   setTargetType((TargetType_t)appSettings->getValue("targetType", (int)T_ARM));
+
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    populateBDMChoices();
    populateInterfaceSpeeds();
 
-   setTargetType((TargetType_t)appSettings->getValue("targetType", (int)T_ARM));
    setInterfaceSpeed(appSettings->getValue("interfaceSpeed", 250));
    setVdd((TargetVddSelect_t)appSettings->getValue("targetVdd", (int)BDM_TARGET_VDD_OFF));
 
@@ -284,6 +393,8 @@ void MemoryDumpDialogue::loadSettings() {
 
 void MemoryDumpDialogue::saveSettings() {
    LOGGING_E;
+
+   appSettings->addValue("pageAddress", pageTextCntrl->GetValue());
    appSettings->addValue("directory", currentDirectory);
    appSettings->addValue("filename", currentFilename);
    appSettings->addValue("keepEmptySRECs", keepEmptySRECsCheckbox->IsChecked());
@@ -291,7 +402,7 @@ void MemoryDumpDialogue::saveSettings() {
    appSettings->addValue("targetType",       getTargetType());
    appSettings->addValue("targetVdd",        getVdd());
    appSettings->addValue("interfaceSpeed",   getInterfaceSpeed());
-   appSettings->addValue("linearAddressing", linearAddressingCheckbox->IsChecked());
+   appSettings->addValue("linearAddressing", flatAddressRadioButton->GetValue());
 
    for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
       long int start, end, width;
@@ -331,6 +442,23 @@ void MemoryDumpDialogue::saveSettings() {
          appSettings->addValue(key, 0);
       }
    }
+   // Save current page value
+   long currentValue;
+   if (pageTextCntrl->GetValue().ToLong(&currentValue, 16)) {
+      switch(this->targetType) {
+      case T_HCS08 :
+         hcs08PPageAddress = currentValue;
+         break;
+      case T_HCS12 :
+         hcs12PPageAddress = currentValue;
+         break;
+      default: break;
+      }
+   }
+   appSettings->addValue("hcs08PPageAddress", hcs08PPageAddress);
+   appSettings->addValue("hcs12PPageAddress", hcs12PPageAddress);
+   appSettings->addValue("initializeTarget", initializationCheckbox->GetValue());
+   appSettings->addValue("initializationString", initialializeTextCntrl->GetValue());
 }
 
 /*
@@ -379,6 +507,14 @@ void MemoryDumpDialogue::update() {
       interfaceSpeedControl->Enable(false);
       break;
    }
+   bool pagedAddressMode = pagedAddressRadioButton->IsEnabled() && pagedAddressRadioButton->GetValue();
+   pageRegisterStaticText->Enable(pagedAddressMode);
+   pageTextCntrl->Enable(pagedAddressMode);
+
+   bool doTargetInit = initializationCheckbox->IsEnabled() && initializationCheckbox->GetValue();
+   initialializeTextCntrl->Enable(doTargetInit);
+
+   populateInterfaceSpeeds();
 }
 
 void MemoryDumpDialogue::populateInterfaceSpeeds() {
@@ -512,8 +648,6 @@ void MemoryDumpDialogue::setInterfaceSpeed(signed speed) {
 
 void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
 
-   this->targetType = targetType;
-
    int selection = 0;
    switch (targetType) {
    case T_RS08 :  selection++;
@@ -529,14 +663,42 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    case T_ARM :
    default: break;
    }
-   bool enableLinearAddressMode = targetType == T_HCS12;
-   bool enableSpeedControl      = (targetType == T_ARM) || (targetType == T_CFVx);
+   // Save current page value
+   long currentPPageAddress = 0;
+   if (pageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16)) {
+      switch(this->targetType) {
+      case T_HCS08 :
+         hcs08PPageAddress = currentPPageAddress;
+         break;
+      case T_HCS12 :
+         hcs12PPageAddress = currentPPageAddress;
+         break;
+      default: break;
+      }
+   }
+   this->targetType = targetType;
+
+   // Update page value
+   switch(targetType) {
+   case T_HCS08 :
+      currentPPageAddress = hcs08PPageAddress;
+      break;
+   case T_HCS12 :
+      currentPPageAddress = hcs12PPageAddress;
+      break;
+   default: break;
+   }
+   pageTextCntrl->SetValue(wxString::Format("%lX", currentPPageAddress));
+
+   bool enableAddressMode  = (targetType == T_HCS08)||(targetType == T_HCS12);
+   bool enableSpeedControl = (targetType == T_ARM) || (targetType == T_CFVx);
    bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
-   populateBDMChoices();
    targetTypeRadioBox->SetSelection(selection);
-   linearAddressingCheckbox->Enable(enableLinearAddressMode);
+   flatAddressRadioButton->Enable(enableAddressMode);
+   pagedAddressRadioButton->Enable(enableAddressMode);
    interfaceSpeedControl->Enable(enableSpeedControl);
+   populateInterfaceSpeeds();
 }
 
 TargetType_t MemoryDumpDialogue::getTargetType() {
@@ -567,10 +729,34 @@ void MemoryDumpDialogue::OnTargetVddControlClick( wxCommandEvent& event ) {
 void MemoryDumpDialogue::OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) {
 }
 
-/*! Handler for LinearAddressingCheckbox
+/*! Handler for OnLinearAddressSelect Button
  *
  *  @param event The event to handle
  */
-void MemoryDumpDialogue::onLinearAddressingClick( wxCommandEvent& event ) {
+void MemoryDumpDialogue::OnFlatAddressSelect( wxCommandEvent& event ) {
+   update();
+}
+
+/*! Handler for OnInitializationCheckboxChange Checkbox
+ *
+ *  @param event The event to handle
+ */
+void MemoryDumpDialogue::OnInitializationCheckboxChange( wxCommandEvent& event ) {
+   update();
+}
+/*! Handler for OnPagedAddressSelect Button
+ *
+ *  @param event The event to handle
+ */
+void MemoryDumpDialogue::OnPagedAddressSelect( wxCommandEvent& event ) {
+   update();
+}
+
+/*! Handler for OnPageAddressChange
+ *
+ *  @param event The event to handle
+ */
+void MemoryDumpDialogue::OnPageAddressChange( wxCommandEvent& event ) {
 
 }
+

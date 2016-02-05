@@ -39,7 +39,10 @@ protected:
   virtual void OnReadMemoryButtonClick( wxCommandEvent& event );
   virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event );
   virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event );
-  virtual void onLinearAddressingClick( wxCommandEvent& event );
+  virtual void OnInitializationCheckboxChange( wxCommandEvent& event );
+  virtual void OnFlatAddressSelect( wxCommandEvent& event );
+  virtual void OnPagedAddressSelect( wxCommandEvent& event );
+  virtual void OnPageAddressChange( wxCommandEvent& event );
   virtual void populateBDMChoices();
   virtual void populateInterfaceSpeeds();
   virtual void update();
@@ -51,7 +54,7 @@ protected:
   TargetVddSelect_t getVdd();
   void setInterfaceSpeed(signed speed);
   unsigned getInterfaceSpeed();
-
+  USBDM_ErrorCode doTargetInitializationString();
   USBDM_ErrorCode readMemoryBlocks(ProgressDialoguePtr progress);
 
   void clearStatus();
@@ -62,6 +65,9 @@ protected:
 
   wxString      currentDirectory;
   wxString      currentFilename;
+
+  uint8_t  hcs08PPageAddress;
+  uint8_t  hcs12PPageAddress;
 
 public:
    MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings);
