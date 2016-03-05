@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -=========================================================================================
+   |  4 Mar 2016 | Fixed custom security values                            - pgo V4.12.1.80
    |  7 Aug 2015 | Changed handling of corrupt database                    - pgo V4.12.1.10
    |  1 Jun 2015 | Changed how device choice is handled (bdmDeviceNum)     - pgo V4.11.1.10
    | 15 Mar 2015 | Complete redesign using wxFormBuilder                   - pgo V4.11.1.10
@@ -713,6 +714,10 @@ void UsbdmDialogue::hideUnusedControls() {
    fInterfacePanel->Layout();
    fTargetPanel->Layout();
    fAdvancedPanel->Layout();
+   if ((targetProperties & IS_PROGRAMMER) != 0) {
+      securityDescriptionStaticText->SetToolTip("Description of security value\n(target use may differ)");
+      securityDescriptionStaticText->Show(true);
+   }
 }
 
 //===================================================================================
@@ -2120,6 +2125,7 @@ wxString UsbdmDialogue::parseSecurityValue() {
       s[index];
    }
    *b = '\0';
+   log.print("Description = %s\n", buffer);
    return wxString(buffer, wxConvUTF8);
 }
 
@@ -2127,6 +2133,7 @@ void UsbdmDialogue::updateSecurityDescription() {
    LOGGING_E;
    securityDescriptionStaticText->SetLabel(parseSecurityValue());
 //   securityDescriptionStaticText->PostSizeEventToParent();
+   securityDescriptionStaticText->Enable();
 }
 
 //! Updates the security information display
@@ -2203,6 +2210,7 @@ void UsbdmDialogue::updateSecurity() {
          securityValuesTextControl->SetValue(tCustomSecurityInfoPtr->getSecurityInfo());
          securityValuesTextControl->Enable(true);
          validator->setObject(tCustomSecurityInfoPtr);
+         securityInfoPtr = tCustomSecurityInfoPtr;
          break;
    }
    resetCustomButtonControl->Enable(deviceInterface->getCurrentDevice()->getSecurity() == SEC_CUSTOM);
