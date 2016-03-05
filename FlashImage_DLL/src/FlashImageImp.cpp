@@ -24,6 +24,7 @@
 \verbatim
  Change History
 +========================================================================================
+|  4 Mar 16 | Improved format of dumpRange()                            V4.12.1.80  - pgo
 | 29 May 15 | Added saveFile()                                          V4.11.1.40  - pgo
 | 10 Feb 15 | Now discards S5 & S6 SRECs                                V4.10.6.260 - pgo
 | 20 Jan 15 | Added DSC ELF file support for newer targets              V4.10.6.250 - pgo
@@ -737,54 +738,76 @@ void FlashImageImp::remove(uint32_t address) {
  *
  */
 void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
-   LOGGING_Q;
    uint32_t addr;
    uint32_t rangeEnd;
 
-   log.print("Dump of [0x%06X-0x%06X]\n", startAddress, endAddress);
+   UsbdmSystem::Log::print("\n");
+   UsbdmSystem::Log::print("Dump of [0x%06X-0x%06X]\n", startAddress, endAddress);
    EnumeratorImp iter(*this, startAddress);
    if (!iter.isValid()) {
       iter.nextValid();
    }
+   bool endOfLine = true;
    do {
       if (sizeof(uint8_t) == 1) {
          addr = iter.getAddress() & ~0xF;
+         if (addr > endAddress) {
+            break;
+         }
          iter.lastValid();
          rangeEnd = iter.getAddress();
-         log.print("        : 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n"
-               "==========================================================\n");
-         while (addr <= rangeEnd) {
-            if (((addr & 0x000F) == 0) || (addr == startAddress))
-               log.print("%8.8X:", addr);
-            if (isValid(addr))
-               log.print("%02X ", getValue(addr));
-            else
-               log.print("   ");
-            if (((addr & 0x000F) == 0xF) || (addr == rangeEnd))
-               log.print("\n");
+         UsbdmSystem::Log::print("        : 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  \n");
+         UsbdmSystem::Log::print("==========================================================\n");
+         endOfLine = true;
+         while ((addr <= rangeEnd) && (addr <= endAddress)) {
+            if (endOfLine) {
+               UsbdmSystem::Log::print("%8.8X: ", addr);
+            }
+            if ((addr >= startAddress) && isValid(addr)) {
+               UsbdmSystem::Log::printq("%02X ", getValue(addr));
+            }
+            else {
+               UsbdmSystem::Log::printq("   ");
+            }
+            endOfLine = (((addr & 0x000F) == 0xF) || (addr == rangeEnd));
+            if (endOfLine) {
+               UsbdmSystem::Log::printq("\n");
+            }
             addr++;
          }
       }
       else {
          addr = iter.getAddress() & ~0xF;
+         if (addr > endAddress) {
+            break;
+         }
          iter.lastValid();
          rangeEnd = iter.getAddress();
-         log.print("        : 0    1    2    3    4    5    6    7\n"
-               "==================================================\n");
-         while (addr <= rangeEnd) {
-            if (((addr & 0x0007) == 0) || (addr == startAddress))
-               log.print("%8.8X:", addr);
-            if (isValid(addr))
-               log.print("%04X ", getValue(addr));
-            else
-               log.print("     ");
-            if (((addr & 0x0007) == 0x7) || (addr == rangeEnd))
-               log.print("\n");
+         UsbdmSystem::Log::print("        : 0    1    2    3    4    5    6    7    \n");
+         UsbdmSystem::Log::print("==================================================\n");
+         endOfLine = true;
+         while ((addr <= rangeEnd) && (addr <= endAddress)) {
+            if (endOfLine) {
+               UsbdmSystem::Log::print("%8.8X: ", addr);
+            }
+            if ((addr >= startAddress) && isValid(addr)) {
+               UsbdmSystem::Log::printq("%04X ", getValue(addr));
+            }
+            else {
+               UsbdmSystem::Log::printq("     ");
+            }
+            endOfLine = (((addr & 0x0007) == 0x7) || (addr == rangeEnd));
+            if (endOfLine) {
+               UsbdmSystem::Log::printq("\n");
+            }
             addr++;
          }
       }
    } while (iter.nextValid());
-   log.print("\n\n");
+   if (!endOfLine) {
+      UsbdmSystem::Log::printq("\n");
+   }
+   UsbdmSystem::Log::print("\n");
 }
 
 /*!
