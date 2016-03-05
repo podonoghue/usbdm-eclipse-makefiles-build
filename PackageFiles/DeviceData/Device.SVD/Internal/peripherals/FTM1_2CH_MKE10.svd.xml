@@ -377,29 +377,23 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <fields>
                   <field>
                      <name>CH0F</name>
-                     <description>Channel 0 Flag</description>
+                     <description>Channel 0 Event Flag</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No channel event has occurred</description>
+                           <description>No event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A channel event has occurred</description>
+                           <description>Event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Flag</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Flag</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Flag</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Flag</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Flag</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH6F</name> <description>Channel 6 Flag</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH7F</name> <description>Channel 7 Flag</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Event Flag</description> <bitOffset>1</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -416,21 +410,28 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Only the TPM-compatible registers (first set of registers) can be used without any restriction. Do not use the FTM-specific</description>
+                           <description>TPM registers only\t (first set of registers) can be used without any restriction. Do not use the FTM-specific</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>All registers including the FTM-specific registers (second set of registers) are available for use with no restrictions</description>
+                           <description>All registers\t including the FTM-specific registers (second set of registers) are available for use with no restrictions</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INIT</name>
-                     <description>Initialize the Channels Output</description>
+                     <description>Initialize the Channel Outputs</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to initialise</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>WPDIS</name>
@@ -440,12 +441,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Write protection is enabled</description>
+                           <description>Enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Write protection is disabled</description>
+                           <description>Disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -458,12 +459,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No restrictions. Software and hardware triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization</description>
+                           <description>No restrictions.\t Software and hardware triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Software trigger can only be used by MOD and CnV synchronization, and hardware triggers can only be used by OUTMASK and FTM counter synchronization</description>
+                           <description>Restricted\t Software trigger can only be used by MOD and CnV synchronization, and hardware triggers can only be used by OUTMASK and FTM counter synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -476,12 +477,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Capture test mode is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Capture test mode is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -494,44 +495,27 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Fault control is disabled for all channels</description>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Fault control is enabled for even channels only (channels 0, 2, 4, and 6), and the selected mode is the manual fault clearing</description>
+                           <description>Even channels with manual fault clearing</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the manual fault clearing</description>
+                           <description>All channels with manual fault clearing</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the automatic fault clearing</description>
+                           <description>All channels with automatic fault clearing</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>FAULTIE</name>
-                     <description>Fault Interrupt Enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Fault control interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Fault control interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CAPTEST" > <name>FAULTIE</name> <description>Fault Interrupt Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -547,34 +531,17 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The minimum loading point is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The minimum loading point is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CNTMAX</name>
-                     <description>Maximum Loading Point Enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The maximum loading point is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The maximum loading point is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CNTMIN" > <name>CNTMAX</name> <description>Maximum Loading Point Enable</description> <bitOffset>1</bitOffset> </field>
                   <field>
                      <name>REINIT</name>
                      <description>FTM Counter Reinitialization by Synchronization (FTM Counter Synchronization)</description>
@@ -583,52 +550,35 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FTM counter continues to count normally</description>
+                           <description>Counts normally</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM counter is updated with its initial value when the selected trigger is detected</description>
+                           <description>Updated with initial value on triggerd</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SYNCHOM</name>
-                     <description>Output Mask Synchronization</description>
+                     <description>Output Mask Synchronization with buffer</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>OUTMASK register is updated with the value of its buffer in all rising edges of the system clock</description>
+                           <description>Rising edges of the system clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>OUTMASK register is updated with the value of its buffer only by the PWM synchronization</description>
+                           <description>PWM synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TRIG0</name>
-                     <description>PWM Synchronization Hardware Trigger 0</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Trigger is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Trigger is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CNTMIN" > <name>TRIG0</name> <description>PWM Synchronization Hardware Trigger 0</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="TRIG0" > <name>TRIG1</name> <description>PWM Synchronization Hardware Trigger 1</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="TRIG0" > <name>TRIG2</name> <description>PWM Synchronization Hardware Trigger 2</description> <bitOffset>6</bitOffset> </field>
                   <field>
@@ -639,12 +589,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger is not selected</description>
+                           <description>Not selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Software trigger is selected</description>
+                           <description>Selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -675,12 +625,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0OI" > <name>CH1OI</name> <description>Channel 1 Output Initialization Value</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH2OI</name> <description>Channel 2 Output Initialization Value</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH3OI</name> <description>Channel 3 Output Initialization Value</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH4OI</name> <description>Channel 4 Output Initialization Value</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH5OI</name> <description>Channel 5 Output Initialization Value</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH6OI</name> <description>Channel 6 Output Initialization Value</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH7OI</name> <description>Channel 7 Output Initialization Value</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -707,12 +651,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0OM" > <name>CH1OM</name> <description>Channel 1 Output Mask</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH2OM</name> <description>Channel 2 Output Mask</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH3OM</name> <description>Channel 3 Output Mask</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH4OM</name> <description>Channel 4 Output Mask</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH5OM</name> <description>Channel 5 Output Mask</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH6OM</name> <description>Channel 6 Output Mask</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH7OM</name> <description>Channel 7 Output Mask</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -793,31 +731,9 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="DECAPEN0" > <name>DTEN0</name> <description>Deadtime Enable for Channels 0 &amp; 1\n
-Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DECAPEN0" > <name>DTEN0</name> <description>Deadtime Enable for Channels 0 &amp; 1</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>SYNCEN0</name> <description>PWM Synchronization Enable for Channels 0 &amp; 1</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>FAULTEN0</name> <description>Fault Control Enable for Channels 0 &amp; 1</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="COMBINE0" > <name>COMBINE1</name> <description>Combine Channels 2 &amp; 3</description> <bitOffset>8</bitOffset> </field>
-                  <field derivedFrom="COMP0" > <name>COMP1</name> <description>Complement for Channels 2 &amp; 3</description> <bitOffset>9</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>DECAPEN1</name> <description>Dual Edge Capture Mode Enable for Channels 2 &amp; 3</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="DECAP0" > <name>DECAP1</name> <description>Dual Edge Capture Mode Captures for Channel 2 &amp; 3</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="DTEN0" > <name>DTEN1</name> <description>Deadtime Enable for Channels 2 &amp; 3</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="SYNCEN0" > <name>SYNCEN1</name> <description>Synchronization Enable for Channels 2 &amp; 3</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="FAULTEN0" > <name>FAULTEN1</name> <description>Fault Control Enable for Channels 2 &amp; 3</description> <bitOffset>14</bitOffset> </field>
-                  <field derivedFrom="COMBINE0" > <name>COMBINE2</name> <description>Combine Channels 4 &amp; 5</description> <bitOffset>16</bitOffset> </field>
-                  <field derivedFrom="COMP0" > <name>COMP2</name> <description>Complement for Channels 4 &amp; 5</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>DECAPEN2</name> <description>Dual Edge Capture Mode Enable for Channels 4 &amp; 5</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="DECAP0" > <name>DECAP2</name> <description>Dual Edge Capture Mode Captures for Channels 4 &amp; 5</description> <bitOffset>19</bitOffset> </field>
-                  <field derivedFrom="DTEN0" > <name>DTEN2</name> <description>Deadtime Enable for Channels 4 &amp; 5</description> <bitOffset>20</bitOffset> </field>
-                  <field derivedFrom="SYNCEN0" > <name>SYNCEN2</name> <description>Synchronization Enable for Channels 4 &amp; 5</description> <bitOffset>21</bitOffset> </field>
-                  <field derivedFrom="FAULTEN0" > <name>FAULTEN2</name> <description>Fault Control Enable for Channels 4 &amp; 5</description> <bitOffset>22</bitOffset> </field>
-                  <field derivedFrom="COMBINE0" > <name>COMBINE3</name> <description>Combine Channels 4 &amp; 5</description> <bitOffset>24</bitOffset> </field>
-                  <field derivedFrom="COMP0" > <name>COMP3</name> <description>Complement for Channels 4 &amp; 5</description> <bitOffset>25</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>DECAPEN3</name> <description>Dual Edge Capture Mode Enable for Channels 4 &amp; 5</description> <bitOffset>26</bitOffset> </field>
-                  <field derivedFrom="DECAP0" > <name>DECAP3</name> <description>Dual Edge Capture Mode Captures for Channels 4 &amp; 5</description> <bitOffset>27</bitOffset> </field>
-                  <field derivedFrom="DTEN0" > <name>DTEN3</name> <description>Deadtime Enable for Channels 4 &amp; 5</description> <bitOffset>28</bitOffset> </field>
-                  <field derivedFrom="SYNCEN0" > <name>SYNCEN3</name> <description>Synchronization Enable for Channels 4 &amp; 5</description> <bitOffset>29</bitOffset> </field>
-                  <field derivedFrom="FAULTEN0" > <name>FAULTEN3</name> <description>Fault Control Enable for Channels 4 &amp; 5</description> <bitOffset>30</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -862,9 +778,9 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                <addressOffset>0x6C</addressOffset>
                <fields>
                   <field>
-                     <name>CH2TRIG</name>
-                     <description>Channel 2 Trigger Enable</description>
-                     <bitOffset>0</bitOffset>
+                     <name>CH0TRIG</name>
+                     <description>Channel 0 Trigger Enable</description>
+                     <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -879,11 +795,7 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH0TRIG</name> <description>Channel 0 Trigger Enable</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>INITTRIGEN</name>
                      <description>Initialization Trigger Enable</description>
@@ -892,12 +804,12 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The generation of initialization trigger is disabled</description>
+                           <description>Disabled\t Generation of initialization trigger disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The generation of initialization trigger is enabled</description>
+                           <description>Enabled\t Generation of initialization trigger enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -910,12 +822,12 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No channel trigger was generated</description>
+                           <description>No Trigger\t was generated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A channel trigger was generated</description>
+                           <description>Trigger\t was generated</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -946,12 +858,6 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="POL0" > <name>POL1</name> <description>Channel 1 Polarity</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL2</name> <description>Channel 2 Polarity</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL3</name> <description>Channel 3 Polarity</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL4</name> <description>Channel 4 Polarity</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL5</name> <description>Channel 5 Polarity</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL6</name> <description>Channel 6 Polarity</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL7</name> <description>Channel 7 Polarity</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -982,19 +888,19 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="FAULTF0" > <name>FAULTF3</name> <description>Fault Detection Flag 3</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>FAULTIN</name>
-                     <description>Fault Inputs</description>
+                     <description>Collective Fault Input Status</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The logic OR of the enabled fault inputs is 0</description>
+                           <description>No faults active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The logic OR of the enabled fault inputs is 1</description>
+                           <description>&gt;=1 fault active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1007,12 +913,12 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Write protection is disabled. Write protected bits can be written</description>
+                           <description>Unprotected\t Write protected bits can be written</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Write protection is enabled. Write protected bits cannot be written</description>
+                           <description>Protected\t Write protected bits cannot be written</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1025,12 +931,12 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No fault condition was detected</description>
+                           <description>No fault</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A fault condition was detected</description>
+                           <description>Fault detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1055,14 +961,12 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0bXXXX</name>
-                           <description>Filter enabled</description>
+                           <description>Filter enabled\t with given length</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0FVAL" > <name>CH1FVAL</name> <description>Channel 1 Input Filter</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0FVAL" > <name>CH2FVAL</name> <description>Channel 2 Input Filter</description> <bitOffset>8</bitOffset> </field>
-                  <field derivedFrom="CH0FVAL" > <name>CH3FVAL</name> <description>Channel 3 Input Filter</description> <bitOffset>12</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1119,14 +1023,14 @@ Deadtime insertion</description> <bitOffset>4</bitOffset> </field>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0b0000</name>
                            <description>Filter disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Filter enabled</description>
-                           <value>0b1</value>
+                           <name>0bXXXX</name>
+                           <description>Filter enabled\t with given length</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1269,46 +1173,52 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                   </field>
                   <field>
                      <name>BDMMODE</name>
-                     <description>BDM Mode</description>
+                     <description>Controls operation in BDM Mode\n
+Selects the ratio between the number of counter overflows to the number of times the TOF bit is set</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Stopped, outputs functional</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Stopped, outputs forced to safe value</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Stopped, outputs frozen</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Functioning</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>GTBEEN</name>
-                     <description>Global Time Base Enable</description>
+                     <description>External Global Time Base Enable</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Use of an external global time base is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Use of an external global time base is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>GTBEOUT</name>
-                     <description>Global Time Base Output</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>A global time base signal generation is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>A global time base signal generation is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="GTBEEN" > <name>GTBEOUT</name> <description>Global Time Base Output</description> <bitOffset>10</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1352,70 +1262,36 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FTM clears the TRIGj bit when the hardware trigger j is detected</description>
+                           <description>TRIGj cleared when trigger j detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM does not clear the TRIGj bit when the hardware trigger j is detected</description>
+                           <description>TRIGj unaffected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CNTINC</name>
-                     <description>CNTIN Register Synchronization</description>
+                     <description>CNTIN Register Synchronization with buffer</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>CNTIN register is updated with its buffer value at all rising edges of system clock</description>
+                           <description>Updated on rising edges of system clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>CNTIN register is updated with its buffer value by the PWM synchronization</description>
+                           <description>Updated by PWM synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>INVC</name>
-                     <description>INVCTRL Register Synchronization</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>INVCTRL register is updated with its buffer value at all rising edges of system clock</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>INVCTRL register is updated with its buffer value by the PWM synchronization</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SWOC</name>
-                     <description>SWOCTRL Register Synchronization</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>SWOCTRL register is updated with its buffer value at all rising edges of system clock</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>SWOCTRL register is updated with its buffer value by the PWM synchronization</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CNTINC" > <name>INVC</name> <description>INVCTRL Register Synchronization with buffer</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CNTINC" > <name>SWOC</name> <description>SWOCTRL Register Synchronization with buffer</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>SYNCMODE</name>
                      <description>Synchronization Mode</description>
@@ -1424,12 +1300,12 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Legacy PWM synchronization is selected</description>
+                           <description>Legacy PWM synchronization</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enhanced PWM synchronization is selected</description>
+                           <description>Enhanced PWM synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1639,9 +1515,6 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="INV0EN" > <name>INV1EN</name> <description>Pair Channels 1 Inverting Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="INV0EN" > <name>INV2EN</name> <description>Pair Channels 2 Inverting Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="INV0EN" > <name>INV3EN</name> <description>Pair Channels 3 Inverting Enable</description> <bitOffset>3</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1668,12 +1541,6 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0OC" > <name>CH1OC</name> <description>Channel 1 Software Output Control Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH2OC</name> <description>Channel 2 Software Output Control Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH3OC</name> <description>Channel 3 Software Output Control Enable</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH4OC</name> <description>Channel 4 Software Output Control Enable</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH6OC</name> <description>Channel 6 Software Output Control Enable</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH7OC</name> <description>Channel 7 Software Output Control Enable</description> <bitOffset>7</bitOffset> </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1693,12 +1560,6 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0OCV" > <name>CH1OCV</name> <description>Channel 1 Software Output Control Value</description> <bitOffset>9</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH2OCV</name> <description>Channel 2 Software Output Control Value</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH3OCV</name> <description>Channel 3 Software Output Control Value</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH4OCV</name> <description>Channel 4 Software Output Control Value</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH5OCV</name> <description>Channel 5 Software Output Control Value</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH6OCV</name> <description>Channel 6 Software Output Control Value</description> <bitOffset>14</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH7OCV</name> <description>Channel 7 Software Output Control Value</description> <bitOffset>15</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1725,12 +1586,6 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CH0SEL" > <name>CH1SEL</name> <description>Channel 1 Select</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH2SEL</name> <description>Channel 2 Select</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH3SEL</name> <description>Channel 3 Select</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH4SEL</name> <description>Channel 4 Select</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH5SEL</name> <description>Channel 5 Select</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH6SEL</name> <description>Channel 6 Select</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH7SEL</name> <description>Channel 7 Select</description> <bitOffset>7</bitOffset> </field>
                   <field>
                      <name>LDOK</name>
                      <description>Load Enable</description>

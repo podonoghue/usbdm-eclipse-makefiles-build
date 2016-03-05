@@ -41,7 +41,7 @@ typedef enum {
   LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface                                                      */
-  LPUART0_RX_TX_IRQn            =  12,   /**<  28 Serial Communication Interface                                                   */
+  LPUART0_IRQn                  =  12,   /**<  28 Serial Communication Interface                                                   */
   ADC0_IRQn                     =  15,   /**<  31 Analogue to Digital Converter                                                    */
   CMP0_IRQn                     =  16,   /**<  32 High-Speed Comparator                                                            */
   TPM0_IRQn                     =  17,   /**<  33 Timer/PWM Module                                                                 */
@@ -72,7 +72,7 @@ extern void PMC_IRQHandler(void);              /**< Power Management Controller 
 extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void LPUART0_RX_TX_IRQHandler(void);    /**< Serial Communication Interface                                                   */
+extern void LPUART0_IRQHandler(void);          /**< Serial Communication Interface                                                   */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
 extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */
 extern void TPM0_IRQHandler(void);             /**< Timer/PWM Module                                                                 */

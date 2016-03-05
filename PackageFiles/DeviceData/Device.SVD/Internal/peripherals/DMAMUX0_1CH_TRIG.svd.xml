@@ -1,14 +1,11 @@
 <!--
 Devices using this peripheral: 
-      MK02F12810
-      MK10D5
-      MK20D5
-      MK22F12810
-      MKV30F12810
-      MKV31F12810
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_4CH_TRIG" ?>
+         <?sourceFile "DMAMUX0_1CH_TRIG" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -22,15 +19,12 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x1</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <dim>4</dim>
-               <dimIncrement>1</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
-               <name>CHCFG%s</name>
+               <name>CHCFG</name>
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>

@@ -65,7 +65,7 @@ typedef enum {
   LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
   LCD_IRQn                      =  29,   /**<  45 Segment Liquid Crystal Display                                                   */
   PORTA_IRQn                    =  30,   /**<  46 General Purpose Input/Output                                                     */
-  PORTC_PORTD_IRQn              =  31,   /**<  47 General Purpose Input/Output                                                     */
+  PORTCD_IRQn                   =  31,   /**<  47 General Purpose Input/Output                                                     */
 } IRQn_Type;
 
 /**
@@ -111,7 +111,7 @@ extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator
 extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
 extern void LCD_IRQHandler(void);              /**< Segment Liquid Crystal Display                                                   */
 extern void PORTA_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTC_PORTD_IRQHandler(void);      /**< General Purpose Input/Output                                                     */
+extern void PORTCD_IRQHandler(void);           /**< General Purpose Input/Output                                                     */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -3758,8 +3758,8 @@ typedef struct {                                /*       SIM Structure          
 /* ------- SCGC5 Bit Fields                         ------ */
 #define SIM_SCGC5_LPTMR_MASK                     (0x01UL << SIM_SCGC5_LPTMR_SHIFT)                   /*!< SIM_SCGC5: LPTMR Mask                   */
 #define SIM_SCGC5_LPTMR_SHIFT                    0                                                   /*!< SIM_SCGC5: LPTMR Position               */
-#define SIM_SCGC5_TSI_MASK                       (0x01UL << SIM_SCGC5_TSI_SHIFT)                     /*!< SIM_SCGC5: TSI Mask                     */
-#define SIM_SCGC5_TSI_SHIFT                      5                                                   /*!< SIM_SCGC5: TSI Position                 */
+#define SIM_SCGC5_TSI0_MASK                      (0x01UL << SIM_SCGC5_TSI0_SHIFT)                    /*!< SIM_SCGC5: TSI0 Mask                    */
+#define SIM_SCGC5_TSI0_SHIFT                     5                                                   /*!< SIM_SCGC5: TSI0 Position                */
 #define SIM_SCGC5_PORTA_MASK                     (0x01UL << SIM_SCGC5_PORTA_SHIFT)                   /*!< SIM_SCGC5: PORTA Mask                   */
 #define SIM_SCGC5_PORTA_SHIFT                    9                                                   /*!< SIM_SCGC5: PORTA Position               */
 #define SIM_SCGC5_PORTB_MASK                     (0x01UL << SIM_SCGC5_PORTB_SHIFT)                   /*!< SIM_SCGC5: PORTB Mask                   */

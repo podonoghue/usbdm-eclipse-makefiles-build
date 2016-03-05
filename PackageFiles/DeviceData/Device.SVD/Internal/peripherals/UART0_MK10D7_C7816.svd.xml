@@ -20,7 +20,6 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART0_MK10D7_C7816" ?>
-         <?forcedBlockWidth "32" ?>
          <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
@@ -34,7 +33,19 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x20</size>
+            <size>0xF</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x10</offset>
+            <size>0x7</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x18</offset>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -435,7 +446,7 @@ To clear TDRE, read S1 when TDRE is set and then write to the data register</des
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Tx FIFO level &lt;= TXWATERd</description>
+                           <description>Tx FIFO level &lt;= TXWATER</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

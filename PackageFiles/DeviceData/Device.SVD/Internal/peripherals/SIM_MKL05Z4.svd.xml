@@ -746,7 +746,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LPTMR" > <name>TSI</name> <description>TSI Access Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>TSI0</name> <description>TSI0 Access Control</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>PORTA</name>
                      <description>Port A Clock Gate Control</description>

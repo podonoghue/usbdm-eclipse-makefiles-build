@@ -1477,18 +1477,6 @@ typedef struct {                                /*       FTM0 Structure         
 #define FTM_STATUS_CH0F_SHIFT                    0                                                   /*!< FTM0_STATUS: CH0F Position              */
 #define FTM_STATUS_CH1F_MASK                     (0x01UL << FTM_STATUS_CH1F_SHIFT)                   /*!< FTM0_STATUS: CH1F Mask                  */
 #define FTM_STATUS_CH1F_SHIFT                    1                                                   /*!< FTM0_STATUS: CH1F Position              */
-#define FTM_STATUS_CH2F_MASK                     (0x01UL << FTM_STATUS_CH2F_SHIFT)                   /*!< FTM0_STATUS: CH2F Mask                  */
-#define FTM_STATUS_CH2F_SHIFT                    2                                                   /*!< FTM0_STATUS: CH2F Position              */
-#define FTM_STATUS_CH3F_MASK                     (0x01UL << FTM_STATUS_CH3F_SHIFT)                   /*!< FTM0_STATUS: CH3F Mask                  */
-#define FTM_STATUS_CH3F_SHIFT                    3                                                   /*!< FTM0_STATUS: CH3F Position              */
-#define FTM_STATUS_CH4F_MASK                     (0x01UL << FTM_STATUS_CH4F_SHIFT)                   /*!< FTM0_STATUS: CH4F Mask                  */
-#define FTM_STATUS_CH4F_SHIFT                    4                                                   /*!< FTM0_STATUS: CH4F Position              */
-#define FTM_STATUS_CH5F_MASK                     (0x01UL << FTM_STATUS_CH5F_SHIFT)                   /*!< FTM0_STATUS: CH5F Mask                  */
-#define FTM_STATUS_CH5F_SHIFT                    5                                                   /*!< FTM0_STATUS: CH5F Position              */
-#define FTM_STATUS_CH6F_MASK                     (0x01UL << FTM_STATUS_CH6F_SHIFT)                   /*!< FTM0_STATUS: CH6F Mask                  */
-#define FTM_STATUS_CH6F_SHIFT                    6                                                   /*!< FTM0_STATUS: CH6F Position              */
-#define FTM_STATUS_CH7F_MASK                     (0x01UL << FTM_STATUS_CH7F_SHIFT)                   /*!< FTM0_STATUS: CH7F Mask                  */
-#define FTM_STATUS_CH7F_SHIFT                    7                                                   /*!< FTM0_STATUS: CH7F Position              */
 /* ------- MODE Bit Fields                          ------ */
 #define FTM_MODE_FTMEN_MASK                      (0x01UL << FTM_MODE_FTMEN_SHIFT)                    /*!< FTM0_MODE: FTMEN Mask                   */
 #define FTM_MODE_FTMEN_SHIFT                     0                                                   /*!< FTM0_MODE: FTMEN Position               */
@@ -1527,35 +1515,11 @@ typedef struct {                                /*       FTM0 Structure         
 #define FTM_OUTINIT_CH0OI_SHIFT                  0                                                   /*!< FTM0_OUTINIT: CH0OI Position            */
 #define FTM_OUTINIT_CH1OI_MASK                   (0x01UL << FTM_OUTINIT_CH1OI_SHIFT)                 /*!< FTM0_OUTINIT: CH1OI Mask                */
 #define FTM_OUTINIT_CH1OI_SHIFT                  1                                                   /*!< FTM0_OUTINIT: CH1OI Position            */
-#define FTM_OUTINIT_CH2OI_MASK                   (0x01UL << FTM_OUTINIT_CH2OI_SHIFT)                 /*!< FTM0_OUTINIT: CH2OI Mask                */
-#define FTM_OUTINIT_CH2OI_SHIFT                  2                                                   /*!< FTM0_OUTINIT: CH2OI Position            */
-#define FTM_OUTINIT_CH3OI_MASK                   (0x01UL << FTM_OUTINIT_CH3OI_SHIFT)                 /*!< FTM0_OUTINIT: CH3OI Mask                */
-#define FTM_OUTINIT_CH3OI_SHIFT                  3                                                   /*!< FTM0_OUTINIT: CH3OI Position            */
-#define FTM_OUTINIT_CH4OI_MASK                   (0x01UL << FTM_OUTINIT_CH4OI_SHIFT)                 /*!< FTM0_OUTINIT: CH4OI Mask                */
-#define FTM_OUTINIT_CH4OI_SHIFT                  4                                                   /*!< FTM0_OUTINIT: CH4OI Position            */
-#define FTM_OUTINIT_CH5OI_MASK                   (0x01UL << FTM_OUTINIT_CH5OI_SHIFT)                 /*!< FTM0_OUTINIT: CH5OI Mask                */
-#define FTM_OUTINIT_CH5OI_SHIFT                  5                                                   /*!< FTM0_OUTINIT: CH5OI Position            */
-#define FTM_OUTINIT_CH6OI_MASK                   (0x01UL << FTM_OUTINIT_CH6OI_SHIFT)                 /*!< FTM0_OUTINIT: CH6OI Mask                */
-#define FTM_OUTINIT_CH6OI_SHIFT                  6                                                   /*!< FTM0_OUTINIT: CH6OI Position            */
-#define FTM_OUTINIT_CH7OI_MASK                   (0x01UL << FTM_OUTINIT_CH7OI_SHIFT)                 /*!< FTM0_OUTINIT: CH7OI Mask                */
-#define FTM_OUTINIT_CH7OI_SHIFT                  7                                                   /*!< FTM0_OUTINIT: CH7OI Position            */
 /* ------- OUTMASK Bit Fields                       ------ */
 #define FTM_OUTMASK_CH0OM_MASK                   (0x01UL << FTM_OUTMASK_CH0OM_SHIFT)                 /*!< FTM0_OUTMASK: CH0OM Mask                */
 #define FTM_OUTMASK_CH0OM_SHIFT                  0                                                   /*!< FTM0_OUTMASK: CH0OM Position            */
 #define FTM_OUTMASK_CH1OM_MASK                   (0x01UL << FTM_OUTMASK_CH1OM_SHIFT)                 /*!< FTM0_OUTMASK: CH1OM Mask                */
 #define FTM_OUTMASK_CH1OM_SHIFT                  1                                                   /*!< FTM0_OUTMASK: CH1OM Position            */
-#define FTM_OUTMASK_CH2OM_MASK                   (0x01UL << FTM_OUTMASK_CH2OM_SHIFT)                 /*!< FTM0_OUTMASK: CH2OM Mask                */
-#define FTM_OUTMASK_CH2OM_SHIFT                  2                                                   /*!< FTM0_OUTMASK: CH2OM Position            */
-#define FTM_OUTMASK_CH3OM_MASK                   (0x01UL << FTM_OUTMASK_CH3OM_SHIFT)                 /*!< FTM0_OUTMASK: CH3OM Mask                */
-#define FTM_OUTMASK_CH3OM_SHIFT                  3                                                   /*!< FTM0_OUTMASK: CH3OM Position            */
-#define FTM_OUTMASK_CH4OM_MASK                   (0x01UL << FTM_OUTMASK_CH4OM_SHIFT)                 /*!< FTM0_OUTMASK: CH4OM Mask                */
-#define FTM_OUTMASK_CH4OM_SHIFT                  4                                                   /*!< FTM0_OUTMASK: CH4OM Position            */
-#define FTM_OUTMASK_CH5OM_MASK                   (0x01UL << FTM_OUTMASK_CH5OM_SHIFT)                 /*!< FTM0_OUTMASK: CH5OM Mask                */
-#define FTM_OUTMASK_CH5OM_SHIFT                  5                                                   /*!< FTM0_OUTMASK: CH5OM Position            */
-#define FTM_OUTMASK_CH6OM_MASK                   (0x01UL << FTM_OUTMASK_CH6OM_SHIFT)                 /*!< FTM0_OUTMASK: CH6OM Mask                */
-#define FTM_OUTMASK_CH6OM_SHIFT                  6                                                   /*!< FTM0_OUTMASK: CH6OM Position            */
-#define FTM_OUTMASK_CH7OM_MASK                   (0x01UL << FTM_OUTMASK_CH7OM_SHIFT)                 /*!< FTM0_OUTMASK: CH7OM Mask                */
-#define FTM_OUTMASK_CH7OM_SHIFT                  7                                                   /*!< FTM0_OUTMASK: CH7OM Position            */
 /* ------- COMBINE Bit Fields                       ------ */
 #define FTM_COMBINE_COMBINE_MASK                 (0x01UL << FTM_COMBINE_COMBINE_SHIFT)               /*!< FTM0_COMBINE: COMBINE Mask              */
 #define FTM_COMBINE_COMBINE_SHIFT                0                                                   /*!< FTM0_COMBINE: COMBINE Position          */
@@ -1788,10 +1752,46 @@ typedef struct {                                /*       FTM1 Structure         
 /* ------- CNTINH Bit Fields                        ------ */
 /* ------- CNTINL Bit Fields                        ------ */
 /* ------- STATUS Bit Fields                        ------ */
+#define FTM_STATUS_CH2F_MASK                     (0x01UL << FTM_STATUS_CH2F_SHIFT)                   /*!< FTM1_STATUS: CH2F Mask                  */
+#define FTM_STATUS_CH2F_SHIFT                    2                                                   /*!< FTM1_STATUS: CH2F Position              */
+#define FTM_STATUS_CH3F_MASK                     (0x01UL << FTM_STATUS_CH3F_SHIFT)                   /*!< FTM1_STATUS: CH3F Mask                  */
+#define FTM_STATUS_CH3F_SHIFT                    3                                                   /*!< FTM1_STATUS: CH3F Position              */
+#define FTM_STATUS_CH4F_MASK                     (0x01UL << FTM_STATUS_CH4F_SHIFT)                   /*!< FTM1_STATUS: CH4F Mask                  */
+#define FTM_STATUS_CH4F_SHIFT                    4                                                   /*!< FTM1_STATUS: CH4F Position              */
+#define FTM_STATUS_CH5F_MASK                     (0x01UL << FTM_STATUS_CH5F_SHIFT)                   /*!< FTM1_STATUS: CH5F Mask                  */
+#define FTM_STATUS_CH5F_SHIFT                    5                                                   /*!< FTM1_STATUS: CH5F Position              */
+#define FTM_STATUS_CH6F_MASK                     (0x01UL << FTM_STATUS_CH6F_SHIFT)                   /*!< FTM1_STATUS: CH6F Mask                  */
+#define FTM_STATUS_CH6F_SHIFT                    6                                                   /*!< FTM1_STATUS: CH6F Position              */
+#define FTM_STATUS_CH7F_MASK                     (0x01UL << FTM_STATUS_CH7F_SHIFT)                   /*!< FTM1_STATUS: CH7F Mask                  */
+#define FTM_STATUS_CH7F_SHIFT                    7                                                   /*!< FTM1_STATUS: CH7F Position              */
 /* ------- MODE Bit Fields                          ------ */
 /* ------- SYNC Bit Fields                          ------ */
 /* ------- OUTINIT Bit Fields                       ------ */
+#define FTM_OUTINIT_CH2OI_MASK                   (0x01UL << FTM_OUTINIT_CH2OI_SHIFT)                 /*!< FTM1_OUTINIT: CH2OI Mask                */
+#define FTM_OUTINIT_CH2OI_SHIFT                  2                                                   /*!< FTM1_OUTINIT: CH2OI Position            */
+#define FTM_OUTINIT_CH3OI_MASK                   (0x01UL << FTM_OUTINIT_CH3OI_SHIFT)                 /*!< FTM1_OUTINIT: CH3OI Mask                */
+#define FTM_OUTINIT_CH3OI_SHIFT                  3                                                   /*!< FTM1_OUTINIT: CH3OI Position            */
+#define FTM_OUTINIT_CH4OI_MASK                   (0x01UL << FTM_OUTINIT_CH4OI_SHIFT)                 /*!< FTM1_OUTINIT: CH4OI Mask                */
+#define FTM_OUTINIT_CH4OI_SHIFT                  4                                                   /*!< FTM1_OUTINIT: CH4OI Position            */
+#define FTM_OUTINIT_CH5OI_MASK                   (0x01UL << FTM_OUTINIT_CH5OI_SHIFT)                 /*!< FTM1_OUTINIT: CH5OI Mask                */
+#define FTM_OUTINIT_CH5OI_SHIFT                  5                                                   /*!< FTM1_OUTINIT: CH5OI Position            */
+#define FTM_OUTINIT_CH6OI_MASK                   (0x01UL << FTM_OUTINIT_CH6OI_SHIFT)                 /*!< FTM1_OUTINIT: CH6OI Mask                */
+#define FTM_OUTINIT_CH6OI_SHIFT                  6                                                   /*!< FTM1_OUTINIT: CH6OI Position            */
+#define FTM_OUTINIT_CH7OI_MASK                   (0x01UL << FTM_OUTINIT_CH7OI_SHIFT)                 /*!< FTM1_OUTINIT: CH7OI Mask                */
+#define FTM_OUTINIT_CH7OI_SHIFT                  7                                                   /*!< FTM1_OUTINIT: CH7OI Position            */
 /* ------- OUTMASK Bit Fields                       ------ */
+#define FTM_OUTMASK_CH2OM_MASK                   (0x01UL << FTM_OUTMASK_CH2OM_SHIFT)                 /*!< FTM1_OUTMASK: CH2OM Mask                */
+#define FTM_OUTMASK_CH2OM_SHIFT                  2                                                   /*!< FTM1_OUTMASK: CH2OM Position            */
+#define FTM_OUTMASK_CH3OM_MASK                   (0x01UL << FTM_OUTMASK_CH3OM_SHIFT)                 /*!< FTM1_OUTMASK: CH3OM Mask                */
+#define FTM_OUTMASK_CH3OM_SHIFT                  3                                                   /*!< FTM1_OUTMASK: CH3OM Position            */
+#define FTM_OUTMASK_CH4OM_MASK                   (0x01UL << FTM_OUTMASK_CH4OM_SHIFT)                 /*!< FTM1_OUTMASK: CH4OM Mask                */
+#define FTM_OUTMASK_CH4OM_SHIFT                  4                                                   /*!< FTM1_OUTMASK: CH4OM Position            */
+#define FTM_OUTMASK_CH5OM_MASK                   (0x01UL << FTM_OUTMASK_CH5OM_SHIFT)                 /*!< FTM1_OUTMASK: CH5OM Mask                */
+#define FTM_OUTMASK_CH5OM_SHIFT                  5                                                   /*!< FTM1_OUTMASK: CH5OM Position            */
+#define FTM_OUTMASK_CH6OM_MASK                   (0x01UL << FTM_OUTMASK_CH6OM_SHIFT)                 /*!< FTM1_OUTMASK: CH6OM Mask                */
+#define FTM_OUTMASK_CH6OM_SHIFT                  6                                                   /*!< FTM1_OUTMASK: CH6OM Position            */
+#define FTM_OUTMASK_CH7OM_MASK                   (0x01UL << FTM_OUTMASK_CH7OM_SHIFT)                 /*!< FTM1_OUTMASK: CH7OM Mask                */
+#define FTM_OUTMASK_CH7OM_SHIFT                  7                                                   /*!< FTM1_OUTMASK: CH7OM Position            */
 /* ------- COMBINE Bit Fields                       ------ */
 /* ------- DEADTIME Bit Fields                      ------ */
 /* ------- EXTTRIG Bit Fields                       ------ */

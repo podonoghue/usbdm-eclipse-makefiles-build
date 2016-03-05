@@ -61,7 +61,7 @@ Devices using this peripheral:
       MKW24D5
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_16CH" ?>
+         <?sourceFile "DMAMUX0_16CH_TRIG" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>

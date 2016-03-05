@@ -341,7 +341,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>TSIEN</name>
+                     <name>TSI0EN</name>
                      <description>no description available</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -349,12 +349,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TSI is not available in the device</description>
+                           <description>TSI0 is not available in the device</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>TSI is available in the device</description>
+                           <description>TSI0 is available in the device</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1234,7 +1234,7 @@ Devices using this peripheral:
                   <field derivedFrom="DMAMUX0" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>RTC</name> <description>RTC Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="DMAMUX0" > <name>TSI</name> <description>TSI Clock Gate Control</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="DMAMUX0" > <name>TSI0</name> <description>TSI0 Clock Gate Control</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>PORTA</name> <description>Port A Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>PORTB</name> <description>Port B Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>PORTC</name> <description>Port C Clock Gate Control</description> <bitOffset>21</bitOffset> </field>

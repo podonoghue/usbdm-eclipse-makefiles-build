@@ -1136,7 +1136,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="LPTIMER" > <name>REGFILE</name> <description>Register File Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="LPTIMER" > <name>TSI</name> <description>TSI Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="LPTIMER" > <name>TSI0</name> <description>TSI0 Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTA</name> <description>Port A Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTB</name> <description>Port B Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTC</name> <description>Port C Clock Gate Control</description> <bitOffset>11</bitOffset> </field>

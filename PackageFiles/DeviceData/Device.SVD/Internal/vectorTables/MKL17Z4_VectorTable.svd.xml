@@ -61,7 +61,7 @@ Devices using this vector table:
             <value>11</value>
          </interrupt>
          <interrupt>
-            <name>LPUART0_RX_TX</name>
+            <name>LPUART0</name>
             <description>Serial Communication Interface</description>
             <value>12</value>
          </interrupt>
@@ -136,7 +136,7 @@ Devices using this vector table:
             <value>30</value>
          </interrupt>
          <interrupt>
-            <name>PORTC_PORTD</name>
+            <name>PORTCD</name>
             <description>General Purpose Input/Output</description>
             <value>31</value>
          </interrupt>

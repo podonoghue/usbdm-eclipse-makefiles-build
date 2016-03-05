@@ -7,7 +7,6 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "UART0_MK24F12_C7816" ?>
-         <?forcedBlockWidth "32" ?>
          <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
@@ -21,7 +20,19 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x20</size>
+            <size>0xF</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x10</offset>
+            <size>0x7</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x18</offset>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -335,7 +346,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field>
                      <name>PF</name>
                      <description>Parity Error Flag\n
-PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
 To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -440,7 +451,7 @@ To clear TDRE, read S1 when TDRE is set and then write to the data register</des
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Tx FIFO level &lt;= TXWATERd</description>
+                           <description>Tx FIFO level &lt;= TXWATER</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

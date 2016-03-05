@@ -4,7 +4,7 @@ Devices using this peripheral:
       MKE15D7
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_14CH" ?>
+         <?sourceFile "DMAMUX0_14CH_TRIG" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>

@@ -2234,7 +2234,7 @@ typedef struct {                                /*       DMA0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           DMAMUX0 (file:DMAMUX0_16CH)          ================ */
+/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG)       ================ */
 /* ================================================================================ */
 
 /**
@@ -8160,8 +8160,8 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC5_LPTIMER_SHIFT                  0                                                   /*!< SIM_SCGC5: LPTIMER Position             */
 #define SIM_SCGC5_REGFILE_MASK                   (0x01UL << SIM_SCGC5_REGFILE_SHIFT)                 /*!< SIM_SCGC5: REGFILE Mask                 */
 #define SIM_SCGC5_REGFILE_SHIFT                  1                                                   /*!< SIM_SCGC5: REGFILE Position             */
-#define SIM_SCGC5_TSI_MASK                       (0x01UL << SIM_SCGC5_TSI_SHIFT)                     /*!< SIM_SCGC5: TSI Mask                     */
-#define SIM_SCGC5_TSI_SHIFT                      5                                                   /*!< SIM_SCGC5: TSI Position                 */
+#define SIM_SCGC5_TSI0_MASK                      (0x01UL << SIM_SCGC5_TSI0_SHIFT)                    /*!< SIM_SCGC5: TSI0 Mask                    */
+#define SIM_SCGC5_TSI0_SHIFT                     5                                                   /*!< SIM_SCGC5: TSI0 Position                */
 #define SIM_SCGC5_PORTA_MASK                     (0x01UL << SIM_SCGC5_PORTA_SHIFT)                   /*!< SIM_SCGC5: PORTA Mask                   */
 #define SIM_SCGC5_PORTA_SHIFT                    9                                                   /*!< SIM_SCGC5: PORTA Position               */
 #define SIM_SCGC5_PORTB_MASK                     (0x01UL << SIM_SCGC5_PORTB_SHIFT)                   /*!< SIM_SCGC5: PORTB Mask                   */

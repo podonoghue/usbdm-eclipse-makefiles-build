@@ -1,11 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKM14Z5
-      MKM33Z5
-      MKM34Z5
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_1CH" ?>
+         <?sourceFile "DMAMUX0_8CH" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -19,12 +17,15 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x1</size>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <name>CHCFG</name>
+               <dim>8</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>CHCFG%s</name>
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
@@ -36,25 +37,6 @@ Devices using this peripheral:
 Specifies which DMA source, if any, is routed to a particular DMA channel</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>TRIG</name>
-                     <description>DMA Channel Trigger Enable\n
-Enables the periodic trigger capability for the triggered DMA channel</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Request directed routed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Periodic triggering enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ENBL</name>

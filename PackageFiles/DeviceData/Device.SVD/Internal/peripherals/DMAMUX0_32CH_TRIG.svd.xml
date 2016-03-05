@@ -4,7 +4,7 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_32CH" ?>
+         <?sourceFile "DMAMUX0_32CH_TRIG" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>

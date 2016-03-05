@@ -47,7 +47,7 @@ typedef enum {
   I2C1_IRQn                     =   9,   /**<  25 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface                                                      */
   SPI1_IRQn                     =  11,   /**<  27 Serial Peripheral Interface                                                      */
-  LPUART0_RX_TX_IRQn            =  12,   /**<  28 Serial Communication Interface                                                   */
+  LPUART0_IRQn                  =  12,   /**<  28 Serial Communication Interface                                                   */
   LPUART1_IRQn                  =  13,   /**<  29 Serial Communication Interface                                                   */
   UART2_FLEXIO_IRQn             =  14,   /**<  30 FLEXIO                                                                           */
   ADC0_IRQn                     =  15,   /**<  31 Analogue to Digital Converter                                                    */
@@ -62,7 +62,7 @@ typedef enum {
   DAC0_IRQn                     =  25,   /**<  41 Digital to Analogue Converter                                                    */
   LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
   PORTA_IRQn                    =  30,   /**<  46 General Purpose Input/Output                                                     */
-  PORTC_PORTD_IRQn              =  31,   /**<  47 General Purpose Input/Output                                                     */
+  PORTCD_IRQn                   =  31,   /**<  47 General Purpose Input/Output                                                     */
 } IRQn_Type;
 
 /**
@@ -90,7 +90,7 @@ extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit    
 extern void I2C1_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
 extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void LPUART0_RX_TX_IRQHandler(void);    /**< Serial Communication Interface                                                   */
+extern void LPUART0_IRQHandler(void);          /**< Serial Communication Interface                                                   */
 extern void LPUART1_IRQHandler(void);          /**< Serial Communication Interface                                                   */
 extern void UART2_FLEXIO_IRQHandler(void);     /**< FLEXIO                                                                           */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
@@ -105,7 +105,7 @@ extern void I2S0_IRQHandler(void);             /**< Synchronous Serial Interface
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
 extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
 extern void PORTA_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTC_PORTD_IRQHandler(void);      /**< General Purpose Input/Output                                                     */
+extern void PORTCD_IRQHandler(void);           /**< General Purpose Input/Output                                                     */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 

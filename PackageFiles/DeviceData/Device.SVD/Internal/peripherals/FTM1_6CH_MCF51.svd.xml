@@ -105,7 +105,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Fixed freq. clock</description>
+                           <description>Fixed frequency clock</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -492,29 +492,29 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <fields>
                   <field>
                      <name>CH0F</name>
-                     <description>Channel 0 Flag</description>
+                     <description>Channel 0 Event Flag</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No channel event has occurred</description>
+                           <description>No event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A channel event has occurred</description>
+                           <description>Event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Flag</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Flag</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Flag</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Flag</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Flag</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH6F</name> <description>Channel 6 Flag</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH7F</name> <description>Channel 7 Flag</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Event Flag</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Event Flag</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Event Flag</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Event Flag</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Event Flag</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH6F</name> <description>Channel 6 Event Flag</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH7F</name> <description>Channel 7 Event Flag</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -531,21 +531,28 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Only the TPM-compatible registers (first set of registers) can be used without any restriction. Do not use the FTM-specific</description>
+                           <description>TPM registers only\t (first set of registers) can be used without any restriction. Do not use the FTM-specific</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>All registers including the FTM-specific registers (second set of registers) are available for use with no restrictions</description>
+                           <description>All registers\t including the FTM-specific registers (second set of registers) are available for use with no restrictions</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INIT</name>
-                     <description>Initialize the Channels Output</description>
+                     <description>Initialize the Channel Outputs</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Write 1 to initialise</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>WPDIS</name>
@@ -555,12 +562,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Write protection is enabled</description>
+                           <description>Enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Write protection is disabled</description>
+                           <description>Disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -573,12 +580,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No restrictions. Software and hardware triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization</description>
+                           <description>No restrictions.\t Software and hardware triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Software trigger can only be used by MOD and CnV synchronization, and hardware triggers can only be used by OUTMASK and FTM counter synchronization</description>
+                           <description>Restricted\t Software trigger can only be used by MOD and CnV synchronization, and hardware triggers can only be used by OUTMASK and FTM counter synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -591,12 +598,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Capture test mode is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Capture test mode is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -609,22 +616,22 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Fault control is disabled for all channels</description>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Fault control is enabled for even channels only (channels 0, 2, 4, and 6), and the selected mode is the manual fault clearing</description>
+                           <description>Even channels with manual fault clearing</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the manual fault clearing</description>
+                           <description>All channels with manual fault clearing</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Fault control is enabled for all channels, and the selected mode is the automatic fault clearing</description>
+                           <description>All channels with automatic fault clearing</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -662,34 +669,17 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The minimum loading point is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The minimum loading point is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CNTMAX</name>
-                     <description>Maximum Loading Point Enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The maximum loading point is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The maximum loading point is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CNTMIN" > <name>CNTMAX</name> <description>Maximum Loading Point Enable</description> <bitOffset>1</bitOffset> </field>
                   <field>
                      <name>REINIT</name>
                      <description>FTM Counter Reinitialization by Synchronization (FTM Counter Synchronization)</description>
@@ -698,52 +688,35 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FTM counter continues to count normally</description>
+                           <description>Counts normally</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM counter is updated with its initial value when the selected trigger is detected</description>
+                           <description>Updated with initial value on triggerd</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SYNCHOM</name>
-                     <description>Output Mask Synchronization</description>
+                     <description>Output Mask Synchronization with buffer</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>OUTMASK register is updated with the value of its buffer in all rising edges of the system clock</description>
+                           <description>Rising edges of the system clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>OUTMASK register is updated with the value of its buffer only by the PWM synchronization</description>
+                           <description>PWM synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TRIG0</name>
-                     <description>PWM Synchronization Hardware Trigger 0</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Trigger is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Trigger is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="CNTMIN" > <name>TRIG0</name> <description>PWM Synchronization Hardware Trigger 0</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="TRIG0" > <name>TRIG1</name> <description>PWM Synchronization Hardware Trigger 1</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="TRIG0" > <name>TRIG2</name> <description>PWM Synchronization Hardware Trigger 2</description> <bitOffset>6</bitOffset> </field>
                   <field>
@@ -754,12 +727,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger is not selected</description>
+                           <description>Not selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Software trigger is selected</description>
+                           <description>Selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -987,12 +960,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The generation of initialization trigger is disabled</description>
+                           <description>Disabled\t Generation of initialization trigger disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The generation of initialization trigger is enabled</description>
+                           <description>Enabled\t Generation of initialization trigger enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1005,12 +978,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No channel trigger was generated</description>
+                           <description>No Trigger\t was generated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A channel trigger was generated</description>
+                           <description>Trigger\t was generated</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1077,19 +1050,19 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="FAULTF0" > <name>FAULTF3</name> <description>Fault Detection Flag 3</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>FAULTIN</name>
-                     <description>Fault Inputs</description>
+                     <description>Collective Fault Input Status</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The logic OR of the enabled fault inputs is 0</description>
+                           <description>No faults active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The logic OR of the enabled fault inputs is 1</description>
+                           <description>&gt;=1 fault active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1102,12 +1075,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Write protection is disabled. Write protected bits can be written</description>
+                           <description>Unprotected\t Write protected bits can be written</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Write protection is enabled. Write protected bits cannot be written</description>
+                           <description>Protected\t Write protected bits cannot be written</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1120,12 +1093,12 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No fault condition was detected</description>
+                           <description>No fault</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A fault condition was detected</description>
+                           <description>Fault detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1150,7 +1123,7 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0bXXXX</name>
-                           <description>Filter enabled</description>
+                           <description>Filter enabled\t with given length</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1291,12 +1264,12 @@ Indicates if the TOF bit was set on the top or the bottom of counting</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bottom of counting\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
+                           <description>Bottom of counting.\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Top of counting\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
+                           <description>Top of counting.\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

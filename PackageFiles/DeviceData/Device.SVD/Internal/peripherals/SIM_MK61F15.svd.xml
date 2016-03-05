@@ -1567,7 +1567,7 @@ Devices using this peripheral:
                   <field derivedFrom="LPTIMER" > <name>REGFILE</name> <description>Register File Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>DRYICE</name> <description>Dryice Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>DRYICESECREG</name> <description>Dryice secure storage Clock Gate Control</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="LPTIMER" > <name>TSI</name> <description>TSI Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="LPTIMER" > <name>TSI0</name> <description>TSI0 Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTA</name> <description>PORTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTB</name> <description>PORTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="LPTIMER" > <name>PORTC</name> <description>PORTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>

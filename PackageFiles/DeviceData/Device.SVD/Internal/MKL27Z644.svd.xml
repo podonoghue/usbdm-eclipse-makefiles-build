@@ -46,7 +46,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MKL27Z644</name>
    <version>1.6</version>
-   <description>Freescale Kinetis MKL27Z644 Family (KL27P64M48SF2RM)</description>
+   <description>Freescale Kinetis MKL27Z644 Family (MKL27Z32xxx4,MKL27Z64xxx4)(KL27P64M48SF2RM)</description>
    <cpu>
       <name>CM0PLUS</name>
       <revision>r1p0</revision>

@@ -151,7 +151,7 @@ Devices using this vector table:
             <value>30</value>
          </interrupt>
          <interrupt>
-            <name>PORTC_PORTD</name>
+            <name>PORTCD</name>
             <description>General Purpose Input/Output</description>
             <value>31</value>
          </interrupt>
