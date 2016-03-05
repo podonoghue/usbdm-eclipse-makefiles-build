@@ -2,8 +2,8 @@
  * @file      gpio.cpp (from gpio-MK22F12.cpp)
  *
  * @brief     Pin declarations for MK22F12, generated from MK22F12.csv
- *            Devices   [MK22FX512M12, MK22FN1M0M12]
- *            Reference [K22P64M120SF5RM, K22P64M120SF5V2RM, K22P80M120SF5RM, K22P100M120SF5RM, K22P121M120SF5RM, K22P144M120SF5RM]
+ *            Devices   [MK22FX512M12, MK22FX512AM12, MK22FN1M0M12, MK22FN1M0AM12]
+ *            Reference [K22P80M120SF5RM, K22P100M120SF5RM, K22P121M120SF5RM, K22P144M120SF5RM]
  */
 
 #include "gpio.h"

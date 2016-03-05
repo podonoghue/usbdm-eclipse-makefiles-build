@@ -2,8 +2,8 @@
  * @file      gpio.cpp (from gpio-MK22F51212.cpp)
  *
  * @brief     Pin declarations for MK22F51212, generated from MK22F51212.csv
- *            Devices   [MK22FN512M12, MK22FN256M12]
- *            Reference [K22P121M120SF7RM, K22P121M120SF8RM]
+ *            Devices   [MK64FX512VLL12, MK64FN1M0VLL12, MK64FX512VDC12, MK64FN1M0VDC12, MK64FX512VLQ12, MK64FX512VMD12, MK64FN1M0VLQ12, MK64FN1M0VMD12]
+ *            Reference [K64P144M120SF5RM]
  */
 
 #include "gpio.h"
@@ -36,6 +36,12 @@ static constexpr PinInit pinInit[] = {
 #if (PTA5_SIG_SEL>=0)
    { PORT_PCR_MUX(PTA5_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[5]},
 #endif
+#if (PTA10_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA10_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[10]},
+#endif
+#if (PTA11_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA11_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[11]},
+#endif
 #if (PTA12_SIG_SEL>=0)
    { PORT_PCR_MUX(PTA12_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[12]},
 #endif
@@ -59,6 +65,9 @@ static constexpr PinInit pinInit[] = {
 #endif
 #if (PTA19_SIG_SEL>=0)
    { PORT_PCR_MUX(PTA19_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[19]},
+#endif
+#if (PTA29_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTA29_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTA->PCR[29]},
 #endif
 #if (PTB0_SIG_SEL>=0)
    { PORT_PCR_MUX(PTB0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTB->PCR[0]},
@@ -198,6 +207,30 @@ static constexpr PinInit pinInit[] = {
 #if (PTD7_SIG_SEL>=0)
    { PORT_PCR_MUX(PTD7_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[7]},
 #endif
+#if (PTD8_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD8_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[8]},
+#endif
+#if (PTD9_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD9_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[9]},
+#endif
+#if (PTD10_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD10_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[10]},
+#endif
+#if (PTD11_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD11_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[11]},
+#endif
+#if (PTD12_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD12_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[12]},
+#endif
+#if (PTD13_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD13_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[13]},
+#endif
+#if (PTD14_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD14_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[14]},
+#endif
+#if (PTD15_SIG_SEL>=0)
+   { PORT_PCR_MUX(PTD15_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTD->PCR[15]},
+#endif
 #if (PTE0_SIG_SEL>=0)
    { PORT_PCR_MUX(PTE0_SIG_SEL)|USBDM::DEFAULT_PCR, &PORTE->PCR[0]},
 #endif
@@ -235,38 +268,41 @@ static constexpr PinInit pinInit[] = {
  */
 void usbdm_PinMapping() {
 #if (PTA0_SIG_SEL>=0) || (PTA1_SIG_SEL>=0) || (PTA2_SIG_SEL>=0) || (PTA3_SIG_SEL>=0) || \
-    (PTA4_SIG_SEL>=0) || (PTA5_SIG_SEL>=0) || (PTA12_SIG_SEL>=0) || (PTA13_SIG_SEL>=0) || \
-    (PTA14_SIG_SEL>=0) || (PTA15_SIG_SEL>=0) || (PTA16_SIG_SEL>=0) || (PTA17_SIG_SEL>=0) || \
-    (PTA18_SIG_SEL>=0) || (PTA19_SIG_SEL>=0)
+    (PTA4_SIG_SEL>=0) || (PTA5_SIG_SEL>=0) || (PTA10_SIG_SEL>=0) || (PTA11_SIG_SEL>=0) || \
+    (PTA12_SIG_SEL>=0) || (PTA13_SIG_SEL>=0) || (PTA14_SIG_SEL>=0) || (PTA15_SIG_SEL>=0) || \
+    (PTA16_SIG_SEL>=0) || (PTA17_SIG_SEL>=0) || (PTA18_SIG_SEL>=0) || (PTA19_SIG_SEL>=0) || \
+    (PTA29_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTA_CLOCK_MASK;
 #endif
-#if (PTB0_SIG_SEL>=0) || (PTB1_SIG_SEL>=0) || (PTB2_SIG_SEL>=0) || \
-    (PTB3_SIG_SEL>=0) || (PTB6_SIG_SEL>=0) || (PTB7_SIG_SEL>=0) || (PTB8_SIG_SEL>=0) || \
-    (PTB9_SIG_SEL>=0) || (PTB10_SIG_SEL>=0) || (PTB11_SIG_SEL>=0) || (PTB16_SIG_SEL>=0) || \
-    (PTB17_SIG_SEL>=0) || (PTB18_SIG_SEL>=0) || (PTB19_SIG_SEL>=0) || (PTB20_SIG_SEL>=0) || \
-    (PTB21_SIG_SEL>=0) || (PTB22_SIG_SEL>=0) || (PTB23_SIG_SEL>=0)
+#if (PTB0_SIG_SEL>=0) || (PTB1_SIG_SEL>=0) || (PTB2_SIG_SEL>=0) || (PTB3_SIG_SEL>=0) || \
+    (PTB6_SIG_SEL>=0) || (PTB7_SIG_SEL>=0) || (PTB8_SIG_SEL>=0) || (PTB9_SIG_SEL>=0) || \
+    (PTB10_SIG_SEL>=0) || (PTB11_SIG_SEL>=0) || (PTB16_SIG_SEL>=0) || (PTB17_SIG_SEL>=0) || \
+    (PTB18_SIG_SEL>=0) || (PTB19_SIG_SEL>=0) || (PTB20_SIG_SEL>=0) || (PTB21_SIG_SEL>=0) || \
+    (PTB22_SIG_SEL>=0) || (PTB23_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTB_CLOCK_MASK;
 #endif
-#if (PTC0_SIG_SEL>=0) || (PTC1_SIG_SEL>=0) || \
-    (PTC2_SIG_SEL>=0) || (PTC3_SIG_SEL>=0) || (PTC4_SIG_SEL>=0) || (PTC5_SIG_SEL>=0) || \
-    (PTC6_SIG_SEL>=0) || (PTC7_SIG_SEL>=0) || (PTC8_SIG_SEL>=0) || (PTC9_SIG_SEL>=0) || \
-    (PTC10_SIG_SEL>=0) || (PTC11_SIG_SEL>=0) || (PTC12_SIG_SEL>=0) || (PTC13_SIG_SEL>=0) || \
-    (PTC14_SIG_SEL>=0) || (PTC15_SIG_SEL>=0) || (PTC16_SIG_SEL>=0) || (PTC17_SIG_SEL>=0) || \
-    (PTC18_SIG_SEL>=0) || (PTC19_SIG_SEL>=0)
+#if (PTC0_SIG_SEL>=0) || (PTC1_SIG_SEL>=0) || (PTC2_SIG_SEL>=0) || \
+    (PTC3_SIG_SEL>=0) || (PTC4_SIG_SEL>=0) || (PTC5_SIG_SEL>=0) || (PTC6_SIG_SEL>=0) || \
+    (PTC7_SIG_SEL>=0) || (PTC8_SIG_SEL>=0) || (PTC9_SIG_SEL>=0) || (PTC10_SIG_SEL>=0) || \
+    (PTC11_SIG_SEL>=0) || (PTC12_SIG_SEL>=0) || (PTC13_SIG_SEL>=0) || (PTC14_SIG_SEL>=0) || \
+    (PTC15_SIG_SEL>=0) || (PTC16_SIG_SEL>=0) || (PTC17_SIG_SEL>=0) || (PTC18_SIG_SEL>=0) || \
+    (PTC19_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTC_CLOCK_MASK;
 #endif
-#if (PTD0_SIG_SEL>=0) || (PTD1_SIG_SEL>=0) || (PTD2_SIG_SEL>=0) || \
-    (PTD3_SIG_SEL>=0) || (PTD4_SIG_SEL>=0) || (PTD5_SIG_SEL>=0) || (PTD6_SIG_SEL>=0) || \
-    (PTD7_SIG_SEL>=0)
+#if (PTD0_SIG_SEL>=0) || (PTD1_SIG_SEL>=0) || (PTD2_SIG_SEL>=0) || (PTD3_SIG_SEL>=0) || \
+    (PTD4_SIG_SEL>=0) || (PTD5_SIG_SEL>=0) || (PTD6_SIG_SEL>=0) || (PTD7_SIG_SEL>=0) || \
+    (PTD8_SIG_SEL>=0) || (PTD9_SIG_SEL>=0) || (PTD10_SIG_SEL>=0) || (PTD11_SIG_SEL>=0) || \
+    (PTD12_SIG_SEL>=0) || (PTD13_SIG_SEL>=0) || (PTD14_SIG_SEL>=0) || (PTD15_SIG_SEL>=0)
 
    SIM->FIXED_PORT_CLOCK_REG |= PORTD_CLOCK_MASK;
 #endif
-#if (PTE0_SIG_SEL>=0) || (PTE1_SIG_SEL>=0) || (PTE2_SIG_SEL>=0) || (PTE3_SIG_SEL>=0) || \
-    (PTE4_SIG_SEL>=0) || (PTE5_SIG_SEL>=0) || (PTE6_SIG_SEL>=0) || (PTE24_SIG_SEL>=0) || \
-    (PTE25_SIG_SEL>=0) || (PTE26_SIG_SEL>=0)
+#if (PTE0_SIG_SEL>=0) || \
+    (PTE1_SIG_SEL>=0) || (PTE2_SIG_SEL>=0) || (PTE3_SIG_SEL>=0) || (PTE4_SIG_SEL>=0) || \
+    (PTE5_SIG_SEL>=0) || (PTE6_SIG_SEL>=0) || (PTE24_SIG_SEL>=0) || (PTE25_SIG_SEL>=0) || \
+    (PTE26_SIG_SEL>=0)
    SIM->FIXED_PORT_CLOCK_REG |= PORTE_CLOCK_MASK;
 #endif
 

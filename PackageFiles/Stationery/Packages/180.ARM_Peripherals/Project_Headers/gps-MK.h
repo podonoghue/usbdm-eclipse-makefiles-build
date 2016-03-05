@@ -176,9 +176,8 @@ public:
    }
 };
 
-#ifdef UART0_RX_GPIO
 /**
- * @brief Class interfacing to a GPS receiver connected to UART0
+ * @brief Class interfacing to a GPS receiver connected to a UART
  *
  * Provides the information from the Global Positioning System Fixed Data (GPGGA) message
  *
@@ -196,27 +195,27 @@ public:
  *    }
  * }
  * @endcode
+ *
+ * @tparam info   Class describing UART hardware
  */
-class Gps0 : public Gps {
+template<class info>
+class Gps_T : public Gps {
 
-   /** Allows access from UART ISR */
-   friend void UART0_RX_TX_IRQHandler();
-
-protected:
-   /** Used by ISR to obtain handle of object */
-   static Gps *thisPtr;
+private:
+   using TxPcr  = PcrTable_T<info, 0>;
+   using RxPcr  = PcrTable_T<info, 1>;
 
 public:
    /**
-    * Initialise the UART to default settings
-    */
-   virtual void initUart();
-
-   /**
     * Create GPS interface
     */
-   Gps0() : Gps((UART_Type *)UART1, SYSTEM_UART0_CLOCK) {
-      thisPtr = this;
+   Gps_T(uint32_t uartClockFrequency) : Gps((UART_Type *)(info::basePtr), uartClockFrequency) {
+      // Enable clock to UART interface
+      *reinterpret_cast<uint32_t *>(info::clockReg) |= info::clockMask;
+
+      TxPcr::setPCR();
+      RxPcr::setPCR();
+
       initUart();
    }
    /**
@@ -230,16 +229,30 @@ public:
       if (!newData) {
          return false;
       }
-      NVIC_DisableIRQ(UART0_RX_TX_IRQn);
+      NVIC_DisableIRQ(info::irqNums[0]);
       gpsData = Gps::gpsData;
       newData = false;
-      NVIC_EnableIRQ(UART0_RX_TX_IRQn);
+      if ((sizeof(info::irqNums)/sizeof(info::irqNums[0])) > 1) {
+         NVIC_EnableIRQ(info::irqNums[1]);
+      }
       return true;
    }
-};
-#endif
 
-#ifdef UART1_RX_GPIO
+   /**
+    * Initialise the UART to default settings
+    */
+   void initUart() {
+
+      setBaud();
+
+      NVIC_EnableIRQ(info::irqNums[0]);
+      if ((sizeof(info::irqNums)/sizeof(info::irqNums[0])) > 1) {
+         NVIC_EnableIRQ(info::irqNums[1]);
+      }
+   }
+};
+
+#if (UART0_RX_PIN_SEL != 0)
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -260,7 +273,52 @@ public:
  * }
  * @endcode
  */
-class Gps1 : public Gps {
+class Gps0 : public Gps_T<Uart0Info> {
+
+   /** Allows access from UART ISR */
+   friend void UART0_RX_TX_IRQHandler();
+
+protected:
+   /** Used by ISR to obtain handle of object */
+   static Gps *thisPtr;
+
+public:
+   /**
+    * Create GPS interface
+    */
+   Gps0() : Gps_T(SYSTEM_UART1_CLOCK) {
+      thisPtr = this;
+      initUart();
+#ifdef SIM_SOPT5_UART0RXSRC_MASK
+      // Select Tx & Rx pins to use
+      SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
+#endif
+   }
+};
+#endif
+
+#if (UART1_RX_PIN_SEL != 0)
+/**
+ * @brief Class interfacing to a GPS receiver connected to UART1
+ *
+ * Provides the information from the Global Positioning System Fixed Data (GPGGA) message
+ *
+ * e.g. $GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E
+ *
+ * <b>Example</b>
+ * @code
+ * // Instantiate interface
+ * USBDM::Gps *gps = new USBDM::Gps1();
+ *
+ * for(;;) {
+ *    USBDM::Gps::GpsData gpsData;
+ *    if (gps->getGpsData(gpsData)) {
+ *       USBDM::Gps::report(gpsData);
+ *    }
+ * }
+ * @endcode
+ */
+class Gps1 : public Gps_T<Uart1Info> {
 
    /** Allows access from UART ISR */
    friend void UART1_RX_TX_IRQHandler();
@@ -271,40 +329,22 @@ protected:
 
 public:
    /**
-    * Initialise the UART to default settings
-    */
-   virtual void initUart();
-
-   /**
     * Create GPS interface
     */
-   Gps1() : Gps((UART_Type *)UART1, SYSTEM_UART1_CLOCK) {
+   Gps1() : Gps_T(SYSTEM_UART1_CLOCK) {
       thisPtr = this;
       initUart();
-   }
-   /**
-    * Get last GPS reported location
-    *
-    * @param gpsData Data structure for returned GPS data
-    *
-    * @return false => No new data available (gpsData unchanged)
-    */
-   virtual bool getGpsData(GpsData &gpsData) {
-      if (!newData) {
-         return false;
-      }
-      NVIC_DisableIRQ(UART1_RX_TX_IRQn);
-      gpsData = Gps::gpsData;
-      newData = false;
-      NVIC_EnableIRQ(UART1_RX_TX_IRQn);
-      return true;
+#ifdef SIM_SOPT5_UART1RXSRC_MASK
+      // Select Tx & Rx pins to use
+      SIM->SOPT5 &= ~(SIM_SOPT5_UART1RXSRC_MASK|SIM_SOPT5_UART1TXSRC_MASK);
+#endif
    }
 };
 #endif
 
-#ifdef UART2_RX_GPIO
+#if (UART2_RX_PIN_SEL != 0)
 /**
- * @brief Class interfacing to a GPS receiver connected to UART2
+ * @brief Class interfacing to a GPS receiver connected to UART1
  *
  * Provides the information from the Global Positioning System Fixed Data (GPGGA) message
  *
@@ -313,7 +353,7 @@ public:
  * <b>Example</b>
  * @code
  * // Instantiate interface
- * USBDM::Gps *gps = new USBDM::Gps2();
+ * USBDM::Gps *gps = new USBDM::Gps1();
  *
  * for(;;) {
  *    USBDM::Gps::GpsData gpsData;
@@ -323,7 +363,7 @@ public:
  * }
  * @endcode
  */
-class Gps2 : public Gps {
+class Gps2 : public Gps_T<Uart2Info> {
 
    /** Allows access from UART ISR */
    friend void UART2_RX_TX_IRQHandler();
@@ -334,33 +374,11 @@ protected:
 
 public:
    /**
-    * Initialise the UART to default settings
-    */
-   virtual void initUart();
-
-   /**
     * Create GPS interface
     */
-   Gps2() : Gps((UART_Type *)UART2, SYSTEM_UART2_CLOCK) {
+   Gps1() : Gps_T(SYSTEM_UART1_CLOCK) {
       thisPtr = this;
       initUart();
-   }
-   /**
-    * Get last GPS reported location
-    *
-    * @param gpsData Data structure for returned GPS data
-    *
-    * @return false => No new data available (gpsData unchanged)
-    */
-   virtual bool getGpsData(GpsData &gpsData) {
-      if (!newData) {
-         return false;
-      }
-      NVIC_DisableIRQ(UART2_RX_TX_IRQn);
-      gpsData = Gps::gpsData;
-      newData = false;
-      NVIC_EnableIRQ(UART2_RX_TX_IRQn);
-      return true;
    }
 };
 #endif

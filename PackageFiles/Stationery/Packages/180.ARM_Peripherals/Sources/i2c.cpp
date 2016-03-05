@@ -11,37 +11,43 @@ using namespace USBDM;
 /*
  * I2C state-machine based interrupt handler
  */
-#if defined(MCU_MKM33Z5) && (((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0)) || ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)))
-extern "C"
-void I2C0_1_IRQHandler() {
-#if ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
-   if (I2C0->S&I2C_S_IICIF_MASK) {
+#if defined(MCU_MKM33Z5)
+   // MCU_MKM33Z5 has a shared handler for I2C0 & I2C1
+   #if (((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0)) || ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)))
+   extern "C"
+   void I2C0_1_IRQHandler() {
+   #if ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
+      if (I2C0->S&I2C_S_IICIF_MASK) {
+         I2c0::thisPtr->poll();
+      }
+   #endif
+   #if ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
+      if (I2C1->S&I2C_S_IICIF_MASK) {
+         I2c1::thisPtr->poll();
+      }
+   #endif
+   }
+   #endif
+#else // defined(MCU_MKM33Z5)
+   #if ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
+   /*
+    * I2C state-machine based interrupt handler
+    */
+   extern "C"
+   void I2C0_IRQHandler() {
       I2c0::thisPtr->poll();
    }
-#endif
-#if ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
-   if (I2C1->S&I2C_S_IICIF_MASK) {
+   #endif
+   #if ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
+   /*
+    * I2C state-machine based interrupt handler
+    */
+   extern "C"
+   void I2C1_IRQHandler() {
       I2c1::thisPtr->poll();
    }
-#endif
-}
-#elif ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C0_IRQHandler() {
-   I2c0::thisPtr->poll();
-}
-#elif ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C1_IRQHandler() {
-   I2c1::thisPtr->poll();
-}
-#endif
+   #endif
+#endif // defined(MCU_MKM33Z5)
 
 #if defined(I2C0)
 #if (I2C0_SCL_PIN_SEL==0) || (I2C0_SDA_PIN_SEL==0)
@@ -52,28 +58,27 @@ template<> I2c *I2c0::thisPtr = 0;
 #endif
 
 #if defined(I2C1)
-#if (I2C1_SCL_PIN_SEL==0) || (I2C1_SDA_PIN_SEL==0)
-#warning "I2C1 unavailable - Please check pin mapping for I2C1_SCL and I2C1_SDA"
-#else
-template<> I2c *I2c1::thisPtr = 0;
-#endif
-#endif
+   #if (I2C1_SCL_PIN_SEL==0) || (I2C1_SDA_PIN_SEL==0)
+   #warning "I2C1 unavailable - Please check pin mapping for I2C1_SCL and I2C1_SDA"
+   #else
+   template<> I2c *I2c1::thisPtr = 0;
+   #endif
+   #endif
 
-#if defined(I2C2)
-#if !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
-#warning "I2C2 unavailable - Please check pin mapping for I2C2_SCL and I2C2_SDA"
-#else
+   #if defined(I2C2)
+   #if !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
+   #warning "I2C2 unavailable - Please check pin mapping for I2C2_SCL and I2C2_SDA"
+   #else
+   template<> I2c *I2c2::thisPtr = 0;
 
-template<> I2c *I2c2::thisPtr = 0;
-
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C2_IRQHandler() {
-   I2c2::thisPtr->poll();
-}
-#endif
+   /*
+    * I2C state-machine based interrupt handler
+    */
+   extern "C"
+   void I2C2_IRQHandler() {
+      I2c2::thisPtr->poll();
+   }
+   #endif
 #endif
 
 // I2C baud rate divisor table

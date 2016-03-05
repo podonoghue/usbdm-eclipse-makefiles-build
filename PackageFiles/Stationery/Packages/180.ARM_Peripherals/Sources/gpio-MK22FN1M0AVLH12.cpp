@@ -1,9 +1,9 @@
 /**
- * @file      gpio.cpp (from gpio-MK20D5.cpp)
+ * @file      gpio.cpp (from gpio-MK22FN1M0AVLH12.cpp)
  *
- * @brief     Pin declarations for MK20D5, generated from MK20D5.csv
- *            Devices   [MK20DN32M5, MK20DN64M5, MK20DN128M5, MK20DX32M5, MK20DX64M5, MK20DX128M5]
- *            Reference [K20P64M50SF0RM]
+ * @brief     Pin declarations for MK22FN1M0AVLH12, generated from K22P64M120SF5.csv
+ *            Devices   [MK22FX512VLH12, MK22FN1M0VLH12, MK22FX512AVLH12, MK22FN1M0AVLH12]
+ *            Reference [K22P64M120SF5RM, K22P64M120SF5V2RM]
  */
 
 #include "gpio.h"

@@ -2,8 +2,8 @@
  * @file      gpio.cpp (from gpio-MK64F12.cpp)
  *
  * @brief     Pin declarations for MK64F12, generated from MK64F12.csv
- *            Devices   [MK64F12]
- *            Reference [MK64F12]
+ *            Devices   [MK22FN512M12, MK22FN256M12, MK22FN256M12]
+ *            Reference [K22P121M120SF7RM, K22P121M120SF8RM, K22P121M120SF8RM]
  */
 
 #include "gpio.h"

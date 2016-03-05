@@ -20,25 +20,25 @@ namespace USBDM {
 /**
  * Sets Communication speed for SPI
  *
- * @param targetFrequency => Frequency in Hz
+ * @param frequency => Frequency in Hz
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed
  */
-void Spi::setSpeed(uint32_t targetFrequency) {
+void Spi::setSpeed(uint32_t frequency) {
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
    for (int pbr = 3; pbr >= 0; pbr--) {
       for (int br = 15; br >= 0; br--) {
          uint32_t calculatedFrequency = SystemBusClock/(pbrFactors[pbr]*brFactors[br]);
-         if (calculatedFrequency > targetFrequency) {
+         if (calculatedFrequency > frequency) {
             // Too high stop looking here
             break;
          }
-         if ((targetFrequency - calculatedFrequency) < difference) {
+         if ((frequency - calculatedFrequency) < difference) {
             // New "best value"
-            difference = (targetFrequency - calculatedFrequency);
+            difference = (frequency - calculatedFrequency);
             bestBR  = br;
             bestPBR = pbr;
             interfaceFrequency = calculatedFrequency;

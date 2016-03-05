@@ -19,7 +19,6 @@
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
       <constant id="cpp.peripheral.internal.spi"    value="true" />
-      <constant id="cpp.peripheral.internal.segment-lcd"  value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
          name="CPP Hardware abstraction" 

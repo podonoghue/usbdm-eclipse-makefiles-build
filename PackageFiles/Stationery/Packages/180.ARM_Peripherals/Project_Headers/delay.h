@@ -66,6 +66,30 @@ void waitUS(uint32_t usToWait);
  */
 void waitMS(uint32_t msToWait);
 
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param usToWait How many microseconds to busy-wait
+ * @param testFn   Function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred. true=>event, false=>no event
+ *
+ * Note: Accuracy will be poor as affected by execution time of function.
+ */
+bool waitUS(uint32_t usToWait, bool testFn(void));
+
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param msToWait How many milliseconds to busy-wait
+ * @param testFn   Function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred. true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
+ */
+bool waitMS(uint32_t msToWait, bool testFn(void));
+
 #ifdef __cplusplus
 } // End namespace USBDM
 #endif

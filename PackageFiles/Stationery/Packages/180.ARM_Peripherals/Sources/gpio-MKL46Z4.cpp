@@ -2,8 +2,8 @@
  * @file      gpio.cpp (from gpio-MKL46Z4.cpp)
  *
  * @brief     Pin declarations for MKL46Z4, generated from MKL46Z4.csv
- *            Devices   [MKL46Z4]
- *            Reference [MKL46Z4]
+ *            Devices   [MKL46Z128xxx4, MKL46Z256xxx4]
+ *            Reference [KL46P121M48SF4RM]
  */
 
 #include "gpio.h"

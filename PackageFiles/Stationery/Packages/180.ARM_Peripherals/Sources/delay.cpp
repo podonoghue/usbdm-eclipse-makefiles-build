@@ -64,6 +64,66 @@ void waitMS(uint32_t msToWait) {
    waitTicks(((uint64_t)msToWait * SystemCoreClock) / 1000);
 }
 
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param delayct  How many ticks to busy-wait
+ * @param testFn   Polling function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred: true=>event, false=>no event
+ */
+static bool waitTicks(int64_t delayct, bool testFn(void)) {
+
+   // Enable counter
+   enableTimer();
+
+   // Get current tick
+   uint32_t last = getTicks();
+
+   while (delayct > 0) {
+      if (testFn()) {
+         return true;
+      }
+      // Decrement time elapsed
+      // Note: This relies on the loop executing in less than the roll-over time
+      // of the counter i.e. (TIMER_MASK+1)/SystemCoreClock
+      uint32_t now = getTicks();
+      delayct -= (uint32_t)(TIMER_MASK&(last-now));
+      last = now;
+   }
+   return false;
+}
+
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param usToWait How many microseconds to busy-wait
+ * @param testFn   Polling function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred: true=>event, false=>no event
+ *
+ * Note: Accuracy will be poor as affected by execution time of function.
+ */
+bool waitUS(uint32_t usToWait, bool testFn(void)) {
+   // Convert duration to ticks
+   return waitTicks(((uint64_t)usToWait * SystemCoreClock) / 1000000, testFn);
+}
+
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param msToWait How many milliseconds to busy-wait
+ * @param testFn   Polling function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred: true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
+ */
+bool waitMS(uint32_t msToWait, bool testFn(void)) {
+   // Convert duration to ticks
+   return waitTicks(((uint64_t)msToWait * SystemCoreClock) / 1000, testFn);
+}
+
 #else
 #include "cmsis_os.h"
 

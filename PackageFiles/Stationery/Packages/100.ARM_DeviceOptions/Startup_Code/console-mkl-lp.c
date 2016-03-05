@@ -1,5 +1,5 @@
 /*
- * console-lp.c
+ * console-mkl-lp.c
  *
  *  Created on: 14/04/2013
  *      Author: pgo
@@ -41,7 +41,7 @@ inline static void initDefaultUart()  {
    NVIC_EnableIRQ(LPUART0_IRQn);
 #endif
 }
-#elif defined(MCU_MKL43Z4) || defined(MCU_MKL27Z4) || defined(MCU_MKL27Z256M4)
+#elif defined(MCU_MKL43Z4) || defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL27Z256M4)
 //=================================================================================
 // LPUART to use
 //

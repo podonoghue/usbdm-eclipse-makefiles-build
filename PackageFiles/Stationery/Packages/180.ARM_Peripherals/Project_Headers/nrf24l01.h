@@ -385,10 +385,10 @@ public:
  *    }
  * @endcode
  *
- * @tparam CeReg_n Chip Enable Gpio for nRF24L01
- * @tparam IrqReg  Irq Gpio input for nRF24L01
+ * @tparam CePin_n Chip Enable Gpio for nRF24L01
+ * @tparam IrqGpio  Irq Gpio input for nRF24L01
  */
-template<typename CeReg_n, typename IrqReg>
+template<typename CePin_n, typename IrqGpio>
 class NRF24L01_T : public NRF24L01 {
 
 public:
@@ -401,11 +401,11 @@ public:
    NRF24L01_T(Spi *spi, const NRFData *configData=&DEFAULT_CONFIGURATION) : NRF24L01(spi, configData) {
 
       // CE pin
-      CeReg_n::setOutput();
-      CeReg_n::clear();
+      CePin_n::setOutput();
+      CePin_n::clear();
 
       // IRQn pin
-      IrqReg::setInput();
+      IrqGpio::setInput();
 
       init();
    }
@@ -417,7 +417,7 @@ private:
     * @param value true=>enable, false=>disable
     */
    void setCE(bool value) {
-      CeReg_n::write(value);
+      CePin_n::write(value);
    }
 
    /**
@@ -426,7 +426,7 @@ private:
     * @return true => IRQ asserted
     */
    bool getIRQn(void) {
-      return IrqReg::read();
+      return IrqGpio::read();
    }
 };
 

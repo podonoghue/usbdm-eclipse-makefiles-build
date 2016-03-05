@@ -1,7 +1,7 @@
 /*
  ============================================================================
  * @file    main.c (derived from main-basic.cpp)
- * @brief   Basic C++ demo using GHPIO class
+ * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
@@ -18,11 +18,10 @@
  */
 
 // LED connection - change as required
-using Led = USBDM::GpioB<3>;
+using Led   = $(demo.cpp.led:USBDM::GpioB<3>);
 
 int main() {
    Led::setOutput();
-   Led::set();
    for(;;) {
       Led::toggle();
       USBDM::waitMS(100);

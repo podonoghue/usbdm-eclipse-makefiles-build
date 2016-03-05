@@ -266,7 +266,7 @@ void Gps::report(Gps::GpsData &gpsData) {
 //=========================================================================
 //=========================================================================
 
-#ifdef UART0_RX_GPIO
+#if (UART0_RX_PIN_SEL != 0)
 
 /**
  * Interrupt handler for UART0 Tx & Rx
@@ -293,35 +293,12 @@ void UART0_ERR_IRQHandler() {
 
 Gps *Gps0::thisPtr;
 
-/**
- * Initialise the UART to default settings
- */
-void Gps0::initUart() {
-   // Configure pins
-   UART0_RX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART0_RX_FN)|USBDM::DEFAULT_PCR);
-#ifdef UART0_TX_GPIO
-   UART0_TX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART0_RX_FN)|USBDM::DEFAULT_PCR);
-#endif
-
-   // Enable clock to UART
-   SIM->UART0_CLOCK_REG |= UART0_CLOCK_MASK;
-
-#if SIM_SOPT5_UART0RXSRC_MASK
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-#endif
-
-   setBaud();
-
-   NVIC_EnableIRQ(UART0_RX_TX_IRQn);
-   NVIC_EnableIRQ(UART0_ERR_IRQn);
-}
 #endif // UART0_RX_GPIO
 
 //=========================================================================
 //=========================================================================
 
-#ifdef UART1_RX_GPIO
+#if (UART1_RX_PIN_SEL != 0)
 
 /**
  * Interrupt handler for UART1 Tx & Rx
@@ -348,36 +325,12 @@ void UART1_ERR_IRQHandler() {
 
 Gps *Gps1::thisPtr;
 
-/**
- * Initialise the UART to default settings
- */
-void Gps1::initUart() {
-   // Configure pins
-   UART1_RX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART1_RX_FN)|USBDM::DEFAULT_PCR);
-#ifdef UART1_TX_GPIO
-   UART1_TX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART1_RX_FN)|USBDM::DEFAULT_PCR);
-#endif
-
-   // Enable clock to UART
-   SIM->UART1_CLOCK_REG |= UART1_CLOCK_MASK;
-
-#ifdef SIM_SOPT5_UART1RXSRC_MASK
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART1RXSRC_MASK|SIM_SOPT5_UART1TXSRC_MASK);
-#endif
-
-   setBaud();
-
-   NVIC_EnableIRQ(UART1_RX_TX_IRQn);
-   NVIC_EnableIRQ(UART1_ERR_IRQn);
-}
-
 #endif // UART1_RX_GPIO
 
 //=========================================================================
 //=========================================================================
 
-#ifdef UART2_RX_GPIO
+#if (UART2_RX_PIN_SEL != 0)
 
 /**
  * Interrupt handler for UART2 Tx & Rx
@@ -402,30 +355,6 @@ void UART2_ERR_IRQHandler() {
 }
 
 Gps *Gps2::thisPtr;
-
-/**
- * Initialise the UART to default settings
- */
-void Gps2::initUart() {
-   // Configure pins
-   UART2_RX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART2_RX_FN)|USBDM::DEFAULT_PCR);
-#ifdef UART2_TX_GPIO
-   UART2_TX_GPIO::Pcr::setPCR(PORT_PCR_MUX(UART2_RX_FN)|USBDM::DEFAULT_PCR);
-#endif
-
-   // Enable clock to UART
-   SIM->UART2_CLOCK_REG |= UART2_CLOCK_MASK;
-
-#ifdef SIM_SOPT5_UART2RXSRC_MASK
-   // Select Tx & Rx pins to use
-   SIM->SOPT5 &= ~(SIM_SOPT5_UART2RXSRC_MASK|SIM_SOPT5_UART2TXSRC_MASK);
-#endif
-
-   setBaud();
-
-   NVIC_EnableIRQ(UART2_RX_TX_IRQn);
-   NVIC_EnableIRQ(UART2_ERR_IRQn);
-}
 
 #endif // UART2_RX_GPIO
 

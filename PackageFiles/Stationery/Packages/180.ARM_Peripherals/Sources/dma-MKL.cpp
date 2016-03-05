@@ -10,40 +10,40 @@
 
 namespace USBDM {
 
-DMAChannel0 *DMAChannel0::thisPtr = 0;
+DmaChannel0 *DmaChannel0::thisPtr = 0;
 
-void DMAChannel0::handler(void) {
+void DmaChannel0::handler(void) {
 }
 
 void DMA0_IRQHandler(void) {
-   DMAChannel0::thisPtr->handler();
+   DmaChannel0::thisPtr->handler();
 }
 
-DMAChannel1 *DMAChannel1::thisPtr = 0;
+DmaChannel1 *DmaChannel1::thisPtr = 0;
 
-void DMAChannel1::handler(void) {
+void DmaChannel1::handler(void) {
 }
 
 void DMA1_IRQHandler(void) {
-   DMAChannel1::thisPtr->handler();
+   DmaChannel1::thisPtr->handler();
 }
 
-DMAChannel2 *DMAChannel2::thisPtr = 0;
+DmaChannel2 *DmaChannel2::thisPtr = 0;
 
-void DMAChannel2::handler(void) {
+void DmaChannel2::handler(void) {
 }
 
 void DMA2_IRQHandler(void) {
-   DMAChannel2::thisPtr->handler();
+   DmaChannel2::thisPtr->handler();
 }
 
-DMAChannel3 *DMAChannel3::thisPtr = 0;
+DmaChannel3 *DmaChannel3::thisPtr = 0;
 
-void DMAChannel3::handler(void) {
+void DmaChannel3::handler(void) {
 }
 
 void DMA3_IRQHandler(void) {
-   DMAChannel3::thisPtr->handler();
+   DmaChannel3::thisPtr->handler();
 }
 
 } // End namespace USBDM

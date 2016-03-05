@@ -38,14 +38,14 @@ namespace USBDM {
 //     <0=> Timers continue to run in debug mode.
 //     <1=> Timers are stopped in Debug mode.
 //! Default value for PIT_MCR_FRZ - Determines if PIT freezes in debug mode.
-#define PIT_MCR_FRZ_M (1<<PIT_MCR_FRZ_SHIFT)
+constexpr uint32_t PIT_MCR_FRZ_M = (1<<PIT_MCR_FRZ_SHIFT);
 
 // PIT IRQ Level in NVIC ==============================
 //
 //   <o> PIT IRQ Level in NVIC <0-15>
 //   <i> Configures the IRQ level set in the NVIC.
 //! Default value for PIT interrupt level
-#define PIT_IRQ_LEVEL_V (2)
+constexpr uint32_t PIT_IRQ_LEVEL_V = (2);
 
 // PIT_USES_NAKED_HANDLER ==============================
 //
@@ -66,51 +66,63 @@ namespace USBDM {
  */
 #define PIT_TCTRL_DEFAULT_VALUE (PIT_TCTRL_TEN_MASK|PIT_TCTRL_TIE_MASK)
 
-#define PIT_NUMBER_OF_CHANNELS (sizeof(PIT->CHANNEL)/sizeof(PIT->CHANNEL[0]))
-
 #if PIT_USES_NAKED_HANDLER == 0
-   /**
-    * Type definition for PIT interrupt call back
-    */
-   typedef void (*PITCallbackFunction)(void);
+/**
+ * Type definition for PIT interrupt call back
+ */
+typedef void (*PITCallbackFunction)(void);
 #endif
 
-   /*!
-    * @brief struct representing a Programmable Interrupt  Timer
-    *
-    * <b>Example</b>
-    * @code
-    *
-    * @endcode
-    */
-struct PIT_ {
+/*!
+ * @brief struct representing a Programmable Interrupt  Timer
+ *
+ * <b>Example</b>
+ * @code
+ *
+ * @endcode
+ */
+template<class Info>
+class Pit_T {
+
+   friend void ::PIT0_IRQHandler(void);
+   friend void ::PIT1_IRQHandler(void);
+   friend void ::PIT2_IRQHandler(void);
+   friend void ::PIT3_IRQHandler(void);
 
 #if PIT_USES_NAKED_HANDLER == 0
-static PITCallbackFunction callback[];
+protected:
+   static PITCallbackFunction callback[Info::irqCount];
 
 public:
-   void setCallback(int channel, PITCallbackFunction callback) const {
-      PIT_::callback[channel] = callback;
+   static void setCallback(int channel, PITCallbackFunction callback) {
+      Pit_T::callback[channel] = callback;
    }
 #endif
-            
+
+protected:
+   // Pointer to hardware
+   static constexpr volatile PIT_Type *pit       = reinterpret_cast<volatile PIT_Type*>(Info::basePtr);
+   // Pointer to clock register
+   static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(PitInfo::clockReg);
+
+public:
    /**
     *  Configure the PIT
     *
     *  @param mcr       Module Control Register
     */
-   void configure(uint32_t mcr=PIT_MCR_DEFAULT_VALUE) const {
+   static void configure(uint32_t mcr=PIT_MCR_DEFAULT_VALUE) {
       // Enable clock
-      SIM->PIT_CLOCK_REG |= PIT_CLOCK_MASK;
+      *clockReg |= PitInfo::clockMask;
 
       // Enable timer
-      PIT->MCR = mcr;
+      pit->MCR = mcr;
    }
    /**
     *   Disable the PIT channel
     */
-   void finalise(uint8_t channel) const {
-      SIM->PIT_CLOCK_REG &= ~PIT_CLOCK_MASK;
+   static void finalise(uint8_t channel) {
+      *clockReg &= ~PitInfo::clockMask;
    }
    /**
     *  Configure the PIT channel
@@ -119,31 +131,30 @@ public:
     *  @param interval  Interval in timer ticks (usually bus clock period)
     *  @param tctrl     Timer Control Register value
     */
-   void configureChannel(uint8_t channel, uint32_t interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) const {
+   static void configureChannel(const uint8_t channel, uint32_t interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
 
-      PIT->CHANNEL[channel].LDVAL = interval;
-      PIT->CHANNEL[channel].TCTRL = tctrl;
-      PIT->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
-      
+      pit->CHANNEL[channel].LDVAL = interval;
+      pit->CHANNEL[channel].TCTRL = tctrl;
+      pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
+
       if (tctrl & PIT_TCTRL_TIE_MASK) {
          // Enable timer interrupts
-         NVIC_EnableIRQ((IRQn_Type)(PIT0_IRQn+channel));
+         NVIC_EnableIRQ((IRQn_Type)(USBDM::PitInfo::irqNums[0]+channel));
 
          // Set arbitrary priority level
-         NVIC_SetPriority((IRQn_Type)(PIT0_IRQn+channel), PIT_IRQ_LEVEL_V);
+         NVIC_SetPriority((IRQn_Type)(USBDM::PitInfo::irqNums[0]+channel), PIT_IRQ_LEVEL_V);
       }
    }
    /**
     *   Disable the PIT channel
     */
-   void finaliseChannel(uint8_t channel) const {
+   static void finaliseChannel(uint8_t channel) {
 
       // Disable timer channel
-      PIT->CHANNEL[channel].TCTRL = 0;
-      SIM->PIT_CLOCK_REG &= ~PIT_CLOCK_MASK;
+      pit->CHANNEL[channel].TCTRL = 0;
 
       // Enable timer interrupts
-      NVIC_EnableIRQ((IRQn_Type)(PIT0_IRQn+channel));
+      NVIC_DisableIRQ((IRQn_Type)(USBDM::PitInfo::irqNums[0]+channel));
    }
    /**
     *  Use a PIT channel to implement a busy-wait delay
@@ -153,20 +164,24 @@ public:
     *
     *  @note Function doesn't return until interval has expired
     */
-   void delay(uint8_t channel, uint32_t interval) const {
+   static void delay(uint8_t channel, uint32_t interval) {
       configureChannel(channel, interval, PIT_TCTRL_TEN_MASK);
-      while (PIT->CHANNEL[channel].TFLG == 0) {
+      while (pit->CHANNEL[channel].TFLG == 0) {
          __NOP();
       }
       configureChannel(channel, 0, 0);
    }
 };
+#if PIT_USES_NAKED_HANDLER == 0
+template<class Info>
+PITCallbackFunction Pit_T<Info>::callback[Info::irqCount];
+#endif
 
 #ifdef PIT
 /**
- * @brief struct representing PIT_0
+ * @brief class representing the PIT
  */
-extern const PIT_ PIT_0;
+using Pit = Pit_T<PitInfo>;
 #endif
 
 /**

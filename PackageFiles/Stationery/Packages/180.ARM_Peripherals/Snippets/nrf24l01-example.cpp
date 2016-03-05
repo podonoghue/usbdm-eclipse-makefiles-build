@@ -22,14 +22,18 @@
  * nRF24L01 MOSI  - SPI SOUT signal
  * nRF24L01 CS_n  - SPI PCSx signal
  *
- * Two individual GPIOs used with module
+ * Two individual GPIOs are used with the module (see below)
  * nRF24L01 CE    - GPIO signal
- * nRF24L01 IRQ   - SPIO signal
+ * nRF24L01 IRQ   - GPIO signal
  */
-int main() {
-   USBDM::Spi *spi = new USBDM::$(demo.cpp.nrf24l01.spi:Spi0)_T<USBDM::$(demo.cpp.nrf24l01.cs_n:spi0_PCS0)>($(demo.cpp.spi.dma:));
 
-   USBDM::NRF24L01 *nrf24l01 = new USBDM::NRF24L01_T<USBDM::$(demo.cpp.nrf24l01.ce:GpioC<4>), USBDM::$(demo.cpp.nrf24l01.irq:GpioC<5>)>(spi);
+using CeGpio_n = USBDM::$(demo.cpp.nrf24l01.ce:GpioC<4>); // CE pin
+using IrqGpio  = USBDM::$(demo.cpp.nrf24l01.irq:GpioC<5>); // IRQ pin
+
+int main() {
+   USBDM::Spi *spi = new USBDM::$(demo.cpp.nrf24l01.spi:Spi0)_T<USBDM::$(demo.cpp.nrf24l01.cs_n:Spi0_PCS0)>($(demo.cpp.spi.dma:));
+
+   USBDM::NRF24L01 *nrf24l01 = new USBDM::NRF24L01_T<CeGpio_n, IrqGpio>(spi);
 
    for (;;) {
       uint8_t txData[] = {1,2,3,4};

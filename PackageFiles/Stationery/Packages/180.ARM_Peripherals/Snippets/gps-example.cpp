@@ -10,6 +10,18 @@
  * Refer to the individual files for license conditions as they vary.
  *
  * <hr>
+ * This example requires use of floating point in printf().\n
+ * It is necessary to change the library options to support this.
+ *
+ * Right-click on project and open Properties.
+ *
+ * - Select [C/C++ Build->Settings] on left of [Tool Settings] tab
+ * - Select [ARM C++ Linker->General] in middle panel
+ * - Turn on [Support %f format in printf]
+ *
+ * (In may be necessary to clean and re-build the project)
+ *
+ * <hr>
  * \subsection QuickLinks Quick Links
  *
  *   - @htmlonly <a href="https://www.itead.cc/itead-gps-shield.html"><b>ITEAD REB-4216 GPS Shield </b></a> @endhtmlonly

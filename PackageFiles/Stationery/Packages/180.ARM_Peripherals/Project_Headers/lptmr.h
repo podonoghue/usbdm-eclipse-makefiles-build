@@ -167,6 +167,9 @@ namespace USBDM {
     */
 struct LPTMR {
 
+      static constexpr volatile LPTMR_Type *lptmr   = reinterpret_cast<volatile LPTMR_Type *>(Lptmr0Info::basePtr);
+      static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t *>(Lptmr0Info::clockReg);
+
 #if LPTMR_USES_NAKED_HANDLER == 0
 static LPTMRCallbackFunction callback;
 
@@ -185,7 +188,7 @@ public:
     */
    void configure(uint16_t interval, uint32_t csr=LPTMR_CSR_DEFAULT_VALUE, uint32_t psr=LPTMR_PSR_DEFAULT_VALUE) const {
       // Enable clock
-      SIM->LPTMR0_CLOCK_REG |= LPTMR0_CLOCK_MASK;
+      *clockReg |= Lptmr0Info::clockMask;
 
 #ifdef LPTMR0_0_GPIO
       LPTMR0_0_GPIO.setPCR(PORT_PCR_MUX(LPTMR0_0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -204,13 +207,13 @@ public:
 #endif
 
       // Disable timer
-      LPTMR0->CSR = 0;
+      lptmr->CSR = 0;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
-      LPTMR0->PSR = psr;
+      lptmr->PSR = psr;
       // Interval/Compare value
-      LPTMR0->CMR = interval;
+      lptmr->CMR = interval;
       // Enable timer
-      LPTMR0->CSR = csr|LPTMR_CSR_TEN_MASK;
+      lptmr->CSR = csr|LPTMR_CSR_TEN_MASK;
 
       if (csr & LPTMR_CSR_TIE_MASK) {
          // Enable timer interrupts
@@ -225,9 +228,9 @@ public:
     */
    void finalise(void) {
       // Disable timer
-      LPTMR0->CSR = 0;
-      NVIC_DisableIRQ(LPTMR0_IRQn);
-      SIM->LPTMR0_CLOCK_REG &= ~LPTMR0_CLOCK_MASK;
+      lptmr->CSR = 0;
+      NVIC_DisableIRQ(Lptmr0Info::irqNums[0]);
+      *clockReg &= ~Lptmr0Info::clockMask;
    }
 };
 

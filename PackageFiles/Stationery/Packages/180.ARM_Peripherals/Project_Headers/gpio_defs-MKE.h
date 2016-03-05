@@ -26,7 +26,7 @@ namespace USBDM {
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::Gpio_T<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
+ * USBDM::Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE0), GPIOA_BasePtr, 3> pta3;
  *
  * // Set as digital output
  * pta3.setOutput();
@@ -55,26 +55,29 @@ namespace USBDM {
  * @endcode
  *
  * @tparam portPue         Pull-up enable register associated with this GPIO
- * @tparam gpio            GPIO hardware
- * @tparam bitNum          Bit number in the port
+ * @tparam gpioAddress     GPIO hardware
+ * @tparam bitNum          Bit number in the PORT associated with this GPIO
  */
 template<uint32_t portPue, uint32_t gpio, const uint32_t bitNum> 
 class Gpio_T {
 
 public:
+
+   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
+
    /**
     * Set pin as digital output
     */
    static void setOutput() {
-      bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, 1<<bitNum);
-//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= (1<<bitNum);
+      bmeOr(gpio->PDDR, 1<<bitNum);
+//      gpio->PDDR |= (1<<bitNum);
    }
    /**
     * Set pin as digital input
     */
    static void setInput() {
-      bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~(1<<bitNum));
-//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~(1<<bitNum);
+      bmeAnd(gpio->PDDR, ~(1<<bitNum));
+//      gpio->PDDR &= ~(1<<bitNum);
    }
    /**
     * Enable Pull-ups on pin
@@ -92,19 +95,19 @@ public:
     * Toggle pin
     */
    static void toggle() {
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PTOR = (1<<bitNum);
+      gpio->PTOR = (1<<bitNum);
    }
    /**
     * Set pin high
     */
    static void set() {
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PSOR = (1<<bitNum);
+      gpio->PSOR = (1<<bitNum);
    }
    /**
     * Set pin low
     */
    static void clear() {
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PCOR = (1<<bitNum);
+      gpio->PCOR = (1<<bitNum);
    }
    /**
     * Set pin high
@@ -124,15 +127,25 @@ public:
     * @param value true/false value
     */
    static void write(bool value) {
-      bmeInsert(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR, bitNum, 1, (value!=0));
+      bmeInsert(gpio->PDOR, bitNum, 1, (value!=0));
    }
    /**
-    * Read digital input as boolean
+    * Read pin value
+    * Note: this reads the PDIR not the PDOR
     *
     * @return true/false reflecting pin value
     */
    static bool read() {
-      return bmeExtract(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR, bitNum, 1);
+      return bmeExtract(gpio->PDIR, bitNum, 1);
+   }
+   /**
+    * Read value being driven to pin if output
+    * Note: this reads the PDOR not the PDIR
+    *
+    * @return true/false reflecting value in output register
+    */
+   static bool readState() {
+      return bmeExtract(gpio->PDOR, bitNum, 1);
    }
 };
 #ifdef GPIOA_BasePtr
@@ -256,7 +269,7 @@ template<int bitNum> using GpioC = Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE2)
  * <b>Example</b>
  * @code
  * // Instantiate object representing Port A 6 down to 3
- * Field_T<PORTA_CLOCK_MASK, PORTA_BasePtr, GPIOA_BasePtr, 6, 3> pta6_3;
+ * USBDM::Field_T<PORT_BasePtr+offsetof(PORT_Type, PUE0), GPIOA_BasePtr, 6, 3> pta6_3;
  *
  * // Set as digital output
  * pta6_3.setOutput();
@@ -281,14 +294,15 @@ template<int bitNum> using GpioC = Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE2)
  * @endcode
  *
  * @tparam portPue         Pull-up enable register associated with this GPIO
- * @tparam gpio            GPIO hardware
+ * @tparam gpioAddress     GPIO hardware address
  * @tparam left            Bit number of leftmost bit in port (inclusive)
  * @tparam right           Bit number of rightmost bit in port (inclusive)
  */
-template<uint32_t portPue, uint32_t gpio, const uint32_t left, const uint32_t right> 
+template<uint32_t portPue, uint32_t gpioAddress, const uint32_t left, const uint32_t right> 
 class Field_T {
 
 private:
+   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
    /**
     * Mask for the bits being manipulated
     */
@@ -299,15 +313,21 @@ public:
     * Set pin as digital output
     */
    static void setOutput() {
-      bmeOr(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, MASK);
-//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR |= MASK;
+      bmeOr(gpio->PDDR, MASK);
    }
    /**
     * Set pin as digital input
     */
    static void setInput() {
-      bmeAnd(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR, ~MASK);
-//      reinterpret_cast<volatile GPIO_Type *>(gpio)->PDDR &= ~MASK;
+      bmeAnd(gpio->PDDR, ~MASK);
+   }
+   /**
+    * Set individual pin directions
+    *
+    * @param mask Mask for pin directions (1=>out, 0=>in)
+    */
+   static void setDirection(uint32_t mask) {
+      bmeInsert(gpio->PDDR, right, left-right+1, mask);
    }
    /**
     * Enable Pull-ups on pin
@@ -327,7 +347,7 @@ public:
     * @param mask Mask to apply to the field (1 => set bit, 0 => unchanged)
     */
    static void bitSet(const uint32_t mask) {
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PSOR = (mask<<right)&MASK;
+      gpio->PSOR = (mask<<right)&MASK;
    }
    /**
     * Clear bits in field
@@ -335,7 +355,7 @@ public:
     * @param mask Mask to apply to the field (1 => clear bit, 0 => unchanged)
     */
    static void bitClear(const uint32_t mask) {
-      reinterpret_cast<volatile GPIO_Type *>(gpio)->PCOR = (mask<<right)&MASK;
+      gpio->PCOR = (mask<<right)&MASK;
    }
    /**
     * Read field
@@ -343,8 +363,7 @@ public:
     * @return value from field
     */
    static uint32_t read() {
-      return bmeExtract(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR, right, left-right+1);
-//      return ((reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & MASK)>>right;
+      return bmeExtract(gpio->PDIR, right, left-right+1);
    }
    /**
     * Write field
@@ -352,9 +371,7 @@ public:
     * @param value to insert as field
     */
    static void write(uint32_t value) {
-      bmeInsert(reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR, right, left-right+1, value);
-//      uint32_t preserved = (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDIR) & ~MASK;
-//      (reinterpret_cast<volatile GPIO_Type *>(gpio)->PDOR) = preserved | ((value<<right)&MASK);
+      bmeInsert(gpio->PDOR, right, left-right+1, value);
    }
 };
 #ifdef GPIOA_BasePtr

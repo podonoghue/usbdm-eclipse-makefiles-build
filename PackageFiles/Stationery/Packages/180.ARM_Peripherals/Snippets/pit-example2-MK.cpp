@@ -75,19 +75,19 @@ int main() {
    RED_LED::set();
    GREEN_LED::set();
 
-   PIT_0.configure();
+   Pit::configure();
 
 #if PIT_USES_NAKED_HANDLER == 0
    // These handlers are set programmatically
-   PIT_0.setCallback(0, flashRed);
-   PIT_0.setCallback(1, flashGreen);
+   Pit::setCallback(0, flashRed);
+   Pit::setCallback(1, flashGreen);
 #endif
 
    // Flash RED @ 1Hz
-   PIT_0.configureChannel(0, SystemBusClock/2);
+   Pit::configureChannel(0, SystemBusClock/2);
 
    // Flash GREEN @ 0.5Hz
-   PIT_0.configureChannel(1, SystemBusClock);
+   Pit::configureChannel(1, SystemBusClock);
 
    for(;;) {
       __asm__("nop");

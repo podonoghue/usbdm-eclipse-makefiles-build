@@ -47,7 +47,7 @@ protected:
    /**
     * Constructor
     *
-    * @param baseAddress - Base address of SPI
+    * @param baseAddress    Base address of SPI
     */
    Spi(volatile SPI_Type *baseAddress) :
       spi(baseAddress), spiBaudValue(0), pushrMask(SPI_PUSHR_PCS_MASK) {
@@ -68,7 +68,7 @@ public:
    /**
     * Sets Communication mode for SPI
     *
-    * @param mode => Mode to set combination of spi_CPHA etc
+    * @param mode => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
     */
    void setMode(uint32_t mode=DEFAULT_SPI_MODE) {
       // Sets the default CTAR value with 8 bits
@@ -122,7 +122,7 @@ public:
     */
    uint32_t txRx(uint32_t data);
 
-   static constexpr uint32_t mask = ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK|SPI_CTAR_DBR_MASK);
+   static constexpr uint32_t CTAR_MASK = ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK|SPI_CTAR_DBR_MASK);
 
    /*! Set SPI.CTAR0 value
     *
@@ -130,7 +130,7 @@ public:
     *     e.g. setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
     */
    void setCTAR0Value(uint32_t ctar) {
-      spi->CTAR[0] = spiBaudValue|(ctar&mask);
+      spi->CTAR[0] = spiBaudValue|(ctar&CTAR_MASK);
    }
 
    /*! Set SPI.CTAR1 value
@@ -139,23 +139,24 @@ public:
     *     e.g. setCTAR1Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
     */
    void setCTAR1Value(uint32_t ctar) {
-      spi->CTAR[1] = spiBaudValue|(ctar&mask);
+      spi->CTAR[1] = spiBaudValue|(ctar&CTAR_MASK);
    }
 };
 
 /**
  * @brief Template class representing a SPI interface
  *
- * @tparam  spiBasePtr     Base address of SPI hardware
- * @tparam  spiClockReg    Address of SIM register controlling SPI hardware clock
- * @tparam  spiClockMask   Clock mask for SIM clock register
- * @tparam  SpiSCK         Pcr used for SCK signal
- * @tparam  SpiSIN         Pcr used for SIN signal
- * @tparam  SpiSOUT        Pcr used for SOUT signal
+ * @tparam  info           Class describing Spi hardware
  * @tparam  Rest...        Pcrs used for PCSx
  */
-template<uint32_t spiBasePtr, uint32_t spiClockReg, uint32_t spiClockMask, typename SpiSCK, typename  SpiSIN, typename  SpiSOUT, typename ... Rest>
+template<class info, typename ... Rest>
 class Spi_T : public Spi {
+
+private:
+   using SpiSCK   = PcrTable_T<info, 0>;
+   using SpiSIN   = PcrTable_T<info, 1>;
+   using SpiSOUT  = PcrTable_T<info, 2>;
+
 public:
    virtual void enablePins() {
       // Configure SPI pins
@@ -170,9 +171,9 @@ public:
    /**
     * Constructor
     */
-   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(spiBasePtr)) {
+   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(info::basePtr)) {
       // Enable SPI module clock
-      *reinterpret_cast<volatile uint32_t*>(spiClockReg) |= spiClockMask;
+      *reinterpret_cast<volatile uint32_t*>(info::clockReg) |= info::clockMask;
 
       spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
                    SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
@@ -183,6 +184,9 @@ public:
 
       // Configure SPI pins
       enablePins();
+
+      // Use default speed
+      setSpeed();
    }
 };
 
@@ -192,7 +196,7 @@ public:
  *
  * <b>Example</b>
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0_T<USBDM::spi0_PCS1>();
+ * USBDM::Spi *spi = new USBDM::Spi0_T<USBDM::Spi0_PCS1>();
  *
  * uint8_t txData[] = {1,2,3};
  * uint8_t rxData[10];
@@ -201,8 +205,7 @@ public:
  *
  * @tparam  PCSs...    GpioX used for PCSx
  */
-template<typename ... PCSs> using  Spi0_T = Spi_T<SPI0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI0_CLOCK_REG), SPI0_CLOCK_MASK,
-      spi0_SCK, spi0_SIN, spi0_SOUT, PCSs...>;
+template<typename ... PCSs> using  Spi0_T = Spi_T<Spi0Info, PCSs...>;
 
 /**
  * @brief Alias representing a SPI0 interface without PCS use
@@ -236,8 +239,7 @@ using Spi0 = Spi0_T<>;
  *
  * @tparam  PCSs...    GpioX used for PCSx
  */
-template<typename ... PCSs> using  Spi1_T = Spi_T<SPI1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, SPI1_CLOCK_REG), SPI1_CLOCK_MASK,
-      spi1_SCK, spi1_SIN, spi1_SOUT, PCSs...>;
+template<typename ... PCSs> using  Spi1_T = Spi_T<Spi1Info, PCSs...>;
 
 /**
  * @brief Alias representing a SPI1 interface without PCS use

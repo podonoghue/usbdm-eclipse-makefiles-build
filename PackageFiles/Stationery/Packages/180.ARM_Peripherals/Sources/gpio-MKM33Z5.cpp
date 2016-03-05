@@ -2,8 +2,8 @@
  * @file      gpio.cpp (from gpio-MKM33Z5.cpp)
  *
  * @brief     Pin declarations for MKM33Z5, generated from MKM33Z5.csv
- *            Devices   [MKM33Z5]
- *            Reference [MKM33Z5]
+ *            Devices   [MKM33Z64xxx5, MKM33Z128xxx5]
+ *            Reference [MKMxxZxxCxx5RM]
  */
 
 #include "gpio.h"

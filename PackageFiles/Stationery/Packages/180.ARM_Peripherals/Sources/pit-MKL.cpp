@@ -25,29 +25,23 @@ using namespace USBDM;
 
 #if PIT_USES_NAKED_HANDLER == 0
 
-PITCallbackFunction PIT_::callback[PIT_NUMBER_OF_CHANNELS] = {0};
-
 /**
  *   PIT interrupt handler
  *
  *   Calls PIT callback
  */
+extern "C"
 void PIT_IRQHandler(void) {
    for (unsigned channel=0; channel<PIT_NUMBER_OF_CHANNELS; channel++) {
       if (PIT->CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
          // Clear interrupt flag
          PIT->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
          // Do call-back
-         if (PIT_::callback[channel] != 0) {
-            PIT_::callback[channel]();
+         if (Pit::callback[channel] != 0) {
+            Pit::callback[channel]();
          }
       }
    }
 }
 #endif
-
-#ifdef LPTMR0
-const PIT_ PIT_0;
-#endif
-
 #endif

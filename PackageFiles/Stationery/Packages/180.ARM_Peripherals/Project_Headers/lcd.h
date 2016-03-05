@@ -437,7 +437,21 @@ public:
 };
 
 /**
- *   Convenience type for typical Arduino shield LCD
+ * @brief Class representing an LCD\n
+ * Convenience type for typical Arduino shield LCD
+ *
+ * <b>Example</b>
+ * @code
+ * // Instantiate interface
+ * Lcd *lcd = new Lcd(new SPI_0());
+ *
+ * lcd->clear(RED);
+ * lcd->drawCircle(65, 65, 20, WHITE);
+ * lcd->drawCircle(65, 65, 30, WHITE);
+ * lcd->drawCircle(65, 65, 40, WHITE);
+ * lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+ *
+ *  @endcode
  */
 #if LCD_BACKLIGHT_PWM_FEATURE
 // PWM control for back-light brightness

@@ -166,14 +166,6 @@ public:
 /**
  * @brief Template class representing an I2C interface
  *
- * @tparam  i2cBasePtr     Base address of I2C hardware
- * @tparam  i2cClockReg    Address of SIM register controlling I2C hardware clock
- * @tparam  i2cClockMask   Clock mask for SIM clock register
- * @tparam  SclPcr         Pcr used for SCL signal
- * @tparam  SclGpio        Gpio used for SCL signal
- * @tparam  SdaPcr         Pcr used for SDA signal
- * @tparam  SdaGpio        Gpio used for SDA signal
- *
  * <b>Example</b>
  * @code
  *  // Instantiate interface
@@ -199,18 +191,25 @@ public:
  *     // Note rxDataBuffer may be the same as txDataBuffer
  *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
  *  }
- *
  *  @endcode
+ *
+ * @tparam info            Class describing I2C hardware
  */
-template<uint32_t i2cBasePtr, uint32_t i2cClockReg, uint32_t i2cClockMask, IRQn_Type irqNum, class SclPcr, class SclGpio, class SdaPcr, class SdaGpio> class I2C_T : public I2c {
-public:
-   static class I2c *thisPtr;
-
-private:
+template<class info> class I2C_T : public I2c {
    friend void I2C0_IRQHandler(void);
    friend void I2C1_IRQHandler(void);
    friend void I2C2_IRQHandler(void);
    friend void I2C3_IRQHandler(void);
+
+public:
+   static class I2c *thisPtr;
+
+private:
+   using SclPcr  = PcrTable_T<info, 0>;
+   using SclGpio = GpioTable_T<info, 0>;
+
+   using SdaPcr  = PcrTable_T<info, 1>;
+   using SdaGpio = GpioTable_T<info, 1>;
 
 public:
    /**
@@ -225,7 +224,7 @@ public:
     * @tparam scl        I2C Clock port
     * @tparam sda        I2C Data port
     */
-   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(i2cBasePtr), mode) {
+   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(info::basePtr), mode) {
       busHangReset();
       init(myAddress);
       setBPS(baud);
@@ -237,7 +236,7 @@ public:
    void init(const uint8_t myAddress) {
 
       // Enable clock to I2C interface
-      *reinterpret_cast<uint32_t *>(i2cClockReg) |= i2cClockMask;
+      *reinterpret_cast<uint32_t *>(info::clockReg) |= info::clockMask;
 
       thisPtr = this;
 
@@ -246,7 +245,7 @@ public:
       SclPcr::setPCR();
 
       if (mode&I2C_C1_IICIE_MASK) {
-         NVIC_EnableIRQ(irqNum);
+         NVIC_EnableIRQ(info::irqNums[0]);
       }
       // Enable I2C peripheral
       i2c->C1 = I2C_C1_IICEN_MASK|mode;
@@ -320,7 +319,7 @@ public:
 #ifdef MCU_MKM33Z5
 using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_1_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
 #else
-using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
+using I2c0 = USBDM::I2C_T<I2c0Info>;
 #endif
 #endif
 
@@ -355,7 +354,7 @@ using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOC
 #ifdef MCU_MKM33Z5
 using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C0_1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
 #else
-using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
+using I2c1 = USBDM::I2C_T<I2c1Info>;
 #endif
 #endif
 
@@ -387,7 +386,7 @@ using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOC
  *  }
  *  @endcode
  */
-using I2c2 = USBDM::I2C_T<I2C2_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK, I2C2_IRQn, i2c2_SCLPcr, i2c2_SCLGpio, i2c2_SDAPcr, i2c2_SDAGpio>;
+using I2c2 = USBDM::I2C_T<I2c2Info>;
 #endif
 
 /**

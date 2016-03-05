@@ -14,56 +14,9 @@
 
 namespace USBDM {
 
-#if 0 && defined(SPI0)
+#if defined(SPI0)
 #if (SPI0_SCK_PIN_SEL==0) || (SPI0_MOSI_PIN_SEL==0) || (SPI0_MISO_PIN_SEL==0)
 #warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
-#else
-
-/**
- * Constructor
- *
- * @param dmaTxChannel DMA Channel for transmission
- * @param dmaRxChannel DMA Channel for reception
- * @param pcs          Manual PCS select signal
- */
-Spi0::Spi0(DMAChannel *dmaTxChannel, DMAChannel *dmaRxChannel) :
-      Spi(SPI0, dmaTxChannel, dmaRxChannel, DMAChannel::DMA_SLOT_SPI0_Rx) {
-
-   thisPtr = this;
-
-   // Enable SPI port pin clocks
-   // MOSI,MISO,SCLK
-   SPI0_SCK_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_SCK_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI0_MOSI_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_MOSI_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-   SPI0_MISO_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_MISO_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-
-#ifdef SPI0_PCS0_GPIO
-   SPI0_PCS0_GPIO::Pcr::setPCR(PORT_PCR_MUX(SPI0_PCS0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-#define SPI0_C1_SSOE_VALUE SPI_C1_SSOE_MASK
-#endif
-#ifndef SPI0_C1_SSOE_VALUE
-#define SPI0_C1_SSOE_VALUE 0
-#endif
-
-   // Enable SPI module clock
-   SIM->SPI0_CLOCK_REG |= SPI0_CLOCK_MASK;
-
-   setSpeed(0); // default baud
-
-   NVIC_EnableIRQ(SPI0_IRQn);
-   NVIC_SetPriority (SPI0_IRQn, 2);
-
-   spi->C2 = SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
-   spi->C1 = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI0_C1_SSOE_VALUE;//|SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK;
-}
-
-Spi0 *Spi0::thisPtr = NULL;
-
-extern "C"
-void SPI0_IRQHandler(void) {
-   Spi0::thisPtr->poll();
-}
-
 #endif // (SPI0_SCK_PIN_SEL==0) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
 #endif // SPI0
 
@@ -143,7 +96,7 @@ void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
       dataOutInc &= ~DMA_DCR_SINC_MASK;
    }
    // Optional Rx channel
-   DMAChannel::DMAInformation dmaRxInformation = {
+   DmaChannel::DMAInformation dmaRxInformation = {
       (uint32_t)&spi->D,
       (uint32_t)dataIn,
       dataSize,
@@ -153,7 +106,7 @@ void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) 
    dmacRxChannel->configure(&dmaRxInformation);
 
    // Must have Tx channel
-   DMAChannel::DMAInformation dmaTxInformation = {
+   DmaChannel::DMAInformation dmaTxInformation = {
       (uint32_t)dataOut,
       (uint32_t)&spi->D,
       dataSize,

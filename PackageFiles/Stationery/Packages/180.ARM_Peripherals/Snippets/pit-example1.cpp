@@ -24,10 +24,10 @@ int main() {
    // Turn off LED initially
    RED_LED::set();
 
-   PIT_0.configure();
+   Pit::configure();
 
    for(;;) {
       RED_LED::toggle();
-      PIT_0.delay(0, SystemBusClock*1);
+      Pit::delay(0, SystemBusClock*1);
    }
 }

@@ -18,7 +18,10 @@ namespace USBDM {
 * @brief Support for DMA operations
 * @{
 */
-class DMAChannel {
+class DmaChannel {
+
+protected:
+   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(DmaMux0Info::clockReg);
 
 private:
    volatile DMA_Type    *dmac;
@@ -34,14 +37,14 @@ public:
       uint16_t sourceDevice;
    };
 
-   DMAChannel(volatile DMA_Type *dmac, volatile DMAMUX_Type *dmaMux, unsigned channel) {
+   DmaChannel(volatile DMA_Type *dmac, volatile DMAMUX_Type *dmaMux, unsigned channel) {
       this->dmac    = dmac;
       this->dmaMux  = dmaMux;
       this->channel = channel;
    }
 
    void configure(DMAInformation *information) {
-      SIM->DMAMUX0_CLOCK_REG |= DMAMUX0_CLOCK_MASK;
+      *clockReg |= DmaMux0Info::clockMask;
       dmaMux->CHCFG[channel]      = 0;
       dmac->DMA[channel].DSR_BCR  = DMA_DSR_BCR_BCR(information->byteCount);
       dmac->DMA[channel].SAR      = information->source;
@@ -58,47 +61,47 @@ public:
    }
 };
 
-class DMAChannel0 : public DMAChannel {
+class DmaChannel0 : public DmaChannel {
 private:
-   static DMAChannel0 *thisPtr;
+   static DmaChannel0 *thisPtr;
    void handler(void);
    friend void DMA0_IRQHandler(void);
 
 public:
-   DMAChannel0() : DMAChannel(DMA0, DMAMUX0, 0) {
+   DmaChannel0() : DmaChannel(DMA0, DMAMUX0, 0) {
       thisPtr = this;
    }
 };
-class DMAChannel1 : public DMAChannel {
+class DmaChannel1 : public DmaChannel {
 private:
-   static DMAChannel1 *thisPtr;
+   static DmaChannel1 *thisPtr;
    void handler(void);
    friend void DMA1_IRQHandler(void);
 
 public:
-   DMAChannel1() : DMAChannel(DMA0, DMAMUX0, 1) {
+   DmaChannel1() : DmaChannel(DMA0, DMAMUX0, 1) {
       thisPtr = this;
    }
 };
-class DMAChannel2 : public DMAChannel {
+class DmaChannel2 : public DmaChannel {
 private:
-   static DMAChannel2 *thisPtr;
+   static DmaChannel2 *thisPtr;
    void handler(void);
    friend void DMA2_IRQHandler(void);
 
 public:
-   DMAChannel2() : DMAChannel(DMA0, DMAMUX0, 2) {
+   DmaChannel2() : DmaChannel(DMA0, DMAMUX0, 2) {
       thisPtr = this;
    }
 };
-class DMAChannel3 : public DMAChannel {
+class DmaChannel3 : public DmaChannel {
 private:
-   static DMAChannel3 *thisPtr;
+   static DmaChannel3 *thisPtr;
    void handler(void);
    friend void DMA3_IRQHandler(void);
 
 public:
-   DMAChannel3() : DMAChannel(DMA0, DMAMUX0, 3) {
+   DmaChannel3() : DmaChannel(DMA0, DMAMUX0, 3) {
       thisPtr = this;
    }
 };

@@ -25,19 +25,18 @@ using namespace USBDM;
 
 #if PIT_USES_NAKED_HANDLER == 0
 
-PITCallbackFunction PIT_::callback[PIT_NUMBER_OF_CHANNELS] = {0};
-
 /**
  *   PIT interrupt handler
  *
  *   Calls PIT callback
  */
+extern "C"
 void PIT0_IRQHandler(void) {
    // Clear interrupt flag
    PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
 
-   if (PIT_::callback[0] != 0) {
-      PIT_::callback[0]();
+   if (Pit::callback[0] != 0) {
+      Pit::callback[0]();
    }
 }
 /**
@@ -45,12 +44,13 @@ void PIT0_IRQHandler(void) {
  *
  *   Calls PIT callback
  */
+extern "C"
 void PIT1_IRQHandler(void) {
    // Clear interrupt flag
    PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
 
-   if (PIT_::callback[1] != 0) {
-      PIT_::callback[1]();
+   if (Pit::callback[1] != 0) {
+      Pit::callback[1]();
    }
 }
 /**
@@ -58,12 +58,13 @@ void PIT1_IRQHandler(void) {
  *
  *   Calls PIT callback
  */
+extern "C"
 void PIT2_IRQHandler(void) {
    // Clear interrupt flag
    PIT->CHANNEL[2].TFLG = PIT_TFLG_TIF_MASK;
 
-   if (PIT_::callback[2] != 0) {
-      PIT_::callback[2]();
+   if (Pit::callback[2] != 0) {
+      Pit::callback[2]();
    }
 }
 /**
@@ -71,18 +72,15 @@ void PIT2_IRQHandler(void) {
  *
  *   Calls PIT callback
  */
+extern "C"
 void PIT3_IRQHandler(void) {
    // Clear interrupt flag
    PIT->CHANNEL[3].TFLG = PIT_TFLG_TIF_MASK;
 
-   if (PIT_::callback[3] != 0) {
-      PIT_::callback[3]();
+   if (Pit::callback[3] != 0) {
+      Pit::callback[3]();
    }
 }
-#endif
-
-#ifdef LPTMR0
-const PIT_ PIT_0;
 #endif
 
 #endif
