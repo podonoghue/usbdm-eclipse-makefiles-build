@@ -87,9 +87,6 @@ protected:
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
-   void            deleteSecurityAreas(void);
-   USBDM_ErrorCode recordSecurityArea(const uint32_t address, const int size, const uint8_t *data);
-   void            restoreSecurityAreas(FlashImagePtr flashImage);
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode eraseFlash(void);

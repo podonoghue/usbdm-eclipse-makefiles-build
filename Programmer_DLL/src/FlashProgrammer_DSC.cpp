@@ -1501,60 +1501,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::checkTargetUnSecured() {
    return PROGRAMMING_RC_OK;
 }
 
-const int MaxSecurityAreaSize = 100;
-struct SecurityDataCache {
-   uint32_t address;                   //!< start address of security area
-   uint32_t size;                      //!< size of area
-   bool     originallyBlank;
-   uint8_t  data[MaxSecurityAreaSize]; //!< security area data
-};
-unsigned securityAreaCount = 0;
-SecurityDataCache securityData[2];
-
-//===========================================================================================================
-//! Clears the record of modified security areas
-//!
-void FlashProgrammer_DSC::deleteSecurityAreas(void) {
-   securityAreaCount = 0;
-}
-
-//===========================================================================================================
-//! Record the original contents of a security area for later restoration
-//!
-//! @param address    Start address of security area
-//! @param size       Size of area
-//! @param data       Security area data
-//!
-//! @return error code see \ref USBDM_ErrorCode.
-//!
-USBDM_ErrorCode FlashProgrammer_DSC::recordSecurityArea(const uint32_t address, const int size, const uint8_t *data) {
-   if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   if (size > MaxSecurityAreaSize) {
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-  securityData[securityAreaCount].address = address;
-  securityData[securityAreaCount].size    = size;
-  memcpy(securityData[securityAreaCount].data, data, size);
-  securityAreaCount++;
-  return PROGRAMMING_RC_OK;
-}
-
-//===========================================================================================================
-//! Restores the contents of the security areas to their original values
-//!
-//! @param flashImage    Flash contents to be programmed.
-//!
-void FlashProgrammer_DSC::restoreSecurityAreas(FlashImagePtr flashImage) {
-   LOGGING_Q;
-   for (unsigned index=0; index<securityAreaCount; index++) {
-      log.print("Restoring security area in image [0x%06X...0x%06X]\n",
-            securityData[index].address, securityData[index].address+securityData[index].size-1);
-      flashImage->loadDataBytes(securityData[index].size, securityData[index].address, securityData[index].data);
-   }
-}
-
 //===========================================================================================================
 //! Modifies the Security locations in the flash image according to required security options of flashRegion
 //!
@@ -1626,7 +1572,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage, 
    uint8_t memory[size];
    bdmInterface->readMemory(MS_PWord, size, securityAddress, memory);
    // Save contents of current security area in Flash
-   recordSecurityArea(securityAddress, size, memory);
+   recordSecurityArea(flashImage, securityAddress, size);
    if (memcmp(data, memory, size) == 0) {
       if ((device->getEraseOption() == DeviceData::eraseMass) ||
           (device->getEraseOption() == DeviceData::eraseNone)) {
@@ -1667,7 +1613,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::setFlashSecurity(FlashImagePtr flashImage) 
    // Process each flash region
    USBDM_ErrorCode rc = BDM_RC_OK;
    securityNeedsSelectiveErase = false; // Assume security areas are valid
-   deleteSecurityAreas();
+   checkNoSecurityAreas();
    for (int index=0; ; index++) {
       MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {

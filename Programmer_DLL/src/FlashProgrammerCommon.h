@@ -30,6 +30,17 @@ public:
    virtual uint16_t           getCalculatedTrimValue() { return calculatedClockTrimValue; };
 
 protected:
+   static const int MaxSecurityAreaSize = 100;  //<! Maximum size of a security area that may be saved
+
+   /**
+    * Used to save a region of a flash image modified for security
+    */
+   struct SecurityDataCache {
+      static const uint16_t BLANK = 0xFFFF;
+      uint32_t address;                   //!< Start address of security area
+      uint32_t size;                      //!< Size of area
+      uint16_t data[MaxSecurityAreaSize]; //!< Security area data (BLANK indicates empty/invalid location)
+   };
 
    class SetProgrammingMode {
    private:
@@ -88,7 +99,30 @@ protected:
    USBDM_ErrorCode trimICS_Clock(ICS_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimMCG_Clock(MCG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimICG_Clock(ICG_ClockParameters_t *clockParameters);
-   
+   /**
+    * Checks that there are no modified security areas
+    *
+    * @return error code if security areas are present
+    */
+   USBDM_ErrorCode checkNoSecurityAreas(void);
+   /**
+    * Record the original contents of a security area for later restoration
+    *
+    * @param flashImage Flash image meing manipulated
+    * @param address    Start address of security area
+    * @param size       Size of area
+    *
+    * @return error code see \ref USBDM_ErrorCode.
+    */
+   USBDM_ErrorCode recordSecurityArea(FlashImagePtr flashImage, const uint32_t address, const uint32_t size);
+   /**
+    * Restores the contents of the security areas to their saved values
+    * All records are cleared
+    *
+    * @param flashImage    Flash contents to be programmed.
+    */
+   void            restoreSecurityAreas(FlashImagePtr flashImage);
+
    bool                    flashReady;               //!< Safety check - only TRUE when flash is ready for programming
    DeviceDataConstPtr      device;                   //!< Parameters describing the current device
    UsbdmTclInterperPtr     tclInterpreter;           //!< TCL interpreter
@@ -96,6 +130,8 @@ protected:
    FlashProgramConstPtr    currentFlashProgram;      //!< Current program for flash operation
    ProgressTimerPtr        progressTimer;            //!< Progress timer
    uint16_t                calculatedClockTrimValue; //!< Clock trim value determined from programmed device
+   unsigned                securityAreaCount;
+   SecurityDataCache       securityData[2];
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
 

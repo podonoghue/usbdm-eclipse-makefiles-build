@@ -46,7 +46,8 @@
 FlashProgrammerCommon::FlashProgrammerCommon() :
    flashReady(false),
    progressTimer(new ProgressTimer()),
-   calculatedClockTrimValue(0) {
+   calculatedClockTrimValue(0),
+   securityAreaCount(0)  {
    LOGGING_E;
 }
 
@@ -1262,3 +1263,76 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
    return PROGRAMMING_RC_OK;
 }
 
+/**
+ * Checks that there are no modified security areas
+ *
+ * @return error code if security areas are present
+ */
+USBDM_ErrorCode FlashProgrammerCommon::checkNoSecurityAreas(void) {
+   LOGGING;
+   if (securityAreaCount > 0) {
+      log.print("Areas not empty\n");
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+   return BDM_RC_OK;
+}
+
+/**
+ * Record the original contents of a security area for later restoration
+ *
+ * @param flashImage Flash image meing manipulated
+ * @param address    Start address of security area
+ * @param size       Size of area
+ *
+ * @return error code see \ref USBDM_ErrorCode.
+ */
+USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashImage, const uint32_t startAddress, const uint32_t size) {
+   LOGGING_Q;
+   log.print("[0x%08X...0x%08X\n", startAddress, startAddress+size-1);
+   if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+   if (size > MaxSecurityAreaSize) {
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+  securityData[securityAreaCount].address = startAddress;
+  securityData[securityAreaCount].size    = size;
+  for (uint32_t count=0; count<size; count++) {
+     if (!flashImage->isValid(startAddress+count)) {
+        securityData[securityAreaCount].data[count] = SecurityDataCache::BLANK;
+        log.print("Blank\n");
+     }
+     else {
+        securityData[securityAreaCount].data[count] = flashImage->getValue(startAddress+count);
+        log.print("Read 0x%02X\n", flashImage->getValue(startAddress+count));
+     }
+  }
+  flashImage->dumpRange(startAddress, startAddress+size-1);
+  securityAreaCount++;
+  return PROGRAMMING_RC_OK;
+}
+
+/**
+ * Restores the contents of the security areas to their saved values
+ *
+ * @param flashImage    Flash contents to be programmed.
+ */
+void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
+   LOGGING_Q;
+   for (unsigned index=0; index<securityAreaCount; index++) {
+      log.print("Restoring security area in image [0x%06X...0x%06X]\n",
+            securityData[index].address, securityData[index].address+securityData[index].size-1);
+      for (uint32_t count=0; count<securityData[index].size; count++) {
+         if (securityData[index].data[count] == SecurityDataCache::BLANK) {
+            flashImage->remove(securityData[index].address+count);
+            log.print("Blank\n");
+         }
+         else {
+            flashImage->setValue(securityData[index].address+count, (uint8_t)securityData[index].data[count]);
+            log.print("Write 0x%02X\n", (uint8_t)securityData[index].data[count]);
+         }
+      }
+      flashImage->dumpRange(securityData[index].address, securityData[index].address+securityData[index].size-1);
+   }
+   securityAreaCount = 0;
+}

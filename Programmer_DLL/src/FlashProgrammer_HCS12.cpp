@@ -25,8 +25,9 @@
 +============================================================================================
 | Revision History
 +============================================================================================
+| 4  Mar 16 | Fixed saving/restoring security regions                       - pgo 4.12.1.90
 | 29 Mar 15 | Changed verify code                                           - pgo 4.12.1.50
-| 29 Mar 15 | Refactored                                                    - pgo 4.10.7.10 
+| 29 Mar 15 | Refactored                                                    - pgo 4.11.1.10 
 +-----------+--------------------------------------------------------------------------------
 | 20 Jan 15 | Cleanup of programming and readback code                      - pgo V4.10.6.250
 | 18 Jan 15 | Addition of DSC mass erase using TCL code                     - pgo V4.10.6.250
@@ -370,10 +371,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::resetAndConnectTarget(void) {
    initTargetDone = false;
 
    // Reset to special mode to allow unlocking of Flash
-#if (TARGET == ARM) || (TARGET == MC56F80xx) || (TARGET == CFVx) || (TARGET == HC12)
-#else
-   bdmInterface->connect();
-#endif
    rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
    if (rc != BDM_RC_OK) {
       bdmInterface->connect();
@@ -543,25 +540,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTarget() {
       rc = bdmInterface->connect();
    }
 #endif
-#if (TARGET == HCS08)
-   char args[200] = "initTarget \"";
-   char *argPtr = args+strlen(args);
-
-   // Add address of each flash region
-   for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
-      if (memoryRegionPtr == NULL) {
-         break;
-      }
-      if (!memoryRegionPtr->isProgrammableMemory()) {
-         continue;
-      }
-      sprintf(argPtr, " 0x%04X", memoryRegionPtr->getDummyAddress()&0xFFFF);
-      argPtr += strlen(argPtr);
-   }
-   *argPtr++ = '\"';
-   *argPtr++ = '\0';
-#elif (TARGET == HCS12) || (TARGET == S12Z)
    char args[200] = "initTarget \"";
    char *argPtr = args+strlen(args);
 
@@ -581,19 +559,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTarget() {
    }
    *argPtr++ = '\"';
    *argPtr++ = '\0';
-#elif (TARGET == RS08)
-   char args[200] = "initTarget ";
-   char *argPtr = args+strlen(args);
-   sprintf(argPtr, "0x%04X 0x%04X 0x%04X",
-         device->getWatchdogAddress(),
-         flashMemoryRegionPtr->getFOPTAddress(),
-         flashMemoryRegionPtr->getFLCRAddress()
-         );
-   argPtr += strlen(argPtr);
-   *argPtr++ = '\0';
-#else
-   char args[] = "initTarget \"\"";
-#endif
 
    rc = runTCLCommand(args);
    if (rc != PROGRAMMING_RC_OK) {
@@ -1210,104 +1175,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::convertTargetErrorCode(FlashDriverError_t
    default                          : return PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND;
    }
 }
-
-//=======================================================================
-#if (TARGET == CFVx)
-static bool usePSTSignals = false;
-//! Check DSC run status
-//!
-//! @return BDM_RC_OK   - halted\n
-//!         BDM_RC_BUSY - running\n
-//!         other       - error
-//!
-USBDM_ErrorCode getRunStatus(void) {
-   LOGGING;
-   USBDMStatus_t USBDMStatus;
-   USBDM_ErrorCode rc = bdmInterface->getBDMStatus(&USBDMStatus);
-   if (rc != BDM_RC_OK) {
-      log.error("Failed, rc=%s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   if (usePSTSignals) {
-      // Check processor state using PST signals
-      if (USBDMStatus.halt_state == TARGET_RUNNING) {
-		   return BDM_RC_BUSY;
-      }
-      else {
-         return BDM_RC_OK;
-      }
-   }
-   else {
-      // Probe D0 register - if fail assume processor running!
-      unsigned long int dummy;
-      rc = bdmInterface->readReg(CFVx_RegD0, &dummy);
-      if (rc == BDM_RC_OK) {
-         // Processor halted
-         return BDM_RC_OK;
-      }
-      else /* if (rc == BDM_RC_CF_BUS_ERROR) */{
-         // Processor executing
-         return BDM_RC_BUSY;
-      }
-   }
-}
-#endif
-
-//=======================================================================
-#if (TARGET == MC56F80xx)
-//! Check DSC run status
-//!
-//! @return BDM_RC_OK   - halted\n
-//!         BDM_RC_BUSY - running\n
-//!         other       - error
-//!
-USBDM_ErrorCode getRunStatus(void) {
-//   LOGGING;
-   OnceStatus_t onceStatus;
-   USBDM_ErrorCode rc = DSC_GetStatus(&onceStatus);
-   if (rc != BDM_RC_OK) {
-      log.error("Failed, rc=%s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   switch (onceStatus) {
-   case stopMode:
-   case debugMode:
-   case unknownMode:
-   default:
-      return BDM_RC_OK;
-   case executeMode :
-   case externalAccessMode:
-      return BDM_RC_BUSY;
-   }
-}
-#endif
-
-#if 0 && defined(LOG) && (TARGET==ARM)
-//! Report ARM status
-//!
-//! @param msg - message to print
-//!
-static void report(const char *msg) {
-   LOGGING;
-   uint8_t buff[10];
-   if (bdmInterface->readMemory(2,2,0x40052000,buff) == BDM_RC_OK) {
-      log.print("%s::report() - WDOG_STCTRLH=0x%02X\n", msg, getData16Target(buff));
-   }
-   else {
-      log.error("%s::report() - Unable to read WDOG_STCTRLHL\n", msg);
-   }
-   uint8_t mc_srsh;
-   uint8_t mc_srsl;
-   // Assume if we can read SRS locations then they are valid (Kinetis chip)
-   if ((bdmInterface->readMemory(1,1, MC_SRSH, &mc_srsh) == BDM_RC_OK) &&
-       (bdmInterface->readMemory(1,1, MC_SRSL, &mc_srsl) == BDM_RC_OK)) {
-      log.print("%s::report() - MC_SRSH=0x%02X, MC_SRSL=0x%02X \n", msg, mc_srsh, mc_srsl);
-   }
-   else {
-      log.print("%s::report() - Unable to read MC_SRSH,MC_SRSL\n", msg);
-   }
-}
-#endif
 
 USBDM_ErrorCode FlashProgrammer_HCS12::initLargeTargetBuffer(uint8_t *buffer) {
    LOGGING;
@@ -1976,60 +1843,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::checkTargetUnSecured() {
    return PROGRAMMING_RC_OK;
 }
 
-const int MaxSecurityAreaSize = 100;
-struct SecurityDataCache {
-   uint32_t address;                   //!< start address of security area
-   uint32_t size;                      //!< size of area
-   bool     originallyBlank;
-   uint8_t  data[MaxSecurityAreaSize]; //!< security area data
-};
-unsigned securityAreaCount = 0;
-SecurityDataCache securityData[2];
-
-//===========================================================================================================
-//! Clears the record of modified security areas
-//!
-void FlashProgrammer_HCS12::deleteSecurityAreas(void) {
-   securityAreaCount = 0;
-}
-
-//===========================================================================================================
-//! Record the original contents of a security area for later restoration
-//!
-//! @param address    Start address of security area
-//! @param size       Size of area
-//! @param data       Security area data
-//!
-//! @return error code see \ref USBDM_ErrorCode.
-//!
-USBDM_ErrorCode FlashProgrammer_HCS12::recordSecurityArea(const uint32_t address, const int size, const uint8_t *data) {
-   if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   if (size > MaxSecurityAreaSize) {
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-  securityData[securityAreaCount].address = address;
-  securityData[securityAreaCount].size    = size;
-  memcpy(securityData[securityAreaCount].data, data, size);
-  securityAreaCount++;
-  return PROGRAMMING_RC_OK;
-}
-
-//===========================================================================================================
-//! Restores the contents of the security areas to their original values
-//!
-//! @param flashImage    Flash contents to be programmed.
-//!
-void FlashProgrammer_HCS12::restoreSecurityAreas(FlashImagePtr flashImage) {
-   LOGGING_Q;
-   for (unsigned index=0; index<securityAreaCount; index++) {
-      log.print("Restoring security area in image [0x%06X...0x%06X]\n",
-            securityData[index].address, securityData[index].address+securityData[index].size-1);
-      flashImage->loadDataBytes(securityData[index].size, securityData[index].address, securityData[index].data);
-   }
-}
-
 //===========================================================================================================
 //! Modifies the Security locations in the flash image according to required security options of flashRegion
 //!
@@ -2088,25 +1901,32 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
       }
       return BDM_RC_OK;
    }
-   uint8_t data[size];
-   memcpy(data, securityInfo->getData(), size);
+   /*
+    * Create expected security area contents
+    *
+    * This will based on the security info for the present security option.
+    * For SEC_INTELLIGENT information will be overwritten by the flash image information (if present).
+    */
+   uint8_t securityData[size];
+   memcpy(securityData, securityInfo->getData(), size);
    if (dontOverwrite) {
-      // Copy any existing data from memory array
+      // Copy any existing data from flash image
       for(int index=0; index<size; index++) {
          if (flashImage->isValid(securityAddress+index)) {
-            data[index] = flashImage->getValue(securityAddress+index);
+            securityData[index] = flashImage->getValue(securityAddress+index);
          }
       }
    }
+
    uint8_t memory[size];
    bdmInterface->readMemory(MS_Byte, size, securityAddress, memory);
-   // Save contents of current security area in Flash
-   recordSecurityArea(securityAddress, size, memory);
-   if (memcmp(data, memory, size) == 0) {
+   // Save contents of current security area in Flash image
+   recordSecurityArea(flashImage, securityAddress, size);
+   if (memcmp(securityData, memory, size) == 0) {
       if ((device->getEraseOption() == DeviceData::eraseMass) ||
           (device->getEraseOption() == DeviceData::eraseNone)) {
          // Clear security area in image to prevent re-programming
-         log.print("Clearing security area as already valid and not being erased\n");
+         log.print("Removing security area from image as already valid and not being erased\n");
          for(int index=0; index<size; index++) {
             flashImage->remove(securityAddress+index);
          }
@@ -2114,18 +1934,18 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
       else {
          // eraseAll & eraseSelective will erase areas anyway so we have to re-program
          log.print("Security area is already valid but will be erased anyway (eraseAll or eraseSelective)\n");
-         flashImage->loadDataBytes(size, securityAddress, data, dontOverwrite);
+         flashImage->loadDataBytes(size, securityAddress, securityData, dontOverwrite);
       }
    }
    else {
       log.print("Security area may need erasing\n");
       // Force erase of security area when mass erased (if necessary)
       securityNeedsSelectiveErase = true;
-      flashImage->loadDataBytes(size, securityAddress, data, dontOverwrite);
+      flashImage->loadDataBytes(size, securityAddress, securityData, dontOverwrite);
 #ifdef LOG
       log.print("Setting security region, \n"
             "              mem[0x%06lX-0x%06lX] = \n", (unsigned long)securityAddress, (unsigned long)(securityAddress+size/sizeof(uint8_t)-1));
-      log.printDump(data, size, securityAddress);
+      flashImage->dumpRange(securityAddress, securityAddress+size-1);
 #endif
    }
    return PROGRAMMING_RC_OK;
@@ -2143,7 +1963,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
    // Process each flash region
    USBDM_ErrorCode rc = BDM_RC_OK;
    securityNeedsSelectiveErase = false; // Assume security areas are valid
-   deleteSecurityAreas();
+   rc = checkNoSecurityAreas();
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
    for (int index=0; ; index++) {
       MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
@@ -2151,6 +1974,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
       }
       rc = setFlashSecurity(flashImage, memoryRegionPtr);
       if (rc != BDM_RC_OK) {
+         log.print("Failed to set security for %s\n", memoryRegionPtr->getMemoryTypeName());
          break;
       }
    }
@@ -2570,6 +2394,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
    int checkResult = TRUE;
    int blockResult;
 
+   flashImage->printMemoryMap();
+
    FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
@@ -2618,6 +2444,9 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
       memoryAddress = imageAddress-offset;
       log.print("Verifying Block %s[0x%8.8X..0x%8.8X]\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+regionSize-1);
 
+      __attribute__((unused))
+      bool  reportedError = false;
+
       while (regionSize>0) {
          // Get memory block containing address
          MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(memoryAddress, memorySpace);
@@ -2664,17 +2493,20 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
                blockResult = FALSE;
 #ifndef LOG
                break;
+#else
+               if (!reportedError) {
+                  log.print("First failed location[0x%8.8X]=>failed, image=%2.2X != target=%2.2X\n",
+                     imageAddress+testIndex,
+                     (uint8_t)(flashImage->getValue(imageAddress+testIndex)),
+                     buffer[testIndex]);
+                  // Dump region around error
+                  flashImage->dumpRange((imageAddress+testIndex-31)&~0xFUL, (imageAddress+testIndex+31)|0xF);
+                  reportedError = true;
+               }
 #endif
-//               log.print("Verifying location[0x%8.8X]=>failed, image=%2.2X != target=%2.2X\n",
-//                     imageAddress+testIndex,
-//                     (uint8_t)(flashImage->getValue(imageAddress+testIndex]),
-//                     buffer[testIndex]);
             }
          }
-         log.print("Verifying Sub-block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+blockSize-1, blockResult?"OK":"FAIL");
-         if (!blockResult) {
-            log.printDump((const uint8_t *)buffer, blockSize*sizeof(uint8_t), memoryAddress);
-         }
+         log.print("Verified Sub-block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+blockSize-1, blockResult?"OK":"FAIL");
          checkResult    = checkResult && blockResult;
          regionSize    -= blockSize;
          imageAddress  += blockSize;
@@ -2935,6 +2767,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");
    log.print("===========================================================\n");
+
+   flashImage->printMemoryMap();
 #endif
 
    this->doRamWrites = doRamWrites;
