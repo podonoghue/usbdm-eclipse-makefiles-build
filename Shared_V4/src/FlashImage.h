@@ -195,7 +195,7 @@ public:
     *
     *  @param address - 32-bit memory address
     *
-    *  @return - uint8_t value (dummy value of 0xFF.. is unallocated address)
+    *  @return - uint8_t value (a dummy value of 0xFF is quietly returned for unallocated locations)
     */
    virtual uint8_t  getValue(uint32_t address) = 0;
 

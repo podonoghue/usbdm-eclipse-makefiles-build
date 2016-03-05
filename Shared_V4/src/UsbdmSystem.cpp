@@ -425,7 +425,7 @@ void UsbdmSystem::Log::printDump(const uint8_t *data,
       unsigned int size,
       unsigned int startAddress,
       unsigned int organization) {
-   const char  *prefix       ="";
+   const char  *prefix       = "";
    unsigned int addressShift = 0;
    unsigned int elementSize  = 1;
    unsigned int address      = startAddress;
