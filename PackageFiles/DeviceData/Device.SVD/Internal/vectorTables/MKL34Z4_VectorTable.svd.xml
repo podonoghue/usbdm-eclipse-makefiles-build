@@ -4,6 +4,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MKL34Z4_VectorTable</name>
+         <description>MKL34Z4 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>DMA Controller</description>

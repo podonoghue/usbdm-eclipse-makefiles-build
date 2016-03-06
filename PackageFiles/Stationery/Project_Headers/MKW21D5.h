@@ -1,11 +1,11 @@
 /****************************************************************************************************//**
- * @file     $(targetDevice).h
+ * @file     MKW21D5.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKW21D5.
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/02
+ * @date     2016/03
  *
  *******************************************************************************************************/
 
@@ -39,7 +39,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------                                            ---------------------- */
+/* ----------------------   MKW21D5 VectorTable                      ---------------------- */
   DMA0_IRQn                     =   0,   /**<  16 Direct memory access controller                                                  */
   DMA1_IRQn                     =   1,   /**<  17 Direct memory access controller                                                  */
   DMA2_IRQn                     =   2,   /**<  18 Direct memory access controller                                                  */

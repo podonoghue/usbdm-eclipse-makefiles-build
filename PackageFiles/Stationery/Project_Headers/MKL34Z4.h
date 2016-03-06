@@ -1,11 +1,11 @@
 /****************************************************************************************************//**
- * @file     $(targetDevice).h
+ * @file     MKL34Z4.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKL34Z4.
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/02
+ * @date     2016/03
  *
  *******************************************************************************************************/
 
@@ -35,7 +35,7 @@ typedef enum {
   SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------                                            ---------------------- */
+/* ----------------------   MKL34Z4 VectorTable                      ---------------------- */
   DMA0_IRQn                     =   0,   /**<  16 DMA Controller                                                                   */
   DMA1_IRQn                     =   1,   /**<  17 DMA Controller                                                                   */
   DMA2_IRQn                     =   2,   /**<  18 DMA Controller                                                                   */

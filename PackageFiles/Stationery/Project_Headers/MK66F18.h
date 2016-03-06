@@ -1,11 +1,11 @@
 /****************************************************************************************************//**
- * @file     $(targetDevice).h
+ * @file     MK66F18.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MK66F18.
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/02
+ * @date     2016/03
  *
  *******************************************************************************************************/
 
@@ -39,7 +39,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------                                            ---------------------- */
+/* ----------------------   MK65F18 VectorTable                      ---------------------- */
   DMA0_DMA16_IRQn               =   0,   /**<  16 Direct memory access controller                                                  */
   DMA1_DMA17_IRQn               =   1,   /**<  17 Direct memory access controller                                                  */
   DMA2_DMA18_IRQn               =   2,   /**<  18 Direct memory access controller                                                  */

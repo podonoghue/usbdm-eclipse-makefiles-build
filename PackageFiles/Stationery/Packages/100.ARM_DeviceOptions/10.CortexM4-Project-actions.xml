@@ -2,9 +2,13 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
+<!-- 
+Cortex-M4
+   MK
+ -->    
 
-   <!-- Base MK files -->
-   <projectActionList id="Kinetis-MK-files" >
+   <!-- Base CortexM4 files -->
+   <projectActionList id="Kinetis-Cortex-m4-exe-files" >
       <applyWhen>
          <and>
             <or>
@@ -14,10 +18,12 @@
             <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
-      <createFolder target="Sources"                              />
-      <createFolder target="Startup_Code"                         />
-      <createFolder target="Project_Headers"                      type="include" />
-      <createFolder target="Project_Settings/Linker_Files"        />
+      
+      <!--  Common Cortex-M4 files -->
+      <createFolder target="Sources"                                        />
+      <createFolder target="Startup_Code"                                   />
+      <createFolder target="Project_Headers"                 type="include" />
+      <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/system-mk.c"                                 target="Startup_Code/system.c" />
       <copy source="Startup_Code/vectors-mk.c"                                target="Startup_Code/vectors.c" />
@@ -31,7 +37,7 @@
       <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"         target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
       <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h" />
       <copy source="Project_Headers/core_cm4_simd.h"                          target="Project_Headers/core_cm4_simd.h" />
@@ -39,8 +45,8 @@
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
 
-      <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"            replace="true" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+      <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" replace="true" />
 
       <projectActionList>
          <applyWhen>
@@ -54,8 +60,8 @@
          <applyWhen>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
-         <copy source="Project_Headers/bitband-cpp-mk.h"                target="Project_Headers/bitband.h" />
-         <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
+         <copy source="Project_Headers/bitband-cpp-mk.h"              target="Project_Headers/bitband.h" />
+         <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
       </projectActionList>
 
    </projectActionList>

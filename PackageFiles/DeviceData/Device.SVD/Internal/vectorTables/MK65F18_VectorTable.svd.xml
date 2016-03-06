@@ -5,6 +5,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MK65F18_VectorTable</name>
+         <description>MK65F18 VectorTable</description>
          <interrupt>
             <name>DMA0_DMA16</name>
             <description>Direct memory access controller</description>

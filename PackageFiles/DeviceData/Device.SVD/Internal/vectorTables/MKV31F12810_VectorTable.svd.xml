@@ -4,6 +4,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MKV31F12810_VectorTable</name>
+         <description>MKV31F12810 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>

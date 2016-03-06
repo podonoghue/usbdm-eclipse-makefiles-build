@@ -46,7 +46,7 @@
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioC&lt;3&gt;" />   <!-- IRQ* connection from NRF24101 module -->
 
          <copy source="Project_Headers/pin_mapping-MK22FN1M0AVLH12.h"        target="Project_Headers/pin_mapping.h" replace="true" />
-         <copy source="Sources/gpio-MK22FN1M0AVLH12.cpp"                     target="Sources/gpio.cpp" />
+         <copy source="Sources/gpio-MK22FN1M0AVLH12.cpp"                     target="Sources/gpio.cpp"              replace="true" />
 
          <!-- Example programs -->
          <!-- copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" / -->

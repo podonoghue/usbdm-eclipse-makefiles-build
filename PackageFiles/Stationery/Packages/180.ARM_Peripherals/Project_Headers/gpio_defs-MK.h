@@ -916,10 +916,9 @@ public:
  * Template class representing a FTM configured as a Quadrature encoder
  *
  * @tparam info      Information class for FTM
- * @tparam scValue   Value for FTM->SC register
  *
  * @code
- *  QuadEncoder<Ftm0Info, FTM0_SC> Encoder0;
+ *  QuadEncoder<Ftm0Info> encoder0;
  *
  *  for(;;) {
  *     printf("Position = %d\n", encoder.getPosition());

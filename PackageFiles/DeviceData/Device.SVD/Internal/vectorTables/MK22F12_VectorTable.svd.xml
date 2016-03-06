@@ -4,7 +4,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MK22F12_VectorTable</name>
-         <description>MK64D10 VectorTable</description>
+         <description>MK22F12 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>

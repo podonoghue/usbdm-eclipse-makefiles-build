@@ -1,11 +1,11 @@
 /****************************************************************************************************//**
- * @file     $(targetDevice).h
+ * @file     MKV31F25612.h
  *
  * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKV31F25612.
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/02
+ * @date     2016/03
  *
  *******************************************************************************************************/
 
@@ -39,7 +39,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------                                            ---------------------- */
+/* ----------------------   MKV31F25612 VectorTable                  ---------------------- */
   DMA0_IRQn                     =   0,   /**<  16 Direct memory access controller                                                  */
   DMA1_IRQn                     =   1,   /**<  17 Direct memory access controller                                                  */
   DMA2_IRQn                     =   2,   /**<  18 Direct memory access controller                                                  */

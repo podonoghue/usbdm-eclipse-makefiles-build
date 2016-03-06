@@ -45,8 +45,8 @@
          <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
          <copy source="Project_Headers/utilities-stm32.h"                        target="Project_Headers/utilities.h" />
       
-         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
-         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"                     replace="true" />
+         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" replace="true" />
 
          <projectActionList>
             <applyWhen>
@@ -89,7 +89,7 @@
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"      target="Project_Settings/Linker_Files/ARMLtd_GCC-rom.ld" />
          <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
          <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-         <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+         <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
          <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
          <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
          <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
@@ -108,8 +108,8 @@
             <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
          </projectActionList>
 
-         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"            replace="true" />
-         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"                     replace="true" />
+         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" replace="true" />
       </projectActionList>
    </projectActionList>
 

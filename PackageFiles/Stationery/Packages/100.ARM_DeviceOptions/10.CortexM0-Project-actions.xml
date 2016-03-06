@@ -17,23 +17,27 @@ Cortex-M0
                <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
             </or>
-            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+            <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
       
       <!--  Common Cortex-M0/+ files -->
-      <createFolder target="Sources"                         />
-      <createFolder target="Startup_Code"                    />
+      <createFolder target="Sources"                                        />
+      <createFolder target="Startup_Code"                                   />
       <createFolder target="Project_Headers"                 type="include" />
-      <createFolder target="Project_Settings/Linker_Files"   />
+      <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM0.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
+
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
+
       <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"       target="Project_Settings/Linker_Files/Linker-rom.ld" />
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
+
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
       <copy source="Project_Headers/core_cm0plus.h"                           target="Project_Headers/core_cm0plus.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
@@ -41,7 +45,7 @@ Cortex-M0
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
 
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" replace="true" />
 
       <projectActionList>
          <applyWhen>

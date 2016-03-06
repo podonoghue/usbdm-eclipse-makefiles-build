@@ -5,6 +5,7 @@ Devices using this vector table:
 -->
       <interrupts>
          <name>MKW22D5_VectorTable</name>
+         <description>MKW22D5 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>

@@ -338,7 +338,7 @@ void processPcrs(uint32_t pcrValue) {
  * @endcode
  *
  * @tparam Pcr             PCR associated with this GPIO
- * @tparam gpioAddress     GPIO hardware
+ * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number in the PORT associated with this GPIO
  * @tparam defPcrValue     Default value for PCR including mux value
  */
