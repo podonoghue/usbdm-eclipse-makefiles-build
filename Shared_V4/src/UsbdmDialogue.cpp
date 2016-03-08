@@ -25,6 +25,7 @@
     \verbatim
    Change History
    -=========================================================================================
+   |  4 Mar 2016 | Added .srec as acceptable file type for binary files    - pgo V4.12.1.90
    |  4 Mar 2016 | Fixed custom security values                            - pgo V4.12.1.80
    |  7 Aug 2015 | Changed handling of corrupt database                    - pgo V4.12.1.10
    |  1 Jun 2015 | Changed how device choice is handled (bdmDeviceNum)     - pgo V4.11.1.10
@@ -2450,8 +2451,8 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
    LOGGING;
 
    wxString caption  = _("Select Binary File to Load");
-   wxString wildcard = _("Binary Files(*.s19,*.sx,*.s,*.afx,*.axf,*.elf)|*.s19;*.sx;*.s;*.afx;*.axf;*.elf|"
-                         "SREC Hex files (*.s19,*.sx,*.s)|*.s19;*.sx;*.s|"
+   wxString wildcard = _("Binary Files(*.s19,*.sx,*.s,*.srec,*.afx,*.axf,*.elf)|*.s19;*.sx;*.s;*.srec;*.afx;*.axf;*.elf|"
+                         "SREC Hex files (*.s19,*.sx,*.s,*.srec)|*.s19;*.sx;*.s;*.srec|"
                          "Elf files (*.afx,*.axf,*.elf)|*.afx;*.axf;*.elf|"
                          "All Files|*");
    wxString defaultFilename = wxEmptyString;
