@@ -9546,8 +9546,8 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC3_FLEXCAN1_SHIFT                 4                                                   /*!< SIM_SCGC3: FLEXCAN1 Position            */
 #define SIM_SCGC3_NFC_MASK                       (0x01UL << SIM_SCGC3_NFC_SHIFT)                     /*!< SIM_SCGC3: NFC Mask                     */
 #define SIM_SCGC3_NFC_SHIFT                      8                                                   /*!< SIM_SCGC3: NFC Position                 */
-#define SIM_SCGC3_DSPI2_MASK                     (0x01UL << SIM_SCGC3_DSPI2_SHIFT)                   /*!< SIM_SCGC3: DSPI2 Mask                   */
-#define SIM_SCGC3_DSPI2_SHIFT                    12                                                  /*!< SIM_SCGC3: DSPI2 Position               */
+#define SIM_SCGC3_SPI2_MASK                      (0x01UL << SIM_SCGC3_SPI2_SHIFT)                    /*!< SIM_SCGC3: SPI2 Mask                    */
+#define SIM_SCGC3_SPI2_SHIFT                     12                                                  /*!< SIM_SCGC3: SPI2 Position                */
 #define SIM_SCGC3_DDR_MASK                       (0x01UL << SIM_SCGC3_DDR_SHIFT)                     /*!< SIM_SCGC3: DDR Mask                     */
 #define SIM_SCGC3_DDR_SHIFT                      14                                                  /*!< SIM_SCGC3: DDR Position                 */
 #define SIM_SCGC3_SAI1_MASK                      (0x01UL << SIM_SCGC3_SAI1_SHIFT)                    /*!< SIM_SCGC3: SAI1 Mask                    */
@@ -9619,10 +9619,10 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC6_DMAMUX1_SHIFT                  2                                                   /*!< SIM_SCGC6: DMAMUX1 Position             */
 #define SIM_SCGC6_FLEXCAN0_MASK                  (0x01UL << SIM_SCGC6_FLEXCAN0_SHIFT)                /*!< SIM_SCGC6: FLEXCAN0 Mask                */
 #define SIM_SCGC6_FLEXCAN0_SHIFT                 4                                                   /*!< SIM_SCGC6: FLEXCAN0 Position            */
-#define SIM_SCGC6_DSPI0_MASK                     (0x01UL << SIM_SCGC6_DSPI0_SHIFT)                   /*!< SIM_SCGC6: DSPI0 Mask                   */
-#define SIM_SCGC6_DSPI0_SHIFT                    12                                                  /*!< SIM_SCGC6: DSPI0 Position               */
-#define SIM_SCGC6_DSPI1_MASK                     (0x01UL << SIM_SCGC6_DSPI1_SHIFT)                   /*!< SIM_SCGC6: DSPI1 Mask                   */
-#define SIM_SCGC6_DSPI1_SHIFT                    13                                                  /*!< SIM_SCGC6: DSPI1 Position               */
+#define SIM_SCGC6_SPI0_MASK                      (0x01UL << SIM_SCGC6_SPI0_SHIFT)                    /*!< SIM_SCGC6: SPI0 Mask                    */
+#define SIM_SCGC6_SPI0_SHIFT                     12                                                  /*!< SIM_SCGC6: SPI0 Position                */
+#define SIM_SCGC6_SPI1_MASK                      (0x01UL << SIM_SCGC6_SPI1_SHIFT)                    /*!< SIM_SCGC6: SPI1 Mask                    */
+#define SIM_SCGC6_SPI1_SHIFT                     13                                                  /*!< SIM_SCGC6: SPI1 Position                */
 #define SIM_SCGC6_SAI0_MASK                      (0x01UL << SIM_SCGC6_SAI0_SHIFT)                    /*!< SIM_SCGC6: SAI0 Mask                    */
 #define SIM_SCGC6_SAI0_SHIFT                     15                                                  /*!< SIM_SCGC6: SAI0 Position                */
 #define SIM_SCGC6_CRC_MASK                       (0x01UL << SIM_SCGC6_CRC_SHIFT)                     /*!< SIM_SCGC6: CRC Mask                     */

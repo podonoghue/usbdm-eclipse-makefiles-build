@@ -62,7 +62,7 @@
 
 class CPP_DLL_EXPORT MINIMAL_APP : public  wxApp {
 
-   DECLARE_CLASS( MINIMAL_APP )
+//   DECLARE_CLASS( MINIMAL_APP )
 
 public:
    MINIMAL_APP() : wxApp() {
@@ -86,8 +86,8 @@ public:
 //#endif
 };
 
-IMPLEMENT_APP_NO_MAIN( MINIMAL_APP )
-IMPLEMENT_CLASS( MINIMAL_APP, wxApp )
+//IMPLEMENT_APP_NO_MAIN( MINIMAL_APP )
+//IMPLEMENT_CLASS( MINIMAL_APP, wxApp )
 
 static bool wxInitializationDone = false;
 
