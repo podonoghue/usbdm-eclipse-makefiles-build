@@ -11,17 +11,17 @@
          <and>
             <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;\d*.*</deviceSubfamilyMatches>
             <variableRef idRef="hasCCNature" condition="isTrue" />
-            <not><variableRef idRef="projectOptionValue.CPP-abstraction" condition="isDefined" /></not>
+            <not><variableRef idRef="cpp.peripheral.subfamily" condition="isDefined" /></not>
          </and>
       </applyWhen>
 
-      <variable id="projectOptionValue.CPP-abstractionX" 
+      <variable id="projectOptionValue.CPP-abstraction" 
          name="Base CPP Hardware abstraction (&DEVICE_SUB_FAMILY; family)" 
          description="Adds a CPP abstraction layer for hardware\n(GPIO) - &DEVICE_SUB_FAMILY;"
          checkGroup="group-additional-options" />
       <projectActionList>
          <applyWhen >
-            <variableRef idRef="projectOptionValue.CPP-abstractionX" />
+            <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
 
 <!--
@@ -29,12 +29,6 @@
             <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
          </projectOption>
 -->
-         <!-- Definitions used by example program -->
-         <constant id="demo.cpp.red.led"            value="LED_RED" />
-         <constant id="demo.cpp.green.led"          value="LED_GREEN" />
-         <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
-         <constant id="demo.cpp.external.switch"    value="PTA0" />
-         <constant id="demo.cpp.external.led"       value="PTA1" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />

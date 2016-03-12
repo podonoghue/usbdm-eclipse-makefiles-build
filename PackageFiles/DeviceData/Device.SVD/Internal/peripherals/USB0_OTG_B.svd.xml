@@ -754,8 +754,7 @@ Address bits 15 through 9 of the BDT base address</description>
                   <field>
                      <name>FRM</name>
                      <description>Frame Number[7:0]\n
-This 8-bit field and the 3-bit field in the Frame Number Register High are 
-used to compute the address where the current Buffer Descriptor Table (BDT) resides in system memory</description>
+Bits [7:0] of the current Frame number from SOF token</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -770,8 +769,7 @@ used to compute the address where the current Buffer Descriptor Table (BDT) resi
                   <field>
                      <name>FRM</name>
                      <description>Frame Number[10:9]\n
-This 3-bit field and the 8-bit field in the Frame Number Register Low are 
-used to compute the address where the current Buffer Descriptor Table (BDT) resides in system memory</description>
+Bits [10:9] of the current Frame number from SOF token</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
                   </field>
@@ -878,7 +876,7 @@ Address bits 15 through 8 of the BDT base address</description>
                      <field>
                         <name>EPHSHK</name>
                         <description>Handshake enable\n
-When set this bet enables an endpoint to perform handshaking during a transaction to this endpoint.\n
+This bit enables an endpoint to perform handshaking during a transaction.\n
 This bit is generally 1 unless the endpoint is Isochronous</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>1</bitWidth>

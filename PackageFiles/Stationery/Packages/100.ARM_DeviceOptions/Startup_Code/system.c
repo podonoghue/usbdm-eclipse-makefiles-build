@@ -10,11 +10,6 @@
 #include <stdint.h>
 #include "derivative.h"
 
-#define $(targetDeviceSubFamily)
-
-$(cDeviceParameters)
-
-
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {

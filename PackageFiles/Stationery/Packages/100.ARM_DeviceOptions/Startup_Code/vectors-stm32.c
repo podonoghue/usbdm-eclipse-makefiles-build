@@ -10,8 +10,6 @@
 #include <string.h>
 #include "derivative.h"
 
-#define DEVICE_SUBFAMILY_CortexM3
-
 /*
  * Vector table related
  */

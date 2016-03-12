@@ -57,7 +57,6 @@ constexpr uint16_t TPM0_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //
 //   <o>    TPM1_SC.CMOD Clock source
 //   <i>    Selects the clock source for the TPM1 module. [TPM1_SC.CMOD]
-//   <info> xxx
 //     <0=> Disabled
 //     <1=> Internal clock
 //     <2=> External clock
@@ -90,7 +89,6 @@ constexpr uint16_t TPM1_SC              = (TPM_SC_CMOD(0x1)|TPM_SC_PS(0x0));
 //
 //   <o>    TPM2_SC.CMOD Clock source
 //   <i>    Selects the clock source for the TPM2 module. [TPM2_SC.CMOD]
-//   <info> xxx
 //     <0=> Disabled
 //     <1=> Internal clock
 //     <2=> External clock

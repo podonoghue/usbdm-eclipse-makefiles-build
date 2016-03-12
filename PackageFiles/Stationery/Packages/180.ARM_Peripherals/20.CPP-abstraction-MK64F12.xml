@@ -14,6 +14,9 @@
          </and>
       </applyWhen>
 
+      <!-- Affects later CPP peripheral options -->
+      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
+      
       <!-- These constants enable internal peripheral features -->
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />

@@ -10,8 +10,6 @@
 #include <string.h>
 #include "derivative.h"
 
-#define $(targetDeviceSubFamily)
-
 /*
  * Security information
  */
