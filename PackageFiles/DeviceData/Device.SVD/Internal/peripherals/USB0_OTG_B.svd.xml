@@ -848,7 +848,7 @@ Address bits 23 through 16 of the BDT base address</description>
             <register>
                <name>BDTPAGE3</name>
                <description>BDT Page Register 3\n
-Address bits 15 through 8 of the BDT base address</description>
+Address bits 31 through 24 of the BDT base address</description>
                <addressOffset>0xB4</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>

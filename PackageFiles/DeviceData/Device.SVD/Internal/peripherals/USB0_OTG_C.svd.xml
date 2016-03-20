@@ -9,6 +9,7 @@ Devices using this peripheral:
       MK21F12
       MK22D5
       MK22F12
+      MK22FA12
       MK40D7
       MK40D10
       MK50D7
@@ -882,7 +883,7 @@ Address bits 23 through 16 of the BDT base address</description>
             <register>
                <name>BDTPAGE3</name>
                <description>BDT Page Register 3\n
-Address bits 15 through 8 of the BDT base address</description>
+Address bits 31 through 24 of the BDT base address</description>
                <addressOffset>0xB4</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
