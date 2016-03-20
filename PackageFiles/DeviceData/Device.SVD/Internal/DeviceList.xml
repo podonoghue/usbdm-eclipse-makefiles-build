@@ -68,8 +68,11 @@
       <device name="MK22FN128M10">     <svdFileName>MK22F12810</svdFileName> </device>
       <device name="MK22FN256M12">     <svdFileName>MK22F25612</svdFileName> </device>
       <device name="MK22FN512M12">     <svdFileName>MK22F51212</svdFileName> </device>
+      <device name="MK22FX512M12">     <svdFileName>MK22F12</svdFileName>    </device>
       <device name="MK22FN1M0M12">     <svdFileName>MK22F12</svdFileName>    </device>
       <device name="MK22FX512M12">     <svdFileName>MK22F12</svdFileName>    </device>
+      <device name="MK22FN1M0AM12">    <svdFileName>MK22FA12</svdFileName>    </device>
+      <device name="MK22FX512AM12">    <svdFileName>MK22FA12</svdFileName>    </device>
 
       <device name="MK24FN256M12">     <svdFileName>MK24F25612</svdFileName> </device>
       <device name="MK24FN1M0M12">     <svdFileName>MK24F12</svdFileName>    </device>
@@ -269,6 +272,7 @@
       
       <device name="FRDM_K20D50M">     <svdFileName>MK20D5</svdFileName>      </device>
       <device name="FRDM_K22F">        <svdFileName>MK22F51212</svdFileName>  </device>
+      <device name="FRDM_K22F1M0">     <svdFileName>MK22FA12</svdFileName>    </device>
       <device name="FRDM_K64F">        <svdFileName>MK64F12</svdFileName>     </device>
       
       <device name="FRDM_KE02Z">       <svdFileName>MKE02Z2</svdFileName>     </device>

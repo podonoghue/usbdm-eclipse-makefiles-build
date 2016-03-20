@@ -2,6 +2,8 @@
 Devices using this peripheral: 
       MK21F12
       MK22F12
+      MK22F51212
+      MK22FA12
       MK24F25612
 -->
       <peripheral>

@@ -2,9 +2,10 @@
 Devices using this peripheral: 
       MK21F12
       MK22F12
+      MK22FA12
 -->
       <peripheral>
-         <?sourceFile "SMC_MK22F12" ?>
+         <?sourceFile "SMC_MK22FA12" ?>
          <name>SMC</name>
          <description>System Mode Controller</description>
          <groupName>SMC</groupName>

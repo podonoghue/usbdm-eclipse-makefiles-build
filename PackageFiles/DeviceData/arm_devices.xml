@@ -29,6 +29,7 @@ FTMRH - MKE02
 FTMRE - MKE04, MKE06
  -->
 <!-- 
+      V4.12.1.90   - Added MK22FNxxxAM12
       V4.12.1.80   - Updated KV devices, added FRDM-KV10 and FRDM-KV31F
       V4.12.1.70   - Renamed SKEAxxx to S9KEAxxx
       V4.12.1.50   - Reviewed & corrected flash sector sizes on M5 and M7 devices
@@ -1999,7 +2000,30 @@ NOTES:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
       </device>
+      <device name="MK22FN1M0AM12" family="CortexM4F" subfamily="MK22FA12">
+         <memoryRef ref="kinetis64K_64K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x00000310" mask="0xFFF00FF0"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
+      </device>
       <device name="MK22FX512M12" family="CortexM4F" subfamily="MK22F12">
+         <memoryRef ref="kinetis64K_64K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_256K_4KS" />
+         <memoryRef ref="FTFE_DFlash0_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x00000310" mask="0xFFF00FF0"/>
+         <tclScriptRef ref="Kinetis-Kxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
+      </device>
+      <device name="MK22FX512AM12" family="CortexM4F" subfamily="MK22FA12">
          <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
@@ -2697,7 +2721,7 @@ NOTES:
    Aliases used for hardware
  -->
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
-      <device name="FRDM_K22F1M0"    alias="MK22FN1M0M12"   hardware="frdmk22f1m0" />
+      <device name="FRDM_K22F1M0"    alias="MK22FN1M0AM12"  hardware="frdmk22f1m0" />
       <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
       <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
       

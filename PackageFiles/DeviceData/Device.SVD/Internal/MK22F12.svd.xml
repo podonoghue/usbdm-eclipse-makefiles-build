@@ -46,8 +46,8 @@
 <!ENTITY RTC          SYSTEM "peripherals/RTC_TAMPER_WPS.svd.xml">
 <!ENTITY SCB          SYSTEM "peripherals/SCB_CM4_CPACR.svd.xml">
 <!ENTITY SDHC         SYSTEM "peripherals/SDHC_MK21F12.svd.xml">
-<!ENTITY SIM          SYSTEM "peripherals/SIM_MK22F12.svd.xml">
-<!ENTITY SMC          SYSTEM "peripherals/SMC_MK22F12.svd.xml">
+<!ENTITY SIM          SYSTEM "peripherals/SIM_MK22FA12.svd.xml">
+<!ENTITY SMC          SYSTEM "peripherals/SMC_MK22FA12.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK21F12.svd.xml">
 <!ENTITY SPI1         SYSTEM "peripherals/SPI1_MK_FIFO_DEPTH1.svd.xml">
 <!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
@@ -62,7 +62,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MK22F12</name>
    <version>1.6</version>
-   <description>Freescale Kinetis MK22F12 (K22P121M120SF5RM, K22P100M120SF5RM, K22P80M120SF5RM, K22P64M120SF5RM)</description>
+   <description>Freescale Kinetis MK22FA12 (K22P121M120SF5RM, K22P100M120SF5RM, K22P80M120SF5RM, K22P64M120SF5RM)</description>
    <cpu>
       <name>CM4</name>
       <revision>r1p0</revision>

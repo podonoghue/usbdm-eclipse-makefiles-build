@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MK21F12
       MK22F12
+      MK22FA12
 -->
       <peripheral>
          <?sourceFile "DMA0_16CH_EARS4" ?>

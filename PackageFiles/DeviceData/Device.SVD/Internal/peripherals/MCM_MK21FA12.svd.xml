@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MK21FA12
+      MK22FA12
       MK24F12
       MK63F12
       MK64F12
@@ -144,7 +145,11 @@ PLAMC is a 16-bit read-only register identifying the presence/absence of bus mas
             </register>
             <register>
                <name>ISCR</name>
-               <description>Interrupt Status Register</description>
+               <description>Interrupt Status and Control Register\n
+The MCM_ISCR register includes the enable and status bits associated with the core&apos;s
+floating-point exceptions. The individual event indicators are first qualified with their
+exception enables and then logically summed to form an interrupt request sent to the
+core&apos;s NVIC</description>
                <addressOffset>0x10</addressOffset>
                <fields>
                   <field>

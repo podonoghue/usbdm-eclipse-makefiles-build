@@ -1,9 +1,10 @@
 <!--
 Devices using this peripheral: 
       MK22F12
+      MK22FA12
 -->
       <peripheral>
-         <?sourceFile "SIM_MK22F12" ?>
+         <?sourceFile "SIM_MK22FA12" ?>
          <name>SIM</name>
          <description>System Integration Module</description>
          <groupName>SIM</groupName>
