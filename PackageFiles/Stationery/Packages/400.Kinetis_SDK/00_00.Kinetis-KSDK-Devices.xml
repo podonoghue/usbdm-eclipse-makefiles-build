@@ -52,9 +52,10 @@ This file lists all the devices KSDK supports
       <projectActionList><applyWhen><deviceNameIs>FRDM_KL46Z</deviceNameIs>    </applyWhen><constant id="kds.cpuname" value="CPU_MKL46Z256VLL4" />  </projectActionList>
 
       <projectActionList><applyWhen><deviceNameIs>MK22FN512M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN512VLH12" /> </projectActionList>
-      <projectActionList><applyWhen><deviceNameIs>MK22FN1M0M12</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK24FN1M0VDC12" /> </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>FRDM_K22F</deviceNameIs>     </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN512VLH12" /> </projectActionList>
       <projectActionList><applyWhen><deviceNameIs>TWR_K22F120M</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN512VLH12" /> </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>MK22FN1M0AM12</deviceNameIs> </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN1M0AVLH12" /> </projectActionList>
+      <projectActionList><applyWhen><deviceNameIs>FRDM_K22F1M0</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK22FN1M0AVLH12" /> </projectActionList>
 
       <projectActionList><applyWhen><deviceNameIs>TWR_K24F120M</deviceNameIs>  </applyWhen><constant id="kds.cpuname" value="CPU_MK24FN256VLH12" /> </projectActionList>
 

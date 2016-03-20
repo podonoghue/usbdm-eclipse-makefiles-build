@@ -9,6 +9,7 @@
 #define HEADER_GPIO_DEFS_H
 
 #include <stddef.h>
+#include <assert.h>
 #include "derivative.h"
 #include "bitband.h"
 
@@ -106,7 +107,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -128,7 +129,7 @@ struct PcrInfo {
  */
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -764,7 +765,7 @@ public:
     * @param period  Period in us
     * @param mode    Mode of operation see @ref Tmr_Mode
     *
-    * @note Assumes prescale has been chosen as a appropriate value
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
 
@@ -788,29 +789,41 @@ public:
    /**
     * Set period
     *
-    * @param period Period in us
+    * @param per Period in us
     *
-    * @note Assumes prescale has been chosen as a appropriate value
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setPeriod(int period) {
+   static void setPeriod(int per) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK) != 0;
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
-      period = (period*tickRate)/1000000;
+      uint64_t period = ((uint64_t)per*tickRate)/1000000;
 
       // Disable FTM so register changes are immediate
       tmr->SC      = FTM_SC_CLKS(0);
 
       if (centreAlign) {
-         tmr->MOD = period/2;
+#ifdef DEBUG_BUILD
+      if (period > 2*0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+         tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
          tmr->SC  = scValue|FTM_SC_CPWMS_MASK;
       }
       else {
-         tmr->MOD = period-1;
+#ifdef DEBUG_BUILD
+      if (period > 0x10000UL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+         tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
          tmr->SC  = scValue;
       }
@@ -821,14 +834,20 @@ public:
     * @param time Time in microseconds
     * @return Time in ticks
     *
-    * @note Assumes prescale has been chosen as a appropriate value. No range checking.
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
-//      assert((rv&~0xFFFFUL) == 0);
+#ifdef DEBUG_BUILD
+      assert(rv > 0xFFFFUL);
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
       return rv;
    }
    /**
@@ -837,14 +856,19 @@ public:
     * @param time Time in ticks
     * @return Time in microseconds
     *
-    * @note Assumes prescale has been chosen as a appropriate value. No range checking.
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static uint32_t convertTicksToMicroseconds(int time) {
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*1000000)/tickRate;
-//      assert((rv&~0xFFFFUL) == 0);
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
       return rv;
    }
 };
@@ -855,9 +879,9 @@ public:
  *
  * Example
  * @code
- * // Instantiate the tmr channel (for FTM0 CH6, auxiliary table tmr0Table)
+ * // Instantiate the tmr channel (for FTM0 CH6, auxiliary table ftm0Info)
  *
- * const USBDM::TmrBase_T<ftm0Table, 6, FTM0_SC> tmr0_ch6;
+ * const USBDM::TmrBase_T<ftm0Info, 6> tmr0_ch6;
  *
  * // Initialise PWM with initial period and alignment
  * tmr0_ch6.setMode(200, PwmIO::tmr_leftAlign);
@@ -871,7 +895,6 @@ public:
  *
  * @tparam info            Table providing pin specific information for the FTM
  * @tparam tmrChannel      FTM channel
- * @tparam scValue         Value for FTM->SC register
  * @tparam pcrValue        Default value for PCR including mux value
  */
 template<class info, uint32_t tmrChannel, uint32_t pcrValue=info::pcrValue>
@@ -890,6 +913,8 @@ public:
     * @param mode    Mode of operation see @ref Tmr_Mode
     */
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+      static_assert(tmrChannel<info::NUM_CHANNELS, "Invalid Timer channel");
+
       Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue>::setMode(period, mode);
 
       // Set up pin
@@ -910,6 +935,54 @@ public:
          tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
       }
    }
+   /**
+    *  Enables fault detection input
+    *
+    *  @tparam polarity       Polarity of fault input (true => active high))
+    *  @tparam inputNum       Number of fault input to enable (0..3)
+    *  @param  filterEnable   Whether to enable filtering on the fault input
+    *  @param  filterDelay    Delay used by the filter (1..15)
+    *
+    *  NOTE - the filter delay is shared by all inputs
+    */
+   template<int inputNum>
+   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=FTM_FLTCTRL_FFVAL_MASK) {
+      static_assert(inputNum<=4, "Illegal fault channel");
+
+      using Pcr = PcrTable_T<info, info::FAULT_INDEX+inputNum, pcrValue>;
+      Pcr::setPCR();
+      if (polarity) {
+         // Set active high
+         tmr->FLTPOL &= ~(1<<inputNum);
+      }
+      else {
+         // Set active low
+         tmr->FLTPOL |= (1<<inputNum);
+      }
+      if (filterEnable) {
+         // Enable filter & set filter delay
+         tmr->FLTCTRL = ((tmr->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
+      }
+      else {
+         // Disable filter
+         tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+      }
+      // Enable fault input
+      tmr->FLTCTRL |= (1<<inputNum);
+   }
+   /**
+    *  Disables fault detection input
+    *
+    *  @tparam inputNum        Number of fault input to enable (0..3)
+    */
+   template<int inputNum>
+   static void disableFault() {
+      static_assert(inputNum<=4, "Illegal fault channel");
+
+      // Enable fault on channel
+      tmr->FLTCTRL &= ~(1<<inputNum);
+   }
+
 };
 
 /**
@@ -931,8 +1004,8 @@ class QuadEncoder : public Tmr<info::basePtr, info::clockReg, info::clockMask, 0
 private:
    static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(info::basePtr);
 
-   using PcrA = PcrTable_T<info, 8>;
-   using PcrB = PcrTable_T<info, 9>;
+   using PcrA = PcrTable_T<info, info::QUAD_INDEX>;
+   using PcrB = PcrTable_T<info, info::QUAD_INDEX+1>;
 
 public:
    static void enable() {
@@ -948,6 +1021,12 @@ public:
             FTM_QDCTRL_PHBFLTREN_MASK;   // Phase B filter
       ftm->CONF   = FTM_CONF_BDMMODE(3);
       ftm->FILTER = FTM_FILTER_CH0FVAL(3)|FTM_FILTER_CH1FVAL(3);
+   }
+   /**
+    * Reset position to zero
+    */
+   static void resetPosition() {
+      ftm->CNT = 0;
    }
    /**
     * Get Quadrature encoder position

@@ -23,39 +23,124 @@ typedef struct {
 } SecurityInfo;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+/*
+  <h> Flash Configuration
+  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
+  <i> and security information that allows the MCU to restrict access to the FTFL module.
+  
+  <h> Backdoor Comparison Key
+  <i> The Verify Backdoor Access Key command releases security if user-supplied keys
+  <i> matches the Backdoor Comparison Key bytes
+    <o0>  Backdoor Comparison Key 0.  <0x0-0xFF>
+    <o1>  Backdoor Comparison Key 1.  <0x0-0xFF>
+    <o2>  Backdoor Comparison Key 2.  <0x0-0xFF>
+    <o3>  Backdoor Comparison Key 3.  <0x0-0xFF>
+    <o4>  Backdoor Comparison Key 4.  <0x0-0xFF>
+    <o5>  Backdoor Comparison Key 5.  <0x0-0xFF>
+    <o6>  Backdoor Comparison Key 6.  <0x0-0xFF>
+    <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
+  </h>
+ */
+#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
+/*
+   <h> Program Flash Region Protect (NV_FPROT0-3)
+      <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
+      <i> Each bit protects a 1/32 region of the program flash memory.
+	   <q.31>   FPROT0.0	<0=>protected  <1=>unprotected   <info>lowest 1/32 block
+	   <q.30>   FPROT0.1	<0=>protected  <1=>unprotected
+	   <q.29>   FPROT0.2	<0=>protected  <1=>unprotected
+	   <q.28>   FPROT0.3	<0=>protected  <1=>unprotected
+	   <q.27>   FPROT0.4	<0=>protected  <1=>unprotected
+	   <q.26>   FPROT0.5	<0=>protected  <1=>unprotected
+	   <q.25>   FPROT0.6	<0=>protected  <1=>unprotected
+	   <q.24>   FPROT0.7	<0=>protected  <1=>unprotected
+	   <q.23>   FPROT1.0	<0=>protected  <1=>unprotected
+	   <q.22>   FPROT1.1	<0=>protected  <1=>unprotected
+	   <q.21>   FPROT1.2	<0=>protected  <1=>unprotected
+	   <q.20>   FPROT1.3	<0=>protected  <1=>unprotected
+	   <q.19>   FPROT1.4	<0=>protected  <1=>unprotected
+	   <q.18>   FPROT1.5	<0=>protected  <1=>unprotected
+	   <q.17>   FPROT1.6	<0=>protected  <1=>unprotected
+	   <q.16>   FPROT1.7	<0=>protected  <1=>unprotected
+	   <q.15>   FPROT2.0	<0=>protected  <1=>unprotected
+	   <q.14>   FPROT2.1	<0=>protected  <1=>unprotected
+	   <q.13>   FPROT2.2	<0=>protected  <1=>unprotected
+	   <q.12>   FPROT2.3	<0=>protected  <1=>unprotected
+	   <q.11>   FPROT2.4	<0=>protected  <1=>unprotected
+	   <q.10>   FPROT2.5	<0=>protected  <1=>unprotected
+	   <q.9>    FPROT2.6	<0=>protected  <1=>unprotected
+	   <q.8>    FPROT2.7	<0=>protected  <1=>unprotected
+	   <q.7>    FPROT3.0	<0=>protected  <1=>unprotected
+	   <q.6>    FPROT3.1	<0=>protected  <1=>unprotected
+	   <q.5>    FPROT3.2	<0=>protected  <1=>unprotected
+	   <q.4>    FPROT3.3	<0=>protected  <1=>unprotected
+	   <q.3>    FPROT3.4	<0=>protected  <1=>unprotected
+	   <q.2>    FPROT3.5	<0=>protected  <1=>unprotected
+	   <q.1>    FPROT3.6	<0=>protected  <1=>unprotected
+	   <q.0>    FPROT3.7	<0=>protected  <1=>unprotected   <info> highest 1/32 block
+   </h>
+*/
+#define FPROT_VALUE 0xFFFFFFFF
+/*
+   <h> EEPROM Region Protect (NV_FEPROT)
+      <i> Each bit protects a 1/8 region of the EEPROM memory.
+      <i> (FlexNVM devices only)
+      <q.0>   FEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FEPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FEPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FEPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FEPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FEPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FEPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define FEPROT_VALUE 0xFF
+/*
+   <h> Data Flash Region Protect (NV_FDPROT)
+      <i> Each bit protects a 1/8 region of the data flash memory.
+      <i> (Device with Data flash only)
+      <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FDPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FDPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FDPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FDPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FDPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FDPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define FDPROT_VALUE 0xFF
 
 /*
-<h> Flash security value (NV_FTFA_FSEC)
+<h> Flash security value (NV_FSEC)
    <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
       <i> Controls use of Backdoor Key access to unsecure device
-      <0=> 0: Access disabled
-      <1=> 1: Access disabled (preferred disabled value)
+      <info>KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits (FSEC.MEEN)
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <0=> 0: Mass erase enabled
-      <1=> 1: Mass erase enabled
+      <info>MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <0=> 0: Factory access granted
-      <1=> 1: Factory access denied
+      <info>FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security (FSEC.SEC)
       <i> Defines the security state of the MCU. 
       <i> In the secure state, the MCU limits access to flash memory module resources. 
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <0=> 0: Secured
-      <1=> 1: Secured
+      <info>SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
 */
 #define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(3<<NV_FSEC_MEEN_SHIFT)|(3<<NV_FSEC_FSLACC_SHIFT)|(2<<NV_FSEC_SEC_SHIFT))
+
 #if ((FSEC_VALUE&NV_FSEC_MEEN_MASK) == (2<<NV_FSEC_MEEN_SHIFT)) && ((FSEC_VALUE&NV_FSEC_SEC_MASK) != (2<<NV_FSEC_SEC_SHIFT))
 // Change to warning if your really, really want to do this!
 #error "The security values selected will prevent the device from being unsecured using external methods"
@@ -63,7 +148,7 @@ typedef struct {
 
 /*
 Control extended Boot features on these devices
-<h> Flash boot options (NV_FTFA_FOPT)
+<h> Flash boot options (NV_FOPT)
    <e0> Boot ROM Options
       <i> Only available on devices with internal ROM
       <i> Currently: KL03,KL17,KL27,KL43
@@ -71,32 +156,38 @@ Control extended Boot features on these devices
       <1=> Enabled
    <o1> Boot Source Selection (FOPT.BOOTSRC_SEL)
       <i> These bits select the boot sources if FOPT.BOOTPIN_OPT = 1
+	  <info>BOOTSRC_SEL
       <0=> 0: Boot from Flash
       <64=> 1: Reserved
       <128=> 2: Boot from ROM
       <192=> 3: Boot from ROM
    <q2.1> External pin selects boot options (FOPT.BOOTPIN_OPT)
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
+	  <info>BOOTPIN_OPT
       <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted. 
       <1=> Boot source controlled by BOOTSRC_SEL
    </e>
 
    <q2.5> Flash initialisation speed (FOPT.FAST_INIT)
       <i> Selects initialization speed on POR, VLLSx, and system reset.
+	  <info>FAST_INIT
       <0=> Slower (reduced average power)
       <1=> Faster (higher average power)
    <q2.3> RESET pin control (FOPT.RESET_PIN_CFG)
       <i> Enables or disables the RESET pin dedicated operation
+	  <info>RESET_PIN_CFG
       <0=> Disabled (available as port pin)
       <1=> Enabled (PUP, open-drain, filtered)
    <q2.2> NMI pin control (FOPT.NMI_DIS)
-      <i> Enables or disables control for the NMI function
+      <i> Enables or disables the NMI function
+      <info>NMI_DIS
       <0=> NMI interrupts are always blocked.
-      <1=> NMI_b interrupts default to enabled
+      <1=> NMI interrupts default to enabled
    <o3> Low power boot control (FOPT.LPBOOT)
       <i> Controls the reset value of SIM_CLKDIV1.OUTDIV1 (clock divider) and
       <i> SMC_PMCTRL.RUNM (processor run mode)
       <i> Note: VLPR is only used on KL03,KL17,KL27,KL43
+	  <info>LPBOOT
       <0=> OUTDIV1 = /8, RUNM = VLPR
       <1=> OUTDIV1 = /4, RUNM = VLPR
       <16=> OUTDIV1 = /2, RUNM = RUN
@@ -116,12 +207,12 @@ Control extended Boot features on these devices
 
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
-    /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
-    /* fprot    */ 0xFFFFFFFF,
+    /* backdoor */ BACKDOOR_VALUE,
+    /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,
     /* fopt     */ FOPT_VALUE,
-    /* feprot   */ 0xFF,
-    /* fdprot   */ 0xFF,
+    /* feprot   */ FEPROT_VALUE,
+    /* fdprot   */ FDPROT_VALUE,
 };
 
 #if defined(NV_FOPT_BOOTPIN_OPT_MASK)

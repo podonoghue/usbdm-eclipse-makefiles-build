@@ -133,7 +133,6 @@ extern "C" {
 //  <o> System Core Clock (Hz) <name=system_core_clock> <constant>
 //  <i> Clocks the ARM Cortex-M4 core
 //  <i> From ICSOUT Clock
-//  <i> Must be less than or equal to 40 MHz.
 #define SYSTEM_CORE_CLOCK 32000000UL
 
 // SYSTEM_BUS_CLOCK =======================================
@@ -141,7 +140,6 @@ extern "C" {
 //  <o> System Bus and Flash Clock (Hz) <name=system_bus_clock> <constant>
 //  <i> Clocks the bus slaves & peripheral and flash
 //  <i> Derived from Core Clock after division by BUSDIV
-//  <i> Must be less than or equal to 20 MHz.
 #define SYSTEM_BUS_CLOCK 16000000UL
 
 // <h> System Clock dividers

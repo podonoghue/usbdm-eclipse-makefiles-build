@@ -29,7 +29,7 @@ extern "C" {
 // <validate=net.sourceforge.usbdm.annotationEditor.validators.PllClockValidate(48000000, 100000000)>
 // FLL clock
 // <validate=net.sourceforge.usbdm.annotationEditor.validators.FllClockValidate>
-
+//
 // Convention
 // name_V = field value
 // name_M = field mask i.e. value in correct position for register
@@ -53,7 +53,7 @@ extern "C" {
 
 // RTC_CLKIN_CLOCK ==============================
 //
-//   <o> Frequency of external RTC clock (Hz)
+//   <o> Frequency of external RTC clock (Hz) <name=rtcclk_clock>
 //   <i> Frequency of external clock provided to RTC clock input pin
 #define RTC_CLKIN_CLOCK (0UL)
 
@@ -80,6 +80,12 @@ extern "C" {
 //   <o> Frequency of Fast Internal Reference Clock (Hz) <constant> <name=system_fast_irc_clock>
 //   <i> Dependent on device and clock Trim. [Typically ~4MHz]
 #define SYSTEM_FAST_IRC_CLOCK (4000000UL)
+
+// SYSTEM_USB_CLKIN ==============================
+//
+//   <o> Frequency of External USB Clock (Hz) <constant> <name=system_usb_clkin_clock>
+//   <i> Externally provided clock for USB on USB_CLKIN 
+#define SYSTEM_USB_CLKIN_CLOCK (48000000UL)
 
 //========================================================================================
 //========================================================================================
@@ -184,7 +190,6 @@ extern "C" {
 //  <o> System Core Clock (Hz) <name=system_core_clock> <constant>
 //  <i> Clocks the ARM Cortex-M4 core
 //  <i> Derived from MCGOUT Clock after division by OUTDIV1
-//  <i> Must be less than or equal to 48 MHz.
 #define SYSTEM_CORE_CLOCK 48000000UL
 
 // SYSTEM_BUS_CLOCK =======================================
@@ -192,7 +197,7 @@ extern "C" {
 //  <o> System Bus and Flash Clock (Hz) <name=system_bus_clock> <constant>
 //  <i> Clocks the bus slaves & peripheral and flash
 //  <i> Derived from Core Clock after division by OUTDIV4
-//  <i> Must be less than or equal to 24 MHz and less than or equal to the Core Clock frequency.
+//  <i> Must be &lt;= Core Clock frequency.
 #define SYSTEM_BUS_CLOCK 24000000UL
 
 // SYSTEM_FLASH_CLOCK =======================================
@@ -255,33 +260,27 @@ extern "C" {
 
 // OSC_CR_SC2P ===============================
 //
-//   <q0> Oscillator Capacitor Load Configure
-//   <i> Configures the oscillator load capacitance [OSC_CR_SC2P]
-//     <0=>
-//     <1=> +2pF
+//   <o> Oscillator Capacitor Load Configure
+//   <i> Configures the oscillator load capacitance [OSC_CR_SCxP]
+//     <0=>   0 pF
+//     <8=>   2 pF
+//     <4=>   4 pF
+//     <12=>  6 pF
+//     <2=>   8 pF
+//     <10=> 10 pF
+//     <6=>  12 pF
+//     <14=> 14 pF
+//     <1=>  16 pF
+//     <9=>  18 pF
+//     <5=>  20 pF
+//     <13=> 22 pF
+//     <3=>  24 pF
+//     <11=> 26 pF
+//     <7=>  28 pF
+//     <15=> 30 pF
 
-// OSC_CR_SC4P ===============================
-//
-//   <q1> Oscillator Capacitor Load Configure
-//   <i> Configures the oscillator load capacitance [OSC_CR_SC4P]
-//     <0=>
-//     <1=> +4pF
-
-// OSC_CR_SC8P ===============================
-//
-//   <q2> Oscillator Capacitor Load Configure
-//   <i> Configures the oscillator load capacitance [OSC_CR_SC8P]
-//     <0=>
-//     <1=> +8pF
-
-// OSC_CR_SC16P ===============================
-//
-//   <q3> Oscillator Capacitor Load Configure
-//   <i> Configures the oscillator load capacitance [OSC_CR_SC16P]
-//     <0=>
-//     <1=> +16pF
-
-#define OSC_CR_SCP_M ((0<<OSC_CR_SC2P_SHIFT)|(0<<OSC_CR_SC4P_SHIFT)|(1<<OSC_CR_SC8P_SHIFT)|(0<<OSC_CR_SC16P_SHIFT))
+#define OSC_CR_SCP_V 0x1
+#define OSC_CR_SCP_M (OSC_CR_SCP_V<<OSC_CR_SC16P_SHIFT)
 // </h>
 
 //========================================================================================
@@ -545,7 +544,7 @@ extern "C" {
 
 // MCG_C5_PRDIV0 ==============================
 //
-//   <o> PLL External Reference Divider (PRDIV0) Divide by: <name=mcg_c5_prdiv0> <constant> <#-1> <1-24>
+//   <o> PLL External Reference Divider (PRDIV0) Divide by: <constant> <name=mcg_c5_prdiv0> <#-1> <1-24>
 //   <i> Determines the amount to divide down the external reference clock for the PLL. [MCG_C5_PRDIV0]
 //   <i> This value is calculated from PLL input and output clock frequencies
 #define MCG_C5_PRDIV0_V    1
@@ -561,7 +560,7 @@ extern "C" {
 //
 //   <q> Loss of Lock interrupt Enable (LOLIE0)
 //   <i> Determines if an interrupt request is made following a loss of lock indication. [MCG_C6_LOLIE0]
-//   <i> This bit only has an effect when LOLS 0 is set.
+//   <i> This bit only has an effect when LOLS0 is set.
 //     <0=> No interrupt request
 //     <1=> Interrupt request on LOL
 #define MCG_C6_LOLIE0_V    0
@@ -643,7 +642,7 @@ extern "C" {
 
 // SIM_SOPT2_PLLFLLSEL =============================
 //
-//   <q> Peripheral clock source (PLL/FLL)
+//   <q> Peripheral clock source (PLL/FLL) <name=sim_sopt2_pllfllsel>
 //   <i> Source for clock used by some peripherals [SIM_SOPT2_PLLFLLSEL]
 //      <0=> FLL (MCGFLLCLK)
 //      <1=> PLL (MCGPLLCLK/2)
@@ -747,7 +746,7 @@ extern "C" {
 
 // SIM_SOPT2_USBSRC ================================
 //
-//   <o> USB clock source select (USBSRC)
+//   <q> USB clock source select (USBSRC) <name=sim_sopt2_usbsrc>
 //   <i> Selects the clock source for the USB 48 MHz clock [SIM_SOPT2_USBSRC]
 //   <i> MCGFLLCLK/MCGPLLCLK/IRC48M choice is divided by SIM_CLKDIV2[USBFRAC, USBDIV].
 //     <0=> External bypass clock (USB_CLKIN)

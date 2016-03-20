@@ -5955,7 +5955,7 @@ typedef struct {                                /*       USB0 Structure         
    __I  uint8_t   RESERVED11[3];               
    __I  uint8_t   STAT;                         /**< 0090: Status Register                                              */
    __I  uint8_t   RESERVED12[3];               
-   __IO uint8_t   CTL;                          /**< 0094: Control register                                             */
+   __IO uint8_t   CTL;                          /**< 0094: Control Register                                             */
    __I  uint8_t   RESERVED13[3];               
    __IO uint8_t   ADDR;                         /**< 0098: Address Register                                             */
    __I  uint8_t   RESERVED14[3];               

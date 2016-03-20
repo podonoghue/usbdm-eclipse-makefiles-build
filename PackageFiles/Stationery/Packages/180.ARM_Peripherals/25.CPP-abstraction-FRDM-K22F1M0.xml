@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
 <!ENTITY DEVICE_NAME  "FRDM_K22F1M0">
+<!ENTITY DEVICE_FILE  "MK22F12-FRDM">
 ]>
 
 <root version="1.0" >
@@ -45,7 +46,7 @@
          <constant id="demo.cpp.nrf24l01.ce"        value="GpioC&lt;4&gt;" />   <!-- CE* connection to NRF24101 module -->
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioC&lt;3&gt;" />   <!-- IRQ* connection from NRF24101 module -->
 
-         <copy source="Project_Headers/pin_mapping-&DEVICE_NAME;.h"        target="Project_Headers/pin_mapping.h" replace="true" />
+         <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" replace="true" />
 
          <!-- Example programs -->
          <!-- copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" / -->

@@ -16,9 +16,9 @@ osThreadId tid_lcdThread;               // Thread id of lcdThread
 #define MAIN_SIGNAL  (1<<1)
 #define CLOCK_SIGNAL (1<<8)
 
-#define RED_LED   USBDM::gpio_$(demo.cpp.red.led)
-#define GREEN_LED USBDM::gpio_$(demo.cpp.green.led)
-#define BLUE_LED  USBDM::gpio_$(demo.cpp.blue.led)
+using RED_LED   = USBDM::$(demo.cpp.red.led:GpioB<3>);
+using GREEN_LED = USBDM::$(demo.cpp.green.led:GpioB<4>);
+using BLUE_LED  = USBDM::$(demo.cpp.blue.led:GpioB<5);
 
 /*----------------------------------------------------------------------------
      Function that turns on Red LED

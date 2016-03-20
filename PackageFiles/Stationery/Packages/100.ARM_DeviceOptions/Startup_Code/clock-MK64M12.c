@@ -1,7 +1,7 @@
 /*
- * clockMK64M12.c
+ * clock-MK64M12.c
  *
- *  Used for MK64M12
+ *  Used for MK64FX512M12, MK64FN1M0M12, 
  *
  * Based on K64P144M120SF5RM
  *   3 Oscillators (OSC0, RTC, IRC48M)
@@ -145,8 +145,7 @@ void clock_initialise(void) {
 
    // Configure PLL Reference Frequency
    // =============================================================
-   MCG->C5 =
-               MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN0  = 0,1 -> PLL -/enabled (irrespective of PLLS)
+   MCG->C5 =   MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN0  = 0,1 -> PLL -/enabled (irrespective of PLLS)
                MCG_C5_PLLSTEN0_M     |  // PLLSTEN0   = 0,1 -> disabled/enabled in normal stop mode
                MCG_C5_PRDIV0_M;         // PRDIV0     = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
 

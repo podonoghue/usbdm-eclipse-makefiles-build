@@ -106,7 +106,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -128,7 +128,7 @@ struct PcrInfo {
  */
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -348,7 +348,6 @@ public:
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
 
-public:
    /**
     * Set pin as digital output
     *

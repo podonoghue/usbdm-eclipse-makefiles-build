@@ -3,6 +3,7 @@
 [
 <!ENTITY DEVICE_SUB_FAMILY  "MKL46Z4">
 <!ENTITY DEVICE_FAMILY      "MKL">
+<!ENTITY DEVICE_FILE        "MKL46Z4-LQFP100">
 ]>
 
 <root version="1.0" >
@@ -44,10 +45,14 @@
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
          <createFolder   target="Snippets" />
+         <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
+         <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
+         <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
+         <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
          <copy source="Project_Headers/gpio.h"                             target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
-         <copy source="Project_Headers/pin_mapping-&DEVICE_SUB_FAMILY;.h"  target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/gpio-&DEVICE_SUB_FAMILY;.cpp"               target="Sources/gpio.cpp" />
+         <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" />
+         <copy source="Sources/gpio-&DEVICE_FILE;.cpp"                     target="Sources/gpio.cpp" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>

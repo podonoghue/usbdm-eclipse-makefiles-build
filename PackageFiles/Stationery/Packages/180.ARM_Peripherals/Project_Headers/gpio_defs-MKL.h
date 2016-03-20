@@ -106,7 +106,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -128,7 +128,7 @@ struct PcrInfo {
  */
 
 /**
- * @addtogroup PeripheralPinTables Peripheral Pin Tables
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
  * @{
  */
@@ -749,7 +749,7 @@ public:
     * @param period  Period in us
     * @param mode    Mode of operation see @ref Tmr_Mode
     *
-    * @note Assumes prescale has been chosen as a appropriate value
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
 
@@ -774,27 +774,39 @@ public:
     *
     * @param period Period in us
     *
-    * @note Assumes prescale has been chosen as a appropriate value
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setPeriod(int period) {
+   static void setPeriod(int per) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&TPM_SC_CPWMS_MASK) != 0;
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
-      period = (period*tickRate)/1000000;
+      uint64_t period = ((uint64_t)per*tickRate)/1000000;
 
       // Disable FTM so register changes are immediate
       tmr->SC = TPM_SC_PS(0);
 
       if (centreAlign) {
-         tmr->MOD = period/2;
+#ifdef DEBUG_BUILD
+      if (period > 2*0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+         tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
          tmr->SC  = scValue|TPM_SC_CPWMS_MASK;
       }
       else {
-         tmr->MOD = period-1;
+#ifdef DEBUG_BUILD
+      if (period > 0x10000UL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+         tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
          tmr->SC  = scValue;
       }
@@ -805,13 +817,19 @@ public:
     * @param time Time in microseconds
     * @return Time in ticks
     *
-    * @note Assumes prescale has been chosen as a appropriate value. No range checking.
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
 //      assert((rv&~0xFFFFUL) == 0);
       return rv;
    }
@@ -821,13 +839,19 @@ public:
     * @param time Time in ticks
     * @return Time in microseconds
     *
-    * @note Assumes prescale has been chosen as a appropriate value. No range checking.
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static uint32_t convertTicksToMicroseconds(int time) {
 
       // Calculate period
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*1000000)/tickRate;
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
 //      assert((rv&~0xFFFFUL) == 0);
       return rv;
    }

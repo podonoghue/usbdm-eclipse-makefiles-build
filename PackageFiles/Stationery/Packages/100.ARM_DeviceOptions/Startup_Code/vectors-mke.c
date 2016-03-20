@@ -23,21 +23,67 @@ typedef struct {
 } SecurityInfo;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+/*
+  <h> Flash Configuration
+  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
+  <i> and security information that allows the MCU to restrict access to the FTFL module.
+  
+  <h> Backdoor Comparison Key
+  <i> The Verify Backdoor Access Key command releases security if user-supplied keys
+  <i> matches the Backdoor Comparison Key bytes
+    <o0>  Backdoor Comparison Key 0.  <0x0-0xFF>
+    <o1>  Backdoor Comparison Key 1.  <0x0-0xFF>
+    <o2>  Backdoor Comparison Key 2.  <0x0-0xFF>
+    <o3>  Backdoor Comparison Key 3.  <0x0-0xFF>
+    <o4>  Backdoor Comparison Key 4.  <0x0-0xFF>
+    <o5>  Backdoor Comparison Key 5.  <0x0-0xFF>
+    <o6>  Backdoor Comparison Key 6.  <0x0-0xFF>
+    <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
+  </h>
+ */
+#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
+/*
+   <h> Flash Region Protect (NV_FDPROT)
+      <i> Each bit protects a 1/8 region of the flash memory.
+      <q.0>   FPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define FPROT_VALUE 0xFF
+/*
+   <h> EEPROM Region Protect (NV_EEPROT)
+      <i> Each bit protects a 1/8 region of the EEPROM memory.
+      <i> (FlexNVM devices only)
+      <q.0>   EEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   EEPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   EEPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   EEPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   EEPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   EEPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   EEPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   EEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define EEPROT_VALUE 0xFF
 
 /*
-<h> Flash security value (NV_FTFA_FSEC)
+<h> Flash security value (NV_FSEC)
    <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
       <i> Controls use of Backdoor Key access to unsecure device
-      <0=> 0: Access disabled
-      <1=> 1: Access disabled (preferred disabled value)
+      <info>KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Flash Security (FSEC.SEC)
       <i> Defines the security state of the MCU. 
       <i> In the secure state, the MCU limits access to flash memory module resources. 
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <0=> 0: Secured
-      <1=> 1: Secured
+      <info>SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
@@ -53,10 +99,10 @@ typedef struct {
 
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
-    /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
+    /* backdoor */ BACKDOOR_VALUE,
     /* reseved  */ 0xFFFFFFFF,
-    /* eeprot   */ 0xFF,
-    /* fprot    */ 0xFF,
+    /* eeprot   */ EEPROT_VALUE,
+    /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,
     /* fopt     */ FOPT_VALUE,
 };

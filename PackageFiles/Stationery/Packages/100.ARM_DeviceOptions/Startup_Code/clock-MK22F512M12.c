@@ -1,9 +1,9 @@
 /*
- * clockMK64M12.c
+ * clock-MK22F512M12.c
  *
- *  Used for MK64M12
+ *  Used for MK22FN512M12
  *
- * Based on K64P144M120SF5RM
+ * Based on K22P121M120SF7RM
  *   3 Oscillators (OSC0, RTC, IRC48M)
  *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
  *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
@@ -21,7 +21,7 @@
 #include "utilities.h"
 #include "stdbool.h"
 
-// Some MCUs call OSC_CR0 just OSC->CR
+// Some MCUs call OSC0 just OSC
 #ifndef OSC0
 #define OSC0 OSC
 #endif
@@ -58,7 +58,7 @@ void hsRunMode(bool enable) {
 }
 
 /*! @brief Sets up the clock out of RESET
- *!
+ *
  */
 void clock_initialise(void) {
 
@@ -66,7 +66,7 @@ void clock_initialise(void) {
    // No clock setup
 #else
    // XTAL/EXTAL Pins
-   SIM->SCGC5  |= SIM_SCGC5_PORTA_MASK;
+   SIM->SCGC5    |= SIM_SCGC5_PORTA_MASK;
    PORTA->PCR[18] = PORT_PCR_MUX(0);
    PORTA->PCR[19] = PORT_PCR_MUX(0);
 
@@ -101,7 +101,7 @@ void clock_initialise(void) {
    // Switch from FEI -> FEI/FBI/FEE/FBE
    // =============================================================
 
-   // Set up crystal or external clock source
+   // Set up crystal or external clock source for OSC0
    MCG->C2 =
             MCG_C2_LOCRE0_M     | // LOCRE0 = 0,1   -> Loss of clock reset enable
             MCG_C2_RANGE0_M     | // RANGE0 = 0,1,2 -> Oscillator low/high/very high clock range
@@ -173,16 +173,16 @@ void clock_initialise(void) {
 
    // Configure PLL Reference Frequency
    // =============================================================
-   MCG->C5 =  MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN = 0,1 -> PLL -/enabled (irrespective of PLLS)
-              MCG_C5_PLLSTEN0_M     |  // PLLSTEN0 = 0,1 -> disabled/enabled in normal stop mode
-              MCG_C5_PRDIV0_M;         // PRDIV0   = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
+   MCG->C5 =   MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN0  = 0,1 -> PLL -/enabled (irrespective of PLLS)
+               MCG_C5_PLLSTEN0_M     |  // PLLSTEN0   = 0,1 -> disabled/enabled in normal stop mode
+               MCG_C5_PRDIV0_M;         // PRDIV0     = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
 
    // Transition via PBE
    // =============================================================
-   MCG->C6 = MCG_C6_LOLIE0_M    |
-             MCG_C6_PLLS_M      |  // PLLS  = 0,1 -> Enable PLL
-             MCG_C6_CME0_M      |  // CME0  = 0,1 -> Disable/enable clock monitor
-             MCG_C6_VDIV0_M;       // VDIV0 = N   -> PLL Multiplication factor
+   MCG->C6 = MCG_C6_LOLIE0_M    |  // LOLIE0 = 0,1 -> Loss of Lock interrupt
+             MCG_C6_PLLS_M      |  // PLLS   = 0,1 -> Enable PLL
+             MCG_C6_CME0_M      |  // CME0   = 0,1 -> Disable/enable clock monitor
+             MCG_C6_VDIV0_M;       // VDIV0  = N   -> PLL Multiplication factor
 
    // Wait for PLL to lock
    do {

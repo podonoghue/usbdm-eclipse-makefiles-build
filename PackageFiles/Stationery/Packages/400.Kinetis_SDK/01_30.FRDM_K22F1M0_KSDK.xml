@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY HARDWARE_NAME     "frdmk22f1m0">
+<!ENTITY BOARD_NAME        "FRDM_K22F1M0">
+]
+>
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK for FRDM board -->
+   <projectActionList id="&HARDWARE_NAME;-KSDK" root="">
+      <applyWhen>
+         <and>
+            <or>
+               <hardwareMatches>&HARDWARE_NAME;</hardwareMatches>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <!-- Used to locate demo directory -->
+      <constant id="demo.KDS.boardName"     value="&HARDWARE_NAME;" />
+
+      <!-- Used to select KDS blinky example -->
+      <constant id="demo.KDS.useblinky"     value="true" />
+
+<!-- These constant enables demos for frdmk22f -->
+<constant id="demo.KSDK-adc-lptmr-trigger" value="true" />
+<constant id="demo.KSDK-adc-pdb-trigger" value="true" />
+<constant id="demo.KSDK-adc-pit-trigger" value="true" />
+<constant id="demo.KSDK-adc-tpm-trigger" value="false" />
+<constant id="demo.KSDK-adc-low-power" value="true" />
+<constant id="demo.KSDK-bubble-level" value="false" />
+<constant id="demo.KSDK-zero-detect" value="false" />
+<constant id="demo.KSDK-dac_adc_demo" value="true" />
+<constant id="demo.KSDK-flash_demo" value="true" />
+<constant id="demo.KSDK-hello-world" value="true" />
+<constant id="demo.KSDK-hardware-timer" value="true" />
+<constant id="demo.KSDK-I2C-master-slave-comm" value="true" />
+<constant id="demo.KSDK-I2C-bm-rtos-master-slave" value="true" />
+<constant id="demo.KSDK-I2C-comm-rtos" value="true" />
+<constant id="demo.KSDK-lwIP-http-server-bm" value="false" />
+<constant id="demo.KSDK-lwIP-http-server-rtos" value="false" />
+<constant id="demo.KSDK-ping-bare-metal" value="false" />
+<constant id="demo.KSDK-ping-rtos" value="false" />
+<constant id="demo.KSDK-tcp-echo-bare-metal" value="false" />
+<constant id="demo.KSDK-tcp-echo-rtos" value="false" />
+<constant id="demo.KSDK-udp-echo-rtos" value="false" />
+<constant id="demo.KSDK-udp-echo-bare-metal" value="false" />
+<constant id="demo.KSDK-power-manager-demo" value="true" />
+<constant id="demo.KSDK-power-manager-rtos-demo" value="true" />
+<constant id="demo.KSDK-rtc-function-demo" value="true" />
+<constant id="demo.KSDK-sdhc-sdcard-demo" value="false" />
+<constant id="demo.KSDK-watchdog-timer-reset-demo" value="true" />
+<constant id="demo.KSDK-usb-with-rtos" value="true" />
+<constant id="demo.KSDK-usb-audio-generator" value="true" />
+<constant id="demo.KSDK-usb-cdc-virtual-com" value="true" />
+<constant id="demo.KSDK-usb-hid-audio" value="true" />
+<constant id="demo.KSDK-usb-hid-keyboard" value="true" />
+<constant id="demo.KSDK-usb-hid-mouse" value="true" />
+<constant id="demo.KSDK-usb-msd" value="true" />
+<constant id="demo.KSDK-usb-phdc-weighscale" value="true" />
+<constant id="demo.KSDK-usb-host-audio-speaker" value="true" />
+<constant id="demo.KSDK-usb-host-cdc-serial" value="true" />
+<constant id="demo.KSDK-usb-host-hid-keyboard-mouse" value="true" />
+<constant id="demo.KSDK-usb-host-hid-keyboard" value="true" />
+<constant id="demo.KSDK-usb-host-hid-mouse" value="true" />
+<constant id="demo.KSDK-usb-host-msd-cmd" value="true" />
+<constant id="demo.KSDK-usb-host-msd-fatfs" value="true" />
+<constant id="demo.KSDK-usb-host-phdc-11073Manager" value="true" />
+<constant id="demo.KSDK-usb-otg-hid-mouse" value="false" />
+<constant id="demo.KSDK-usb-pin-detect" value="false" />
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </applyWhen>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${workspace_loc:/${ProjName}/board}&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${workspace_loc:/${ProjName}/board}&quot;</value>
+         </projectOption>
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FREEDOM</value>
+            <value>&BOARD_NAME;</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FREEDOM</value>
+            <value>&BOARD_NAME;</value>
+         </projectOption>
+         <createFolder target="board" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/board.c"       target="board/board.c"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/board.h"       target="board/board.h"     sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/gpio_pins.c"   target="board/gpio_pins.c" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/gpio_pins.h"   target="board/gpio_pins.h" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/pin_mux.c"     target="board/pin_mux.c"   sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/examples/&HARDWARE_NAME;/pin_mux.h"     target="board/pin_mux.h"   sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+</root>
