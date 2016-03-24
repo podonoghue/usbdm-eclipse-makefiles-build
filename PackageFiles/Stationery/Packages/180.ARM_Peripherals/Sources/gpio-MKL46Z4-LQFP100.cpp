@@ -7,7 +7,6 @@
  */
 
 #include "gpio.h"
-#include "pin_mapping.h"
 
 namespace USBDM {
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root fileElement -->
+<!ELEMENT root (family, pins, packages, peripherals) >
+   <!ATTLIST root version CDATA #REQUIRED >
+
+ <!ELEMENT family (device)* >
+   <!ATTLIST family name        CDATA #REQUIRED>
+   
+ <!ELEMENT device EMPTY >
+   <!ATTLIST device name        CDATA #REQUIRED>
+   <!ATTLIST device manual      CDATA #REQUIRED>
+   <!ATTLIST device package     CDATA #REQUIRED>
+   
+ <!ELEMENT pins (pin*) >
+ 
+ <!ELEMENT pin (mux*, (reset, default)?) >
+   <!ATTLIST pin name        CDATA #REQUIRED>
+   <!ATTLIST pin isFixed     (true|false) "false">
+   
+ <!ELEMENT mux EMPTY >
+   <!ATTLIST mux sel         (fixed|mux0|mux1|mux2|mux3|mux4|mux5|mux6|mux7|disabled) #REQUIRED>
+   <!ATTLIST mux function    CDATA #REQUIRED>
+   
+ <!ELEMENT reset EMPTY >
+   <!ATTLIST reset sel         (fixed|mux0|mux1|mux2|mux3|mux4|mux5|mux6|mux7|disabled) #REQUIRED>
+   
+ <!ELEMENT default EMPTY >
+   <!ATTLIST default sel         (fixed|mux0|mux1|mux2|mux3|mux4|mux5|mux6|mux7|disabled) #REQUIRED>
+   
+ <!ELEMENT packages (package*) >
+   
+ <!ELEMENT package (placement*) >
+   <!ATTLIST package name        CDATA #REQUIRED>
+ 
+ <!ELEMENT placement EMPTY >
+   <!ATTLIST placement pin        CDATA #REQUIRED>
+   <!ATTLIST placement location   CDATA #REQUIRED>
+   
+ <!ELEMENT peripherals (peripheral*) >
+   
+ <!ELEMENT peripheral (pcrs*) >
+   <!ATTLIST peripheral name        CDATA #REQUIRED>
+ 
+ <!ELEMENT pcrs (pcr*) >
+ 
+ <!ELEMENT pcr EMPTY >
+   <!ATTLIST pcr index        CDATA #REQUIRED>
+   <!ATTLIST pcr function     CDATA #REQUIRED>
+   

@@ -349,7 +349,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field>
                      <name>PF</name>
                      <description>Parity Error Flag\n
-PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
 To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
