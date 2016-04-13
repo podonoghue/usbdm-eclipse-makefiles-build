@@ -9,7 +9,7 @@
 #define INCLUDE_USBDM_DMA_H_
 
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 namespace USBDM {
 

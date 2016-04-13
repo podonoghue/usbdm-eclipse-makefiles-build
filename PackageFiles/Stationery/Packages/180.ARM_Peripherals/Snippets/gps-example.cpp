@@ -30,7 +30,7 @@
 #include <string.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "gps.h"
 #include "delay.h"
 

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 using namespace USBDM;
 
@@ -39,8 +39,8 @@ using GREEN_LED = $(demo.cpp.pwm.green.led:Ftm0<1>);
 #endif
 
 int main() {
-   RED_LED::setMode(2000,   ftm_leftAlign);
-   GREEN_LED::setMode(2000, ftm_leftAlign);
+   RED_LED::setMode(1000,   tmr_leftAlign);
+   GREEN_LED::setMode(1000, tmr_leftAlign);
    for(;;) {
       for (int i=0; i<=100; i++) {
          RED_LED::setDutyCycle(i);

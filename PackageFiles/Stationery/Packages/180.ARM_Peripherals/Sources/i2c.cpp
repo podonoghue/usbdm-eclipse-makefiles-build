@@ -1,85 +1,12 @@
 /*
  * @file i2c.cpp
  *
- *  Created on: 27 Nov 2015
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 #include "i2c.h"
 
 using namespace USBDM;
-
-/*
- * I2C state-machine based interrupt handler
- */
-#if defined(MCU_MKM33Z5)
-   // MCU_MKM33Z5 has a shared handler for I2C0 & I2C1
-   #if (((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0)) || ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)))
-   extern "C"
-   void I2C0_1_IRQHandler() {
-   #if ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
-      if (I2C0->S&I2C_S_IICIF_MASK) {
-         I2c0::thisPtr->poll();
-      }
-   #endif
-   #if ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
-      if (I2C1->S&I2C_S_IICIF_MASK) {
-         I2c1::thisPtr->poll();
-      }
-   #endif
-   }
-   #endif
-#else // defined(MCU_MKM33Z5)
-   #if ((I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0))
-   /*
-    * I2C state-machine based interrupt handler
-    */
-   extern "C"
-   void I2C0_IRQHandler() {
-      I2c0::thisPtr->poll();
-   }
-   #endif
-   #if ((I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0))
-   /*
-    * I2C state-machine based interrupt handler
-    */
-   extern "C"
-   void I2C1_IRQHandler() {
-      I2c1::thisPtr->poll();
-   }
-   #endif
-#endif // defined(MCU_MKM33Z5)
-
-#if defined(I2C0)
-#if (I2C0_SCL_PIN_SEL==0) || (I2C0_SDA_PIN_SEL==0)
-#warning "I2C0 unavailable - Please check pin mapping for I2C0_SCL and I2C0_SDA"
-#else
-template<> I2c *I2c0::thisPtr = 0;
-#endif
-#endif
-
-#if defined(I2C1)
-   #if (I2C1_SCL_PIN_SEL==0) || (I2C1_SDA_PIN_SEL==0)
-   #warning "I2C1 unavailable - Please check pin mapping for I2C1_SCL and I2C1_SDA"
-   #else
-   template<> I2c *I2c1::thisPtr = 0;
-   #endif
-   #endif
-
-   #if defined(I2C2)
-   #if !defined(I2C2_SCL_GPIO) || !defined(I2C2_SDA_GPIO)
-   #warning "I2C2 unavailable - Please check pin mapping for I2C2_SCL and I2C2_SDA"
-   #else
-   template<> I2c *I2c2::thisPtr = 0;
-
-   /*
-    * I2C state-machine based interrupt handler
-    */
-   extern "C"
-   void I2C2_IRQHandler() {
-      I2c2::thisPtr->poll();
-   }
-   #endif
-#endif
 
 // I2C baud rate divisor table
 const uint16_t I2c::I2C_DIVISORS[] = {
@@ -267,10 +194,10 @@ void I2c::poll(void) {
  * Transmit message
  *
  * @param address  Address of slave to communicate with
- * @param data     Data to transmit, 0th byte is often register address
  * @param size     Size of transmission data
+ * @param data     Data to transmit, 0th byte is often register address
  */
-int I2c::transmit(uint8_t address, const uint8_t data[], uint16_t size) {
+int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
    errorCode = 0;
 
    rxBytesRemaining = 0;
@@ -292,10 +219,10 @@ int I2c::transmit(uint8_t address, const uint8_t data[], uint16_t size) {
  * Receive message
  *
  * @param address  Address of slave to communicate with
- * @param data     Data buffer for reception
  * @param size     Size of reception data
+ * @param data     Data buffer for reception
  */
-int I2c::receive(uint8_t address,  uint8_t data[], uint16_t size) {
+int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
    errorCode = 0;
 
    txBytesRemaining = 0;
@@ -318,12 +245,12 @@ int I2c::receive(uint8_t address,  uint8_t data[], uint16_t size) {
  * Uses repeated-start.
  *
  * @param address  Address of slave to communicate with
- * @param txData   Data for transmission
  * @param txSize   Size of transmission data
- * @param rxData   Date buffer for reception
+ * @param txData   Data for transmission
  * @param rxSize   Size of reception data
+ * @param rxData   Date buffer for reception
  */
-int I2c::txRx(uint8_t address, const uint8_t txData[], uint16_t txSize, uint8_t rxData[], uint16_t rxSize ) {
+int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] ) {
    errorCode = 0;
 
    // Send address byte at start and move to data transmission
@@ -346,11 +273,73 @@ int I2c::txRx(uint8_t address, const uint8_t txData[], uint16_t txSize, uint8_t 
  * Uses shared transmit and receive buffer
  *
  * @param address  Address of slave to communicate with
- * @param data     Data for transmission and reception
  * @param txSize   Size of transmission data
  * @param rxSize   Size of reception data
+ * @param data     Data for transmission and reception
  */
-int I2c::txRx(uint8_t address, uint8_t data[], uint16_t txSize, uint16_t rxSize ) {
-   return txRx(address, data, txSize, data, rxSize);
+int I2c::txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] ) {
+   return txRx(address, txSize, data, rxSize, data);
 }
+
+
+/*
+ * I2C state-machine based interrupt handler
+ */
+#if defined(MCU_MKM33Z5)
+// MCU_MKM33Z5 has a shared handler for I2C0 & I2C1
+extern "C"
+/*
+ * I2C state-machine based interrupt handler
+ */
+void I2C0_1_IRQHandler() {
+   if (I2C0->S&I2C_S_IICIF_MASK) {
+      I2c0::thisPtr->poll();
+   }
+   if (I2C1->S&I2C_S_IICIF_MASK) {
+      I2c1::thisPtr->poll();
+   }
+}
+#else // !defined(MCU_MKM33Z5)
+#if defined(I2C0)
+/*
+ * I2C state-machine based interrupt handler
+ */
+extern "C"
+void I2C0_IRQHandler() {
+   I2c0::thisPtr->poll();
+}
+#endif
+#if defined(I2C1)
+/*
+ * I2C state-machine based interrupt handler
+ */
+extern "C"
+void I2C1_IRQHandler() {
+   I2c1::thisPtr->poll();
+}
+#endif
+
+#endif // defined(MCU_MKM33Z5)
+
+#if defined(I2C2)
+/*
+ * I2C state-machine based interrupt handler
+ */
+extern "C"
+void I2C2_IRQHandler() {
+   I2c2::thisPtr->poll();
+}
+#endif
+
+#if defined(I2C0)
+template<> I2c *I2c0::thisPtr = 0;
+#endif
+
+#if defined(I2C1)
+template<> I2c *I2c1::thisPtr = 0;
+#endif
+
+#if defined(I2C2)
+template<> I2c *I2c2::thisPtr = 0;
+#endif
 

@@ -24,7 +24,7 @@
 #ifndef __GT20L16_DRIVE_H__
 #define __GT20L16_DRIVE_H__
 
-#include "gpio.h"
+#include "hardware.h"
 #include "spi.h"
 
 namespace USBDM {

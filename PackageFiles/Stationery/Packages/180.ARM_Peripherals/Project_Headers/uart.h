@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "clock_configure.h"
 
 namespace USBDM {

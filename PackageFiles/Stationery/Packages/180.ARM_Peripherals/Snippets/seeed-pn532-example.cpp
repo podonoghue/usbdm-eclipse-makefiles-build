@@ -24,7 +24,7 @@
 #include <string.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "delay.h"
 #include "pn532.h"
 

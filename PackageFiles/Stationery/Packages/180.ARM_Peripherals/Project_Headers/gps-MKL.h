@@ -12,7 +12,7 @@
 #define INCLUDE_USBDM_GPS_H_
 
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "clock_configure.h"
 
 namespace USBDM {

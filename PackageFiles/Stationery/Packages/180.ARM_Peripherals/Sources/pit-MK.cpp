@@ -1,8 +1,8 @@
 /*
  * @file pit.cpp (derived from pit-MK.cpp)
  *
- *  Created on: 12/11/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 
 #include <stddef.h>
@@ -18,12 +18,10 @@ using namespace USBDM;
  *
  *=========================================================================*/
 
-#ifdef PIT
-#if !defined(SIM_SCGC5_PIT0_MASK)
-#define SIM_SCGC5_PIT0_MASK SIM_SCGC5_PIT_MASK
-#endif
+#if defined(PIT) && (PIT_USES_NAKED_HANDLER == 0)
 
-#if PIT_USES_NAKED_HANDLER == 0
+template<class Info>
+PITCallbackFunction Pit_T<Info>::callback[Info::irqCount];
 
 /**
  *   PIT interrupt handler
@@ -81,6 +79,4 @@ void PIT3_IRQHandler(void) {
       Pit::callback[3]();
    }
 }
-#endif
-
 #endif

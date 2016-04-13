@@ -6,7 +6,7 @@
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "i2c.h"
 #include "fxos8700cq.h"
 #include "delay.h"

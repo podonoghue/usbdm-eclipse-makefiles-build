@@ -27,7 +27,7 @@
 #ifndef EPD_H
 #define EPD_H
 
-#include "gpio.h"
+#include "hardware.h"
 #include "spi.h"
 #include "delay.h"
 

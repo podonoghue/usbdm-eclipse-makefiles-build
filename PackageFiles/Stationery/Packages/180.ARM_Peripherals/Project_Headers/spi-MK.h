@@ -3,8 +3,8 @@
  *
  * @brief    Abstraction layer for SPI interface
  *
- * @version   1.1.0
- * @date     2015/12
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 
 #ifndef INCLUDE_USBDM_SPI_H_
@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 namespace USBDM {
 
@@ -25,10 +25,8 @@ static constexpr uint32_t SPI_MODE1 (0       |SPI_CPHA);
 static constexpr uint32_t SPI_MODE2 (SPI_CPOL|0);
 static constexpr uint32_t SPI_MODE3 (SPI_CPOL|SPI_CPHA);
 
-static constexpr uint32_t DEFAULT_SPI_FREQUENCY = 10000000;     //!< Default SPI frequency 10 MHz
-static constexpr uint32_t DEFAULT_SPI_MODE      = SPI_MODE0;    //!< Default SPI mode for TxRx
 /**
- * @addtogroup SPI_Group Serial Peripheral Interface
+ * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
@@ -54,8 +52,16 @@ protected:
    }
 
 public:
+   /**
+    * Enable pins used by SPI
+    */
    virtual void enablePins() = 0;
+
+   /**
+    * Disable (restore to usual default) pins used by SPI
+    */
    virtual void disablePins() = 0;
+
    /**
     * Sets Communication speed for SPI
     *
@@ -64,13 +70,14 @@ public:
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
     */
-   void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
+   void setSpeed(uint32_t frequency);
+
    /**
     * Sets Communication mode for SPI
     *
     * @param mode => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
     */
-   void setMode(uint32_t mode=DEFAULT_SPI_MODE) {
+   void setMode(uint32_t mode) {
       // Sets the default CTAR value with 8 bits
       setCTAR0Value((mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF))|SPI_CTAR_FMSZ(8-1));
    }
@@ -146,69 +153,53 @@ public:
 /**
  * @brief Template class representing a SPI interface
  *
- * @tparam  info           Class describing Spi hardware
- * @tparam  Rest...        Pcrs used for PCSx
+ * @tparam  Info           Class describing Spi hardware
  */
-template<class info, typename ... Rest>
+template<class Info>
 class Spi_T : public Spi {
-
-private:
-   using SpiSCK   = PcrTable_T<info, 0>;
-   using SpiSIN   = PcrTable_T<info, 1>;
-   using SpiSOUT  = PcrTable_T<info, 2>;
 
 public:
    virtual void enablePins() {
       // Configure SPI pins
-      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>();
+      Info::initPCRs(Info::pcrValue);
    }
 
    virtual void disablePins() {
-      // Configure SPI pins
-      processPcrs<SpiSCK, SpiSIN, SpiSOUT, Rest...>(0);
+      // Configure SPI pins to mux=0
+      Info::initPCRs(0);
    }
 
    /**
     * Constructor
     */
-   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(info::basePtr)) {
+   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::basePtr)) {
+
+#ifdef DEBUG_BUILD
+      // Check pin assignments
+      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin");
+      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin");
+      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin");
+#endif
+
       // Enable SPI module clock
-      *reinterpret_cast<volatile uint32_t*>(info::clockReg) |= info::clockMask;
+      *reinterpret_cast<volatile uint32_t*>(Info::clockReg) |= Info::clockMask;
 
       spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
                    SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
 
-      setSpeed();                        // Use default speed
+      setSpeed(Info::speed);             // Use default speed
+      setMode(Info::modeValue);          // Use default mode
       setCTAR0Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
       setCTAR1Value(SPI_CTAR_FMSZ(8-1)); // Default 8-bit transfers
 
       // Configure SPI pins
       enablePins();
-
-      // Use default speed
-      setSpeed();
    }
 };
 
-#if defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_SIN_PIN_SEL!=0) && (SPI0_SOUT_PIN_SEL!=0)
+#if defined(SPI0)
 /**
- * @brief Template class representing a SPI0 interface with optional PCSs
- *
- * <b>Example</b>
- * @code
- * USBDM::Spi *spi = new USBDM::Spi0_T<USBDM::Spi0_PCS1>();
- *
- * uint8_t txData[] = {1,2,3};
- * uint8_t rxData[10];
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- *
- * @tparam  PCSs...    GpioX used for PCSx
- */
-template<typename ... PCSs> using  Spi0_T = Spi_T<Spi0Info, PCSs...>;
-
-/**
- * @brief Alias representing a SPI0 interface without PCS use
+ * @brief Template class representing a SPI0 interface
  *
  * <b>Example</b>
  * @code
@@ -219,30 +210,13 @@ template<typename ... PCSs> using  Spi0_T = Spi_T<Spi0Info, PCSs...>;
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
  *
- * @tparam  PCSs...    GpioX used for PCSx
  */
-using Spi0 = Spi0_T<>;
+using Spi0 = Spi_T<Spi0Info>;
 #endif
 
-#if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_SIN_PIN_SEL!=0) && (SPI1_SOUT_PIN_SEL!=0)
+#if defined(SPI1)
 /**
- * @brief Template class representing a SPI1 interface with optional PCSs
- *
- * <b>Example</b>
- * @code
- * USBDM::Spi *spi = new USBDM::Spi1_T<USBDM::spi1_PCS1>();
- *
- * uint8_t txData[] = {1,2,3};
- * uint8_t rxData[10];
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- *
- * @tparam  PCSs...    GpioX used for PCSx
- */
-template<typename ... PCSs> using  Spi1_T = Spi_T<Spi1Info, PCSs...>;
-
-/**
- * @brief Alias representing a SPI1 interface without PCS use
+ * @brief Template class representing a SPI1 interface
  *
  * <b>Example</b>
  * @code
@@ -253,9 +227,8 @@ template<typename ... PCSs> using  Spi1_T = Spi_T<Spi1Info, PCSs...>;
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
  *
- * @tparam  PCSs...    GpioX used for PCSx
  */
-using Spi1 = Spi1_T<>;
+using  Spi1 = Spi_T<Spi1Info>;
 #endif
 /**
  * @}

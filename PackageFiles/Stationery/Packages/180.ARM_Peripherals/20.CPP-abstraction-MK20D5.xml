@@ -3,7 +3,7 @@
 [
 <!ENTITY DEVICE_SUB_FAMILY  "MK20D5">
 <!ENTITY DEVICE_FAMILY      "MK">
-<!ENTITY DEVICE_FILE        "MK20D5-LQFP64">
+<!ENTITY DEVICE_FILE        "MK20D5">
 ]>
 
 <root version="1.0" >
@@ -48,11 +48,13 @@
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
-         <copy source="Project_Headers/gpio.h"                             target="Project_Headers/gpio.h" />
-         <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
-         <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/gpio-&DEVICE_FILE;.cpp"                     target="Sources/gpio.cpp" />
+         <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
+         <copy source="Project_Headers/adc.h"                              target="Project_Headers/adc.h" />
+         <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
+         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
+         <copy source="usbdm/&DEVICE_FILE;.hardware"                       target="usbdm/Configure.hardware" />
+         <copy source="usbdm/Pins.dtd"                                     target="usbdm/Pins.dtd" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

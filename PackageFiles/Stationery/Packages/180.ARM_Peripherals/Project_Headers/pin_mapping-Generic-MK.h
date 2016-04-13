@@ -302,12 +302,12 @@ public:
 
 } // End namespace USBDM
 
-#include "gpio_defs.h"
+#include "gpio.h"
 
 namespace USBDM {
 
 /**
- * @addtogroup DigitalIO_Group Digital Input/Output
+ * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @brief Allows use of port pins as simple digital inputs or outputs
  * @{
  */
@@ -387,7 +387,7 @@ template<int left, int right> using GpioAField = Field_T<GpioAInfo, left, right>
  * @}
  */
 /**
- * @addtogroup DigitalIO_Group Digital Input/Output
+ * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @brief Allows use of port pins as simple digital inputs or outputs
  * @{
  */
@@ -467,7 +467,7 @@ template<int left, int right> using GpioBField = Field_T<GpioBInfo, left, right>
  * @}
  */
 /**
- * @addtogroup DigitalIO_Group Digital Input/Output
+ * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @brief Allows use of port pins as simple digital inputs or outputs
  * @{
  */
@@ -547,7 +547,7 @@ template<int left, int right> using GpioCField = Field_T<GpioCInfo, left, right>
  * @}
  */
 /**
- * @addtogroup DigitalIO_Group Digital Input/Output
+ * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @brief Allows use of port pins as simple digital inputs or outputs
  * @{
  */
@@ -627,7 +627,7 @@ template<int left, int right> using GpioDField = Field_T<GpioDInfo, left, right>
  * @}
  */
 /**
- * @addtogroup DigitalIO_Group Digital Input/Output
+ * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @brief Allows use of port pins as simple digital inputs or outputs
  * @{
  */

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 /**
  * See examples in Snippets directory

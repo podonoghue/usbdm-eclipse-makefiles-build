@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "lptmr.h"
 
 using namespace USBDM;
@@ -40,11 +40,11 @@ int main() {
    RED_LED::setOutput();
 
    // May need to change prescaler to get useful delays
-   LPTMR_0.configure(1000, LPTMR_CSR_DEFAULT_VALUE|LPTMR_CSR_TIE_MASK);
+   Lptmr0::configure(1000);
    
 #if LPTMR_USES_NAKED_HANDLER == 0
    // This handler is set programmatically
-   LPTMR_0.setCallback(flash);
+   Lptmr0::setCallback(flash);
 #endif
 
    for(;;) {

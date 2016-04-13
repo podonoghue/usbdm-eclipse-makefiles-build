@@ -12,7 +12,7 @@
 
 #include "derivative.h"
 #include "system.h"
-#include "gpio.h"
+#include "hardware.h"
 
 namespace USBDM {
 

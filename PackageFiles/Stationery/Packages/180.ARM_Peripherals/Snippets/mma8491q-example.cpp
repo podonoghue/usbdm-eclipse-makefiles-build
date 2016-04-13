@@ -5,7 +5,7 @@
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "i2c.h"
 #include "mma8491q.h"
 #include "delay.h"

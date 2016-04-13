@@ -1,8 +1,8 @@
 /*
  * spi.cpp (derived from spi-MK.cpp)
  *
- *  Created on: 07/08/2012
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 #include <stddef.h>
 #include <stdint.h>
@@ -10,7 +10,7 @@
 #include "derivative.h"
 #include "utilities.h"
 #include "spi.h"
-#include "gpio.h"
+#include "hardware.h"
 
 namespace USBDM {
 

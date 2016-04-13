@@ -14,18 +14,13 @@ using namespace USBDM;
 
 /*!=========================================================================
  *
- *   Low Power Timer (LPTMR) routines
+ *   Low Power Timer (Lptrm) routines
  *
  *=========================================================================*/
 
-#ifdef LPTMR0
-#if !defined(SIM_SCGC5_LPTMR0_MASK)
-#define SIM_SCGC5_LPTMR0_MASK SIM_SCGC5_LPTMR_MASK
-#endif
+#if defined(LPTMR0) && (LPTMR_USES_NAKED_HANDLER == 0)
 
-#if LPTMR_USES_NAKED_HANDLER == 0
-
-LPTMRCallbackFunction LPTMR::callback = 0;
+template<> LPTMRCallbackFunction Lptmr_T<Lptmr0Info>::callback = 0;
 
 /*!
  *   LPTRM interrupt handler
@@ -34,16 +29,10 @@ LPTMRCallbackFunction LPTMR::callback = 0;
  */
 void LPTMR0_IRQHandler(void) {
    // Clear interrupt flag
-   LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
+   Lptmr_T<Lptmr0Info>::lptmr->CSR |= LPTMR_CSR_TCF_MASK;
 
-   if (LPTMR::callback != 0) {
-      (*LPTMR::callback)();
+   if (Lptmr_T<Lptmr0Info>::callback != 0) {
+      (*Lptmr_T<Lptmr0Info>::callback)();
    }
 }
-#endif
-
-#ifdef LPTMR0
-const LPTMR LPTMR_0;
-#endif
-
 #endif

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 using namespace USBDM;
 

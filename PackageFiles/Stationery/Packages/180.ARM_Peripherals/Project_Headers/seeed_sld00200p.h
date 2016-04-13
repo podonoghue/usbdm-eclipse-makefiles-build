@@ -10,7 +10,7 @@
 #ifndef SEEED_SLD00200P_H_
 #define SEEED_SLD00200P_H_
 
-#include <gpio.h>
+#include <hardware.h>
 /*!
  * Mappings from Arduino pins to Seeed studio e-Paper shield
  */

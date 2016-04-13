@@ -71,7 +71,7 @@
 #include "derivative.h"
 #include "utilities.h"
 #include "lcd.h"
-#include "gpio.h"
+#include "hardware.h"
 #include "fonts.h"
 
 using namespace USBDM;

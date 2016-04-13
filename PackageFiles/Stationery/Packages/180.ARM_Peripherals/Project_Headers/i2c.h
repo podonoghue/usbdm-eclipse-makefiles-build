@@ -13,12 +13,12 @@
 
 #include <stdint.h>
 #include "derivative.h"
-#include "gpio.h"
+#include "hardware.h"
 
 namespace USBDM {
 
 /**
- * @addtogroup I2C_Group Inter-Integrated-Circuit I2C
+ * @addtogroup I2C_Group I2C, Inter-Integrated-Circuit Interface
  * @brief C++ Class allowing access to I2C interface
  * @{
  */
@@ -122,19 +122,19 @@ public:
     * Transmit message
     *
     * @param address  Address of slave to communicate with
-    * @param data     Data to transmit, 0th byte is often register address
     * @param size     Size of transmission data
+    * @param data     Data to transmit, 0th byte is often register address
     */
-   int transmit(uint8_t address, const uint8_t data[], uint16_t size);
+   int transmit(uint8_t address, uint16_t size, const uint8_t data[]);
 
    /**
     * Receive message
     *
     * @param address  Address of slave to communicate with
-    * @param data     Data buffer for reception
     * @param size     Size of reception data
+    * @param data     Data buffer for reception
     */
-   int receive(uint8_t address,  uint8_t data[], uint16_t size);
+   int receive(uint8_t address, uint16_t size,  uint8_t data[]);
 
    /**
     * Transmit message followed by receive message.
@@ -142,12 +142,12 @@ public:
     * Uses repeated-start.
     *
     * @param address  Address of slave to communicate with
-    * @param txData   Data for transmission
     * @param txSize   Size of transmission data
-    * @param rxData   Date buffer for reception
+    * @param txData   Data for transmission
     * @param rxSize   Size of reception data
+    * @param rxData   Date buffer for reception
     */
-   int txRx(uint8_t address, const uint8_t txData[], uint16_t txSize, uint8_t rxData[], uint16_t rxSize );
+   int txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] );
 
    /**
     * Transmit message followed by receive message.
@@ -155,11 +155,11 @@ public:
     * Uses shared transmit and receive buffer
     *
     * @param address  Address of slave to communicate with
-    * @param data     Data for transmission and reception
     * @param txSize   Size of transmission data
     * @param rxSize   Size of reception data
+    * @param data     Data for transmission and reception
     */
-   int txRx(uint8_t address, uint8_t data[], uint16_t txSize, uint16_t rxSize );
+   int txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] );
 
 };
 
@@ -193,9 +193,9 @@ public:
  *  }
  *  @endcode
  *
- * @tparam info            Class describing I2C hardware
+ * @tparam Info            Class describing I2C hardware
  */
-template<class info> class I2C_T : public I2c {
+template<class Info> class I2C_T : public I2c {
    friend void I2C0_IRQHandler(void);
    friend void I2C1_IRQHandler(void);
    friend void I2C2_IRQHandler(void);
@@ -205,11 +205,9 @@ public:
    static class I2c *thisPtr;
 
 private:
-   using SclPcr  = PcrTable_T<info, 0>;
-   using SclGpio = GpioTable_T<info, 0>;
+   using SclGpio = GpioTable_T<Info, 0>;
 
-   using SdaPcr  = PcrTable_T<info, 1>;
-   using SdaGpio = GpioTable_T<info, 1>;
+   using SdaGpio = GpioTable_T<Info, 1>;
 
 public:
    /**
@@ -218,13 +216,15 @@ public:
     * @param baud
     * @param mode       Mode of operation
     * @param myAddress  Address of this device on bus (not currently used)
-    *
-    *
-    * @tparam i2c        Hardware pointer
-    * @tparam scl        I2C Clock port
-    * @tparam sda        I2C Data port
     */
-   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(info::basePtr), mode) {
+   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(Info::basePtr), mode) {
+
+#ifdef DEBUG_BUILD
+   // Check pin assignments
+   static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2C0_SCL has not been assigned to a pin");
+   static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2C0_SDA has not been assigned to a pin");
+#endif
+
       busHangReset();
       init(myAddress);
       setBPS(baud);
@@ -236,16 +236,15 @@ public:
    void init(const uint8_t myAddress) {
 
       // Enable clock to I2C interface
-      *reinterpret_cast<uint32_t *>(info::clockReg) |= info::clockMask;
+      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
 
       thisPtr = this;
 
       // Configure I2C pins
-      SdaPcr::setPCR();
-      SclPcr::setPCR();
+      Info::initPCRs(Info::pcrValue);
 
       if (mode&I2C_C1_IICIE_MASK) {
-         NVIC_EnableIRQ(info::irqNums[0]);
+         NVIC_EnableIRQ(Info::irqNums[0]);
       }
       // Enable I2C peripheral
       i2c->C1 = I2C_C1_IICEN_MASK|mode;
@@ -289,7 +288,7 @@ public:
    }
 };
 
-#if defined(I2C0) && (I2C0_SCL_PIN_SEL!=0) && (I2C0_SDA_PIN_SEL!=0)
+#if defined(I2C0)
 /**
  * @brief Convenience template class representing the I2C0 interface
  *
@@ -323,7 +322,7 @@ using I2c0 = USBDM::I2C_T<I2c0Info>;
 #endif
 #endif
 
-#if defined(I2C1) && (I2C1_SCL_PIN_SEL!=0) && (I2C1_SDA_PIN_SEL!=0)
+#if defined(I2C1)
 /**
  * @brief Convenience template class representing the I2C1 interface
  *
@@ -358,7 +357,7 @@ using I2c1 = USBDM::I2C_T<I2c1Info>;
 #endif
 #endif
 
-#if defined(I2C2) && (I2C2_SCL_PIN_SEL!=0) && (I2C2_SDA_PIN_SEL!=0)
+#if defined(I2C2)
 /**
  * @brief Convenience template class representing the I2C2 interface
  *
