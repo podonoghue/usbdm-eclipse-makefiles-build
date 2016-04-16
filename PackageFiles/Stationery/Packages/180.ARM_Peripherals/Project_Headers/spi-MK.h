@@ -161,12 +161,12 @@ class Spi_T : public Spi {
 public:
    virtual void enablePins() {
       // Configure SPI pins
-      Info::initPCRs(Info::pcrValue);
+      Info::initPCRs();
    }
 
    virtual void disablePins() {
       // Configure SPI pins to mux=0
-      Info::initPCRs(0);
+      Info::clearPCRs();
    }
 
    /**

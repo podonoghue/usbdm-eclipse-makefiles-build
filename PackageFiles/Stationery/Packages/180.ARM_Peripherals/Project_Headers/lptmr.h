@@ -73,7 +73,7 @@ public:
    static void configure(uint16_t interval, uint32_t csr=Info::csrValue|LPTMR_CSR_TIE_MASK, uint32_t psr=Info::psrValue) {
 
       // Configure pins
-      Info::initPCRs(Info::pcrValue);
+      Info::initPCRs();
 
       // Enable clock
       *clockReg |= Info::clockMask;

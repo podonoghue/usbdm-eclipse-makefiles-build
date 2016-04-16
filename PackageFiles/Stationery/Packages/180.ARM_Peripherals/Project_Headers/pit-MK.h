@@ -29,7 +29,7 @@ typedef void (*PITCallbackFunction)(void);
 #endif
 
 /*!
- * @brief struct representing a Programmable Interrupt  Timer
+ * @brief Class representing a Programmable Interrupt  Timer
  *
  * <b>Example</b>
  * @code

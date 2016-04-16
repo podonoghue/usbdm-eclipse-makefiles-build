@@ -183,7 +183,7 @@ void FXOS8700CQ::enable(Mode mode) {
 uint8_t FXOS8700CQ::readReg(uint8_t regNum) {
    uint8_t command[] = {regNum};
 
-   i2c->txRx(DEVICE_ADDRESS, command, 1, sizeof(command));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(command), command);
    return command[0];
 }
 
@@ -196,7 +196,7 @@ uint8_t FXOS8700CQ::readReg(uint8_t regNum) {
 void FXOS8700CQ::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(DEVICE_ADDRESS, command, sizeof(command));
+   i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
 }
 
 /**
@@ -238,7 +238,7 @@ void FXOS8700CQ::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];
@@ -278,7 +278,7 @@ void FXOS8700CQ::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_
    uint8_t dataXYZ[7] = {M_DR_STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return (data is sign extended)
    *status = dataXYZ[0];
@@ -306,7 +306,7 @@ void FXOS8700CQ::readAll(Data &data) {
 
    // Receive 14 registers (accelerometerStatus, X-high/low, Y-high/low, Z-high/low,
    //                       magnetometerStatus, X-high/low, Y-high/low, Z-high/low)
-   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
    data.accelerometerStatus = dataXYZ[0];
    data.accelerometer_X     = ((dataXYZ[1]<<8)+dataXYZ[2]);
    data.accelerometer_Y     = ((dataXYZ[3]<<8)+dataXYZ[4]);
@@ -324,7 +324,7 @@ void FXOS8700CQ::readAll(Data &data) {
  */
 uint32_t FXOS8700CQ::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->txRx(DEVICE_ADDRESS, values, 1, sizeof(values));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
    return values[0];
 }
 

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="USBDM">
+	<item value="$(cpp.peripheral.subfamily).usbdmHardware" key="Hardware_Source_Filename"/>
+</section>

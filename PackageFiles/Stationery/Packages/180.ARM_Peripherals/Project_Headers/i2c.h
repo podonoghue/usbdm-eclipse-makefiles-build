@@ -241,7 +241,7 @@ public:
       thisPtr = this;
 
       // Configure I2C pins
-      Info::initPCRs(Info::pcrValue);
+      Info::initPCRs();
 
       if (mode&I2C_C1_IICIE_MASK) {
          NVIC_EnableIRQ(Info::irqNums[0]);

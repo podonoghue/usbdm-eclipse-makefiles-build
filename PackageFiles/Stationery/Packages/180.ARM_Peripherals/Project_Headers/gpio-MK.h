@@ -142,7 +142,7 @@ static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
  * @tparam pcrAddress      PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
- * @tparam defPcrValue     Default value for PCR
+ * @tparam defPcrValue     Default value for PCR (including mux value)
  */
 template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue=DEFAULT_PCR>
 class Pcr_T {

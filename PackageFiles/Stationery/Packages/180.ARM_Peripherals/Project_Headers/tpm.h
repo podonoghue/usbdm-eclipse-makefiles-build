@@ -196,6 +196,7 @@ public:
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
 #ifdef DEBUG_BUILD
+      assert(rv > 0xFFFFUL);
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          __BKPT();
@@ -252,6 +253,13 @@ public:
  */
 template<class info, uint32_t tmrChannel, uint32_t pcrValue=info::pcrValue>
 class TmrBase_T : public Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue> {
+
+#ifdef DEBUG_BUILD
+   static_assert(info::info[tmrChannel].gpioBit != UNMAPPED_PCR, "TmrBase_T: FTM channel is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(info::info[tmrChannel].gpioBit != INVALID_PCR,  "TmrBase_T: FTM channel doesn't exist in this device/package");
+   static_assert((info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(info::info[tmrChannel].gpioBit == INVALID_PCR)||(info::info[tmrChannel].gpioBit >= 0),
+         "TmrBase_T: Illegal FTM channel");
+#endif
 
 private:
    static constexpr volatile TPM_Type *tmr = reinterpret_cast<volatile TPM_Type *>(info::basePtr);

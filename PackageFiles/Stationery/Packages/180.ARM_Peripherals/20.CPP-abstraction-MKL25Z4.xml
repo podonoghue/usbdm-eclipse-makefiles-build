@@ -53,8 +53,7 @@
          <copy source="Project_Headers/tpm.h"                              target="Project_Headers/ftm.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
-         <copy source="usbdm/&DEVICE_FILE;.hardware"                       target="usbdm/Configure.hardware" />
-         <copy source="usbdm/Pins.dtd"                                     target="usbdm/Pins.dtd" />
+         <copy source="usbdm/Configure.usbdmProject"                       target="usbdm/Configure.usbdmProject" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>
