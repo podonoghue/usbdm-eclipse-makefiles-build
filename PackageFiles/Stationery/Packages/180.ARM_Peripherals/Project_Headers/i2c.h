@@ -17,6 +17,11 @@
 
 namespace USBDM {
 
+extern "C" void I2C0_IRQHandler(void);
+extern "C" void I2C1_IRQHandler(void);
+extern "C" void I2C2_IRQHandler(void);
+extern "C" void I2C3_IRQHandler(void);
+
 /**
  * @addtogroup I2C_Group I2C, Inter-Integrated-Circuit Interface
  * @brief C++ Class allowing access to I2C interface
@@ -195,18 +200,23 @@ public:
  *
  * @tparam Info            Class describing I2C hardware
  */
-template<class Info> class I2C_T : public I2c {
+template<class Info> class I2c_T : public I2c {
+
+   /** Allows access from I2C ISR */
    friend void I2C0_IRQHandler(void);
+   /** Allows access from I2C ISR */
    friend void I2C1_IRQHandler(void);
+   /** Allows access from I2C ISR */
    friend void I2C2_IRQHandler(void);
+   /** Allows access from I2C ISR */
    friend void I2C3_IRQHandler(void);
 
 public:
-   static class I2c *thisPtr;
+   /** Used by ISR to obtain handle of object */
+   static I2c *thisPtr;
 
 private:
    using SclGpio = GpioTable_T<Info, 0>;
-
    using SdaGpio = GpioTable_T<Info, 1>;
 
 public:
@@ -217,12 +227,12 @@ public:
     * @param mode       Mode of operation
     * @param myAddress  Address of this device on bus (not currently used)
     */
-   I2C_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(Info::basePtr), mode) {
+   I2c_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(Info::basePtr), mode) {
 
 #ifdef DEBUG_BUILD
    // Check pin assignments
-   static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2C0_SCL has not been assigned to a pin");
-   static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2C0_SDA has not been assigned to a pin");
+   static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2Cx_SCL has not been assigned to a pin");
+   static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2Cx_SDA has not been assigned to a pin");
 #endif
 
       busHangReset();
@@ -316,9 +326,9 @@ public:
  *  @endcode
  */
 #ifdef MCU_MKM33Z5
-using I2c0 = USBDM::I2C_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_1_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
+using I2c0 = USBDM::I2c_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_1_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
 #else
-using I2c0 = USBDM::I2C_T<I2c0Info>;
+using I2c0 = USBDM::I2c_T<I2c0Info>;
 #endif
 #endif
 
@@ -351,9 +361,9 @@ using I2c0 = USBDM::I2C_T<I2c0Info>;
  *  @endcode
  */
 #ifdef MCU_MKM33Z5
-using I2c1 = USBDM::I2C_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C0_1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
+using I2c1 = USBDM::I2c_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C0_1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
 #else
-using I2c1 = USBDM::I2C_T<I2c1Info>;
+using I2c1 = USBDM::I2c_T<I2c1Info>;
 #endif
 #endif
 
@@ -385,7 +395,7 @@ using I2c1 = USBDM::I2C_T<I2c1Info>;
  *  }
  *  @endcode
  */
-using I2c2 = USBDM::I2C_T<I2c2Info>;
+using I2c2 = USBDM::I2c_T<I2c2Info>;
 #endif
 
 /**

@@ -152,8 +152,8 @@ private:
    static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[(bitNum >= 0)?bitNum:0]));
 
 #ifdef DEBUG_BUILD
-   static_assert(bitNum != UNMAPPED_PCR, "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(bitNum != INVALID_PCR,  "Pcr_T: Non-existent signal");
+   static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
    static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||(bitNum >= 0), "Pcr_T: Illegal bit number");
 #endif
 
@@ -417,8 +417,7 @@ using  Gpio_T = GpioBase_T<Pcr_T<Info::clockMask, Info::pcrAddress, bitNum, defP
  * @tparam defPcrValue     Default value for PCR excluding multiplexor value
  */
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  GpioTable_T =
-   GpioBase_T<
+using  GpioTable_T = GpioBase_T<
    Pcr_T<Info::info[bitNum].clockMask, Info::info[bitNum].pcrAddress, Info::info[bitNum].gpioBit, defPcrValue>,
    Info::info[bitNum].gpioAddress,
    Info::info[bitNum].gpioBit,

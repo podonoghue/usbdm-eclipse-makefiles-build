@@ -87,7 +87,7 @@ MMA845x::MMA845x(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
  */
 uint8_t MMA845x::readReg(uint8_t regNum) {
    uint8_t command[1];
-   i2c->txRx(DEVICE_ADDRESS, &regNum, 1, command, sizeof(command));
+   i2c->txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
    return command[0];
 }
 
@@ -100,7 +100,7 @@ uint8_t MMA845x::readReg(uint8_t regNum) {
 void MMA845x::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(DEVICE_ADDRESS, command, sizeof(command));
+   i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
 }
 
 /**
@@ -143,7 +143,7 @@ void MMA845x::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t 
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];
@@ -175,7 +175,7 @@ void MMA845x::setAccelerometerMode(AccelerometerMode mode) {
  */
 uint32_t MMA845x::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->txRx(DEVICE_ADDRESS, values, 1, sizeof(values));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
    return values[0];
 }
 

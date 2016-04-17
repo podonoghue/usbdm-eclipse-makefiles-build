@@ -266,7 +266,7 @@ void Gps::report(Gps::GpsData &gpsData) {
 //=========================================================================
 //=========================================================================
 
-#if (UART0_RX_PIN_SEL != 0)
+#ifdef UART0_BASE_PTR
 
 /**
  * Interrupt handler for UART0 Tx & Rx
@@ -291,14 +291,14 @@ void UART0_ERR_IRQHandler() {
    }
 }
 
-Gps *Gps0::thisPtr;
+template<> Gps *Gps_T<Uart0Info>::thisPtr = 0;
 
-#endif // UART0_RX_GPIO
+#endif // UART0_BASE_PTR
 
 //=========================================================================
 //=========================================================================
 
-#if (UART1_RX_PIN_SEL != 0)
+#ifdef UART1_BASE_PTR
 
 /**
  * Interrupt handler for UART1 Tx & Rx
@@ -323,14 +323,14 @@ void UART1_ERR_IRQHandler() {
    }
 }
 
-Gps *Gps1::thisPtr;
+template<> Gps *Gps_T<Uart1Info>::thisPtr = 0;
 
-#endif // UART1_RX_GPIO
+#endif // UART1_BASE_PTR
 
 //=========================================================================
 //=========================================================================
 
-#if (UART2_RX_PIN_SEL != 0)
+#ifdef UART2_BASE_PTR
 
 /**
  * Interrupt handler for UART2 Tx & Rx
@@ -354,9 +354,9 @@ void UART2_ERR_IRQHandler() {
    }
 }
 
-Gps *Gps2::thisPtr;
+template<> Gps *Gps_T<Uart2Info>::thisPtr = 0;
 
-#endif // UART2_RX_GPIO
+#endif // UART2_BASE_PTR
 
 } // End namespace USBDM
 

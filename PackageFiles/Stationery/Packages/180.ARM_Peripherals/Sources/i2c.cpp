@@ -6,7 +6,7 @@
  */
 #include "i2c.h"
 
-using namespace USBDM;
+namespace USBDM {
 
 // I2C baud rate divisor table
 const uint16_t I2c::I2C_DIVISORS[] = {
@@ -281,7 +281,6 @@ int I2c::txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] 
    return txRx(address, txSize, data, rxSize, data);
 }
 
-
 /*
  * I2C state-machine based interrupt handler
  */
@@ -332,14 +331,16 @@ void I2C2_IRQHandler() {
 #endif
 
 #if defined(I2C0)
-template<> I2c *I2c0::thisPtr = 0;
+template<> I2c *I2c_T<I2c0Info>::thisPtr = 0;
 #endif
 
 #if defined(I2C1)
-template<> I2c *I2c1::thisPtr = 0;
+template<> I2c *I2c_T<I2c1Info>::thisPtr = 0;
 #endif
 
 #if defined(I2C2)
-template<> I2c *I2c2::thisPtr = 0;
+template<> I2c *I2c_T<I2c2Info>::thisPtr = 0;
 #endif
 
+
+} // End namespace USBDM

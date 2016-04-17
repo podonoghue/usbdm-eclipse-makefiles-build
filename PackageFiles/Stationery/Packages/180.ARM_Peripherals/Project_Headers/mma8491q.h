@@ -75,7 +75,7 @@ protected:
     */
    uint8_t readReg(uint8_t regNum) {
       uint8_t command[1];
-      i2c->txRx(DEVICE_ADDRESS, &regNum, 1, command, sizeof(command));
+      i2c->txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
       return command[0];
    }
    /**
@@ -86,7 +86,7 @@ protected:
     */
    void writeReg(uint8_t regNum, uint8_t value) {
       uint8_t command[] = {regNum, value};
-      i2c->transmit(DEVICE_ADDRESS, command, sizeof(command));
+      i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
    }
    /**
     * Reset Accelerometer

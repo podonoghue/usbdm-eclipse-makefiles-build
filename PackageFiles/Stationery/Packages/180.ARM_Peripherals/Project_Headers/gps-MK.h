@@ -17,6 +17,7 @@
 
 namespace USBDM {
 
+/* Allow access from UART ISR */
 extern "C" void UART0_RX_TX_IRQHandler();
 extern "C" void UART1_RX_TX_IRQHandler();
 extern "C" void UART2_RX_TX_IRQHandler();
@@ -95,7 +96,7 @@ protected:
    };
 
    UART_Type  *uart;
-   uint32_t    uartClockFrequency;
+   uint32_t   &uartClockFrequency; // Usually SystemCoreClock or SystemBusClock
 
    State       state;
    State       pushState;
@@ -111,10 +112,10 @@ protected:
     * Constructor for GPS interface
     *
     * @param uart               Pointer to UART hardware
-    * @param uartClockFrequency Clock frequency use for UART hardware
+    * @param uartClockFrequency Clock frequency of UART hardware. Usually SystemCoreClock or SystemBusClock
     *
     */
-   Gps(UART_Type *uart, uint32_t uartClockFrequency) : uart(uart), uartClockFrequency(uartClockFrequency), state(S_idle), pushState(S_idle) {
+   Gps(UART_Type *uart, uint32_t &uartClockFrequency) : uart(uart), uartClockFrequency(uartClockFrequency), state(S_idle), pushState(S_idle) {
    }
    /**
     * Start parsing a number
@@ -198,23 +199,44 @@ public:
  *
  * @tparam info   Class describing UART hardware
  */
-template<class info>
-class Gps_T : public Gps {
+template<class Info> class Gps_T : public Gps {
+
+   /** Allows access from UART ISR */
+   friend void UART0_RX_TX_IRQHandler();
+   /** Allows access from UART ISR */
+   friend void UART1_RX_TX_IRQHandler();
+   /** Allows access from UART ISR */
+   friend void UART2_RX_TX_IRQHandler();
+   /** Allows access from UART ISR */
+   friend void UART3_RX_TX_IRQHandler();
+
+protected:
+   /** Used by ISR to obtain handle of object */
+   static Gps *thisPtr;
 
 private:
-   using TxPcr  = PcrTable_T<info, 0>;
-   using RxPcr  = PcrTable_T<info, 1>;
+   using SclGpio = GpioTable_T<Info, 0>;
 
 public:
    /**
     * Create GPS interface
+    *
+    * @param uartClockFrequency Input clock frequency to UART
     */
-   Gps_T(uint32_t uartClockFrequency) : Gps((UART_Type *)(info::basePtr), uartClockFrequency) {
-      // Enable clock to UART interface
-      *reinterpret_cast<uint32_t *>(info::clockReg) |= info::clockMask;
+   Gps_T() : Gps(reinterpret_cast<UART_Type *>(Info::basePtr), Info::clockSource) {
 
-      TxPcr::setPCR();
-      RxPcr::setPCR();
+#ifdef DEBUG_BUILD
+   static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "UARTx: Tx signal is not mapped to a pin");
+   static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "UARTx: Rx signal is not mapped to a pin");
+#endif
+
+      thisPtr = this;
+
+      // Enable clock to UART interface
+      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
+
+      // Configure Tx & Rx pins
+      Info::initPCRs();
 
       initUart();
    }
@@ -229,11 +251,11 @@ public:
       if (!newData) {
          return false;
       }
-      NVIC_DisableIRQ(info::irqNums[0]);
+      NVIC_DisableIRQ(Info::irqNums[0]);
       gpsData = Gps::gpsData;
       newData = false;
-      if ((sizeof(info::irqNums)/sizeof(info::irqNums[0])) > 1) {
-         NVIC_EnableIRQ(info::irqNums[1]);
+      if ((sizeof(Info::irqNums)/sizeof(Info::irqNums[0])) > 1) {
+         NVIC_EnableIRQ(Info::irqNums[1]);
       }
       return true;
    }
@@ -245,14 +267,14 @@ public:
 
       setBaud();
 
-      NVIC_EnableIRQ(info::irqNums[0]);
-      if ((sizeof(info::irqNums)/sizeof(info::irqNums[0])) > 1) {
-         NVIC_EnableIRQ(info::irqNums[1]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
+      if ((sizeof(Info::irqNums)/sizeof(Info::irqNums[0])) > 1) {
+         NVIC_EnableIRQ(Info::irqNums[1]);
       }
    }
 };
 
-#if (UART0_RX_PIN_SEL != 0)
+#ifdef UART0_BASE_PTR
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -273,31 +295,10 @@ public:
  * }
  * @endcode
  */
-class Gps0 : public Gps_T<Uart0Info> {
-
-   /** Allows access from UART ISR */
-   friend void UART0_RX_TX_IRQHandler();
-
-protected:
-   /** Used by ISR to obtain handle of object */
-   static Gps *thisPtr;
-
-public:
-   /**
-    * Create GPS interface
-    */
-   Gps0() : Gps_T(SYSTEM_UART1_CLOCK) {
-      thisPtr = this;
-      initUart();
-#ifdef SIM_SOPT5_UART0RXSRC_MASK
-      // Select Tx & Rx pins to use
-      SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
-#endif
-   }
-};
+using Gps0 = Gps_T<Uart0Info>;
 #endif
 
-#if (UART1_RX_PIN_SEL != 0)
+#ifdef UART1_BASE_PTR
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -318,31 +319,10 @@ public:
  * }
  * @endcode
  */
-class Gps1 : public Gps_T<Uart1Info> {
-
-   /** Allows access from UART ISR */
-   friend void UART1_RX_TX_IRQHandler();
-
-protected:
-   /** Used by ISR to obtain handle of object */
-   static Gps *thisPtr;
-
-public:
-   /**
-    * Create GPS interface
-    */
-   Gps1() : Gps_T(SYSTEM_UART1_CLOCK) {
-      thisPtr = this;
-      initUart();
-#ifdef SIM_SOPT5_UART1RXSRC_MASK
-      // Select Tx & Rx pins to use
-      SIM->SOPT5 &= ~(SIM_SOPT5_UART1RXSRC_MASK|SIM_SOPT5_UART1TXSRC_MASK);
-#endif
-   }
-};
+using Gps1 = Gps_T<Uart1Info>;
 #endif
 
-#if (UART2_RX_PIN_SEL != 0)
+#ifdef UART2_BASE_PTR
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -363,24 +343,7 @@ public:
  * }
  * @endcode
  */
-class Gps2 : public Gps_T<Uart2Info> {
-
-   /** Allows access from UART ISR */
-   friend void UART2_RX_TX_IRQHandler();
-
-protected:
-   /** Used by ISR to obtain handle of object */
-   static Gps *thisPtr;
-
-public:
-   /**
-    * Create GPS interface
-    */
-   Gps1() : Gps_T(SYSTEM_UART1_CLOCK) {
-      thisPtr = this;
-      initUart();
-   }
-};
+using Gps2 = Gps_T<Uart2Info>;
 #endif
 
 /**

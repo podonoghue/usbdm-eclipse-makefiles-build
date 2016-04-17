@@ -14,7 +14,7 @@
 
 /*
  * It will be necessary to change pin mappings to use this example
- * Make sure the following are correctly set under "Mapping by Peripheral Function".
+ * Make sure the following are correctly set under "Peripheral View".
  *
  * For whichever SPI is being used:
  * nRF24L01 SCK   - SPI SCK signal
@@ -31,7 +31,7 @@ using CeGpio_n = USBDM::$(demo.cpp.nrf24l01.ce:GpioC<4>); // CE pin
 using IrqGpio  = USBDM::$(demo.cpp.nrf24l01.irq:GpioC<5>); // IRQ pin
 
 int main() {
-   USBDM::Spi *spi = new USBDM::$(demo.cpp.nrf24l01.spi:Spi0)_T<USBDM::$(demo.cpp.nrf24l01.cs_n:Spi0_PCS0)>($(demo.cpp.spi.dma:));
+   USBDM::Spi *spi = new USBDM::$(demo.cpp.nrf24l01.spi:Spi0)($(demo.cpp.spi.dma:));
 
    USBDM::NRF24L01 *nrf24l01 = new USBDM::NRF24L01_T<CeGpio_n, IrqGpio>(spi);
 

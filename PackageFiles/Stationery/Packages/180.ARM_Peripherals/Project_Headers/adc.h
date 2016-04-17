@@ -99,9 +99,10 @@ template<class info, uint8_t adcChannel>
 class Adc_T {
 
 #ifdef DEBUG_BUILD
-   static_assert(info::info[adcChannel].gpioBit != UNMAPPED_PCR, "Adc_T: ADC channel is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(info::info[adcChannel].gpioBit != INVALID_PCR,  "Adc_T: ADC channel doesn't exist in this device/package");
-   static_assert((info::info[adcChannel].gpioBit == UNMAPPED_PCR)||(info::info[adcChannel].gpioBit == INVALID_PCR)||(info::info[adcChannel].gpioBit >= 0), "Adc_T: Illegal ADC channel");
+   static_assert((adcChannel<info::NUM_SIGNALS), "Adc_T: Non-existent ADC channel - Modify Configure.usbdm");
+   static_assert((adcChannel>=info::NUM_SIGNALS)||(info::info[adcChannel].gpioBit != UNMAPPED_PCR), "Adc_T: ADC channel is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((adcChannel>=info::NUM_SIGNALS)||(info::info[adcChannel].gpioBit != INVALID_PCR),  "Adc_T: ADC channel doesn't exist in this device/package");
+   static_assert((adcChannel>=info::NUM_SIGNALS)||((info::info[adcChannel].gpioBit == UNMAPPED_PCR)||(info::info[adcChannel].gpioBit == INVALID_PCR)||(info::info[adcChannel].gpioBit >= 0)), "Adc_T: Illegal ADC channel");
 #endif
 
 private:

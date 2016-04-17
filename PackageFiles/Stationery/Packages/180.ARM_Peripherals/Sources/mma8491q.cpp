@@ -23,7 +23,7 @@ void MMA8491Q::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, dataXYZ, 1, sizeof(dataXYZ));
+   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];

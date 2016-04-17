@@ -255,9 +255,10 @@ template<class info, uint32_t tmrChannel, uint32_t pcrValue=info::pcrValue>
 class TmrBase_T : public Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue> {
 
 #ifdef DEBUG_BUILD
-   static_assert(info::info[tmrChannel].gpioBit != UNMAPPED_PCR, "TmrBase_T: FTM channel is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(info::info[tmrChannel].gpioBit != INVALID_PCR,  "TmrBase_T: FTM channel doesn't exist in this device/package");
-   static_assert((info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(info::info[tmrChannel].gpioBit == INVALID_PCR)||(info::info[tmrChannel].gpioBit >= 0),
+   static_assert((tmrChannel<info::NUM_SIGNALS), "TmrBase_T: Non-existent timer channel - Modify Configure.usbdmProject");
+   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != UNMAPPED_PCR), "TmrBase_T: FTM channel is not mapped to a pin - Modify Configure.usbdmProject");
+   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != INVALID_PCR),  "TmrBase_T: FTM channel doesn't exist in this device/package");
+   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(info::info[tmrChannel].gpioBit == INVALID_PCR)||(info::info[tmrChannel].gpioBit >= 0),
          "TmrBase_T: Illegal FTM channel");
 #endif
 
@@ -265,7 +266,7 @@ private:
    static constexpr volatile TPM_Type *tmr = reinterpret_cast<volatile TPM_Type *>(info::basePtr);
 
 public:
-   using Pcr = PcrTable_T<info, tmrChannel, pcrValue>;
+   using Pcr = PcrTable_T<info, (tmrChannel>=info::NUM_SIGNALS)?0:tmrChannel, pcrValue>;
 
    /**
     * Configure Timer operation
@@ -274,8 +275,6 @@ public:
     * @param mode    Mode of operation see @ref Tmr_Mode
     */
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
-      static_assert(tmrChannel<info::NUM_CHANNELS, "Invalid Timer channel");
-
       Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue>::setMode(period, mode);
 
       // Set up pin

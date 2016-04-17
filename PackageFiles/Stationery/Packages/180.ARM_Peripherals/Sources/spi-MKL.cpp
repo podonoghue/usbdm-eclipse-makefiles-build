@@ -14,20 +14,13 @@
 
 namespace USBDM {
 
-#if defined(SPI0)
-#if (SPI0_SCK_PIN_SEL==0) || (SPI0_MOSI_PIN_SEL==0) || (SPI0_MISO_PIN_SEL==0)
-#warning "SPI0 unavailable - Please check pin mappings for SCK, SIN & SOUT in pin_mapping.h"
-#endif // (SPI0_SCK_PIN_SEL==0) || !defined(SPI0_MOSI_GPIO) || !defined(SPI0_MISO_GPIO)
-#endif // SPI0
-
-
 static const uint16_t spprFactors[] = {1,2,3,4,5,6,7,8};
 static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
 
 /**
  * Sets Communication speed for SPI
  *
- * @param frequency => Frequency in Hz (0 => use default value)
+ * @param frequency => Frequency in Hz
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */

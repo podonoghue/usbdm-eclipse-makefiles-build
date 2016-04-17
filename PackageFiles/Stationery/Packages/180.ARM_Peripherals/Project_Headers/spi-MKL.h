@@ -81,8 +81,16 @@ protected:
    }
 
 public:
-   virtual void enablePins()  = 0;
+   /**
+    * Enable pins used by SPI
+    */
+   virtual void enablePins() = 0;
+
+   /**
+    * Disable (restore to usual default) pins used by SPI
+    */
    virtual void disablePins() = 0;
+
    /**
     * Sets Communication speed for SPI
     *
@@ -90,13 +98,14 @@ public:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t frequency = DEFAULT_SPI_FREQUENCY);
+   void setSpeed(uint32_t frequency);
+
    /**
     * Sets Communication mode for SPI
     *
     * @param mode => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
     */
-   void setMode(uint32_t mode=DEFAULT_SPI_MODE) {
+   void setMode(uint32_t mode) {
       // Note: always master mode
       spi->C1 = (mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF))|SPI_C1_SSOE_MASK|SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
    }
