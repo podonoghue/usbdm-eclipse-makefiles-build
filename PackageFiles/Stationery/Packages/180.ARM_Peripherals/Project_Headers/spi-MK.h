@@ -197,7 +197,7 @@ public:
    }
 };
 
-#if defined(SPI0)
+#if defined(USBDM_SPI0_IS_DEFINED)
 /**
  * @brief Template class representing a SPI0 interface
  *
@@ -214,7 +214,7 @@ public:
 using Spi0 = Spi_T<Spi0Info>;
 #endif
 
-#if defined(SPI1)
+#if defined(USBDM_SPI1_IS_DEFINED)
 /**
  * @brief Template class representing a SPI1 interface
  *

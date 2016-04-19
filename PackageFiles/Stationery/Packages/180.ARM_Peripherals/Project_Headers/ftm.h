@@ -112,16 +112,13 @@ enum Tmr_Mode {
  * tmr0.setPeriod(500);
  * @endcode
  *
- * @tparam tmrBase       FTM hardware
- * @tparam tmrClockReg   SIM Clock register for FTM
- * @tparam tmrClockMask  Mask for FTM clock register
- * @tparam scValue       Value for FTM->SC register
+ * @tparam Info  Class describing FTM hardware instance
  */
-template<uint32_t tmrBase, uint32_t tmrClockReg, uint32_t tmrClockMask, uint16_t scValue>
-class Tmr {
+template<class Info>
+class TmrBase_T {
 protected:
-   static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(tmrBase);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(tmrClockReg);
+   static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(Info::basePtr);
+   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
 
 public:
    /**
@@ -135,18 +132,18 @@ public:
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
 
       // Enable clock to timer
-      *clockReg |= tmrClockMask;
+      *clockReg |= Info::clockMask;
 
       // Common registers
       tmr->CNTIN   = 0;
       tmr->CNT     = 0;
       if (mode == tmr_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC   = scValue|FTM_SC_CPWMS_MASK;
+         tmr->SC   = Info::scValue|FTM_SC_CPWMS_MASK;
       }
       else {
          // Left aligned PWM without CPWMS selected
-         tmr->SC   = scValue;
+         tmr->SC   = Info::scValue;
       }
       setPeriod(period);
    }
@@ -179,7 +176,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = scValue|FTM_SC_CPWMS_MASK;
+         tmr->SC  = Info::scValue|FTM_SC_CPWMS_MASK;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -190,7 +187,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = scValue;
+         tmr->SC  = Info::scValue;
       }
    }
    /**
@@ -236,6 +233,61 @@ public:
 #endif
       return rv;
    }
+   /**
+    *  Enables fault detection input
+    *
+    *  @tparam inputNum       Number of fault input to enable (0..3)
+    *  @param  polarity       Polarity of fault input (true => active high))
+    *  @param  filterEnable   Whether to enable filtering on the fault input
+    *  @param  filterDelay    Delay used by the filter (1..15)
+    *
+    *  NOTE - the filter delay is shared by all inputs
+    */
+   template<uint8_t inputNum>
+   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=FTM_FLTCTRL_FFVAL_MASK) {
+
+#ifdef DEBUG_BUILD
+   static_assert((inputNum<Info::InfoFAULT::NUM_SIGNALS), "Tmr_T: Illegal fault channel");
+   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != UNMAPPED_PCR), "Tmr_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != INVALID_PCR),  "Tmr_T: Non-existent signal used for fault input");
+   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
+#endif
+
+//      using Pcr = PcrTable_T<typename Info::InfoFAULT, (inputNum>=4)?0:inputNum, pcrValue>;
+      PcrTable_T<typename Info::InfoFAULT, (inputNum>=4)?0:inputNum, Info::pcrValue>::setPCR();
+
+      if (polarity) {
+         // Set active high
+         TmrBase_T<Info>::tmr->FLTPOL &= ~(1<<inputNum);
+      }
+      else {
+         // Set active low
+         TmrBase_T<Info>::tmr->FLTPOL |= (1<<inputNum);
+      }
+      if (filterEnable) {
+         // Enable filter & set filter delay
+         TmrBase_T<Info>::tmr->FLTCTRL = ((TmrBase_T<Info>::tmr->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
+      }
+      else {
+         // Disable filter
+         TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+      }
+      // Enable fault input
+      TmrBase_T<Info>::tmr->FLTCTRL |= (1<<inputNum);
+   }
+   /**
+    *  Disables fault detection input
+    *
+    *  @tparam inputNum        Number of fault input to enable (0..3)
+    */
+   template<int inputNum>
+   static void disableFault() {
+      static_assert(inputNum<=4, "Illegal fault channel");
+
+      // Enable fault on channel
+      TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<inputNum);
+   }
+
 };
 
 /**
@@ -246,7 +298,7 @@ public:
  * @code
  * // Instantiate the tmr channel (for FTM0 CH6, auxiliary table ftm0Info)
  *
- * const USBDM::TmrBase_T<ftm0Info, 6> tmr0_ch6;
+ * const USBDM::Tmr_T<ftm0Info, 6> tmr0_ch6;
  *
  * // Initialise PWM with initial period and alignment
  * tmr0_ch6.setMode(200, PwmIO::tmr_leftAlign);
@@ -262,22 +314,19 @@ public:
  * @tparam tmrChannel      FTM channel
  * @tparam pcrValue        Default value for PCR including mux value
  */
-template<class info, uint32_t tmrChannel, uint32_t pcrValue=info::pcrValue>
-class TmrBase_T : public Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue> {
+template<class Info, uint8_t tmrChannel, uint32_t pcrValue=Info::pcrValue>
+class Tmr_T : public TmrBase_T<Info> {
 
 #ifdef DEBUG_BUILD
-   static_assert((tmrChannel<info::NUM_SIGNALS), "TmrBase_T: Non-existent timer channel - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != UNMAPPED_PCR), "TmrBase_T: FTM channel is not mapped to a pin - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != INVALID_PCR),  "TmrBase_T: FTM channel doesn't exist in this device/package");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(info::info[tmrChannel].gpioBit == INVALID_PCR)||(info::info[tmrChannel].gpioBit >= 0),
-         "TmrBase_T: Illegal FTM channel");
+   static_assert((tmrChannel<Info::NUM_SIGNALS), "Tmr_T: Non-existent timer channel - Modify Configure.usbdmProject");
+   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit != UNMAPPED_PCR), "Tmr_T: FTM channel is not mapped to a pin - Modify Configure.usbdmProject");
+   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit != INVALID_PCR),  "Tmr_T: FTM channel doesn't exist in this device/package");
+   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(Info::info[tmrChannel].gpioBit == INVALID_PCR)||(Info::info[tmrChannel].gpioBit >= 0),
+         "Tmr_T: Illegal FTM channel");
 #endif
 
-private:
-   static constexpr volatile FTM_Type *tmr = reinterpret_cast<volatile FTM_Type *>(info::basePtr);
-
 public:
-   using Pcr = PcrTable_T<info, (tmrChannel>=info::NUM_SIGNALS)?0:tmrChannel, pcrValue>;
+   using Pcr = PcrTable_T<Info, (tmrChannel>=Info::NUM_SIGNALS)?0:tmrChannel, pcrValue>;
 
    /**
     * Configure Timer operation
@@ -286,7 +335,7 @@ public:
     * @param mode    Mode of operation see @ref Tmr_Mode
     */
    static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
-      Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue>::setMode(period, mode);
+      TmrBase_T<Info>::setMode(period, mode);
 
       // Set up pin
       Pcr::setPCR();
@@ -297,63 +346,15 @@ public:
     * @param dutyCycle Duty-cycle as percentage
     */
    static void setDutyCycle(int dutyCycle) {
-      tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
+      TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
 
-      if (tmr->SC&FTM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*tmr->MOD)/100;
+      if (TmrBase_T<Info>::tmr->SC&FTM_SC_CPWMS_MASK) {
+         TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*TmrBase_T<Info>::tmr->MOD)/100;
       }
       else {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+         TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(TmrBase_T<Info>::tmr->MOD+1))/100;
       }
    }
-   /**
-    *  Enables fault detection input
-    *
-    *  @tparam inputNum       Number of fault input to enable (0..3)
-    *  @param  polarity       Polarity of fault input (true => active high))
-    *  @param  filterEnable   Whether to enable filtering on the fault input
-    *  @param  filterDelay    Delay used by the filter (1..15)
-    *
-    *  NOTE - the filter delay is shared by all inputs
-    */
-   template<int inputNum>
-   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=FTM_FLTCTRL_FFVAL_MASK) {
-      static_assert(inputNum<=4, "Illegal fault channel");
-
-      using Pcr = PcrTable_T<info, info::FAULT_INDEX+inputNum, pcrValue>;
-      Pcr::setPCR();
-      if (polarity) {
-         // Set active high
-         tmr->FLTPOL &= ~(1<<inputNum);
-      }
-      else {
-         // Set active low
-         tmr->FLTPOL |= (1<<inputNum);
-      }
-      if (filterEnable) {
-         // Enable filter & set filter delay
-         tmr->FLTCTRL = ((tmr->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
-      }
-      else {
-         // Disable filter
-         tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
-      }
-      // Enable fault input
-      tmr->FLTCTRL |= (1<<inputNum);
-   }
-   /**
-    *  Disables fault detection input
-    *
-    *  @tparam inputNum        Number of fault input to enable (0..3)
-    */
-   template<int inputNum>
-   static void disableFault() {
-      static_assert(inputNum<=4, "Illegal fault channel");
-
-      // Enable fault on channel
-      tmr->FLTCTRL &= ~(1<<inputNum);
-   }
-
 };
 
 /**
@@ -369,26 +370,22 @@ public:
  *  }
  * @endcode
  */
-template <class info>
-class QuadEncoder_T : public Tmr<info::basePtr, info::clockReg, info::clockMask, 0> {
+template <class Info>
+class QuadEncoder_T : public TmrBase_T<Info> {
 
 #ifdef DEBUG_BUILD
-   static_assert(info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "TmrBase_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "TmrBase_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "Tmr_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "Tmr_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
 #endif
 
 private:
-   static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(info::basePtr);
-
-   using PcrA = PcrTable_T<typename info::InfoQUAD, 0>;
-   using PcrB = PcrTable_T<typename info::InfoQUAD, 1>;
+   static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(Info::basePtr);
 
 public:
    static void enable() {
-      PcrA::setPCR();
-      PcrB::setPCR();
+      Info::InfoQUAD::initPCRs();
 
-      Tmr<info::basePtr, info::clockReg, info::clockMask, 0>::setMode(0, tmr_quadrature);
+      TmrBase_T<Info>::setMode(0, tmr_quadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

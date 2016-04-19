@@ -92,7 +92,7 @@ void PN532Base::txCommand(uint8_t command, unsigned length, const uint8_t dataOu
  *
  * @return true => data received, false => Reception failed
  */
-bool PN532Base::rxData(unsigned length, uint8_t dataIn[], int timeout) {
+bool PN532Base::rxData(unsigned length, uint8_t dataIn[], int /* timeout */) {
    bool isComplete = false;
    if (!waitReady()) {
       return false;

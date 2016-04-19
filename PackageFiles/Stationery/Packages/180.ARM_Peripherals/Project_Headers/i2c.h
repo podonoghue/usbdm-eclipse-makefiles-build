@@ -298,7 +298,7 @@ public:
    }
 };
 
-#if defined(I2C0)
+#if defined(USBDM_I2C0_IS_DEFINED)
 /**
  * @brief Convenience template class representing the I2C0 interface
  *
@@ -332,7 +332,7 @@ using I2c0 = USBDM::I2c_T<I2c0Info>;
 #endif
 #endif
 
-#if defined(I2C1)
+#if defined(USBDM_I2C1_IS_DEFINED)
 /**
  * @brief Convenience template class representing the I2C1 interface
  *
@@ -367,7 +367,7 @@ using I2c1 = USBDM::I2c_T<I2c1Info>;
 #endif
 #endif
 
-#if defined(I2C2)
+#if defined(USBDM_I2C2_IS_DEFINED)
 /**
  * @brief Convenience template class representing the I2C2 interface
  *

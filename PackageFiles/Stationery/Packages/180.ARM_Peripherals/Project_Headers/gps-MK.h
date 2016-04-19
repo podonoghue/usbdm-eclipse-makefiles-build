@@ -274,7 +274,7 @@ public:
    }
 };
 
-#ifdef UART0_BASE_PTR
+#if defined(USBDM_UART0_IS_DEFINED)
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -298,7 +298,7 @@ public:
 using Gps0 = Gps_T<Uart0Info>;
 #endif
 
-#ifdef UART1_BASE_PTR
+#if defined(USBDM_UART1_IS_DEFINED)
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *
@@ -322,7 +322,7 @@ using Gps0 = Gps_T<Uart0Info>;
 using Gps1 = Gps_T<Uart1Info>;
 #endif
 
-#ifdef UART2_BASE_PTR
+#if defined(USBDM_UART2_IS_DEFINED)
 /**
  * @brief Class interfacing to a GPS receiver connected to UART1
  *

@@ -266,7 +266,7 @@ void Gps::report(Gps::GpsData &gpsData) {
 //=========================================================================
 //=========================================================================
 
-#ifdef UART0_BASE_PTR
+#if defined(USBDM_UART0_IS_DEFINED)
 
 /**
  * Interrupt handler for UART0 Tx & Rx
@@ -298,7 +298,7 @@ template<> Gps *Gps_T<Uart0Info>::thisPtr = 0;
 //=========================================================================
 //=========================================================================
 
-#ifdef UART1_BASE_PTR
+#if defined(USBDM_UART1_IS_DEFINED)
 
 /**
  * Interrupt handler for UART1 Tx & Rx
@@ -330,7 +330,7 @@ template<> Gps *Gps_T<Uart1Info>::thisPtr = 0;
 //=========================================================================
 //=========================================================================
 
-#ifdef UART2_BASE_PTR
+#if defined(USBDM_UART2_IS_DEFINED)
 
 /**
  * Interrupt handler for UART2 Tx & Rx

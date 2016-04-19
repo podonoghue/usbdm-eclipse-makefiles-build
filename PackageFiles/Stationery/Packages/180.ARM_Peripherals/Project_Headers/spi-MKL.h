@@ -193,7 +193,7 @@ protected:
    }
 };
 
-#if defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
+#if defined(USBDM_SPI0_IS_DEFINED) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
 #if (SPI0_PCS0_PIN_SEL!=0)
 /**
  * @brief Class representing SPI0 interface with hardware PCS
@@ -319,9 +319,9 @@ public:
       return rv;
    }
 };
-#endif // defined(SPI0) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
+#endif // defined(USBDM_SPI0_IS_DEFINED) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
 
-#if defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
+#if defined(USBDM_SPI1_IS_DEFINED) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
 #if (SPI1_PCS0_PIN_SEL!=0)
 /**
  * @brief Class representing SPI1 interface with hardware PCS
@@ -447,7 +447,7 @@ public:
       return rv;
    }
 };
-#endif // defined(SPI1) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
+#endif // defined(USBDM_SPI1_IS_DEFINED) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
 /**
  * @}
  */

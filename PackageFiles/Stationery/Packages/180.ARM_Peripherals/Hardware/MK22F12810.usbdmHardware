@@ -17,12 +17,12 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
       <peripheral baseName="ADC"      instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAnalogueIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_ADC0_MASK" />
          <irq num="ADC0_IRQn" />
       </peripheral>
       <peripheral baseName="ADC"      instance="1">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAnalogueIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_ADC1_MASK" />
          <irq num="ADC1_IRQn" />
       </peripheral>
@@ -85,27 +85,27 @@
          <irq num="FTM2_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDigitalIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTA_MASK" />
          <irq num="PORTA_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDigitalIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTB_MASK" />
          <irq num="PORTB_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDigitalIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTC_MASK" />
          <irq num="PORTC_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="D">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDigitalIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTD_MASK" />
          <irq num="PORTD_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="E">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDigitalIO" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTE_MASK" />
          <irq num="PORTE_IRQn" />
       </peripheral>
