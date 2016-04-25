@@ -8,18 +8,18 @@
 <root version="1.2.0">
    <family name="MK20D5">
       <device name="FRDM_K20D5"   manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
-      <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DN128VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DN32VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DN64VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX128VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX32VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP-64" />
-      <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="LQFP-64" />
+      <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN128VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN32VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN64VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX128VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX32VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="LQFP_64" />
    </family>
    <peripherals>
       <peripheral baseName="0"        instance="">
@@ -848,7 +848,7 @@
          <placement pin="VSSA"          location="VSSA" />
          <placement pin="XTAL32"        location="XTAL32" />
       </package>
-      <package name="LQFP-64">
+      <package name="LQFP_64">
          <placement pin="ADC0_DM0"      location="p10" />
          <placement pin="ADC0_DM3"      location="p12" />
          <placement pin="ADC0_DP0"      location="p9" />

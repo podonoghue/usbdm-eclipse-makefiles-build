@@ -1,47 +1,38 @@
 /**
- * @file      lptmr.h
- * @version   1.0.0
- * @brief     Low Power Timer
+ * @file     lptmr.h
+ * @brief    Low power timer interface
+ *
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef INCLUDE_USBDM_LPTMR_H_
 #define INCLUDE_USBDM_LPTMR_H_
 
 #include "derivative.h"
 #include "system.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
 /**
- * @addtogroup LPTMR, LPTMR_Group Low Power Timer
+ * @addtogroup LPTMR_Group LPTMR, Low Power Timer
  * @brief Abstraction for Low Power Timer
  * @{
  */
 
-#if LPTMR_USES_NAKED_HANDLER == 0
 /**
  * Type definition for LPTMR interrupt call back
  */
 typedef void (*LPTMRCallbackFunction)(void);
-#endif
 
-/*!
- * @brief struct representing a Low Power Timer
- *
- * <b>Example</b>
- * @code
- *
- * @endcode
+/**
+ * @brief Template class representing a Low Power Timer
  */
 template<class Info>
 class Lptmr_T {
 
-   friend void ::LPTMR0_IRQHandler(void);
-
-#if LPTMR_USES_NAKED_HANDLER == 0
 protected:
-   /*! Callback function for ISR */
+   /** Callback function for ISR */
    static LPTMRCallbackFunction callback;
 
 public:
@@ -53,7 +44,19 @@ public:
    static void setCallback(LPTMRCallbackFunction callback) {
       Lptmr_T<Info>::callback = callback;
    }
-#endif
+
+   /**
+    * PIT interrupt handler. \n
+    * Calls PIT0 callback
+    */
+   static void irqHandler() {
+      // Clear interrupt flag
+      lptmr->CSR |= LPTMR_CSR_TCF_MASK;
+
+      if (callback != 0) {
+         callback();
+      }
+   }
 
 protected:
    /** Pointer to hardware */
@@ -106,12 +109,31 @@ public:
    }
 };
 
+template<class Info> LPTMRCallbackFunction Lptmr_T<Info>::callback = 0;
+
 #ifdef LPTMR0
 /**
- * @brief class representing LPTMR_0
+ * @brief Class representing LPTMR0
+ *
+ * <b>Example</b>
+ * @code
+ *
+ * // LPTMR callback
+ * void flash(void) {
+ *    RED_LED::toggle();
+ * }
+ *
+ * ...
+ *
+ * // Configure LPTMR
+ * Lptmr0::configure(1000);
+ *
+ * // This handler is set programmatically
+ * Lptmr0::setCallback(flash);
+ *
+ * @endcode
  */
 using Lptmr0 = Lptmr_T<Lptmr0Info>;
-
 #endif
 
 /**

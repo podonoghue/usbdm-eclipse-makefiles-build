@@ -43,7 +43,9 @@
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
+         <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
+         <copy source="Startup_Code/vectors-mk.cpp"                        target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
@@ -53,7 +55,7 @@
          <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
-         <copy source="usbdm/Configure.usbdmProject"                       target="usbdm/Configure.usbdmProject" />
+         <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

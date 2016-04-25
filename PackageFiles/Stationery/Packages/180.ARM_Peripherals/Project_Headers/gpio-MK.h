@@ -1,6 +1,6 @@
 /**
  * @file     gpio.h (from gpio_defs-MK.h)
- * @brief    GPIO Pin routines
+ * @brief    GPIO interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -80,7 +80,7 @@ struct PcrInfo {
    uint32_t pcrAddress;  //!< PCR register array address
    uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
    int8_t   gpioBit;     //!< Bit number of pin in GPIO
-   int8_t   muxValue;    //!< PCR multiplexor value to select this function
+   uint32_t pcrValue;    //!< PCR value including MUX value to select this function
 };
 
 /**
@@ -100,13 +100,9 @@ struct PcrInfo {
  */
 static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 /**
- * PCR multiplexor value for digital function
- */
-static constexpr uint32_t    GPIO_PORT_FN     = PORT_PCR_MUX(FIXED_GPIO_FN);
-/**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|GPIO_PORT_FN;
+static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN);
 
 #ifndef PORT_PCR_ODE_MASK
 /**
@@ -142,14 +138,12 @@ static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
  * @tparam pcrAddress      PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
- * @tparam defPcrValue     Default value for PCR (including mux value)
+ * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue=DEFAULT_PCR>
+template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
 class Pcr_T {
 
 private:
-   // Pointer to PCR register for pin
-   static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[(bitNum >= 0)?bitNum:0]));
 
 #ifdef DEBUG_BUILD
    static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
@@ -162,12 +156,29 @@ public:
     * Set pin PCR value\n
     * The clock to the port will be enabled before changing the PCR
     *
-    * @param pcrValue PCR value made up of PORT_PCR_x masks
+    * @param pcrValue PCR value made up of PORT_PCR_x masks including MUX value
     */
    static void setPCR(uint32_t pcrValue=defPcrValue) {
-      if (pcrReg != 0) {
+      if ((pcrAddress != 0) && (bitNum >= 0)) {
          enableClock();
+
+         // Pointer to PCR register for pin
+         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
          *pcrReg = pcrValue;
+      }
+   }
+   /**
+    * Set pin PCR.MUX value\n
+    * Assumes clock to the port has already been enabled\n
+    * Other PCR bits are taken from default value in template
+    *
+    * @param muxValue PCR MUX value [0..7]
+    */
+   static void setMUX(uint32_t muxValue) {
+      if ((pcrAddress != 0) && (bitNum >= 0)) {
+         // Pointer to PCR register for pin
+         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
+         *pcrReg = (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
       }
    }
    /**
@@ -176,6 +187,7 @@ public:
    static void enableClock() {
 //      bitbandSet(SIM->FIXED_PORT_CLOCK_REG, clockBit);
       SIM->FIXED_PORT_CLOCK_REG |= clockMask;
+      __DMB();
    }
    /**
     * Disable clock to port
@@ -185,32 +197,6 @@ public:
       SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
    }
 };
-
-/**
- * @brief Template representing a Pin Control Register (PCR)\n
- * Makes use of a configuration class
- *
- * Code examples:
- * @code
- * // Create PCR type
- * Pcr_T<spiInfo, 3> SpiMOSI;
- *
- * // Configure PCR
- * SpiMOSI.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
- *
- * // Disable clock to associated PORT
- * SpiMOSI.disableClock();
- *
- * // Alternatively the PCR may be manipulated directly
- * Pcr_T<PORTC_CLOCK_MASK, PORTC_BasePtr, 3>.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
- * @endcode
- *
- * @tparam info          Configuration class
- * @tparam index         Index of pin in configuration table
- * @tparam pcrValue      Default value for PCR excluding mux value
- */
-template<class info, uint8_t index, uint32_t pcrValue=info::pcrValue> using PcrTable_T =
-      Pcr_T<info::info[index].clockMask, info::info[index].pcrAddress, info::info[index].gpioBit, PORT_PCR_MUX(info::info[index].muxValue)|pcrValue>;
 
 /**
  * @brief Template function to set a PCR to the default value
@@ -304,22 +290,24 @@ void processPcrs(uint32_t pcrValue) {
  *
  * @endcode
  *
- * @tparam Pcr             PCR associated with this GPIO
+ * @tparam clockMask       Clock mask for PORT (PCR register array) associated with GPIO
+ * @tparam pcrAddress      Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
- * @tparam bitNum          Bit number in the PORT associated with this GPIO
- * @tparam defPcrValue     Default value for PCR including mux value
+ * @tparam bitNum          Bit number within PORT/GPIO
+ * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Pcr, const uint32_t gpioAddress, const uint32_t bitNum, uint32_t defPcrValue>
+template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, uint32_t bitNum, uint32_t defPcrValue>
 class GpioBase_T {
 
 public:
+   using Pcr = Pcr_T<clockMask, pcrAddress, bitNum, defPcrValue>;
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
 
    /**
     * Set pin as digital output
     *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
+    * @param pcrValue PCR value to use in configuring port (excluding MUX value)
     */
    static void setOutput(uint32_t pcrValue=defPcrValue) {
       bitbandSet(gpio->PDDR, bitNum);
@@ -329,7 +317,7 @@ public:
    /**
     * Set pin as digital input
     *
-    * @param pcrValue PCR value to use in configuring port (excluding mux fn)
+    * @param pcrValue PCR value to use in configuring port (excluding MUX value)
     */
    static void setInput(uint32_t pcrValue=defPcrValue) {
       bitbandClear(gpio->PDDR, bitNum);
@@ -400,28 +388,49 @@ public:
 };
 
 /**
+ * @brief Template representing a Pin Control Register (PCR)\n
+ * Makes use of a configuration class
+ *
+ * Code examples:
+ * @code
+ * // Create PCR type
+ * Pcr_T<spiInfo, 3> SpiMOSI;
+ *
+ * // Configure PCR
+ * SpiMOSI.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
+ *
+ * // Disable clock to associated PORT
+ * SpiMOSI.disableClock();
+ *
+ * // Alternatively the PCR may be manipulated directly
+ * Pcr_T<spiInfo, 3>::setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+ * @endcode
+ *
+ * @tparam info          Configuration class
+ * @tparam index         Index of pin in configuration table
+ */
+template<class Info, uint8_t index> using PcrTable_T =
+      Pcr_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+
+/**
  * Create GPIO from GpioInfo class
  *
  * @tparam Info            Gpio information class
- * @tparam bitNum          Bit number in the PORT associated with this GPIO
- * @tparam defPcrValue     Default value for PCR including multiplexor value
+ * @tparam bitNum          Bit number within PORT/GPIO
+ * @tparam defPcrValue     Default value for PCR including MUX value
  */
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  Gpio_T = GpioBase_T<Pcr_T<Info::clockMask, Info::pcrAddress, bitNum, defPcrValue>, Info::gpioAddress, bitNum, defPcrValue>;
+using  Gpio_T = GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue>;
 
 /**
  * Create GPIO from Peripheral Info class
  *
  * @tparam Info            Peripheral information class
- * @tparam bitNum          Signal number to index the info table
- * @tparam defPcrValue     Default value for PCR excluding multiplexor value
+ * @tparam index           Index of signal within the info table
+ * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  GpioTable_T = GpioBase_T<
-   Pcr_T<Info::info[bitNum].clockMask, Info::info[bitNum].pcrAddress, Info::info[bitNum].gpioBit, defPcrValue>,
-   Info::info[bitNum].gpioAddress,
-   Info::info[bitNum].gpioBit,
-   (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(Info::info[bitNum].muxValue)>;
+template<class Info, const uint32_t index, uint32_t defPcrValue=Info::pcrValue>
+using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, defPcrValue>;
 
 /**
  * @brief Template representing a field within a port

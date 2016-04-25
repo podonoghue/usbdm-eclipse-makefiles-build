@@ -1,26 +1,18 @@
-/****************************************************************************************************//**
+/**
  * @file     i2c.h
+ * @brief    I2C interface
  *
- * @brief    Abstracion layer for I2C interface
- *
- * @version  V0.0
- * @date     2015/06
- *
- *******************************************************************************************************/
-
+ * @version  V4.12.1.80
+ * @date     13 April 2016
+ */
 #ifndef INCLUDE_USBDM_I2C_H_
 #define INCLUDE_USBDM_I2C_H_
 
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
-
-extern "C" void I2C0_IRQHandler(void);
-extern "C" void I2C1_IRQHandler(void);
-extern "C" void I2C2_IRQHandler(void);
-extern "C" void I2C3_IRQHandler(void);
 
 /**
  * @addtogroup I2C_Group I2C, Inter-Integrated-Circuit Interface
@@ -172,12 +164,10 @@ public:
  * @brief Template class representing an I2C interface
  *
  * <b>Example</b>
+ *
  * @code
  *  // Instantiate interface
- *  I2C_0 *i2c0 = new USBDM::I2CT<I2C2_BasePtr,
- *            SIM_BasePtr+offsetof(SIM_Type, I2C2_CLOCK_REG), I2C2_CLOCK_MASK,
- *            USBDM::I2C2_SCL_GPIO, I2C2_SCL_FN,
- *            USBDM::I2C2_SDA_GPIO, I2C2_SDA_FN>();
+ *  I2C_0 *i2c0 = new USBDM::I2c_T<I2cInfo>();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -187,14 +177,14 @@ public:
  *
  *  for(;;) {
  *     // Transmit block
- *     i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
+ *     i2c->transmit(0x1D<<1, sizeof(txDataBuffer), txDataBuffer);
  *
  *     // Receive block
- *     i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
+ *     i2c->receive((0x1D<<1)|1, sizeof(rxDataBuffer), rxDataBuffer);
  *
  *     // Transmit block followed by read block (using repeated-start)
  *     // Note rxDataBuffer may be the same as txDataBuffer
- *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
+ *     i2c->txRx(0x1D<<1, sizeof(txDataBuffer), txDataBuffer, sizeof(rxDataBuffer), rxDataBuffer);
  *  }
  *  @endcode
  *
@@ -202,22 +192,9 @@ public:
  */
 template<class Info> class I2c_T : public I2c {
 
-   /** Allows access from I2C ISR */
-   friend void I2C0_IRQHandler(void);
-   /** Allows access from I2C ISR */
-   friend void I2C1_IRQHandler(void);
-   /** Allows access from I2C ISR */
-   friend void I2C2_IRQHandler(void);
-   /** Allows access from I2C ISR */
-   friend void I2C3_IRQHandler(void);
-
 public:
    /** Used by ISR to obtain handle of object */
    static I2c *thisPtr;
-
-private:
-   using SclGpio = GpioTable_T<Info, 0>;
-   using SdaGpio = GpioTable_T<Info, 1>;
 
 public:
    /**
@@ -242,6 +219,8 @@ public:
 
    /**
     * Initialise interface
+    *
+    * @param myAddress Address of self (not used)
     */
    void init(const uint8_t myAddress) {
 
@@ -268,17 +247,21 @@ public:
    /**
     * Clear bus hang
     *
-    * Generates I2C_SCL clock until I2C_SDA goes high
+    * Generates I2C_SCL clock until I2C_SDA goes high\n
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
-      SdaGpio::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      // GPIOs used for bit-banging
+      using SclGpio = GpioTable_T<Info, 0, I2C_DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN)>;
+      using SdaGpio = GpioTable_T<Info, 1, I2C_DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN)>;
+
+      SdaGpio::setInput();
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
-      SclGpio::setInput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      SclGpio::setInput();
       SclGpio::set();
-      SclGpio::setOutput(GPIO_PORT_FN|PORT_PCR_ODE_MASK);
+      SclGpio::setOutput();
       for (int i=0; i<9; i++) {
          // Set clock high (3-state)
          SclGpio::set();
@@ -296,106 +279,43 @@ public:
          }
       }
    }
+
+   static void irqHandler() {
+      thisPtr->poll();
+   }
 };
 
-#if defined(USBDM_I2C0_IS_DEFINED)
+/** Used by ISR to obtain handle of object */
+template<class Info> I2c *I2c_T<Info>::thisPtr = 0;
+
+#if defined(USBDM_I2C1_IS_DEFINED)
 /**
- * @brief Convenience template class representing the I2C0 interface
+ * @brief Class representing the I2C0 interface
  *
- * <b>Example</b>
- * @code
- *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2c0();
- *
- *  // Transmit data
- *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
- *
- *  // Receive buffer
- *  uint8_t rxDataBuffer[5];
- *
- *  for(;;) {
- *     // Transmit block
- *     i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
- *
- *     // Receive block
- *     i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
- *
- *     // Transmit block followed by read block (using repeated-start)
- *     // Note rxDataBuffer may be the same as txDataBuffer
- *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
- *  @endcode
+ * <b>Example</b>\n
+ * Refer @ref I2c_T
  */
-#ifdef MCU_MKM33Z5
-using I2c0 = USBDM::I2c_T<I2C0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C0_CLOCK_REG), I2C0_CLOCK_MASK, I2C0_1_IRQn, i2c0_SCLPcr, i2c0_SCLGpio, i2c0_SDAPcr, i2c0_SDAGpio>;
-#else
-using I2c0 = USBDM::I2c_T<I2c0Info>;
-#endif
+using I2c0 = I2c_T<I2c0Info>;
 #endif
 
 #if defined(USBDM_I2C1_IS_DEFINED)
 /**
- * @brief Convenience template class representing the I2C1 interface
+ * @brief Class representing the I2C1 interface
  *
  * <b>Example</b>
- * @code
- *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2c1();
- *
- *  // Transmit data
- *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
- *
- *  // Receive buffer
- *  uint8_t rxDataBuffer[5];
- *
- *  for(;;) {
- *     // Transmit block
- *     i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
- *
- *     // Receive block
- *     i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
- *
- *     // Transmit block followed by read block (using repeated-start)
- *     // Note rxDataBuffer may be the same as txDataBuffer
- *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
- *  }
- *  @endcode
+ * Refer @ref I2c_T
  */
-#ifdef MCU_MKM33Z5
-using I2c1 = USBDM::I2c_T<I2C1_BasePtr, SIM_BasePtr+offsetof(SIM_Type, I2C1_CLOCK_REG), I2C1_CLOCK_MASK, I2C0_1_IRQn, i2c1_SCLPcr, i2c1_SCLGpio, i2c1_SDAPcr, i2c1_SDAGpio>;
-#else
-using I2c1 = USBDM::I2c_T<I2c1Info>;
-#endif
+using I2c1 = I2c_T<I2c1Info>;
 #endif
 
 #if defined(USBDM_I2C2_IS_DEFINED)
 /**
- * @brief Convenience template class representing the I2C2 interface
+ * @brief Class representing the I2C2 interface
  *
  * <b>Example</b>
- * @code
- *  // Instantiate interface
- *  USBDM::I2c *i2c = new USBDM::I2c2();
- *
- *  // Transmit data
- *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
- *
- *  // Receive buffer
- *  uint8_t rxDataBuffer[5];
- *
- *  for(;;) {
- *     // Transmit block
- *     i2c->transmit(0x1D<<1,    txDataBuffer, sizeof(txDataBuffer));
- *
- *     // Receive block
- *     i2c->receive((0x1D<<1)|1, rxDataBuffer, sizeof(rxDataBuffer));
- *
- *     // Transmit block followed by read block (using repeated-start)
- *     // Note rxDataBuffer may be the same as txDataBuffer
- *     i2c->txRx(0x1D<<1, txDataBuffer, sizeof(txDataBuffer), rxDataBuffer, sizeof(rxDataBuffer));
- *  }
- *  @endcode
+ * Refer @ref I2c_T
  */
-using I2c2 = USBDM::I2c_T<I2c2Info>;
+using I2c2 = I2c_T<I2c2Info>;
 #endif
 
 /**

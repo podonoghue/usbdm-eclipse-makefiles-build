@@ -298,49 +298,6 @@ void I2C0_1_IRQHandler() {
       I2c1::thisPtr->poll();
    }
 }
-#else // !defined(MCU_MKM33Z5)
-#if defined(USBDM_I2C0_IS_DEFINED)
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C0_IRQHandler() {
-   I2c0::thisPtr->poll();
-}
 #endif
-#if defined(USBDM_I2C1_IS_DEFINED)
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C1_IRQHandler() {
-   I2c1::thisPtr->poll();
-}
-#endif
-
-#endif // defined(MCU_MKM33Z5)
-
-#if defined(USBDM_I2C2_IS_DEFINED)
-/*
- * I2C state-machine based interrupt handler
- */
-extern "C"
-void I2C2_IRQHandler() {
-   I2c2::thisPtr->poll();
-}
-#endif
-
-#if defined(USBDM_I2C0_IS_DEFINED)
-template<> I2c *I2c_T<I2c0Info>::thisPtr = 0;
-#endif
-
-#if defined(USBDM_I2C1_IS_DEFINED)
-template<> I2c *I2c_T<I2c1Info>::thisPtr = 0;
-#endif
-
-#if defined(USBDM_I2C2_IS_DEFINED)
-template<> I2c *I2c_T<I2c2Info>::thisPtr = 0;
-#endif
-
 
 } // End namespace USBDM

@@ -38,9 +38,22 @@ using GREEN_LED = $(demo.cpp.pwm.green.led:Ftm0<1>);
 #error "PWM is not available on LEDs"
 #endif
 
+#if 0
+/**
+ * Example showing how to install a custom IRQ handler for a FTM
+ */
+namespace USBDM {
+
+template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
+   // Your code
+}
+
+}
+#endif
+
 int main() {
-   RED_LED::setMode(1000,   tmr_leftAlign);
-   GREEN_LED::setMode(1000, tmr_leftAlign);
+   RED_LED::initialise(1000,   tmr_leftAlign);
+   GREEN_LED::initialise(1000, tmr_leftAlign);
    for(;;) {
       for (int i=0; i<=100; i++) {
          RED_LED::setDutyCycle(i);

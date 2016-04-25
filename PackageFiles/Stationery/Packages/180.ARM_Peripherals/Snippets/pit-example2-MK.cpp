@@ -12,60 +12,52 @@ using namespace USBDM;
 /**
  * Programmable Interrupt Timer (PIT) Example
  *
- * Demonstrates PIT call-back or handler
+ * Demonstrates PIT call-back or static handler
  *
  * Toggles LEDs
  */
+
+// Comment out the following line to use static interrupt handlers
+#define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
 using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
 using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 
-#if PIT_USES_NAKED_HANDLER == 1
-/*
- * If using naked handler it must be named exactly as shown
+#ifndef SET_HANDLERS_PROGRAMMATICALLY
+/**
+ * Example showing how to create custom IRQ handlers for PIT channels
  */
-void PIT0_IRQHandler(void) {
+namespace USBDM {
+
+/*
+ * MK version - individual handler for each PIT channel
+ */
+template<> void Pit_T<PitInfo>::irqHandler0() {
    // Clear interrupt flag
    PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    RED_LED::toggle();
 }
-/*
- * If using naked handler it must be named exactly as shown
- */
-void PIT1_IRQHandler(void) {
+
+template<> void Pit_T<PitInfo>::irqHandler1() {
    // Clear interrupt flag
    PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
    GREEN_LED::toggle();
 }
 
-/*
- * If using naked handler it must be named exactly as shown
- * MKL version - shared handler for all PIT channels
- */
-void PIT_IRQHandler(void) {
-   if (PIT->CHANNEL[0].TFLG & PIT_TFLG_TIF_MASK) {
-      // Clear interrupt flag
-      PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
-      RED_LED::toggle();
-   }
-   if (PIT->CHANNEL[1].TFLG & PIT_TFLG_TIF_MASK) {
-      // Clear interrupt flag
-      PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
-      GREEN_LED::toggle();
-   }
-}
-#else
+} // end namespace USBDM
+#endif
+
 /*
  * These handlers are set programmatically
  */
 void flashRed(void) {
    RED_LED::toggle();
 }
+
 void flashGreen(void) {
    GREEN_LED::toggle();
 }
-#endif
 
 int main() {
    RED_LED::setOutput();
@@ -77,8 +69,8 @@ int main() {
 
    Pit::configure();
 
-#if PIT_USES_NAKED_HANDLER == 0
-   // These handlers are set programmatically
+#ifdef SET_HANDLERS_PROGRAMMATICALLY
+   // Set handlers programmatically
    Pit::setCallback(0, flashRed);
    Pit::setCallback(1, flashGreen);
 #endif

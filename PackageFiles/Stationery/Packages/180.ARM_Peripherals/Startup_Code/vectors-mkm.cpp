@@ -1,8 +1,8 @@
 /*
- *  @file Vectors.c
- *  Derived from  Vectors-mk.c
+ *  @file Vectors.cpp 
+ *  Derived from  Vectors-mkm.cpp
  *
- *  Generic vectors and security for Kinetis MKxxx
+ *  Vectors and security for Kinetis MKMxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -10,6 +10,10 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
+#include "pin_mapping.h"
+
+/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
  * Security information
@@ -86,14 +90,14 @@ typedef struct {
    <h> EEPROM Region Protect (NV_FEPROT)
       <i> Each bit protects a 1/8 region of the EEPROM memory.
       <i> (FlexNVM devices only)
-      <q.0>   FEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
-      <q.1>   FEPROT.1  <0=>protected  <1=>unprotected
-      <q.2>   FEPROT.2  <0=>protected  <1=>unprotected
-      <q.3>   FEPROT.3  <0=>protected  <1=>unprotected
-      <q.4>   FEPROT.4  <0=>protected  <1=>unprotected
-      <q.5>   FEPROT.5  <0=>protected  <1=>unprotected
-      <q.6>   FEPROT.6  <0=>protected  <1=>unprotected
-      <q.7>   FEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+      <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FDPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FDPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FDPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FDPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FDPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FDPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
    </h>
 */
 #define FEPROT_VALUE 0xFF
@@ -149,28 +153,35 @@ typedef struct {
 
 /*
 Control extended Boot features on these devices
-<h> Flash boot options (NV_FOPT)
-   <q0.2> NMI pin control (FOPT.NMI_DIS)
-      <i> Enables or disables the NMI function
+<h> Flash boot options (NV_FTFA_FOPT)
+   <q0.5> Flash clock source (FOPT.CLK_SRC)
+      <i> Selects clock source for flash.
+      <i> This bit has effect only in RUN mode boot up. Ignored in VLPR boot.
+	  <info>CLK_SRC
+      <0=> External clock
+      <1=> Internal clock
+   <q0.3> Execution mode (FOPT.EXE_MODE)
+      <i> This bit will not change mode for boot automatically and is different from the RTC Boot Override bit.
+      <i> This bit is for software so that a startup code can change mode based on setting of this bit
+      <i> whenever it is executed on every boot up
+	  <info>EXE_MODE
+      <0=> RUN mode
+      <1=> VLPR mode
+   <q0.2> NMI pin control (FOPT.NMI_EN)
+      <i> Enables or disables control for the NMI function
       <info>NMI_DIS
       <0=> NMI interrupts are always blocked.
-      <1=> NMI interrupts default to enabled
-   <q0.1> EZPORT pin control (FOPT.EZPORT_DIS)
-      <i> Enables or disables EzPort function
-      <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
-      <i> if the EZP_CS/NMI pin is used for its NMI function 
-      <info>EZPORT_DIS
-      <0=> EZP_CSn pin is disabled on reset
-      <1=> EZP_CSn pin is enabled on reset
+      <1=> NMI_b interrupts default to enabled
    <q0.0> Low power boot control (FOPT.LPBOOT)
-      <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
-      <i> Allows power consumption during reset to be reduced
-      <info>LPBOOT
-      <0=> Low Power - CLKDIV1,2 = /8, CLKDIV3,4 = /16
-      <1=> Normal - CLKDIV1,2 = /1, CLKDIV3,4 = /2
+      <i> Controls the reset value of the core clock divider SIM_CLKDIV1.SYS_DIV and 
+      <i> system clock mode SIM_CLKDIV1.SYSCLKMODE
+      <i> May be used to reduce power during start up
+	  <info>LPBOOT
+      <0=> Slow boot: Clock divider (SYS_DIV) /8
+      <1=> Fast boot: Clock divider (SYS_DIV) /1
 </h>
  */
-#define FOPT_VALUE (0x7|0xF8)
+#define FOPT_VALUE (0x2D|0xC2)
 
 __attribute__ ((section(".security_information")))
 extern const SecurityInfo securityInfo = {
@@ -206,6 +217,7 @@ typedef void( *const intfunc )( void );
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
+extern "C" {
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -215,6 +227,7 @@ void Default_Handler(void) {
    while (1) {
       __BKPT(0);
    }
+}
 }
 
 typedef struct {
@@ -243,11 +256,21 @@ void HardFault_Handler(void) {
     * and allows access to the saved processor state.
     * Other registers are unchanged and available in the usual register view
     */
-     __asm__ volatile ( "  tst   lr, #4              \n");  // Check mode
-     __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
-     __asm__ volatile ( "  mrseq r0, msp             \n");
-     __asm__ volatile ( "  mrsne r0, psp             \n");
-     __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
+   __asm__ volatile (
+          "       mov r0,lr                                     \n"
+          "       mov r1,#4                                     \n"
+          "       and r0,r1                                     \n"
+          "       bne skip1                                     \n"
+          "       mrs r0,msp                                    \n"
+          "       b   skip2                                     \n"
+          "skip1:                                               \n"
+          "       mrs r0,psp                                    \n"
+          "skip2:                                               \n"
+          "       nop                                           \n"
+          "       ldr r2, handler_addr_const                    \n"
+          "       bx r2                                         \n"
+          "       handler_addr_const: .word _HardFault_Handler  \n"
+      );
 }
 
 /******************************************************************************/
@@ -263,6 +286,7 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
+extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
@@ -272,7 +296,9 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
+}
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
@@ -280,5 +306,7 @@ extern uint32_t __StackTop;
  * To install a handler, create a function with the name shown and it will override
  * the weak default.
  */
-$(cVectorTable)
+/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
+/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+
 

@@ -21,14 +21,12 @@ namespace USBDM {
  * @brief Abstraction for Programmable Interrupt Timer
  * @{
  */
-#if PIT_USES_NAKED_HANDLER == 0
 /**
  * Type definition for PIT interrupt call back
  */
 typedef void (*PITCallbackFunction)(void);
-#endif
 
-/*!
+/**
  * @brief Class representing a Programmable Interrupt  Timer
  *
  * <b>Example</b>
@@ -38,19 +36,50 @@ typedef void (*PITCallbackFunction)(void);
  */
 template<class Info>
 class Pit_T {
-
-   friend void ::PIT0_IRQHandler(void);
-   friend void ::PIT1_IRQHandler(void);
-   friend void ::PIT2_IRQHandler(void);
-   friend void ::PIT3_IRQHandler(void);
-
 protected:
-   /** Default TCTRL value for Timer channel */
+   /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK|PIT_TCTRL_TIE_MASK);
 
-#if PIT_USES_NAKED_HANDLER == 0
-   /*! Callback functions for ISRs */
+   /** Callback functions for ISRs */
    static PITCallbackFunction callback[Info::irqCount];
+
+public:
+   /** PIT interrupt handler -  Calls PIT0 callback */
+   static void irqHandler0() {
+      // Clear interrupt flag
+      PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+
+      if (Pit_T::callback[0] != 0) {
+         Pit_T::callback[0]();
+      }
+   }
+   /** PIT interrupt handler -  Calls PIT1 callback */
+   static void irqHandler1() {
+      // Clear interrupt flag
+      PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
+
+      if (Pit_T::callback[1] != 0) {
+         Pit_T::callback[1]();
+      }
+   }
+   /** PIT interrupt handler -  Calls PIT2 callback */
+   static void irqHandler2() {
+      // Clear interrupt flag
+      PIT->CHANNEL[2].TFLG = PIT_TFLG_TIF_MASK;
+
+      if (Pit_T::callback[2] != 0) {
+         Pit_T::callback[2]();
+      }
+   }
+   /** PIT interrupt handler -  Calls PIT3 callback */
+   static void irqHandler3() {
+      // Clear interrupt flag
+      PIT->CHANNEL[3].TFLG = PIT_TFLG_TIF_MASK;
+
+      if (Pit_T::callback[3] != 0) {
+         Pit_T::callback[3]();
+      }
+   }
 
 public:
    /**
@@ -62,13 +91,12 @@ public:
    static void setCallback(int channel, PITCallbackFunction callback) {
       Pit_T::callback[channel] = callback;
    }
-#endif
 
 protected:
    /** Pointer to hardware */
    static constexpr volatile PIT_Type *pit       = reinterpret_cast<volatile PIT_Type*>(Info::basePtr);
 
-   /* Pointer to clock register */
+   /** Pointer to clock register */
    static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
 
 public:
@@ -80,6 +108,8 @@ public:
    static void configure(uint32_t mcr=Info::mcrValue) {
       // Enable clock
       *clockReg |= Info::clockMask;
+
+      __DMB();
 
       // Enable timer
       pit->MCR = mcr;
@@ -119,7 +149,7 @@ public:
       // Disable timer channel
       pit->CHANNEL[channel].TCTRL = 0;
 
-      // Enable timer interrupts
+      // Disable timer interrupts
       NVIC_DisableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
    }
    /**
@@ -138,6 +168,11 @@ public:
       configureChannel(channel, 0, 0);
    }
 };
+
+/**
+ * Callback table for programmatically set handlers
+ */
+template<class Info> PITCallbackFunction Pit_T<Info>::callback[] = {0};
 
 #ifdef PIT
 /**

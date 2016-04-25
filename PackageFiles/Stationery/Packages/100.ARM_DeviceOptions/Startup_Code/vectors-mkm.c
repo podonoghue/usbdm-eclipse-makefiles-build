@@ -1,5 +1,6 @@
 /*
- *  Vectors-mkm.c
+ *  @file Vectors.c
+ *  Derived from  Vectors-mkm.c
  *
  *  Generic vectors and security for Kinetis MKMxx
  *
@@ -179,7 +180,7 @@ Control extended Boot features on these devices
 #define FOPT_VALUE (0x2D|0xC2)
 
 __attribute__ ((section(".security_information")))
-const SecurityInfo securityInfo = {
+extern const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,

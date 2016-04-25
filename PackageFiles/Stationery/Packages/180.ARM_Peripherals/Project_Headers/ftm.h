@@ -50,7 +50,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup PwmIO_Group PWM, Input capture, Output compare
+ * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
+ * @brief Pins used for PWM, Input capture and Output compare
  * @{
  */
 /**
@@ -75,13 +76,13 @@ enum Tmr_ChannelMode {
    tmr_pwmHighTruePulses       = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
    //! PWM with low-true pulses
    tmr_pwmLowTruePulses        = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture one shot - CHn config
+   //! Dual edge input capture one shot - CHn configuration
    tmr_dualEdgeCaptureOneShotRisingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture continuous - CHn config
+   //! Dual edge input capture continuous - CHn configuration
    tmr_dualEdgeCaptureContinuousRisingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture one shot - CHn config
+   //! Dual edge input capture one shot - CHn configuration
    tmr_dualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
-   //! Dual edge input capture continuous - CHn config
+   //! Dual edge input capture continuous - CHn configuration
    tmr_dualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
 };
 
@@ -98,18 +99,23 @@ enum Tmr_Mode {
 } ;
 
 /**
- * Template class representing the functions controlling the shared hardware of an FTM
+ * Type definition for LPTMR interrupt call back
+ */
+typedef void (*FTMCallbackFunction)(void);
+
+/**
+ * Base class representing an FTM
  *
  * Example
  * @code
  * // Instantiate the tmr (for FTM0)
- * const USBDM::Tmr<FTM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, FTM0_CLOCK_REG), FTM0_CLOCK_MASK, FTM0_SC)> Tmr0;
+ * const USBDM::TmrBase_T<FTM0_Info)> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
- * tmr0.setMode(200, USBDM::tmr_leftAlign);
+ * Ftm0::initialise(200, USBDM::tmr_leftAlign);
  *
- * // Change period (in ticks)
- * tmr0.setPeriod(500);
+ * // Change timer period
+ * Ftm0::setPeriod(500);
  * @endcode
  *
  * @tparam Info  Class describing FTM hardware instance
@@ -129,10 +135,14 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+   static void initialise(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+      // Configure pins
+      Info::initPCRs();
 
       // Enable clock to timer
       *clockReg |= Info::clockMask;
+
+      __DMB();
 
       // Common registers
       tmr->CNTIN   = 0;
@@ -253,8 +263,7 @@ public:
    static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
 #endif
 
-//      using Pcr = PcrTable_T<typename Info::InfoFAULT, (inputNum>=4)?0:inputNum, pcrValue>;
-      PcrTable_T<typename Info::InfoFAULT, (inputNum>=4)?0:inputNum, Info::pcrValue>::setPCR();
+      PcrTable_T<typename Info::InfoFAULT, inputNum>::setPCR();
 
       if (polarity) {
          // Set active high
@@ -287,75 +296,147 @@ public:
       // Enable fault on channel
       TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<inputNum);
    }
-
-};
-
-/**
- * Template class representing a pin with PWM capability\n
- * Makes use of an auxiliary class having channel specific information
- *
- * Example
- * @code
- * // Instantiate the tmr channel (for FTM0 CH6, auxiliary table ftm0Info)
- *
- * const USBDM::Tmr_T<ftm0Info, 6> tmr0_ch6;
- *
- * // Initialise PWM with initial period and alignment
- * tmr0_ch6.setMode(200, PwmIO::tmr_leftAlign);
- *
- * // Change period (in ticks)
- * tmr0_ch6.setPeriod(500);
- *
- * // Change duty cycle (in percent)
- * tmr0_ch6.setDutyCycle(45);
- * @endcode
- *
- * @tparam info            Table providing pin specific information for the FTM
- * @tparam tmrChannel      FTM channel
- * @tparam pcrValue        Default value for PCR including mux value
- */
-template<class Info, uint8_t tmrChannel, uint32_t pcrValue=Info::pcrValue>
-class Tmr_T : public TmrBase_T<Info> {
-
-#ifdef DEBUG_BUILD
-   static_assert((tmrChannel<Info::NUM_SIGNALS), "Tmr_T: Non-existent timer channel - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit != UNMAPPED_PCR), "Tmr_T: FTM channel is not mapped to a pin - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit != INVALID_PCR),  "Tmr_T: FTM channel doesn't exist in this device/package");
-   static_assert((tmrChannel>=Info::NUM_SIGNALS)||(Info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(Info::info[tmrChannel].gpioBit == INVALID_PCR)||(Info::info[tmrChannel].gpioBit >= 0),
-         "Tmr_T: Illegal FTM channel");
-#endif
-
-public:
-   using Pcr = PcrTable_T<Info, (tmrChannel>=Info::NUM_SIGNALS)?0:tmrChannel, pcrValue>;
-
-   /**
-    * Configure Timer operation
-    *
-    * @param period  Period in us
-    * @param mode    Mode of operation see @ref Tmr_Mode
-    */
-   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
-      TmrBase_T<Info>::setMode(period, mode);
-
-      // Set up pin
-      Pcr::setPCR();
-   }
    /**
     * Set PWM duty cycle
     *
-    * @param dutyCycle Duty-cycle as percentage
+    * @param dutyCycle  Duty-cycle as percentage
+    * @param tmrChannel Timer channel
     */
-   static void setDutyCycle(int dutyCycle) {
-      TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
+   static void setDutyCycle(int dutyCycle, int tmrChannel) {
+      tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
 
-      if (TmrBase_T<Info>::tmr->SC&FTM_SC_CPWMS_MASK) {
-         TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*TmrBase_T<Info>::tmr->MOD)/100;
+      if (tmr->SC&FTM_SC_CPWMS_MASK) {
+         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*tmr->MOD)/100;
       }
       else {
-         TmrBase_T<Info>::tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(TmrBase_T<Info>::tmr->MOD+1))/100;
+         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
       }
    }
 };
+
+/**
+ * Template class to provide FTM callback
+ */
+template<class Info>
+class FtmIrq_T : public TmrBase_T<Info> {
+
+protected:
+   /** Callback function for ISR */
+   static FTMCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      if (callback != 0) {
+         callback();
+      }
+   }
+};
+
+template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
+
+#ifdef USBDM_FTM0_IS_DEFINED
+/**
+ * Template class representing a FTM0 timer channel
+ *
+ * Example
+ * @code
+ * // Instantiate the timer channel (for FTM0 channel 6)
+ *
+ * using ftm0_ch6 = USBDM::Ftm0Channel<6>;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.initialise(200, PwmIO::tmr_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam tmrChannel FTM timer channel
+ */
+template <int tmrChannel>
+class Ftm0Channel : public TmrBase_T<Ftm0Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+/**
+ * Class representing FTM0
+ */
+using Ftm0 = FtmIrq_T<Ftm0Info>;
+#endif
+
+#ifdef USBDM_FTM1_IS_DEFINED
+/**
+ * Template class representing a FTM1 timer channel
+ *
+ * Refer @ref Ftm0Channel
+ *
+ * @tparam tmrChannel FTM timer channel
+ */
+template <int tmrChannel>
+class Ftm1Channel : public TmrBase_T<Ftm1Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing FTM1
+ */
+using Ftm1 = FtmIrq_T<Ftm1Info>;
+#endif
+
+#ifdef USBDM_FTM2_IS_DEFINED
+/**
+ * Template class representing a FTM2 timer channel
+ *
+ * Refer @ref Ftm0Channel
+ *
+ * @tparam tmrChannel FTM timer channel
+ */
+template <int tmrChannel>
+class Ftm2Channel : public TmrBase_T<Ftm2Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing FTM2
+ */
+using Ftm2 = FtmIrq_T<Ftm2Info>;
+#endif
+
+#ifdef USBDM_FTM3_IS_DEFINED
+/**
+ * Template class representing a FTM3 timer channel
+ *
+ * Refer @ref Ftm0Channel
+ *
+ * @tparam tmrChannel FTM timer channel
+ */
+template <int tmrChannel>
+class Ftm3Channel : public TmrBase_T<Ftm3Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing FTM0
+ */
+using Ftm3 = FtmIrq_T<Ftm3Info>;
+#endif
 
 /**
  * Template class representing a FTM configured as a Quadrature encoder
@@ -385,7 +466,7 @@ public:
    static void enable() {
       Info::InfoQUAD::initPCRs();
 
-      TmrBase_T<Info>::setMode(0, tmr_quadrature);
+      TmrBase_T<Info>::initialise(0, tmr_quadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

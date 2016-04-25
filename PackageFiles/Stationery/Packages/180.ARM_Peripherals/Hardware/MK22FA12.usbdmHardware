@@ -7,8 +7,8 @@
 
 <root version="1.2.0">
    <family name="MK22FA12">
-      <device name="FRDM_K22F121M0" manual="K22P64M120SF5V2RM" package="FRDM_K20D50M" />
-      <device name="FRDM_K22FA121M0" manual="K22P64M120SF5RM" package="FRDM_K20D50M" />
+      <device name="FRDM_K22F1M0" manual="K22P64M120SF5V2RM" package="FRDM_K20D50M" />
+      <device name="FRDM_K22FA1M0" manual="K22P64M120SF5RM" package="FRDM_K20D50M" />
       <device name="MK22FN1M0AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64" />
       <device name="MK22FN1M0VLH12" manual="K22P64M120SF5RM" package="LQFP_64" />
       <device name="MK22FX512AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64" />
@@ -59,7 +59,7 @@
       </peripheral>
       <peripheral baseName="DAC"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
-         <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_DAC0_MASK" />
       </peripheral>
       <peripheral baseName="DAC1"     instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
@@ -930,11 +930,11 @@
    </pins>
    <packages>
       <package name="FRDM_K20D50M">
-         <placement pin="ADC0_DM0"      location="" />
-         <placement pin="ADC0_DP0"      location="" />
-         <placement pin="ADC1_DM0"      location="" />
-         <placement pin="ADC1_DP0"      location="" />
-         <placement pin="DAC0_OUT"      location="" />
+         <placement pin="ADC0_DM0"      location="A11" />
+         <placement pin="ADC0_DP0"      location="A10" />
+         <placement pin="ADC1_DM0"      location="A9" />
+         <placement pin="ADC1_DP0"      location="A8" />
+         <placement pin="DAC0_OUT"      location="A7" />
          <placement pin="EXTAL32"       location="EXTAL32" />
          <placement pin="PTA0"          location="JTAG_TCLK/SWD_CLK/EZP_CLK" />
          <placement pin="PTA1"          location="D5" />
@@ -987,7 +987,7 @@
          <placement pin="VOUT33"        location="VOUT33" />
          <placement pin="VREFH"         location="VREFH" />
          <placement pin="VREFL"         location="VREFL" />
-         <placement pin="VREF_OUT"      location="" />
+         <placement pin="VREF_OUT"      location="A6" />
          <placement pin="VREGIN"        location="VREGIN" />
          <placement pin="VSS1"          location="VSS1" />
          <placement pin="VSS2"          location="VSS2" />

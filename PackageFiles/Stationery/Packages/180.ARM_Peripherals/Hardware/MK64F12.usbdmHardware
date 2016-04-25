@@ -8,14 +8,14 @@
 <root version="1.2.0">
    <family name="MK64F12">
       <device name="FRDM_K64F"    manual="K64P144M120SF5RM" package="FRDM" />
-      <device name="MK64FN1M0VDC12" manual="K64P144M120SF5RM" package="BGA-121" />
-      <device name="MK64FN1M0VLL12" manual="K64P144M120SF5RM" package="LQFP-100" />
-      <device name="MK64FN1M0VLQ12" manual="K64P144M120SF5RM" package="LQFP-144" />
-      <device name="MK64FN1M0VMD12" manual="K64P144M120SF5RM" package="BGA-144" />
-      <device name="MK64FX512VDC12" manual="K64P144M120SF5RM" package="BGA-121" />
-      <device name="MK64FX512VLL12" manual="K64P144M120SF5RM" package="LQFP-100" />
-      <device name="MK64FX512VLQ12" manual="K64P144M120SF5RM" package="LQFP-144" />
-      <device name="MK64FX512VMD12" manual="K64P144M120SF5RM" package="BGA-144" />
+      <device name="MK64FN1M0VDC12" manual="K64P144M120SF5RM" package="BGA_121" />
+      <device name="MK64FN1M0VLL12" manual="K64P144M120SF5RM" package="LQFP_100" />
+      <device name="MK64FN1M0VLQ12" manual="K64P144M120SF5RM" package="LQFP_144" />
+      <device name="MK64FN1M0VMD12" manual="K64P144M120SF5RM" package="BGA_144" />
+      <device name="MK64FX512VDC12" manual="K64P144M120SF5RM" package="BGA_121" />
+      <device name="MK64FX512VLL12" manual="K64P144M120SF5RM" package="LQFP_100" />
+      <device name="MK64FX512VLQ12" manual="K64P144M120SF5RM" package="LQFP_144" />
+      <device name="MK64FX512VMD12" manual="K64P144M120SF5RM" package="BGA_144" />
    </family>
    <peripherals>
       <peripheral baseName="0"        instance="">
@@ -1717,7 +1717,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="BGA-121">
+      <package name="BGA_121">
          <placement pin="ADC0_DM0"      location="K2" />
          <placement pin="ADC0_DM1"      location="H2" />
          <placement pin="ADC0_DP0"      location="K1" />
@@ -1837,7 +1837,7 @@
          <placement pin="VSSA"          location="F6" />
          <placement pin="XTAL32"        location="L4" />
       </package>
-      <package name="BGA-144">
+      <package name="BGA_144">
          <placement pin="ADC0_DM0"      location="L2" />
          <placement pin="ADC0_DM1"      location="J2" />
          <placement pin="ADC0_DP0"      location="L1" />
@@ -2081,7 +2081,7 @@
          <placement pin="VSSA"          location="" />
          <placement pin="XTAL32"        location="" />
       </package>
-      <package name="LQFP-100">
+      <package name="LQFP_100">
          <placement pin="ADC0_DM0"      location="p19" />
          <placement pin="ADC0_DM1"      location="p15" />
          <placement pin="ADC0_DP0"      location="p18" />
@@ -2183,7 +2183,7 @@
          <placement pin="VSSA"          location="p25" />
          <placement pin="XTAL32"        location="p28" />
       </package>
-      <package name="LQFP-144">
+      <package name="LQFP_144">
          <placement pin="ADC0_DM0"      location="p28" />
          <placement pin="ADC0_DM1"      location="p24" />
          <placement pin="ADC0_DP0"      location="p27" />

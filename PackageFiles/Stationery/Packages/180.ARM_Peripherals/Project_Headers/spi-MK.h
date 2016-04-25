@@ -184,6 +184,8 @@ public:
       // Enable SPI module clock
       *reinterpret_cast<volatile uint32_t*>(Info::clockReg) |= Info::clockMask;
 
+      __DMB();
+
       spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
                    SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
 

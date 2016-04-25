@@ -1,10 +1,10 @@
 /**
  * @file     spi.h (derived from spi-MKL.h)
  *
- * @brief    Abstracion layer for SPI interface
+ * @brief    Abstraction layer for SPI interface
  *
- * @version   1.1.0
- * @date     2015/12
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 
 #ifndef INCLUDE_USBDM_SPI_H_
@@ -36,7 +36,7 @@ extern "C" void SPI1_IRQHandler(void);
 extern "C" void SPI2_IRQHandler(void);
 
 /**
- * @addtogroup SPI_Group Serial Peripheral Interface
+ * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
  */

@@ -1,8 +1,8 @@
 /*
- *  @file Vectors.c
- *  Derived from  Vectors-mk.c
+ *  @file Vectors.cpp 
+ *  Derived from  Vectors-mkl.cpp
  *
- *  Generic vectors and security for Kinetis MKxxx
+ *  Vectors and security for Kinetis MKxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -10,6 +10,10 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
+#include "pin_mapping.h"
+
+/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
  * Security information
@@ -150,27 +154,61 @@ typedef struct {
 /*
 Control extended Boot features on these devices
 <h> Flash boot options (NV_FOPT)
-   <q0.2> NMI pin control (FOPT.NMI_DIS)
+   <e0> Boot ROM Options
+      <i> Only available on devices with internal ROM
+      <i> Currently: KL03,KL17,KL27,KL43
+      <0=> Disabled
+      <1=> Enabled
+   <o1> Boot Source Selection (FOPT.BOOTSRC_SEL)
+      <i> These bits select the boot sources if FOPT.BOOTPIN_OPT = 1
+	  <info>BOOTSRC_SEL
+      <0=> 0: Boot from Flash
+      <64=> 1: Reserved
+      <128=> 2: Boot from ROM
+      <192=> 3: Boot from ROM
+   <q2.1> External pin selects boot options (FOPT.BOOTPIN_OPT)
+      <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
+	  <info>BOOTPIN_OPT
+      <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted. 
+      <1=> Boot source controlled by BOOTSRC_SEL
+   </e>
+
+   <q2.5> Flash initialisation speed (FOPT.FAST_INIT)
+      <i> Selects initialization speed on POR, VLLSx, and system reset.
+	  <info>FAST_INIT
+      <0=> Slower (reduced average power)
+      <1=> Faster (higher average power)
+   <q2.3> RESET pin control (FOPT.RESET_PIN_CFG)
+      <i> Enables or disables the RESET pin dedicated operation
+	  <info>RESET_PIN_CFG
+      <0=> Disabled (available as port pin)
+      <1=> Enabled (PUP, open-drain, filtered)
+   <q2.2> NMI pin control (FOPT.NMI_DIS)
       <i> Enables or disables the NMI function
       <info>NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
-   <q0.1> EZPORT pin control (FOPT.EZPORT_DIS)
-      <i> Enables or disables EzPort function
-      <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
-      <i> if the EZP_CS/NMI pin is used for its NMI function 
-      <info>EZPORT_DIS
-      <0=> EZP_CSn pin is disabled on reset
-      <1=> EZP_CSn pin is enabled on reset
-   <q0.0> Low power boot control (FOPT.LPBOOT)
-      <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
-      <i> Allows power consumption during reset to be reduced
-      <info>LPBOOT
-      <0=> Low Power - CLKDIV1,2 = /8, CLKDIV3,4 = /16
-      <1=> Normal - CLKDIV1,2 = /1, CLKDIV3,4 = /2
+   <o3> Low power boot control (FOPT.LPBOOT)
+      <i> Controls the reset value of SIM_CLKDIV1.OUTDIV1 (clock divider) and
+      <i> SMC_PMCTRL.RUNM (processor run mode)
+      <i> Note: VLPR is only used on KL03,KL17,KL27,KL43
+	  <info>LPBOOT
+      <0=> OUTDIV1 = /8, RUNM = VLPR
+      <1=> OUTDIV1 = /4, RUNM = VLPR
+      <16=> OUTDIV1 = /2, RUNM = RUN
+      <17=> OUTDIV1 = /1, RUNM = RUN
 </h>
  */
-#define FOPT_VALUE (0x7|0xF8)
+#define BOOT_ENABLE  (1)
+#define FOPT_BOOTSRC (0x0)
+#define FOPT_MISC    (0x2E)
+#define FOPT_LPBOOT  (0x11)
+
+#if defined(NV_FOPT_BOOTSRC_SEL) && BOOT_ENABLE
+#define FOPT_VALUE (FOPT_BOOTSRC|FOPT_MISC|FOPT_LPBOOT)
+#else
+#define FOPT_VALUE (0xC2|FOPT_MISC|FOPT_LPBOOT)
+#endif
 
 __attribute__ ((section(".security_information")))
 extern const SecurityInfo securityInfo = {
@@ -181,6 +219,38 @@ extern const SecurityInfo securityInfo = {
     /* feprot   */ FEPROT_VALUE,
     /* fdprot   */ FDPROT_VALUE,
 };
+
+#if defined(NV_FOPT_BOOTPIN_OPT_MASK)
+/*
+ * Security information
+ */
+typedef struct {
+    char     magic[4];           // Magic number indicating valid configuration - 'kcfg'
+    uint8_t  reserved[12];       // Reserved
+    uint8_t  enabledPeripherals; // 0:LPUART, 1:I2C, 2:SPI, 4:USB
+    uint8_t  i2cAddress;         // If not 0xFF, used as the 7-bit I2C slave address.
+    uint16_t peripheralTimeout;  // Timeout in milliseconds for active peripheral detection
+    uint16_t usbVid;             // Sets the USB Vendor ID reported by the device during enumeration.
+    uint16_t usbPid;             // Sets the USB Product ID reported by the device during enumeration.
+    uint32_t usbStringsPointer;  // Sets the USB Strings reported by the device during enumeration.
+    uint8_t  clockFlags;         // See Table 13-4, clockFlags Configuration Field
+    uint8_t  clockDivider;       // Divider to use for core and bus clocks when in high speed mode
+} BootloaderConfiguration;
+
+__attribute__ ((section(".bootloader_configuration")))
+const BootloaderConfiguration bootloaderConfiguration = {
+    /* magic               */ "kcfg",
+    /* reserved            */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+    /* enabledPeripherals  */ 0xFF, /* all peripherals */
+    /* i2cAddress          */ 0x11,
+    /* peripheralTimeout   */ 1000, /* ms */
+    /* usbVid              */ 0,
+    /* usbPid              */ 0,
+    /* usbStringsPointer   */ 0,
+    /* clockFlags          */ 0,
+    /* clockDivider        */ 0,    /* 0 => high-speed 48MHz */
+};
+#endif
 
 /*
  * Vector table related
@@ -206,6 +276,7 @@ typedef void( *const intfunc )( void );
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
+extern "C" {
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -215,6 +286,7 @@ void Default_Handler(void) {
    while (1) {
       __BKPT(0);
    }
+}
 }
 
 typedef struct {
@@ -243,11 +315,21 @@ void HardFault_Handler(void) {
     * and allows access to the saved processor state.
     * Other registers are unchanged and available in the usual register view
     */
-     __asm__ volatile ( "  tst   lr, #4              \n");  // Check mode
-     __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
-     __asm__ volatile ( "  mrseq r0, msp             \n");
-     __asm__ volatile ( "  mrsne r0, psp             \n");
-     __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
+   __asm__ volatile (
+          "       mov r0,lr                                     \n"
+          "       mov r1,#4                                     \n"
+          "       and r0,r1                                     \n"
+          "       bne skip1                                     \n"
+          "       mrs r0,msp                                    \n"
+          "       b   skip2                                     \n"
+          "skip1:                                               \n"
+          "       mrs r0,psp                                    \n"
+          "skip2:                                               \n"
+          "       nop                                           \n"
+          "       ldr r2, handler_addr_const                    \n"
+          "       bx r2                                         \n"
+          "       handler_addr_const: .word _HardFault_Handler  \n"
+      );
 }
 
 /******************************************************************************/
@@ -263,6 +345,7 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
+extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
@@ -272,7 +355,9 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
+}
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
@@ -280,5 +365,7 @@ extern uint32_t __StackTop;
  * To install a handler, create a function with the name shown and it will override
  * the weak default.
  */
-$(cVectorTable)
+/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
+/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+
 

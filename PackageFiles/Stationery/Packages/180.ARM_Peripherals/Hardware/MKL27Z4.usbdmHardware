@@ -7,14 +7,14 @@
 
 <root version="1.2.0">
    <family name="MKL27Z4">
-      <device name="MKL27Z128VFM4" manual="KL27P64M48SF6RM" package="QFN-32" />
-      <device name="MKL27Z128VFT4" manual="KL27P64M48SF6RM" package="QFN-48" />
-      <device name="MKL27Z128VLH4" manual="KL27P64M48SF6RM" package="LQFP-64" />
-      <device name="MKL27Z128VMP4" manual="KL27P64M48SF6RM" package="BGA-64" />
-      <device name="MKL27Z256VFM4" manual="KL27P64M48SF6RM" package="QFN-32" />
-      <device name="MKL27Z256VFT4" manual="KL27P64M48SF6RM" package="QFN-48" />
-      <device name="MKL27Z256VLH4" manual="KL27P64M48SF6RM" package="LQFP-64" />
-      <device name="MKL27Z256VMP4" manual="KL27P64M48SF6RM" package="BGA-64" />
+      <device name="MKL27Z128VFM4" manual="KL27P64M48SF6RM" package="QFN_32" />
+      <device name="MKL27Z128VFT4" manual="KL27P64M48SF6RM" package="QFN_48" />
+      <device name="MKL27Z128VLH4" manual="KL27P64M48SF6RM" package="LQFP_64" />
+      <device name="MKL27Z128VMP4" manual="KL27P64M48SF6RM" package="BGA_64" />
+      <device name="MKL27Z256VFM4" manual="KL27P64M48SF6RM" package="QFN_32" />
+      <device name="MKL27Z256VFT4" manual="KL27P64M48SF6RM" package="QFN_48" />
+      <device name="MKL27Z256VLH4" manual="KL27P64M48SF6RM" package="LQFP_64" />
+      <device name="MKL27Z256VMP4" manual="KL27P64M48SF6RM" package="BGA_64" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0">
@@ -798,7 +798,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="BGA-64">
+      <package name="BGA_64">
          <placement pin="PTA0"          location="D3" />
          <placement pin="PTA1"          location="D4" />
          <placement pin="PTA12"         location="H6" />
@@ -863,7 +863,7 @@
          <placement pin="VSS3"          location="E3" />
          <placement pin="VSSA"          location="F3" />
       </package>
-      <package name="LQFP-64">
+      <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />
@@ -929,7 +929,7 @@
          <placement pin="VSS3"          location="p47" />
          <placement pin="VSSA"          location="p16" />
       </package>
-      <package name="QFN-32">
+      <package name="QFN_32">
          <placement pin="PTA0"          location="p10" />
          <placement pin="PTA1"          location="p11" />
          <placement pin="PTA18"         location="p17" />
@@ -963,7 +963,7 @@
          <placement pin="VSS2"          location="p16" />
          <placement pin="VSSA"          location="p8" />
       </package>
-      <package name="QFN-48">
+      <package name="QFN_48">
          <placement pin="PTA0"          location="p17" />
          <placement pin="PTA1"          location="p18" />
          <placement pin="PTA18"         location="p24" />

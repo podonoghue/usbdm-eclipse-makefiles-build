@@ -8,13 +8,13 @@
 <root version="1.2.0">
    <family name="MKL46Z4">
       <device name="FRDM_KL46Z4"  manual="KL46P121M48SF4RM" package="FRDM" />
-      <device name="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP-64" />
-      <device name="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP-100" />
-      <device name="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA-121" />
-      <device name="MKL46Z256VLH4" manual="KL46P121M48SF4RM" package="LQFP-64" />
-      <device name="MKL46Z256VLL4" manual="KL46P121M48SF4RM" package="LQFP-100" />
-      <device name="MKL46Z256VMC4" manual="KL46P121M48SF4RM" package="BGA-121" />
-      <device name="MKL46Z256VMP4" manual="KL46P121M48SF4RM" package="BGA-64" />
+      <device name="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
+      <device name="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
+      <device name="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
+      <device name="MKL46Z256VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
+      <device name="MKL46Z256VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
+      <device name="MKL46Z256VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
+      <device name="MKL46Z256VMP4" manual="KL46P121M48SF4RM" package="BGA_64" />
    </family>
    <peripherals>
       <peripheral baseName="0"        instance="">
@@ -1261,7 +1261,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="BGA-121">
+      <package name="BGA_121">
          <placement pin="PTA0"          location="J6" />
          <placement pin="PTA1"          location="H8" />
          <placement pin="PTA12"         location="K8" />
@@ -1367,7 +1367,7 @@
          <placement pin="VSS5"          location="F7" />
          <placement pin="VSSA"          location="F6" />
       </package>
-      <package name="BGA-64">
+      <package name="BGA_64">
          <placement pin="PTA0"          location="pD3" />
          <placement pin="PTA1"          location="pD4" />
          <placement pin="PTA12"         location="pH6" />
@@ -1538,7 +1538,7 @@
          <placement pin="VSS5"          location="" />
          <placement pin="VSSA"          location="" />
       </package>
-      <package name="LQFP-100">
+      <package name="LQFP_100">
          <placement pin="PTA0"          location="p34" />
          <placement pin="PTA1"          location="p35" />
          <placement pin="PTA12"         location="p42" />
@@ -1640,7 +1640,7 @@
          <placement pin="VSS5"          location="p74" />
          <placement pin="VSSA"          location="p25" />
       </package>
-      <package name="LQFP-64">
+      <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />

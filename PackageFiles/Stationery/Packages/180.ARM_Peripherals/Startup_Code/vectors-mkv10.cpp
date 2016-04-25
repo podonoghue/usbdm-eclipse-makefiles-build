@@ -1,8 +1,8 @@
 /*
- *  @file Vectors.c
- *  Derived from  Vectors-mke.c
+ *  @file Vectors.cpp 
+ *  Derived from  Vectors-mkv10.cpp
  *
- *  Generic vectors and security for Kinetis MKExx
+ *  Vectors and security for Kinetis MKV10
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -10,68 +10,24 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
+#include "pin_mapping.h"
+
+/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
  * Security information
  */
 typedef struct {
-   uint8_t  backdoorKey[8];
-   uint32_t reseved;
-   uint8_t  eeprot;
-   uint8_t  fprot;
-   uint8_t  fsec;
-   uint8_t  fopt;
+    uint8_t  backdoorKey[8];
+    uint32_t fprot;
+    uint8_t  fsec;
+    uint8_t  fopt;
+    uint8_t  feprot;
+    uint8_t  fdprot;
 } SecurityInfo;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
-/*
-  <h> Flash Configuration
-  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
-  <i> and security information that allows the MCU to restrict access to the FTFL module.
-  
-  <h> Backdoor Comparison Key
-  <i> The Verify Backdoor Access Key command releases security if user-supplied keys
-  <i> matches the Backdoor Comparison Key bytes
-    <o0>  Backdoor Comparison Key 0.  <0x0-0xFF>
-    <o1>  Backdoor Comparison Key 1.  <0x0-0xFF>
-    <o2>  Backdoor Comparison Key 2.  <0x0-0xFF>
-    <o3>  Backdoor Comparison Key 3.  <0x0-0xFF>
-    <o4>  Backdoor Comparison Key 4.  <0x0-0xFF>
-    <o5>  Backdoor Comparison Key 5.  <0x0-0xFF>
-    <o6>  Backdoor Comparison Key 6.  <0x0-0xFF>
-    <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
-  </h>
- */
-#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
-/*
-   <h> Flash Region Protect (NV_FDPROT)
-      <i> Each bit protects a 1/8 region of the flash memory.
-      <q.0>   FPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
-      <q.1>   FPROT.1  <0=>protected  <1=>unprotected
-      <q.2>   FPROT.2  <0=>protected  <1=>unprotected
-      <q.3>   FPROT.3  <0=>protected  <1=>unprotected
-      <q.4>   FPROT.4  <0=>protected  <1=>unprotected
-      <q.5>   FPROT.5  <0=>protected  <1=>unprotected
-      <q.6>   FPROT.6  <0=>protected  <1=>unprotected
-      <q.7>   FPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
-   </h>
-*/
-#define FPROT_VALUE 0xFF
-/*
-   <h> EEPROM Region Protect (NV_EEPROT)
-      <i> Each bit protects a 1/8 region of the EEPROM memory.
-      <i> (FlexNVM devices only)
-      <q.0>   EEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
-      <q.1>   EEPROT.1  <0=>protected  <1=>unprotected
-      <q.2>   EEPROT.2  <0=>protected  <1=>unprotected
-      <q.3>   EEPROT.3  <0=>protected  <1=>unprotected
-      <q.4>   EEPROT.4  <0=>protected  <1=>unprotected
-      <q.5>   EEPROT.5  <0=>protected  <1=>unprotected
-      <q.6>   EEPROT.6  <0=>protected  <1=>unprotected
-      <q.7>   EEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
-   </h>
-*/
-#define EEPROT_VALUE 0xFF
 
 /*
 <h> Flash security value (NV_FSEC)
@@ -80,7 +36,18 @@ typedef struct {
       <info>KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
-   <o1> Flash Security (FSEC.SEC)
+   <o1> Mass Erase Enable Bits (FSEC.MEEN)
+      <i> Controls mass erase capability of the flash memory module.
+      <i> Only relevant when FSEC.SEC is set to secure.
+      <info>MEEN
+      <2=> 2: Mass erase disabled
+      <3=> 3: Mass erase enabled
+   <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
+      <i> Controls access to the flash memory contents during returned part failure analysis
+      <info>FSLACC
+      <2=> 2: Factory access denied
+      <3=> 3: Factory access granted
+   <o3> Flash Security (FSEC.SEC)
       <i> Defines the security state of the MCU. 
       <i> In the secure state, the MCU limits access to flash memory module resources. 
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
@@ -89,23 +56,49 @@ typedef struct {
       <3=> 3: Secured
 </h>
 */
-#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(2<<NV_FSEC_SEC_SHIFT)|0x3C)
+#define FSEC_VALUE ((3<<NV_FSEC_KEYEN_SHIFT)|(3<<NV_FSEC_MEEN_SHIFT)|(3<<NV_FSEC_FSLACC_SHIFT)|(2<<NV_FSEC_SEC_SHIFT))
+
+#if ((FSEC_VALUE&NV_FSEC_MEEN_MASK) == (2<<NV_FSEC_MEEN_SHIFT)) && ((FSEC_VALUE&NV_FSEC_SEC_MASK) != (2<<NV_FSEC_SEC_SHIFT))
+// Change to warning if your really, really want to do this!
+#error "The security values selected will prevent the device from being unsecured using external methods"
+#endif
 
 /*
-<h> Flash option Value (NV_FTFA_FOPT)
-   <o> The FOPT value is copied from Flash to FTMRH_FOPT on reset  <0-255>
+Control extended Boot features on these devices
+<h> Flash boot options (NV_FTFA_FOPT)
+   <q0.5> Flash clock source (FOPT.CLK_SRC)
+      <i> Selects clock source for flash.
+      <i> This bit has effect only in RUN mode boot up. Ignored in VLPR boot.
+      <0=> External clock
+      <1=> Internal clock
+   <q0.3> Execution mode (FOPT.EXE_MODE)
+      <i> This bit will not change mode for boot automatically and is different from the RTC Boot Override bit.
+      <i> This bit is for software so that a startup code can change mode based on setting of this bit
+      <i> whenever it is executed on every boot up
+      <0=> RUN mode
+      <1=> VLPR mode
+   <q0.2> NMI pin control (FOPT.NMI_EN)
+      <i> Enables or disables control for the NMI function
+      <0=> NMI interrupts are always blocked.
+      <1=> NMI_b interrupts default to enabled
+   <q0.0> Low power boot control (FOPT.LPBOOT)
+      <i> Controls the reset value of the core clock divider SIM_CLKDIV1.SYS_DIV and 
+      <i> system clock mode SIM_CLKDIV1.SYSCLKMODE
+      <i> May be used to reduce power during start up
+      <0=> Slow boot: Clock divider (SYS_DIV) /8
+      <1=> Fast boot: Clock divider (SYS_DIV) /1
 </h>
-*/
-#define FOPT_VALUE (0xFF)
+ */
+#define FOPT_VALUE (0x2D|0xC2)
 
 __attribute__ ((section(".security_information")))
 extern const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
-    /* reseved  */ 0xFFFFFFFF,
-    /* eeprot   */ EEPROT_VALUE,
-    /* fprot    */ FPROT_VALUE,
+    /* fprot    */ 0xFFFFFFFF,
     /* fsec     */ FSEC_VALUE,
     /* fopt     */ FOPT_VALUE,
+    /* feprot   */ 0xFF,
+    /* fdprot   */ 0xFF,
 };
 
 /*
@@ -132,6 +125,7 @@ typedef void( *const intfunc )( void );
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
+extern "C" {
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -141,6 +135,7 @@ void Default_Handler(void) {
    while (1) {
       __BKPT(0);
    }
+}
 }
 
 typedef struct {
@@ -199,6 +194,7 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
+extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
@@ -208,7 +204,9 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
+}
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
@@ -216,5 +214,7 @@ extern uint32_t __StackTop;
  * To install a handler, create a function with the name shown and it will override
  * the weak default.
  */
-$(cVectorTable)
+/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
+/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+
 

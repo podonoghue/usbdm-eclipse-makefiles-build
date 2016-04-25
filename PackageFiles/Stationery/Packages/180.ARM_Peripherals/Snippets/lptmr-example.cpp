@@ -15,24 +15,31 @@ using namespace USBDM;
  * Demonstrates use of timer call-back
  */
 
+// Comment out the following line to use static interrupt handlers
+#define SET_HANDLERS_PROGRAMMATICALLY
+
 // Connection mapping - change as required
 using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
 
-#if LPTMR_USES_NAKED_HANDLER == 1
-/*
- * If using naked handler it must be named exactly as shown
- */
-void LPTMR0_IRQHandler(void) {
-   // Clear interrupt flag
-   LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
-   RED_LED::toggle();
-}
-#else
 /*
  * This handler is set programmatically
  */
 void flash(void) {
    RED_LED::toggle();
+}
+
+#ifndef SET_HANDLERS_PROGRAMMATICALLY
+/**
+ * Example showing how to install a custom IRQ handler for a LPTMR
+ */
+namespace USBDM {
+
+template<> void Lptmr_T<Lptmr0Info>::irqHandler() {
+   // Clear interrupt flag
+   LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
+   RED_LED::toggle();
+}
+
 }
 #endif
 
@@ -42,7 +49,7 @@ int main() {
    // May need to change prescaler to get useful delays
    Lptmr0::configure(1000);
    
-#if LPTMR_USES_NAKED_HANDLER == 0
+#ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically
    Lptmr0::setCallback(flash);
 #endif

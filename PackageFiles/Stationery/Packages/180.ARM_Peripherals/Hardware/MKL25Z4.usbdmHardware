@@ -7,19 +7,19 @@
 
 <root version="1.2.0">
    <family name="MKL25Z4">
-      <device name="FRDM_KL25Z"   manual="KL25P80M48SF0RM" package="FRDM" />
-      <device name="MKL25Z128VFM4" manual="KL25P80M48SF0RM" package="QFN-32" />
-      <device name="MKL25Z128VFT4" manual="KL25P80M48SF0RM" package="QFN-48" />
-      <device name="MKL25Z128VLH4" manual="KL25P80M48SF0RM" package="LQFP-64" />
-      <device name="MKL25Z128VLK4" manual="KL25P80M48SF0RM" package="LQFP-80" />
-      <device name="MKL25Z32VFM4" manual="KL25P80M48SF0RM" package="QFN-32" />
-      <device name="MKL25Z32VFT4" manual="KL25P80M48SF0RM" package="QFN-48" />
-      <device name="MKL25Z32VLH4" manual="KL25P80M48SF0RM" package="LQFP-64" />
-      <device name="MKL25Z32VLK4" manual="KL25P80M48SF0RM" package="LQFP-80" />
-      <device name="MKL25Z64VFM4" manual="KL25P80M48SF0RM" package="QFN-32" />
-      <device name="MKL25Z64VFT4" manual="KL25P80M48SF0RM" package="QFN-48" />
-      <device name="MKL25Z64VLH4" manual="KL25P80M48SF0RM" package="LQFP-64" />
-      <device name="MKL25Z64VLK4" manual="KL25P80M48SF0RM" package="LQFP-80" />
+      <device name="FRDM_KL25Z"   manual="KL25P80M48SF0RM" package="FRDM_KL25Z" />
+      <device name="MKL25Z128VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
+      <device name="MKL25Z128VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
+      <device name="MKL25Z128VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
+      <device name="MKL25Z128VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
+      <device name="MKL25Z32VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
+      <device name="MKL25Z32VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
+      <device name="MKL25Z32VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
+      <device name="MKL25Z32VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
+      <device name="MKL25Z64VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
+      <device name="MKL25Z64VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
+      <device name="MKL25Z64VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
+      <device name="MKL25Z64VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
    </family>
    <peripherals>
       <peripheral baseName="0"        instance="">
@@ -908,7 +908,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="FRDM">
+      <package name="FRDM_KL25Z">
          <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0/ConRx" />
          <placement pin="PTA12"         location="D3" />
@@ -990,7 +990,7 @@
          <placement pin="VSS3"          location="" />
          <placement pin="VSSA"          location="" />
       </package>
-      <package name="LQFP-64">
+      <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />
@@ -1056,7 +1056,7 @@
          <placement pin="VSS3"          location="p47" />
          <placement pin="VSSA"          location="p16" />
       </package>
-      <package name="LQFP-80">
+      <package name="LQFP_80">
          <placement pin="PTA0"          location="p26" />
          <placement pin="PTA1"          location="p27" />
          <placement pin="PTA12"         location="p32" />
@@ -1138,7 +1138,7 @@
          <placement pin="VSS3"          location="p59" />
          <placement pin="VSSA"          location="p20" />
       </package>
-      <package name="QFN-32">
+      <package name="QFN_32">
          <placement pin="PTA0"          location="p10" />
          <placement pin="PTA1"          location="p11" />
          <placement pin="PTA18"         location="p17" />
@@ -1172,7 +1172,7 @@
          <placement pin="VSS2"          location="p16" />
          <placement pin="VSSA"          location="p8" />
       </package>
-      <package name="QFN-48">
+      <package name="QFN_48">
          <placement pin="PTA0"          location="p17" />
          <placement pin="PTA1"          location="p18" />
          <placement pin="PTA18"         location="p24" />

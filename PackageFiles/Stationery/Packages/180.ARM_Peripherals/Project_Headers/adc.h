@@ -11,7 +11,6 @@
 #include <stddef.h>
 #include <assert.h>
 #include "derivative.h"
-#include "bitband.h"
 
 /*
  * Default port information
@@ -95,22 +94,22 @@ enum Adc_Resolution {
  * @tparam info            Table of information describing ADC
  * @tparam adcChannel      ADC channel
  */
-template<class info, uint8_t adcChannel>
+template<class Info, uint8_t adcChannel>
 class Adc_T {
 
 #ifdef DEBUG_BUILD
-   static_assert((adcChannel<info::NUM_SIGNALS), "Adc_T: Non-existent ADC channel - Modify Configure.usbdm");
-   static_assert((adcChannel>=info::NUM_SIGNALS)||(info::info[adcChannel].gpioBit != UNMAPPED_PCR), "Adc_T: ADC channel is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((adcChannel>=info::NUM_SIGNALS)||(info::info[adcChannel].gpioBit != INVALID_PCR),  "Adc_T: ADC channel doesn't exist in this device/package");
-   static_assert((adcChannel>=info::NUM_SIGNALS)||((info::info[adcChannel].gpioBit == UNMAPPED_PCR)||(info::info[adcChannel].gpioBit == INVALID_PCR)||(info::info[adcChannel].gpioBit >= 0)), "Adc_T: Illegal ADC channel");
+   static_assert((adcChannel<Info::NUM_SIGNALS), "Adc_T: Non-existent ADC channel - Modify Configure.usbdm");
+   static_assert((adcChannel>=Info::NUM_SIGNALS)||(Info::info[adcChannel].gpioBit != UNMAPPED_PCR), "Adc_T: ADC channel is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((adcChannel>=Info::NUM_SIGNALS)||(Info::info[adcChannel].gpioBit != INVALID_PCR),  "Adc_T: ADC channel doesn't exist in this device/package");
+   static_assert((adcChannel>=Info::NUM_SIGNALS)||((Info::info[adcChannel].gpioBit == UNMAPPED_PCR)||(Info::info[adcChannel].gpioBit == INVALID_PCR)||(Info::info[adcChannel].gpioBit >= 0)), "Adc_T: Illegal ADC channel");
 #endif
 
 private:
-   static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(info::clockReg);
+   static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(Info::basePtr);
+   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
 
 public:
-   using Pcr = PcrTable_T<info, adcChannel, info::pcrValue>;
+   using Pcr = PcrTable_T<Info, adcChannel>;
 
    /**
     * Set port pin as analogue input
@@ -121,7 +120,7 @@ public:
     */
    static void setMode(uint32_t mode = resolution_16bit_se) {
       // Enable clock to ADC
-      *clockReg  |= info::clockMask;
+      *clockReg  |= Info::clockMask;
 
       // Set up ADC pin
       Pcr::setPCR(ADC_PORT_FN);

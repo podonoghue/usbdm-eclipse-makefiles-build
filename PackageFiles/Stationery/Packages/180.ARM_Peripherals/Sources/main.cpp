@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 /**
  * See examples in Snippets directory

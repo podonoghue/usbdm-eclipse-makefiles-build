@@ -17,40 +17,41 @@
  * Default port information
  */
 
-#ifndef FTM0_CLOCK_MASK
-#ifdef SIM_SCGC6_FTM0_MASK
-#define FTM0_CLOCK_MASK SIM_SCGC6_FTM0_MASK
-#define FTM0_CLOCK_REG  SCGC6
+#ifndef TPM0_CLOCK_MASK
+#ifdef SIM_SCGC6_TPM0_MASK
+#define TPM0_CLOCK_MASK SIM_SCGC6_TPM0_MASK
+#define TPM0_CLOCK_REG  SCGC6
 #endif
-#ifdef SIM_SCGC6_FTM1_MASK
-#define FTM1_CLOCK_MASK SIM_SCGC6_FTM1_MASK
-#define FTM1_CLOCK_REG  SCGC6
+#ifdef SIM_SCGC6_TPM1_MASK
+#define TPM1_CLOCK_MASK SIM_SCGC6_TPM1_MASK
+#define TPM1_CLOCK_REG  SCGC6
 #endif
-#ifdef SIM_SCGC6_FTM2_MASK
-#define FTM2_CLOCK_MASK SIM_SCGC6_FTM2_MASK
-#define FTM2_CLOCK_REG  SCGC6
-#elif defined SIM_SCGC3_FTM2_MASK
-#define FTM2_CLOCK_MASK SIM_SCGC3_FTM2_MASK
-#define FTM2_CLOCK_REG  SCGC3
+#ifdef SIM_SCGC6_TPM2_MASK
+#define TPM2_CLOCK_MASK SIM_SCGC6_TPM2_MASK
+#define TPM2_CLOCK_REG  SCGC6
+#elif defined SIM_SCGC3_TPM2_MASK
+#define TPM2_CLOCK_MASK SIM_SCGC3_TPM2_MASK
+#define TPM2_CLOCK_REG  SCGC3
 #endif
-#ifdef SIM_SCGC6_FTM3_MASK
-#define FTM3_CLOCK_MASK SIM_SCGC6_FTM3_MASK
-#define FTM3_CLOCK_REG  SCGC6
+#ifdef SIM_SCGC6_TPM3_MASK
+#define TPM3_CLOCK_MASK SIM_SCGC6_TPM3_MASK
+#define TPM3_CLOCK_REG  SCGC6
 #endif
-#ifdef SIM_SCGC3_FTM3_MASK
-#define FTM3_CLOCK_MASK SIM_SCGC3_FTM3_MASK
-#define FTM3_CLOCK_REG  SCGC3
+#ifdef SIM_SCGC3_TPM3_MASK
+#define TPM3_CLOCK_MASK SIM_SCGC3_TPM3_MASK
+#define TPM3_CLOCK_REG  SCGC3
 #endif
-#ifdef SIM_SCGC3_FTM3_MASKC
-#define FTM3_CLOCK_MASK SIM_SCGC3_FTM3_MASKC
-#define FTM3_CLOCK_REG  SCGC3
+#ifdef SIM_SCGC3_TPM3_MASKC
+#define TPM3_CLOCK_MASK SIM_SCGC3_TPM3_MASKC
+#define TPM3_CLOCK_REG  SCGC3
 #endif
 #endif
 
 namespace USBDM {
 
 /**
- * @addtogroup PwmIO_Group PWM, Input capture, Output compare
+ * @addtogroup TPM_Group TPM, PWM, Input capture and Output compare
+ * @brief Pins used for PWM, Input capture and Output compare
  * @{
  */
 /**
@@ -88,30 +89,32 @@ enum Tmr_Mode {
 } ;
 
 /**
- * Template class representing the functions controlling the shared hardware of an TPM
+ * Type definition for TPM interrupt call back
+ */
+typedef void (*TPMCallbackFunction)(void);
+
+/**
+ * Base class representing an TPM
  *
  * Example
  * @code
  * // Instantiate the tmr (for TPM0)
- * const USBDM::Tmr<TPM0_BasePtr, SIM_BasePtr+offsetof(SIM_Type, TPM0_CLOCK_REG), TPM0_CLOCK_MASK, TPM0_SC> Tmr0;
+ * const USBDM::TmrBase_T<TPM0_Info)> Tpm0;
  *
  * // Initialise PWM with initial period and alignment
- * tmr0.setMode(200, USBDM::tmr_leftAlign);
+ * Tpm0::initialise(200, USBDM::tmr_leftAlign);
  *
- * // Change period (in ticks)
- * tmr0.setPeriod(500);
+ * // Change timer period
+ * Tpm0::setPeriod(500);
  * @endcode
  *
- * @tparam tmrBase       TPM hardware
- * @tparam tmrClockReg   SIM Clock register for TPM
- * @tparam tmrClockMask  Mask for TPM clock register
- * @tparam scValue       Value for TPM->SC register
+ * @tparam Info  Class describing TPM hardware instance
  */
-template<uint32_t tmrBase, uint32_t tmrClockReg, uint32_t tmrClockMask, uint16_t scValue>
-class Tmr {
+template<class Info>
+class TmrBase_T {
 protected:
-   static constexpr volatile TPM_Type* tmr      = reinterpret_cast<volatile TPM_Type*>(tmrBase);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(tmrClockReg);
+   static constexpr volatile TPM_Type* tmr      = reinterpret_cast<volatile TPM_Type*>(Info::basePtr);
+   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
 
 public:
    /**
@@ -122,20 +125,24 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+   static void initialise(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+      // Configure pins
+      Info::initPCRs();
 
       // Enable clock to timer
-      *clockReg |= tmrClockMask;
+      *clockReg |= Info::clockMask;
+
+      __DMB();
 
       // Common registers
       tmr->CNT     = 0;
       if (mode == tmr_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC   = scValue|TPM_SC_CPWMS_MASK;
+         tmr->SC   = Info::scValue|TPM_SC_CPWMS_MASK;
       }
       else {
          // Left aligned PWM without CPWMS selected
-         tmr->SC   = scValue;
+         tmr->SC   = Info::scValue;
       }
       setPeriod(period);
    }
@@ -156,7 +163,7 @@ public:
       uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
       uint64_t period = ((uint64_t)per*tickRate)/1000000;
 
-      // Disable FTM so register changes are immediate
+      // Disable TPM so register changes are immediate
       tmr->SC = TPM_SC_PS(0);
 
       if (centreAlign) {
@@ -168,7 +175,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = scValue|TPM_SC_CPWMS_MASK;
+         tmr->SC  = Info::scValue|TPM_SC_CPWMS_MASK;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -179,7 +186,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = scValue;
+         tmr->SC  = Info::scValue;
       }
    }
    /**
@@ -225,67 +232,13 @@ public:
 #endif
       return rv;
    }
-};
-
-/**
- * Template class representing a pin with PWM capability\n
- * Makes use of an auxiliary class having channel specific information
- *
- * Example
- * @code
- * // Instantiate the tmr channel (for FTM0 CH6, auxiliary table tmr0Table)
- *
- * const USBDM::TmrBase_T<ftm0Info, 6> tmr0_ch6;
- *
- * // Initialise PWM with initial period and alignment
- * tmr0_ch6.setMode(200, PwmIO::tmr_leftAlign);
- *
- * // Change period (in ticks)
- * tmr0_ch6.setPeriod(500);
- *
- * // Change duty cycle (in percent)
- * tmr0_ch6.setDutyCycle(45);
- * @endcode
- *
- * @tparam info            Table providing pin specific information for the FTM
- * @tparam tmrChannel      FTM channel
- * @tparam pcrValue        Default value for PCR including mux value
- */
-template<class info, uint32_t tmrChannel, uint32_t pcrValue=info::pcrValue>
-class TmrBase_T : public Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue> {
-
-#ifdef DEBUG_BUILD
-   static_assert((tmrChannel<info::NUM_SIGNALS), "TmrBase_T: Non-existent timer channel - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != UNMAPPED_PCR), "TmrBase_T: FTM channel is not mapped to a pin - Modify Configure.usbdmProject");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit != INVALID_PCR),  "TmrBase_T: FTM channel doesn't exist in this device/package");
-   static_assert((tmrChannel>=info::NUM_SIGNALS)||(info::info[tmrChannel].gpioBit == UNMAPPED_PCR)||(info::info[tmrChannel].gpioBit == INVALID_PCR)||(info::info[tmrChannel].gpioBit >= 0),
-         "TmrBase_T: Illegal FTM channel");
-#endif
-
-private:
-   static constexpr volatile TPM_Type *tmr = reinterpret_cast<volatile TPM_Type *>(info::basePtr);
-
-public:
-   using Pcr = PcrTable_T<info, (tmrChannel>=info::NUM_SIGNALS)?0:tmrChannel, pcrValue>;
-
-   /**
-    * Configure Timer operation
-    *
-    * @param period  Period in us
-    * @param mode    Mode of operation see @ref Tmr_Mode
-    */
-   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
-      Tmr<info::basePtr, info::clockReg, info::clockMask, info::scValue>::setMode(period, mode);
-
-      // Set up pin
-      Pcr::setPCR();
-   }
    /**
     * Set PWM duty cycle
     *
-    * @param dutyCycle Duty-cycle as percentage
+    * @param dutyCycle  Duty-cycle as percentage
+    * @param tmrChannel Timer channel
     */
-   static void setDutyCycle(int dutyCycle) {
+   static void setDutyCycle(int dutyCycle, int tmrChannel) {
       tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
 
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
@@ -297,6 +250,129 @@ public:
    }
 };
 
+/**
+ * Template class to provide TPM callback
+ */
+template<class Info>
+class TpmIrq_T : public TmrBase_T<Info> {
+
+protected:
+   /** Callback function for ISR */
+   static TPMCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      if (callback != 0) {
+         callback();
+      }
+   }
+};
+
+template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
+
+#ifdef USBDM_TPM0_IS_DEFINED
+/**
+ * Template class representing a TPM0 timer channel
+ *
+ * Example
+ * @code
+ * // Instantiate the timer channel (for TPM0 channel 6)
+ *
+ * using ftm0_ch6 = USBDM::Tpm0Channel<6>;
+ *
+ * // Initialise PWM with initial period and alignment
+ * ftm0_ch6.initialise(200, PwmIO::tmr_leftAlign);
+ *
+ * // Change period (in ticks)
+ * ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam tmrChannel TPM timer channel
+ */
+template <int tmrChannel>
+class Tpm0Channel : public TmrBase_T<Tpm0Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+/**
+ * Class representing TPM0
+ */
+using Tpm0 = TpmIrq_T<Tpm0Info>;
+#endif
+
+#ifdef USBDM_TPM1_IS_DEFINED
+/**
+ * Template class representing a TPM1 timer channel
+ *
+ * Refer @ref Tpm0Channel
+ *
+ * @tparam tmrChannel TPM timer channel
+ */
+template <int tmrChannel>
+class Tpm1Channel : public TmrBase_T<Tpm1Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing TPM1
+ */
+using Tpm1 = TpmIrq_T<Tpm1Info>;
+#endif
+
+#ifdef USBDM_TPM2_IS_DEFINED
+/**
+ * Template class representing a TPM2 timer channel
+ *
+ * Refer @ref Tpm0Channel
+ *
+ * @tparam tmrChannel TPM timer channel
+ */
+template <int tmrChannel>
+class Tpm2Channel : public TmrBase_T<Tpm2Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing TPM2
+ */
+using Tpm2 = TpmIrq_T<Tpm2Info>;
+#endif
+
+#ifdef USBDM_TPM3_IS_DEFINED
+/**
+ * Template class representing a TPM3 timer channel
+ *
+ * Refer @ref Tpm0Channel
+ *
+ * @tparam tmrChannel TPM timer channel
+ */
+template <int tmrChannel>
+class Tpm3Channel : public TmrBase_T<Tpm3Info> {
+public:
+   static void setDutyCycle(int dutyCycle) {
+      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+   }
+};
+
+/**
+ * Class representing TPM0
+ */
+using Tpm3 = TpmIrq_T<Tpm3Info>;
+#endif
 
 /**
  * @}

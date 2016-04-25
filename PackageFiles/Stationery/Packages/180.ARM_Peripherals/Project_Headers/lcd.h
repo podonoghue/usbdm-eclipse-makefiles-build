@@ -419,7 +419,7 @@ public:
     */
    virtual void backlightSetLevel(int level) {
 #if LCD_BACKLIGHT_PWM_FEATURE
-      BackLight::setMode(1000, PwmIO::ftm_leftAlign);
+      BackLight::setMode(1000, tmr_leftAlign);
       if (level>100) {
          level = 100;
       }

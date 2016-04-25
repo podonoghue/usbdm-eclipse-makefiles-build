@@ -24,16 +24,16 @@
 
          <!-- Definitions used by example programs -->
          <constant id="demo.cpp.led"                value="USBDM::GpioB&lt;18&gt;" /> <!-- Digital I/O generic LED -->
-         <constant id="demo.cpp.pwm.red.led"        value="ftm_LED_RED" />      <!-- FTM/TPM to LED -->
-         <constant id="demo.cpp.pwm.green.led"      value="ftm_LED_GREEN" />    <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.red.led"        value="tpm_LED_RED" />      <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.green.led"      value="tpm_LED_GREEN" />    <!-- FTM/TPM to LED -->
          <constant id="demo.cpp.red.led"            value="gpio_LED_RED" />     <!-- Digital I/O to LED -->
          <constant id="demo.cpp.green.led"          value="gpio_LED_GREEN" />   <!-- Digital I/O to LED -->
          <constant id="demo.cpp.blue.led"           value="gpio_LED_BLUE" />    <!-- Digital I/O to LED -->
          <constant id="demo.cpp.joystick.x"         value="adc_A2" />           <!-- Analogue I/O (Arduino) -->
          <constant id="demo.cpp.joystick.y"         value="adc_A1" />           <!-- Analogue I/O (Arduino) -->
          <constant id="demo.cpp.joystick.k"         value="gpio_A0" />          <!-- Digital I/O from switch (Arduino) -->
-         <constant id="demo.cpp.external.switch"    value="D12" />              <!-- Digital I/O from switch (Arduino) -->
-         <constant id="demo.cpp.external.led"       value="D13" />              <!-- Digital I/O to LED (Arduino) -->
+         <constant id="demo.cpp.external.switch"    value="gpio_A0" />          <!-- Digital I/O from switch (Arduino) -->
+         <constant id="demo.cpp.external.led"       value="gpio_A1" />          <!-- Digital I/O to LED (Arduino) -->
          <constant id="demo.cpp.external.gps"       value="Gps2" />             <!-- GPS module connected by serial -->
          <constant id="demo.cpp.external.spi"       value="Spi0" />             <!-- SPI interface to off-board device -->
          <constant id="demo.cpp.external.i2c"       value="I2c1" />             <!-- I2C interface to off-board device -->
@@ -46,7 +46,7 @@
          <constant id="demo.cpp.nrf24l01.ce"        value="GpioD&lt;5&gt;" />   <!-- CE* connection to NRF24101 module -->
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />  <!-- IRQ* connection from NRF24101 module -->
 
-         <!-- copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" replace="true" / -->
+         <!-- copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  replace="true" / -->
 
          <!-- Example programs -->
          <!-- copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" / -->

@@ -31,14 +31,14 @@
 	<item value="mux2" key="PTD2_muxSetting"/>
 	<item value="Reserved" key="PTA19_descriptionSetting"/>
 	<item value="Reserved" key="PTA18_descriptionSetting"/>
-	<item value="mux3" key="PTA19_muxSetting"/>
+	<item value="mux0" key="PTA19_muxSetting"/>
 	<item value="mux1" key="PTC2_muxSetting"/>
 	<item value="mux1" key="PTC10_muxSetting"/>
 	<item value="0" key="PIT_MCR_FRZ"/>
 	<item value="mux4" key="PTA18_muxSetting"/>
 	<item value="0" key="SPI0_LSBE"/>
 	<item value="Photo-transistor" key="ADC0_DM0_descriptionSetting"/>
-	<item value="mux6" key="PTB3_muxSetting"/>
+	<item value="mux0" key="PTB3_muxSetting"/>
 	<item value="mux0" key="PTB18_muxSetting"/>
 	<item value="mux2" key="PTD3_muxSetting"/>
 	<item value="0" key="PIT_USES_NAKED_HANDLER"/>
@@ -51,6 +51,7 @@
 	<item value="0" key="LPTMR0_PSR_PCS"/>
 	<item value="mux0" key="PTB1_muxSetting"/>
 	<item value="mux1" key="PTD4_muxSetting"/>
+	<item value="" key="DeviceInfo_Target_Device"/>
 	<item value="mux1" key="PTC11_muxSetting"/>
 	<item value="mux1" key="PTA4_muxSetting"/>
 	<item value="Touch 1" key="PTB18_descriptionSetting"/>

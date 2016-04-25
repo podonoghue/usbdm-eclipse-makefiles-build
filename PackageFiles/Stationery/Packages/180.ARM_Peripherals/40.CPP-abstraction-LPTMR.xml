@@ -33,7 +33,6 @@
                </applyWhen>
                <copy source="Snippets/lptmr-example.cpp"     target="Snippets/lptmr-example.cpp" />
                <copy source="Project_Headers/lptmr.h"        target="Project_Headers/lptmr.h" />
-               <copy source="Sources/lptmr.cpp"              target="Sources/lptmr.cpp" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

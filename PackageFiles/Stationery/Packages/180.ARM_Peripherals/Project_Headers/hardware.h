@@ -8,9 +8,6 @@
 #ifndef PROJECT_HEADERS_HARDWARE_H_
 #define PROJECT_HEADERS_HARDWARE_H_
 
-#include "gpio.h"
-#include "adc.h"
-#include "ftm.h"
 #include "pin_mapping.h"
 
 #endif /* PROJECT_HEADERS_HARDWARE_H_ */

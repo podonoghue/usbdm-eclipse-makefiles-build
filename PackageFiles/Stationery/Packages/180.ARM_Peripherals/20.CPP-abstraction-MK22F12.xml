@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_SUB_FAMILY  "MK20D5">
+<!ENTITY DEVICE_SUB_FAMILY  "MK22F12">
 <!ENTITY DEVICE_FAMILY      "MK">
-<!ENTITY DEVICE_FILE        "MK20D5">
+<!ENTITY DEVICE_FILE        "MK22FA12">
 ]>
 
 <root version="1.0" >
@@ -16,7 +16,7 @@
       </applyWhen>
 
       <!-- Affects later CPP peripheral options -->
-      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
+      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_FILE;" />
       
       <!-- These constants enable internal peripheral features -->
       <constant id="cpp.peripheral.internal.i2c"    value="true" />

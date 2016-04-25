@@ -1,8 +1,8 @@
 /*
- *  @file Vectors.c
- *  Derived from  Vectors-mk.c
+ *  @file Vectors.cpp 
+ *  Derived from  Vectors-mk.cpp
  *
- *  Generic vectors and security for Kinetis MKxxx
+ *  Vectors and security for Kinetis MKxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -10,6 +10,10 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
+#include "pin_mapping.h"
+
+/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
  * Security information
@@ -206,6 +210,7 @@ typedef void( *const intfunc )( void );
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
+extern "C" {
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -215,6 +220,7 @@ void Default_Handler(void) {
    while (1) {
       __BKPT(0);
    }
+}
 }
 
 typedef struct {
@@ -263,6 +269,7 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
+extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
@@ -272,7 +279,9 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
+}
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
@@ -280,5 +289,7 @@ extern uint32_t __StackTop;
  * To install a handler, create a function with the name shown and it will override
  * the weak default.
  */
-$(cVectorTable)
+/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
+/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+
 
