@@ -405,6 +405,7 @@
             <FeatureRef Id='F.CODEWARRIOR_COLDFIRE_V7_2' />
             <FeatureRef Id='F.CODEWARRIOR_DSC_V8_3' />
          </Feature>
+         <FeatureRef Id='F.KDS_3_2_0' />
          <FeatureRef Id='F.KDS_3_0_0' />
          <FeatureRef Id='F.S32DS_1_0_0' />
          <FeatureRef Id='F.CDT_1' />
