@@ -2724,6 +2724,7 @@ NOTES:
       <device name="FRDM_K22F1M0"    alias="MK22FN1M0AM12"  hardware="frdmk22f1m0" />
       <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
       <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
+      <device name="FRDM_K66F"       alias="MK66FN2M0M18"   hardware="frdmk66f" />
       
       <device name="FRDM_KE02Z"      alias="MKE02Z64M2"     hardware="frdmke02z" />
       <device name="FRDM_KE02Z40M"   alias="MKE02Z64M4"     hardware="frdmke02z40m" />
