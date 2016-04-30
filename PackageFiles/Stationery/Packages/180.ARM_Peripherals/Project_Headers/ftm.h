@@ -112,7 +112,7 @@ typedef void (*FTMCallbackFunction)(void);
  * const USBDM::TmrBase_T<FTM0_Info)> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0::initialise(200, USBDM::tmr_leftAlign);
+ * Ftm0::setMode(200, USBDM::tmr_leftAlign);
  *
  * // Change timer period
  * Ftm0::setPeriod(500);
@@ -122,6 +122,7 @@ typedef void (*FTMCallbackFunction)(void);
  */
 template<class Info>
 class TmrBase_T {
+
 protected:
    static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(Info::basePtr);
    static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
@@ -135,7 +136,7 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void initialise(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
       // Configure pins
       Info::initPCRs();
 
@@ -200,6 +201,7 @@ public:
          tmr->SC  = Info::scValue;
       }
    }
+
    /**
     * Converts a time in microseconds to number of ticks
     *
@@ -222,6 +224,7 @@ public:
 #endif
       return rv;
    }
+
    /**
     * Converts ticks to time in microseconds
     *
@@ -243,6 +246,7 @@ public:
 #endif
       return rv;
    }
+
    /**
     *  Enables fault detection input
     *
@@ -284,6 +288,7 @@ public:
       // Enable fault input
       TmrBase_T<Info>::tmr->FLTCTRL |= (1<<inputNum);
    }
+
    /**
     *  Disables fault detection input
     *
@@ -296,6 +301,7 @@ public:
       // Enable fault on channel
       TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<inputNum);
    }
+
    /**
     * Set PWM duty cycle
     *
@@ -333,6 +339,15 @@ public:
          callback();
       }
    }
+
+   /**
+    * Set callback function
+    *
+    * @param callback Callback function to execute on interrupt
+    */
+   void setCallback(FTMCallbackFunction callback) {
+      FtmIrq_T::callback = callback;
+   }
 };
 
 template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
@@ -344,30 +359,35 @@ template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
  * Example
  * @code
  * // Instantiate the timer channel (for FTM0 channel 6)
- *
- * using ftm0_ch6 = USBDM::Ftm0Channel<6>;
+ * using Ftm0_ch6 = USBDM::Ftm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * ftm0_ch6.initialise(200, PwmIO::tmr_leftAlign);
+ * Ftm0_ch6.setMode(200, PwmIO::tmr_leftAlign);
  *
  * // Change period (in ticks)
- * ftm0_ch6.setPeriod(500);
+ * Ftm0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * ftm0_ch6.setDutyCycle(45);
+ * Ftm0_ch6.setDutyCycle(45);
  * @endcode
  *
  * @tparam tmrChannel FTM timer channel
  */
 template <int tmrChannel>
-class Ftm0Channel : public TmrBase_T<Ftm0Info> {
+class Ftm0Channel : public TmrBase_T<Ftm0Info>, CheckSignal<Ftm0Info, tmrChannel> {
+
 public:
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
    static void setDutyCycle(int dutyCycle) {
       TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
    }
 };
 /**
- * Class representing FTM0
+ * Class representing FTM0Ftm0Info::Ftm0Info
  */
 using Ftm0 = FtmIrq_T<Ftm0Info>;
 #endif
@@ -381,7 +401,7 @@ using Ftm0 = FtmIrq_T<Ftm0Info>;
  * @tparam tmrChannel FTM timer channel
  */
 template <int tmrChannel>
-class Ftm1Channel : public TmrBase_T<Ftm1Info> {
+class Ftm1Channel : public TmrBase_T<Ftm1Info>, CheckSignal<Ftm1Info, tmrChannel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
@@ -403,7 +423,7 @@ using Ftm1 = FtmIrq_T<Ftm1Info>;
  * @tparam tmrChannel FTM timer channel
  */
 template <int tmrChannel>
-class Ftm2Channel : public TmrBase_T<Ftm2Info> {
+class Ftm2Channel : public TmrBase_T<Ftm2Info>, CheckSignal<Ftm2Info, tmrChannel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
@@ -425,7 +445,7 @@ using Ftm2 = FtmIrq_T<Ftm2Info>;
  * @tparam tmrChannel FTM timer channel
  */
 template <int tmrChannel>
-class Ftm3Channel : public TmrBase_T<Ftm3Info> {
+class Ftm3Channel : public TmrBase_T<Ftm3Info>, CheckSignal<Ftm3Info, tmrChannel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);

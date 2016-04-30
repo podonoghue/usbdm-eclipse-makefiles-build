@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Pins.dtd">
+<!DOCTYPE root SYSTEM "Hardware.dtd">
 <!-- MK22FA12.usbdmHardware -->
 <!-- 
    Generated from MK22FA12.csv
@@ -137,22 +137,22 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
       </peripheral>
       <peripheral baseName="FTM"      instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFTM" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM0_MASK" />
          <irq num="FTM0_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="1">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFTM" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM1_MASK" />
          <irq num="FTM1_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="2">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFTM" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_FTM2_MASK" />
          <irq num="FTM2_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="3">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFTM" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_FTM3_MASK" />
          <irq num="FTM3_IRQn" />
       </peripheral>
@@ -213,6 +213,9 @@
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
          <irq num="LPTMR0_IRQn" />
       </peripheral>
+      <peripheral baseName="MCG"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+      </peripheral>
       <peripheral baseName="MPU"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_MPU_MASK" />
@@ -220,11 +223,8 @@
       <peripheral baseName="NMI_b"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
-      <peripheral baseName="OSC0"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="OSC32"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      <peripheral baseName="OSC"      instance="0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
       <peripheral baseName="PDB"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
@@ -239,11 +239,14 @@
          <irq num="PIT2_IRQn" />
          <irq num="PIT3_IRQn" />
       </peripheral>
+      <peripheral baseName="POWER"    instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+      </peripheral>
       <peripheral baseName="RESET_b"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
       <peripheral baseName="RTC"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
       </peripheral>
@@ -289,9 +292,6 @@
       <peripheral baseName="VBAT"     instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
-      <peripheral baseName="VDD"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
-      </peripheral>
       <peripheral baseName="VDDA"     instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
@@ -310,9 +310,6 @@
       </peripheral>
       <peripheral baseName="VREGIN"   instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="VSS"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
       </peripheral>
       <peripheral baseName="VSSA"     instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />

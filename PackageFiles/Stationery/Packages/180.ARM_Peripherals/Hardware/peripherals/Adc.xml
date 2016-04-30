@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- ftm.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="_instance" description="Programmable Interrupt Timer">
+
+      <choiceOption name="CFG1_ADICLK" description="Clock Source"
+         toolTip="Selects the clock source for the module">
+         <choice value="0" name="Bus clock" />
+         <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
+         <choice value="2" name="Alternate clock (ALTCLK)" />
+         <choice value="3" name="Asynchronous clock (ADACK)" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+
+      <choiceOption name="CFG1_MODE" description="Conversion mode selection"
+         toolTip="Selects the ADC resolution mode.">
+         <choice value="0" name="8-bit single/9-bit differential" />
+         <choice value="1" name="12-bit single/13-bit differential" />
+         <choice value="2" name="10-bit single/11-bit differential" />
+         <choice value="3" name="16-bit single or differential" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+
+      <binaryOption name="CFG1_ADLSMP" description="Sample Time Configuration"
+         toolTip="Selects between different sample times based on the conversion mode selected">
+         <choice value="0" name="Short sample time" />
+         <choice value="1" name="Long sample time" />
+      </binaryOption>
+
+      <choiceOption name="CFG1_ADIV" description="Clock Divide Select"
+         toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
+         <choice value="0" name="Input clock" />
+         <choice value="1" name="Input clock/2" />
+         <choice value="2" name="Input clock/4" />
+         <choice value="3" name="Input clock/8" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+
+      <binaryOption name="CFG1_ADLPC" description="Low-Power Configuration"
+         toolTip="Adjust power consumption">
+         <choice value="0" name="Normal power configuration." />
+         <choice value="1" name="Low-power configuration (reduced speed)" />
+      </binaryOption>
+
+      <choiceOption name="CFG2_ADLSTS" description="Long Sample Time Select"
+         toolTip="Selects between the extended sample times when long sample time is selected">
+         <choice value="0" name="+20 ADCK cycles; 24 ADCK total" />
+         <choice value="1" name="+12 ADCK cycles; 16 ADCK total" />
+         <choice value="2" name="+6 ADCK cycles; 10 ADCK total" />
+         <choice value="3" name="+2 ADCK cycles; 6 ADCK total" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+
+      <binaryOption name="CFG2_ADHSC" description="High-Speed Configuration"
+         toolTip="Configures the ADC for very high-speed operation by adding 2\n additional ADCK cycles to total conversion time">
+         <choice value="0" name="Normal conversion sequence selected" />
+         <choice value="1" name="High-speed conversion sequence selected" />
+      </binaryOption>
+
+      <binaryOption name="CFG2_ADACKEN" description="Asynchronous Clock Output Enable"
+         toolTip="Enables the asynchronous clock source irrespective of ADC need">
+         <choice value="0" name="Asynchronous clock output disabled" />
+         <choice value="1" name="Asynchronous clock output enabled" />
+      </binaryOption>
+
+      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+         toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
+         <choice value="0" name="No handler installed" />
+         <choice value="1" name="Handler installed" />
+      </binaryOption>
+
+      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+         toolTip="Sets the priority level used to configure the NVIC"
+         value="0" min="0" max="15" />
+   </menu>
+   <template>
+      \t//! Default value for ADCx_CFG1 register\n
+      \tstatic constexpr uint32_t CFG1  = 
+      \t\t ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)||
+      \t\t ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)||
+      \t\t ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)||
+      \t\t ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)||
+      \t\t ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
+      \t//! Default value for ADCx_CFG2 register\n
+      \tstatic constexpr uint32_t CFG2  = 
+      \t\t ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)||
+      \t\t ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)||
+      \t\t ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
+      \tstatic constexpr uint32_t SC1  = 
+      \t\t ($(IRQ_HANDLER)&lt;&lt;ADC_SC1_AIEN_SHIFT);\n\n
+      \t//! Default IRQ level\n
+      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+   </template>
+</root>

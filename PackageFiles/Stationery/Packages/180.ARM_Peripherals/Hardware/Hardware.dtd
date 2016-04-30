@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Root fileElement -->
-<!ELEMENT root (family, pins, packages, peripherals) >
+<!ELEMENT root (family, peripherals, pins, packages, menus?) >
    <!ATTLIST root version CDATA #REQUIRED >
 
  <!ELEMENT family (device)* >
@@ -20,7 +20,7 @@
    
  <!ELEMENT mux EMPTY >
    <!ATTLIST mux sel         (reset|fixed|mux0|mux1|mux2|mux3|mux4|mux5|mux6|mux7|disabled) #REQUIRED>
-   <!ATTLIST mux function    CDATA #REQUIRED>
+   <!ATTLIST mux signal    CDATA #REQUIRED>
    
  <!ELEMENT reset EMPTY >
    <!ATTLIST reset sel         (reset|fixed|mux0|mux1|mux2|mux3|mux4|mux5|mux6|mux7|disabled) #REQUIRED>
@@ -40,7 +40,8 @@
  <!ELEMENT peripherals (peripheral*) >
    
  <!ELEMENT peripheral (handler?,clock*,irq*,dma?) >
-   <!ATTLIST peripheral name        CDATA #REQUIRED>
+   <!ATTLIST peripheral baseName        CDATA #REQUIRED>
+   <!ATTLIST peripheral instance        CDATA #REQUIRED>
  
  <!ELEMENT handler EMPTY >
    <!ATTLIST handler class        CDATA #REQUIRED>
@@ -49,19 +50,42 @@
  <!ELEMENT pcrs (pcr*) >
 
  <!ELEMENT clock EMPTY >
-   <!ATTLIST clock clockReg        CDATA #REQUIRED>
-   <!ATTLIST clock clockMask       CDATA #REQUIRED>
+   <!ATTLIST clock reg        CDATA #REQUIRED>
+   <!ATTLIST clock mask       CDATA #REQUIRED>
+   <!ATTLIST clock source     (SystemBusClock|SystemCoreClock) "SystemCoreClock">
 
  <!ELEMENT irq EMPTY >
    <!ATTLIST irq num        CDATA #REQUIRED>
     
  <!ELEMENT pcr EMPTY >
-   <!ATTLIST pcr index        CDATA #REQUIRED>
-   <!ATTLIST pcr function     CDATA #REQUIRED>
+   <!ATTLIST pcr index      CDATA #REQUIRED>
+   <!ATTLIST pcr signal     CDATA #REQUIRED>
    
  <!ELEMENT dma (slot*) >
 
  <!ELEMENT slot EMPTY >
    <!ATTLIST slot source  CDATA #REQUIRED>
    <!ATTLIST slot num     CDATA #REQUIRED>
+   
+<!ELEMENT menus (menu)* >
+   
+<!ELEMENT menu (intOption|choiceOption)* >
+   <!ATTLIST menu name     CDATA        #REQUIRED>
+   
+<!ELEMENT intOption EMPTY >
+   <!ATTLIST intOption name         CDATA        #REQUIRED>
+   <!ATTLIST intOption description  CDATA        #REQUIRED>
+   <!ATTLIST intOption toolTip      CDATA        #REQUIRED>
+   <!ATTLIST intOption min          CDATA        #REQUIRED>
+   <!ATTLIST intOption max          CDATA        #REQUIRED>
+   <!ATTLIST intOption step         CDATA        #REQUIRED>
+  
+<!ELEMENT choiceOption (choice)* >
+   <!ATTLIST choiceOption name         CDATA        #REQUIRED>
+   <!ATTLIST choiceOption description  CDATA        #REQUIRED>
+   <!ATTLIST choiceOption toolTip      CDATA        #REQUIRED>
+  
+<!ELEMENT choice EMPTY >
+   <!ATTLIST choice name         CDATA        #REQUIRED>
+   <!ATTLIST choice value        CDATA        #REQUIRED>
    

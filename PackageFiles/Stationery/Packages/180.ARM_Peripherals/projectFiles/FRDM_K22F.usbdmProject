@@ -30,7 +30,7 @@
 	<item value="mux1" key="PTA1_muxSetting"/>
 	<item value="mux0" key="PTB1_muxSetting"/>
 	<item value="0" key="FTM2_FTM_SC_PS"/>
-	<item value="$(targetDevice)" key="DeviceInfo_Target_Device"/>
+	<item value="FRDM_K22F" key="DeviceInfo_Target_Device"/>
 	<item value="0" key="LPTMR0_IRQ_LEVEL"/>
 	<item value="Reserved(SWD)" key="PTA0_descriptionSetting"/>
 	<item value="1" key="LPTMR0_CSR_TPS"/>

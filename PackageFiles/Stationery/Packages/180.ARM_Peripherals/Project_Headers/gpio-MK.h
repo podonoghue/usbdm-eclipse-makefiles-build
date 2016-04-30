@@ -420,7 +420,9 @@ template<class Info, uint8_t index> using PcrTable_T =
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  Gpio_T = GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue>;
+class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue> {
+   static_assert((bitNum<32), "Illegal signal");
+};
 
 /**
  * Create GPIO from Peripheral Info class

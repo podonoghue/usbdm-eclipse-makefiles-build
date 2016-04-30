@@ -45,7 +45,7 @@ protected:
 
 public:
    /** PIT interrupt handler -  Calls PIT0 callback */
-   static void irqHandler0() {
+   static void irq0Handler() {
       // Clear interrupt flag
       PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
 
@@ -54,7 +54,7 @@ public:
       }
    }
    /** PIT interrupt handler -  Calls PIT1 callback */
-   static void irqHandler1() {
+   static void irq1Handler() {
       // Clear interrupt flag
       PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
 
@@ -63,7 +63,7 @@ public:
       }
    }
    /** PIT interrupt handler -  Calls PIT2 callback */
-   static void irqHandler2() {
+   static void irq2Handler() {
       // Clear interrupt flag
       PIT->CHANNEL[2].TFLG = PIT_TFLG_TIF_MASK;
 
@@ -72,7 +72,7 @@ public:
       }
    }
    /** PIT interrupt handler -  Calls PIT3 callback */
-   static void irqHandler3() {
+   static void irq3Handler() {
       // Clear interrupt flag
       PIT->CHANNEL[3].TFLG = PIT_TFLG_TIF_MASK;
 

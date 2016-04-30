@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- ftm.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="_instance" description="Low power timer">
+      <choiceOption name="PSR_PCS" description="Clock Source"
+         toolTip="Low Power Timer clock source">
+         <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
+         <choice value="1" name="Low power oscillator (LPO - 1kHz)" />
+         <choice value="2" name="32kHz Clock Source (ERCLK32)" />
+         <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+
+      <choiceOption name="PSR_PRESCALE" description="Prescaler Value"
+         toolTip="Configures the size of the Prescaler in Time Counter mode or\nwidth of the glitch filter in Pulse Counter mode">
+         <choice value="0"  name="Prescaler = 2, no glitch filter" />
+         <choice value="1"  name="Prescaler = 4, 2 clock glitch filter" />
+         <choice value="2"  name="Prescaler = 8, 4 clock glitch filter" />
+         <choice value="3"  name="Prescaler = 16, 8 clock glitch filter" />
+         <choice value="4"  name="Prescaler = 32, 16 clock glitch filter" />
+         <choice value="5"  name="Prescaler = 64, 32 clock glitch filter" />
+         <choice value="6"  name="Prescaler = 128, 64 clock glitch filter" />
+         <choice value="7"  name="Prescaler = 256, 128 clock glitch filter" />
+         <choice value="8"  name="Prescaler = 512, 256 clock glitch filter" />
+         <choice value="9"  name="Prescaler = 1024, 512 clock glitch filter" />
+         <choice value="10" name="Prescaler = 2048, 1024 clock glitch filter" />
+         <choice value="11" name="Prescaler = 4096, 2048 clock glitch filter" />
+         <choice value="12" name="Prescaler = 8192, 4096 clock glitch filter" />
+         <choice value="13" name="Prescaler = 16384, 8192 clock glitch filter" />
+         <choice value="14" name="Prescaler = 32768, 16384 clock glitch filter" />
+         <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
+         <choice value="0"  name="Default" />
+      </choiceOption>
+
+      <choiceOption name="CSR_TPS" description="Timer Pin Select"
+         toolTip="Configures the input source to be used in Pulse Counter mode.\nThe input connections vary by device">
+         <choice value="0" name="CMP0 output" />
+         <choice value="1" name="LPTMR_ALT1 pin" />
+         <choice value="2" name="LPTMR_ALT2 pin" />
+         <choice value="1" name="Default" />
+      </choiceOption>
+      
+      <binaryOption name="PSR_PBYP" description="Prescaler Bypass"
+         toolTip="When PBYP is set:\n- The selected prescaler clock in Time Counter mode or\n  the selected input source in Pulse Counter mode, directly clocks the CNR.\nWhen PBYP is clear:\n- The CNR is clocked by the output of the prescaler/glitch filter">
+         <choice value="0" name="Prescaler/glitch filter is enabled" />
+         <choice value="1" name="Prescaler/glitch filter is bypassed" />
+      </binaryOption>
+      
+      <binaryOption name="CSR_TMS" description="Timer Mode Select"
+         toolTip="Configures the mode of the LPTMR">
+         <choice value="0" name="Time Counter mode" />
+         <choice value="1" name="Pulse Counter mode" />
+      </binaryOption>
+      
+      <binaryOption name="CSR_TFC" description="Timer Free-Running Counter"
+         toolTip="When clear, TFC configures the CNR to reset whenever TCF is set.\nWhen set, TFC configures the CNR to reset on overflow">
+         <choice value="0" name="CNR is reset whenever TCF is set" />
+         <choice value="1" name="CNR is reset on overflow" />
+      </binaryOption>
+      
+      <binaryOption name="CSR_TPP" description="Timer Pin Polarity"
+         toolTip="Configures the polarity of the input source in Pulse Counter mode">
+         <choice value="0" name="Active-high source, rising-edge increments CNR" />
+         <choice value="1" name="Active-low source,  falling-edge increments CNR" />
+      </binaryOption>
+      
+      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+         toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
+         <choice value="0" name="No handler installed" />
+         <choice value="1" name="Handler installed" />
+      </binaryOption>
+
+      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+         toolTip="Sets the priority level used to configure the NVIC"
+         value="0" min="0" max="15" />
+   </menu>
+   <template>
+       \t//! Default PSR value\n
+       \tstatic constexpr uint32_t psrValue = LPTMR_PSR_PRESCALE($(PSR_PRESCALE))|LPTMR_PSR_PCS($(PSR_PCS))|($(PSR_PBYP)&lt;&lt;LPTMR_PSR_PBYP_SHIFT)|($(PSR_PCS)&lt;&lt;LPTMR_PSR_PCS_SHIFT);\n\n
+       \t//! Default CSR value\n
+       \tstatic constexpr uint32_t csrValue =  ($(CSR_TMS)&lt;&lt;LPTMR_CSR_TMS_SHIFT)|($(CSR_TFC)&lt;&lt;LPTMR_CSR_TFC_SHIFT)|($(CSR_TPP)&lt;&lt;LPTMR_CSR_TPP_SHIFT)|LPTMR_CSR_TPS($(CSR_TPS));\n\n
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+   </template>
+</root>

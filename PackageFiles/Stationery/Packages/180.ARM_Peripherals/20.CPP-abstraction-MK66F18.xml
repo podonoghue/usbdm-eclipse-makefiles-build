@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_SUB_FAMILY  "MKM33Z5">
-<!ENTITY DEVICE_FAMILY      "MKM">
-<!ENTITY DEVICE_FILE        "MKM33Z5-LQFP100">
+<!ENTITY DEVICE_SUB_FAMILY  "MK66F18">
+<!ENTITY DEVICE_FAMILY      "MK">
+<!ENTITY DEVICE_FILE        "MK66F18">
 ]>
 
 <root version="1.0" >
@@ -22,6 +22,7 @@
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
+      <constant id="cpp.peripheral.internal.spi"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
          name="CPP Hardware abstraction" 
@@ -37,20 +38,6 @@
             <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
          </projectOption>
 -->
-         <!-- Definitions used by example program -->
-         <constant id="demo.cpp.red.led"            value="LED_RED" />
-         <constant id="demo.cpp.green.led"          value="LED_GREEN" />
-         <constant id="demo.cpp.blue.led"           value="LED_BLUE" />
-         <constant id="demo.cpp.joystick.x"         value="PTC5" />
-         <constant id="demo.cpp.joystick.y"         value="PTC6" />
-         <constant id="demo.cpp.joystick.z"         value="PTB0" />
-         <constant id="demo.cpp.external.switch"    value="PTA0" />
-         <constant id="demo.cpp.external.led"       value="PTA1" />
-         <constant id="demo.cpp.external.gps"       value="Gps2" />
-         <constant id="demo.cpp.external.i2c"       value="I2c0" />
-         <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />
-         <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c0" />
-         <constant id="demo.cpp.mag3110.i2c"        value="I2c0" />
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
@@ -58,12 +45,14 @@
          <deleteResource target="Sources/main.c" />
          <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
-         <copy source="Startup_Code/vectors-mkm.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
+         <copy source="Startup_Code/vectors-mk.cpp"                        target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
+         <copy source="Project_Headers/adc.h"                              target="Project_Headers/adc.h" />
+         <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />

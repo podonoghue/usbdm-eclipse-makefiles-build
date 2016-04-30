@@ -33,13 +33,13 @@ namespace USBDM {
 /*
  * MK version - individual handler for each PIT channel
  */
-template<> void Pit_T<PitInfo>::irqHandler0() {
+template<> void Pit_T<PitInfo>::irq0Handler() {
    // Clear interrupt flag
    PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    RED_LED::toggle();
 }
 
-template<> void Pit_T<PitInfo>::irqHandler1() {
+template<> void Pit_T<PitInfo>::irq1Handler() {
    // Clear interrupt flag
    PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
    GREEN_LED::toggle();

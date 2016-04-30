@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="USBDM">
-	<item value="0" key="PIT_PIT_IRQ_HANDLER3"/>
-	<item value="0" key="PIT_PIT_IRQ_HANDLER0"/>
 	<item value="Green LED" key="PTB19_descriptionSetting"/>
-	<item value="0" key="PIT_PIT_IRQ_HANDLER2"/>
 	<item value="0" key="TPM1_TPM_IRQ_HANDLER"/>
 	<item value="Touch" key="PTB17_descriptionSetting"/>
-	<item value="0" key="PIT_PIT_IRQ_HANDLER1"/>
 	<item value="0" key="LPTMR0_CSR_TFC"/>
 	<item value="0" key="TPM0_TPM_SC_PS"/>
 	<item value="mux0" key="PTC5_muxSetting"/>
@@ -57,6 +53,7 @@
 	<item value="0" key="SPI1_MODE"/>
 	<item value="mux1" key="PTA17_muxSetting"/>
 	<item value="0" key="LPTMR0_CSR_TPP"/>
+	<item value="0" key="PIT_PIT_IRQ_HANDLER"/>
 	<item value="Touch" key="PTB16_descriptionSetting"/>
 	<item value="0" key="SPI1_LSBE"/>
 	<item value="0" key="TPM2_TPM_SC_PS"/>

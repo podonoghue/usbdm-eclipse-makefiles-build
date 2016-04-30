@@ -37,7 +37,7 @@
          <constant id="demo.cpp.external.gps"       value="Gps2" />             <!-- GPS module connected by serial -->
          <constant id="demo.cpp.external.spi"       value="Spi0" />             <!-- SPI interface to off-board device -->
          <constant id="demo.cpp.external.i2c"       value="I2c1" />             <!-- I2C interface to off-board device -->
-         <constant id="demo.cpp.mma845x.i2c"        value="I2c1" />             <!-- I2C interface to MMA845x -->
+         <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />             <!-- I2C interface to MMA845x -->
          <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c1" />             <!-- I2C interface to FX0S8700CQ -->
          <constant id="demo.cpp.mag3110.i2c"        value="I2c1" />             <!-- I2C interface to MAG3110 -->
          <constant id="demo.cpp.spi.dma"            value="new USBDM::DMAChannel0(), new USBDM::DMAChannel1()" />

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- ftm.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="_instance" description="Flex timer">
+
+      <choiceOption name="CR_SCP" description="Oscillator load capacitance"
+         toolTip="Configures the oscillator load capacitance">
+         <choice value="0"  name="0 pF" />
+         <choice value="8"  name="2 pF" />
+         <choice value="4"  name="4 pF" />
+         <choice value="12" name="6 pF" />
+         <choice value="2"  name="8 pF" isDefault="true" />
+         <choice value="10" name="10 pF" />
+         <choice value="6"  name="12 pF" />
+         <choice value="14" name="14 pF" />
+         <choice value="1"  name="16 pF" />
+         <choice value="9"  name="18 pF" />
+         <choice value="5"  name="20 pF" />
+         <choice value="13" name="22 pF" />
+         <choice value="3"  name="24 pF" />
+         <choice value="11" name="26 pF" />
+         <choice value="7"  name="28 pF" />
+         <choice value="15" name="30 pF" />
+         <choice value="0"  name="Default" />
+      </choiceOption>
+
+      <binaryOption name="CR_OSCE" description="RTC Oscillator Enable"
+         toolTip="Enables external 32.768 kHz RTC oscillator" >
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <binaryOption name="CR_CLKO" description="RTC 32kHz Clock Output"
+         toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
+         <choice value="0" name="The 32kHz clock is output to other peripherals" />
+         <choice value="1" name="The 32kHz clock is not output to other peripherals" />
+      </binaryOption>
+
+      <binaryOption name="CR_UM" description="Update Mode"
+         toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\nWhen set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
+         <choice value="0" name="Registers cannot be written when locked" />
+         <choice value="1" name="Registers can be written when locked under limited conditions" />
+      </binaryOption>
+
+      <binaryOption name="CR_SUP" description="Supervisor access"
+         toolTip="Determines if the RTC register access is available in non-supervisor mode\nNon supported write accesses generate a bus error" >
+         <choice value="0" name="Non-supervisor mode write accesses are not supported" />
+         <choice value="1" name="Non-supervisor mode write accesses are supported" />
+      </binaryOption>
+
+      <binaryOption name="CR_WPE" description="Wakeup Pin Enable"
+         toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down\nThe wakeup pin is optional and not available on all devices." >
+         <choice value="0" name="Wakeup pin is disabled" />
+         <choice value="1" name="Wakeup pin is enabled" />
+      </binaryOption>
+   </menu>
+   <template>
+      \t//! RTC Oscillator Enable\n
+      \tstatic constexpr uint32_t CR_OSCE_M  = ($(CR_OSCE)&lt;&lt;RTC_CR_OSCE_SHIFT);\n\n
+      \t//!  RTC 32kHz Clock Output\n
+      \tstatic constexpr uint32_t CR_CLKO_M  = ($(CR_CLKO)&lt;&lt;RTC_CR_CLKO_SHIFT);\n\n
+      \t//! Update Mode\n
+      \tstatic constexpr uint32_t CR_UM_M    = ($(CR_UM)&lt;&lt;RTC_CR_UM_SHIFT);\n\n
+      \t//! Supervisor Access\n
+      \tstatic constexpr uint32_t CR_SUP_M   = ($(CR_SUP)&lt;&lt;RTC_CR_SUP_SHIFT);\n\n
+      \t//! Wakeup Pin Enable\n
+      \tstatic constexpr uint32_t CR_WPE_M   = ($(CR_WPE)&lt;&lt;RTC_CR_WPE_SHIFT);\n\n
+      \t//! Oscillator load capacitance\n
+      \tstatic constexpr uint32_t CR_SCP_M   = ($(CR_SCP)&lt;&lt;RTC_CR_SC16P_SHIFT);\n\n
+   </template>
+</root>

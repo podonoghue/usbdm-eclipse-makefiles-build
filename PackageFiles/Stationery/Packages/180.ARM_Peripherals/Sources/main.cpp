@@ -12,7 +12,17 @@
 #include "pin_mapping.h"
 
 /**
- * See examples in Snippets directory
+ * See more examples in Snippets directory
+ *
+ * Using a timer channel
+ *   using ftmChannel = USBDM::Ftm0Channel<0>;
+ *   ftmChannel::setMode(1000, USBDM::tmr_leftAlign);
+ *   ftmChannel::setDutyCycle(25);
+ *
+ * Using a ADC channel
+ *   using adcChannel = USBDM::Adc0Channel<4>;
+ *   adcChannel::setMode(USBDM::resolution_16bit_se);
+ *   int value = adcChannel::readAnalogue();
  */
 
 // Simple delay - not for real programs!

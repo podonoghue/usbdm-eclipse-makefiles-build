@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root fileElement -->
+<!ELEMENT root ((menu)*,template) >
+   <!ATTLIST root xmlns:xi CDATA #IMPLIED>
+
+<!ELEMENT menu ((intOption|choiceOption|binaryOption|xi:include)*) >
+   <!ATTLIST menu xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST menu name         CDATA        #REQUIRED>
+   <!ATTLIST menu description  CDATA        #REQUIRED>
+   
+<!ELEMENT binaryOption (choice, choice) >
+   <!ATTLIST binaryOption name         CDATA        #REQUIRED>
+   <!ATTLIST binaryOption description  CDATA        #REQUIRED>
+   <!ATTLIST binaryOption toolTip      CDATA        "">
+
+<!ELEMENT intOption EMPTY >
+   <!ATTLIST intOption name         CDATA        #REQUIRED>
+   <!ATTLIST intOption description  CDATA        #REQUIRED>
+   <!ATTLIST intOption toolTip      CDATA        "">
+   <!ATTLIST intOption value        CDATA        "0">
+   <!ATTLIST intOption min          CDATA        "0">
+   <!ATTLIST intOption max          CDATA        "0x7fffffffffffffff">
+   <!ATTLIST intOption step         CDATA        "1">
+   <!ATTLIST intOption constant     (false|true) "false">
+  
+<!ELEMENT choiceOption (choice)* >
+   <!ATTLIST choiceOption name         CDATA        #REQUIRED>
+   <!ATTLIST choiceOption description  CDATA        #REQUIRED>
+   <!ATTLIST choiceOption toolTip      CDATA        "">
+  
+<!ELEMENT choice EMPTY >
+   <!ATTLIST choice value        CDATA        #REQUIRED>
+   <!ATTLIST choice name         CDATA        #REQUIRED>
+   <!ATTLIST choice isDefault    (false|true) "false">
+
+<!ELEMENT xi:include EMPTY>
+   <!ATTLIST xi:include href      CDATA        #REQUIRED>
+
+<!ELEMENT template (#PCDATA)>
+   

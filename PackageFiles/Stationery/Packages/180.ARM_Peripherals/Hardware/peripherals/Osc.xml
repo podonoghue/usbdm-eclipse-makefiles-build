@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- ftm.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="_instance" description="Flex timer">
+
+      <choiceOption name="CR_SCP" description="Oscillator load capacitance"
+         toolTip="Configures the oscillator load capacitance">
+         <choice value="0"  name="0 pF" />
+         <choice value="8"  name="2 pF" />
+         <choice value="4"  name="4 pF" />
+         <choice value="12" name="6 pF" />
+         <choice value="2"  name="8 pF" isDefault="true" />
+         <choice value="10" name="10 pF" />
+         <choice value="6"  name="12 pF" />
+         <choice value="14" name="14 pF" />
+         <choice value="1"  name="16 pF" />
+         <choice value="9"  name="18 pF" />
+         <choice value="5"  name="20 pF" />
+         <choice value="13" name="22 pF" />
+         <choice value="3"  name="24 pF" />
+         <choice value="11" name="26 pF" />
+         <choice value="7"  name="28 pF" />
+         <choice value="15" name="30 pF" />
+         <choice value="0"  name="Default" />
+      </choiceOption>
+
+      <binaryOption name="CR_ERCLKEN" description="External Reference Enable"
+         toolTip="Enables external reference clock">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <binaryOption name="CR_EREFSTEN" description="External Reference Stop Enable"
+         toolTip="Determines if external reference clock is enabled in Stop mode">
+         <choice value="0" name="Disabled in Stop mode" />
+         <choice value="1" name="Enabled in Stop mode" />
+      </binaryOption>
+
+   </menu>
+   <template>
+      \t//! External Reference Enable\n
+      \tstatic constexpr uint32_t CR_ERCLKEN_M  = ($(CR_ERCLKEN)&lt;&lt;OSC_CR_ERCLKEN_SHIFT);\n\n
+      \t//! External Reference Stop Enable\n
+      \tstatic constexpr uint32_t CR_EREFSTEN_M = ($(CR_EREFSTEN)&lt;&lt;OSC_CR_EREFSTEN_SHIFT);\n\n
+      \t//! Oscillator load capacitance\n
+      \tstatic constexpr uint32_t CR_SCP_M      = ($(CR_SCP)&lt;&lt;OSC_CR_SC16P_SHIFT);\n\n
+   </template>
+</root>

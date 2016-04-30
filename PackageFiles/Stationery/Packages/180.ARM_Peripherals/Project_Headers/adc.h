@@ -73,44 +73,32 @@ enum Adc_Resolution {
 };
 
 /**
- * Template class representing a pin with Analogue Input capability\n
- * Uses a information structure to describe the ADC
+ * Type definition for ADC interrupt call back
+ */
+typedef void (*ADCCallbackFunction)(void);
+
+/**
+ * Template class representing an ADC
  *
  * Example
  * @code
  *  // Instantiate ADC channel adc0_se8
- *  const Adc_T<adc0Info, 8> adc0_se8;
+ *  const AdcBase_T<adc0Info> Adc0;
  *
  *  // Initialise ADC
- *  adc0_se8.initialiseADC();
- *
- *  // Set as analogue input
- *  adc0_se8.setAnalogueInput();
- *
- *  // Read input
- *  uint16_t value = adc0_se8.readAnalogue();
+ *  Adc0.setMode(resolution_16bit_se);
  *  @endcode
  *
- * @tparam info            Table of information describing ADC
- * @tparam adcChannel      ADC channel
+ * @tparam info Table of information describing ADC
  */
-template<class Info, uint8_t adcChannel>
-class Adc_T {
-
-#ifdef DEBUG_BUILD
-   static_assert((adcChannel<Info::NUM_SIGNALS), "Adc_T: Non-existent ADC channel - Modify Configure.usbdm");
-   static_assert((adcChannel>=Info::NUM_SIGNALS)||(Info::info[adcChannel].gpioBit != UNMAPPED_PCR), "Adc_T: ADC channel is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((adcChannel>=Info::NUM_SIGNALS)||(Info::info[adcChannel].gpioBit != INVALID_PCR),  "Adc_T: ADC channel doesn't exist in this device/package");
-   static_assert((adcChannel>=Info::NUM_SIGNALS)||((Info::info[adcChannel].gpioBit == UNMAPPED_PCR)||(Info::info[adcChannel].gpioBit == INVALID_PCR)||(Info::info[adcChannel].gpioBit >= 0)), "Adc_T: Illegal ADC channel");
-#endif
+template<class Info>
+class AdcBase_T {
 
 private:
    static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(Info::basePtr);
    static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
 
 public:
-   using Pcr = PcrTable_T<Info, adcChannel>;
-
    /**
     * Set port pin as analogue input
     *
@@ -119,25 +107,28 @@ public:
     * @note This initialises the ADC
     */
    static void setMode(uint32_t mode = resolution_16bit_se) {
+      // Configure pins
+      Info::initPCRs();
+
       // Enable clock to ADC
       *clockReg  |= Info::clockMask;
 
-      // Set up ADC pin
-      Pcr::setPCR(ADC_PORT_FN);
+      __DMB();
 
       // Configure ADC for software triggered conversion
-      adc->CFG1 = ADC_CFG1_ADIV(1)|mode|ADC_CFG1_ADLSMP_MASK|ADC_CFG1_ADICLK(0);
+      adc->CFG1 = Info::CFG1|mode;
       adc->SC2  = 0;
-      adc->CFG2 = ADC_CFG2_ADLSTS(0)|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
+      adc->CFG2 = Info::CFG1|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
    }
+
    /**
     * Initiates a conversion and waits for it to complete
     *
     * @return - the result of the conversion
     */
-   static int readAnalogue() {
+   static int readAnalogue(int channel) {
       // Trigger conversion
-      adc->SC1[0] = ADC_SC1_ADCH(adcChannel);
+      adc->SC1[0] = ADC_SC1_ADCH(channel)|Info::SC1;
 
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
@@ -145,6 +136,111 @@ public:
       return (int)adc->R[0];
    };
 };
+
+/**
+ * Template class to provide ADC callback
+ */
+template<class Info>
+class AdcIrq_T : public AdcBase_T<Info> {
+
+protected:
+   /** Callback function for ISR */
+   static ADCCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      if (callback != 0) {
+         callback();
+      }
+   }
+
+   /**
+    * Set callback function
+    *
+    * @param callback Callback function to execute on interrupt
+    */
+   void setCallback(ADCCallbackFunction callback) {
+      AdcIrq_T::callback = callback;
+   }
+};
+
+template<class Info> ADCCallbackFunction AdcIrq_T<Info>::callback = 0;
+
+#ifdef USBDM_ADC0_IS_DEFINED
+/**
+ *
+ * Template class representing a ADC0 channel
+ *
+ * Example
+ * @code
+ * // Instantiate the ADC channel (for ADC0 channel 6)
+ * using Adc0_ch6 = USBDM::Adc0Channel<6>;
+ *
+ * // Set ADC resolution
+ * Adc0_ch6.setMode(resolution_16bit_se);
+ *
+ * // Read ADC value
+ * uint32_t value = Adc0_ch6.readAnalogue();
+ * @endcode
+ *
+ * @tparam channel ADC channel
+ */
+template<int channel>
+class Adc0Channel : public AdcBase_T<Adc0Info>, CheckSignal<Adc0Info, channel> {
+
+public:
+   /**
+    * Initiates a conversion and waits for it to complete
+    *
+    * @return - the result of the conversion
+    */
+   static int readAnalogue() {
+      return AdcBase_T::readAnalogue(channel);
+   };
+};
+
+/**
+ * Class representing ADC0
+ */
+using Adc0 = AdcIrq_T<Adc0Info>;
+#endif
+
+#ifdef USBDM_ADC1_IS_DEFINED
+/**
+ *
+ * Template class representing a ADC0 channel
+ *
+ * Refer @ref Adc0Channel
+ *
+ * @tparam channel ADC channel
+ */
+template<int channel>
+class Adc1Channel : public AdcBase_T<Adc1Info>, CheckSignal<Adc1Info, channel> {
+
+#ifdef DEBUG_BUILD
+   static_assert((channel<Adc1Info::NUM_SIGNALS), "Adc0Channel: Non-existent ADC channel - Modify Configure.usbdm");
+   static_assert((channel>=Adc1Info::NUM_SIGNALS)||(Adc1Info::info[channel].gpioBit != UNMAPPED_PCR), "Adc0Channel: ADC channel is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((channel>=Adc1Info::NUM_SIGNALS)||(Adc1Info::info[channel].gpioBit != INVALID_PCR),  "Adc0Channel: ADC channel doesn't exist in this device/package");
+   static_assert((channel>=Adc1Info::NUM_SIGNALS)||((Adc1Info::info[channel].gpioBit == UNMAPPED_PCR)||(Adc1Info::info[channel].gpioBit == INVALID_PCR)||(Adc1Info::info[channel].gpioBit >= 0)), "Adc0Channel: Illegal ADC channel");
+#endif
+
+   /**
+    * Initiates a conversion and waits for it to complete
+    *
+    * @return - the result of the conversion
+    */
+   static int readAnalogue() {
+      return readAnalogue(channel);
+   };
+};
+/**
+ * Class representing ADC1
+ */
+using Adc1 = AdcIrq_T<Adc1Info>;
+#endif
 
 /**
  * @}

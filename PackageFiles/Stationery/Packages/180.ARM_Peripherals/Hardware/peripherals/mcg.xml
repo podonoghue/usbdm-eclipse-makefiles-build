@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- menu.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="_instance" description="Clock Configuration" >
+      <intOption name="oscclk_clock"
+         description="Frequency of Main External Clock or Crystal (Hz)"
+         toolTip="Frequency of external crystal or clock on XTAL/EXTAL\n See MCG_C2_EREFS0 for XTAL/Clock selection"
+         value="8000000"
+         min="0" max="50000000" />
+      
+      <intOption name="rtcclk_clock"
+         description="Frequency of RTC External Clock or Crystal (Hz)"
+         toolTip="Frequency of external crystal or clock on XTAL32/EXTAL32 [Typically 32768 Hz]"
+         value="32768"
+         min="30000" max="40000" step="1" />
+      
+      <intOption name="irc48m_clock"
+         description="Frequency of Internal 48MHz Clock"
+         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
+         value="48000000"
+         constant="true" />
+
+      <intOption name="system_low_power_clock"
+         description="Frequency of Internal Low Power Oscillator Clock (Hz)"
+         toolTip="Dependent on device. [Typically ~1kHz]"
+         value="1000"
+         constant="true" />
+
+      <intOption name="system_erc_clock"
+         description="External Reference Clock (Hz)"
+         toolTip="Derived from the OSCCLK0 (external crystal or clock source on XTAL/EXTAL), RTC_CLOCK(XTAL32/EXTAL32) or IRC48M(Internal 48MHz)"
+         value="12000000"
+         constant="true" />
+
+      <intOption name="system_slow_irc_clock"
+         description="Frequency of Slow Internal Reference Clock (Hz)"
+         toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
+         value="1000"
+         constant="true" />
+
+      <intOption name="system_fast_irc_clock"
+         description="Frequency of Fast Internal Reference Clock (Hz)"
+         toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
+         value="4000000"
+         constant="true" />
+
+      <intOption name="system_usb_clkin_clock"
+         description="Frequency of External USB Clock (Hz)"
+         toolTip="Externally provided clock for USB on USB_CLKIN"
+         value="48000000"
+         constant="true" />
+
+   <xi:include href="mcg_clock_mode.xml" />
+   </menu>
+</root>
