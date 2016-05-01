@@ -21,8 +21,8 @@ using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0<1>);
 using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioB<0>);
 
 int main(void) {
-   JOYSTICK_X::setMode();
-   JOYSTICK_Y::setMode();
+   JOYSTICK_X::enable();
+   JOYSTICK_Y::enable();
    JOYSTICK_K::setInput();
 
    for(;;) {

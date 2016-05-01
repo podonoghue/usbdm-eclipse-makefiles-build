@@ -11,7 +11,6 @@
 #include <stddef.h>
 #include <assert.h>
 #include "derivative.h"
-#include "bitband.h"
 
 /*
  * Default port information
@@ -57,45 +56,45 @@ namespace USBDM {
 /**
  * Controls basic operation of PWM/Input capture
  */
-enum Tmr_ChannelMode {
+enum Ftm_ChannelMode {
    //! Capture rising edge
-   tmr_inputCaptureRisingEdge  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   ftm_inputCaptureRisingEdge  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
    //! Capture falling edge
-   tmr_inputCaptureFallingEdge = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
+   ftm_inputCaptureFallingEdge = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
    //! Capture both rising and falling edges
-   tmr_inputCaptureEitherEdge  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3),
+   ftm_inputCaptureEitherEdge  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3),
    //! Output compare operation
-   tmr_outputCompare           = FTM_CnSC_MS(1),
+   ftm_outputCompare           = FTM_CnSC_MS(1),
    //! Toggle pin on output compare
-   tmr_outputCompareToggle     = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
+   ftm_outputCompareToggle     = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
    //! Clear pin on output compare
-   tmr_outputCompareClear      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
+   ftm_outputCompareClear      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
    //! Set pin on output compare
-   tmr_outputCompareSet        = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3),
+   ftm_outputCompareSet        = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3),
    //! PWM with high-true pulses
-   tmr_pwmHighTruePulses       = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
+   ftm_pwmHighTruePulses       = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
    //! PWM with low-true pulses
-   tmr_pwmLowTruePulses        = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
+   ftm_pwmLowTruePulses        = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
    //! Dual edge input capture one shot - CHn configuration
-   tmr_dualEdgeCaptureOneShotRisingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   ftm_dualEdgeCaptureOneShotRisingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
    //! Dual edge input capture continuous - CHn configuration
-   tmr_dualEdgeCaptureContinuousRisingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
+   ftm_dualEdgeCaptureContinuousRisingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
    //! Dual edge input capture one shot - CHn configuration
-   tmr_dualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
+   ftm_dualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
    //! Dual edge input capture continuous - CHn configuration
-   tmr_dualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
+   ftm_dualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
 };
 
 /**
  * Control alignment of PWM function
  */
-enum Tmr_Mode {
+enum Ftm_Mode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   tmr_leftAlign   = 0,
+   ftm_leftAlign   = 0,
    //! Centre-aligned PWM
-   tmr_centreAlign = FTM_SC_CPWMS_MASK,
+   ftm_centreAlign = FTM_SC_CPWMS_MASK,
    //! Dummy value for Quadrature encoder
-   tmr_quadrature  = 0,
+   ftm_quadrature  = 0,
 } ;
 
 /**
@@ -109,10 +108,10 @@ typedef void (*FTMCallbackFunction)(void);
  * Example
  * @code
  * // Instantiate the tmr (for FTM0)
- * const USBDM::TmrBase_T<FTM0_Info)> Ftm0;
+ * const USBDM::FtmBase_T<FTM0_Info)> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0::setMode(200, USBDM::tmr_leftAlign);
+ * Ftm0::setMode(200, USBDM::ftm_leftAlign);
  *
  * // Change timer period
  * Ftm0::setPeriod(500);
@@ -121,7 +120,7 @@ typedef void (*FTMCallbackFunction)(void);
  * @tparam Info  Class describing FTM hardware instance
  */
 template<class Info>
-class TmrBase_T {
+class FtmBase_T {
 
 protected:
    static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(Info::basePtr);
@@ -129,14 +128,10 @@ protected:
 
 public:
    /**
-    * Configure Timer operation
-    *
-    * @param period  Period in us
-    * @param mode    Mode of operation see @ref Tmr_Mode
-    *
-    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    * Enable with default settings\n
+    * Includes configuring all pins
     */
-   static void setMode(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+   static void enable() {
       // Configure pins
       Info::initPCRs();
 
@@ -148,15 +143,47 @@ public:
       // Common registers
       tmr->CNTIN   = 0;
       tmr->CNT     = 0;
-      if (mode == tmr_centreAlign) {
+      tmr->MOD     = Info::PERIOD;
+      tmr->SC      = Info::SC;
+
+      if (Info::SC & FTM_SC_TOIE_MASK) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+   }
+
+   /**
+    * Configure Timer operation\n
+    * Used to change configuration after enabling interface
+    *
+    * @param period  Period in us
+    * @param mode    Mode of operation see @ref Ftm_Mode
+    *
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    */
+   static void configure(int period /* us */, Ftm_Mode mode=ftm_leftAlign) {
+
+      tmr->SC      = mode;
+      if (mode == ftm_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC   = Info::scValue|FTM_SC_CPWMS_MASK;
+         tmr->SC   = Info::SC|FTM_SC_CPWMS_MASK;
       }
       else {
          // Left aligned PWM without CPWMS selected
-         tmr->SC   = Info::scValue;
+         tmr->SC   = Info::SC;
       }
       setPeriod(period);
+
+      if (tmr->SC & FTM_SC_TOIE_MASK) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
    }
 
    /**
@@ -187,7 +214,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = Info::scValue|FTM_SC_CPWMS_MASK;
+         tmr->SC  = Info::SC|FTM_SC_CPWMS_MASK;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -198,7 +225,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = Info::scValue;
+         tmr->SC  = Info::SC;
       }
    }
 
@@ -257,13 +284,14 @@ public:
     *
     *  NOTE - the filter delay is shared by all inputs
     */
+public:
    template<uint8_t inputNum>
    static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=FTM_FLTCTRL_FFVAL_MASK) {
 
 #ifdef DEBUG_BUILD
-   static_assert((inputNum<Info::InfoFAULT::NUM_SIGNALS), "Tmr_T: Illegal fault channel");
-   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != UNMAPPED_PCR), "Tmr_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != INVALID_PCR),  "Tmr_T: Non-existent signal used for fault input");
+   static_assert((inputNum<Info::InfoFAULT::NUM_SIGNALS), "FtmBase_T: Illegal fault channel");
+   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit != INVALID_PCR),  "FtmBase_T: Non-existent signal used for fault input");
    static_assert((inputNum>=Info::InfoFAULT::NUM_SIGNALS)||(Info::InfoFAULT::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
 #endif
 
@@ -271,22 +299,22 @@ public:
 
       if (polarity) {
          // Set active high
-         TmrBase_T<Info>::tmr->FLTPOL &= ~(1<<inputNum);
+         tmr->FLTPOL &= ~(1<<inputNum);
       }
       else {
          // Set active low
-         TmrBase_T<Info>::tmr->FLTPOL |= (1<<inputNum);
+         tmr->FLTPOL |= (1<<inputNum);
       }
       if (filterEnable) {
          // Enable filter & set filter delay
-         TmrBase_T<Info>::tmr->FLTCTRL = ((TmrBase_T<Info>::tmr->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
+         tmr->FLTCTRL = ((tmr->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
       }
       else {
          // Disable filter
-         TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+         tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
       }
       // Enable fault input
-      TmrBase_T<Info>::tmr->FLTCTRL |= (1<<inputNum);
+      tmr->FLTCTRL |= (1<<inputNum);
    }
 
    /**
@@ -299,23 +327,23 @@ public:
       static_assert(inputNum<=4, "Illegal fault channel");
 
       // Enable fault on channel
-      TmrBase_T<Info>::tmr->FLTCTRL &= ~(1<<inputNum);
+      tmr->FLTCTRL &= ~(1<<inputNum);
    }
 
    /**
     * Set PWM duty cycle
     *
     * @param dutyCycle  Duty-cycle as percentage
-    * @param tmrChannel Timer channel
+    * @param channel Timer channel
     */
-   static void setDutyCycle(int dutyCycle, int tmrChannel) {
-      tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
+   static void setDutyCycle(int dutyCycle, int channel) {
+      tmr->CONTROLS[channel].CnSC = ftm_pwmHighTruePulses;
 
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*tmr->MOD)/100;
+         tmr->CONTROLS[channel].CnV  = (dutyCycle*tmr->MOD)/100;
       }
       else {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+         tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
       }
    }
 };
@@ -324,7 +352,7 @@ public:
  * Template class to provide FTM callback
  */
 template<class Info>
-class FtmIrq_T : public TmrBase_T<Info> {
+class FtmIrq_T : public FtmBase_T<Info> {
 
 protected:
    /** Callback function for ISR */
@@ -338,6 +366,8 @@ public:
       if (callback != 0) {
          callback();
       }
+	  // Clear interrupt
+      FtmBase_T<Info>::tmr->SC &= ~FTM_SC_TOF_MASK;
    }
 
    /**
@@ -345,8 +375,8 @@ public:
     *
     * @param callback Callback function to execute on interrupt
     */
-   void setCallback(FTMCallbackFunction callback) {
-      FtmIrq_T::callback = callback;
+   static void setCallback(FTMCallbackFunction theCallback) {
+      callback = theCallback;
    }
 };
 
@@ -362,7 +392,7 @@ template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
  * using Ftm0_ch6 = USBDM::Ftm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0_ch6.setMode(200, PwmIO::tmr_leftAlign);
+ * Ftm0_ch6.setMode(200, PwmIO::ftm_leftAlign);
  *
  * // Change period (in ticks)
  * Ftm0_ch6.setPeriod(500);
@@ -371,10 +401,10 @@ template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
  * Ftm0_ch6.setDutyCycle(45);
  * @endcode
  *
- * @tparam tmrChannel FTM timer channel
+ * @tparam channel FTM timer channel
  */
-template <int tmrChannel>
-class Ftm0Channel : public TmrBase_T<Ftm0Info>, CheckSignal<Ftm0Info, tmrChannel> {
+template <int channel>
+class Ftm0Channel : public FtmBase_T<Ftm0Info>, CheckSignal<Ftm0Info, channel> {
 
 public:
    /**
@@ -383,11 +413,11 @@ public:
     * @param dutyCycle  Duty-cycle as percentage
     */
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      setDutyCycle(dutyCycle, channel);
    }
 };
 /**
- * Class representing FTM0Ftm0Info::Ftm0Info
+ * Class representing FTM0
  */
 using Ftm0 = FtmIrq_T<Ftm0Info>;
 #endif
@@ -398,13 +428,13 @@ using Ftm0 = FtmIrq_T<Ftm0Info>;
  *
  * Refer @ref Ftm0Channel
  *
- * @tparam tmrChannel FTM timer channel
+ * @tparam channel FTM timer channel
  */
-template <int tmrChannel>
-class Ftm1Channel : public TmrBase_T<Ftm1Info>, CheckSignal<Ftm1Info, tmrChannel> {
+template <int channel>
+class Ftm1Channel : public FtmBase_T<Ftm1Info>, CheckSignal<Ftm1Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -420,13 +450,13 @@ using Ftm1 = FtmIrq_T<Ftm1Info>;
  *
  * Refer @ref Ftm0Channel
  *
- * @tparam tmrChannel FTM timer channel
+ * @tparam channel FTM timer channel
  */
-template <int tmrChannel>
-class Ftm2Channel : public TmrBase_T<Ftm2Info>, CheckSignal<Ftm2Info, tmrChannel> {
+template <int channel>
+class Ftm2Channel : public FtmBase_T<Ftm2Info>, CheckSignal<Ftm2Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -442,13 +472,13 @@ using Ftm2 = FtmIrq_T<Ftm2Info>;
  *
  * Refer @ref Ftm0Channel
  *
- * @tparam tmrChannel FTM timer channel
+ * @tparam channel FTM timer channel
  */
-template <int tmrChannel>
-class Ftm3Channel : public TmrBase_T<Ftm3Info>, CheckSignal<Ftm3Info, tmrChannel> {
+template <int channel>
+class Ftm3Channel : public FtmBase_T<Ftm3Info>, CheckSignal<Ftm3Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      FtmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -472,11 +502,11 @@ using Ftm3 = FtmIrq_T<Ftm3Info>;
  * @endcode
  */
 template <class Info>
-class QuadEncoder_T : public TmrBase_T<Info> {
+class QuadEncoder_T : public FtmBase_T<Info> {
 
 #ifdef DEBUG_BUILD
-   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "Tmr_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "Tmr_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
 #endif
 
 private:
@@ -486,7 +516,7 @@ public:
    static void enable() {
       Info::InfoQUAD::initPCRs();
 
-      TmrBase_T<Info>::initialise(0, tmr_quadrature);
+      FtmBase_T<Info>::initialise(0, ftm_quadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

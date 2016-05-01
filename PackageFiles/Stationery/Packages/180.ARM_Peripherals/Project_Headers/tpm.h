@@ -11,7 +11,6 @@
 #include <stddef.h>
 #include <assert.h>
 #include "derivative.h"
-#include "bme.h"
 
 /*
  * Default port information
@@ -57,35 +56,35 @@ namespace USBDM {
 /**
  * Controls basic operation of PWM/Input capture
  */
-enum Tmr_ChannelMode {
+enum Tpm_ChannelMode {
    //! Capture rising edge
-   tmr_inputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
+   tpm_inputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
    //! Capture falling edge
-   tmr_inputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
+   tpm_inputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
    //! Capture both rising and falling edges
-   tmr_inputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
+   tpm_inputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
    //! Output compare operation
-   tmr_outputCompare           = TPM_CnSC_MS(1),
+   tpm_outputCompare           = TPM_CnSC_MS(1),
    //! Toggle pin on output compare
-   tmr_outputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
+   tpm_outputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
    //! Clear pin on output compare
-   tmr_outputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
+   tpm_outputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
    //! Set pin on output compare
-   tmr_outputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
+   tpm_outputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
    //! PWM with high-true pulses
-   tmr_pwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
+   tpm_pwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
    //! PWM with low-true pulses
-   tmr_pwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
+   tpm_pwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
 };
 
 /**
  * Control alignment of PWM function
  */
-enum Tmr_Mode {
+enum Tpm_Mode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   tmr_leftAlign   = 0,
+   tpm_leftAlign   = 0,
    //! Centre-aligned PWM
-   tmr_centreAlign = TPM_SC_CPWMS_MASK,
+   tpm_centreAlign = TPM_SC_CPWMS_MASK,
 } ;
 
 /**
@@ -99,10 +98,10 @@ typedef void (*TPMCallbackFunction)(void);
  * Example
  * @code
  * // Instantiate the tmr (for TPM0)
- * const USBDM::TmrBase_T<TPM0_Info)> Tpm0;
+ * const USBDM::TpmBase_T<TPM0_Info)> Tpm0;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0::initialise(200, USBDM::tmr_leftAlign);
+ * Tpm0::initialise(200, USBDM::tpm_leftAlign);
  *
  * // Change timer period
  * Tpm0::setPeriod(500);
@@ -111,21 +110,18 @@ typedef void (*TPMCallbackFunction)(void);
  * @tparam Info  Class describing TPM hardware instance
  */
 template<class Info>
-class TmrBase_T {
+class TpmBase_T {
+
 protected:
    static constexpr volatile TPM_Type* tmr      = reinterpret_cast<volatile TPM_Type*>(Info::basePtr);
    static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
 
 public:
    /**
-    * Configure Timer operation
-    *
-    * @param period  Period in us
-    * @param mode    Mode of operation see @ref Tmr_Mode
-    *
-    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    * Enable with default settings\n
+    * Includes configuring all pins
     */
-   static void initialise(int period /* us */, Tmr_Mode mode=tmr_leftAlign) {
+   static void enable() {
       // Configure pins
       Info::initPCRs();
 
@@ -136,15 +132,47 @@ public:
 
       // Common registers
       tmr->CNT     = 0;
-      if (mode == tmr_centreAlign) {
+      tmr->SC      = Info::SC;
+      tmr->MOD     = Info::PERIOD;
+
+      if (tmr->SC & FTM_SC_TOF_MASK) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+   }
+
+   /**
+    * Configure Timer operation\n
+    * Used to change configuration after enabling interface
+    *
+    * @param period  Period in us
+    * @param mode    Mode of operation see @ref Tpm_Mode
+    *
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    */
+   static void configure(int period /* us */, Tpm_Mode mode=tpm_leftAlign) {
+      // Common registers
+      tmr->SC      = mode;
+      if (mode == tpm_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC   = Info::scValue|TPM_SC_CPWMS_MASK;
+         tmr->SC   = Info::SC|TPM_SC_CPWMS_MASK;
       }
       else {
          // Left aligned PWM without CPWMS selected
-         tmr->SC   = Info::scValue;
+         tmr->SC   = Info::SC;
       }
       setPeriod(period);
+
+      if (tmr->SC & TPM_SC_TOF_MASK) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
    }
 
    /**
@@ -175,7 +203,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = Info::scValue|TPM_SC_CPWMS_MASK;
+         tmr->SC  = Info::SC|TPM_SC_CPWMS_MASK;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -186,9 +214,10 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = Info::scValue;
+         tmr->SC  = Info::SC;
       }
    }
+
    /**
     * Converts a time in microseconds to number of ticks
     *
@@ -211,6 +240,7 @@ public:
 #endif
       return rv;
    }
+
    /**
     * Converts ticks to time in microseconds
     *
@@ -236,16 +266,16 @@ public:
     * Set PWM duty cycle
     *
     * @param dutyCycle  Duty-cycle as percentage
-    * @param tmrChannel Timer channel
+    * @param channel Timer channel
     */
-   static void setDutyCycle(int dutyCycle, int tmrChannel) {
-      tmr->CONTROLS[tmrChannel].CnSC = tmr_pwmHighTruePulses;
+   static void setDutyCycle(int dutyCycle, int channel) {
+      tmr->CONTROLS[channel].CnSC = tpm_pwmHighTruePulses;
 
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*tmr->MOD)/100;
+         tmr->CONTROLS[channel].CnV  = (dutyCycle*tmr->MOD)/100;
       }
       else {
-         tmr->CONTROLS[tmrChannel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+         tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
       }
    }
 };
@@ -254,7 +284,7 @@ public:
  * Template class to provide TPM callback
  */
 template<class Info>
-class TpmIrq_T : public TmrBase_T<Info> {
+class TpmIrq_T : public TpmBase_T<Info> {
 
 protected:
    /** Callback function for ISR */
@@ -269,6 +299,15 @@ public:
          callback();
       }
    }
+
+   /**
+    * Set callback function
+    *
+    * @param callback Callback function to execute on interrupt
+    */
+   void setCallback(FTMCallbackFunction theCallback) {
+      callback = theCallback;
+   }
 };
 
 template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
@@ -280,11 +319,10 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * Example
  * @code
  * // Instantiate the timer channel (for TPM0 channel 6)
- *
  * using ftm0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * ftm0_ch6.initialise(200, PwmIO::tmr_leftAlign);
+ * ftm0_ch6.initialise(200, PwmIO::tpm_leftAlign);
  *
  * // Change period (in ticks)
  * ftm0_ch6.setPeriod(500);
@@ -293,13 +331,19 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * ftm0_ch6.setDutyCycle(45);
  * @endcode
  *
- * @tparam tmrChannel TPM timer channel
+ * @tparam channel TPM timer channel
  */
-template <int tmrChannel>
-class Tpm0Channel : public TmrBase_T<Tpm0Info> {
+template <int channel>
+class Tpm0Channel : public TpmBase_T<Tpm0Info> {
+
 public:
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      TpmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 /**
@@ -314,13 +358,13 @@ using Tpm0 = TpmIrq_T<Tpm0Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam tmrChannel TPM timer channel
+ * @tparam channel TPM timer channel
  */
-template <int tmrChannel>
-class Tpm1Channel : public TmrBase_T<Tpm1Info> {
+template <int channel>
+class Tpm1Channel : public TpmBase_T<Tpm1Info> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      TpmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -336,13 +380,13 @@ using Tpm1 = TpmIrq_T<Tpm1Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam tmrChannel TPM timer channel
+ * @tparam channel TPM timer channel
  */
-template <int tmrChannel>
-class Tpm2Channel : public TmrBase_T<Tpm2Info> {
+template <int channel>
+class Tpm2Channel : public TpmBase_T<Tpm2Info> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      TpmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -358,13 +402,13 @@ using Tpm2 = TpmIrq_T<Tpm2Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam tmrChannel TPM timer channel
+ * @tparam channel TPM timer channel
  */
-template <int tmrChannel>
-class Tpm3Channel : public TmrBase_T<Tpm3Info> {
+template <int channel>
+class Tpm3Channel : public TpmBase_T<Tpm3Info> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      TmrBase_T::setDutyCycle(dutyCycle, tmrChannel);
+      TpmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 

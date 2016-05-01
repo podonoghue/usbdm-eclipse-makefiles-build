@@ -33,8 +33,8 @@
          <constant id="demo.cpp.joystick.x"         value="adc_A2" />           <!-- Analogue I/O (Arduino) -->
          <constant id="demo.cpp.joystick.y"         value="adc_A1" />           <!-- Analogue I/O (Arduino) -->
          <constant id="demo.cpp.joystick.k"         value="gpio_A0" />          <!-- Digital I/O from switch (Arduino) -->
-         <constant id="demo.cpp.external.switch"    value="D12" />              <!-- Digital I/O from switch (Arduino) -->
-         <constant id="demo.cpp.external.led"       value="D13" />              <!-- Digital I/O to LED (Arduino) -->
+         <constant id="demo.cpp.external.switch"    value="gpio_SW2" />         <!-- Digital I/O from switch (Arduino) -->
+         <constant id="demo.cpp.external.led"       value="gpio_LED_RED" />     <!-- Digital I/O to LED (Arduino) -->
          <constant id="demo.cpp.external.gps"       value="Gps1" />             <!-- GPS module connected by serial -->
          <constant id="demo.cpp.external.spi"       value="Spi0" />             <!-- SPI interface to off-board device -->
          <constant id="demo.cpp.external.i2c"       value="I2c0" />             <!-- I2C interface to off-board device -->

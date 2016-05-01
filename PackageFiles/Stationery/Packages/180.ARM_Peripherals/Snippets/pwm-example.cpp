@@ -52,8 +52,13 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 #endif
 
 int main() {
-   RED_LED::initialise(1000,   tmr_leftAlign);
-   GREEN_LED::initialise(1000, tmr_leftAlign);
+   RED_LED::enable();
+   GREEN_LED::enable();
+
+   // Change PWM period
+//   RED_LED::configure(1000);
+//   GREEN_LED::configure(1000);
+
    for(;;) {
       for (int i=0; i<=100; i++) {
          RED_LED::setDutyCycle(i);

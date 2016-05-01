@@ -47,7 +47,7 @@ int main() {
    RED_LED::setOutput();
 
    // May need to change prescaler to get useful delays
-   Lptmr0::configure(1000);
+   Lptmr0::enable();
    
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/04
+ * @date     2016/05
  *
  *******************************************************************************************************/
 
@@ -10409,7 +10409,7 @@ typedef struct {                                /*       TPM1 Structure         
    __I  uint32_t  RESERVED4;                   
    __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
    __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
-} TPM1_Type;
+} TPM_Type;
 
 /**
  * @} */ /* End group TPM_structs_GROUP 
@@ -10536,7 +10536,7 @@ typedef struct {                                /*       TPM1 Structure         
 
 /* TPM1 - Peripheral instance base addresses */
 #define TPM1_BasePtr                   0x400C9000UL //!< Peripheral base address
-#define TPM1                           ((TPM1_Type *) TPM1_BasePtr) //!< Freescale base pointer
+#define TPM1                           ((TPM_Type *) TPM1_BasePtr) //!< Freescale base pointer
 #define TPM1_BASE_PTR                  (TPM1) //!< Freescale style base pointer
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
@@ -10557,7 +10557,7 @@ typedef struct {                                /*       TPM1 Structure         
 
 /* TPM2 - Peripheral instance base addresses */
 #define TPM2_BasePtr                   0x400CA000UL //!< Peripheral base address
-#define TPM2                           ((TPM1_Type *) TPM2_BasePtr) //!< Freescale base pointer
+#define TPM2                           ((TPM_Type *) TPM2_BasePtr) //!< Freescale base pointer
 #define TPM2_BASE_PTR                  (TPM2) //!< Freescale style base pointer
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 

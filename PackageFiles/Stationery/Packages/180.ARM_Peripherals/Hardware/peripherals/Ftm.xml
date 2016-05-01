@@ -26,6 +26,22 @@
          <choice value="0" name="Default" />
       </choiceOption>
 
+      <binaryOption name="SC_CPWMS" description="Center-Aligned PWM Select"
+         toolTip="Selects CPWM mode\nThis mode configures the FTM to operate in Up-Down Counting mode.">
+         <choice value="0" name="Left-aligned (count up)" />
+         <choice value="1" name="Centre-aligned (count up-down)" />
+      </binaryOption>
+
+      <binaryOption name="SC_TOIE" description="Timer Overflow Interrupt Enable"
+         toolTip="Enables FTM overflow interrupts.">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <intOption name="PERIOD" description="Period of timer"
+         toolTip="Default period of the timer"
+         value="10000" min="0" max="65535" />
+         
       <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -35,11 +51,18 @@
       <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
+         
    </menu>
    <template>
       \t//! Default value for SC register\n
-      \tstatic constexpr uint32_t scValue  = FTM_SC_CLKS($(SC_CLKS))|FTM_SC_PS($(SC_PS));\n\n
-       \t//! Default IRQ level\n
-       \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t SC  = 
+      \t\t ($(SC_CPWMS)&lt;&lt;FTM_SC_CPWMS_SHIFT)|
+      \t\t (($(IRQ_HANDLER)|$(SC_TOIE))&lt;&lt;FTM_SC_TOIE_SHIFT)|
+      \t\t FTM_SC_CLKS($(SC_CLKS))|
+      \t\t FTM_SC_PS($(SC_PS));\n\n
+      \t//! Default Timer Period\n
+      \tstatic constexpr uint32_t PERIOD =  $(PERIOD);\n\n
+      \t//! Default IRQ level\n
+      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
    </template>
 </root>

@@ -87,7 +87,8 @@ inline static void initDefaultUart()  {
    PORTD->PCR[6] = PORT_PCR_MUX(3);
    PORTD->PCR[7] = PORT_PCR_MUX(3);
 }
-#elif defined(MCU_MK60DZ10) || defined(MCU_MK60D10) || defined(MCU_MK60F12) || defined(MCU_MK10DZ10) || defined(MCU_MK10D10) || defined(MCU_MK10F12)
+#elif defined(MCU_MK60DZ10) || defined(MCU_MK60D10) || defined(MCU_MK60F12) ||\
+      defined(MCU_MK10DZ10) || defined(MCU_MK10D10) || defined(MCU_MK10F12)
 //=================================================================================
 // UART to use
 //
@@ -112,7 +113,7 @@ inline static void initDefaultUart()  {
    PORTE->PCR[8] = PORT_PCR_MUX(3);
    PORTE->PCR[9] = PORT_PCR_MUX(3);
 }
-#elif defined(MCU_MK64F12)
+#elif defined(MCU_MK64F12) || defined(MCU_MK66F18)
 //=================================================================================
 // UART to use
 //

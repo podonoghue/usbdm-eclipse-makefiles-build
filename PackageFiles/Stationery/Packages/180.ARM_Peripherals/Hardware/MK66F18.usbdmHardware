@@ -2074,8 +2074,8 @@
          <placement pin="PTB1"          location="" />
          <placement pin="PTB10"         location="D27" />
          <placement pin="PTB11"         location="D28" />
-         <placement pin="PTB16"         location="" />
-         <placement pin="PTB17"         location="" />
+         <placement pin="PTB16"         location="ConRx" />
+         <placement pin="PTB17"         location="ConTx" />
          <placement pin="PTB18"         location="D8" />
          <placement pin="PTB19"         location="D9" />
          <placement pin="PTB2"          location="A5" />
@@ -2086,7 +2086,7 @@
          <placement pin="PTB3"          location="A4" />
          <placement pin="PTB4"          location="A3" />
          <placement pin="PTB5"          location="A2" />
-         <placement pin="PTB6"          location="A10" />
+         <placement pin="PTB6"          location="A1" />
          <placement pin="PTB7"          location="A0" />
          <placement pin="PTB8"          location="" />
          <placement pin="PTB9"          location="" />

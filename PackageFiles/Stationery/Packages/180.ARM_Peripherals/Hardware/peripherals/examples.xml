@@ -6,7 +6,7 @@
          <choice value="1" name="BBBB" />
          <choice value="2" name="CCCC" />
          <choice value="3" name="DDDD" />
-         <choice value="1" name="Default" />
+         <choice value="0" name="Default" />
       </choiceOption>
 
       <binaryOption name="XXXXX" description="YYYYY"

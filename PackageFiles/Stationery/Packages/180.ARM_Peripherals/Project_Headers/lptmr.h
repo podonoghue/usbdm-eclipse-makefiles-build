@@ -41,8 +41,8 @@ public:
     *
     * @param callback The function to call from stub ISR
     */
-   static void setCallback(LPTMRCallbackFunction callback) {
-      Lptmr_T<Info>::callback = callback;
+   static void setCallback(LPTMRCallbackFunction theCallback) {
+      callback = theCallback;
    }
 
    /**
@@ -67,20 +67,43 @@ protected:
 
 public:
    /**
+    * Enable LPTMR\n
+    * Includes initialising any pins used
+    */
+   static void enable() {
+      // Configure pins
+      Info::initPCRs();
+
+      // Enable clock
+      *clockReg |= Info::clockMask;
+      __DMB();
+
+      // Disable timer
+      lptmr->CSR  = Info::CSR;
+      // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
+      lptmr->PSR  = Info::PSR;
+      // Interval/Compare value
+      lptmr->CMR  = Info::PERIOD;
+      // Enable timer
+      lptmr->CSR |= LPTMR_CSR_TEN_MASK;
+
+      if (Info::CSR & LPTMR_CSR_TIE_MASK) {
+         // Enable timer interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+      }
+
+   /**
     *  Configure the LPTMR
     *
     *  @param interval  Interval for the timer in timer ticks
     *  @param csr       Control Status Register
     *  @param psr       Prescale Register
     */
-   static void configure(uint16_t interval, uint32_t csr=Info::csrValue|LPTMR_CSR_TIE_MASK, uint32_t psr=Info::psrValue) {
-
-      // Configure pins
-      Info::initPCRs();
-
-      // Enable clock
-      *clockReg |= Info::clockMask;
-
+   static void configure(uint16_t interval, uint32_t csr=Info::CSR|LPTMR_CSR_TIE_MASK, uint32_t psr=Info::PSR) {
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK

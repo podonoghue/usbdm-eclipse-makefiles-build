@@ -11,16 +11,16 @@
          <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
          <choice value="2" name="Alternate clock (ALTCLK)" />
          <choice value="3" name="Asynchronous clock (ADACK)" />
-         <choice value="1" name="Default" />
+         <choice value="0" name="Default" />
       </choiceOption>
 
       <choiceOption name="CFG1_MODE" description="Conversion mode selection"
          toolTip="Selects the ADC resolution mode.">
          <choice value="0" name="8-bit single/9-bit differential" />
          <choice value="1" name="12-bit single/13-bit differential" />
-         <choice value="2" name="10-bit single/11-bit differential" />
+         <choice value="2" name="10-bit single/11-bit differential" isDefault="true" />
          <choice value="3" name="16-bit single or differential" />
-         <choice value="1" name="Default" />
+         <choice value="2" name="Default" />
       </choiceOption>
 
       <binaryOption name="CFG1_ADLSMP" description="Sample Time Configuration"
@@ -35,7 +35,7 @@
          <choice value="1" name="Input clock/2" />
          <choice value="2" name="Input clock/4" />
          <choice value="3" name="Input clock/8" />
-         <choice value="1" name="Default" />
+         <choice value="0" name="Default" />
       </choiceOption>
 
       <binaryOption name="CFG1_ADLPC" description="Low-Power Configuration"
@@ -50,7 +50,7 @@
          <choice value="1" name="+12 ADCK cycles; 16 ADCK total" />
          <choice value="2" name="+6 ADCK cycles; 10 ADCK total" />
          <choice value="3" name="+2 ADCK cycles; 6 ADCK total" />
-         <choice value="1" name="Default" />
+         <choice value="0" name="Default" />
       </choiceOption>
 
       <binaryOption name="CFG2_ADHSC" description="High-Speed Configuration"
@@ -65,6 +65,37 @@
          <choice value="1" name="Asynchronous clock output enabled" />
       </binaryOption>
 
+      <choiceOption name="SC2_REFSEL" description="Voltage Reference Selection"
+         toolTip="Selects the voltage reference source used for conversions.">
+         <choice value="0" name="VRefH and VRefl" />
+         <choice value="1" name="VAltH and VAltL" />
+         <choice value="2" name="Reserved" />
+         <choice value="3" name="Reserved" />
+         <choice value="0" name="Default" />
+      </choiceOption>
+
+      <binaryOption name="SC2_DMAEN" description="DMA Enable"
+         toolTip="Enables use of DMA with ADC">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <choiceOption name="SC2_COMPARE" description="Compare function"
+         toolTip="Enables comparison of ADC result with CV1 &amp;&amp; CV2\nRange comparisons depend on relation between CV1 &amp;&amp; CV2" >
+         <choice value="0b000" name="Disabled" />
+         <choice value="0b001" name="ADC&lt;CV1" />
+         <choice value="0b101" name="ADC&gt;=CV1" />
+         <choice value="0b011" name="(ADC&lt;CV1)||(ADC&gt;CV2) or (CV2&lt;ADC&lt;CV1)" />
+         <choice value="0b111" name="(ADC&gt;=CV1)||(ADC&lt;=CV2) or (CV1&lt;=ADC&lt;=CV2)" />
+         <choice value="0b000" name="Default" />
+      </choiceOption>
+
+      <binaryOption name="SC2_ADTRG" description="Conversion Trigger Select"
+         toolTip="Selects the type of trigger used for initiating a conversion">
+         <choice value="0" name="Software trigger (write to SC1A)" />
+         <choice value="1" name="Hardware trigger (ADHWT source)" />
+      </binaryOption>
+
       <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -76,21 +107,27 @@
          value="0" min="0" max="15" />
    </menu>
    <template>
-      \t//! Default value for ADCx_CFG1 register\n
-      \tstatic constexpr uint32_t CFG1  = 
-      \t\t ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)||
-      \t\t ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)||
-      \t\t ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)||
-      \t\t ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)||
-      \t\t ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
-      \t//! Default value for ADCx_CFG2 register\n
-      \tstatic constexpr uint32_t CFG2  = 
-      \t\t ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)||
-      \t\t ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)||
-      \t\t ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
-      \tstatic constexpr uint32_t SC1  = 
-      \t\t ($(IRQ_HANDLER)&lt;&lt;ADC_SC1_AIEN_SHIFT);\n\n
-      \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+     \t//! Default value for ADCx_CFG1 register
+     \tstatic constexpr uint32_t CFG1  = 
+     \t\t ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)||
+     \t\t ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)||
+     \t\t ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)||
+     \t\t ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)||
+     \t\t ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
+     \t//! Default value for ADCx_CFG2 register
+     \t static constexpr uint32_t CFG2  = 
+     \t\t  ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
+     \t\t ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)||
+     \t\t ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)||
+     \t\t ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
+     \tstatic constexpr uint32_t SC1  = 
+     \t\t ($(IRQ_HANDLER)&lt;&lt;ADC_SC1_AIEN_SHIFT);\n\n
+     \tstatic constexpr uint32_t SC2  =
+     \t\t ($(SC2_REFSEL)&lt;&lt;ADC_SC2_REFSEL_SHIFT)||
+     \t\t ($(SC2_DMAEN)&lt;&lt;ADC_SC2_DMAEN_SHIFT)||
+     \t\t ($(SC2_COMPARE)&lt;&lt;ADC_SC2_ACREN_SHIFT)||
+     \t\t ($(SC2_ADTRG)&lt;&lt;ADC_SC2_ADTRG_SHIFT);\n\n
+     \t//! Default IRQ level\n
+     \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
    </template>
 </root>

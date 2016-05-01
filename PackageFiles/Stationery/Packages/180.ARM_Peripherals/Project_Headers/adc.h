@@ -100,35 +100,55 @@ private:
 
 public:
    /**
-    * Set port pin as analogue input
+    * Initialise ADC\n
+    * Configures all ADC pins
     *
-    * @param mode Mode for converter (currently only resolution)
+    * @param mode Mode for converter e.g resolution_16bit_se
     *
     * @note This initialises the ADC
     */
    static void setMode(uint32_t mode = resolution_16bit_se) {
+      adc->CFG1 = (Info::CFG1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
+   }
+
+   /**
+    * Initialise ADC to default settings\n
+    * Configures all ADC pins
+    */
+   static void enable() {
       // Configure pins
       Info::initPCRs();
 
       // Enable clock to ADC
       *clockReg  |= Info::clockMask;
-
       __DMB();
 
-      // Configure ADC for software triggered conversion
-      adc->CFG1 = Info::CFG1|mode;
-      adc->SC2  = 0;
-      adc->CFG2 = Info::CFG1|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
+      // Set mode to default
+      adc->CFG1 = Info::CFG1;
+      adc->CFG2 = Info::CFG2;
+      adc->SC2  = Info::SC2;
+   }
+
+   /**
+    * Configure ADC
+    */
+   static void configure(uint32_t cfg1=Info::CFG1, uint32_t cfg2=Info::CFG2, uint32_t sc2=Info::SC2) {
+      // Set mode
+      adc->CFG1 = cfg1;
+      adc->CFG2 = cfg2;
+      adc->SC2  = sc2;
    }
 
    /**
     * Initiates a conversion and waits for it to complete
     *
+    * @param channel The ADC channel to use
+    *
     * @return - the result of the conversion
     */
    static int readAnalogue(int channel) {
       // Trigger conversion
-      adc->SC1[0] = ADC_SC1_ADCH(channel)|Info::SC1;
+      adc->SC1[0] = Info::SC1|ADC_SC1_ADCH(channel);
 
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
@@ -155,6 +175,10 @@ public:
       if (callback != 0) {
          callback();
       }
+      else {
+         // Dummy read to clear interrupt
+         (void)(AdcBase_T<Info>::adc->R[0]);
+      }
    }
 
    /**
@@ -162,8 +186,8 @@ public:
     *
     * @param callback Callback function to execute on interrupt
     */
-   void setCallback(ADCCallbackFunction callback) {
-      AdcIrq_T::callback = callback;
+   static void setCallback(ADCCallbackFunction theCallback) {
+      callback = theCallback;
    }
 };
 
@@ -220,20 +244,14 @@ using Adc0 = AdcIrq_T<Adc0Info>;
 template<int channel>
 class Adc1Channel : public AdcBase_T<Adc1Info>, CheckSignal<Adc1Info, channel> {
 
-#ifdef DEBUG_BUILD
-   static_assert((channel<Adc1Info::NUM_SIGNALS), "Adc0Channel: Non-existent ADC channel - Modify Configure.usbdm");
-   static_assert((channel>=Adc1Info::NUM_SIGNALS)||(Adc1Info::info[channel].gpioBit != UNMAPPED_PCR), "Adc0Channel: ADC channel is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((channel>=Adc1Info::NUM_SIGNALS)||(Adc1Info::info[channel].gpioBit != INVALID_PCR),  "Adc0Channel: ADC channel doesn't exist in this device/package");
-   static_assert((channel>=Adc1Info::NUM_SIGNALS)||((Adc1Info::info[channel].gpioBit == UNMAPPED_PCR)||(Adc1Info::info[channel].gpioBit == INVALID_PCR)||(Adc1Info::info[channel].gpioBit >= 0)), "Adc0Channel: Illegal ADC channel");
-#endif
-
+public:
    /**
     * Initiates a conversion and waits for it to complete
     *
     * @return - the result of the conversion
     */
    static int readAnalogue() {
-      return readAnalogue(channel);
+      return AdcBase_T::readAnalogue(channel);
    };
 };
 /**

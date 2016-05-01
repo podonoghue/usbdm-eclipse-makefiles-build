@@ -101,14 +101,13 @@ protected:
 
 public:
    /**
-    *  Configure the PIT
+    *  Configure the PIT with default settings
     *
     *  @param mcr       Module Control Register
     */
    static void configure(uint32_t mcr=Info::mcrValue) {
       // Enable clock
       *clockReg |= Info::clockMask;
-
       __DMB();
 
       // Enable timer

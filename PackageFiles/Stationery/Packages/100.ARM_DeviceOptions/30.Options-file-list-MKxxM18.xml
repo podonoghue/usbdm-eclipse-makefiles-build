@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKxxM12 with USB derived Clock 180MHz PLL -->
+   <projectActionList id="Options-file-list-MKxxM18_USBClk">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceSubfamilyIs>MK66F18</deviceSubfamilyIs>
+            </or>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Clock-setup" 
+         name="Clock setup code" 
+         description="Adds code for basic clock initialization - check assumptions made"
+         checkGroup="group-additional-options"/>
+      <variable id="projectOptionValue.UART-setup" 
+         name="UART setup code" 
+         description="Adds C stdio (UART) support for newlib"          
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Clock-setup"/>
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Clock-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/clock-MK66M18.c" target="Startup_Code/clock.c" />
+         <copy source="Project_Headers/clock_configure-MK66M18.h" target="Project_Headers/clock_configure.h" />
+      </projectActionList>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.UART-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c" />
+         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
+      </projectActionList>
+   </projectActionList>
+
+</root>
