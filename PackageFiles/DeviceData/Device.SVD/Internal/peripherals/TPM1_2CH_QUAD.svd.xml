@@ -9,7 +9,7 @@ Devices using this peripheral:
          <description>Timer/PWM Module</description>
          <groupName>TPM</groupName>
          <prependToName>TPM1</prependToName>
-         <headerStructName>TPM1</headerStructName>
+         <headerStructName>TPM</headerStructName>
          <baseAddress>0x400C9000</baseAddress>
          <size>32</size>
          <access>read-write</access>
