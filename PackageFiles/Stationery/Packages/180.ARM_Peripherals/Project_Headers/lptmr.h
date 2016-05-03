@@ -94,7 +94,7 @@ public:
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
-      }
+   }
 
    /**
     *  Configure the LPTMR
@@ -103,7 +103,7 @@ public:
     *  @param csr       Control Status Register
     *  @param psr       Prescale Register
     */
-   static void configure(uint16_t interval, uint32_t csr=Info::CSR|LPTMR_CSR_TIE_MASK, uint32_t psr=Info::PSR) {
+   static void configure(uint16_t interval, uint32_t csr=Info::CSR, uint32_t psr=Info::PSR) {
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK

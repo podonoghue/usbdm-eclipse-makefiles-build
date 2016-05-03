@@ -19,6 +19,9 @@
       <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
       
       <!-- These constants enable internal peripheral features -->
+      <constant id="cpp.peripheral.internal.adc"    value="true" />
+      <constant id="cpp.peripheral.internal.ftm"    value="true" />
+      <constant id="cpp.peripheral.internal.tpm"    value="true" />
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
@@ -46,13 +49,9 @@
          <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
          <copy source="Startup_Code/vectors-mk.cpp"                        target="Startup_Code/vectors.cpp" macroReplacement="false" />
-         <copy source="Snippets/analogue-example.cpp"                      target="Snippets/analogue-example.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
-         <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
-         <copy source="Project_Headers/adc.h"                              target="Project_Headers/adc.h" />
-         <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />

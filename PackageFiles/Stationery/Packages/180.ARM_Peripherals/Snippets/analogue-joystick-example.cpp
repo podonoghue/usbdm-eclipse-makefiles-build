@@ -25,6 +25,10 @@ int main(void) {
    JOYSTICK_Y::enable();
    JOYSTICK_K::setInput();
 
+   // May change default resolution e.g.
+//   JOYSTICK_X::setMode(USBDM::resolution_8bit_se);
+//   JOYSTICK_Y::setMode(USBDM::resolution_8bit_se);
+
    for(;;) {
       int  x = JOYSTICK_X::readAnalogue();
       int  y = JOYSTICK_Y::readAnalogue();

@@ -74,8 +74,10 @@ enum Adc_Resolution {
 
 /**
  * Type definition for ADC interrupt call back
+ *
+ * @param value Conversion value from channel
  */
-typedef void (*ADCCallbackFunction)(void);
+typedef void (*ADCCallbackFunction)(uint32_t value);
 
 /**
  * Template class representing an ADC
@@ -94,23 +96,11 @@ typedef void (*ADCCallbackFunction)(void);
 template<class Info>
 class AdcBase_T {
 
-private:
+protected:
    static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(Info::basePtr);
    static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
 
 public:
-   /**
-    * Initialise ADC\n
-    * Configures all ADC pins
-    *
-    * @param mode Mode for converter e.g resolution_16bit_se
-    *
-    * @note This initialises the ADC
-    */
-   static void setMode(uint32_t mode = resolution_16bit_se) {
-      adc->CFG1 = (Info::CFG1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
-   }
-
    /**
     * Initialise ADC to default settings\n
     * Configures all ADC pins
@@ -118,6 +108,8 @@ public:
    static void enable() {
       // Configure pins
       Info::initPCRs();
+      Info::InfoDP::initPCRs();
+      Info::InfoDM::initPCRs();
 
       // Enable clock to ADC
       *clockReg  |= Info::clockMask;
@@ -127,6 +119,35 @@ public:
       adc->CFG1 = Info::CFG1;
       adc->CFG2 = Info::CFG2;
       adc->SC2  = Info::SC2;
+
+      if (Info::irqHandlerInstalled) {
+         // Enable timer interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+   }
+
+   /**
+    * Disables the ADC\n
+    * Does not change ADC pin mapping
+    */
+   static void disable() {
+      adc->CFG1 = 0;
+      adc->CFG2 = 0;
+      adc->SC2  = 0;
+   }
+
+   /**
+    * Set conversion mode
+    *
+    * @param mode Mode for converter e.g resolution_16bit_se
+    *
+    * @note This affects all channels on the ADC
+    */
+   static void setMode(uint32_t mode = resolution_16bit_se) {
+      adc->CFG1 = (Info::CFG1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
    }
 
    /**
@@ -140,15 +161,31 @@ public:
    }
 
    /**
+    * Initiates a conversion but does not wait for it to complete\n
+    * Intended for use with interrupts
+    *
+    * @param sc1Value SC1 register value including the ADC channel to use
+    */
+   static void startConversion(const int sc1Value) {
+#ifdef DEBUG_BUILD
+      static_assert(Info::irqHandlerInstalled, "Interrupt handlers must be enabled when using this function");
+#endif
+
+      // Trigger conversion with interrupts enabled
+      adc->SC1[0] = ADC_SC1_AIEN_MASK|(sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
+   };
+
+   /**
     * Initiates a conversion and waits for it to complete
     *
-    * @param channel The ADC channel to use
+    * @param sc1Value SC1 register value including the ADC channel to use
     *
     * @return - the result of the conversion
     */
-   static int readAnalogue(int channel) {
+   static int readAnalogue(const int sc1Value) {
+
       // Trigger conversion
-      adc->SC1[0] = Info::SC1|ADC_SC1_ADCH(channel);
+      adc->SC1[0] = (sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
 
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
@@ -173,7 +210,7 @@ public:
     */
    static void irqHandler() {
       if (callback != 0) {
-         callback();
+         callback(AdcBase_T<Info>::adc->R[0]);
       }
       else {
          // Dummy read to clear interrupt
@@ -217,15 +254,64 @@ class Adc0Channel : public AdcBase_T<Adc0Info>, CheckSignal<Adc0Info, channel> {
 
 public:
    /**
+    * Initiates a conversion but does not wait for it to complete\n
+    * Intended for use with interrupts
+    *
+    * @param channel The ADC channel to use
+    */
+   static void startConversion() {
+      AdcBase_T::startConversion(ADC_SC1_ADCH(channel)&~ADC_SC1_DIFF_MASK);
+   };
+   /**
     * Initiates a conversion and waits for it to complete
     *
     * @return - the result of the conversion
     */
    static int readAnalogue() {
-      return AdcBase_T::readAnalogue(channel);
+      return AdcBase_T::readAnalogue(ADC_SC1_ADCH(channel)&~ADC_SC1_DIFF_MASK);
    };
 };
 
+/**
+ *
+ * Template class representing a ADC0 differential channel
+ *
+ * Example
+ * @code
+ * // Instantiate the ADC channel (for ADC0 channel 6)
+ * using Adc0_ch6 = USBDM::Adc0Channel<6>;
+ *
+ * // Set ADC resolution
+ * Adc0_ch6.setMode(resolution_16bit_se);
+ *
+ * // Read ADC value
+ * uint32_t value = Adc0_ch6.readAnalogue();
+ * @endcode
+ *
+ * @tparam channel ADC channel
+ */
+template<int channel>
+class Adc0DiffChannel : public AdcBase_T<Adc0Info>, CheckSignal<Adc0Info::InfoDP, channel>, CheckSignal<Adc0Info::InfoDM, channel> {
+
+public:
+   /**
+    * Initiates a conversion but does not wait for it to complete\n
+    * Intended for use with interrupts
+    *
+    * @param channel The ADC channel to use
+    */
+   static void startConversion() {
+      AdcBase_T::startConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
+   };
+   /**
+    * Initiates a conversion and waits for it to complete
+    *
+    * @return - the result of the conversion
+    */
+   static int readAnalogue() {
+      return AdcBase_T::readAnalogue(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
+   };
+};
 /**
  * Class representing ADC0
  */

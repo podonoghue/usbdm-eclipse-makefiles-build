@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-ADC" >
+      <applyWhen>
+         <and>
+            <variableRef idRef="cpp.peripheral.internal.ftm" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+   
+         <!-- MK ADC CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+                     </or>
+                     <or>
+                        <deviceSubfamilyMatches>MK.*</deviceSubfamilyMatches>
+                     </or>
+                  </and>
+               </applyWhen>
+               <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
+               <copy source="Snippets/ftm-pwm-example.cpp"                           target="Snippets/ftm-pwm-example.cpp" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MKL ADC CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen>
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+                     </or>
+                     <or>
+                        <deviceSubfamilyMatches>MKL.*</deviceSubfamilyMatches>
+                        <deviceSubfamilyMatches>MKE.*</deviceSubfamilyMatches>
+                     </or>
+                  </and>
+               </applyWhen>
+               <copy source="Project_Headers/ftm.h"                              target="Project_Headers/ftm.h" />
+               <copy source="Snippets/ftm-pwm-example.cpp"                           target="Snippets/ftm-pwm-example.cpp" />
+            </projectActionList>
+         </projectActionList>
+         
+         <!-- MKM ADC CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <and>
+                     <or>
+                        <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                        <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+                     </or>
+                     <or>
+                        <deviceSubfamilyMatches>MKM.*</deviceSubfamilyMatches>
+                     </or>
+                  </and>
+               </applyWhen>
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+   </projectActionList>
+</root>

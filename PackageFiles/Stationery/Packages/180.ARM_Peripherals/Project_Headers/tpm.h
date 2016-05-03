@@ -132,8 +132,8 @@ public:
 
       // Common registers
       tmr->CNT     = 0;
-      tmr->SC      = Info::SC;
       tmr->MOD     = Info::PERIOD;
+      tmr->SC      = Info::SC;
 
       if (tmr->SC & FTM_SC_TOF_MASK) {
          // Enable interrupts
@@ -154,7 +154,7 @@ public:
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
    static void configure(int period /* us */, Tpm_Mode mode=tpm_leftAlign) {
-      // Common registers
+
       tmr->SC      = mode;
       if (mode == tpm_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
@@ -166,7 +166,7 @@ public:
       }
       setPeriod(period);
 
-      if (tmr->SC & TPM_SC_TOF_MASK) {
+      if (tmr->SC & TPM_SC_TOIE_MASK) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
@@ -298,6 +298,8 @@ public:
       if (callback != 0) {
          callback();
       }
+	  // Clear interrupt
+      TpmBase_T<Info>::tmr->SC &= ~TPM_SC_TOF_MASK;
    }
 
    /**
@@ -305,7 +307,7 @@ public:
     *
     * @param callback Callback function to execute on interrupt
     */
-   void setCallback(FTMCallbackFunction theCallback) {
+   static void setCallback(TPMCallbackFunction theCallback) {
       callback = theCallback;
    }
 };
@@ -334,7 +336,7 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm0Channel : public TpmBase_T<Tpm0Info> {
+class Tpm0Channel : public TpmBase_T<Tpm0Info>, CheckSignal<Tpm0Info, channel> {
 
 public:
    /**
@@ -361,7 +363,7 @@ using Tpm0 = TpmIrq_T<Tpm0Info>;
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm1Channel : public TpmBase_T<Tpm1Info> {
+class Tpm1Channel : public TpmBase_T<Tpm1Info>, CheckSignal<Ftm1Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TpmBase_T::setDutyCycle(dutyCycle, channel);
@@ -383,7 +385,7 @@ using Tpm1 = TpmIrq_T<Tpm1Info>;
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm2Channel : public TpmBase_T<Tpm2Info> {
+class Tpm2Channel : public TpmBase_T<Tpm2Info>, CheckSignal<Tpm2Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TpmBase_T::setDutyCycle(dutyCycle, channel);
@@ -405,7 +407,7 @@ using Tpm2 = TpmIrq_T<Tpm2Info>;
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm3Channel : public TpmBase_T<Tpm3Info> {
+class Tpm3Channel : public TpmBase_T<Tpm3Info>, CheckSignal<Tpm2Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TpmBase_T::setDutyCycle(dutyCycle, channel);

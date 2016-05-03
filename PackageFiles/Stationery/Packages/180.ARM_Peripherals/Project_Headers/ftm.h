@@ -98,7 +98,7 @@ enum Ftm_Mode {
 } ;
 
 /**
- * Type definition for LPTMR interrupt call back
+ * Type definition for FTM interrupt call back
  */
 typedef void (*FTMCallbackFunction)(void);
 
@@ -203,7 +203,7 @@ public:
       uint64_t period = ((uint64_t)per*tickRate)/1000000;
 
       // Disable FTM so register changes are immediate
-      tmr->SC      = FTM_SC_CLKS(0);
+      tmr->SC = FTM_SC_CLKS(0);
 
       if (centreAlign) {
 #ifdef DEBUG_BUILD
@@ -413,7 +413,7 @@ public:
     * @param dutyCycle  Duty-cycle as percentage
     */
    static void setDutyCycle(int dutyCycle) {
-      setDutyCycle(dutyCycle, channel);
+      FtmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 /**
@@ -434,7 +434,7 @@ template <int channel>
 class Ftm1Channel : public FtmBase_T<Ftm1Info>, CheckSignal<Ftm1Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      setDutyCycle(dutyCycle, channel);
+      FtmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 
@@ -456,7 +456,7 @@ template <int channel>
 class Ftm2Channel : public FtmBase_T<Ftm2Info>, CheckSignal<Ftm2Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
-      setDutyCycle(dutyCycle, channel);
+      FtmBase_T::setDutyCycle(dutyCycle, channel);
    }
 };
 

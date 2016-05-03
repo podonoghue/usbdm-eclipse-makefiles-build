@@ -25,8 +25,8 @@
 
          <!-- Definitions used by example programs -->
          <constant id="demo.cpp.led"                value="USBDM::GpioG&lt;5&gt;" /> <!-- Digital I/O generic LED -->
-         <constant id="demo.cpp.pwm.red.led"        value="ftm_LED_RED" />      <!-- FTM/TPM to LED -->
-         <constant id="demo.cpp.pwm.green.led"      value="ftm_LED_GREEN" />    <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.led1"           value="ftm_LED_RED" />      <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.led2"           value="ftm_LED_GREEN" />    <!-- FTM/TPM to LED -->
          <constant id="demo.cpp.red.led"            value="gpio_LED_RED" />     <!-- Digital I/O to LED -->
          <constant id="demo.cpp.green.led"          value="gpio_LED_GREEN" />   <!-- Digital I/O to LED -->
          <constant id="demo.cpp.blue.led"           value="gpio_LED_BLUE" />    <!-- Digital I/O to LED -->
