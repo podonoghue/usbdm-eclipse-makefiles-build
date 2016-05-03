@@ -769,7 +769,7 @@ extern "C" {
 //   <o> SDHC clock source select (SDHCSRC)
 //   <i> Selects the clock source for the SDHC clock [SIM_SOPT2_SDHCSRC]
 //     <0=> Core/system clock
-//     <1=> MCGFLLCLK/MCGPLLCLK/IRC48M as selected by SOPT2[PLLFLLSEL]
+//     <1=> MCGFLLCLK/MCGPLLCLK/USB1_PFD/IRC48M as selected by SOPT2[PLLFLLSEL]
 //     <2=> OSCERCLK clock
 //     <3=> External bypass clock (SDHC0_CLKIN)
 #define SIM_SOPT2_SDHCSRC_V 0
@@ -788,12 +788,33 @@ extern "C" {
 
 // SIM_SOPT2_RMIISRC ================================
 //
-//   <o> RMII clock source select (RMIISRC)
 //   <i> Selects the clock source for the Ethernet RMII interface [SIM_SOPT2_RMIISRC]
 //     <0=> EXTAL clock
 //     <1=> External bypass clock (ENET_1588_CLKIN)
-#define SIM_SOPT2_RMIISRC_V 0
+#define SIM_SOPT2_RMIISRC_V 1
 #define SIM_SOPT2_RMIISRC_M (SIM_SOPT2_RMIISRC_V<<SIM_SOPT2_RMIISRC_SHIFT)
+
+// SIM_SOPT2_LPUARTSRC ================================
+//
+//   <o> LPUART clock source select (TPMSRC)
+//   <i> Selects the clock source for the TPM counter clock. [SIM_SOPT2_LPUARTSRC]
+//     <0=> Clock disabled
+//     <1=> Derived from MCGFLLCLK/MCGPLLCLK/IRC48M/USB1_PFD (SOPT2[PLLFLLSEL], SIM_CLKDIV3[PLLFLLFRAC, PLLFLLDIV])
+//     <2=> OSCERCLK clock
+//     <3=> MCGIRCLK clock
+#define SIM_SOPT2_LPUARTSRC_V 1
+#define SIM_SOPT2_LPUARTSRC_M (SIM_SOPT2_LPUARTSRC_V<<SIM_SOPT2_LPUARTSRC_SHIFT)
+
+// SIM_SOPT2_TPMSRC ================================
+//
+//   <o> TPM clock source select (TPMSRC)
+//   <i> Selects the clock source for the TPM counter clock. [SIM_SOPT2_TPMSRC]
+//     <0=> Clock disabled
+//     <1=> Derived from MCGFLLCLK/MCGPLLCLK/IRC48M/USB1_PFD (SOPT2[PLLFLLSEL], SIM_CLKDIV3[PLLFLLFRAC, PLLFLLDIV])
+//     <2=> OSCERCLK clock
+//     <3=> MCGIRCLK clock
+#define SIM_SOPT2_TPMSRC_V 1
+#define SIM_SOPT2_TPMSRC_M (SIM_SOPT2_TPMSRC_V<<SIM_SOPT2_TPMSRC_SHIFT)
 
 // SIM_SOPT2_CLKOUTSEL ================================
 //
@@ -811,12 +832,22 @@ extern "C" {
 
 // SIM_SOPT2_RTCCLKOUTSEL ================================
 //
-//   <o> RTC clock out select (RTCCLKOUTSEL)
+//   <q> RTC clock out select (RTCCLKOUTSEL)
 //   <i> Selects the clock to be output on the RTC_CLKOUT pin [SIM_SOPT2_RTCCLKOUTSEL]
 //     <0=> RTC 1 Hz clock
 //     <1=> RTC 32.768kHz clock
-#define SIM_SOPT2_RTCCLKOUTSEL_V 0
+#define SIM_SOPT2_RTCCLKOUTSEL_V 1
 #define SIM_SOPT2_RTCCLKOUTSEL_M (SIM_SOPT2_RTCCLKOUTSEL_V<<SIM_SOPT2_RTCCLKOUTSEL_SHIFT)
+
+// SIM_SOPT2_USBSLSRC ================================
+//
+//   <q> USB Slow Clock Source (RTCCLKOUTSEL)
+//   <i> Configures the clock source for the USB PHY and HS Controller slow clock,
+//   <i> used to detect wakeup and resume events. [SIM_SOPT2_USBSLSRC]
+//     <0=> MCGIRCLK
+//     <1=> RTC 32.768kHz clock
+#define SIM_SOPT2_USBSLSRC_V 1
+#define SIM_SOPT2_USBSLSRC_M (SIM_SOPT2_USBSLSRC_V<<SIM_SOPT2_USBSLSRC_SHIFT)
 
 // SIM_SOPT2_USBSRC ================================
 //
@@ -847,6 +878,26 @@ extern "C" {
 //     <14=> Multiply by 1/8 (USBFRAC=0, USBDIV=7)
 #define SIM_CLKDIV2_USB_V 0x0
 #define SIM_CLKDIV2_USB_M (SIM_CLKDIV2_USB_V)
+
+// SIM_CLKDIV3_PLLFLL =============================
+//
+//   <o> PLL/FLL clock factor (PLLFLLFRAC,PLLFLLDIV) <name=SIM_CLKDIV3_PLLFLL>
+//   <i> This field sets the PLLFLLFRAC && PLLFLLDIV values for the fractional clock divider 
+//   <i> providing a clock to various peripherals (TPM, LPUART) [SIM_CLKDIV3_PLLFLLDIV]
+//      <1=> Multiply by 2 (PLLFLLFRAC=1, PLLFLLDIV=0)
+//      <0=> Multiply by 1 (PLLFLLFRAC=0, PLLFLLDIV=0)
+//      <5=> Multiply by 2/3 (PLLFLLFRAC=1, PLLFLLDIV=2)
+//      <2=> Multiply by 1/2 (PLLFLLFRAC=0, PLLFLLDIV=1)
+//      <9=> Multiply by 2/5 (PLLFLLFRAC=1, PLLFLLDIV=4)
+//      <4=> Multiply by 1/3 (PLLFLLFRAC=0, PLLFLLDIV=2)
+//      <13=> Multiply by 2/7 (PLLFLLFRAC=1, PLLFLLDIV=6)
+//      <6=> Multiply by 1/4 (PLLFLLFRAC=0, PLLFLLDIV=3)
+//      <8=> Multiply by 1/5 (PLLFLLFRAC=0, PLLFLLDIV=4)
+//      <10=> Multiply by 1/6 (PLLFLLFRAC=0, PLLFLLDIV=5)
+//      <12=> Multiply by 1/7 (PLLFLLFRAC=0, PLLFLLDIV=6)
+//      <14=> Multiply by 1/8 (PLLFLLFRAC=0, PLLFLLDIV=7)
+#define SIM_CLKDIV3_PLLFLL_V 0xE
+#define SIM_CLKDIV3_PLLFLL_M (SIM_CLKDIV3_PLLFLL_V)
 
 #define SYSTEM_UART0_CLOCK SystemCoreClock
 #define SYSTEM_UART1_CLOCK SystemCoreClock
