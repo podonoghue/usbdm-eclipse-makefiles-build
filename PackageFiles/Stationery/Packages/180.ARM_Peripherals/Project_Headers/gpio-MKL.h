@@ -1,6 +1,6 @@
 /**
- * @file     gpio.h (from gpio_defs-MKL.h)
- * @brief    GPIO Pin routines
+ * @file     gpio.h (from gpio-MKL.h)
+ * @brief    GPIO interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -13,243 +13,7 @@
 #include "derivative.h"
 #include "bme.h"
 
-/*
- * Default port information
- */
-#ifndef FIXED_PORT_CLOCK_REG
-#define FIXED_PORT_CLOCK_REG SCGC5
-#endif
-
-#ifndef FIXED_GPIO_FN
-#define FIXED_GPIO_FN   (1)
-#endif
-
-#ifndef FIXED_ADC_FN
-#define FIXED_ADC_FN    (0)
-#endif
-
-#ifndef PORTA_CLOCK_MASK
-#ifdef SIM_SCGC5_PORTA_MASK
-#define PORTA_CLOCK_MASK  SIM_SCGC5_PORTA_MASK
-#define PORTA_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTB_MASK
-#define PORTB_CLOCK_MASK  SIM_SCGC5_PORTB_MASK
-#define PORTB_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTC_MASK
-#define PORTC_CLOCK_MASK  SIM_SCGC5_PORTC_MASK
-#define PORTC_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTD_MASK
-#define PORTD_CLOCK_MASK  SIM_SCGC5_PORTD_MASK
-#define PORTD_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTE_MASK
-#define PORTE_CLOCK_MASK  SIM_SCGC5_PORTE_MASK
-#define PORTE_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTF_MASK
-#define PORTF_CLOCK_MASK  SIM_SCGC5_PORTF_MASK
-#define PORTF_CLOCK_REG   SCGC5
-#endif
-#endif
-
 namespace USBDM {
-
-/** Indicates the function has a fixed mapping to a pin */
-constexpr   int8_t FIXED_NO_PCR         = 0x00;
-
-/** Indicates the function doesn't exist */
-constexpr   int8_t INVALID_PCR          = 0xA5;
-
-/** Indicates the function is not currently mapped to a pin */
-constexpr   int8_t UNMAPPED_PCR         = 0xA4;
-
-/**
- * @addtogroup PeripheralPinTables Peripheral Information Classes
- * @brief Provides information about pins used by a peripheral
- * @{
- */
-/**
- * Struct for Pin Control Register information\n
- * Information required to configure the PCR for a particular function
- */
-struct PcrInfo {
-   uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t pcrAddress;  //!< PCR register array address
-   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   int8_t   gpioBit;     //!< Bit number of pin in GPIO
-   uint32_t pcrValue;    //!< PCR value including MUX value to select this function
-};
-
-/**
- * @}
- ** PeripheralPinTables
- */
-
-/**
- * @addtogroup PeripheralPinTables Peripheral Information Classes
- * @brief Provides information about pins used by a peripheral
- * @{
- */
-
-/**
- * Default PCR setting for pins (excluding multiplexor value)
- * High drive strength + Pull-up
- */
-static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
-/**
- * Default PCR value for pins used as GPIO (including multiplexor value)
- */
-static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN);
-
-#ifndef PORT_PCR_ODE_MASK
-/**
- * Some devices don't have ODE function on pin
- * The open-drain mode is automatically selected when I2C function is selected for the pin
- */
-#define PORT_PCR_ODE_MASK 0
-#endif
-/**
- * Default PCR setting for I2C pins (excluding multiplexor value)
- * High drive strength + Pull-up + Open-drain (if available)
- */
-static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
-
-/**
- * @brief Template representing a Pin Control Register (PCR)
- *
- * Code examples:
- * @code
- * // Create PCR type
- * Pcr_T<PORTC_CLOCK_MASK, PORTC_BasePtr, 3> PortC_3;
- *
- * // Configure PCR
- * PortC_3.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
- *
- * // Disable clock to associated PORT
- * pcr.disableClock();
- *
- * // Alternatively the PCR may be manipulated directly
- * Pcr_T<PORTC_CLOCK_MASK, PORTC_BasePtr, 3>.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
- * @endcode
- *
- * @tparam clockMask       Mask for SIM clock register associated with this PCR
- * @tparam pcrAddress      PORT to be manipulated e.g. PORTA (PCR array)
- * @tparam bitNum          Bit number e.g. 3
- * @tparam defPcrValue     Default value for PCR (including MUX value)
- */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
-class Pcr_T {
-
-private:
-
-#ifdef DEBUG_BUILD
-   static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
-   static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||(bitNum >= 0), "Pcr_T: Illegal bit number");
-#endif
-
-public:
-   /**
-    * Set pin PCR value\n
-    * The clock to the port will be enabled before changing the PCR
-    *
-    * @param pcrValue PCR value made up of PORT_PCR_x masks including MUX value
-    */
-   static void setPCR(uint32_t pcrValue=defPcrValue) {
-      if ((pcrAddress != 0) && (bitNum >= 0)) {
-         enableClock();
-
-         // Pointer to PCR register for pin
-         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
-         *pcrReg = pcrValue;
-      }
-   }
-   /**
-    * Set pin PCR.MUX value\n
-    * Assumes clock to the port has already been enabled\n
-    * Other PCR bits are taken from default value in template
-    *
-    * @param muxValue PCR MUX value [0..7]
-    */
-   static void setMUX(uint32_t muxValue) {
-      if ((pcrAddress != 0) && (bitNum >= 0)) {
-         // Pointer to PCR register for pin
-         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
-         *pcrReg = (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
-      }
-   }
-   /**
-    * Enable clock to port
-    */
-   static void enableClock() {
-      bmeOr(SIM->FIXED_PORT_CLOCK_REG, clockMask);
-//      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
-      __DMB();
-   }
-   /**
-    * Disable clock to port
-    */
-   static void disableClock() {
-      bmeAnd(SIM->FIXED_PORT_CLOCK_REG, ~clockMask);
-//      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
-   }
-};
-
-/**
- * @brief Template function to set a PCR to the default value
- *
- * @tparam  Last PCR to modify
- */
-template<typename Last>
-void processPcrs() {
-   Last::setPCR();
-}
-/**
- * @brief Template function to set a collection of PCRs to the default value
- *
- * @tparam  Pcr1 PCR to modify
- * @tparam  Pcr2 PCR to modify
- * @tparam  Rest Remaining PCRs to modify
- */
-template<typename Pcr1, typename  Pcr2, typename  ... Rest>
-void processPcrs() {
-   processPcrs<Pcr1>();
-   processPcrs<Pcr2, Rest...>();
-}
-/**
- * @brief Template function to set a PCR to a given value
- *
- * @param   pcrValue PCR value to set
- *
- * @tparam  Last PCR to modify
- */
-template<typename Last>
-void processPcrs(uint32_t pcrValue) {
-   Last::setPCR(pcrValue);
-}
-
-/**
- * @brief Template function to set a collection of PCRs to a given value
- *
- * @param pcrValue PCR value to set
- *
- * @tparam  Pcr1 PCR to modify
- * @tparam  Pcr2 PCR to modify
- * @tparam  Rest Remaining PCRs to modify
- */
-template<typename Pcr1, typename  Pcr2, typename  ... Rest>
-void processPcrs(uint32_t pcrValue) {
-   processPcrs<Pcr1>(pcrValue);
-   processPcrs<Pcr2, Rest...>(pcrValue);
-}
-
-/**
- * @}
- ** PeripheralPinTables
- */
 
 /**
  * @addtogroup GPIO_Group GPIO, Digital Input/Output
@@ -383,31 +147,6 @@ public:
 };
 
 /**
- * @brief Template representing a Pin Control Register (PCR)\n
- * Makes use of a configuration class
- *
- * Code examples:
- * @code
- * // Create PCR type
- * Pcr_T<spiInfo, 3> SpiMOSI;
- *
- * // Configure PCR
- * SpiMOSI.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
- *
- * // Disable clock to associated PORT
- * SpiMOSI.disableClock();
- *
- * // Alternatively the PCR may be manipulated directly
- * Pcr_T<spiInfo, 3>::setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
- * @endcode
- *
- * @tparam info          Configuration class
- * @tparam index         Index of pin in configuration table
- */
-template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
-
-/**
  * Create GPIO from GpioInfo class
  *
  * @tparam Info            Gpio information class
@@ -415,7 +154,9 @@ template<class Info, uint8_t index> using PcrTable_T =
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  Gpio_T = GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue>;
+class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue> {
+   static_assert((bitNum<32), "Illegal signal");
+};
 
 /**
  * Create GPIO from Peripheral Info class
@@ -550,10 +291,379 @@ public:
    }
 };
 
+#ifdef USBDM_GPIOA_IS_DEFINED
 /**
+ * @brief Convenience template for GpioA. See @ref Gpio_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 3 of GpioA
+ * GpioA<3> GpioA3
+ *
+ * // Set as digital output
+ * GpioA3.setOutput();
+ *
+ * // Set pin high
+ * GpioA3.set();
+ *
+ * // Set pin low
+ * GpioA3.clear();
+ *
+ * // Toggle pin
+ * GpioA3.toggle();
+ *
+ * // Set pin to boolean value
+ * GpioA3.write(true);
+ *
+ * // Set pin to boolean value
+ * GpioA3.write(false);
+ *
+ * // Set as digital input
+ * GpioA3.setInput();
+ *
+ * // Read pin as boolean value
+ * bool x = GpioA3.read();
+ * @endcode
+ *
+ * @tparam bitNum        Bit number in the port
+ */
+template<uint8_t bitNum> using GpioA = Gpio_T<GpioAInfo, bitNum>;
+/**
+ * @brief Convenience template for GpioA fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioA
+ * GpioAField<6,3> GpioA6_3
+ *
+ * // Set as digital output
+ * GpioA6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioA6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioA6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioA6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioA6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioA6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioA6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> using GpioAField = Field_T<GpioAInfo, left, right>;
+#endif
+
+#ifdef USBDM_GPIOB_IS_DEFINED
+/**
+ * @brief Convenience template for GpioB. See @ref Gpio_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 3 of GpioB
+ * GpioB<3> GpioB3
+ *
+ * // Set as digital output
+ * GpioB3.setOutput();
+ *
+ * // Set pin high
+ * GpioB3.set();
+ *
+ * // Set pin low
+ * GpioB3.clear();
+ *
+ * // Toggle pin
+ * GpioB3.toggle();
+ *
+ * // Set pin to boolean value
+ * GpioB3.write(true);
+ *
+ * // Set pin to boolean value
+ * GpioB3.write(false);
+ *
+ * // Set as digital input
+ * GpioB3.setInput();
+ *
+ * // Read pin as boolean value
+ * bool x = GpioB3.read();
+ * @endcode
+ *
+ * @tparam bitNum        Bit number in the port
+ */
+template<uint8_t bitNum> using GpioB = Gpio_T<GpioBInfo, bitNum>;
+
+/**
+ * @brief Convenience template for GpioB fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioB
+ * GpioBField<6,3> GpioB6_3
+ *
+ * // Set as digital output
+ * GpioB6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioB6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioB6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioB6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioB6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioB6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioB6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> using GpioBField = Field_T<GpioBInfo, left, right>;
+#endif
+
+#ifdef USBDM_GPIOC_IS_DEFINED
+/**
+ * @brief Convenience template for GpioC. See @ref Gpio_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 3 of GpioC
+ * GpioC<3> GpioC3
+ *
+ * // Set as digital output
+ * GpioC3.setOutput();
+ *
+ * // Set pin high
+ * GpioC3.set();
+ *
+ * // Set pin low
+ * GpioC3.clear();
+ *
+ * // Toggle pin
+ * GpioC3.toggle();
+ *
+ * // Set pin to boolean value
+ * GpioC3.write(true);
+ *
+ * // Set pin to boolean value
+ * GpioC3.write(false);
+ *
+ * // Set as digital input
+ * GpioC3.setInput();
+ *
+ * // Read pin as boolean value
+ * bool x = GpioC3.read();
+ * @endcode
+ *
+ * @tparam bitNum        Bit number in the port
+ */
+template<uint8_t bitNum> using GpioC = Gpio_T<GpioCInfo, bitNum>;
+
+/**
+ * @brief Convenience template for GpioC fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioC
+ * GpioCField<6,3> GpioC6_3
+ *
+ * // Set as digital output
+ * GpioC6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioC6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioC6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioC6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioC6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioC6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioC6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> using GpioCField = Field_T<GpioCInfo, left, right>;
+#endif
+
+#ifdef USBDM_GPIOD_IS_DEFINED
+/**
+ * @brief Convenience template for GpioD. See @ref Gpio_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 3 of GpioD
+ * GpioD<3> GpioD3
+ *
+ * // Set as digital output
+ * GpioD3.setOutput();
+ *
+ * // Set pin high
+ * GpioD3.set();
+ *
+ * // Set pin low
+ * GpioD3.clear();
+ *
+ * // Toggle pin
+ * GpioD3.toggle();
+ *
+ * // Set pin to boolean value
+ * GpioD3.write(true);
+ *
+ * // Set pin to boolean value
+ * GpioD3.write(false);
+ *
+ * // Set as digital input
+ * GpioD3.setInput();
+ *
+ * // Read pin as boolean value
+ * bool x = GpioD3.read();
+ * @endcode
+ *
+ * @tparam bitNum        Bit number in the port
+ */
+template<uint8_t bitNum> using GpioD = Gpio_T<GpioDInfo, bitNum>;
+
+/**
+ * @brief Convenience template for GpioD fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioD
+ * GpioDField<6,3> GpioD6_3
+ *
+ * // Set as digital output
+ * GpioD6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioD6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioD6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioD6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioD6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioD6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioD6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> using GpioDField = Field_T<GpioDInfo, left, right>;
+#endif
+
+#ifdef USBDM_GPIOE_IS_DEFINED
+/**
+ * @brief Convenience template for GpioE fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioE
+ * GpioEField<6,3> GpioE6_3
+ *
+ * // Set as digital output
+ * GpioE6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioE6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioE6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioE6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioE6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioE6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioE6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> using GpioEField = Field_T<GpioEInfo, left, right>;
+
+/**
+ * @brief Convenience template for GpioE. See @ref Gpio_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 3 of GpioE
+ * GpioE<3> GpioE3
+ *
+ * // Set as digital output
+ * GpioE3.setOutput();
+ *
+ * // Set pin high
+ * GpioE3.set();
+ *
+ * // Set pin low
+ * GpioE3.clear();
+ *
+ * // Toggle pin
+ * GpioE3.toggle();
+ *
+ * // Set pin to boolean value
+ * GpioE3.write(true);
+ *
+ * // Set pin to boolean value
+ * GpioE3.write(false);
+ *
+ * // Set as digital input
+ * GpioE3.setInput();
+ *
+ * // Read pin as boolean value
+ * bool x = GpioE3.read();
+ * @endcode
+ *
+ * @tparam bitNum        Bit number in the port
+ */
+template<uint8_t bitNum> using GpioE = Gpio_T<GpioEInfo, bitNum>;
+#endif
+
+/**
+ * End GPIO_Group
  * @}
  */
-
 } // End namespace USBDM
 
 #endif /* HEADER_GPIO_H */

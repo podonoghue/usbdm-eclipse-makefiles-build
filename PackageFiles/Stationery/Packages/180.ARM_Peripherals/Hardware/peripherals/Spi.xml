@@ -17,7 +17,7 @@
          toolTip="Speed of transmission"
          value="100000" min="0" max="10000000" />
 
-      <binaryOption name="LSBFE" description="Handler for IRQ"
+      <binaryOption name="LSBFE" description="Transmission order"
          toolTip="Transmission order">
          <choice value="0" name="MSB first" />
          <choice value="1" name="LSB first" />
