@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension>
+      <wizard uiExtensionID="com.processorexpert.ui.kds.newprojectwizard.ui"
+         wizardExtensionID="com.processorexpert.ui.kds.newprojectwizard.wizard1">
+         <projectGeneration
+            baseProjectType="com.processorexpert.ui.kds.newprojectwizard.projecttype1"
+            ccNatureConditionId="com.processorexpert.projectWizard.condition.selection">
+
+            <configurations>
+               <configuration
+                  conditionId="com.processorexpert.create.gnuarm.toolchain"
+                  configurationId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug"
+                  name="Debug" projectType="ilg.gnuarmeclipse.managedbuild.cross.target.elf">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo # KDS -->
+                     <launchSettingsRef merge-actions="insert"
+                        id="com.processorexpert.launch.gdb.usbdm"
+                        conditionId="com.processorexpert.condition.launch.gnuarm.gdb.usbdm"
+                        name="USBDM"
+                        launchType="net.sourceforge.usbdm.gdb.launchConfigurationType">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+               <configuration
+                  conditionId="com.processorexpert.create.gnuarm.toolchain.release"
+                  configurationId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release"
+                  name="Release" projectType="ilg.gnuarmeclipse.managedbuild.cross.target.elf">
+                  <configurationLaunchSettings>
+                     <!-- Added pgo # KDS -->
+                     <launchSettingsRef merge-actions="insert"
+                        id="com.processorexpert.launch.gdb.usbdm"
+                        conditionId="com.processorexpert.condition.launch.gnuarm.gdb.usbdm"
+                        name="USBDM"
+                        launchType="net.sourceforge.usbdm.gdb.launchConfigurationType">
+                     </launchSettingsRef>
+                  </configurationLaunchSettings>
+               </configuration>
+            </configurations>
+         </projectGeneration>
+      </wizard>
+   </extension>
+</plugin>
