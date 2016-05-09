@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- ftm.xml -->
+<!-- I2c.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <menu name="_instance" description="Inter-Integrated-Circuit">

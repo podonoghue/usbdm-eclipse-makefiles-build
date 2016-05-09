@@ -219,9 +219,9 @@ public:
    }
 
    /**
-    * Set callback function
+    * Set Callback function
     *
-    * @param callback Callback function to execute on interrupt
+    * @param theCallback Callback function to execute on interrupt
     */
    static void setCallback(ADCCallbackFunction theCallback) {
       callback = theCallback;

@@ -373,7 +373,7 @@ public:
    /**
     * Set callback function
     *
-    * @param callback Callback function to execute on interrupt
+    * @param theCallback Callback function to execute on interrupt
     */
    static void setCallback(FTMCallbackFunction theCallback) {
       callback = theCallback;

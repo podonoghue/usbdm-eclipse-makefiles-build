@@ -22,36 +22,33 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_ADC0_MASK" />
          <irq num="ADC0_IRQn" />
       </peripheral>
-      <peripheral baseName="CLKOUT"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="CMP"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMP0_MASK" />
          <irq num="CMP0_IRQn" />
       </peripheral>
+      <peripheral baseName="CONTROL"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
+      </peripheral>
       <peripheral baseName="CRC"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
       </peripheral>
-      <peripheral baseName="EXTRG"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="FLEXIO"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_FLEXIO_MASK" />
          <irq num="UART2_FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="FTFA"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A">
@@ -110,8 +107,8 @@
       <peripheral baseName="MCG"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
       </peripheral>
-      <peripheral baseName="NMI_b"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      <peripheral baseName="Miscellaneous" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
@@ -122,10 +119,7 @@
          <irq num="PIT_IRQn" />
       </peripheral>
       <peripheral baseName="POWER"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
-      </peripheral>
-      <peripheral baseName="RESET_b"  instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
       <peripheral baseName="RTC"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
@@ -143,11 +137,8 @@
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI1_MASK" />
          <irq num="SPI1_IRQn" />
       </peripheral>
-      <peripheral baseName="SWD"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="TPM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
       <peripheral baseName="TPM"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
@@ -170,31 +161,13 @@
          <irq num="UART2_FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="USB"      instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMisc" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_USBOTG_MASK" />
          <irq num="USB0_IRQn" />
       </peripheral>
-      <peripheral baseName="VDDA"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="VREF"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_VREF_MASK" />
-      </peripheral>
-      <peripheral baseName="VREF0_B"  instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="VREFH"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="VREFL"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="VREFO_A"  instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="VSSA"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
    </peripherals>
    <pins>
@@ -781,12 +754,6 @@
          <reset sel="fixed" />
          <default sel="fixed" />
       </pin>
-      <pin name="VREF0">
-         <mux sel="reset"         signal="VREF0_B" />
-         <mux sel="mux0"          signal="VREF0_B" />
-         <reset sel="mux0" />
-         <default sel="reset" />
-      </pin>
       <pin name="VREFH"        isFixed="true">
          <mux sel="fixed"         signal="VREFH" />
          <reset sel="fixed" />
@@ -797,8 +764,8 @@
          <reset sel="fixed" />
          <default sel="fixed" />
       </pin>
-      <pin name="VREFO"        isFixed="true">
-         <mux sel="fixed"         signal="VREFO_A" />
+      <pin name="VREF_OUT"     isFixed="true">
+         <mux sel="fixed"         signal="VREF_OUT" />
          <reset sel="fixed" />
          <default sel="fixed" />
       </pin>
@@ -884,7 +851,7 @@
          <placement pin="VDDA"          location="F4" />
          <placement pin="VREFH"         location="G4" />
          <placement pin="VREFL"         location="G3" />
-         <placement pin="VREFO"         location="G4" />
+         <placement pin="VREF_OUT"      location="G4" />
          <placement pin="VSS1"          location="C4" />
          <placement pin="VSS2"          location="H7" />
          <placement pin="VSS3"          location="E3" />
@@ -951,7 +918,7 @@
          <placement pin="VDDA"          location="" />
          <placement pin="VREFH"         location="" />
          <placement pin="VREFL"         location="" />
-         <placement pin="VREFO"         location="" />
+         <placement pin="VREF_OUT"      location="" />
          <placement pin="VSS1"          location="" />
          <placement pin="VSS2"          location="" />
          <placement pin="VSS3"          location="" />
@@ -1018,7 +985,7 @@
          <placement pin="VDDA"          location="p13" />
          <placement pin="VREFH"         location="p14" />
          <placement pin="VREFL"         location="p15" />
-         <placement pin="VREFO"         location="p14" />
+         <placement pin="VREF_OUT"      location="p14" />
          <placement pin="VSS1"          location="p4" />
          <placement pin="VSS2"          location="p31" />
          <placement pin="VSS3"          location="p47" />
@@ -1054,9 +1021,9 @@
          <placement pin="USB_VDD"       location="p5" />
          <placement pin="VDD2"          location="p15" />
          <placement pin="VDDA"          location="p7" />
-         <placement pin="VREF0"         location="p9" />
          <placement pin="VREFH"         location="p7" />
          <placement pin="VREFL"         location="p8" />
+         <placement pin="VREF_OUT"      location="p9" />
          <placement pin="VSS1"          location="p2" />
          <placement pin="VSS2"          location="p16" />
          <placement pin="VSSA"          location="p8" />
@@ -1107,7 +1074,7 @@
          <placement pin="VDDA"          location="p9" />
          <placement pin="VREFH"         location="p10" />
          <placement pin="VREFL"         location="p11" />
-         <placement pin="VREFO"         location="p10" />
+         <placement pin="VREF_OUT"      location="p10" />
          <placement pin="VSS1"          location="p2" />
          <placement pin="VSS2"          location="p23" />
          <placement pin="VSSA"          location="p12" />

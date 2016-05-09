@@ -39,7 +39,7 @@ public:
    /**
     * Set callback for ISR
     *
-    * @param callback The function to call from stub ISR
+    * @param theCallback The function to call from stub ISR
     */
    static void setCallback(LPTMRCallbackFunction theCallback) {
       callback = theCallback;

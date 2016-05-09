@@ -15,3 +15,8 @@
          <choice value="1" name="222222222222" />
       </binaryOption>
 
+      <intOption name="xxxx"
+         description="yyyyyy"
+         toolTip="yyyyyyy"
+         value="4000000" constant="true" />
+

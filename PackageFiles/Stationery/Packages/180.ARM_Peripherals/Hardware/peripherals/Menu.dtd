@@ -4,7 +4,7 @@
 <!ELEMENT root (menu*,validate*,template) >
    <!ATTLIST root xmlns:xi CDATA #IMPLIED>
 
-<!ELEMENT menu ((intOption|choiceOption|binaryOption|xi:include)*) >
+<!ELEMENT menu ((intOption|choiceOption|binaryOption|xi:include|menu)*) >
    <!ATTLIST menu xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST menu name         CDATA        #REQUIRED>
    <!ATTLIST menu description  CDATA        #REQUIRED>
