@@ -1,6 +1,7 @@
 
 
-      <choiceOption name="XXXX" description="YYYYY"
+      <choiceOption name="XXXX" 
+         description="YYYYY"
          toolTip="ZZZZZZZ">
          <choice value="0" name="AAAA" />
          <choice value="1" name="BBBB" />
@@ -9,7 +10,8 @@
          <choice value="0" name="Default" />
       </choiceOption>
 
-      <binaryOption name="XXXXX" description="YYYYY"
+      <binaryOption name="XXXXX" 
+         description="YYYYY"
          toolTip="TTTTTTTTTTTT">
          <choice value="0" name="111111111111" />
          <choice value="1" name="222222222222" />

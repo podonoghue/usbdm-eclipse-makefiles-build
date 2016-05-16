@@ -1,84 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="USBDM">
+	<item value="0" key="RTC_CR_CLKO"/>
+	<item value="4000000" key="MCG_system_fast_irc_clock"/>
+	<item value="120000000" key="MCG_system_core_clock"/>
+	<item value="0" key="OSC0_CR_ERCLKEN"/>
+	<item value="2" key="OSC0_CR_SCP"/>
 	<item value="Green LED" key="PTB19_descriptionSetting"/>
-	<item value="0" key="TPM1_TPM_IRQ_HANDLER"/>
-	<item value="Touch" key="PTB17_descriptionSetting"/>
-	<item value="0" key="LPTMR0_CSR_TFC"/>
-	<item value="0" key="TPM0_TPM_SC_PS"/>
+	<item value="1" key="TPM2_SC_CMOD"/>
+	<item value="0" key="ADC0_CFG1_ADLSMP"/>
+	<item value="0" key="PIT_TCTRL_CHN3"/>
+	<item value="0" key="PIT_TCTRL_CHN1"/>
 	<item value="mux0" key="PTC5_muxSetting"/>
-	<item value="mux0" key="PTB17_muxSetting"/>
+	<item value="0" key="TPM2_IRQ_LEVEL"/>
 	<item value="mux1" key="PTA5_muxSetting"/>
 	<item value="mux2" key="PTA2_muxSetting"/>
-	<item value="mux1" key="PTA12_muxSetting"/>
-	<item value="Accelerometer - SCL" key="PTE24_descriptionSetting"/>
-	<item value="0" key="LPTMR0_PSR_PRESCALE"/>
+	<item value="0" key="LPTMR0_IRQ_HANDLER"/>
 	<item value="mux1" key="PTA16_muxSetting"/>
-	<item value="0" key="I2C0_I2C_IRQ_HANDLER"/>
-	<item value="0" key="SPI0_MODE"/>
-	<item value="mux7" key="PTA3_muxSetting"/>
+	<item value="0" key="MCG_IRCLKEN"/>
+	<item value="0" key="RTC_CR_WPE"/>
 	<item value="0" key="PIT_IRQ_LEVEL"/>
 	<item value="mux1" key="PTB19_muxSetting"/>
 	<item value="10000000" key="SPI0_SPEED"/>
 	<item value="mux0" key="PTB2_muxSetting"/>
+	<item value="12000000" key="MCG_system_erc_clock"/>
 	<item value="Reserved" key="PTA19_descriptionSetting"/>
 	<item value="Reserved" key="PTA18_descriptionSetting"/>
 	<item value="mux0" key="PTA19_muxSetting"/>
 	<item value="mux0" key="PTC2_muxSetting"/>
-	<item value="0" key="TPM2_TPM_IRQ_HANDLER"/>
-	<item value="0" key="I2C1_I2C_IRQ_LEVEL"/>
-	<item value="0" key="PIT_MCR_FRZ"/>
-	<item value="mux0" key="PTA18_muxSetting"/>
-	<item value="1" key="TPM0_TPM_SC_CMOD"/>
-	<item value="0" key="SPI0_LSBE"/>
-	<item value="1" key="TPM1_TPM_SC_CMOD"/>
-	<item value="mux0" key="PTB3_muxSetting"/>
+	<item value="10000" key="LPTMR0_PERIOD"/>
+	<item value="0" key="ADC0_CFG2_ADHSC"/>
+	<item value="0" key="ADC0_CFG2_ADLSTS"/>
+	<item value="0" key="TPM1_IRQ_LEVEL"/>
 	<item value="mux1" key="PTB18_muxSetting"/>
-	<item value="mux1" key="PTD3_muxSetting"/>
-	<item value="1" key="TPM2_TPM_SC_CMOD"/>
+	<item value="0" key="SPI0_IRQ_HANDLER"/>
+	<item value="0" key="OSC0_CR_EREFSTEN"/>
+	<item value="0" key="TPM0_SC_PS"/>
+	<item value="0" key="SPI1_IRQ_HANDLER"/>
 	<item value="mux2" key="PTA1_muxSetting"/>
-	<item value="0" key="LPTMR0_PSR_PCS"/>
-	<item value="10000000" key="SPI1_SPEED"/>
+	<item value="96000000" key="MCG_fllTargetFrequency"/>
 	<item value="mux0" key="PTB1_muxSetting"/>
-	<item value="0" key="I2C1_I2C_IRQ_HANDLER"/>
+	<item value="0" key="RTC_CR_SUP"/>
 	<item value="FRDM_KL25Z" key="DeviceInfo_Target_Device"/>
-	<item value="Accelerometer - SDA" key="PTE25_descriptionSetting"/>
-	<item value="0" key="TPM0_TPM_IRQ_LEVEL"/>
-	<item value="mux1" key="PTA4_muxSetting"/>
+	<item value="0" key="TPM1_SC_PS"/>
+	<item value="0" key="TPM2_IRQ_HANDLER"/>
 	<item value="Red LED" key="PTB18_descriptionSetting"/>
 	<item value="0" key="LPTMR0_IRQ_LEVEL"/>
 	<item value="Reserved(SWD)" key="PTA0_descriptionSetting"/>
 	<item value="1" key="LPTMR0_CSR_TPS"/>
 	<item value="2000" key="PIT_LDVAL"/>
-	<item value="mux5" key="PTE24_muxSetting"/>
 	<item value="0" key="SPI1_MODE"/>
-	<item value="mux1" key="PTA17_muxSetting"/>
 	<item value="0" key="LPTMR0_CSR_TPP"/>
-	<item value="0" key="PIT_PIT_IRQ_HANDLER"/>
+	<item value="120000000" key="MCG_pllTargetFrequency"/>
+	<item value="0" key="MCG_sim_clkdiv1_outdiv1"/>
 	<item value="Touch" key="PTB16_descriptionSetting"/>
-	<item value="0" key="SPI1_LSBE"/>
-	<item value="0" key="TPM2_TPM_SC_PS"/>
-	<item value="Blue LED" key="PTD1_descriptionSetting"/>
-	<item value="0" key="TPM1_TPM_IRQ_LEVEL"/>
-	<item value="FRDM_KL25Z" key="DeviceInfo_deviceVariant"/>
+	<item value="0" key="OSC0_DIV_ERPS"/>
+	<item value="4" key="MCG_sim_clkdiv1_outdiv4"/>
+	<item value="1" key="MCG_sim_clkdiv1_outdiv2"/>
+	<item value="1" key="MCG_sim_clkdiv1_outdiv3"/>
+	<item value="0" key="ADC0_CFG1_ADIV"/>
 	<item value="mux1" key="PTD1_muxSetting"/>
-	<item value="0" key="SPI1_SPI_IRQ_HANDLER"/>
-	<item value="0" key="SPI0_IRQ_LEVEL"/>
+	<item value="0" key="TPM1_IRQ_HANDLER"/>
+	<item value="0" key="TPM0_IRQ_HANDLER"/>
+	<item value="0" key="TPM0_IRQ_LEVEL"/>
+	<item value="0" key="MCG_mcg_c1_irefs"/>
 	<item value="0" key="SPI1_IRQ_LEVEL"/>
 	<item value="mux0" key="PTB16_muxSetting"/>
-	<item value="0" key="LPTMR0_CSR_TMS"/>
-	<item value="0" key="I2C0_I2C_IRQ_LEVEL"/>
+	<item value="false" key="RTC_IRQ_HANDLER"/>
 	<item value="0" key="LPTMR0_PSR_PBYP"/>
-	<item value="0" key="TPM0_TPM_IRQ_HANDLER"/>
-	<item value="0" key="LPTMR0_LPTMR_IRQ_HANDLER"/>
-	<item value="mux1" key="PTA13_muxSetting"/>
-	<item value="0" key="TPM1_TPM_SC_PS"/>
-	<item value="MKL25Z4.usbdmHardware" key="Hardware_Source_Filename"/>
+	<item value="0" key="RTC_IRQ_LEVEL"/>
 	<item value="Reserved(SWD)" key="PTA3_descriptionSetting"/>
+	<item value="0" key="TPM2_SC_PS"/>
 	<item value="USB_serial" key="PTA2_descriptionSetting"/>
-	<item value="0" key="TPM2_TPM_IRQ_LEVEL"/>
 	<item value="mux0" key="PTB0_muxSetting"/>
 	<item value="USB_serial" key="PTA1_descriptionSetting"/>
-	<item value="mux5" key="PTE25_muxSetting"/>
+	<item value="10000" key="TPM1_PERIOD"/>
 	<item value="mux7" key="PTA0_muxSetting"/>
-	<item value="0" key="SPI0_SPI_IRQ_HANDLER"/>
+	<item value="2" key="ADC0_CFG1_MODE"/>
+	<item value="0" key="ADC0_IRQ_LEVEL"/>
+	<item value="0" key="MCG_mcg_c1_frdiv"/>
+	<item value="0" key="RTC_CR_OSCE"/>
+	<item value="32768" key="MCG_rtcclk_clock"/>
+	<item value="0" key="I2C1_IRQ_HANDLER"/>
+	<item value="0" key="ADC0_CFG1_ADLPC"/>
+	<item value="Touch" key="PTB17_descriptionSetting"/>
+	<item value="0" key="LPTMR0_CSR_TFC"/>
+	<item value="0" key="I2C0_IRQ_HANDLER"/>
+	<item value="60000000" key="MCG_system_bus_clock"/>
+	<item value="mux0" key="PTB17_muxSetting"/>
+	<item value="mux1" key="PTA12_muxSetting"/>
+	<item value="Accelerometer - SCL" key="PTE24_descriptionSetting"/>
+	<item value="0" key="I2C0_IRQ_LEVEL"/>
+	<item value="120000000" key="MCG_system_mcgout_clock"/>
+	<item value="0" key="LPTMR0_PSR_PRESCALE"/>
+	<item value="1" key="TPM0_SC_CMOD"/>
+	<item value="0" key="SPI0_MODE"/>
+	<item value="0" key="MCG_IREFSTEN"/>
+	<item value="0" key="ADC0_CFG1_ADICLK"/>
+	<item value="mux7" key="PTA3_muxSetting"/>
+	<item value="FRDM_KL25Z" key="DeviceInfo_Device_Variant"/>
+	<item value="24000000" key="MCG_system_flash_clock"/>
+	<item value="0" key="PIT_IRQ_HANDLER"/>
+	<item value="8000000" key="MCG_oscclk_clock"/>
+	<item value="2" key="RTC_CR_SCP"/>
+	<item value="10000" key="TPM0_PERIOD"/>
+	<item value="1000" key="MCG_system_slow_irc_clock"/>
+	<item value="0" key="PIT_MCR_FRZ"/>
+	<item value="mux0" key="PTA18_muxSetting"/>
+	<item value="0" key="MCG_mcg_c1_clks"/>
+	<item value="0" key="SPI0_LSBFE"/>
+	<item value="mux0" key="PTB3_muxSetting"/>
+	<item value="mux1" key="PTD3_muxSetting"/>
+	<item value="0" key="ADC0_SC2_ADTRG"/>
+	<item value="0b000" key="ADC0_SC2_COMPARE"/>
+	<item value="false" key="ADC0_IRQ_HANDLER"/>
+	<item value="0" key="I2C1_IRQ_LEVEL"/>
+	<item value="0" key="LPTMR0_PSR_PCS"/>
+	<item value="10000000" key="SPI1_SPEED"/>
+	<item value="Accelerometer - SDA" key="PTE25_descriptionSetting"/>
+	<item value="0" key="ADC0_SC2_REFSEL"/>
+	<item value="0" key="ADC0_SC2_DMAEN"/>
+	<item value="mux1" key="PTA4_muxSetting"/>
+	<item value="32768" key="MCG_system_mcgir_clock"/>
+	<item value="mux5" key="PTE24_muxSetting"/>
+	<item value="10000" key="TPM2_PERIOD"/>
+	<item value="mux1" key="PTA17_muxSetting"/>
+	<item value="Blue LED" key="PTD1_descriptionSetting"/>
+	<item value="48000000" key="MCG_irc48m_clock"/>
+	<item value="1" key="TPM1_SC_CMOD"/>
+	<item value="0" key="MCG_clock_mode"/>
+	<item value="60000000" key="MCG_system_flexbus_clock"/>
+	<item value="0" key="SPI0_IRQ_LEVEL"/>
+	<item value="1000" key="MCG_system_low_power_clock"/>
+	<item value="0" key="LPTMR0_CSR_TMS"/>
+	<item value="0" key="RTC_CR_UM"/>
+	<item value="0" key="ADC0_CFG2_ADACKEN"/>
+	<item value="mux1" key="PTA13_muxSetting"/>
+	<item value="48000000" key="MCG_system_usb_clkin_clock"/>
+	<item value="0" key="SPI1_LSBFE"/>
+	<item value="MKL25Z4.usbdmHardware" key="Hardware_Source_Filename"/>
+	<item value="mux5" key="PTE25_muxSetting"/>
 </section>

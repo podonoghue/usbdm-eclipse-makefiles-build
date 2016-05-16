@@ -229,7 +229,7 @@
       </peripheral>
       <peripheral baseName="USB"      instance="0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
-         <clock reg="SCGC4"         mask="SIM_SCGC4_USB0_MASK" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_USBOTG_MASK" />
          <irq num="USB0_IRQn" />
       </peripheral>
       <peripheral baseName="VREF"     instance="">

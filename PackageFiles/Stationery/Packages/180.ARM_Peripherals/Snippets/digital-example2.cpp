@@ -14,21 +14,21 @@ using namespace USBDM;
  * Echoes an external switch to an external LED
  * Uses arduino aliases if available
  *
- *  SWITCH + LED
+ *  Switch + LED
  *  1 x Digital input
  *  1 x Digital output
  *
  */
 
 // Connection mapping - change as required
-using SWITCH =   $(demo.cpp.external.switch:USBDM::GpioB<0>);
-using LED    =   $(demo.cpp.external.led:USBDM::GpioB<1>);
+using Switch =   $(demo.cpp.external.switch:USBDM::GpioB<0>);
+using Led    =   $(demo.cpp.external.led:USBDM::GpioB<1>);
 
 int main(void) {
-   LED::setOutput();
-   SWITCH::setInput();
+   Led::setOutput();
+   Switch::setInput();
 
    for(;;) {
-      LED::write(!SWITCH::read());
+      Led::write(!Switch::read());
    }
 }

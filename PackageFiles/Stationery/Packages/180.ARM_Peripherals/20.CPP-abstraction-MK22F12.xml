@@ -24,6 +24,7 @@
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
+      <constant id="cpp.peripheral.internal.rtc"    value="true" />
       <constant id="cpp.peripheral.internal.spi"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 

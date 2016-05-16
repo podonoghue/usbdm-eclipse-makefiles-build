@@ -3,7 +3,7 @@
 <!-- ftm.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="_instance" description="Programmable Interrupt Timer">
+   <page name="_instance" description="Analogue to Digital Converter">
 
       <choiceOption name="CFG1_ADICLK" description="Clock Source"
          toolTip="Selects the clock source for the module">
@@ -105,28 +105,28 @@
       <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
-   </menu>
+   </page>
    <template>
      \t//! Indicates interrupt handler has been installed
      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t CFG1  = 
-     \t\t ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)|
-     \t\t ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)|
-     \t\t ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)|
-     \t\t ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)|
-     \t\t ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
+     \t    ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)|
+     \t    ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)|
+     \t    ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)|
+     \t    ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)|
+     \t    ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
      \t//! Default value for ADCx_CFG2 register
      \t static constexpr uint32_t CFG2  = 
-     \t\t  ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
-     \t\t ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)|
-     \t\t ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)|
-     \t\t ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
+     \t     ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
+     \t    ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)|
+     \t    ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)|
+     \t    ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
      \tstatic constexpr uint32_t SC2  =
-     \t\t ($(SC2_REFSEL)&lt;&lt;ADC_SC2_REFSEL_SHIFT)|
-     \t\t ($(SC2_DMAEN)&lt;&lt;ADC_SC2_DMAEN_SHIFT)|
-     \t\t ($(SC2_COMPARE)&lt;&lt;ADC_SC2_ACREN_SHIFT)|
-     \t\t ($(SC2_ADTRG)&lt;&lt;ADC_SC2_ADTRG_SHIFT);\n\n
+     \t    ($(SC2_REFSEL)&lt;&lt;ADC_SC2_REFSEL_SHIFT)|
+     \t    ($(SC2_DMAEN)&lt;&lt;ADC_SC2_DMAEN_SHIFT)|
+     \t    ($(SC2_COMPARE)&lt;&lt;ADC_SC2_ACREN_SHIFT)|
+     \t    ($(SC2_ADTRG)&lt;&lt;ADC_SC2_ADTRG_SHIFT);\n\n
      \t//! Default IRQ level\n
      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
    </template>

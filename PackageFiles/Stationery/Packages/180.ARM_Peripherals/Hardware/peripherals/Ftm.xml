@@ -3,7 +3,7 @@
 <!-- ftm.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="_instance" description="Flex timer">
+   <page name="_instance" description="Flex timer">
       <choiceOption name="SC_CLKS" description="Clock Source"
          toolTip="Selects the clock source for the module">
          <choice value="0" name="Disabled" />
@@ -52,14 +52,14 @@
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
          
-   </menu>
+   </page>
    <template>
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t SC  = 
-      \t\t ($(SC_CPWMS)&lt;&lt;FTM_SC_CPWMS_SHIFT)|
-      \t\t (($(IRQ_HANDLER)|$(SC_TOIE))&lt;&lt;FTM_SC_TOIE_SHIFT)|
-      \t\t FTM_SC_CLKS($(SC_CLKS))|
-      \t\t FTM_SC_PS($(SC_PS));\n\n
+      \t    ($(SC_CPWMS)&lt;&lt;FTM_SC_CPWMS_SHIFT)|
+      \t    (($(IRQ_HANDLER)|$(SC_TOIE))&lt;&lt;FTM_SC_TOIE_SHIFT)|
+      \t    FTM_SC_CLKS($(SC_CLKS))|
+      \t    FTM_SC_PS($(SC_PS));\n\n
       \t//! Default Timer Period\n
       \tstatic constexpr uint32_t PERIOD =  $(PERIOD);\n\n
       \t//! Default IRQ level\n

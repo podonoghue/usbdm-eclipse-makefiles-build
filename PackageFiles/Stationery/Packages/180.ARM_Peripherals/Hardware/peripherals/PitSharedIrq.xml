@@ -3,7 +3,7 @@
 <!-- ftm.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="_instance" description="Programmable Interrupt Timer">
+   <page name="_instance" description="Programmable Interrupt Timer">
 
       <intOption name="LDVAL" description="Reload value [0-65535]"
          toolTip="Value loaded in timer register on roll-over"
@@ -36,7 +36,7 @@
       <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
-   </menu>
+   </page>
    <template>
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n

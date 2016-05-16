@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Root fileElement -->
-<!ELEMENT root (menu*,validate*,template) >
+<!ELEMENT root ((page|menu*),validate*,template) >
    <!ATTLIST root xmlns:xi CDATA #IMPLIED>
 
+<!ELEMENT page ((intOption|choiceOption|binaryOption|xi:include|menu)*) >
+   <!ATTLIST page xmlns:xi CDATA #IMPLIED>
+   <!ATTLIST page name         CDATA        #REQUIRED>
+   <!ATTLIST page description  CDATA        #REQUIRED>
+   
 <!ELEMENT menu ((intOption|choiceOption|binaryOption|xi:include|menu)*) >
    <!ATTLIST menu xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST menu name         CDATA        #REQUIRED>
+   <!ATTLIST menu key          CDATA        #IMPLIED>
    <!ATTLIST menu description  CDATA        #REQUIRED>
+   <!ATTLIST menu toolTip      CDATA        "">
    
 <!ELEMENT intOption EMPTY >
+   <!ATTLIST intOption constant     (false|true) "false">
    <!ATTLIST intOption name         CDATA        #REQUIRED>
+   <!ATTLIST intOption key          CDATA        #IMPLIED>
+   <!ATTLIST intOption alias        (false|true) "false">
    <!ATTLIST intOption description  CDATA        #REQUIRED>
    <!ATTLIST intOption toolTip      CDATA        "">
    <!ATTLIST intOption value        CDATA        "0">
-   <!ATTLIST intOption min          CDATA        "0">
-   <!ATTLIST intOption max          CDATA        "0x7fffffffffffffff">
+   <!ATTLIST intOption min          CDATA        #IMPLIED>
+   <!ATTLIST intOption max          CDATA        #IMPLIED>
    <!ATTLIST intOption step         CDATA        "1">
-   <!ATTLIST intOption constant     (false|true) "false">
+   <!ATTLIST intOption offset       CDATA        "0">
   
 <!ELEMENT choiceOption (choice)* >
+   <!ATTLIST choiceOption constant     (false|true) "false">
    <!ATTLIST choiceOption name         CDATA        #REQUIRED>
+   <!ATTLIST choiceOption key          CDATA        #IMPLIED>
+   <!ATTLIST choiceOption alias        (false|true) "false">
    <!ATTLIST choiceOption description  CDATA        #REQUIRED>
    <!ATTLIST choiceOption toolTip      CDATA        "">
   
@@ -29,8 +42,11 @@
    <!ATTLIST choice name         CDATA        #REQUIRED>
    <!ATTLIST choice isDefault    (false|true) "false">
 
-<!ELEMENT binaryOption (choice, choice) >
+<!ELEMENT binaryOption (choice, choice, (intOption|choiceOption|binaryOption|xi:include|menu)*) >
+   <!ATTLIST binaryOption constant     (false|true) "false">
    <!ATTLIST binaryOption name         CDATA        #REQUIRED>
+   <!ATTLIST binaryOption key          CDATA        #IMPLIED>
+   <!ATTLIST binaryOption alias        (false|true) "false">
    <!ATTLIST binaryOption description  CDATA        #REQUIRED>
    <!ATTLIST binaryOption toolTip      CDATA        "">
 

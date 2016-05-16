@@ -3,7 +3,7 @@
 <!-- ftm.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="_instance" description="Flex timer">
+   <page name="_instance" description="Real-time Clock">
 
       <choiceOption name="CR_SCP" description="Oscillator load capacitance"
          toolTip="Configures the oscillator load capacitance">
@@ -55,19 +55,31 @@
          <choice value="0" name="Wakeup pin is disabled" />
          <choice value="1" name="Wakeup pin is enabled" />
       </binaryOption>
-   </menu>
+      
+      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+         toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
+         <choice value="false" name="No handler installed" />
+         <choice value="true" name="Handler installed" />
+      </binaryOption>
+
+      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+         toolTip="Sets the priority level used to configure the NVIC"
+         value="0" min="0" max="15" />
+      
+   </page>
+   
    <template>
-      \t//! RTC Oscillator Enable\n
-      \tstatic constexpr uint32_t CR_OSCE_M  = ($(CR_OSCE)&lt;&lt;RTC_CR_OSCE_SHIFT);\n\n
-      \t//!  RTC 32kHz Clock Output\n
-      \tstatic constexpr uint32_t CR_CLKO_M  = ($(CR_CLKO)&lt;&lt;RTC_CR_CLKO_SHIFT);\n\n
-      \t//! Update Mode\n
-      \tstatic constexpr uint32_t CR_UM_M    = ($(CR_UM)&lt;&lt;RTC_CR_UM_SHIFT);\n\n
-      \t//! Supervisor Access\n
-      \tstatic constexpr uint32_t CR_SUP_M   = ($(CR_SUP)&lt;&lt;RTC_CR_SUP_SHIFT);\n\n
-      \t//! Wakeup Pin Enable\n
-      \tstatic constexpr uint32_t CR_WPE_M   = ($(CR_WPE)&lt;&lt;RTC_CR_WPE_SHIFT);\n\n
-      \t//! Oscillator load capacitance\n
-      \tstatic constexpr uint32_t CR_SCP_M   = ($(CR_SCP)&lt;&lt;RTC_CR_SC16P_SHIFT);\n\n
+      \t//! Indicates interrupt handler has been installed
+      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
+      \t//! Default IRQ level\n
+      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \t//! Oscillator control register\n
+      \tstatic constexpr uint32_t RTC_CR =
+      \t   ($(CR_OSCE)&lt;&lt;RTC_CR_OSCE_SHIFT)|
+      \t   ($(CR_CLKO)&lt;&lt;RTC_CR_CLKO_SHIFT)|
+      \t   ($(CR_UM)&lt;&lt;RTC_CR_UM_SHIFT)|
+      \t   ($(CR_SUP)&lt;&lt;RTC_CR_SUP_SHIFT)|
+      \t   ($(CR_WPE)&lt;&lt;RTC_CR_WPE_SHIFT)|
+      \t   ($(CR_SCP)&lt;&lt;RTC_CR_SC16P_SHIFT);\n\n
    </template>
 </root>
