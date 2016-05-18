@@ -278,14 +278,14 @@ public:
  *
  * Example
  * @code
- * // Instantiate the ADC channel (for ADC0 channel 6)
- * using Adc0_ch6 = USBDM::Adc0Channel<6>;
+ * // Instantiate the differential ADC channels (for ADC_DM0, ADC_DP0)
+ * using Adc0_diff0 = USBDM::Adc0DiffChannel<0>;
  *
  * // Set ADC resolution
- * Adc0_ch6.setMode(resolution_16bit_se);
+ * Adc0_diff0.setMode(resolution_16bit_se);
  *
  * // Read ADC value
- * uint32_t value = Adc0_ch6.readAnalogue();
+ * uint32_t value = Adc0_diff0.readAnalogue();
  * @endcode
  *
  * @tparam channel ADC channel
@@ -338,6 +338,46 @@ public:
     */
    static int readAnalogue() {
       return AdcBase_T::readAnalogue(channel);
+   };
+};
+/**
+ *
+ * Template class representing a ADC0 differential channel
+ *
+ * Example
+ * @code
+ * // Instantiate the differential ADC channels (for ADC_DM0, ADC_DP0)
+ * using Adc1_diff0 = USBDM::Adc0DiffChannel<0>;
+ *
+ * // Set ADC resolution
+ * Adc1_diff0.setMode(resolution_16bit_se);
+ *
+ * // Read ADC value
+ * uint32_t value = Adc1_diff0.readAnalogue();
+ * @endcode
+ *
+ * @tparam channel ADC channel
+ */
+template<int channel>
+class Adc1DiffChannel : public AdcBase_T<Adc1Info>, CheckSignal<Adc1Info::InfoDP, channel>, CheckSignal<Adc1Info::InfoDM, channel> {
+
+public:
+   /**
+    * Initiates a conversion but does not wait for it to complete\n
+    * Intended for use with interrupts
+    *
+    * @param channel The ADC channel to use
+    */
+   static void startConversion() {
+      AdcBase_T::startConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
+   };
+   /**
+    * Initiates a conversion and waits for it to complete
+    *
+    * @return - the result of the conversion
+    */
+   static int readAnalogue() {
+      return AdcBase_T::readAnalogue(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
    };
 };
 /**

@@ -26,7 +26,7 @@ namespace USBDM {
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::Gpio_T<SIM_SCGC5_PORTA_SHIFT, PORTA_BasePtr, 3, GPIOA_BasePtr> pta3;
+ * USBDM::Gpio_T<SIM_SCGC5_PORTA_MASK, PORTA_BasePtr, GPIOA_BasePtr, 3,  PORT_PCR_MUX(0)> pta3;
  *
  * // Set as digital output
  * pta3.setOutput();
@@ -54,7 +54,7 @@ namespace USBDM {
  *
  * @endcode
  *
- * @tparam clockMask       Clock mask for PORT (PCR register array) associated with GPIO
+ * @tparam clockMask       Clock mask for PORT (PCR register) associated with GPIO
  * @tparam pcrAddress      Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
@@ -332,7 +332,8 @@ public:
  *
  * @tparam bitNum        Bit number in the port
  */
-template<uint8_t bitNum> using GpioA = Gpio_T<GpioAInfo, bitNum>;
+template<uint8_t bitNum> class GpioA : public Gpio_T<GpioAInfo, bitNum> {};
+
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
  *
@@ -366,7 +367,7 @@ template<uint8_t bitNum> using GpioA = Gpio_T<GpioAInfo, bitNum>;
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioAField = Field_T<GpioAInfo, left, right>;
+template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left, right> {};
 #endif
 
 #ifdef USBDM_GPIOB_IS_DEFINED
@@ -405,7 +406,7 @@ template<int left, int right> using GpioAField = Field_T<GpioAInfo, left, right>
  *
  * @tparam bitNum        Bit number in the port
  */
-template<uint8_t bitNum> using GpioB = Gpio_T<GpioBInfo, bitNum>;
+template<uint8_t bitNum> class GpioB : public Gpio_T<GpioBInfo, bitNum> {};
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -440,7 +441,7 @@ template<uint8_t bitNum> using GpioB = Gpio_T<GpioBInfo, bitNum>;
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioBField = Field_T<GpioBInfo, left, right>;
+template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left, right> {};
 #endif
 
 #ifdef USBDM_GPIOC_IS_DEFINED
@@ -479,7 +480,7 @@ template<int left, int right> using GpioBField = Field_T<GpioBInfo, left, right>
  *
  * @tparam bitNum        Bit number in the port
  */
-template<uint8_t bitNum> using GpioC = Gpio_T<GpioCInfo, bitNum>;
+template<uint8_t bitNum> class GpioC : public Gpio_T<GpioCInfo, bitNum> {};
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -514,7 +515,7 @@ template<uint8_t bitNum> using GpioC = Gpio_T<GpioCInfo, bitNum>;
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioCField = Field_T<GpioCInfo, left, right>;
+template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left, right> {};
 #endif
 
 #ifdef USBDM_GPIOD_IS_DEFINED
@@ -553,7 +554,7 @@ template<int left, int right> using GpioCField = Field_T<GpioCInfo, left, right>
  *
  * @tparam bitNum        Bit number in the port
  */
-template<uint8_t bitNum> using GpioD = Gpio_T<GpioDInfo, bitNum>;
+template<uint8_t bitNum> class GpioD : public Gpio_T<GpioDInfo, bitNum> {};
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -588,45 +589,10 @@ template<uint8_t bitNum> using GpioD = Gpio_T<GpioDInfo, bitNum>;
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  */
-template<int left, int right> using GpioDField = Field_T<GpioDInfo, left, right>;
+template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left, right> {};
 #endif
 
 #ifdef USBDM_GPIOE_IS_DEFINED
-/**
- * @brief Convenience template for GpioE fields. See @ref Field_T
- *
- * <b>Usage</b>
- * @code
- * // Instantiate for bit 6 down to 3 of GpioE
- * GpioEField<6,3> GpioE6_3
- *
- * // Set as digital output
- * GpioE6_3.setOutput();
- *
- * // Write value to field
- * GpioE6_3.write(0x53);
- *
- * // Clear all of field
- * GpioE6_3.bitClear();
- *
- * // Clear lower two bits of field
- * GpioE6_3.bitClear(0x3);
- *
- * // Set lower two bits of field
- * GpioE6_3.bitSet(0x3);
- *
- * // Set as digital input
- * GpioE6_3.setInput();
- *
- * // Read pin as int value
- * int x = GpioE6_3.read();
- * @endcode
- *
- * @tparam left          Bit number of leftmost bit in port (inclusive)
- * @tparam right         Bit number of rightmost bit in port (inclusive)
- */
-template<int left, int right> using GpioEField = Field_T<GpioEInfo, left, right>;
-
 /**
  * @brief Convenience template for GpioE. See @ref Gpio_T
  *
@@ -662,7 +628,42 @@ template<int left, int right> using GpioEField = Field_T<GpioEInfo, left, right>
  *
  * @tparam bitNum        Bit number in the port
  */
-template<uint8_t bitNum> using GpioE = Gpio_T<GpioEInfo, bitNum>;
+
+template<uint8_t bitNum> class GpioE : public Gpio_T<GpioEInfo, bitNum> {};
+/**
+ * @brief Convenience template for GpioE fields. See @ref Field_T
+ *
+ * <b>Usage</b>
+ * @code
+ * // Instantiate for bit 6 down to 3 of GpioE
+ * GpioEField<6,3> GpioE6_3
+ *
+ * // Set as digital output
+ * GpioE6_3.setOutput();
+ *
+ * // Write value to field
+ * GpioE6_3.write(0x53);
+ *
+ * // Clear all of field
+ * GpioE6_3.bitClear();
+ *
+ * // Clear lower two bits of field
+ * GpioE6_3.bitClear(0x3);
+ *
+ * // Set lower two bits of field
+ * GpioE6_3.bitSet(0x3);
+ *
+ * // Set as digital input
+ * GpioE6_3.setInput();
+ *
+ * // Read pin as int value
+ * int x = GpioE6_3.read();
+ * @endcode
+ *
+ * @tparam left          Bit number of leftmost bit in port (inclusive)
+ * @tparam right         Bit number of rightmost bit in port (inclusive)
+ */
+template<int left, int right> class GpioEField : public Field_T<GpioEInfo, left, right> {};
 #endif
 
 /**

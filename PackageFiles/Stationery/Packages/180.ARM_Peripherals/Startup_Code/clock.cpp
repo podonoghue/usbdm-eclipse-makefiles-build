@@ -22,6 +22,8 @@
 #include "stdbool.h"
 #include "pin_mapping.h"
 
+using namespace USBDM;
+
 // Some MCUs call OSC0 just OSC
 #ifndef OSC0
 #define OSC0 OSC
@@ -44,7 +46,7 @@ void hsRunMode(bool enable) {
    if (enable) {
       SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
       while ((SMC->PMSTAT & 0x80) == 0) {
-         // wait for mode change
+         // Wait for mode change
          __asm__("nop");
       }
       // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
@@ -122,55 +124,224 @@ static void doClockGating() {
    SystemCoreClockUpdate();
 }
 
+/** Current clock mode (FEI out of reset) */
+McgInfo::ClockMode currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
+
+static constexpr uint8_t clockTransitionTable[8][8] = {
+      /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
+      /* ClockMode_FEI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+      /* ClockMode_FEE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+      /* ClockMode_FBI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_BLPI, McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+      /* ClockMode_BLPI, */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI, },
+      /* ClockMode_FBE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
+      /* ClockMode_BLPE, */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
+      /* ClockMode_PBE,  */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
+      /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
+};
+
+/**
+ * Transition from current clock mode to mode given
+ *
+ * @param to CLock mode to transition to
+ */
+int clockTransition(McgInfo::ClockMode to) {
+   constexpr volatile MCG_Type* mcg = (volatile MCG_Type*)McgInfo::basePtr;
+
+   if (to == McgInfo::ClockMode_None) {
+      return -1;
+   }
+   int transitionCount = 0;
+   if (currentClockMode == McgInfo::ClockMode_None) {
+      currentClockMode = McgInfo::ClockMode_FEI;
+      mcg->C2 = McgInfo::MCG_C2;
+   }
+   do {
+      McgInfo::ClockMode next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
+      switch (next) {
+
+      case McgInfo::ClockMode_None:
+      case McgInfo::ClockMode_FEI: // From FEE, FBI, FBE or reset(FEI)
+
+         mcg->C2 = McgInfo::MCG_C2;
+
+         mcg->C1 =
+               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
+               MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+         // Wait for S_IREFST to indicate FLL Reference has switched to IRC
+         do {
+            __asm__("nop");
+         } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(1)));
+
+         // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
+         do {
+            __asm__("nop");
+         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
+
+         // Set FLL Parameters
+         mcg->C4 = (mcg->C4&~(MCG_C4_DMX32_MASK|MCG_C4_DRST_DRS_MASK))|McgInfo::MCG_C4;
+         break;
+
+      case McgInfo::ClockMode_FEE: // from FEI, FBI or FBE
+         mcg->C1 =
+               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
+               MCG_C1_IREFS(0)          | // IREFS    = 0     -> External reference clock is FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+         // Wait for S_IREFST to indicate FLL Reference has switched to ERC
+         do {
+            __asm__("nop");
+         } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(0)));
+
+         // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
+         do {
+            __asm__("nop");
+         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
+
+         break;
+
+      case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
+         mcg->C1 =
+               MCG_C1_CLKS(1)           | // CLKS     = 1     -> Internal reference clock is selected
+               MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+         mcg->C2 &= ~MCG_C2_LP_MASK;
+
+         // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
+         do {
+            __asm__("nop");
+         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(1));
+         break;
+
+      case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
+         mcg->C1 =
+               MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
+               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+         mcg->C2 &= ~MCG_C2_LP_MASK;
+         // Select FLL as MCG clock source
+         mcg->C6 &= ~MCG_C6_PLLS_M;
+         break;
+
+      case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
+         mcg->C1 =
+               MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
+               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+         mcg->C2 &= ~MCG_C2_LP_MASK;
+         // Select PLL as MCG clock source
+         mcg->C6 |= MCG_C6_PLLS_M;
+
+         mcg->C5  = McgInfo::MCG_C5;
+         mcg->C6  = McgInfo::MCG_C6;
+         break;
+
+      case McgInfo::ClockMode_PEE: // from PEE
+         mcg->C1 =
+               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of PLLCS is selected
+               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+         break;
+
+      case McgInfo::ClockMode_BLPI: // from FBI
+         mcg->C2 |= MCG_C2_LP_MASK;
+         break;
+
+      case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
+         mcg->C2 |= MCG_C2_LP_MASK;
+         break;
+      }
+      currentClockMode = next;
+      if (transitionCount++>5) {
+         return -1;
+      }
+   } while (currentClockMode != to);
+   return 0;
+}
+
+static void osc_initialise() {
+#ifdef USBDM_OSC0_IS_DEFINED
+   {
+      constexpr volatile OSC_Type* osc = (volatile OSC_Type*)Osc0Info::basePtr;
+
+      // XTAL/EXTAL Pins
+      USBDM::Osc0Info::initPCRs();
+
+      // Configure the Crystal Oscillator
+      osc->CR  = USBDM::Osc0Info::OSC_CR;
+#ifdef OSC_DIV_ERPS_MASK
+      osc->DIV = USBDM::Osc0Info::OSC_DIV;
+#endif
+   }
+#endif // USBDM_OSC0_IS_DEFINED
+}
+
+static void rtc_initialise() {
+#ifdef USBDM_RTC_IS_DEFINED
+   {
+      constexpr volatile uint32_t* rtcClockReg = (volatile uint32_t*)RtcInfo::clockReg;
+      constexpr volatile RTC_Type* rtc         = (volatile RTC_Type*)RtcInfo::basePtr;
+
+      // XTAL32/EXTAL32 Pins
+      USBDM::RtcInfo::initPCRs();
+
+      // Configure the RTC Crystal Oscillator
+      *rtcClockReg |= USBDM::RtcInfo::clockMask;
+      rtc->CR       = USBDM::RtcInfo::RTC_CR;
+   }
+#endif // USBDM_RTC_IS_DEFINED
+}
+
 /*! @brief Sets up the clock out of RESET
  *
  */
 void clock_initialise(void) {
 
-   if (USBDM::McgInfo::CLOCK_MODE_ == CLOCK_MODE_NONE) {
+   currentClockMode = McgInfo::ClockMode::ClockMode_None;
+
+   osc_initialise();
+   rtc_initialise();
+
+
+   if (McgInfo::clockMode == McgInfo::ClockMode::ClockMode_None) {
       // No clock setup
       doClockGating();
       return;
    }
 
-#ifdef USBDM_OSC0_IS_DEFINED
-   // XTAL/EXTAL Pins
-   USBDM::Osc0Info::initPCRs();
-
-   // Configure the Crystal Oscillator
-   OSC0->CR  = USBDM::Osc0Info::OSC_CR;
-#ifdef OSC_DIV_ERPS_MASK
-   OSC0->DIV = USBDM::Osc0Info::OSC_DIV;
-#endif
-#endif
-
-#ifdef USBDM_RTC_IS_DEFINED
-   // XTAL32/EXTAL32 Pins
-   USBDM::RtcInfo::initPCRs();
-
-   // Configure the RTC Crystal Oscillator
-   *(volatile uint32_t*)USBDM::RtcInfo::clockReg |= USBDM::RtcInfo::clockMask;
-   *(volatile uint32_t*)USBDM::RtcInfo::basePtr   = USBDM::RtcInfo::RTC_CR;
-#endif // USBDM_RTC_IS_DEFINED
-
-
-#if (MCG_C7_OSCSEL_V == 2)
-   // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-   SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
-   USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
-#endif
+   if (McgInfo::MCG_C7&&MCG_C7_OSCSEL_MASK) {
+      // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
+      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
+   }
 
    // Select OSCCLK Source
-   MCG->C7 = MCG_C7_OSCSEL_M; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+   MCG->C7 = McgInfo::MCG_C7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 
    // Fast Internal Clock divider
-   MCG->SC = MCG_SC_FCRDIV_M;
+   MCG->SC = McgInfo::MCG_SC;
+
+   clockTransition(McgInfo::clockMode);
+
+   doClockGating();
+   return;
+
+#if 0
 
    // Out of reset MCG is in FEI mode
    // =============================================================
 
    // Set conservative SIM clock dividers BEFORE switching to ensure the clock speed remain within specification
    SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(3) | SIM_CLKDIV1_OUTDIV2(7) | SIM_CLKDIV1_OUTDIV3(3) | SIM_CLKDIV1_OUTDIV4(7);
+
+   clockTransition(McgInfo::ClockMode_FEI);
+
+   doClockGating();
+   SystemCoreClockUpdate();
+   return;
 
    // Switch from FEI -> FEI/FBI/FEE/FBE
    // =============================================================
@@ -313,6 +484,7 @@ void clock_initialise(void) {
          MCG_C2_IRCS_M;         // IRCS   = 0,1   -> Select slow/fast internal clock for internal reference
 
 #endif // (CLOCK_MODE == CLOCK_MODE_BLPE) || (CLOCK_MODE == CLOCK_MODE_BLPI)
+#endif
 }
 
 /*!
@@ -323,48 +495,48 @@ void clock_initialise(void) {
 void SystemCoreClockUpdate(void) {
    uint32_t oscerclk = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = OSCCLK_CLOCK; break;
-      case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
-      case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = IRC48M_CLOCK; break;
+   case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = OSCCLK_CLOCK; break;
+   case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
+   case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = IRC48M_CLOCK; break;
    }
    switch (MCG->S&MCG_S_CLKST_MASK) {
-      case MCG_S_CLKST(0) : // FLL
-         SystemCoreClock = (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
-         if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
-            SystemCoreClock *= oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-            if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
-               if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
-                  SystemCoreClock /= 20;
-               }
-               else if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
-                  SystemCoreClock /= 12;
+   case MCG_S_CLKST(0) : // FLL
+               SystemCoreClock = (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
+   if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
+      SystemCoreClock *= oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+      if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
+         if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
+            SystemCoreClock /= 20;
+         }
+         else if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
+            SystemCoreClock /= 12;
+         }
+         else {
+            SystemCoreClock /= 32;
+         }
+      }
+   }
+   else {
+      SystemCoreClock *= SYSTEM_SLOW_IRC_CLOCK;
+   }
+   SystemCoreClock *= ((MCG->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1;
+   break;
+   case MCG_S_CLKST(1) : // Internal Reference Clock
+               if ((MCG->C2&MCG_C2_IRCS_MASK) != 0) {
+                  SystemCoreClock = SYSTEM_FAST_IRC_CLOCK/(1<<((MCG->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT));
                }
                else {
-                  SystemCoreClock /= 32;
+                  SystemCoreClock = SYSTEM_SLOW_IRC_CLOCK;
                }
-            }
-         }
-         else {
-            SystemCoreClock *= SYSTEM_SLOW_IRC_CLOCK;
-         }
-         SystemCoreClock *= ((MCG->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1;
-      break;
-      case MCG_S_CLKST(1) : // Internal Reference Clock
-         if ((MCG->C2&MCG_C2_IRCS_MASK) != 0) {
-            SystemCoreClock = SYSTEM_FAST_IRC_CLOCK/(1<<((MCG->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT));
-         }
-         else {
-            SystemCoreClock = SYSTEM_SLOW_IRC_CLOCK;
-         }
-         break;
-      case MCG_S_CLKST(2) : // External Reference Clock
-         SystemCoreClock = oscerclk;
-         break;
-      case MCG_S_CLKST(3) : // PLL
-         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
-         SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
-         SystemCoreClock *= 10;
-         break;
+   break;
+   case MCG_S_CLKST(2) : // External Reference Clock
+               SystemCoreClock = oscerclk;
+   break;
+   case MCG_S_CLKST(3) : // PLL
+               SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
+   SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
+   SystemCoreClock *= 10;
+   break;
    }
    SystemBusClock    = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
    SystemCoreClock   = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
