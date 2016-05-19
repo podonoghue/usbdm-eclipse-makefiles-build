@@ -1,5 +1,5 @@
 /*
- * clock-MK22F512M12.c
+ * clock-MK22F512M12.cpp
  *
  *  Used for MK22FN512M12
  *

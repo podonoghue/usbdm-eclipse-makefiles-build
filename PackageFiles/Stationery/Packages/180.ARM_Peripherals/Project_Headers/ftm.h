@@ -382,6 +382,44 @@ public:
 
 template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
 
+/**
+ * Template class representing a FTM timer channel
+ *
+ * Example
+ * @code
+ * // Instantiate the timer channel (for FTM0 channel 6)
+ * using Ftm0_ch6 = USBDM::FtmChannel<FTM0Info, 6>;
+ *
+ * // Initialise PWM with initial period and alignment
+ * Ftm0_ch6.setMode(200, PwmIO::ftm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * Ftm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * Ftm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam channel FTM timer channel
+ */
+template <class Info, int channel>
+class FtmChannel_T : public FtmBase_T<Info>, CheckSignal<Ftm0Info, channel> {
+
+public:
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
+   static void setDutyCycle(int dutyCycle) {
+      FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
+   }
+
+   static void setPCR(uint32_t pcrValue) {
+      PcrTable_T<Info,  1>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   }
+};
+
 #ifdef USBDM_FTM0_IS_DEFINED
 /**
  * Template class representing a FTM0 timer channel
@@ -516,7 +554,7 @@ public:
    static void enable() {
       Info::InfoQUAD::initPCRs();
 
-      FtmBase_T<Info>::initialise(0, ftm_quadrature);
+      FtmBase_T<Info>::configure(0, ftm_quadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

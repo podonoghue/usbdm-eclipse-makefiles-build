@@ -24,6 +24,7 @@
    <!ATTLIST intOption description  CDATA        #REQUIRED>
    <!ATTLIST intOption toolTip      CDATA        "">
    <!ATTLIST intOption value        CDATA        "0">
+   <!ATTLIST intOption units        (None|Hz|Seconds)    "None">
    <!ATTLIST intOption min          CDATA        #IMPLIED>
    <!ATTLIST intOption max          CDATA        #IMPLIED>
    <!ATTLIST intOption step         CDATA        "1">
@@ -45,6 +46,7 @@
    <!ATTLIST choiceOption alias        (false|true) "false">
    <!ATTLIST choiceOption description  CDATA        #REQUIRED>
    <!ATTLIST choiceOption toolTip      CDATA        "">
+   <!ATTLIST choiceOption units        (None|Hz|Seconds)    "None">
   
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value        CDATA        #REQUIRED>
