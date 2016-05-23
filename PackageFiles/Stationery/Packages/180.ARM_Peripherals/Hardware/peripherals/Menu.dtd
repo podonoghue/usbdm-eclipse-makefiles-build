@@ -24,9 +24,12 @@
    <!ATTLIST intOption toolTip      CDATA        "">
    <!ATTLIST intOption value        CDATA        "0">
    <!ATTLIST intOption units        (None|Hz|Seconds)    "None">
-   <!ATTLIST intOption min          CDATA        #IMPLIED>
-   <!ATTLIST intOption max          CDATA        #IMPLIED>
    <!ATTLIST intOption step         CDATA        "1">
+   <!-- Minimum value (displayed value) -->
+   <!ATTLIST intOption min          CDATA        #IMPLIED>
+   <!-- Maximum value (displayed value) -->
+   <!ATTLIST intOption max          CDATA        #IMPLIED>
+   <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset       CDATA        "0">
   
 <!ELEMENT aliasOption EMPTY >

@@ -332,7 +332,6 @@
    
       <menu name="FLL" description="FLL Settings">
          <binaryOption name="fll_enabled"
-            constant="true" 
             description="Enable state of FLL"
             toolTip="Determined from clock mode selected" >
             <choice value="0" name="Inactive" />
