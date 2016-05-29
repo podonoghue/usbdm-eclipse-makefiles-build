@@ -7141,7 +7141,7 @@ typedef struct {                                /*       OPAMP0 Structure       
 */
 
 /* ================================================================================ */
-/* ================           OSC0 (file:OSC0_MK_X)                ================ */
+/* ================           OSC0 (file:OSC0_MK)                  ================ */
 /* ================================================================================ */
 
 /**
@@ -7170,6 +7170,9 @@ typedef struct {                                /*       OSC0 Structure         
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
+#define OSC_CR_SCP_MASK                          (0x0FUL << OSC_CR_SCP_SHIFT)                        /*!< OSC0_CR: SCP Mask                       */
+#define OSC_CR_SCP_SHIFT                         0                                                   /*!< OSC0_CR: SCP Position                   */
+#define OSC_CR_SCP(x)                            (((uint8_t)(((uint8_t)(x))<<OSC_CR_SCP_SHIFT))&OSC_CR_SCP_MASK) /*!< OSC0_CR                                 */
 #define OSC_CR_SC16P_MASK                        (0x01UL << OSC_CR_SC16P_SHIFT)                      /*!< OSC0_CR: SC16P Mask                     */
 #define OSC_CR_SC16P_SHIFT                       0                                                   /*!< OSC0_CR: SC16P Position                 */
 #define OSC_CR_SC16P(x)                          (((uint8_t)(((uint8_t)(x))<<OSC_CR_SC16P_SHIFT))&OSC_CR_SC16P_MASK) /*!< OSC0_CR                                 */
@@ -8067,6 +8070,9 @@ typedef struct {                                /*       RTC Structure          
 #define RTC_CR_CLKO_MASK                         (0x01UL << RTC_CR_CLKO_SHIFT)                       /*!< RTC_CR: CLKO Mask                       */
 #define RTC_CR_CLKO_SHIFT                        9                                                   /*!< RTC_CR: CLKO Position                   */
 #define RTC_CR_CLKO(x)                           (((uint32_t)(((uint32_t)(x))<<RTC_CR_CLKO_SHIFT))&RTC_CR_CLKO_MASK) /*!< RTC_CR                                  */
+#define RTC_CR_SCP_MASK                          (0x0FUL << RTC_CR_SCP_SHIFT)                        /*!< RTC_CR: SCP Mask                        */
+#define RTC_CR_SCP_SHIFT                         10                                                  /*!< RTC_CR: SCP Position                    */
+#define RTC_CR_SCP(x)                            (((uint32_t)(((uint32_t)(x))<<RTC_CR_SCP_SHIFT))&RTC_CR_SCP_MASK) /*!< RTC_CR                                  */
 #define RTC_CR_SC16P_MASK                        (0x01UL << RTC_CR_SC16P_SHIFT)                      /*!< RTC_CR: SC16P Mask                      */
 #define RTC_CR_SC16P_SHIFT                       10                                                  /*!< RTC_CR: SC16P Position                  */
 #define RTC_CR_SC16P(x)                          (((uint32_t)(((uint32_t)(x))<<RTC_CR_SC16P_SHIFT))&RTC_CR_SC16P_MASK) /*!< RTC_CR                                  */
@@ -8183,7 +8189,7 @@ typedef struct {                                /*       RTC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SDHC (file:SDHC_MK10DZ10)            ================ */
+/* ================           SDHC0 (file:SDHC0_MK10DZ10)          ================ */
 /* ================================================================================ */
 
 /**
@@ -8194,7 +8200,7 @@ typedef struct {                                /*       RTC Structure          
 * @brief Struct for SDHC
 * @{
 */
-typedef struct {                                /*       SDHC Structure                                               */
+typedef struct {                                /*       SDHC0 Structure                                              */
    __IO uint32_t  DSADDR;                       /**< 0000: DMA System Address Register                                  */
    __IO uint32_t  BLKATTR;                      /**< 0004: Block Attributes Register                                    */
    __IO uint32_t  CMDARG;                       /**< 0008: Command Argument Register                                    */
@@ -8219,14 +8225,14 @@ typedef struct {                                /*       SDHC Structure         
    __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot Register                                            */
    __I  uint32_t  RESERVED2[13];               
    __I  uint32_t  HOSTVER;                      /**< 00FC: Host Controller Version                                      */
-} SDHC_Type;
+} SDHC0_Type;
 
 /**
  * @} */ /* End group SDHC_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'SDHC' Position & Mask macros                        ----------- */
+/* -----------     'SDHC0' Position & Mask macros                       ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -8235,511 +8241,511 @@ typedef struct {                                /*       SDHC Structure         
 * @{
 */
 /* ------- DSADDR Bit Fields                        ------ */
-#define SDHC_DSADDR_DSADDR_MASK                  (0x3FFFFFFFUL << SDHC_DSADDR_DSADDR_SHIFT)          /*!< SDHC_DSADDR: DSADDR Mask                */
-#define SDHC_DSADDR_DSADDR_SHIFT                 2                                                   /*!< SDHC_DSADDR: DSADDR Position            */
-#define SDHC_DSADDR_DSADDR(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_DSADDR_DSADDR_SHIFT))&SDHC_DSADDR_DSADDR_MASK) /*!< SDHC_DSADDR                             */
+#define SDHC0_DSADDR_DSADDR_MASK                 (0x3FFFFFFFUL << SDHC0_DSADDR_DSADDR_SHIFT)         /*!< SDHC0_DSADDR: DSADDR Mask               */
+#define SDHC0_DSADDR_DSADDR_SHIFT                2                                                   /*!< SDHC0_DSADDR: DSADDR Position           */
+#define SDHC0_DSADDR_DSADDR(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_DSADDR_DSADDR_SHIFT))&SDHC0_DSADDR_DSADDR_MASK) /*!< SDHC0_DSADDR                            */
 /* ------- BLKATTR Bit Fields                       ------ */
-#define SDHC_BLKATTR_BLKSIZE_MASK                (0x1FFFUL << SDHC_BLKATTR_BLKSIZE_SHIFT)            /*!< SDHC_BLKATTR: BLKSIZE Mask              */
-#define SDHC_BLKATTR_BLKSIZE_SHIFT               0                                                   /*!< SDHC_BLKATTR: BLKSIZE Position          */
-#define SDHC_BLKATTR_BLKSIZE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_BLKATTR_BLKSIZE_SHIFT))&SDHC_BLKATTR_BLKSIZE_MASK) /*!< SDHC_BLKATTR                            */
-#define SDHC_BLKATTR_BLKCNT_MASK                 (0xFFFFUL << SDHC_BLKATTR_BLKCNT_SHIFT)             /*!< SDHC_BLKATTR: BLKCNT Mask               */
-#define SDHC_BLKATTR_BLKCNT_SHIFT                16                                                  /*!< SDHC_BLKATTR: BLKCNT Position           */
-#define SDHC_BLKATTR_BLKCNT(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_BLKATTR_BLKCNT_SHIFT))&SDHC_BLKATTR_BLKCNT_MASK) /*!< SDHC_BLKATTR                            */
+#define SDHC0_BLKATTR_BLKSIZE_MASK               (0x1FFFUL << SDHC0_BLKATTR_BLKSIZE_SHIFT)           /*!< SDHC0_BLKATTR: BLKSIZE Mask             */
+#define SDHC0_BLKATTR_BLKSIZE_SHIFT              0                                                   /*!< SDHC0_BLKATTR: BLKSIZE Position         */
+#define SDHC0_BLKATTR_BLKSIZE(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_BLKATTR_BLKSIZE_SHIFT))&SDHC0_BLKATTR_BLKSIZE_MASK) /*!< SDHC0_BLKATTR                           */
+#define SDHC0_BLKATTR_BLKCNT_MASK                (0xFFFFUL << SDHC0_BLKATTR_BLKCNT_SHIFT)            /*!< SDHC0_BLKATTR: BLKCNT Mask              */
+#define SDHC0_BLKATTR_BLKCNT_SHIFT               16                                                  /*!< SDHC0_BLKATTR: BLKCNT Position          */
+#define SDHC0_BLKATTR_BLKCNT(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_BLKATTR_BLKCNT_SHIFT))&SDHC0_BLKATTR_BLKCNT_MASK) /*!< SDHC0_BLKATTR                           */
 /* ------- CMDARG Bit Fields                        ------ */
-#define SDHC_CMDARG_CMDARG_MASK                  (0xFFFFFFFFUL << SDHC_CMDARG_CMDARG_SHIFT)          /*!< SDHC_CMDARG: CMDARG Mask                */
-#define SDHC_CMDARG_CMDARG_SHIFT                 0                                                   /*!< SDHC_CMDARG: CMDARG Position            */
-#define SDHC_CMDARG_CMDARG(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_CMDARG_CMDARG_SHIFT))&SDHC_CMDARG_CMDARG_MASK) /*!< SDHC_CMDARG                             */
+#define SDHC0_CMDARG_CMDARG_MASK                 (0xFFFFFFFFUL << SDHC0_CMDARG_CMDARG_SHIFT)         /*!< SDHC0_CMDARG: CMDARG Mask               */
+#define SDHC0_CMDARG_CMDARG_SHIFT                0                                                   /*!< SDHC0_CMDARG: CMDARG Position           */
+#define SDHC0_CMDARG_CMDARG(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_CMDARG_CMDARG_SHIFT))&SDHC0_CMDARG_CMDARG_MASK) /*!< SDHC0_CMDARG                            */
 /* ------- XFERTYP Bit Fields                       ------ */
-#define SDHC_XFERTYP_DMAEN_MASK                  (0x01UL << SDHC_XFERTYP_DMAEN_SHIFT)                /*!< SDHC_XFERTYP: DMAEN Mask                */
-#define SDHC_XFERTYP_DMAEN_SHIFT                 0                                                   /*!< SDHC_XFERTYP: DMAEN Position            */
-#define SDHC_XFERTYP_DMAEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_DMAEN_SHIFT))&SDHC_XFERTYP_DMAEN_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_BCEN_MASK                   (0x01UL << SDHC_XFERTYP_BCEN_SHIFT)                 /*!< SDHC_XFERTYP: BCEN Mask                 */
-#define SDHC_XFERTYP_BCEN_SHIFT                  1                                                   /*!< SDHC_XFERTYP: BCEN Position             */
-#define SDHC_XFERTYP_BCEN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_BCEN_SHIFT))&SDHC_XFERTYP_BCEN_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_AC12EN_MASK                 (0x01UL << SDHC_XFERTYP_AC12EN_SHIFT)               /*!< SDHC_XFERTYP: AC12EN Mask               */
-#define SDHC_XFERTYP_AC12EN_SHIFT                2                                                   /*!< SDHC_XFERTYP: AC12EN Position           */
-#define SDHC_XFERTYP_AC12EN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_AC12EN_SHIFT))&SDHC_XFERTYP_AC12EN_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_DTDSEL_MASK                 (0x01UL << SDHC_XFERTYP_DTDSEL_SHIFT)               /*!< SDHC_XFERTYP: DTDSEL Mask               */
-#define SDHC_XFERTYP_DTDSEL_SHIFT                4                                                   /*!< SDHC_XFERTYP: DTDSEL Position           */
-#define SDHC_XFERTYP_DTDSEL(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_DTDSEL_SHIFT))&SDHC_XFERTYP_DTDSEL_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_MSBSEL_MASK                 (0x01UL << SDHC_XFERTYP_MSBSEL_SHIFT)               /*!< SDHC_XFERTYP: MSBSEL Mask               */
-#define SDHC_XFERTYP_MSBSEL_SHIFT                5                                                   /*!< SDHC_XFERTYP: MSBSEL Position           */
-#define SDHC_XFERTYP_MSBSEL(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_MSBSEL_SHIFT))&SDHC_XFERTYP_MSBSEL_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_RSPTYP_MASK                 (0x03UL << SDHC_XFERTYP_RSPTYP_SHIFT)               /*!< SDHC_XFERTYP: RSPTYP Mask               */
-#define SDHC_XFERTYP_RSPTYP_SHIFT                16                                                  /*!< SDHC_XFERTYP: RSPTYP Position           */
-#define SDHC_XFERTYP_RSPTYP(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_RSPTYP_SHIFT))&SDHC_XFERTYP_RSPTYP_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_CCCEN_MASK                  (0x01UL << SDHC_XFERTYP_CCCEN_SHIFT)                /*!< SDHC_XFERTYP: CCCEN Mask                */
-#define SDHC_XFERTYP_CCCEN_SHIFT                 19                                                  /*!< SDHC_XFERTYP: CCCEN Position            */
-#define SDHC_XFERTYP_CCCEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_CCCEN_SHIFT))&SDHC_XFERTYP_CCCEN_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_CICEN_MASK                  (0x01UL << SDHC_XFERTYP_CICEN_SHIFT)                /*!< SDHC_XFERTYP: CICEN Mask                */
-#define SDHC_XFERTYP_CICEN_SHIFT                 20                                                  /*!< SDHC_XFERTYP: CICEN Position            */
-#define SDHC_XFERTYP_CICEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_CICEN_SHIFT))&SDHC_XFERTYP_CICEN_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_DPSEL_MASK                  (0x01UL << SDHC_XFERTYP_DPSEL_SHIFT)                /*!< SDHC_XFERTYP: DPSEL Mask                */
-#define SDHC_XFERTYP_DPSEL_SHIFT                 21                                                  /*!< SDHC_XFERTYP: DPSEL Position            */
-#define SDHC_XFERTYP_DPSEL(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_DPSEL_SHIFT))&SDHC_XFERTYP_DPSEL_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_CMDTYP_MASK                 (0x03UL << SDHC_XFERTYP_CMDTYP_SHIFT)               /*!< SDHC_XFERTYP: CMDTYP Mask               */
-#define SDHC_XFERTYP_CMDTYP_SHIFT                22                                                  /*!< SDHC_XFERTYP: CMDTYP Position           */
-#define SDHC_XFERTYP_CMDTYP(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_CMDTYP_SHIFT))&SDHC_XFERTYP_CMDTYP_MASK) /*!< SDHC_XFERTYP                            */
-#define SDHC_XFERTYP_CMDINX_MASK                 (0x3FUL << SDHC_XFERTYP_CMDINX_SHIFT)               /*!< SDHC_XFERTYP: CMDINX Mask               */
-#define SDHC_XFERTYP_CMDINX_SHIFT                24                                                  /*!< SDHC_XFERTYP: CMDINX Position           */
-#define SDHC_XFERTYP_CMDINX(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_XFERTYP_CMDINX_SHIFT))&SDHC_XFERTYP_CMDINX_MASK) /*!< SDHC_XFERTYP                            */
+#define SDHC0_XFERTYP_DMAEN_MASK                 (0x01UL << SDHC0_XFERTYP_DMAEN_SHIFT)               /*!< SDHC0_XFERTYP: DMAEN Mask               */
+#define SDHC0_XFERTYP_DMAEN_SHIFT                0                                                   /*!< SDHC0_XFERTYP: DMAEN Position           */
+#define SDHC0_XFERTYP_DMAEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_DMAEN_SHIFT))&SDHC0_XFERTYP_DMAEN_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_BCEN_MASK                  (0x01UL << SDHC0_XFERTYP_BCEN_SHIFT)                /*!< SDHC0_XFERTYP: BCEN Mask                */
+#define SDHC0_XFERTYP_BCEN_SHIFT                 1                                                   /*!< SDHC0_XFERTYP: BCEN Position            */
+#define SDHC0_XFERTYP_BCEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_BCEN_SHIFT))&SDHC0_XFERTYP_BCEN_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_AC12EN_MASK                (0x01UL << SDHC0_XFERTYP_AC12EN_SHIFT)              /*!< SDHC0_XFERTYP: AC12EN Mask              */
+#define SDHC0_XFERTYP_AC12EN_SHIFT               2                                                   /*!< SDHC0_XFERTYP: AC12EN Position          */
+#define SDHC0_XFERTYP_AC12EN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_AC12EN_SHIFT))&SDHC0_XFERTYP_AC12EN_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_DTDSEL_MASK                (0x01UL << SDHC0_XFERTYP_DTDSEL_SHIFT)              /*!< SDHC0_XFERTYP: DTDSEL Mask              */
+#define SDHC0_XFERTYP_DTDSEL_SHIFT               4                                                   /*!< SDHC0_XFERTYP: DTDSEL Position          */
+#define SDHC0_XFERTYP_DTDSEL(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_DTDSEL_SHIFT))&SDHC0_XFERTYP_DTDSEL_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_MSBSEL_MASK                (0x01UL << SDHC0_XFERTYP_MSBSEL_SHIFT)              /*!< SDHC0_XFERTYP: MSBSEL Mask              */
+#define SDHC0_XFERTYP_MSBSEL_SHIFT               5                                                   /*!< SDHC0_XFERTYP: MSBSEL Position          */
+#define SDHC0_XFERTYP_MSBSEL(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_MSBSEL_SHIFT))&SDHC0_XFERTYP_MSBSEL_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_RSPTYP_MASK                (0x03UL << SDHC0_XFERTYP_RSPTYP_SHIFT)              /*!< SDHC0_XFERTYP: RSPTYP Mask              */
+#define SDHC0_XFERTYP_RSPTYP_SHIFT               16                                                  /*!< SDHC0_XFERTYP: RSPTYP Position          */
+#define SDHC0_XFERTYP_RSPTYP(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_RSPTYP_SHIFT))&SDHC0_XFERTYP_RSPTYP_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_CCCEN_MASK                 (0x01UL << SDHC0_XFERTYP_CCCEN_SHIFT)               /*!< SDHC0_XFERTYP: CCCEN Mask               */
+#define SDHC0_XFERTYP_CCCEN_SHIFT                19                                                  /*!< SDHC0_XFERTYP: CCCEN Position           */
+#define SDHC0_XFERTYP_CCCEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_CCCEN_SHIFT))&SDHC0_XFERTYP_CCCEN_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_CICEN_MASK                 (0x01UL << SDHC0_XFERTYP_CICEN_SHIFT)               /*!< SDHC0_XFERTYP: CICEN Mask               */
+#define SDHC0_XFERTYP_CICEN_SHIFT                20                                                  /*!< SDHC0_XFERTYP: CICEN Position           */
+#define SDHC0_XFERTYP_CICEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_CICEN_SHIFT))&SDHC0_XFERTYP_CICEN_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_DPSEL_MASK                 (0x01UL << SDHC0_XFERTYP_DPSEL_SHIFT)               /*!< SDHC0_XFERTYP: DPSEL Mask               */
+#define SDHC0_XFERTYP_DPSEL_SHIFT                21                                                  /*!< SDHC0_XFERTYP: DPSEL Position           */
+#define SDHC0_XFERTYP_DPSEL(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_DPSEL_SHIFT))&SDHC0_XFERTYP_DPSEL_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_CMDTYP_MASK                (0x03UL << SDHC0_XFERTYP_CMDTYP_SHIFT)              /*!< SDHC0_XFERTYP: CMDTYP Mask              */
+#define SDHC0_XFERTYP_CMDTYP_SHIFT               22                                                  /*!< SDHC0_XFERTYP: CMDTYP Position          */
+#define SDHC0_XFERTYP_CMDTYP(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_CMDTYP_SHIFT))&SDHC0_XFERTYP_CMDTYP_MASK) /*!< SDHC0_XFERTYP                           */
+#define SDHC0_XFERTYP_CMDINX_MASK                (0x3FUL << SDHC0_XFERTYP_CMDINX_SHIFT)              /*!< SDHC0_XFERTYP: CMDINX Mask              */
+#define SDHC0_XFERTYP_CMDINX_SHIFT               24                                                  /*!< SDHC0_XFERTYP: CMDINX Position          */
+#define SDHC0_XFERTYP_CMDINX(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_XFERTYP_CMDINX_SHIFT))&SDHC0_XFERTYP_CMDINX_MASK) /*!< SDHC0_XFERTYP                           */
 /* ------- CMDRSP Bit Fields                        ------ */
-#define SDHC_CMDRSP_CMDRSP0_MASK                 (0xFFFFFFFFUL << SDHC_CMDRSP_CMDRSP0_SHIFT)         /*!< SDHC_CMDRSP: CMDRSP0 Mask               */
-#define SDHC_CMDRSP_CMDRSP0_SHIFT                0                                                   /*!< SDHC_CMDRSP: CMDRSP0 Position           */
-#define SDHC_CMDRSP_CMDRSP0(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_CMDRSP_CMDRSP0_SHIFT))&SDHC_CMDRSP_CMDRSP0_MASK) /*!< SDHC_CMDRSP                             */
+#define SDHC0_CMDRSP_CMDRSP0_MASK                (0xFFFFFFFFUL << SDHC0_CMDRSP_CMDRSP0_SHIFT)        /*!< SDHC0_CMDRSP: CMDRSP0 Mask              */
+#define SDHC0_CMDRSP_CMDRSP0_SHIFT               0                                                   /*!< SDHC0_CMDRSP: CMDRSP0 Position          */
+#define SDHC0_CMDRSP_CMDRSP0(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_CMDRSP_CMDRSP0_SHIFT))&SDHC0_CMDRSP_CMDRSP0_MASK) /*!< SDHC0_CMDRSP                            */
 /* ------- DATPORT Bit Fields                       ------ */
-#define SDHC_DATPORT_DATCONT_MASK                (0xFFFFFFFFUL << SDHC_DATPORT_DATCONT_SHIFT)        /*!< SDHC_DATPORT: DATCONT Mask              */
-#define SDHC_DATPORT_DATCONT_SHIFT               0                                                   /*!< SDHC_DATPORT: DATCONT Position          */
-#define SDHC_DATPORT_DATCONT(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_DATPORT_DATCONT_SHIFT))&SDHC_DATPORT_DATCONT_MASK) /*!< SDHC_DATPORT                            */
+#define SDHC0_DATPORT_DATCONT_MASK               (0xFFFFFFFFUL << SDHC0_DATPORT_DATCONT_SHIFT)       /*!< SDHC0_DATPORT: DATCONT Mask             */
+#define SDHC0_DATPORT_DATCONT_SHIFT              0                                                   /*!< SDHC0_DATPORT: DATCONT Position         */
+#define SDHC0_DATPORT_DATCONT(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_DATPORT_DATCONT_SHIFT))&SDHC0_DATPORT_DATCONT_MASK) /*!< SDHC0_DATPORT                           */
 /* ------- PRSSTAT Bit Fields                       ------ */
-#define SDHC_PRSSTAT_CIHB_MASK                   (0x01UL << SDHC_PRSSTAT_CIHB_SHIFT)                 /*!< SDHC_PRSSTAT: CIHB Mask                 */
-#define SDHC_PRSSTAT_CIHB_SHIFT                  0                                                   /*!< SDHC_PRSSTAT: CIHB Position             */
-#define SDHC_PRSSTAT_CIHB(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_CIHB_SHIFT))&SDHC_PRSSTAT_CIHB_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_CDIHB_MASK                  (0x01UL << SDHC_PRSSTAT_CDIHB_SHIFT)                /*!< SDHC_PRSSTAT: CDIHB Mask                */
-#define SDHC_PRSSTAT_CDIHB_SHIFT                 1                                                   /*!< SDHC_PRSSTAT: CDIHB Position            */
-#define SDHC_PRSSTAT_CDIHB(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_CDIHB_SHIFT))&SDHC_PRSSTAT_CDIHB_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_DLA_MASK                    (0x01UL << SDHC_PRSSTAT_DLA_SHIFT)                  /*!< SDHC_PRSSTAT: DLA Mask                  */
-#define SDHC_PRSSTAT_DLA_SHIFT                   2                                                   /*!< SDHC_PRSSTAT: DLA Position              */
-#define SDHC_PRSSTAT_DLA(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_DLA_SHIFT))&SDHC_PRSSTAT_DLA_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_SDSTB_MASK                  (0x01UL << SDHC_PRSSTAT_SDSTB_SHIFT)                /*!< SDHC_PRSSTAT: SDSTB Mask                */
-#define SDHC_PRSSTAT_SDSTB_SHIFT                 3                                                   /*!< SDHC_PRSSTAT: SDSTB Position            */
-#define SDHC_PRSSTAT_SDSTB(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_SDSTB_SHIFT))&SDHC_PRSSTAT_SDSTB_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_IPGOFF_MASK                 (0x01UL << SDHC_PRSSTAT_IPGOFF_SHIFT)               /*!< SDHC_PRSSTAT: IPGOFF Mask               */
-#define SDHC_PRSSTAT_IPGOFF_SHIFT                4                                                   /*!< SDHC_PRSSTAT: IPGOFF Position           */
-#define SDHC_PRSSTAT_IPGOFF(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_IPGOFF_SHIFT))&SDHC_PRSSTAT_IPGOFF_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_HCKOFF_MASK                 (0x01UL << SDHC_PRSSTAT_HCKOFF_SHIFT)               /*!< SDHC_PRSSTAT: HCKOFF Mask               */
-#define SDHC_PRSSTAT_HCKOFF_SHIFT                5                                                   /*!< SDHC_PRSSTAT: HCKOFF Position           */
-#define SDHC_PRSSTAT_HCKOFF(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_HCKOFF_SHIFT))&SDHC_PRSSTAT_HCKOFF_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_PEROFF_MASK                 (0x01UL << SDHC_PRSSTAT_PEROFF_SHIFT)               /*!< SDHC_PRSSTAT: PEROFF Mask               */
-#define SDHC_PRSSTAT_PEROFF_SHIFT                6                                                   /*!< SDHC_PRSSTAT: PEROFF Position           */
-#define SDHC_PRSSTAT_PEROFF(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_PEROFF_SHIFT))&SDHC_PRSSTAT_PEROFF_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_SDOFF_MASK                  (0x01UL << SDHC_PRSSTAT_SDOFF_SHIFT)                /*!< SDHC_PRSSTAT: SDOFF Mask                */
-#define SDHC_PRSSTAT_SDOFF_SHIFT                 7                                                   /*!< SDHC_PRSSTAT: SDOFF Position            */
-#define SDHC_PRSSTAT_SDOFF(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_SDOFF_SHIFT))&SDHC_PRSSTAT_SDOFF_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_WTA_MASK                    (0x01UL << SDHC_PRSSTAT_WTA_SHIFT)                  /*!< SDHC_PRSSTAT: WTA Mask                  */
-#define SDHC_PRSSTAT_WTA_SHIFT                   8                                                   /*!< SDHC_PRSSTAT: WTA Position              */
-#define SDHC_PRSSTAT_WTA(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_WTA_SHIFT))&SDHC_PRSSTAT_WTA_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_RTA_MASK                    (0x01UL << SDHC_PRSSTAT_RTA_SHIFT)                  /*!< SDHC_PRSSTAT: RTA Mask                  */
-#define SDHC_PRSSTAT_RTA_SHIFT                   9                                                   /*!< SDHC_PRSSTAT: RTA Position              */
-#define SDHC_PRSSTAT_RTA(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_RTA_SHIFT))&SDHC_PRSSTAT_RTA_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_BWEN_MASK                   (0x01UL << SDHC_PRSSTAT_BWEN_SHIFT)                 /*!< SDHC_PRSSTAT: BWEN Mask                 */
-#define SDHC_PRSSTAT_BWEN_SHIFT                  10                                                  /*!< SDHC_PRSSTAT: BWEN Position             */
-#define SDHC_PRSSTAT_BWEN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_BWEN_SHIFT))&SDHC_PRSSTAT_BWEN_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_BREN_MASK                   (0x01UL << SDHC_PRSSTAT_BREN_SHIFT)                 /*!< SDHC_PRSSTAT: BREN Mask                 */
-#define SDHC_PRSSTAT_BREN_SHIFT                  11                                                  /*!< SDHC_PRSSTAT: BREN Position             */
-#define SDHC_PRSSTAT_BREN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_BREN_SHIFT))&SDHC_PRSSTAT_BREN_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_CINS_MASK                   (0x01UL << SDHC_PRSSTAT_CINS_SHIFT)                 /*!< SDHC_PRSSTAT: CINS Mask                 */
-#define SDHC_PRSSTAT_CINS_SHIFT                  16                                                  /*!< SDHC_PRSSTAT: CINS Position             */
-#define SDHC_PRSSTAT_CINS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_CINS_SHIFT))&SDHC_PRSSTAT_CINS_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_CLSL_MASK                   (0x01UL << SDHC_PRSSTAT_CLSL_SHIFT)                 /*!< SDHC_PRSSTAT: CLSL Mask                 */
-#define SDHC_PRSSTAT_CLSL_SHIFT                  23                                                  /*!< SDHC_PRSSTAT: CLSL Position             */
-#define SDHC_PRSSTAT_CLSL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_CLSL_SHIFT))&SDHC_PRSSTAT_CLSL_MASK) /*!< SDHC_PRSSTAT                            */
-#define SDHC_PRSSTAT_DLSL_MASK                   (0xFFUL << SDHC_PRSSTAT_DLSL_SHIFT)                 /*!< SDHC_PRSSTAT: DLSL Mask                 */
-#define SDHC_PRSSTAT_DLSL_SHIFT                  24                                                  /*!< SDHC_PRSSTAT: DLSL Position             */
-#define SDHC_PRSSTAT_DLSL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PRSSTAT_DLSL_SHIFT))&SDHC_PRSSTAT_DLSL_MASK) /*!< SDHC_PRSSTAT                            */
+#define SDHC0_PRSSTAT_CIHB_MASK                  (0x01UL << SDHC0_PRSSTAT_CIHB_SHIFT)                /*!< SDHC0_PRSSTAT: CIHB Mask                */
+#define SDHC0_PRSSTAT_CIHB_SHIFT                 0                                                   /*!< SDHC0_PRSSTAT: CIHB Position            */
+#define SDHC0_PRSSTAT_CIHB(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_CIHB_SHIFT))&SDHC0_PRSSTAT_CIHB_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_CDIHB_MASK                 (0x01UL << SDHC0_PRSSTAT_CDIHB_SHIFT)               /*!< SDHC0_PRSSTAT: CDIHB Mask               */
+#define SDHC0_PRSSTAT_CDIHB_SHIFT                1                                                   /*!< SDHC0_PRSSTAT: CDIHB Position           */
+#define SDHC0_PRSSTAT_CDIHB(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_CDIHB_SHIFT))&SDHC0_PRSSTAT_CDIHB_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_DLA_MASK                   (0x01UL << SDHC0_PRSSTAT_DLA_SHIFT)                 /*!< SDHC0_PRSSTAT: DLA Mask                 */
+#define SDHC0_PRSSTAT_DLA_SHIFT                  2                                                   /*!< SDHC0_PRSSTAT: DLA Position             */
+#define SDHC0_PRSSTAT_DLA(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_DLA_SHIFT))&SDHC0_PRSSTAT_DLA_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_SDSTB_MASK                 (0x01UL << SDHC0_PRSSTAT_SDSTB_SHIFT)               /*!< SDHC0_PRSSTAT: SDSTB Mask               */
+#define SDHC0_PRSSTAT_SDSTB_SHIFT                3                                                   /*!< SDHC0_PRSSTAT: SDSTB Position           */
+#define SDHC0_PRSSTAT_SDSTB(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_SDSTB_SHIFT))&SDHC0_PRSSTAT_SDSTB_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_IPGOFF_MASK                (0x01UL << SDHC0_PRSSTAT_IPGOFF_SHIFT)              /*!< SDHC0_PRSSTAT: IPGOFF Mask              */
+#define SDHC0_PRSSTAT_IPGOFF_SHIFT               4                                                   /*!< SDHC0_PRSSTAT: IPGOFF Position          */
+#define SDHC0_PRSSTAT_IPGOFF(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_IPGOFF_SHIFT))&SDHC0_PRSSTAT_IPGOFF_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_HCKOFF_MASK                (0x01UL << SDHC0_PRSSTAT_HCKOFF_SHIFT)              /*!< SDHC0_PRSSTAT: HCKOFF Mask              */
+#define SDHC0_PRSSTAT_HCKOFF_SHIFT               5                                                   /*!< SDHC0_PRSSTAT: HCKOFF Position          */
+#define SDHC0_PRSSTAT_HCKOFF(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_HCKOFF_SHIFT))&SDHC0_PRSSTAT_HCKOFF_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_PEROFF_MASK                (0x01UL << SDHC0_PRSSTAT_PEROFF_SHIFT)              /*!< SDHC0_PRSSTAT: PEROFF Mask              */
+#define SDHC0_PRSSTAT_PEROFF_SHIFT               6                                                   /*!< SDHC0_PRSSTAT: PEROFF Position          */
+#define SDHC0_PRSSTAT_PEROFF(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_PEROFF_SHIFT))&SDHC0_PRSSTAT_PEROFF_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_SDOFF_MASK                 (0x01UL << SDHC0_PRSSTAT_SDOFF_SHIFT)               /*!< SDHC0_PRSSTAT: SDOFF Mask               */
+#define SDHC0_PRSSTAT_SDOFF_SHIFT                7                                                   /*!< SDHC0_PRSSTAT: SDOFF Position           */
+#define SDHC0_PRSSTAT_SDOFF(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_SDOFF_SHIFT))&SDHC0_PRSSTAT_SDOFF_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_WTA_MASK                   (0x01UL << SDHC0_PRSSTAT_WTA_SHIFT)                 /*!< SDHC0_PRSSTAT: WTA Mask                 */
+#define SDHC0_PRSSTAT_WTA_SHIFT                  8                                                   /*!< SDHC0_PRSSTAT: WTA Position             */
+#define SDHC0_PRSSTAT_WTA(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_WTA_SHIFT))&SDHC0_PRSSTAT_WTA_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_RTA_MASK                   (0x01UL << SDHC0_PRSSTAT_RTA_SHIFT)                 /*!< SDHC0_PRSSTAT: RTA Mask                 */
+#define SDHC0_PRSSTAT_RTA_SHIFT                  9                                                   /*!< SDHC0_PRSSTAT: RTA Position             */
+#define SDHC0_PRSSTAT_RTA(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_RTA_SHIFT))&SDHC0_PRSSTAT_RTA_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_BWEN_MASK                  (0x01UL << SDHC0_PRSSTAT_BWEN_SHIFT)                /*!< SDHC0_PRSSTAT: BWEN Mask                */
+#define SDHC0_PRSSTAT_BWEN_SHIFT                 10                                                  /*!< SDHC0_PRSSTAT: BWEN Position            */
+#define SDHC0_PRSSTAT_BWEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_BWEN_SHIFT))&SDHC0_PRSSTAT_BWEN_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_BREN_MASK                  (0x01UL << SDHC0_PRSSTAT_BREN_SHIFT)                /*!< SDHC0_PRSSTAT: BREN Mask                */
+#define SDHC0_PRSSTAT_BREN_SHIFT                 11                                                  /*!< SDHC0_PRSSTAT: BREN Position            */
+#define SDHC0_PRSSTAT_BREN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_BREN_SHIFT))&SDHC0_PRSSTAT_BREN_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_CINS_MASK                  (0x01UL << SDHC0_PRSSTAT_CINS_SHIFT)                /*!< SDHC0_PRSSTAT: CINS Mask                */
+#define SDHC0_PRSSTAT_CINS_SHIFT                 16                                                  /*!< SDHC0_PRSSTAT: CINS Position            */
+#define SDHC0_PRSSTAT_CINS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_CINS_SHIFT))&SDHC0_PRSSTAT_CINS_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_CLSL_MASK                  (0x01UL << SDHC0_PRSSTAT_CLSL_SHIFT)                /*!< SDHC0_PRSSTAT: CLSL Mask                */
+#define SDHC0_PRSSTAT_CLSL_SHIFT                 23                                                  /*!< SDHC0_PRSSTAT: CLSL Position            */
+#define SDHC0_PRSSTAT_CLSL(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_CLSL_SHIFT))&SDHC0_PRSSTAT_CLSL_MASK) /*!< SDHC0_PRSSTAT                           */
+#define SDHC0_PRSSTAT_DLSL_MASK                  (0xFFUL << SDHC0_PRSSTAT_DLSL_SHIFT)                /*!< SDHC0_PRSSTAT: DLSL Mask                */
+#define SDHC0_PRSSTAT_DLSL_SHIFT                 24                                                  /*!< SDHC0_PRSSTAT: DLSL Position            */
+#define SDHC0_PRSSTAT_DLSL(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PRSSTAT_DLSL_SHIFT))&SDHC0_PRSSTAT_DLSL_MASK) /*!< SDHC0_PRSSTAT                           */
 /* ------- PROCTL Bit Fields                        ------ */
-#define SDHC_PROCTL_LCTL_MASK                    (0x01UL << SDHC_PROCTL_LCTL_SHIFT)                  /*!< SDHC_PROCTL: LCTL Mask                  */
-#define SDHC_PROCTL_LCTL_SHIFT                   0                                                   /*!< SDHC_PROCTL: LCTL Position              */
-#define SDHC_PROCTL_LCTL(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_LCTL_SHIFT))&SDHC_PROCTL_LCTL_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_DTW_MASK                     (0x03UL << SDHC_PROCTL_DTW_SHIFT)                   /*!< SDHC_PROCTL: DTW Mask                   */
-#define SDHC_PROCTL_DTW_SHIFT                    1                                                   /*!< SDHC_PROCTL: DTW Position               */
-#define SDHC_PROCTL_DTW(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_DTW_SHIFT))&SDHC_PROCTL_DTW_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_D3CD_MASK                    (0x01UL << SDHC_PROCTL_D3CD_SHIFT)                  /*!< SDHC_PROCTL: D3CD Mask                  */
-#define SDHC_PROCTL_D3CD_SHIFT                   3                                                   /*!< SDHC_PROCTL: D3CD Position              */
-#define SDHC_PROCTL_D3CD(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_D3CD_SHIFT))&SDHC_PROCTL_D3CD_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_EMODE_MASK                   (0x03UL << SDHC_PROCTL_EMODE_SHIFT)                 /*!< SDHC_PROCTL: EMODE Mask                 */
-#define SDHC_PROCTL_EMODE_SHIFT                  4                                                   /*!< SDHC_PROCTL: EMODE Position             */
-#define SDHC_PROCTL_EMODE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_EMODE_SHIFT))&SDHC_PROCTL_EMODE_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_CDTL_MASK                    (0x01UL << SDHC_PROCTL_CDTL_SHIFT)                  /*!< SDHC_PROCTL: CDTL Mask                  */
-#define SDHC_PROCTL_CDTL_SHIFT                   6                                                   /*!< SDHC_PROCTL: CDTL Position              */
-#define SDHC_PROCTL_CDTL(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_CDTL_SHIFT))&SDHC_PROCTL_CDTL_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_CDSS_MASK                    (0x01UL << SDHC_PROCTL_CDSS_SHIFT)                  /*!< SDHC_PROCTL: CDSS Mask                  */
-#define SDHC_PROCTL_CDSS_SHIFT                   7                                                   /*!< SDHC_PROCTL: CDSS Position              */
-#define SDHC_PROCTL_CDSS(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_CDSS_SHIFT))&SDHC_PROCTL_CDSS_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_DMAS_MASK                    (0x03UL << SDHC_PROCTL_DMAS_SHIFT)                  /*!< SDHC_PROCTL: DMAS Mask                  */
-#define SDHC_PROCTL_DMAS_SHIFT                   8                                                   /*!< SDHC_PROCTL: DMAS Position              */
-#define SDHC_PROCTL_DMAS(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_DMAS_SHIFT))&SDHC_PROCTL_DMAS_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_SABGREQ_MASK                 (0x01UL << SDHC_PROCTL_SABGREQ_SHIFT)               /*!< SDHC_PROCTL: SABGREQ Mask               */
-#define SDHC_PROCTL_SABGREQ_SHIFT                16                                                  /*!< SDHC_PROCTL: SABGREQ Position           */
-#define SDHC_PROCTL_SABGREQ(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_SABGREQ_SHIFT))&SDHC_PROCTL_SABGREQ_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_CREQ_MASK                    (0x01UL << SDHC_PROCTL_CREQ_SHIFT)                  /*!< SDHC_PROCTL: CREQ Mask                  */
-#define SDHC_PROCTL_CREQ_SHIFT                   17                                                  /*!< SDHC_PROCTL: CREQ Position              */
-#define SDHC_PROCTL_CREQ(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_CREQ_SHIFT))&SDHC_PROCTL_CREQ_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_RWCTL_MASK                   (0x01UL << SDHC_PROCTL_RWCTL_SHIFT)                 /*!< SDHC_PROCTL: RWCTL Mask                 */
-#define SDHC_PROCTL_RWCTL_SHIFT                  18                                                  /*!< SDHC_PROCTL: RWCTL Position             */
-#define SDHC_PROCTL_RWCTL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_RWCTL_SHIFT))&SDHC_PROCTL_RWCTL_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_IABG_MASK                    (0x01UL << SDHC_PROCTL_IABG_SHIFT)                  /*!< SDHC_PROCTL: IABG Mask                  */
-#define SDHC_PROCTL_IABG_SHIFT                   19                                                  /*!< SDHC_PROCTL: IABG Position              */
-#define SDHC_PROCTL_IABG(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_IABG_SHIFT))&SDHC_PROCTL_IABG_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_WECINT_MASK                  (0x01UL << SDHC_PROCTL_WECINT_SHIFT)                /*!< SDHC_PROCTL: WECINT Mask                */
-#define SDHC_PROCTL_WECINT_SHIFT                 24                                                  /*!< SDHC_PROCTL: WECINT Position            */
-#define SDHC_PROCTL_WECINT(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_WECINT_SHIFT))&SDHC_PROCTL_WECINT_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_WECINS_MASK                  (0x01UL << SDHC_PROCTL_WECINS_SHIFT)                /*!< SDHC_PROCTL: WECINS Mask                */
-#define SDHC_PROCTL_WECINS_SHIFT                 25                                                  /*!< SDHC_PROCTL: WECINS Position            */
-#define SDHC_PROCTL_WECINS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_WECINS_SHIFT))&SDHC_PROCTL_WECINS_MASK) /*!< SDHC_PROCTL                             */
-#define SDHC_PROCTL_WECRM_MASK                   (0x01UL << SDHC_PROCTL_WECRM_SHIFT)                 /*!< SDHC_PROCTL: WECRM Mask                 */
-#define SDHC_PROCTL_WECRM_SHIFT                  26                                                  /*!< SDHC_PROCTL: WECRM Position             */
-#define SDHC_PROCTL_WECRM(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_WECRM_SHIFT))&SDHC_PROCTL_WECRM_MASK) /*!< SDHC_PROCTL                             */
+#define SDHC0_PROCTL_LCTL_MASK                   (0x01UL << SDHC0_PROCTL_LCTL_SHIFT)                 /*!< SDHC0_PROCTL: LCTL Mask                 */
+#define SDHC0_PROCTL_LCTL_SHIFT                  0                                                   /*!< SDHC0_PROCTL: LCTL Position             */
+#define SDHC0_PROCTL_LCTL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_LCTL_SHIFT))&SDHC0_PROCTL_LCTL_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_DTW_MASK                    (0x03UL << SDHC0_PROCTL_DTW_SHIFT)                  /*!< SDHC0_PROCTL: DTW Mask                  */
+#define SDHC0_PROCTL_DTW_SHIFT                   1                                                   /*!< SDHC0_PROCTL: DTW Position              */
+#define SDHC0_PROCTL_DTW(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_DTW_SHIFT))&SDHC0_PROCTL_DTW_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_D3CD_MASK                   (0x01UL << SDHC0_PROCTL_D3CD_SHIFT)                 /*!< SDHC0_PROCTL: D3CD Mask                 */
+#define SDHC0_PROCTL_D3CD_SHIFT                  3                                                   /*!< SDHC0_PROCTL: D3CD Position             */
+#define SDHC0_PROCTL_D3CD(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_D3CD_SHIFT))&SDHC0_PROCTL_D3CD_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_EMODE_MASK                  (0x03UL << SDHC0_PROCTL_EMODE_SHIFT)                /*!< SDHC0_PROCTL: EMODE Mask                */
+#define SDHC0_PROCTL_EMODE_SHIFT                 4                                                   /*!< SDHC0_PROCTL: EMODE Position            */
+#define SDHC0_PROCTL_EMODE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_EMODE_SHIFT))&SDHC0_PROCTL_EMODE_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_CDTL_MASK                   (0x01UL << SDHC0_PROCTL_CDTL_SHIFT)                 /*!< SDHC0_PROCTL: CDTL Mask                 */
+#define SDHC0_PROCTL_CDTL_SHIFT                  6                                                   /*!< SDHC0_PROCTL: CDTL Position             */
+#define SDHC0_PROCTL_CDTL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_CDTL_SHIFT))&SDHC0_PROCTL_CDTL_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_CDSS_MASK                   (0x01UL << SDHC0_PROCTL_CDSS_SHIFT)                 /*!< SDHC0_PROCTL: CDSS Mask                 */
+#define SDHC0_PROCTL_CDSS_SHIFT                  7                                                   /*!< SDHC0_PROCTL: CDSS Position             */
+#define SDHC0_PROCTL_CDSS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_CDSS_SHIFT))&SDHC0_PROCTL_CDSS_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_DMAS_MASK                   (0x03UL << SDHC0_PROCTL_DMAS_SHIFT)                 /*!< SDHC0_PROCTL: DMAS Mask                 */
+#define SDHC0_PROCTL_DMAS_SHIFT                  8                                                   /*!< SDHC0_PROCTL: DMAS Position             */
+#define SDHC0_PROCTL_DMAS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_DMAS_SHIFT))&SDHC0_PROCTL_DMAS_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_SABGREQ_MASK                (0x01UL << SDHC0_PROCTL_SABGREQ_SHIFT)              /*!< SDHC0_PROCTL: SABGREQ Mask              */
+#define SDHC0_PROCTL_SABGREQ_SHIFT               16                                                  /*!< SDHC0_PROCTL: SABGREQ Position          */
+#define SDHC0_PROCTL_SABGREQ(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_SABGREQ_SHIFT))&SDHC0_PROCTL_SABGREQ_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_CREQ_MASK                   (0x01UL << SDHC0_PROCTL_CREQ_SHIFT)                 /*!< SDHC0_PROCTL: CREQ Mask                 */
+#define SDHC0_PROCTL_CREQ_SHIFT                  17                                                  /*!< SDHC0_PROCTL: CREQ Position             */
+#define SDHC0_PROCTL_CREQ(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_CREQ_SHIFT))&SDHC0_PROCTL_CREQ_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_RWCTL_MASK                  (0x01UL << SDHC0_PROCTL_RWCTL_SHIFT)                /*!< SDHC0_PROCTL: RWCTL Mask                */
+#define SDHC0_PROCTL_RWCTL_SHIFT                 18                                                  /*!< SDHC0_PROCTL: RWCTL Position            */
+#define SDHC0_PROCTL_RWCTL(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_RWCTL_SHIFT))&SDHC0_PROCTL_RWCTL_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_IABG_MASK                   (0x01UL << SDHC0_PROCTL_IABG_SHIFT)                 /*!< SDHC0_PROCTL: IABG Mask                 */
+#define SDHC0_PROCTL_IABG_SHIFT                  19                                                  /*!< SDHC0_PROCTL: IABG Position             */
+#define SDHC0_PROCTL_IABG(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_IABG_SHIFT))&SDHC0_PROCTL_IABG_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_WECINT_MASK                 (0x01UL << SDHC0_PROCTL_WECINT_SHIFT)               /*!< SDHC0_PROCTL: WECINT Mask               */
+#define SDHC0_PROCTL_WECINT_SHIFT                24                                                  /*!< SDHC0_PROCTL: WECINT Position           */
+#define SDHC0_PROCTL_WECINT(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_WECINT_SHIFT))&SDHC0_PROCTL_WECINT_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_WECINS_MASK                 (0x01UL << SDHC0_PROCTL_WECINS_SHIFT)               /*!< SDHC0_PROCTL: WECINS Mask               */
+#define SDHC0_PROCTL_WECINS_SHIFT                25                                                  /*!< SDHC0_PROCTL: WECINS Position           */
+#define SDHC0_PROCTL_WECINS(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_WECINS_SHIFT))&SDHC0_PROCTL_WECINS_MASK) /*!< SDHC0_PROCTL                            */
+#define SDHC0_PROCTL_WECRM_MASK                  (0x01UL << SDHC0_PROCTL_WECRM_SHIFT)                /*!< SDHC0_PROCTL: WECRM Mask                */
+#define SDHC0_PROCTL_WECRM_SHIFT                 26                                                  /*!< SDHC0_PROCTL: WECRM Position            */
+#define SDHC0_PROCTL_WECRM(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_PROCTL_WECRM_SHIFT))&SDHC0_PROCTL_WECRM_MASK) /*!< SDHC0_PROCTL                            */
 /* ------- SYSCTL Bit Fields                        ------ */
-#define SDHC_SYSCTL_IPGEN_MASK                   (0x01UL << SDHC_SYSCTL_IPGEN_SHIFT)                 /*!< SDHC_SYSCTL: IPGEN Mask                 */
-#define SDHC_SYSCTL_IPGEN_SHIFT                  0                                                   /*!< SDHC_SYSCTL: IPGEN Position             */
-#define SDHC_SYSCTL_IPGEN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_IPGEN_SHIFT))&SDHC_SYSCTL_IPGEN_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_HCKEN_MASK                   (0x01UL << SDHC_SYSCTL_HCKEN_SHIFT)                 /*!< SDHC_SYSCTL: HCKEN Mask                 */
-#define SDHC_SYSCTL_HCKEN_SHIFT                  1                                                   /*!< SDHC_SYSCTL: HCKEN Position             */
-#define SDHC_SYSCTL_HCKEN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_HCKEN_SHIFT))&SDHC_SYSCTL_HCKEN_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_PEREN_MASK                   (0x01UL << SDHC_SYSCTL_PEREN_SHIFT)                 /*!< SDHC_SYSCTL: PEREN Mask                 */
-#define SDHC_SYSCTL_PEREN_SHIFT                  2                                                   /*!< SDHC_SYSCTL: PEREN Position             */
-#define SDHC_SYSCTL_PEREN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_PEREN_SHIFT))&SDHC_SYSCTL_PEREN_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_SDCLKEN_MASK                 (0x01UL << SDHC_SYSCTL_SDCLKEN_SHIFT)               /*!< SDHC_SYSCTL: SDCLKEN Mask               */
-#define SDHC_SYSCTL_SDCLKEN_SHIFT                3                                                   /*!< SDHC_SYSCTL: SDCLKEN Position           */
-#define SDHC_SYSCTL_SDCLKEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_SDCLKEN_SHIFT))&SDHC_SYSCTL_SDCLKEN_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_DVS_MASK                     (0x0FUL << SDHC_SYSCTL_DVS_SHIFT)                   /*!< SDHC_SYSCTL: DVS Mask                   */
-#define SDHC_SYSCTL_DVS_SHIFT                    4                                                   /*!< SDHC_SYSCTL: DVS Position               */
-#define SDHC_SYSCTL_DVS(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_DVS_SHIFT))&SDHC_SYSCTL_DVS_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_SDCLKFS_MASK                 (0xFFUL << SDHC_SYSCTL_SDCLKFS_SHIFT)               /*!< SDHC_SYSCTL: SDCLKFS Mask               */
-#define SDHC_SYSCTL_SDCLKFS_SHIFT                8                                                   /*!< SDHC_SYSCTL: SDCLKFS Position           */
-#define SDHC_SYSCTL_SDCLKFS(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_SDCLKFS_SHIFT))&SDHC_SYSCTL_SDCLKFS_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_DTOCV_MASK                   (0x0FUL << SDHC_SYSCTL_DTOCV_SHIFT)                 /*!< SDHC_SYSCTL: DTOCV Mask                 */
-#define SDHC_SYSCTL_DTOCV_SHIFT                  16                                                  /*!< SDHC_SYSCTL: DTOCV Position             */
-#define SDHC_SYSCTL_DTOCV(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_DTOCV_SHIFT))&SDHC_SYSCTL_DTOCV_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_RSTA_MASK                    (0x01UL << SDHC_SYSCTL_RSTA_SHIFT)                  /*!< SDHC_SYSCTL: RSTA Mask                  */
-#define SDHC_SYSCTL_RSTA_SHIFT                   24                                                  /*!< SDHC_SYSCTL: RSTA Position              */
-#define SDHC_SYSCTL_RSTA(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_RSTA_SHIFT))&SDHC_SYSCTL_RSTA_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_RSTC_MASK                    (0x01UL << SDHC_SYSCTL_RSTC_SHIFT)                  /*!< SDHC_SYSCTL: RSTC Mask                  */
-#define SDHC_SYSCTL_RSTC_SHIFT                   25                                                  /*!< SDHC_SYSCTL: RSTC Position              */
-#define SDHC_SYSCTL_RSTC(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_RSTC_SHIFT))&SDHC_SYSCTL_RSTC_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_RSTD_MASK                    (0x01UL << SDHC_SYSCTL_RSTD_SHIFT)                  /*!< SDHC_SYSCTL: RSTD Mask                  */
-#define SDHC_SYSCTL_RSTD_SHIFT                   26                                                  /*!< SDHC_SYSCTL: RSTD Position              */
-#define SDHC_SYSCTL_RSTD(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_RSTD_SHIFT))&SDHC_SYSCTL_RSTD_MASK) /*!< SDHC_SYSCTL                             */
-#define SDHC_SYSCTL_INITA_MASK                   (0x01UL << SDHC_SYSCTL_INITA_SHIFT)                 /*!< SDHC_SYSCTL: INITA Mask                 */
-#define SDHC_SYSCTL_INITA_SHIFT                  27                                                  /*!< SDHC_SYSCTL: INITA Position             */
-#define SDHC_SYSCTL_INITA(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_SYSCTL_INITA_SHIFT))&SDHC_SYSCTL_INITA_MASK) /*!< SDHC_SYSCTL                             */
+#define SDHC0_SYSCTL_IPGEN_MASK                  (0x01UL << SDHC0_SYSCTL_IPGEN_SHIFT)                /*!< SDHC0_SYSCTL: IPGEN Mask                */
+#define SDHC0_SYSCTL_IPGEN_SHIFT                 0                                                   /*!< SDHC0_SYSCTL: IPGEN Position            */
+#define SDHC0_SYSCTL_IPGEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_IPGEN_SHIFT))&SDHC0_SYSCTL_IPGEN_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_HCKEN_MASK                  (0x01UL << SDHC0_SYSCTL_HCKEN_SHIFT)                /*!< SDHC0_SYSCTL: HCKEN Mask                */
+#define SDHC0_SYSCTL_HCKEN_SHIFT                 1                                                   /*!< SDHC0_SYSCTL: HCKEN Position            */
+#define SDHC0_SYSCTL_HCKEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_HCKEN_SHIFT))&SDHC0_SYSCTL_HCKEN_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_PEREN_MASK                  (0x01UL << SDHC0_SYSCTL_PEREN_SHIFT)                /*!< SDHC0_SYSCTL: PEREN Mask                */
+#define SDHC0_SYSCTL_PEREN_SHIFT                 2                                                   /*!< SDHC0_SYSCTL: PEREN Position            */
+#define SDHC0_SYSCTL_PEREN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_PEREN_SHIFT))&SDHC0_SYSCTL_PEREN_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_SDCLKEN_MASK                (0x01UL << SDHC0_SYSCTL_SDCLKEN_SHIFT)              /*!< SDHC0_SYSCTL: SDCLKEN Mask              */
+#define SDHC0_SYSCTL_SDCLKEN_SHIFT               3                                                   /*!< SDHC0_SYSCTL: SDCLKEN Position          */
+#define SDHC0_SYSCTL_SDCLKEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_SDCLKEN_SHIFT))&SDHC0_SYSCTL_SDCLKEN_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_DVS_MASK                    (0x0FUL << SDHC0_SYSCTL_DVS_SHIFT)                  /*!< SDHC0_SYSCTL: DVS Mask                  */
+#define SDHC0_SYSCTL_DVS_SHIFT                   4                                                   /*!< SDHC0_SYSCTL: DVS Position              */
+#define SDHC0_SYSCTL_DVS(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_DVS_SHIFT))&SDHC0_SYSCTL_DVS_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_SDCLKFS_MASK                (0xFFUL << SDHC0_SYSCTL_SDCLKFS_SHIFT)              /*!< SDHC0_SYSCTL: SDCLKFS Mask              */
+#define SDHC0_SYSCTL_SDCLKFS_SHIFT               8                                                   /*!< SDHC0_SYSCTL: SDCLKFS Position          */
+#define SDHC0_SYSCTL_SDCLKFS(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_SDCLKFS_SHIFT))&SDHC0_SYSCTL_SDCLKFS_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_DTOCV_MASK                  (0x0FUL << SDHC0_SYSCTL_DTOCV_SHIFT)                /*!< SDHC0_SYSCTL: DTOCV Mask                */
+#define SDHC0_SYSCTL_DTOCV_SHIFT                 16                                                  /*!< SDHC0_SYSCTL: DTOCV Position            */
+#define SDHC0_SYSCTL_DTOCV(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_DTOCV_SHIFT))&SDHC0_SYSCTL_DTOCV_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_RSTA_MASK                   (0x01UL << SDHC0_SYSCTL_RSTA_SHIFT)                 /*!< SDHC0_SYSCTL: RSTA Mask                 */
+#define SDHC0_SYSCTL_RSTA_SHIFT                  24                                                  /*!< SDHC0_SYSCTL: RSTA Position             */
+#define SDHC0_SYSCTL_RSTA(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_RSTA_SHIFT))&SDHC0_SYSCTL_RSTA_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_RSTC_MASK                   (0x01UL << SDHC0_SYSCTL_RSTC_SHIFT)                 /*!< SDHC0_SYSCTL: RSTC Mask                 */
+#define SDHC0_SYSCTL_RSTC_SHIFT                  25                                                  /*!< SDHC0_SYSCTL: RSTC Position             */
+#define SDHC0_SYSCTL_RSTC(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_RSTC_SHIFT))&SDHC0_SYSCTL_RSTC_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_RSTD_MASK                   (0x01UL << SDHC0_SYSCTL_RSTD_SHIFT)                 /*!< SDHC0_SYSCTL: RSTD Mask                 */
+#define SDHC0_SYSCTL_RSTD_SHIFT                  26                                                  /*!< SDHC0_SYSCTL: RSTD Position             */
+#define SDHC0_SYSCTL_RSTD(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_RSTD_SHIFT))&SDHC0_SYSCTL_RSTD_MASK) /*!< SDHC0_SYSCTL                            */
+#define SDHC0_SYSCTL_INITA_MASK                  (0x01UL << SDHC0_SYSCTL_INITA_SHIFT)                /*!< SDHC0_SYSCTL: INITA Mask                */
+#define SDHC0_SYSCTL_INITA_SHIFT                 27                                                  /*!< SDHC0_SYSCTL: INITA Position            */
+#define SDHC0_SYSCTL_INITA(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_SYSCTL_INITA_SHIFT))&SDHC0_SYSCTL_INITA_MASK) /*!< SDHC0_SYSCTL                            */
 /* ------- IRQSTAT Bit Fields                       ------ */
-#define SDHC_IRQSTAT_CC_MASK                     (0x01UL << SDHC_IRQSTAT_CC_SHIFT)                   /*!< SDHC_IRQSTAT: CC Mask                   */
-#define SDHC_IRQSTAT_CC_SHIFT                    0                                                   /*!< SDHC_IRQSTAT: CC Position               */
-#define SDHC_IRQSTAT_CC(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CC_SHIFT))&SDHC_IRQSTAT_CC_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_TC_MASK                     (0x01UL << SDHC_IRQSTAT_TC_SHIFT)                   /*!< SDHC_IRQSTAT: TC Mask                   */
-#define SDHC_IRQSTAT_TC_SHIFT                    1                                                   /*!< SDHC_IRQSTAT: TC Position               */
-#define SDHC_IRQSTAT_TC(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_TC_SHIFT))&SDHC_IRQSTAT_TC_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_BGE_MASK                    (0x01UL << SDHC_IRQSTAT_BGE_SHIFT)                  /*!< SDHC_IRQSTAT: BGE Mask                  */
-#define SDHC_IRQSTAT_BGE_SHIFT                   2                                                   /*!< SDHC_IRQSTAT: BGE Position              */
-#define SDHC_IRQSTAT_BGE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_BGE_SHIFT))&SDHC_IRQSTAT_BGE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_DINT_MASK                   (0x01UL << SDHC_IRQSTAT_DINT_SHIFT)                 /*!< SDHC_IRQSTAT: DINT Mask                 */
-#define SDHC_IRQSTAT_DINT_SHIFT                  3                                                   /*!< SDHC_IRQSTAT: DINT Position             */
-#define SDHC_IRQSTAT_DINT(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_DINT_SHIFT))&SDHC_IRQSTAT_DINT_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_BWR_MASK                    (0x01UL << SDHC_IRQSTAT_BWR_SHIFT)                  /*!< SDHC_IRQSTAT: BWR Mask                  */
-#define SDHC_IRQSTAT_BWR_SHIFT                   4                                                   /*!< SDHC_IRQSTAT: BWR Position              */
-#define SDHC_IRQSTAT_BWR(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_BWR_SHIFT))&SDHC_IRQSTAT_BWR_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_BRR_MASK                    (0x01UL << SDHC_IRQSTAT_BRR_SHIFT)                  /*!< SDHC_IRQSTAT: BRR Mask                  */
-#define SDHC_IRQSTAT_BRR_SHIFT                   5                                                   /*!< SDHC_IRQSTAT: BRR Position              */
-#define SDHC_IRQSTAT_BRR(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_BRR_SHIFT))&SDHC_IRQSTAT_BRR_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CINS_MASK                   (0x01UL << SDHC_IRQSTAT_CINS_SHIFT)                 /*!< SDHC_IRQSTAT: CINS Mask                 */
-#define SDHC_IRQSTAT_CINS_SHIFT                  6                                                   /*!< SDHC_IRQSTAT: CINS Position             */
-#define SDHC_IRQSTAT_CINS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CINS_SHIFT))&SDHC_IRQSTAT_CINS_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CRM_MASK                    (0x01UL << SDHC_IRQSTAT_CRM_SHIFT)                  /*!< SDHC_IRQSTAT: CRM Mask                  */
-#define SDHC_IRQSTAT_CRM_SHIFT                   7                                                   /*!< SDHC_IRQSTAT: CRM Position              */
-#define SDHC_IRQSTAT_CRM(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CRM_SHIFT))&SDHC_IRQSTAT_CRM_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CINT_MASK                   (0x01UL << SDHC_IRQSTAT_CINT_SHIFT)                 /*!< SDHC_IRQSTAT: CINT Mask                 */
-#define SDHC_IRQSTAT_CINT_SHIFT                  8                                                   /*!< SDHC_IRQSTAT: CINT Position             */
-#define SDHC_IRQSTAT_CINT(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CINT_SHIFT))&SDHC_IRQSTAT_CINT_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CTOE_MASK                   (0x01UL << SDHC_IRQSTAT_CTOE_SHIFT)                 /*!< SDHC_IRQSTAT: CTOE Mask                 */
-#define SDHC_IRQSTAT_CTOE_SHIFT                  16                                                  /*!< SDHC_IRQSTAT: CTOE Position             */
-#define SDHC_IRQSTAT_CTOE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CTOE_SHIFT))&SDHC_IRQSTAT_CTOE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CCE_MASK                    (0x01UL << SDHC_IRQSTAT_CCE_SHIFT)                  /*!< SDHC_IRQSTAT: CCE Mask                  */
-#define SDHC_IRQSTAT_CCE_SHIFT                   17                                                  /*!< SDHC_IRQSTAT: CCE Position              */
-#define SDHC_IRQSTAT_CCE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CCE_SHIFT))&SDHC_IRQSTAT_CCE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CEBE_MASK                   (0x01UL << SDHC_IRQSTAT_CEBE_SHIFT)                 /*!< SDHC_IRQSTAT: CEBE Mask                 */
-#define SDHC_IRQSTAT_CEBE_SHIFT                  18                                                  /*!< SDHC_IRQSTAT: CEBE Position             */
-#define SDHC_IRQSTAT_CEBE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CEBE_SHIFT))&SDHC_IRQSTAT_CEBE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_CIE_MASK                    (0x01UL << SDHC_IRQSTAT_CIE_SHIFT)                  /*!< SDHC_IRQSTAT: CIE Mask                  */
-#define SDHC_IRQSTAT_CIE_SHIFT                   19                                                  /*!< SDHC_IRQSTAT: CIE Position              */
-#define SDHC_IRQSTAT_CIE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CIE_SHIFT))&SDHC_IRQSTAT_CIE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_DTOE_MASK                   (0x01UL << SDHC_IRQSTAT_DTOE_SHIFT)                 /*!< SDHC_IRQSTAT: DTOE Mask                 */
-#define SDHC_IRQSTAT_DTOE_SHIFT                  20                                                  /*!< SDHC_IRQSTAT: DTOE Position             */
-#define SDHC_IRQSTAT_DTOE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_DTOE_SHIFT))&SDHC_IRQSTAT_DTOE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_DCE_MASK                    (0x01UL << SDHC_IRQSTAT_DCE_SHIFT)                  /*!< SDHC_IRQSTAT: DCE Mask                  */
-#define SDHC_IRQSTAT_DCE_SHIFT                   21                                                  /*!< SDHC_IRQSTAT: DCE Position              */
-#define SDHC_IRQSTAT_DCE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_DCE_SHIFT))&SDHC_IRQSTAT_DCE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_DEBE_MASK                   (0x01UL << SDHC_IRQSTAT_DEBE_SHIFT)                 /*!< SDHC_IRQSTAT: DEBE Mask                 */
-#define SDHC_IRQSTAT_DEBE_SHIFT                  22                                                  /*!< SDHC_IRQSTAT: DEBE Position             */
-#define SDHC_IRQSTAT_DEBE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_DEBE_SHIFT))&SDHC_IRQSTAT_DEBE_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_AC12E_MASK                  (0x01UL << SDHC_IRQSTAT_AC12E_SHIFT)                /*!< SDHC_IRQSTAT: AC12E Mask                */
-#define SDHC_IRQSTAT_AC12E_SHIFT                 24                                                  /*!< SDHC_IRQSTAT: AC12E Position            */
-#define SDHC_IRQSTAT_AC12E(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_AC12E_SHIFT))&SDHC_IRQSTAT_AC12E_MASK) /*!< SDHC_IRQSTAT                            */
-#define SDHC_IRQSTAT_DMAE_MASK                   (0x01UL << SDHC_IRQSTAT_DMAE_SHIFT)                 /*!< SDHC_IRQSTAT: DMAE Mask                 */
-#define SDHC_IRQSTAT_DMAE_SHIFT                  28                                                  /*!< SDHC_IRQSTAT: DMAE Position             */
-#define SDHC_IRQSTAT_DMAE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_DMAE_SHIFT))&SDHC_IRQSTAT_DMAE_MASK) /*!< SDHC_IRQSTAT                            */
+#define SDHC0_IRQSTAT_CC_MASK                    (0x01UL << SDHC0_IRQSTAT_CC_SHIFT)                  /*!< SDHC0_IRQSTAT: CC Mask                  */
+#define SDHC0_IRQSTAT_CC_SHIFT                   0                                                   /*!< SDHC0_IRQSTAT: CC Position              */
+#define SDHC0_IRQSTAT_CC(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CC_SHIFT))&SDHC0_IRQSTAT_CC_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_TC_MASK                    (0x01UL << SDHC0_IRQSTAT_TC_SHIFT)                  /*!< SDHC0_IRQSTAT: TC Mask                  */
+#define SDHC0_IRQSTAT_TC_SHIFT                   1                                                   /*!< SDHC0_IRQSTAT: TC Position              */
+#define SDHC0_IRQSTAT_TC(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_TC_SHIFT))&SDHC0_IRQSTAT_TC_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_BGE_MASK                   (0x01UL << SDHC0_IRQSTAT_BGE_SHIFT)                 /*!< SDHC0_IRQSTAT: BGE Mask                 */
+#define SDHC0_IRQSTAT_BGE_SHIFT                  2                                                   /*!< SDHC0_IRQSTAT: BGE Position             */
+#define SDHC0_IRQSTAT_BGE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_BGE_SHIFT))&SDHC0_IRQSTAT_BGE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_DINT_MASK                  (0x01UL << SDHC0_IRQSTAT_DINT_SHIFT)                /*!< SDHC0_IRQSTAT: DINT Mask                */
+#define SDHC0_IRQSTAT_DINT_SHIFT                 3                                                   /*!< SDHC0_IRQSTAT: DINT Position            */
+#define SDHC0_IRQSTAT_DINT(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_DINT_SHIFT))&SDHC0_IRQSTAT_DINT_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_BWR_MASK                   (0x01UL << SDHC0_IRQSTAT_BWR_SHIFT)                 /*!< SDHC0_IRQSTAT: BWR Mask                 */
+#define SDHC0_IRQSTAT_BWR_SHIFT                  4                                                   /*!< SDHC0_IRQSTAT: BWR Position             */
+#define SDHC0_IRQSTAT_BWR(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_BWR_SHIFT))&SDHC0_IRQSTAT_BWR_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_BRR_MASK                   (0x01UL << SDHC0_IRQSTAT_BRR_SHIFT)                 /*!< SDHC0_IRQSTAT: BRR Mask                 */
+#define SDHC0_IRQSTAT_BRR_SHIFT                  5                                                   /*!< SDHC0_IRQSTAT: BRR Position             */
+#define SDHC0_IRQSTAT_BRR(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_BRR_SHIFT))&SDHC0_IRQSTAT_BRR_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CINS_MASK                  (0x01UL << SDHC0_IRQSTAT_CINS_SHIFT)                /*!< SDHC0_IRQSTAT: CINS Mask                */
+#define SDHC0_IRQSTAT_CINS_SHIFT                 6                                                   /*!< SDHC0_IRQSTAT: CINS Position            */
+#define SDHC0_IRQSTAT_CINS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CINS_SHIFT))&SDHC0_IRQSTAT_CINS_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CRM_MASK                   (0x01UL << SDHC0_IRQSTAT_CRM_SHIFT)                 /*!< SDHC0_IRQSTAT: CRM Mask                 */
+#define SDHC0_IRQSTAT_CRM_SHIFT                  7                                                   /*!< SDHC0_IRQSTAT: CRM Position             */
+#define SDHC0_IRQSTAT_CRM(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CRM_SHIFT))&SDHC0_IRQSTAT_CRM_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CINT_MASK                  (0x01UL << SDHC0_IRQSTAT_CINT_SHIFT)                /*!< SDHC0_IRQSTAT: CINT Mask                */
+#define SDHC0_IRQSTAT_CINT_SHIFT                 8                                                   /*!< SDHC0_IRQSTAT: CINT Position            */
+#define SDHC0_IRQSTAT_CINT(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CINT_SHIFT))&SDHC0_IRQSTAT_CINT_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CTOE_MASK                  (0x01UL << SDHC0_IRQSTAT_CTOE_SHIFT)                /*!< SDHC0_IRQSTAT: CTOE Mask                */
+#define SDHC0_IRQSTAT_CTOE_SHIFT                 16                                                  /*!< SDHC0_IRQSTAT: CTOE Position            */
+#define SDHC0_IRQSTAT_CTOE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CTOE_SHIFT))&SDHC0_IRQSTAT_CTOE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CCE_MASK                   (0x01UL << SDHC0_IRQSTAT_CCE_SHIFT)                 /*!< SDHC0_IRQSTAT: CCE Mask                 */
+#define SDHC0_IRQSTAT_CCE_SHIFT                  17                                                  /*!< SDHC0_IRQSTAT: CCE Position             */
+#define SDHC0_IRQSTAT_CCE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CCE_SHIFT))&SDHC0_IRQSTAT_CCE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CEBE_MASK                  (0x01UL << SDHC0_IRQSTAT_CEBE_SHIFT)                /*!< SDHC0_IRQSTAT: CEBE Mask                */
+#define SDHC0_IRQSTAT_CEBE_SHIFT                 18                                                  /*!< SDHC0_IRQSTAT: CEBE Position            */
+#define SDHC0_IRQSTAT_CEBE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CEBE_SHIFT))&SDHC0_IRQSTAT_CEBE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_CIE_MASK                   (0x01UL << SDHC0_IRQSTAT_CIE_SHIFT)                 /*!< SDHC0_IRQSTAT: CIE Mask                 */
+#define SDHC0_IRQSTAT_CIE_SHIFT                  19                                                  /*!< SDHC0_IRQSTAT: CIE Position             */
+#define SDHC0_IRQSTAT_CIE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_CIE_SHIFT))&SDHC0_IRQSTAT_CIE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_DTOE_MASK                  (0x01UL << SDHC0_IRQSTAT_DTOE_SHIFT)                /*!< SDHC0_IRQSTAT: DTOE Mask                */
+#define SDHC0_IRQSTAT_DTOE_SHIFT                 20                                                  /*!< SDHC0_IRQSTAT: DTOE Position            */
+#define SDHC0_IRQSTAT_DTOE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_DTOE_SHIFT))&SDHC0_IRQSTAT_DTOE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_DCE_MASK                   (0x01UL << SDHC0_IRQSTAT_DCE_SHIFT)                 /*!< SDHC0_IRQSTAT: DCE Mask                 */
+#define SDHC0_IRQSTAT_DCE_SHIFT                  21                                                  /*!< SDHC0_IRQSTAT: DCE Position             */
+#define SDHC0_IRQSTAT_DCE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_DCE_SHIFT))&SDHC0_IRQSTAT_DCE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_DEBE_MASK                  (0x01UL << SDHC0_IRQSTAT_DEBE_SHIFT)                /*!< SDHC0_IRQSTAT: DEBE Mask                */
+#define SDHC0_IRQSTAT_DEBE_SHIFT                 22                                                  /*!< SDHC0_IRQSTAT: DEBE Position            */
+#define SDHC0_IRQSTAT_DEBE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_DEBE_SHIFT))&SDHC0_IRQSTAT_DEBE_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_AC12E_MASK                 (0x01UL << SDHC0_IRQSTAT_AC12E_SHIFT)               /*!< SDHC0_IRQSTAT: AC12E Mask               */
+#define SDHC0_IRQSTAT_AC12E_SHIFT                24                                                  /*!< SDHC0_IRQSTAT: AC12E Position           */
+#define SDHC0_IRQSTAT_AC12E(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_AC12E_SHIFT))&SDHC0_IRQSTAT_AC12E_MASK) /*!< SDHC0_IRQSTAT                           */
+#define SDHC0_IRQSTAT_DMAE_MASK                  (0x01UL << SDHC0_IRQSTAT_DMAE_SHIFT)                /*!< SDHC0_IRQSTAT: DMAE Mask                */
+#define SDHC0_IRQSTAT_DMAE_SHIFT                 28                                                  /*!< SDHC0_IRQSTAT: DMAE Position            */
+#define SDHC0_IRQSTAT_DMAE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTAT_DMAE_SHIFT))&SDHC0_IRQSTAT_DMAE_MASK) /*!< SDHC0_IRQSTAT                           */
 /* ------- IRQSTATEN Bit Fields                     ------ */
-#define SDHC_IRQSTATEN_CCSEN_MASK                (0x01UL << SDHC_IRQSTATEN_CCSEN_SHIFT)              /*!< SDHC_IRQSTATEN: CCSEN Mask              */
-#define SDHC_IRQSTATEN_CCSEN_SHIFT               0                                                   /*!< SDHC_IRQSTATEN: CCSEN Position          */
-#define SDHC_IRQSTATEN_CCSEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CCSEN_SHIFT))&SDHC_IRQSTATEN_CCSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_TCSEN_MASK                (0x01UL << SDHC_IRQSTATEN_TCSEN_SHIFT)              /*!< SDHC_IRQSTATEN: TCSEN Mask              */
-#define SDHC_IRQSTATEN_TCSEN_SHIFT               1                                                   /*!< SDHC_IRQSTATEN: TCSEN Position          */
-#define SDHC_IRQSTATEN_TCSEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_TCSEN_SHIFT))&SDHC_IRQSTATEN_TCSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_BGESEN_MASK               (0x01UL << SDHC_IRQSTATEN_BGESEN_SHIFT)             /*!< SDHC_IRQSTATEN: BGESEN Mask             */
-#define SDHC_IRQSTATEN_BGESEN_SHIFT              2                                                   /*!< SDHC_IRQSTATEN: BGESEN Position         */
-#define SDHC_IRQSTATEN_BGESEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_BGESEN_SHIFT))&SDHC_IRQSTATEN_BGESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_DINTSEN_MASK              (0x01UL << SDHC_IRQSTATEN_DINTSEN_SHIFT)            /*!< SDHC_IRQSTATEN: DINTSEN Mask            */
-#define SDHC_IRQSTATEN_DINTSEN_SHIFT             3                                                   /*!< SDHC_IRQSTATEN: DINTSEN Position        */
-#define SDHC_IRQSTATEN_DINTSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_DINTSEN_SHIFT))&SDHC_IRQSTATEN_DINTSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_BWRSEN_MASK               (0x01UL << SDHC_IRQSTATEN_BWRSEN_SHIFT)             /*!< SDHC_IRQSTATEN: BWRSEN Mask             */
-#define SDHC_IRQSTATEN_BWRSEN_SHIFT              4                                                   /*!< SDHC_IRQSTATEN: BWRSEN Position         */
-#define SDHC_IRQSTATEN_BWRSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_BWRSEN_SHIFT))&SDHC_IRQSTATEN_BWRSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_BRRSEN_MASK               (0x01UL << SDHC_IRQSTATEN_BRRSEN_SHIFT)             /*!< SDHC_IRQSTATEN: BRRSEN Mask             */
-#define SDHC_IRQSTATEN_BRRSEN_SHIFT              5                                                   /*!< SDHC_IRQSTATEN: BRRSEN Position         */
-#define SDHC_IRQSTATEN_BRRSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_BRRSEN_SHIFT))&SDHC_IRQSTATEN_BRRSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CINSEN_MASK               (0x01UL << SDHC_IRQSTATEN_CINSEN_SHIFT)             /*!< SDHC_IRQSTATEN: CINSEN Mask             */
-#define SDHC_IRQSTATEN_CINSEN_SHIFT              6                                                   /*!< SDHC_IRQSTATEN: CINSEN Position         */
-#define SDHC_IRQSTATEN_CINSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CINSEN_SHIFT))&SDHC_IRQSTATEN_CINSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CRMSEN_MASK               (0x01UL << SDHC_IRQSTATEN_CRMSEN_SHIFT)             /*!< SDHC_IRQSTATEN: CRMSEN Mask             */
-#define SDHC_IRQSTATEN_CRMSEN_SHIFT              7                                                   /*!< SDHC_IRQSTATEN: CRMSEN Position         */
-#define SDHC_IRQSTATEN_CRMSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CRMSEN_SHIFT))&SDHC_IRQSTATEN_CRMSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CINTSEN_MASK              (0x01UL << SDHC_IRQSTATEN_CINTSEN_SHIFT)            /*!< SDHC_IRQSTATEN: CINTSEN Mask            */
-#define SDHC_IRQSTATEN_CINTSEN_SHIFT             8                                                   /*!< SDHC_IRQSTATEN: CINTSEN Position        */
-#define SDHC_IRQSTATEN_CINTSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CINTSEN_SHIFT))&SDHC_IRQSTATEN_CINTSEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CTOESEN_MASK              (0x01UL << SDHC_IRQSTATEN_CTOESEN_SHIFT)            /*!< SDHC_IRQSTATEN: CTOESEN Mask            */
-#define SDHC_IRQSTATEN_CTOESEN_SHIFT             16                                                  /*!< SDHC_IRQSTATEN: CTOESEN Position        */
-#define SDHC_IRQSTATEN_CTOESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CTOESEN_SHIFT))&SDHC_IRQSTATEN_CTOESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CCESEN_MASK               (0x01UL << SDHC_IRQSTATEN_CCESEN_SHIFT)             /*!< SDHC_IRQSTATEN: CCESEN Mask             */
-#define SDHC_IRQSTATEN_CCESEN_SHIFT              17                                                  /*!< SDHC_IRQSTATEN: CCESEN Position         */
-#define SDHC_IRQSTATEN_CCESEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CCESEN_SHIFT))&SDHC_IRQSTATEN_CCESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CEBESEN_MASK              (0x01UL << SDHC_IRQSTATEN_CEBESEN_SHIFT)            /*!< SDHC_IRQSTATEN: CEBESEN Mask            */
-#define SDHC_IRQSTATEN_CEBESEN_SHIFT             18                                                  /*!< SDHC_IRQSTATEN: CEBESEN Position        */
-#define SDHC_IRQSTATEN_CEBESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CEBESEN_SHIFT))&SDHC_IRQSTATEN_CEBESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_CIESEN_MASK               (0x01UL << SDHC_IRQSTATEN_CIESEN_SHIFT)             /*!< SDHC_IRQSTATEN: CIESEN Mask             */
-#define SDHC_IRQSTATEN_CIESEN_SHIFT              19                                                  /*!< SDHC_IRQSTATEN: CIESEN Position         */
-#define SDHC_IRQSTATEN_CIESEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CIESEN_SHIFT))&SDHC_IRQSTATEN_CIESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_DTOESEN_MASK              (0x01UL << SDHC_IRQSTATEN_DTOESEN_SHIFT)            /*!< SDHC_IRQSTATEN: DTOESEN Mask            */
-#define SDHC_IRQSTATEN_DTOESEN_SHIFT             20                                                  /*!< SDHC_IRQSTATEN: DTOESEN Position        */
-#define SDHC_IRQSTATEN_DTOESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_DTOESEN_SHIFT))&SDHC_IRQSTATEN_DTOESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_DCESEN_MASK               (0x01UL << SDHC_IRQSTATEN_DCESEN_SHIFT)             /*!< SDHC_IRQSTATEN: DCESEN Mask             */
-#define SDHC_IRQSTATEN_DCESEN_SHIFT              21                                                  /*!< SDHC_IRQSTATEN: DCESEN Position         */
-#define SDHC_IRQSTATEN_DCESEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_DCESEN_SHIFT))&SDHC_IRQSTATEN_DCESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_DEBESEN_MASK              (0x01UL << SDHC_IRQSTATEN_DEBESEN_SHIFT)            /*!< SDHC_IRQSTATEN: DEBESEN Mask            */
-#define SDHC_IRQSTATEN_DEBESEN_SHIFT             22                                                  /*!< SDHC_IRQSTATEN: DEBESEN Position        */
-#define SDHC_IRQSTATEN_DEBESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_DEBESEN_SHIFT))&SDHC_IRQSTATEN_DEBESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_AC12ESEN_MASK             (0x01UL << SDHC_IRQSTATEN_AC12ESEN_SHIFT)           /*!< SDHC_IRQSTATEN: AC12ESEN Mask           */
-#define SDHC_IRQSTATEN_AC12ESEN_SHIFT            24                                                  /*!< SDHC_IRQSTATEN: AC12ESEN Position       */
-#define SDHC_IRQSTATEN_AC12ESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_AC12ESEN_SHIFT))&SDHC_IRQSTATEN_AC12ESEN_MASK) /*!< SDHC_IRQSTATEN                          */
-#define SDHC_IRQSTATEN_DMAESEN_MASK              (0x01UL << SDHC_IRQSTATEN_DMAESEN_SHIFT)            /*!< SDHC_IRQSTATEN: DMAESEN Mask            */
-#define SDHC_IRQSTATEN_DMAESEN_SHIFT             28                                                  /*!< SDHC_IRQSTATEN: DMAESEN Position        */
-#define SDHC_IRQSTATEN_DMAESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_DMAESEN_SHIFT))&SDHC_IRQSTATEN_DMAESEN_MASK) /*!< SDHC_IRQSTATEN                          */
+#define SDHC0_IRQSTATEN_CCSEN_MASK               (0x01UL << SDHC0_IRQSTATEN_CCSEN_SHIFT)             /*!< SDHC0_IRQSTATEN: CCSEN Mask             */
+#define SDHC0_IRQSTATEN_CCSEN_SHIFT              0                                                   /*!< SDHC0_IRQSTATEN: CCSEN Position         */
+#define SDHC0_IRQSTATEN_CCSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CCSEN_SHIFT))&SDHC0_IRQSTATEN_CCSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_TCSEN_MASK               (0x01UL << SDHC0_IRQSTATEN_TCSEN_SHIFT)             /*!< SDHC0_IRQSTATEN: TCSEN Mask             */
+#define SDHC0_IRQSTATEN_TCSEN_SHIFT              1                                                   /*!< SDHC0_IRQSTATEN: TCSEN Position         */
+#define SDHC0_IRQSTATEN_TCSEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_TCSEN_SHIFT))&SDHC0_IRQSTATEN_TCSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_BGESEN_MASK              (0x01UL << SDHC0_IRQSTATEN_BGESEN_SHIFT)            /*!< SDHC0_IRQSTATEN: BGESEN Mask            */
+#define SDHC0_IRQSTATEN_BGESEN_SHIFT             2                                                   /*!< SDHC0_IRQSTATEN: BGESEN Position        */
+#define SDHC0_IRQSTATEN_BGESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_BGESEN_SHIFT))&SDHC0_IRQSTATEN_BGESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_DINTSEN_MASK             (0x01UL << SDHC0_IRQSTATEN_DINTSEN_SHIFT)           /*!< SDHC0_IRQSTATEN: DINTSEN Mask           */
+#define SDHC0_IRQSTATEN_DINTSEN_SHIFT            3                                                   /*!< SDHC0_IRQSTATEN: DINTSEN Position       */
+#define SDHC0_IRQSTATEN_DINTSEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_DINTSEN_SHIFT))&SDHC0_IRQSTATEN_DINTSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_BWRSEN_MASK              (0x01UL << SDHC0_IRQSTATEN_BWRSEN_SHIFT)            /*!< SDHC0_IRQSTATEN: BWRSEN Mask            */
+#define SDHC0_IRQSTATEN_BWRSEN_SHIFT             4                                                   /*!< SDHC0_IRQSTATEN: BWRSEN Position        */
+#define SDHC0_IRQSTATEN_BWRSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_BWRSEN_SHIFT))&SDHC0_IRQSTATEN_BWRSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_BRRSEN_MASK              (0x01UL << SDHC0_IRQSTATEN_BRRSEN_SHIFT)            /*!< SDHC0_IRQSTATEN: BRRSEN Mask            */
+#define SDHC0_IRQSTATEN_BRRSEN_SHIFT             5                                                   /*!< SDHC0_IRQSTATEN: BRRSEN Position        */
+#define SDHC0_IRQSTATEN_BRRSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_BRRSEN_SHIFT))&SDHC0_IRQSTATEN_BRRSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CINSEN_MASK              (0x01UL << SDHC0_IRQSTATEN_CINSEN_SHIFT)            /*!< SDHC0_IRQSTATEN: CINSEN Mask            */
+#define SDHC0_IRQSTATEN_CINSEN_SHIFT             6                                                   /*!< SDHC0_IRQSTATEN: CINSEN Position        */
+#define SDHC0_IRQSTATEN_CINSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CINSEN_SHIFT))&SDHC0_IRQSTATEN_CINSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CRMSEN_MASK              (0x01UL << SDHC0_IRQSTATEN_CRMSEN_SHIFT)            /*!< SDHC0_IRQSTATEN: CRMSEN Mask            */
+#define SDHC0_IRQSTATEN_CRMSEN_SHIFT             7                                                   /*!< SDHC0_IRQSTATEN: CRMSEN Position        */
+#define SDHC0_IRQSTATEN_CRMSEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CRMSEN_SHIFT))&SDHC0_IRQSTATEN_CRMSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CINTSEN_MASK             (0x01UL << SDHC0_IRQSTATEN_CINTSEN_SHIFT)           /*!< SDHC0_IRQSTATEN: CINTSEN Mask           */
+#define SDHC0_IRQSTATEN_CINTSEN_SHIFT            8                                                   /*!< SDHC0_IRQSTATEN: CINTSEN Position       */
+#define SDHC0_IRQSTATEN_CINTSEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CINTSEN_SHIFT))&SDHC0_IRQSTATEN_CINTSEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CTOESEN_MASK             (0x01UL << SDHC0_IRQSTATEN_CTOESEN_SHIFT)           /*!< SDHC0_IRQSTATEN: CTOESEN Mask           */
+#define SDHC0_IRQSTATEN_CTOESEN_SHIFT            16                                                  /*!< SDHC0_IRQSTATEN: CTOESEN Position       */
+#define SDHC0_IRQSTATEN_CTOESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CTOESEN_SHIFT))&SDHC0_IRQSTATEN_CTOESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CCESEN_MASK              (0x01UL << SDHC0_IRQSTATEN_CCESEN_SHIFT)            /*!< SDHC0_IRQSTATEN: CCESEN Mask            */
+#define SDHC0_IRQSTATEN_CCESEN_SHIFT             17                                                  /*!< SDHC0_IRQSTATEN: CCESEN Position        */
+#define SDHC0_IRQSTATEN_CCESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CCESEN_SHIFT))&SDHC0_IRQSTATEN_CCESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CEBESEN_MASK             (0x01UL << SDHC0_IRQSTATEN_CEBESEN_SHIFT)           /*!< SDHC0_IRQSTATEN: CEBESEN Mask           */
+#define SDHC0_IRQSTATEN_CEBESEN_SHIFT            18                                                  /*!< SDHC0_IRQSTATEN: CEBESEN Position       */
+#define SDHC0_IRQSTATEN_CEBESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CEBESEN_SHIFT))&SDHC0_IRQSTATEN_CEBESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_CIESEN_MASK              (0x01UL << SDHC0_IRQSTATEN_CIESEN_SHIFT)            /*!< SDHC0_IRQSTATEN: CIESEN Mask            */
+#define SDHC0_IRQSTATEN_CIESEN_SHIFT             19                                                  /*!< SDHC0_IRQSTATEN: CIESEN Position        */
+#define SDHC0_IRQSTATEN_CIESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_CIESEN_SHIFT))&SDHC0_IRQSTATEN_CIESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_DTOESEN_MASK             (0x01UL << SDHC0_IRQSTATEN_DTOESEN_SHIFT)           /*!< SDHC0_IRQSTATEN: DTOESEN Mask           */
+#define SDHC0_IRQSTATEN_DTOESEN_SHIFT            20                                                  /*!< SDHC0_IRQSTATEN: DTOESEN Position       */
+#define SDHC0_IRQSTATEN_DTOESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_DTOESEN_SHIFT))&SDHC0_IRQSTATEN_DTOESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_DCESEN_MASK              (0x01UL << SDHC0_IRQSTATEN_DCESEN_SHIFT)            /*!< SDHC0_IRQSTATEN: DCESEN Mask            */
+#define SDHC0_IRQSTATEN_DCESEN_SHIFT             21                                                  /*!< SDHC0_IRQSTATEN: DCESEN Position        */
+#define SDHC0_IRQSTATEN_DCESEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_DCESEN_SHIFT))&SDHC0_IRQSTATEN_DCESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_DEBESEN_MASK             (0x01UL << SDHC0_IRQSTATEN_DEBESEN_SHIFT)           /*!< SDHC0_IRQSTATEN: DEBESEN Mask           */
+#define SDHC0_IRQSTATEN_DEBESEN_SHIFT            22                                                  /*!< SDHC0_IRQSTATEN: DEBESEN Position       */
+#define SDHC0_IRQSTATEN_DEBESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_DEBESEN_SHIFT))&SDHC0_IRQSTATEN_DEBESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_AC12ESEN_MASK            (0x01UL << SDHC0_IRQSTATEN_AC12ESEN_SHIFT)          /*!< SDHC0_IRQSTATEN: AC12ESEN Mask          */
+#define SDHC0_IRQSTATEN_AC12ESEN_SHIFT           24                                                  /*!< SDHC0_IRQSTATEN: AC12ESEN Position      */
+#define SDHC0_IRQSTATEN_AC12ESEN(x)              (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_AC12ESEN_SHIFT))&SDHC0_IRQSTATEN_AC12ESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
+#define SDHC0_IRQSTATEN_DMAESEN_MASK             (0x01UL << SDHC0_IRQSTATEN_DMAESEN_SHIFT)           /*!< SDHC0_IRQSTATEN: DMAESEN Mask           */
+#define SDHC0_IRQSTATEN_DMAESEN_SHIFT            28                                                  /*!< SDHC0_IRQSTATEN: DMAESEN Position       */
+#define SDHC0_IRQSTATEN_DMAESEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSTATEN_DMAESEN_SHIFT))&SDHC0_IRQSTATEN_DMAESEN_MASK) /*!< SDHC0_IRQSTATEN                         */
 /* ------- IRQSIGEN Bit Fields                      ------ */
-#define SDHC_IRQSIGEN_CCIEN_MASK                 (0x01UL << SDHC_IRQSIGEN_CCIEN_SHIFT)               /*!< SDHC_IRQSIGEN: CCIEN Mask               */
-#define SDHC_IRQSIGEN_CCIEN_SHIFT                0                                                   /*!< SDHC_IRQSIGEN: CCIEN Position           */
-#define SDHC_IRQSIGEN_CCIEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CCIEN_SHIFT))&SDHC_IRQSIGEN_CCIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_TCIEN_MASK                 (0x01UL << SDHC_IRQSIGEN_TCIEN_SHIFT)               /*!< SDHC_IRQSIGEN: TCIEN Mask               */
-#define SDHC_IRQSIGEN_TCIEN_SHIFT                1                                                   /*!< SDHC_IRQSIGEN: TCIEN Position           */
-#define SDHC_IRQSIGEN_TCIEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_TCIEN_SHIFT))&SDHC_IRQSIGEN_TCIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_BGEIEN_MASK                (0x01UL << SDHC_IRQSIGEN_BGEIEN_SHIFT)              /*!< SDHC_IRQSIGEN: BGEIEN Mask              */
-#define SDHC_IRQSIGEN_BGEIEN_SHIFT               2                                                   /*!< SDHC_IRQSIGEN: BGEIEN Position          */
-#define SDHC_IRQSIGEN_BGEIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_BGEIEN_SHIFT))&SDHC_IRQSIGEN_BGEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_DINTIEN_MASK               (0x01UL << SDHC_IRQSIGEN_DINTIEN_SHIFT)             /*!< SDHC_IRQSIGEN: DINTIEN Mask             */
-#define SDHC_IRQSIGEN_DINTIEN_SHIFT              3                                                   /*!< SDHC_IRQSIGEN: DINTIEN Position         */
-#define SDHC_IRQSIGEN_DINTIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_DINTIEN_SHIFT))&SDHC_IRQSIGEN_DINTIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_BWRIEN_MASK                (0x01UL << SDHC_IRQSIGEN_BWRIEN_SHIFT)              /*!< SDHC_IRQSIGEN: BWRIEN Mask              */
-#define SDHC_IRQSIGEN_BWRIEN_SHIFT               4                                                   /*!< SDHC_IRQSIGEN: BWRIEN Position          */
-#define SDHC_IRQSIGEN_BWRIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_BWRIEN_SHIFT))&SDHC_IRQSIGEN_BWRIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_BRRIEN_MASK                (0x01UL << SDHC_IRQSIGEN_BRRIEN_SHIFT)              /*!< SDHC_IRQSIGEN: BRRIEN Mask              */
-#define SDHC_IRQSIGEN_BRRIEN_SHIFT               5                                                   /*!< SDHC_IRQSIGEN: BRRIEN Position          */
-#define SDHC_IRQSIGEN_BRRIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_BRRIEN_SHIFT))&SDHC_IRQSIGEN_BRRIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CINSIEN_MASK               (0x01UL << SDHC_IRQSIGEN_CINSIEN_SHIFT)             /*!< SDHC_IRQSIGEN: CINSIEN Mask             */
-#define SDHC_IRQSIGEN_CINSIEN_SHIFT              6                                                   /*!< SDHC_IRQSIGEN: CINSIEN Position         */
-#define SDHC_IRQSIGEN_CINSIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CINSIEN_SHIFT))&SDHC_IRQSIGEN_CINSIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CRMIEN_MASK                (0x01UL << SDHC_IRQSIGEN_CRMIEN_SHIFT)              /*!< SDHC_IRQSIGEN: CRMIEN Mask              */
-#define SDHC_IRQSIGEN_CRMIEN_SHIFT               7                                                   /*!< SDHC_IRQSIGEN: CRMIEN Position          */
-#define SDHC_IRQSIGEN_CRMIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CRMIEN_SHIFT))&SDHC_IRQSIGEN_CRMIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CINTIEN_MASK               (0x01UL << SDHC_IRQSIGEN_CINTIEN_SHIFT)             /*!< SDHC_IRQSIGEN: CINTIEN Mask             */
-#define SDHC_IRQSIGEN_CINTIEN_SHIFT              8                                                   /*!< SDHC_IRQSIGEN: CINTIEN Position         */
-#define SDHC_IRQSIGEN_CINTIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CINTIEN_SHIFT))&SDHC_IRQSIGEN_CINTIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CTOEIEN_MASK               (0x01UL << SDHC_IRQSIGEN_CTOEIEN_SHIFT)             /*!< SDHC_IRQSIGEN: CTOEIEN Mask             */
-#define SDHC_IRQSIGEN_CTOEIEN_SHIFT              16                                                  /*!< SDHC_IRQSIGEN: CTOEIEN Position         */
-#define SDHC_IRQSIGEN_CTOEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CTOEIEN_SHIFT))&SDHC_IRQSIGEN_CTOEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CCEIEN_MASK                (0x01UL << SDHC_IRQSIGEN_CCEIEN_SHIFT)              /*!< SDHC_IRQSIGEN: CCEIEN Mask              */
-#define SDHC_IRQSIGEN_CCEIEN_SHIFT               17                                                  /*!< SDHC_IRQSIGEN: CCEIEN Position          */
-#define SDHC_IRQSIGEN_CCEIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CCEIEN_SHIFT))&SDHC_IRQSIGEN_CCEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CEBEIEN_MASK               (0x01UL << SDHC_IRQSIGEN_CEBEIEN_SHIFT)             /*!< SDHC_IRQSIGEN: CEBEIEN Mask             */
-#define SDHC_IRQSIGEN_CEBEIEN_SHIFT              18                                                  /*!< SDHC_IRQSIGEN: CEBEIEN Position         */
-#define SDHC_IRQSIGEN_CEBEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CEBEIEN_SHIFT))&SDHC_IRQSIGEN_CEBEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_CIEIEN_MASK                (0x01UL << SDHC_IRQSIGEN_CIEIEN_SHIFT)              /*!< SDHC_IRQSIGEN: CIEIEN Mask              */
-#define SDHC_IRQSIGEN_CIEIEN_SHIFT               19                                                  /*!< SDHC_IRQSIGEN: CIEIEN Position          */
-#define SDHC_IRQSIGEN_CIEIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CIEIEN_SHIFT))&SDHC_IRQSIGEN_CIEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_DTOEIEN_MASK               (0x01UL << SDHC_IRQSIGEN_DTOEIEN_SHIFT)             /*!< SDHC_IRQSIGEN: DTOEIEN Mask             */
-#define SDHC_IRQSIGEN_DTOEIEN_SHIFT              20                                                  /*!< SDHC_IRQSIGEN: DTOEIEN Position         */
-#define SDHC_IRQSIGEN_DTOEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_DTOEIEN_SHIFT))&SDHC_IRQSIGEN_DTOEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_DCEIEN_MASK                (0x01UL << SDHC_IRQSIGEN_DCEIEN_SHIFT)              /*!< SDHC_IRQSIGEN: DCEIEN Mask              */
-#define SDHC_IRQSIGEN_DCEIEN_SHIFT               21                                                  /*!< SDHC_IRQSIGEN: DCEIEN Position          */
-#define SDHC_IRQSIGEN_DCEIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_DCEIEN_SHIFT))&SDHC_IRQSIGEN_DCEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_DEBEIEN_MASK               (0x01UL << SDHC_IRQSIGEN_DEBEIEN_SHIFT)             /*!< SDHC_IRQSIGEN: DEBEIEN Mask             */
-#define SDHC_IRQSIGEN_DEBEIEN_SHIFT              22                                                  /*!< SDHC_IRQSIGEN: DEBEIEN Position         */
-#define SDHC_IRQSIGEN_DEBEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_DEBEIEN_SHIFT))&SDHC_IRQSIGEN_DEBEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_AC12EIEN_MASK              (0x01UL << SDHC_IRQSIGEN_AC12EIEN_SHIFT)            /*!< SDHC_IRQSIGEN: AC12EIEN Mask            */
-#define SDHC_IRQSIGEN_AC12EIEN_SHIFT             24                                                  /*!< SDHC_IRQSIGEN: AC12EIEN Position        */
-#define SDHC_IRQSIGEN_AC12EIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_AC12EIEN_SHIFT))&SDHC_IRQSIGEN_AC12EIEN_MASK) /*!< SDHC_IRQSIGEN                           */
-#define SDHC_IRQSIGEN_DMAEIEN_MASK               (0x01UL << SDHC_IRQSIGEN_DMAEIEN_SHIFT)             /*!< SDHC_IRQSIGEN: DMAEIEN Mask             */
-#define SDHC_IRQSIGEN_DMAEIEN_SHIFT              28                                                  /*!< SDHC_IRQSIGEN: DMAEIEN Position         */
-#define SDHC_IRQSIGEN_DMAEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_DMAEIEN_SHIFT))&SDHC_IRQSIGEN_DMAEIEN_MASK) /*!< SDHC_IRQSIGEN                           */
+#define SDHC0_IRQSIGEN_CCIEN_MASK                (0x01UL << SDHC0_IRQSIGEN_CCIEN_SHIFT)              /*!< SDHC0_IRQSIGEN: CCIEN Mask              */
+#define SDHC0_IRQSIGEN_CCIEN_SHIFT               0                                                   /*!< SDHC0_IRQSIGEN: CCIEN Position          */
+#define SDHC0_IRQSIGEN_CCIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CCIEN_SHIFT))&SDHC0_IRQSIGEN_CCIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_TCIEN_MASK                (0x01UL << SDHC0_IRQSIGEN_TCIEN_SHIFT)              /*!< SDHC0_IRQSIGEN: TCIEN Mask              */
+#define SDHC0_IRQSIGEN_TCIEN_SHIFT               1                                                   /*!< SDHC0_IRQSIGEN: TCIEN Position          */
+#define SDHC0_IRQSIGEN_TCIEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_TCIEN_SHIFT))&SDHC0_IRQSIGEN_TCIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_BGEIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_BGEIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: BGEIEN Mask             */
+#define SDHC0_IRQSIGEN_BGEIEN_SHIFT              2                                                   /*!< SDHC0_IRQSIGEN: BGEIEN Position         */
+#define SDHC0_IRQSIGEN_BGEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_BGEIEN_SHIFT))&SDHC0_IRQSIGEN_BGEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_DINTIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_DINTIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: DINTIEN Mask            */
+#define SDHC0_IRQSIGEN_DINTIEN_SHIFT             3                                                   /*!< SDHC0_IRQSIGEN: DINTIEN Position        */
+#define SDHC0_IRQSIGEN_DINTIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_DINTIEN_SHIFT))&SDHC0_IRQSIGEN_DINTIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_BWRIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_BWRIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: BWRIEN Mask             */
+#define SDHC0_IRQSIGEN_BWRIEN_SHIFT              4                                                   /*!< SDHC0_IRQSIGEN: BWRIEN Position         */
+#define SDHC0_IRQSIGEN_BWRIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_BWRIEN_SHIFT))&SDHC0_IRQSIGEN_BWRIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_BRRIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_BRRIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: BRRIEN Mask             */
+#define SDHC0_IRQSIGEN_BRRIEN_SHIFT              5                                                   /*!< SDHC0_IRQSIGEN: BRRIEN Position         */
+#define SDHC0_IRQSIGEN_BRRIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_BRRIEN_SHIFT))&SDHC0_IRQSIGEN_BRRIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CINSIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_CINSIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: CINSIEN Mask            */
+#define SDHC0_IRQSIGEN_CINSIEN_SHIFT             6                                                   /*!< SDHC0_IRQSIGEN: CINSIEN Position        */
+#define SDHC0_IRQSIGEN_CINSIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CINSIEN_SHIFT))&SDHC0_IRQSIGEN_CINSIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CRMIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_CRMIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: CRMIEN Mask             */
+#define SDHC0_IRQSIGEN_CRMIEN_SHIFT              7                                                   /*!< SDHC0_IRQSIGEN: CRMIEN Position         */
+#define SDHC0_IRQSIGEN_CRMIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CRMIEN_SHIFT))&SDHC0_IRQSIGEN_CRMIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CINTIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_CINTIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: CINTIEN Mask            */
+#define SDHC0_IRQSIGEN_CINTIEN_SHIFT             8                                                   /*!< SDHC0_IRQSIGEN: CINTIEN Position        */
+#define SDHC0_IRQSIGEN_CINTIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CINTIEN_SHIFT))&SDHC0_IRQSIGEN_CINTIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CTOEIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_CTOEIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: CTOEIEN Mask            */
+#define SDHC0_IRQSIGEN_CTOEIEN_SHIFT             16                                                  /*!< SDHC0_IRQSIGEN: CTOEIEN Position        */
+#define SDHC0_IRQSIGEN_CTOEIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CTOEIEN_SHIFT))&SDHC0_IRQSIGEN_CTOEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CCEIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_CCEIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: CCEIEN Mask             */
+#define SDHC0_IRQSIGEN_CCEIEN_SHIFT              17                                                  /*!< SDHC0_IRQSIGEN: CCEIEN Position         */
+#define SDHC0_IRQSIGEN_CCEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CCEIEN_SHIFT))&SDHC0_IRQSIGEN_CCEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CEBEIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_CEBEIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: CEBEIEN Mask            */
+#define SDHC0_IRQSIGEN_CEBEIEN_SHIFT             18                                                  /*!< SDHC0_IRQSIGEN: CEBEIEN Position        */
+#define SDHC0_IRQSIGEN_CEBEIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CEBEIEN_SHIFT))&SDHC0_IRQSIGEN_CEBEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_CIEIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_CIEIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: CIEIEN Mask             */
+#define SDHC0_IRQSIGEN_CIEIEN_SHIFT              19                                                  /*!< SDHC0_IRQSIGEN: CIEIEN Position         */
+#define SDHC0_IRQSIGEN_CIEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_CIEIEN_SHIFT))&SDHC0_IRQSIGEN_CIEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_DTOEIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_DTOEIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: DTOEIEN Mask            */
+#define SDHC0_IRQSIGEN_DTOEIEN_SHIFT             20                                                  /*!< SDHC0_IRQSIGEN: DTOEIEN Position        */
+#define SDHC0_IRQSIGEN_DTOEIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_DTOEIEN_SHIFT))&SDHC0_IRQSIGEN_DTOEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_DCEIEN_MASK               (0x01UL << SDHC0_IRQSIGEN_DCEIEN_SHIFT)             /*!< SDHC0_IRQSIGEN: DCEIEN Mask             */
+#define SDHC0_IRQSIGEN_DCEIEN_SHIFT              21                                                  /*!< SDHC0_IRQSIGEN: DCEIEN Position         */
+#define SDHC0_IRQSIGEN_DCEIEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_DCEIEN_SHIFT))&SDHC0_IRQSIGEN_DCEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_DEBEIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_DEBEIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: DEBEIEN Mask            */
+#define SDHC0_IRQSIGEN_DEBEIEN_SHIFT             22                                                  /*!< SDHC0_IRQSIGEN: DEBEIEN Position        */
+#define SDHC0_IRQSIGEN_DEBEIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_DEBEIEN_SHIFT))&SDHC0_IRQSIGEN_DEBEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_AC12EIEN_MASK             (0x01UL << SDHC0_IRQSIGEN_AC12EIEN_SHIFT)           /*!< SDHC0_IRQSIGEN: AC12EIEN Mask           */
+#define SDHC0_IRQSIGEN_AC12EIEN_SHIFT            24                                                  /*!< SDHC0_IRQSIGEN: AC12EIEN Position       */
+#define SDHC0_IRQSIGEN_AC12EIEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_AC12EIEN_SHIFT))&SDHC0_IRQSIGEN_AC12EIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
+#define SDHC0_IRQSIGEN_DMAEIEN_MASK              (0x01UL << SDHC0_IRQSIGEN_DMAEIEN_SHIFT)            /*!< SDHC0_IRQSIGEN: DMAEIEN Mask            */
+#define SDHC0_IRQSIGEN_DMAEIEN_SHIFT             28                                                  /*!< SDHC0_IRQSIGEN: DMAEIEN Position        */
+#define SDHC0_IRQSIGEN_DMAEIEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_IRQSIGEN_DMAEIEN_SHIFT))&SDHC0_IRQSIGEN_DMAEIEN_MASK) /*!< SDHC0_IRQSIGEN                          */
 /* ------- AC12ERR Bit Fields                       ------ */
-#define SDHC_AC12ERR_AC12NE_MASK                 (0x01UL << SDHC_AC12ERR_AC12NE_SHIFT)               /*!< SDHC_AC12ERR: AC12NE Mask               */
-#define SDHC_AC12ERR_AC12NE_SHIFT                0                                                   /*!< SDHC_AC12ERR: AC12NE Position           */
-#define SDHC_AC12ERR_AC12NE(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_AC12NE_SHIFT))&SDHC_AC12ERR_AC12NE_MASK) /*!< SDHC_AC12ERR                            */
-#define SDHC_AC12ERR_AC12TOE_MASK                (0x01UL << SDHC_AC12ERR_AC12TOE_SHIFT)              /*!< SDHC_AC12ERR: AC12TOE Mask              */
-#define SDHC_AC12ERR_AC12TOE_SHIFT               1                                                   /*!< SDHC_AC12ERR: AC12TOE Position          */
-#define SDHC_AC12ERR_AC12TOE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_AC12TOE_SHIFT))&SDHC_AC12ERR_AC12TOE_MASK) /*!< SDHC_AC12ERR                            */
-#define SDHC_AC12ERR_AC12EBE_MASK                (0x01UL << SDHC_AC12ERR_AC12EBE_SHIFT)              /*!< SDHC_AC12ERR: AC12EBE Mask              */
-#define SDHC_AC12ERR_AC12EBE_SHIFT               2                                                   /*!< SDHC_AC12ERR: AC12EBE Position          */
-#define SDHC_AC12ERR_AC12EBE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_AC12EBE_SHIFT))&SDHC_AC12ERR_AC12EBE_MASK) /*!< SDHC_AC12ERR                            */
-#define SDHC_AC12ERR_AC12CE_MASK                 (0x01UL << SDHC_AC12ERR_AC12CE_SHIFT)               /*!< SDHC_AC12ERR: AC12CE Mask               */
-#define SDHC_AC12ERR_AC12CE_SHIFT                3                                                   /*!< SDHC_AC12ERR: AC12CE Position           */
-#define SDHC_AC12ERR_AC12CE(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_AC12CE_SHIFT))&SDHC_AC12ERR_AC12CE_MASK) /*!< SDHC_AC12ERR                            */
-#define SDHC_AC12ERR_AC12IE_MASK                 (0x01UL << SDHC_AC12ERR_AC12IE_SHIFT)               /*!< SDHC_AC12ERR: AC12IE Mask               */
-#define SDHC_AC12ERR_AC12IE_SHIFT                4                                                   /*!< SDHC_AC12ERR: AC12IE Position           */
-#define SDHC_AC12ERR_AC12IE(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_AC12IE_SHIFT))&SDHC_AC12ERR_AC12IE_MASK) /*!< SDHC_AC12ERR                            */
-#define SDHC_AC12ERR_CNIBAC12E_MASK              (0x01UL << SDHC_AC12ERR_CNIBAC12E_SHIFT)            /*!< SDHC_AC12ERR: CNIBAC12E Mask            */
-#define SDHC_AC12ERR_CNIBAC12E_SHIFT             7                                                   /*!< SDHC_AC12ERR: CNIBAC12E Position        */
-#define SDHC_AC12ERR_CNIBAC12E(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_AC12ERR_CNIBAC12E_SHIFT))&SDHC_AC12ERR_CNIBAC12E_MASK) /*!< SDHC_AC12ERR                            */
+#define SDHC0_AC12ERR_AC12NE_MASK                (0x01UL << SDHC0_AC12ERR_AC12NE_SHIFT)              /*!< SDHC0_AC12ERR: AC12NE Mask              */
+#define SDHC0_AC12ERR_AC12NE_SHIFT               0                                                   /*!< SDHC0_AC12ERR: AC12NE Position          */
+#define SDHC0_AC12ERR_AC12NE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_AC12NE_SHIFT))&SDHC0_AC12ERR_AC12NE_MASK) /*!< SDHC0_AC12ERR                           */
+#define SDHC0_AC12ERR_AC12TOE_MASK               (0x01UL << SDHC0_AC12ERR_AC12TOE_SHIFT)             /*!< SDHC0_AC12ERR: AC12TOE Mask             */
+#define SDHC0_AC12ERR_AC12TOE_SHIFT              1                                                   /*!< SDHC0_AC12ERR: AC12TOE Position         */
+#define SDHC0_AC12ERR_AC12TOE(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_AC12TOE_SHIFT))&SDHC0_AC12ERR_AC12TOE_MASK) /*!< SDHC0_AC12ERR                           */
+#define SDHC0_AC12ERR_AC12EBE_MASK               (0x01UL << SDHC0_AC12ERR_AC12EBE_SHIFT)             /*!< SDHC0_AC12ERR: AC12EBE Mask             */
+#define SDHC0_AC12ERR_AC12EBE_SHIFT              2                                                   /*!< SDHC0_AC12ERR: AC12EBE Position         */
+#define SDHC0_AC12ERR_AC12EBE(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_AC12EBE_SHIFT))&SDHC0_AC12ERR_AC12EBE_MASK) /*!< SDHC0_AC12ERR                           */
+#define SDHC0_AC12ERR_AC12CE_MASK                (0x01UL << SDHC0_AC12ERR_AC12CE_SHIFT)              /*!< SDHC0_AC12ERR: AC12CE Mask              */
+#define SDHC0_AC12ERR_AC12CE_SHIFT               3                                                   /*!< SDHC0_AC12ERR: AC12CE Position          */
+#define SDHC0_AC12ERR_AC12CE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_AC12CE_SHIFT))&SDHC0_AC12ERR_AC12CE_MASK) /*!< SDHC0_AC12ERR                           */
+#define SDHC0_AC12ERR_AC12IE_MASK                (0x01UL << SDHC0_AC12ERR_AC12IE_SHIFT)              /*!< SDHC0_AC12ERR: AC12IE Mask              */
+#define SDHC0_AC12ERR_AC12IE_SHIFT               4                                                   /*!< SDHC0_AC12ERR: AC12IE Position          */
+#define SDHC0_AC12ERR_AC12IE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_AC12IE_SHIFT))&SDHC0_AC12ERR_AC12IE_MASK) /*!< SDHC0_AC12ERR                           */
+#define SDHC0_AC12ERR_CNIBAC12E_MASK             (0x01UL << SDHC0_AC12ERR_CNIBAC12E_SHIFT)           /*!< SDHC0_AC12ERR: CNIBAC12E Mask           */
+#define SDHC0_AC12ERR_CNIBAC12E_SHIFT            7                                                   /*!< SDHC0_AC12ERR: CNIBAC12E Position       */
+#define SDHC0_AC12ERR_CNIBAC12E(x)               (((uint32_t)(((uint32_t)(x))<<SDHC0_AC12ERR_CNIBAC12E_SHIFT))&SDHC0_AC12ERR_CNIBAC12E_MASK) /*!< SDHC0_AC12ERR                           */
 /* ------- HTCAPBLT Bit Fields                      ------ */
-#define SDHC_HTCAPBLT_MBL_MASK                   (0x07UL << SDHC_HTCAPBLT_MBL_SHIFT)                 /*!< SDHC_HTCAPBLT: MBL Mask                 */
-#define SDHC_HTCAPBLT_MBL_SHIFT                  16                                                  /*!< SDHC_HTCAPBLT: MBL Position             */
-#define SDHC_HTCAPBLT_MBL(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_MBL_SHIFT))&SDHC_HTCAPBLT_MBL_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_ADMAS_MASK                 (0x01UL << SDHC_HTCAPBLT_ADMAS_SHIFT)               /*!< SDHC_HTCAPBLT: ADMAS Mask               */
-#define SDHC_HTCAPBLT_ADMAS_SHIFT                20                                                  /*!< SDHC_HTCAPBLT: ADMAS Position           */
-#define SDHC_HTCAPBLT_ADMAS(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_ADMAS_SHIFT))&SDHC_HTCAPBLT_ADMAS_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_HSS_MASK                   (0x01UL << SDHC_HTCAPBLT_HSS_SHIFT)                 /*!< SDHC_HTCAPBLT: HSS Mask                 */
-#define SDHC_HTCAPBLT_HSS_SHIFT                  21                                                  /*!< SDHC_HTCAPBLT: HSS Position             */
-#define SDHC_HTCAPBLT_HSS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_HSS_SHIFT))&SDHC_HTCAPBLT_HSS_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_DMAS_MASK                  (0x01UL << SDHC_HTCAPBLT_DMAS_SHIFT)                /*!< SDHC_HTCAPBLT: DMAS Mask                */
-#define SDHC_HTCAPBLT_DMAS_SHIFT                 22                                                  /*!< SDHC_HTCAPBLT: DMAS Position            */
-#define SDHC_HTCAPBLT_DMAS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_DMAS_SHIFT))&SDHC_HTCAPBLT_DMAS_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_SRS_MASK                   (0x01UL << SDHC_HTCAPBLT_SRS_SHIFT)                 /*!< SDHC_HTCAPBLT: SRS Mask                 */
-#define SDHC_HTCAPBLT_SRS_SHIFT                  23                                                  /*!< SDHC_HTCAPBLT: SRS Position             */
-#define SDHC_HTCAPBLT_SRS(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_SRS_SHIFT))&SDHC_HTCAPBLT_SRS_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_VS33_MASK                  (0x01UL << SDHC_HTCAPBLT_VS33_SHIFT)                /*!< SDHC_HTCAPBLT: VS33 Mask                */
-#define SDHC_HTCAPBLT_VS33_SHIFT                 24                                                  /*!< SDHC_HTCAPBLT: VS33 Position            */
-#define SDHC_HTCAPBLT_VS33(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS33_SHIFT))&SDHC_HTCAPBLT_VS33_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_VS30_MASK                  (0x01UL << SDHC_HTCAPBLT_VS30_SHIFT)                /*!< SDHC_HTCAPBLT: VS30 Mask                */
-#define SDHC_HTCAPBLT_VS30_SHIFT                 25                                                  /*!< SDHC_HTCAPBLT: VS30 Position            */
-#define SDHC_HTCAPBLT_VS30(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS30_SHIFT))&SDHC_HTCAPBLT_VS30_MASK) /*!< SDHC_HTCAPBLT                           */
-#define SDHC_HTCAPBLT_VS18_MASK                  (0x01UL << SDHC_HTCAPBLT_VS18_SHIFT)                /*!< SDHC_HTCAPBLT: VS18 Mask                */
-#define SDHC_HTCAPBLT_VS18_SHIFT                 26                                                  /*!< SDHC_HTCAPBLT: VS18 Position            */
-#define SDHC_HTCAPBLT_VS18(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS18_SHIFT))&SDHC_HTCAPBLT_VS18_MASK) /*!< SDHC_HTCAPBLT                           */
+#define SDHC0_HTCAPBLT_MBL_MASK                  (0x07UL << SDHC0_HTCAPBLT_MBL_SHIFT)                /*!< SDHC0_HTCAPBLT: MBL Mask                */
+#define SDHC0_HTCAPBLT_MBL_SHIFT                 16                                                  /*!< SDHC0_HTCAPBLT: MBL Position            */
+#define SDHC0_HTCAPBLT_MBL(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_MBL_SHIFT))&SDHC0_HTCAPBLT_MBL_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_ADMAS_MASK                (0x01UL << SDHC0_HTCAPBLT_ADMAS_SHIFT)              /*!< SDHC0_HTCAPBLT: ADMAS Mask              */
+#define SDHC0_HTCAPBLT_ADMAS_SHIFT               20                                                  /*!< SDHC0_HTCAPBLT: ADMAS Position          */
+#define SDHC0_HTCAPBLT_ADMAS(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_ADMAS_SHIFT))&SDHC0_HTCAPBLT_ADMAS_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_HSS_MASK                  (0x01UL << SDHC0_HTCAPBLT_HSS_SHIFT)                /*!< SDHC0_HTCAPBLT: HSS Mask                */
+#define SDHC0_HTCAPBLT_HSS_SHIFT                 21                                                  /*!< SDHC0_HTCAPBLT: HSS Position            */
+#define SDHC0_HTCAPBLT_HSS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_HSS_SHIFT))&SDHC0_HTCAPBLT_HSS_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_DMAS_MASK                 (0x01UL << SDHC0_HTCAPBLT_DMAS_SHIFT)               /*!< SDHC0_HTCAPBLT: DMAS Mask               */
+#define SDHC0_HTCAPBLT_DMAS_SHIFT                22                                                  /*!< SDHC0_HTCAPBLT: DMAS Position           */
+#define SDHC0_HTCAPBLT_DMAS(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_DMAS_SHIFT))&SDHC0_HTCAPBLT_DMAS_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_SRS_MASK                  (0x01UL << SDHC0_HTCAPBLT_SRS_SHIFT)                /*!< SDHC0_HTCAPBLT: SRS Mask                */
+#define SDHC0_HTCAPBLT_SRS_SHIFT                 23                                                  /*!< SDHC0_HTCAPBLT: SRS Position            */
+#define SDHC0_HTCAPBLT_SRS(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_SRS_SHIFT))&SDHC0_HTCAPBLT_SRS_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_VS33_MASK                 (0x01UL << SDHC0_HTCAPBLT_VS33_SHIFT)               /*!< SDHC0_HTCAPBLT: VS33 Mask               */
+#define SDHC0_HTCAPBLT_VS33_SHIFT                24                                                  /*!< SDHC0_HTCAPBLT: VS33 Position           */
+#define SDHC0_HTCAPBLT_VS33(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_VS33_SHIFT))&SDHC0_HTCAPBLT_VS33_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_VS30_MASK                 (0x01UL << SDHC0_HTCAPBLT_VS30_SHIFT)               /*!< SDHC0_HTCAPBLT: VS30 Mask               */
+#define SDHC0_HTCAPBLT_VS30_SHIFT                25                                                  /*!< SDHC0_HTCAPBLT: VS30 Position           */
+#define SDHC0_HTCAPBLT_VS30(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_VS30_SHIFT))&SDHC0_HTCAPBLT_VS30_MASK) /*!< SDHC0_HTCAPBLT                          */
+#define SDHC0_HTCAPBLT_VS18_MASK                 (0x01UL << SDHC0_HTCAPBLT_VS18_SHIFT)               /*!< SDHC0_HTCAPBLT: VS18 Mask               */
+#define SDHC0_HTCAPBLT_VS18_SHIFT                26                                                  /*!< SDHC0_HTCAPBLT: VS18 Position           */
+#define SDHC0_HTCAPBLT_VS18(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_HTCAPBLT_VS18_SHIFT))&SDHC0_HTCAPBLT_VS18_MASK) /*!< SDHC0_HTCAPBLT                          */
 /* ------- WML Bit Fields                           ------ */
-#define SDHC_WML_RDWML_MASK                      (0xFFUL << SDHC_WML_RDWML_SHIFT)                    /*!< SDHC_WML: RDWML Mask                    */
-#define SDHC_WML_RDWML_SHIFT                     0                                                   /*!< SDHC_WML: RDWML Position                */
-#define SDHC_WML_RDWML(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_WML_RDWML_SHIFT))&SDHC_WML_RDWML_MASK) /*!< SDHC_WML                                */
-#define SDHC_WML_WRWML_MASK                      (0xFFUL << SDHC_WML_WRWML_SHIFT)                    /*!< SDHC_WML: WRWML Mask                    */
-#define SDHC_WML_WRWML_SHIFT                     16                                                  /*!< SDHC_WML: WRWML Position                */
-#define SDHC_WML_WRWML(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_WML_WRWML_SHIFT))&SDHC_WML_WRWML_MASK) /*!< SDHC_WML                                */
-#define SDHC_WML_WRBRSTLEN_MASK                  (0x1FUL << SDHC_WML_WRBRSTLEN_SHIFT)                /*!< SDHC_WML: WRBRSTLEN Mask                */
-#define SDHC_WML_WRBRSTLEN_SHIFT                 24                                                  /*!< SDHC_WML: WRBRSTLEN Position            */
-#define SDHC_WML_WRBRSTLEN(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_WML_WRBRSTLEN_SHIFT))&SDHC_WML_WRBRSTLEN_MASK) /*!< SDHC_WML                                */
+#define SDHC0_WML_RDWML_MASK                     (0xFFUL << SDHC0_WML_RDWML_SHIFT)                   /*!< SDHC0_WML: RDWML Mask                   */
+#define SDHC0_WML_RDWML_SHIFT                    0                                                   /*!< SDHC0_WML: RDWML Position               */
+#define SDHC0_WML_RDWML(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_WML_RDWML_SHIFT))&SDHC0_WML_RDWML_MASK) /*!< SDHC0_WML                               */
+#define SDHC0_WML_WRWML_MASK                     (0xFFUL << SDHC0_WML_WRWML_SHIFT)                   /*!< SDHC0_WML: WRWML Mask                   */
+#define SDHC0_WML_WRWML_SHIFT                    16                                                  /*!< SDHC0_WML: WRWML Position               */
+#define SDHC0_WML_WRWML(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_WML_WRWML_SHIFT))&SDHC0_WML_WRWML_MASK) /*!< SDHC0_WML                               */
+#define SDHC0_WML_WRBRSTLEN_MASK                 (0x1FUL << SDHC0_WML_WRBRSTLEN_SHIFT)               /*!< SDHC0_WML: WRBRSTLEN Mask               */
+#define SDHC0_WML_WRBRSTLEN_SHIFT                24                                                  /*!< SDHC0_WML: WRBRSTLEN Position           */
+#define SDHC0_WML_WRBRSTLEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_WML_WRBRSTLEN_SHIFT))&SDHC0_WML_WRBRSTLEN_MASK) /*!< SDHC0_WML                               */
 /* ------- FEVT Bit Fields                          ------ */
-#define SDHC_FEVT_AC12NE_MASK                    (0x01UL << SDHC_FEVT_AC12NE_SHIFT)                  /*!< SDHC_FEVT: AC12NE Mask                  */
-#define SDHC_FEVT_AC12NE_SHIFT                   0                                                   /*!< SDHC_FEVT: AC12NE Position              */
-#define SDHC_FEVT_AC12NE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12NE_SHIFT))&SDHC_FEVT_AC12NE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_AC12TOE_MASK                   (0x01UL << SDHC_FEVT_AC12TOE_SHIFT)                 /*!< SDHC_FEVT: AC12TOE Mask                 */
-#define SDHC_FEVT_AC12TOE_SHIFT                  1                                                   /*!< SDHC_FEVT: AC12TOE Position             */
-#define SDHC_FEVT_AC12TOE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12TOE_SHIFT))&SDHC_FEVT_AC12TOE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_AC12CE_MASK                    (0x01UL << SDHC_FEVT_AC12CE_SHIFT)                  /*!< SDHC_FEVT: AC12CE Mask                  */
-#define SDHC_FEVT_AC12CE_SHIFT                   2                                                   /*!< SDHC_FEVT: AC12CE Position              */
-#define SDHC_FEVT_AC12CE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12CE_SHIFT))&SDHC_FEVT_AC12CE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_AC12EBE_MASK                   (0x01UL << SDHC_FEVT_AC12EBE_SHIFT)                 /*!< SDHC_FEVT: AC12EBE Mask                 */
-#define SDHC_FEVT_AC12EBE_SHIFT                  3                                                   /*!< SDHC_FEVT: AC12EBE Position             */
-#define SDHC_FEVT_AC12EBE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12EBE_SHIFT))&SDHC_FEVT_AC12EBE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_AC12IE_MASK                    (0x01UL << SDHC_FEVT_AC12IE_SHIFT)                  /*!< SDHC_FEVT: AC12IE Mask                  */
-#define SDHC_FEVT_AC12IE_SHIFT                   4                                                   /*!< SDHC_FEVT: AC12IE Position              */
-#define SDHC_FEVT_AC12IE(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12IE_SHIFT))&SDHC_FEVT_AC12IE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CNIBAC12E_MASK                 (0x01UL << SDHC_FEVT_CNIBAC12E_SHIFT)               /*!< SDHC_FEVT: CNIBAC12E Mask               */
-#define SDHC_FEVT_CNIBAC12E_SHIFT                7                                                   /*!< SDHC_FEVT: CNIBAC12E Position           */
-#define SDHC_FEVT_CNIBAC12E(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CNIBAC12E_SHIFT))&SDHC_FEVT_CNIBAC12E_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CTOE_MASK                      (0x01UL << SDHC_FEVT_CTOE_SHIFT)                    /*!< SDHC_FEVT: CTOE Mask                    */
-#define SDHC_FEVT_CTOE_SHIFT                     16                                                  /*!< SDHC_FEVT: CTOE Position                */
-#define SDHC_FEVT_CTOE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CTOE_SHIFT))&SDHC_FEVT_CTOE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CCE_MASK                       (0x01UL << SDHC_FEVT_CCE_SHIFT)                     /*!< SDHC_FEVT: CCE Mask                     */
-#define SDHC_FEVT_CCE_SHIFT                      17                                                  /*!< SDHC_FEVT: CCE Position                 */
-#define SDHC_FEVT_CCE(x)                         (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CCE_SHIFT))&SDHC_FEVT_CCE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CEBE_MASK                      (0x01UL << SDHC_FEVT_CEBE_SHIFT)                    /*!< SDHC_FEVT: CEBE Mask                    */
-#define SDHC_FEVT_CEBE_SHIFT                     18                                                  /*!< SDHC_FEVT: CEBE Position                */
-#define SDHC_FEVT_CEBE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CEBE_SHIFT))&SDHC_FEVT_CEBE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CIE_MASK                       (0x01UL << SDHC_FEVT_CIE_SHIFT)                     /*!< SDHC_FEVT: CIE Mask                     */
-#define SDHC_FEVT_CIE_SHIFT                      19                                                  /*!< SDHC_FEVT: CIE Position                 */
-#define SDHC_FEVT_CIE(x)                         (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CIE_SHIFT))&SDHC_FEVT_CIE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_DTOE_MASK                      (0x01UL << SDHC_FEVT_DTOE_SHIFT)                    /*!< SDHC_FEVT: DTOE Mask                    */
-#define SDHC_FEVT_DTOE_SHIFT                     20                                                  /*!< SDHC_FEVT: DTOE Position                */
-#define SDHC_FEVT_DTOE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_DTOE_SHIFT))&SDHC_FEVT_DTOE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_DCE_MASK                       (0x01UL << SDHC_FEVT_DCE_SHIFT)                     /*!< SDHC_FEVT: DCE Mask                     */
-#define SDHC_FEVT_DCE_SHIFT                      21                                                  /*!< SDHC_FEVT: DCE Position                 */
-#define SDHC_FEVT_DCE(x)                         (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_DCE_SHIFT))&SDHC_FEVT_DCE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_DEBE_MASK                      (0x01UL << SDHC_FEVT_DEBE_SHIFT)                    /*!< SDHC_FEVT: DEBE Mask                    */
-#define SDHC_FEVT_DEBE_SHIFT                     22                                                  /*!< SDHC_FEVT: DEBE Position                */
-#define SDHC_FEVT_DEBE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_DEBE_SHIFT))&SDHC_FEVT_DEBE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_AC12E_MASK                     (0x01UL << SDHC_FEVT_AC12E_SHIFT)                   /*!< SDHC_FEVT: AC12E Mask                   */
-#define SDHC_FEVT_AC12E_SHIFT                    24                                                  /*!< SDHC_FEVT: AC12E Position               */
-#define SDHC_FEVT_AC12E(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_AC12E_SHIFT))&SDHC_FEVT_AC12E_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_DMAE_MASK                      (0x01UL << SDHC_FEVT_DMAE_SHIFT)                    /*!< SDHC_FEVT: DMAE Mask                    */
-#define SDHC_FEVT_DMAE_SHIFT                     28                                                  /*!< SDHC_FEVT: DMAE Position                */
-#define SDHC_FEVT_DMAE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_DMAE_SHIFT))&SDHC_FEVT_DMAE_MASK) /*!< SDHC_FEVT                               */
-#define SDHC_FEVT_CINT_MASK                      (0x01UL << SDHC_FEVT_CINT_SHIFT)                    /*!< SDHC_FEVT: CINT Mask                    */
-#define SDHC_FEVT_CINT_SHIFT                     31                                                  /*!< SDHC_FEVT: CINT Position                */
-#define SDHC_FEVT_CINT(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC_FEVT_CINT_SHIFT))&SDHC_FEVT_CINT_MASK) /*!< SDHC_FEVT                               */
+#define SDHC0_FEVT_AC12NE_MASK                   (0x01UL << SDHC0_FEVT_AC12NE_SHIFT)                 /*!< SDHC0_FEVT: AC12NE Mask                 */
+#define SDHC0_FEVT_AC12NE_SHIFT                  0                                                   /*!< SDHC0_FEVT: AC12NE Position             */
+#define SDHC0_FEVT_AC12NE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12NE_SHIFT))&SDHC0_FEVT_AC12NE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_AC12TOE_MASK                  (0x01UL << SDHC0_FEVT_AC12TOE_SHIFT)                /*!< SDHC0_FEVT: AC12TOE Mask                */
+#define SDHC0_FEVT_AC12TOE_SHIFT                 1                                                   /*!< SDHC0_FEVT: AC12TOE Position            */
+#define SDHC0_FEVT_AC12TOE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12TOE_SHIFT))&SDHC0_FEVT_AC12TOE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_AC12CE_MASK                   (0x01UL << SDHC0_FEVT_AC12CE_SHIFT)                 /*!< SDHC0_FEVT: AC12CE Mask                 */
+#define SDHC0_FEVT_AC12CE_SHIFT                  2                                                   /*!< SDHC0_FEVT: AC12CE Position             */
+#define SDHC0_FEVT_AC12CE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12CE_SHIFT))&SDHC0_FEVT_AC12CE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_AC12EBE_MASK                  (0x01UL << SDHC0_FEVT_AC12EBE_SHIFT)                /*!< SDHC0_FEVT: AC12EBE Mask                */
+#define SDHC0_FEVT_AC12EBE_SHIFT                 3                                                   /*!< SDHC0_FEVT: AC12EBE Position            */
+#define SDHC0_FEVT_AC12EBE(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12EBE_SHIFT))&SDHC0_FEVT_AC12EBE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_AC12IE_MASK                   (0x01UL << SDHC0_FEVT_AC12IE_SHIFT)                 /*!< SDHC0_FEVT: AC12IE Mask                 */
+#define SDHC0_FEVT_AC12IE_SHIFT                  4                                                   /*!< SDHC0_FEVT: AC12IE Position             */
+#define SDHC0_FEVT_AC12IE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12IE_SHIFT))&SDHC0_FEVT_AC12IE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CNIBAC12E_MASK                (0x01UL << SDHC0_FEVT_CNIBAC12E_SHIFT)              /*!< SDHC0_FEVT: CNIBAC12E Mask              */
+#define SDHC0_FEVT_CNIBAC12E_SHIFT               7                                                   /*!< SDHC0_FEVT: CNIBAC12E Position          */
+#define SDHC0_FEVT_CNIBAC12E(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CNIBAC12E_SHIFT))&SDHC0_FEVT_CNIBAC12E_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CTOE_MASK                     (0x01UL << SDHC0_FEVT_CTOE_SHIFT)                   /*!< SDHC0_FEVT: CTOE Mask                   */
+#define SDHC0_FEVT_CTOE_SHIFT                    16                                                  /*!< SDHC0_FEVT: CTOE Position               */
+#define SDHC0_FEVT_CTOE(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CTOE_SHIFT))&SDHC0_FEVT_CTOE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CCE_MASK                      (0x01UL << SDHC0_FEVT_CCE_SHIFT)                    /*!< SDHC0_FEVT: CCE Mask                    */
+#define SDHC0_FEVT_CCE_SHIFT                     17                                                  /*!< SDHC0_FEVT: CCE Position                */
+#define SDHC0_FEVT_CCE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CCE_SHIFT))&SDHC0_FEVT_CCE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CEBE_MASK                     (0x01UL << SDHC0_FEVT_CEBE_SHIFT)                   /*!< SDHC0_FEVT: CEBE Mask                   */
+#define SDHC0_FEVT_CEBE_SHIFT                    18                                                  /*!< SDHC0_FEVT: CEBE Position               */
+#define SDHC0_FEVT_CEBE(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CEBE_SHIFT))&SDHC0_FEVT_CEBE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CIE_MASK                      (0x01UL << SDHC0_FEVT_CIE_SHIFT)                    /*!< SDHC0_FEVT: CIE Mask                    */
+#define SDHC0_FEVT_CIE_SHIFT                     19                                                  /*!< SDHC0_FEVT: CIE Position                */
+#define SDHC0_FEVT_CIE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CIE_SHIFT))&SDHC0_FEVT_CIE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_DTOE_MASK                     (0x01UL << SDHC0_FEVT_DTOE_SHIFT)                   /*!< SDHC0_FEVT: DTOE Mask                   */
+#define SDHC0_FEVT_DTOE_SHIFT                    20                                                  /*!< SDHC0_FEVT: DTOE Position               */
+#define SDHC0_FEVT_DTOE(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_DTOE_SHIFT))&SDHC0_FEVT_DTOE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_DCE_MASK                      (0x01UL << SDHC0_FEVT_DCE_SHIFT)                    /*!< SDHC0_FEVT: DCE Mask                    */
+#define SDHC0_FEVT_DCE_SHIFT                     21                                                  /*!< SDHC0_FEVT: DCE Position                */
+#define SDHC0_FEVT_DCE(x)                        (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_DCE_SHIFT))&SDHC0_FEVT_DCE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_DEBE_MASK                     (0x01UL << SDHC0_FEVT_DEBE_SHIFT)                   /*!< SDHC0_FEVT: DEBE Mask                   */
+#define SDHC0_FEVT_DEBE_SHIFT                    22                                                  /*!< SDHC0_FEVT: DEBE Position               */
+#define SDHC0_FEVT_DEBE(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_DEBE_SHIFT))&SDHC0_FEVT_DEBE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_AC12E_MASK                    (0x01UL << SDHC0_FEVT_AC12E_SHIFT)                  /*!< SDHC0_FEVT: AC12E Mask                  */
+#define SDHC0_FEVT_AC12E_SHIFT                   24                                                  /*!< SDHC0_FEVT: AC12E Position              */
+#define SDHC0_FEVT_AC12E(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_AC12E_SHIFT))&SDHC0_FEVT_AC12E_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_DMAE_MASK                     (0x01UL << SDHC0_FEVT_DMAE_SHIFT)                   /*!< SDHC0_FEVT: DMAE Mask                   */
+#define SDHC0_FEVT_DMAE_SHIFT                    28                                                  /*!< SDHC0_FEVT: DMAE Position               */
+#define SDHC0_FEVT_DMAE(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_DMAE_SHIFT))&SDHC0_FEVT_DMAE_MASK) /*!< SDHC0_FEVT                              */
+#define SDHC0_FEVT_CINT_MASK                     (0x01UL << SDHC0_FEVT_CINT_SHIFT)                   /*!< SDHC0_FEVT: CINT Mask                   */
+#define SDHC0_FEVT_CINT_SHIFT                    31                                                  /*!< SDHC0_FEVT: CINT Position               */
+#define SDHC0_FEVT_CINT(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC0_FEVT_CINT_SHIFT))&SDHC0_FEVT_CINT_MASK) /*!< SDHC0_FEVT                              */
 /* ------- ADMAES Bit Fields                        ------ */
-#define SDHC_ADMAES_ADMAES_MASK                  (0x03UL << SDHC_ADMAES_ADMAES_SHIFT)                /*!< SDHC_ADMAES: ADMAES Mask                */
-#define SDHC_ADMAES_ADMAES_SHIFT                 0                                                   /*!< SDHC_ADMAES: ADMAES Position            */
-#define SDHC_ADMAES_ADMAES(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_ADMAES_ADMAES_SHIFT))&SDHC_ADMAES_ADMAES_MASK) /*!< SDHC_ADMAES                             */
-#define SDHC_ADMAES_ADMALME_MASK                 (0x01UL << SDHC_ADMAES_ADMALME_SHIFT)               /*!< SDHC_ADMAES: ADMALME Mask               */
-#define SDHC_ADMAES_ADMALME_SHIFT                2                                                   /*!< SDHC_ADMAES: ADMALME Position           */
-#define SDHC_ADMAES_ADMALME(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_ADMAES_ADMALME_SHIFT))&SDHC_ADMAES_ADMALME_MASK) /*!< SDHC_ADMAES                             */
-#define SDHC_ADMAES_ADMADCE_MASK                 (0x01UL << SDHC_ADMAES_ADMADCE_SHIFT)               /*!< SDHC_ADMAES: ADMADCE Mask               */
-#define SDHC_ADMAES_ADMADCE_SHIFT                3                                                   /*!< SDHC_ADMAES: ADMADCE Position           */
-#define SDHC_ADMAES_ADMADCE(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_ADMAES_ADMADCE_SHIFT))&SDHC_ADMAES_ADMADCE_MASK) /*!< SDHC_ADMAES                             */
+#define SDHC0_ADMAES_ADMAES_MASK                 (0x03UL << SDHC0_ADMAES_ADMAES_SHIFT)               /*!< SDHC0_ADMAES: ADMAES Mask               */
+#define SDHC0_ADMAES_ADMAES_SHIFT                0                                                   /*!< SDHC0_ADMAES: ADMAES Position           */
+#define SDHC0_ADMAES_ADMAES(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC0_ADMAES_ADMAES_SHIFT))&SDHC0_ADMAES_ADMAES_MASK) /*!< SDHC0_ADMAES                            */
+#define SDHC0_ADMAES_ADMALME_MASK                (0x01UL << SDHC0_ADMAES_ADMALME_SHIFT)              /*!< SDHC0_ADMAES: ADMALME Mask              */
+#define SDHC0_ADMAES_ADMALME_SHIFT               2                                                   /*!< SDHC0_ADMAES: ADMALME Position          */
+#define SDHC0_ADMAES_ADMALME(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_ADMAES_ADMALME_SHIFT))&SDHC0_ADMAES_ADMALME_MASK) /*!< SDHC0_ADMAES                            */
+#define SDHC0_ADMAES_ADMADCE_MASK                (0x01UL << SDHC0_ADMAES_ADMADCE_SHIFT)              /*!< SDHC0_ADMAES: ADMADCE Mask              */
+#define SDHC0_ADMAES_ADMADCE_SHIFT               3                                                   /*!< SDHC0_ADMAES: ADMADCE Position          */
+#define SDHC0_ADMAES_ADMADCE(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_ADMAES_ADMADCE_SHIFT))&SDHC0_ADMAES_ADMADCE_MASK) /*!< SDHC0_ADMAES                            */
 /* ------- ADSADDR Bit Fields                       ------ */
-#define SDHC_ADSADDR_ADSADDR_MASK                (0x3FFFFFFFUL << SDHC_ADSADDR_ADSADDR_SHIFT)        /*!< SDHC_ADSADDR: ADSADDR Mask              */
-#define SDHC_ADSADDR_ADSADDR_SHIFT               2                                                   /*!< SDHC_ADSADDR: ADSADDR Position          */
-#define SDHC_ADSADDR_ADSADDR(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_ADSADDR_ADSADDR_SHIFT))&SDHC_ADSADDR_ADSADDR_MASK) /*!< SDHC_ADSADDR                            */
+#define SDHC0_ADSADDR_ADSADDR_MASK               (0x3FFFFFFFUL << SDHC0_ADSADDR_ADSADDR_SHIFT)       /*!< SDHC0_ADSADDR: ADSADDR Mask             */
+#define SDHC0_ADSADDR_ADSADDR_SHIFT              2                                                   /*!< SDHC0_ADSADDR: ADSADDR Position         */
+#define SDHC0_ADSADDR_ADSADDR(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_ADSADDR_ADSADDR_SHIFT))&SDHC0_ADSADDR_ADSADDR_MASK) /*!< SDHC0_ADSADDR                           */
 /* ------- VENDOR Bit Fields                        ------ */
-#define SDHC_VENDOR_EXTDMAEN_MASK                (0x01UL << SDHC_VENDOR_EXTDMAEN_SHIFT)              /*!< SDHC_VENDOR: EXTDMAEN Mask              */
-#define SDHC_VENDOR_EXTDMAEN_SHIFT               0                                                   /*!< SDHC_VENDOR: EXTDMAEN Position          */
-#define SDHC_VENDOR_EXTDMAEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_VENDOR_EXTDMAEN_SHIFT))&SDHC_VENDOR_EXTDMAEN_MASK) /*!< SDHC_VENDOR                             */
-#define SDHC_VENDOR_EXBLKNU_MASK                 (0x01UL << SDHC_VENDOR_EXBLKNU_SHIFT)               /*!< SDHC_VENDOR: EXBLKNU Mask               */
-#define SDHC_VENDOR_EXBLKNU_SHIFT                1                                                   /*!< SDHC_VENDOR: EXBLKNU Position           */
-#define SDHC_VENDOR_EXBLKNU(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_VENDOR_EXBLKNU_SHIFT))&SDHC_VENDOR_EXBLKNU_MASK) /*!< SDHC_VENDOR                             */
-#define SDHC_VENDOR_INTSTVAL_MASK                (0xFFUL << SDHC_VENDOR_INTSTVAL_SHIFT)              /*!< SDHC_VENDOR: INTSTVAL Mask              */
-#define SDHC_VENDOR_INTSTVAL_SHIFT               16                                                  /*!< SDHC_VENDOR: INTSTVAL Position          */
-#define SDHC_VENDOR_INTSTVAL(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_VENDOR_INTSTVAL_SHIFT))&SDHC_VENDOR_INTSTVAL_MASK) /*!< SDHC_VENDOR                             */
+#define SDHC0_VENDOR_EXTDMAEN_MASK               (0x01UL << SDHC0_VENDOR_EXTDMAEN_SHIFT)             /*!< SDHC0_VENDOR: EXTDMAEN Mask             */
+#define SDHC0_VENDOR_EXTDMAEN_SHIFT              0                                                   /*!< SDHC0_VENDOR: EXTDMAEN Position         */
+#define SDHC0_VENDOR_EXTDMAEN(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_VENDOR_EXTDMAEN_SHIFT))&SDHC0_VENDOR_EXTDMAEN_MASK) /*!< SDHC0_VENDOR                            */
+#define SDHC0_VENDOR_EXBLKNU_MASK                (0x01UL << SDHC0_VENDOR_EXBLKNU_SHIFT)              /*!< SDHC0_VENDOR: EXBLKNU Mask              */
+#define SDHC0_VENDOR_EXBLKNU_SHIFT               1                                                   /*!< SDHC0_VENDOR: EXBLKNU Position          */
+#define SDHC0_VENDOR_EXBLKNU(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_VENDOR_EXBLKNU_SHIFT))&SDHC0_VENDOR_EXBLKNU_MASK) /*!< SDHC0_VENDOR                            */
+#define SDHC0_VENDOR_INTSTVAL_MASK               (0xFFUL << SDHC0_VENDOR_INTSTVAL_SHIFT)             /*!< SDHC0_VENDOR: INTSTVAL Mask             */
+#define SDHC0_VENDOR_INTSTVAL_SHIFT              16                                                  /*!< SDHC0_VENDOR: INTSTVAL Position         */
+#define SDHC0_VENDOR_INTSTVAL(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_VENDOR_INTSTVAL_SHIFT))&SDHC0_VENDOR_INTSTVAL_MASK) /*!< SDHC0_VENDOR                            */
 /* ------- MMCBOOT Bit Fields                       ------ */
-#define SDHC_MMCBOOT_DTOCVACK_MASK               (0x0FUL << SDHC_MMCBOOT_DTOCVACK_SHIFT)             /*!< SDHC_MMCBOOT: DTOCVACK Mask             */
-#define SDHC_MMCBOOT_DTOCVACK_SHIFT              0                                                   /*!< SDHC_MMCBOOT: DTOCVACK Position         */
-#define SDHC_MMCBOOT_DTOCVACK(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_DTOCVACK_SHIFT))&SDHC_MMCBOOT_DTOCVACK_MASK) /*!< SDHC_MMCBOOT                            */
-#define SDHC_MMCBOOT_BOOTACK_MASK                (0x01UL << SDHC_MMCBOOT_BOOTACK_SHIFT)              /*!< SDHC_MMCBOOT: BOOTACK Mask              */
-#define SDHC_MMCBOOT_BOOTACK_SHIFT               4                                                   /*!< SDHC_MMCBOOT: BOOTACK Position          */
-#define SDHC_MMCBOOT_BOOTACK(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_BOOTACK_SHIFT))&SDHC_MMCBOOT_BOOTACK_MASK) /*!< SDHC_MMCBOOT                            */
-#define SDHC_MMCBOOT_BOOTMODE_MASK               (0x01UL << SDHC_MMCBOOT_BOOTMODE_SHIFT)             /*!< SDHC_MMCBOOT: BOOTMODE Mask             */
-#define SDHC_MMCBOOT_BOOTMODE_SHIFT              5                                                   /*!< SDHC_MMCBOOT: BOOTMODE Position         */
-#define SDHC_MMCBOOT_BOOTMODE(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_BOOTMODE_SHIFT))&SDHC_MMCBOOT_BOOTMODE_MASK) /*!< SDHC_MMCBOOT                            */
-#define SDHC_MMCBOOT_BOOTEN_MASK                 (0x01UL << SDHC_MMCBOOT_BOOTEN_SHIFT)               /*!< SDHC_MMCBOOT: BOOTEN Mask               */
-#define SDHC_MMCBOOT_BOOTEN_SHIFT                6                                                   /*!< SDHC_MMCBOOT: BOOTEN Position           */
-#define SDHC_MMCBOOT_BOOTEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_BOOTEN_SHIFT))&SDHC_MMCBOOT_BOOTEN_MASK) /*!< SDHC_MMCBOOT                            */
-#define SDHC_MMCBOOT_AUTOSABGEN_MASK             (0x01UL << SDHC_MMCBOOT_AUTOSABGEN_SHIFT)           /*!< SDHC_MMCBOOT: AUTOSABGEN Mask           */
-#define SDHC_MMCBOOT_AUTOSABGEN_SHIFT            7                                                   /*!< SDHC_MMCBOOT: AUTOSABGEN Position       */
-#define SDHC_MMCBOOT_AUTOSABGEN(x)               (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_AUTOSABGEN_SHIFT))&SDHC_MMCBOOT_AUTOSABGEN_MASK) /*!< SDHC_MMCBOOT                            */
-#define SDHC_MMCBOOT_BOOTBLKCNT_MASK             (0xFFFFUL << SDHC_MMCBOOT_BOOTBLKCNT_SHIFT)         /*!< SDHC_MMCBOOT: BOOTBLKCNT Mask           */
-#define SDHC_MMCBOOT_BOOTBLKCNT_SHIFT            16                                                  /*!< SDHC_MMCBOOT: BOOTBLKCNT Position       */
-#define SDHC_MMCBOOT_BOOTBLKCNT(x)               (((uint32_t)(((uint32_t)(x))<<SDHC_MMCBOOT_BOOTBLKCNT_SHIFT))&SDHC_MMCBOOT_BOOTBLKCNT_MASK) /*!< SDHC_MMCBOOT                            */
+#define SDHC0_MMCBOOT_DTOCVACK_MASK              (0x0FUL << SDHC0_MMCBOOT_DTOCVACK_SHIFT)            /*!< SDHC0_MMCBOOT: DTOCVACK Mask            */
+#define SDHC0_MMCBOOT_DTOCVACK_SHIFT             0                                                   /*!< SDHC0_MMCBOOT: DTOCVACK Position        */
+#define SDHC0_MMCBOOT_DTOCVACK(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_DTOCVACK_SHIFT))&SDHC0_MMCBOOT_DTOCVACK_MASK) /*!< SDHC0_MMCBOOT                           */
+#define SDHC0_MMCBOOT_BOOTACK_MASK               (0x01UL << SDHC0_MMCBOOT_BOOTACK_SHIFT)             /*!< SDHC0_MMCBOOT: BOOTACK Mask             */
+#define SDHC0_MMCBOOT_BOOTACK_SHIFT              4                                                   /*!< SDHC0_MMCBOOT: BOOTACK Position         */
+#define SDHC0_MMCBOOT_BOOTACK(x)                 (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_BOOTACK_SHIFT))&SDHC0_MMCBOOT_BOOTACK_MASK) /*!< SDHC0_MMCBOOT                           */
+#define SDHC0_MMCBOOT_BOOTMODE_MASK              (0x01UL << SDHC0_MMCBOOT_BOOTMODE_SHIFT)            /*!< SDHC0_MMCBOOT: BOOTMODE Mask            */
+#define SDHC0_MMCBOOT_BOOTMODE_SHIFT             5                                                   /*!< SDHC0_MMCBOOT: BOOTMODE Position        */
+#define SDHC0_MMCBOOT_BOOTMODE(x)                (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_BOOTMODE_SHIFT))&SDHC0_MMCBOOT_BOOTMODE_MASK) /*!< SDHC0_MMCBOOT                           */
+#define SDHC0_MMCBOOT_BOOTEN_MASK                (0x01UL << SDHC0_MMCBOOT_BOOTEN_SHIFT)              /*!< SDHC0_MMCBOOT: BOOTEN Mask              */
+#define SDHC0_MMCBOOT_BOOTEN_SHIFT               6                                                   /*!< SDHC0_MMCBOOT: BOOTEN Position          */
+#define SDHC0_MMCBOOT_BOOTEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_BOOTEN_SHIFT))&SDHC0_MMCBOOT_BOOTEN_MASK) /*!< SDHC0_MMCBOOT                           */
+#define SDHC0_MMCBOOT_AUTOSABGEN_MASK            (0x01UL << SDHC0_MMCBOOT_AUTOSABGEN_SHIFT)          /*!< SDHC0_MMCBOOT: AUTOSABGEN Mask          */
+#define SDHC0_MMCBOOT_AUTOSABGEN_SHIFT           7                                                   /*!< SDHC0_MMCBOOT: AUTOSABGEN Position      */
+#define SDHC0_MMCBOOT_AUTOSABGEN(x)              (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_AUTOSABGEN_SHIFT))&SDHC0_MMCBOOT_AUTOSABGEN_MASK) /*!< SDHC0_MMCBOOT                           */
+#define SDHC0_MMCBOOT_BOOTBLKCNT_MASK            (0xFFFFUL << SDHC0_MMCBOOT_BOOTBLKCNT_SHIFT)        /*!< SDHC0_MMCBOOT: BOOTBLKCNT Mask          */
+#define SDHC0_MMCBOOT_BOOTBLKCNT_SHIFT           16                                                  /*!< SDHC0_MMCBOOT: BOOTBLKCNT Position      */
+#define SDHC0_MMCBOOT_BOOTBLKCNT(x)              (((uint32_t)(((uint32_t)(x))<<SDHC0_MMCBOOT_BOOTBLKCNT_SHIFT))&SDHC0_MMCBOOT_BOOTBLKCNT_MASK) /*!< SDHC0_MMCBOOT                           */
 /* ------- HOSTVER Bit Fields                       ------ */
-#define SDHC_HOSTVER_SVN_MASK                    (0xFFUL << SDHC_HOSTVER_SVN_SHIFT)                  /*!< SDHC_HOSTVER: SVN Mask                  */
-#define SDHC_HOSTVER_SVN_SHIFT                   0                                                   /*!< SDHC_HOSTVER: SVN Position              */
-#define SDHC_HOSTVER_SVN(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_HOSTVER_SVN_SHIFT))&SDHC_HOSTVER_SVN_MASK) /*!< SDHC_HOSTVER                            */
-#define SDHC_HOSTVER_VVN_MASK                    (0xFFUL << SDHC_HOSTVER_VVN_SHIFT)                  /*!< SDHC_HOSTVER: VVN Mask                  */
-#define SDHC_HOSTVER_VVN_SHIFT                   8                                                   /*!< SDHC_HOSTVER: VVN Position              */
-#define SDHC_HOSTVER_VVN(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_HOSTVER_VVN_SHIFT))&SDHC_HOSTVER_VVN_MASK) /*!< SDHC_HOSTVER                            */
+#define SDHC0_HOSTVER_SVN_MASK                   (0xFFUL << SDHC0_HOSTVER_SVN_SHIFT)                 /*!< SDHC0_HOSTVER: SVN Mask                 */
+#define SDHC0_HOSTVER_SVN_SHIFT                  0                                                   /*!< SDHC0_HOSTVER: SVN Position             */
+#define SDHC0_HOSTVER_SVN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_HOSTVER_SVN_SHIFT))&SDHC0_HOSTVER_SVN_MASK) /*!< SDHC0_HOSTVER                           */
+#define SDHC0_HOSTVER_VVN_MASK                   (0xFFUL << SDHC0_HOSTVER_VVN_SHIFT)                 /*!< SDHC0_HOSTVER: VVN Mask                 */
+#define SDHC0_HOSTVER_VVN_SHIFT                  8                                                   /*!< SDHC0_HOSTVER: VVN Position             */
+#define SDHC0_HOSTVER_VVN(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC0_HOSTVER_VVN_SHIFT))&SDHC0_HOSTVER_VVN_MASK) /*!< SDHC0_HOSTVER                           */
 /**
  * @} */ /* End group SDHC_Register_Masks_GROUP 
  */
 
-/* SDHC - Peripheral instance base addresses */
-#define SDHC_BasePtr                   0x400B1000UL //!< Peripheral base address
-#define SDHC                           ((SDHC_Type *) SDHC_BasePtr) //!< Freescale base pointer
-#define SDHC_BASE_PTR                  (SDHC) //!< Freescale style base pointer
+/* SDHC0 - Peripheral instance base addresses */
+#define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
+#define SDHC0                          ((SDHC0_Type *) SDHC0_BasePtr) //!< Freescale base pointer
+#define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
  */

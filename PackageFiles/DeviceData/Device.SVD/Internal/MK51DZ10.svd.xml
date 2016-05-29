@@ -37,7 +37,7 @@
 <!ENTITY NV           SYSTEM "peripherals/NV_MK50.svd.xml">
 <!ENTITY NVIC         SYSTEM "peripherals/NVIC_CM4.svd.xml">
 <!ENTITY OPAMP0       SYSTEM "peripherals/OPAMP0_INV.svd.xml">
-<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK_X.svd.xml">
+<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK.svd.xml">
 <!ENTITY PDB0         SYSTEM "peripherals/PDB0_2CH_2TRIG_2DAC_1PO.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MK10DZ10.svd.xml">
@@ -46,7 +46,7 @@
 <!ENTITY RFVBAT       SYSTEM "peripherals/RFVBAT_0.svd.xml">
 <!ENTITY RTC          SYSTEM "peripherals/RTC_WAR_RAR.svd.xml">
 <!ENTITY SCB          SYSTEM "peripherals/SCB_CM4.svd.xml">
-<!ENTITY SDHC         SYSTEM "peripherals/SDHC_MK10DZ10.svd.xml">
+<!ENTITY SDHC0        SYSTEM "peripherals/SDHC0_MK10DZ10.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MK51DZ10.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK10D10.svd.xml">
 <!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
@@ -137,7 +137,7 @@
 &RFVBAT;
 &RTC;
 &SCB;
-&SDHC;
+&SDHC0;
 &SIM;
 &SPI0;
 <peripheral derivedFrom="SPI0"><name>SPI1</name><prependToName>SPI1</prependToName><baseAddress>0x4002D000</baseAddress></peripheral>

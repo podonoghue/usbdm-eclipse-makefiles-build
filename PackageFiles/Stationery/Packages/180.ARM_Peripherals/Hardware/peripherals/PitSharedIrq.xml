@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- ftm.xml -->
+<!-- PitSharedIrq.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Programmable Interrupt Timer">
@@ -28,7 +28,8 @@
       </binaryOption>
 
       <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
-         toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
+         toolTip="The interrupt handler may be a static member function or\n
+         may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
          <choice value="1" name="Handler installed" />
       </binaryOption>

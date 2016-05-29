@@ -1,42 +1,18 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
-      MK10D7
-      MK10D10
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK12D5
-      MK20D5
-      MK20D7
-      MK20D10
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK21F12
-      MK21FA12
-      MK22D5
-      MK22F12
-      MK22FA12
-      MK30D7
-      MK30D10
-      MK40D7
-      MK40D10
-      MK50D7
-      MK50D10
-      MK51D7
-      MK51D10
-      MK52D10
-      MK53D10
-      MK60D10
-      MKW21D5
-      MKW22D5
-      MKW24D5
+      MK10F12
+      MK20F12
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK70F15
+      MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "MCG_FLL_PLL_MK10D5" ?>
+         <?sourceFile "MCG_MK_DUALPLL" ?>
          <name>MCG</name>
-         <description>Multipurpose Clock Generator module</description>
+         <description>Multipurpose Clock Generator module (3 OSC, 2 PLL)</description>
          <groupName>MCG</groupName>
          <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
@@ -60,6 +36,12 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0xA</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0xF</offset>
             <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
@@ -458,13 +440,13 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                <fields>
                   <field>
                      <name>PRDIV0</name>
-                     <description>PLL External Reference Divider\n
+                     <description>PLL0 External Reference Divider\n
 Selects the amount to divide down the external reference clock for the PLL</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0bXXXXX</name>
+                           <name>0bXXX</name>
                            <description>(N+1) Divisor</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
@@ -472,7 +454,7 @@ Selects the amount to divide down the external reference clock for the PLL</desc
                   </field>
                   <field>
                      <name>PLLSTEN0</name>
-                     <description>PLL Stop Enable\n
+                     <description>PLL0 Stop Enable\n
 Enables the PLL Clock during Normal Stop mode.\n
 In Low Power Stop mode, the PLL clock is always disabled</description>
                      <bitOffset>5</bitOffset>
@@ -480,12 +462,12 @@ In Low Power Stop mode, the PLL clock is always disabled</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGPLLCLK disabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X disabled in Stop</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGPLLCLK enabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X enabled in Stop</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -499,12 +481,30 @@ Enables the PLL independent of PLLS and enables the PLL clock for use as MCGPLLC
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGPLLCLK is inactive</description>
+                           <description>MCGPLL0CLK and MCGPLL0CLK2X are inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGPLLCLK is active</description>
+                           <description>MCGPLL0CLK and MCGPLL0CLK2X are active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLLREFSEL0</name>
+                     <description>PLL0 External Reference Clock Select</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>OSC0 is reference</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>OSC1 is reference</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -527,7 +527,7 @@ Selects the amount to divide the VCO output of the PLL</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bXXXXX</name>
-                           <description>(N+24) Divisor</description>
+                           <description>(N+16) Divisor</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -567,7 +567,7 @@ Controls whether the PLL or FLL output is selected as the MCG source when CLKS[1
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>PLL is selected  
-(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the range of 2-4 MHz prior to setting the PLLS bit)</description>
+(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the correct range prior to setting the PLLS bit)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -611,12 +611,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1027,26 +1027,345 @@ Enables the loss of clock monitoring circuit for the output of the RTC external 
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>LOLRE</name>
-                     <description>PLL Loss of Lock Reset Enable\n
-Determines if an interrupt or a reset request is made following a PLL loss of lock</description>
+                     <name>LOCRE1</name>
+                     <description>Loss of Clock Reset Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt request is generated on a loss of RTC external reference clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate a reset request on a loss of RTC external reference clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C10</name>
+               <description>Control 10 Register</description>
+               <addressOffset>0xF</addressOffset>
+               <size>8</size>
+               <resetValue>0x80</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EREFS1</name>
+                     <description>External Reference Select</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External reference clock requested</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Oscillator requested</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HGO1</name>
+                     <description>High Gain Oscillator1 Select</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Configure crystal oscillator for low-power operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Configure crystal oscillator for high-gain operation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RANGE1</name>
+                     <description>Frequency Range1 Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Encoding 0 - Low frequency range selected for the crystal oscillator</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Encoding 1 - High frequency range selected for the crystal oscillator</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCRE2</name>
+                     <description>OSC1 Loss of Clock Reset Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt request is generated on a loss of OSC1 external reference clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset request is generated on a loss of OSC1 external reference clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C11</name>
+               <description>Control 11 Register</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PRDIV1</name>
+                     <description>PLL1 External Reference Divider</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXX</name>
+                           <description>(N+1) Divisor</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLLCS</name>
+                     <description>PLL Clock Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL0 output clock is selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL1 output clock is selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLLSTEN1</name>
+                     <description>PLL1 Stop Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL1 clocks (MCGPLL1CLK, MCGPLL1CLK2X, and MCGDDRCLK2X) are disabled in any of the Stop modes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL1 and its clocks (MCGPLL1CLK, MCGPLL1CLK2X, and MCGDDRCLK2X) are enabled if system is in Normal Stop mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLLCLKEN1</name>
+                     <description>PLL1 Clock Enable</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt request</description>
+                           <description>MCGPLL1CLK, MCGPLL1CLK2X, and MCGDDRCLK2X are inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset request</description>
+                           <description>MCGPLL1CLK, MCGPLL1CLK2X, and MCGDDRCLK2X are active unless MCG is in a bypass mode with LP=1 (BLPI or BLPE)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LOLRE" > <name>LOCRE1</name> <description>Loss of Clock Reset Enable\n
-Determines if a interrupt or a reset request is made following a loss of RTC external reference clock</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>PLLREFSEL1</name>
+                     <description>PLL1 External Reference Select</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Selects OSC0 clock source as its external reference clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Selects OSC1 clock source as its external reference clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C12</name>
+               <description>Control 12 Register</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>VDIV1</name>
+                     <description>VCO1 Divider</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bXXXXX</name>
+                           <description>(N+16) Divisor</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CME2</name>
+                     <description>Clock Monitor Enable2</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>External clock monitor for OSC1 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate a reset request on loss of external clock on OSC1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOLIE1</name>
+                     <description>PLL1 Loss of Lock Interrupt Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No interrupt request is generated on loss of lock on PLL1</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate an interrupt request on loss of lock on PLL1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>S2</name>
+               <description>Status 2 Register</description>
+               <addressOffset>0x12</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LOCS2</name>
+                     <description>OSC1 Loss of Clock Status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No loss of OSC1 external reference clock has occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Loss of OSC1 external reference clock has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSCINIT1</name>
+                     <description>OSC1 Initialization</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLCST</name>
+                     <description>PLL Clock Select Status</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Source of PLLCS is PLL0 clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Source of PLLCS is PLL1 clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK1</name>
+                     <description>Lock1 Status</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL1 is currently unlocked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL1 is currently locked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOLS1</name>
+                     <description>Loss of Lock2 Status</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL1 has not lost lock since LOLS1 was last cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL1 has lost lock since LOLS1 was last cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
          </registers>

@@ -230,6 +230,13 @@ Enables the 32kHz clock to be output to other peripherals</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>SCP</name>
+                     <?ignoreOverlap?>
+                     <description>Oscillator Capacitor Load (pF)</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
                      <name>SC16P</name>
                      <description>Oscillator 16pF Load</description>
                      <bitOffset>10</bitOffset>

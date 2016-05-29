@@ -13,11 +13,6 @@
 #include "pin_mapping.h"
 
 /*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
-#include "ftm.h"
-#include "lptmr.h"
-#include "i2c.h"
-#include "pit.h"
-#include "adc.h"
 /*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
@@ -51,7 +46,7 @@ typedef struct {
     <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
   </h>
  */
-#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
+#define BACKDOOR_VALUE {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, }
 /*
    <h> Program Flash Region Protect (NV_FPROT0-3)
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
@@ -208,6 +203,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
+ *   - Failed to enable the interrupt handler in the USBDM device configuration
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
@@ -326,6 +322,8 @@ void PMC_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
 void LLWU_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void WDOG_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void RNG_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
+void I2C0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void I2C1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void SPI0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void SPI1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void I2S0_Tx_IRQHandler(void)                 WEAK_DEFAULT_HANDLER;
@@ -342,16 +340,21 @@ void UART3_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void ADC0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void FTM0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void FTM1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void FTM2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMT_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
 void RTC_Alarm_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void RTC_Seconds_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
+void PIT0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void PIT1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PIT2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PIT3_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PDB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USBDCD_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void DAC0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void LPTMR0_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void PORTA_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
 void PORTB_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
 void PORTC_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
@@ -363,6 +366,7 @@ void UART4_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void CMP2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void FTM3_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void DAC1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
+void ADC1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void I2C2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CAN0_Message_IRQHandler(void)            WEAK_DEFAULT_HANDLER;
 void CAN0_BusOff_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
@@ -441,8 +445,8 @@ extern VectorTable const __vector_table = {
       LLWU_IRQHandler,               /*   37,   21  Low Leakage Wakeup                                                               */
       WDOG_IRQHandler,               /*   38,   22  External Watchdog Monitor                                                        */
       RNG_IRQHandler,                /*   39,   23  Random Number Generator                                                          */
-      USBDM::I2c0::irqHandler,       /*   40,   24  Inter-Integrated Circuit                                                         */
-      USBDM::I2c1::irqHandler,       /*   41,   25  Inter-Integrated Circuit                                                         */
+      I2C0_IRQHandler,               /*   40,   24  Inter-Integrated Circuit                                                         */
+      I2C1_IRQHandler,               /*   41,   25  Inter-Integrated Circuit                                                         */
       SPI0_IRQHandler,               /*   42,   26  Serial Peripheral Interface                                                      */
       SPI1_IRQHandler,               /*   43,   27  Serial Peripheral Interface                                                      */
       I2S0_Tx_IRQHandler,            /*   44,   28  Synchronous Serial Interface                                                     */
@@ -459,14 +463,14 @@ extern VectorTable const __vector_table = {
       ADC0_IRQHandler,               /*   55,   39  Analogue to Digital Converter                                                    */
       CMP0_IRQHandler,               /*   56,   40  High-Speed Comparator                                                            */
       CMP1_IRQHandler,               /*   57,   41  High-Speed Comparator                                                            */
-      USBDM::Ftm0::irqHandler,       /*   58,   42  FlexTimer Module                                                                 */
-      USBDM::Ftm1::irqHandler,       /*   59,   43  FlexTimer Module                                                                 */
+      FTM0_IRQHandler,               /*   58,   42  FlexTimer Module                                                                 */
+      FTM1_IRQHandler,               /*   59,   43  FlexTimer Module                                                                 */
       FTM2_IRQHandler,               /*   60,   44  FlexTimer Module                                                                 */
       CMT_IRQHandler,                /*   61,   45  Carrier Modulator Transmitter                                                    */
       RTC_Alarm_IRQHandler,          /*   62,   46  Real Time Clock                                                                  */
       RTC_Seconds_IRQHandler,        /*   63,   47  Real Time Clock                                                                  */
-      USBDM::Pit::irq0Handler,       /*   64,   48  Periodic Interrupt Timer                                                         */
-      USBDM::Pit::irq1Handler,       /*   65,   49  Periodic Interrupt Timer                                                         */
+      PIT0_IRQHandler,               /*   64,   48  Periodic Interrupt Timer                                                         */
+      PIT1_IRQHandler,               /*   65,   49  Periodic Interrupt Timer                                                         */
       PIT2_IRQHandler,               /*   66,   50  Periodic Interrupt Timer                                                         */
       PIT3_IRQHandler,               /*   67,   51  Periodic Interrupt Timer                                                         */
       PDB0_IRQHandler,               /*   68,   52  Programmable Delay Block                                                         */
@@ -475,7 +479,7 @@ extern VectorTable const __vector_table = {
       Default_Handler,               /*   71,   55                                                                                   */
       DAC0_IRQHandler,               /*   72,   56  Digital to Analogue Converter                                                    */
       Default_Handler,               /*   73,   57                                                                                   */
-      USBDM::Lptmr0::irqHandler,     /*   74,   58  Low Power Timer                                                                  */
+      LPTMR0_IRQHandler,             /*   74,   58  Low Power Timer                                                                  */
       PORTA_IRQHandler,              /*   75,   59  General Purpose Input/Output                                                     */
       PORTB_IRQHandler,              /*   76,   60  General Purpose Input/Output                                                     */
       PORTC_IRQHandler,              /*   77,   61  General Purpose Input/Output                                                     */
@@ -490,7 +494,7 @@ extern VectorTable const __vector_table = {
       CMP2_IRQHandler,               /*   86,   70  High-Speed Comparator                                                            */
       FTM3_IRQHandler,               /*   87,   71  FlexTimer Module                                                                 */
       DAC1_IRQHandler,               /*   88,   72  Digital to Analogue Converter                                                    */
-      USBDM::Adc1::irqHandler,       /*   89,   73  Analogue to Digital Converter                                                    */
+      ADC1_IRQHandler,               /*   89,   73  Analogue to Digital Converter                                                    */
       I2C2_IRQHandler,               /*   90,   74  Inter-Integrated Circuit                                                         */
       CAN0_Message_IRQHandler,       /*   91,   75  Flex Controller Area Network module                                              */
       CAN0_BusOff_IRQHandler,        /*   92,   76  Flex Controller Area Network module                                              */

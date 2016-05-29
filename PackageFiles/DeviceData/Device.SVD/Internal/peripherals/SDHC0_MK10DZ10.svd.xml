@@ -1,20 +1,30 @@
 <!--
 Devices using this peripheral: 
-      MK21F12
-      MK21FA12
-      MK22F12
-      MK22FA12
-      MK24F12
-      MK63F12
-      MK64F12
+      MK10DZ10
+      MK10F12
+      MK20DZ10
+      MK20F12
+      MK30DZ10
+      MK40DZ10
+      MK50DZ10
+      MK51DZ10
+      MK52DZ10
+      MK53DZ10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK70F15
+      MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "SDHC_MK21F12" ?>
-         <name>SDHC</name>
+         <?sourceFile "SDHC0_MK10DZ10" ?>
+         <name>SDHC0</name>
          <description>Secured Digital Host Controller</description>
          <groupName>SDHC</groupName>
-         <prependToName>SDHC</prependToName>
-         <headerStructName>SDHC</headerStructName>
+         <prependToName>SDHC0</prependToName>
+         <headerStructName>SDHC0</headerStructName>
          <baseAddress>0x400B1000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -1579,6 +1589,42 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>VS30</name>
+                     <description>Voltage Support 3.0 V</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>3.0 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>3.0 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS18</name>
+                     <description>Voltage Support 1.8 V</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.8 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1.8 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -1598,6 +1644,12 @@ Devices using this peripheral:
                      <description>Write Watermark Level</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>WRBRSTLEN</name>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <access>read-only</access>
                   </field>
                </fields>
             </register>

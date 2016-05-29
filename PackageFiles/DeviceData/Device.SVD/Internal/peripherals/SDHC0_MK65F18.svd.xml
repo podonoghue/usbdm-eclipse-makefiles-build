@@ -1,22 +1,15 @@
 <!--
 Devices using this peripheral: 
-      MK10D10
-      MK20D10
-      MK30D10
-      MK40D10
-      MK50D10
-      MK51D10
-      MK52D10
-      MK53D10
-      MK60D10
+      MK65F18
+      MK66F18
 -->
       <peripheral>
-         <?sourceFile "SDHC_MK10D10" ?>
-         <name>SDHC</name>
+         <?sourceFile "SDHC0_MK65F18" ?>
+         <name>SDHC0</name>
          <description>Secured Digital Host Controller</description>
          <groupName>SDHC</groupName>
-         <prependToName>SDHC</prependToName>
-         <headerStructName>SDHC</headerStructName>
+         <prependToName>SDHC0</prependToName>
+         <headerStructName>SDHC0</headerStructName>
          <baseAddress>0x400B1000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -1581,42 +1574,6 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>VS30</name>
-                     <description>Voltage Support 3.0 V</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>3.0 V not supported</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>3.0 V supported</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>VS18</name>
-                     <description>Voltage Support 1.8 V</description>
-                     <bitOffset>26</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>1.8 V not supported</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>1.8 V supported</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -1795,24 +1752,6 @@ Devices using this peripheral:
                <addressOffset>0xC0</addressOffset>
                <resetValue>0x1</resetValue>
                <fields>
-                  <field>
-                     <name>EXTDMAEN</name>
-                     <description>External DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>In any scenario, SDHC does not send out external DMA request</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>When internal DMA is not active, the external DMA request will be sent out</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                   <field>
                      <name>EXBLKNU</name>
                      <description>Exact Block Number Block Read Enable For SDIO CMD53</description>

@@ -4,7 +4,7 @@ Devices using this peripheral:
       MKM34Z5
 -->
       <peripheral>
-         <?sourceFile "RTC_MKM_RAM" ?>
+         <?sourceFile "RTC_RAM_MKM" ?>
          <name>RTC_RAM</name>
          <description>Battery backed RAM</description>
          <groupName>RTC_RAM</groupName>

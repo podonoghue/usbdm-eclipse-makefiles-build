@@ -600,12 +600,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Slow clock</description>
+                           <description>IRC is slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Fast clock</description>
+                           <description>IRC is fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

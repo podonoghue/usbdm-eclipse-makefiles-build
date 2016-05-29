@@ -1674,7 +1674,7 @@ typedef struct {                                /*       NV Structure           
 */
 
 /* ================================================================================ */
-/* ================           OSC0 (file:OSC0_MK_X)                ================ */
+/* ================           OSC0 (file:OSC0_MK)                  ================ */
 /* ================================================================================ */
 
 /**
@@ -1703,6 +1703,9 @@ typedef struct {                                /*       OSC0 Structure         
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
+#define OSC_CR_SCP_MASK                          (0x0FUL << OSC_CR_SCP_SHIFT)                        /*!< OSC0_CR: SCP Mask                       */
+#define OSC_CR_SCP_SHIFT                         0                                                   /*!< OSC0_CR: SCP Position                   */
+#define OSC_CR_SCP(x)                            (((uint8_t)(((uint8_t)(x))<<OSC_CR_SCP_SHIFT))&OSC_CR_SCP_MASK) /*!< OSC0_CR                                 */
 #define OSC_CR_SC16P_MASK                        (0x01UL << OSC_CR_SC16P_SHIFT)                      /*!< OSC0_CR: SC16P Mask                     */
 #define OSC_CR_SC16P_SHIFT                       0                                                   /*!< OSC0_CR: SC16P Position                 */
 #define OSC_CR_SC16P(x)                          (((uint8_t)(((uint8_t)(x))<<OSC_CR_SC16P_SHIFT))&OSC_CR_SC16P_MASK) /*!< OSC0_CR                                 */

@@ -415,7 +415,7 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                <fields>
                   <field>
                      <name>PRDIV0</name>
-                     <description>PLL External Reference Divider\n
+                     <description>PLL0 External Reference Divider\n
 Selects the amount to divide down the external reference clock for the PLL</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
@@ -429,7 +429,7 @@ Selects the amount to divide down the external reference clock for the PLL</desc
                   </field>
                   <field>
                      <name>PLLSTEN0</name>
-                     <description>PLL Stop Enable\n
+                     <description>PLL0 Stop Enable\n
 Enables the PLL Clock during Normal Stop mode.\n
 In Low Power Stop mode, the PLL clock is always disabled</description>
                      <bitOffset>5</bitOffset>
@@ -524,7 +524,7 @@ Controls whether the PLL or FLL output is selected as the MCG source when CLKS[1
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>PLL is selected  
-(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the range of 2-4 MHz prior to setting the PLLS bit)</description>
+(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the correct range prior to setting the PLLS bit)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

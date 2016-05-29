@@ -4111,7 +4111,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_FLL_PLL_MK10D5)        ================ */
+/* ================           MCG (file:MCG_MK)                    ================ */
 /* ================================================================================ */
 
 /**
@@ -4472,7 +4472,7 @@ typedef struct {                                /*       NV Structure           
 */
 
 /* ================================================================================ */
-/* ================           OSC0 (file:OSC0_MK_X)                ================ */
+/* ================           OSC0 (file:OSC0_MK)                  ================ */
 /* ================================================================================ */
 
 /**
@@ -4501,6 +4501,9 @@ typedef struct {                                /*       OSC0 Structure         
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
+#define OSC_CR_SCP_MASK                          (0x0FUL << OSC_CR_SCP_SHIFT)                        /*!< OSC0_CR: SCP Mask                       */
+#define OSC_CR_SCP_SHIFT                         0                                                   /*!< OSC0_CR: SCP Position                   */
+#define OSC_CR_SCP(x)                            (((uint8_t)(((uint8_t)(x))<<OSC_CR_SCP_SHIFT))&OSC_CR_SCP_MASK) /*!< OSC0_CR                                 */
 #define OSC_CR_SC16P_MASK                        (0x01UL << OSC_CR_SC16P_SHIFT)                      /*!< OSC0_CR: SC16P Mask                     */
 #define OSC_CR_SC16P_SHIFT                       0                                                   /*!< OSC0_CR: SC16P Position                 */
 #define OSC_CR_SC16P(x)                          (((uint8_t)(((uint8_t)(x))<<OSC_CR_SC16P_SHIFT))&OSC_CR_SC16P_MASK) /*!< OSC0_CR                                 */
@@ -5464,6 +5467,9 @@ typedef struct {                                /*       RTC Structure          
 #define RTC_CR_CLKO_MASK                         (0x01UL << RTC_CR_CLKO_SHIFT)                       /*!< RTC_CR: CLKO Mask                       */
 #define RTC_CR_CLKO_SHIFT                        9                                                   /*!< RTC_CR: CLKO Position                   */
 #define RTC_CR_CLKO(x)                           (((uint32_t)(((uint32_t)(x))<<RTC_CR_CLKO_SHIFT))&RTC_CR_CLKO_MASK) /*!< RTC_CR                                  */
+#define RTC_CR_SCP_MASK                          (0x0FUL << RTC_CR_SCP_SHIFT)                        /*!< RTC_CR: SCP Mask                        */
+#define RTC_CR_SCP_SHIFT                         10                                                  /*!< RTC_CR: SCP Position                    */
+#define RTC_CR_SCP(x)                            (((uint32_t)(((uint32_t)(x))<<RTC_CR_SCP_SHIFT))&RTC_CR_SCP_MASK) /*!< RTC_CR                                  */
 #define RTC_CR_SC16P_MASK                        (0x01UL << RTC_CR_SC16P_SHIFT)                      /*!< RTC_CR: SC16P Mask                      */
 #define RTC_CR_SC16P_SHIFT                       10                                                  /*!< RTC_CR: SC16P Position                  */
 #define RTC_CR_SC16P(x)                          (((uint32_t)(((uint32_t)(x))<<RTC_CR_SC16P_SHIFT))&RTC_CR_SC16P_MASK) /*!< RTC_CR                                  */

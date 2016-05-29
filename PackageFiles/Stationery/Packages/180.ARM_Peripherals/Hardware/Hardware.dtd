@@ -42,6 +42,7 @@
  <!ELEMENT peripheral (handler?,clock*,irq*,dma?) >
    <!ATTLIST peripheral baseName        CDATA #REQUIRED>
    <!ATTLIST peripheral instance        CDATA #REQUIRED>
+   <!ATTLIST peripheral version         CDATA #IMPLIED>
  
  <!ELEMENT handler EMPTY >
    <!ATTLIST handler class        CDATA #REQUIRED>

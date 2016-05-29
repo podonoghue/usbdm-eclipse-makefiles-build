@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- spi0_mk21f12.xml.xml -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="spi_def.xml"/>
+</root>

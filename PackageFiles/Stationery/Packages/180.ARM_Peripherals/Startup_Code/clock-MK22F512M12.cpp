@@ -29,8 +29,8 @@ using namespace USBDM;
 #define OSC0 OSC
 #endif
 
-uint32_t SystemCoreClock;
-uint32_t SystemBusClock;
+extern "C" uint32_t SystemCoreClock;
+extern "C" uint32_t SystemBusClock;
 
 /*!
  * Switch to/from high speed run mode
@@ -150,147 +150,146 @@ int clockTransition(McgInfo::ClockMode to) {
    // Set conservative clock dividers
    SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5);
 
-   if (to == McgInfo::ClockMode_None) {
-      return -1;
+   if (to != McgInfo::ClockMode_None) {
+      int transitionCount = 0;
+      do {
+         // Used to indicate that clock stabilization wait is needed
+         bool externalClockInUse = false;
+
+         McgInfo::ClockMode next;
+         if (currentClockMode == McgInfo::ClockMode_None) {
+            next = McgInfo::ClockMode_FEI;
+         }
+         else {
+            next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
+         }
+         switch (next) {
+
+         case McgInfo::ClockMode_None:
+         case McgInfo::ClockMode_FEI: // From FEE, FBI, FBE or reset(FEI)
+
+            mcg->C2 = McgInfo::MCG_C2;
+
+            mcg->C1 =
+                  MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
+                  MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+            // Wait for S_IREFST to indicate FLL Reference has switched to IRC
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(1)));
+
+            // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
+
+            // Set FLL Parameters
+            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|McgInfo::MCG_C4;
+            break;
+
+         case McgInfo::ClockMode_FEE: // from FEI, FBI or FBE
+            mcg->C1 =
+                  MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
+                  MCG_C1_IREFS(0)          | // IREFS    = 0     -> External reference clock is FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+            // Wait for S_IREFST to indicate FLL Reference has switched to ERC
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(0)));
+
+            // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
+            externalClockInUse = true;
+            break;
+
+         case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
+            mcg->C1 =
+                  MCG_C1_CLKS(1)           | // CLKS     = 1     -> Internal reference clock is selected
+                  MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+            // Clear LP
+            mcg->C2 = McgInfo::MCG_C2;
+
+            // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(1));
+            break;
+
+         case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
+            // Clear LP
+            mcg->C2 = McgInfo::MCG_C2;
+
+            mcg->C1 =
+                  MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
+                  MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+            // Select FLL as MCG clock source
+            mcg->C6  = McgInfo::MCG_C6;
+
+            // Wait for S_IREFST to indicate FLL Reference has switched to ERC
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(0)));
+
+            // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
+            do {
+               __asm__("nop");
+            } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2));
+
+            externalClockInUse = true;
+            break;
+
+         case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
+            // Clear LP
+            mcg->C2 = McgInfo::MCG_C2;
+
+            mcg->C1 =
+                  MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
+                  MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+
+            // Select PLL as MCG clock source
+            mcg->C6  = McgInfo::MCG_C6|MCG_C6_PLLS_MASK;
+            externalClockInUse = true;
+            break;
+
+         case McgInfo::ClockMode_PEE: // from PBE
+            mcg->C1 =
+                  MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of PLLCS is selected
+                  MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
+                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+            externalClockInUse = true;
+            break;
+
+         case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
+            externalClockInUse = true;
+         case McgInfo::ClockMode_BLPI: // from FBI
+            // Set LP
+            mcg->C2 = McgInfo::MCG_C2|MCG_C2_LP_MASK;
+            break;
+         }
+         // Wait for oscillator stable (if used)
+         if (externalClockInUse && (McgInfo::MCG_C2&MCG_C2_EREFS0_MASK)) {
+            do {
+               __asm__("nop");
+            } while ((MCG->S & MCG_S_OSCINIT0_MASK) == 0);
+         }
+         currentClockMode = next;
+         if (transitionCount++>5) {
+            return -1;
+         }
+      } while (currentClockMode != to);
+
+      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
    }
-   int transitionCount = 0;
-   do {
-      // Used to indicate that clock stabilization wait is needed
-      bool externalClockInUse = false;
-
-      McgInfo::ClockMode next;
-      if (currentClockMode == McgInfo::ClockMode_None) {
-         next = McgInfo::ClockMode_FEI;
-      }
-      else {
-         next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
-      }
-      switch (next) {
-
-      case McgInfo::ClockMode_None:
-      case McgInfo::ClockMode_FEI: // From FEE, FBI, FBE or reset(FEI)
-
-         mcg->C2 = McgInfo::MCG_C2;
-
-         mcg->C1 =
-               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
-               MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-
-         // Wait for S_IREFST to indicate FLL Reference has switched to IRC
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(1)));
-
-         // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
-
-         // Set FLL Parameters
-         mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|McgInfo::MCG_C4;
-         break;
-
-      case McgInfo::ClockMode_FEE: // from FEI, FBI or FBE
-         mcg->C1 =
-               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
-               MCG_C1_IREFS(0)          | // IREFS    = 0     -> External reference clock is FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-
-         // Wait for S_IREFST to indicate FLL Reference has switched to ERC
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(0)));
-
-         // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
-         externalClockInUse = true;
-         break;
-
-      case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
-         mcg->C1 =
-               MCG_C1_CLKS(1)           | // CLKS     = 1     -> Internal reference clock is selected
-               MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-
-         // Clear LP
-         mcg->C2 = McgInfo::MCG_C2;
-
-         // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(1));
-         break;
-
-      case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
-         // Clear LP
-         mcg->C2 = McgInfo::MCG_C2;
-
-         mcg->C1 =
-               MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
-               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-
-         // Select FLL as MCG clock source
-         mcg->C6  = McgInfo::MCG_C6;
-
-         // Wait for S_IREFST to indicate FLL Reference has switched to ERC
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_IREFST_MASK) != (MCG_S_IREFST(0)));
-
-         // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
-         do {
-            __asm__("nop");
-         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2));
-
-         externalClockInUse = true;
-         break;
-
-      case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
-         // Clear LP
-         mcg->C2 = McgInfo::MCG_C2;
-
-         mcg->C1 =
-               MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
-               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-
-         // Select PLL as MCG clock source
-         mcg->C6  = McgInfo::MCG_C6|MCG_C6_PLLS_MASK;
-         externalClockInUse = true;
-         break;
-
-      case McgInfo::ClockMode_PEE: // from PBE
-         mcg->C1 =
-               MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of PLLCS is selected
-               MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-               McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
-         externalClockInUse = true;
-         break;
-
-      case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
-         externalClockInUse = true;
-      case McgInfo::ClockMode_BLPI: // from FBI
-         // Set LP
-         mcg->C2 = McgInfo::MCG_C2|MCG_C2_LP_MASK;
-         break;
-      }
-      // Wait for oscillator stable (if used)
-      if (externalClockInUse && (McgInfo::MCG_C2&MCG_C2_EREFS0_MASK)) {
-         do {
-            __asm__("nop");
-         } while ((MCG->S & MCG_S_OSCINIT0_MASK) == 0);
-      }
-      currentClockMode = next;
-      if (transitionCount++>5) {
-         return -1;
-      }
-   } while (currentClockMode != to);
-
-   SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
 
    SystemCoreClockUpdate();
    return 0;
@@ -322,6 +321,7 @@ static void rtc_initialise() {
 /*! @brief Sets up the clock out of RESET
  *
  */
+extern "C"
 void clock_initialise(void) {
 
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
@@ -364,8 +364,8 @@ void clock_initialise(void) {
 void SystemCoreClockUpdate(void) {
    uint32_t oscerclk = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = McgInfo::oscclk_clock; break;
-      case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = McgInfo::rtcclk_clock; break;
+      case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = Osc0Info::oscclk_clock; break;
+      case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RtcInfo::rtcclk_clock; break;
       case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = McgInfo::irc48m_clock; break;
    }
    switch (MCG->S&MCG_S_CLKST_MASK) {

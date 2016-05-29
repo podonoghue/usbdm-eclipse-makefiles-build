@@ -4,12 +4,12 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "SDRAM_0" ?>
-         <name>SDRAM</name>
+         <?sourceFile "SDRAMC_0" ?>
+         <name>SDRAMC</name>
          <description>Synchronous DRAM Controller</description>
-         <groupName>SDRAM</groupName>
-         <prependToName>SDRAM</prependToName>
-         <headerStructName>SDRAM</headerStructName>
+         <groupName>SDRAMC</groupName>
+         <prependToName>SDRAMC</prependToName>
+         <headerStructName>SDRAMC</headerStructName>
          <baseAddress>0x4000F000</baseAddress>
          <size>32</size>
          <access>read-write</access>

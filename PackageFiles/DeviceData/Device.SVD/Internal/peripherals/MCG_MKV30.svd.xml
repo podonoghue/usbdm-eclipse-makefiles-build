@@ -73,12 +73,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK inactive</description>
+                           <description>MCGIRCLK disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK active</description>
+                           <description>MCGIRCLK enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -154,7 +154,8 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                   </field>
                   <field>
                      <name>CLKS</name>
-                     <description>Clock Source Select</description>
+                     <description>Clock Source Select\n
+Selects the clock source for MCGOUTCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -233,7 +234,8 @@ In any other MCG mode, LP bit has no affect</description>
                   </field>
                   <field>
                      <name>EREFS0</name>
-                     <description>External Reference Select\nSelects the source for the external reference clock</description>
+                     <description>External Reference Select\n
+Selects the source for the external reference clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -488,7 +490,9 @@ The IRCST bit indicates the current source for the internal reference clock sele
                   </field>
                   <field>
                      <name>OSCINIT0</name>
-                     <description>OSC Initialization</description>
+                     <description>OSC Initialization Status\n
+This flag, which resets to 0, is set to 1 after the initialization cycles of the crystal oscillator clock are
+completed. After being set, the bit is cleared to 0 if the OSC is subsequently disabled</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -572,7 +576,8 @@ The LOCS0 indicates when a loss of OSC0 reference clock has occurred</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss has occurred</description>
+                           <description>Loss has occurred\n
+			   Write-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -658,7 +663,8 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ATM failed</description>
+                           <description>ATM failed\n
+			   Write-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -772,7 +778,7 @@ Selects the MCG FLL external reference clock</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Selects OSCCLK1 (IRC48M)</description>
+                           <description>Oscillator (OSCCLK1=IRC48M)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>

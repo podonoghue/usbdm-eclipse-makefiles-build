@@ -56,6 +56,7 @@
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
+         <copy source="Startup/clock-MKxx.cpp"                             target="Startup/clock.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

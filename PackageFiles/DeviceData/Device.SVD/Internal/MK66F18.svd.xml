@@ -51,8 +51,8 @@
 <!ENTITY RFVBAT       SYSTEM "peripherals/RFVBAT_0.svd.xml">
 <!ENTITY RNG          SYSTEM "peripherals/RNG_0.svd.xml">
 <!ENTITY RTC          SYSTEM "peripherals/RTC_TAMPER_WPS.svd.xml">
-<!ENTITY SDHC         SYSTEM "peripherals/SDHC_MK65F18.svd.xml">
-<!ENTITY SDRAM        SYSTEM "peripherals/SDRAM_0.svd.xml">
+<!ENTITY SDHC0        SYSTEM "peripherals/SDHC0_MK65F18.svd.xml">
+<!ENTITY SDRAMC       SYSTEM "peripherals/SDRAMC_0.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MK65F18.svd.xml">
 <!ENTITY SMC          SYSTEM "peripherals/SMC_MK65F18.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK65F18.svd.xml">
@@ -154,8 +154,8 @@
 &RFVBAT;
 &RNG;
 &RTC;
-&SDHC;
-&SDRAM;
+&SDHC0;
+&SDRAMC;
 &SIM;
 &SMC;
 &SPI0;

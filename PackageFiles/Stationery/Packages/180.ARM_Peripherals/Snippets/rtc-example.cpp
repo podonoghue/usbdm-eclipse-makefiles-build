@@ -32,8 +32,13 @@ void handler(uint32_t timeSinceEpoch) {
 }
 
 int main() {
-   // Enable RTC
-   USBDM::Rtc::enable();
+   printf("Starting\n");
+
+   printf("SystemBusClock  = %lu\n", SystemBusClock);
+   printf("SystemCoreClock = %lu\n", SystemCoreClock);
+
+   // Enable RTC - done by startup code
+   // USBDM::Rtc::enable();
 
    // Set initial callback
    USBDM::Rtc::setCallback(handler, USBDM::Rtc::getTime()+5);

@@ -34,22 +34,22 @@
       <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
    </family>
    <peripherals>
-      <peripheral baseName="ADC"      instance="0">
+      <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_ADC0_MASK" />
          <irq num="ADC0_IRQn" />
       </peripheral>
-      <peripheral baseName="CMP"      instance="0">
+      <peripheral baseName="CMP"      instance="0"        version="cmp0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
          <irq num="CMP0_IRQn" />
       </peripheral>
-      <peripheral baseName="CMP"      instance="1">
+      <peripheral baseName="CMP"      instance="1"        version="cmp0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
          <irq num="CMP1_IRQn" />
       </peripheral>
-      <peripheral baseName="CMT"      instance="">
+      <peripheral baseName="CMT"      instance=""         version="cmt_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmt" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMT_MASK" />
          <irq num="CMT_IRQn" />
@@ -57,15 +57,15 @@
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
       </peripheral>
-      <peripheral baseName="CRC"      instance="">
+      <peripheral baseName="CRC"      instance=""         version="crc_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
       </peripheral>
-      <peripheral baseName="DMA"      instance="0">
+      <peripheral baseName="DMA"      instance="0"        version="dma0_4ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
          <dma>
@@ -113,80 +113,80 @@
             <slot source="AlwaysEnabled9"       num="63" />
          </dma>
       </peripheral>
-      <peripheral baseName="EWM"      instance="">
+      <peripheral baseName="EWM"      instance=""         version="ewm_2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
       </peripheral>
-      <peripheral baseName="FTFL"     instance="">
+      <peripheral baseName="FTFL"     instance=""         version="ftfl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTFL_MASK" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="0">
+      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM0_MASK" />
          <irq num="FTM0_IRQn" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1">
+      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM1_MASK" />
          <irq num="FTM1_IRQn" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="A">
+      <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTA_MASK" />
          <irq num="PORTA_IRQn" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="B">
+      <peripheral baseName="GPIO"     instance="B"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTB_MASK" />
          <irq num="PORTB_IRQn" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="C">
+      <peripheral baseName="GPIO"     instance="C"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTC_MASK" />
          <irq num="PORTC_IRQn" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="D">
+      <peripheral baseName="GPIO"     instance="D"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTD_MASK" />
          <irq num="PORTD_IRQn" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="E">
+      <peripheral baseName="GPIO"     instance="E"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTE_MASK" />
          <irq num="PORTE_IRQn" />
       </peripheral>
-      <peripheral baseName="I2C"      instance="0">
+      <peripheral baseName="I2C"      instance="0"        version="i2c0_mk10d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C0_MASK" />
          <irq num="I2C0_IRQn" />
       </peripheral>
-      <peripheral baseName="I2S"      instance="0">
+      <peripheral baseName="I2S"      instance="0"        version="i2s0_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_I2S_MASK" />
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance="">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0">
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
          <irq num="LPTMR0_IRQn" />
       </peripheral>
-      <peripheral baseName="MCG"      instance="">
+      <peripheral baseName="MCG"      instance=""         version="mcg_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
       </peripheral>
-      <peripheral baseName="OSC"      instance="0">
+      <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
-      <peripheral baseName="PDB"      instance="0">
+      <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2trig_0dac_2po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_PDB_MASK" />
          <irq num="PDB0_IRQn" />
       </peripheral>
-      <peripheral baseName="PIT"      instance="">
+      <peripheral baseName="PIT"      instance=""         version="pit_4ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_PIT_MASK" />
          <irq num="PIT0_IRQn" />
@@ -197,47 +197,47 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="RTC"      instance="">
+      <peripheral baseName="RTC"      instance=""         version="rtc_war_rar_tsie">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="0">
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="TSI"      instance="0">
+      <peripheral baseName="TSI"      instance="0"        version="tsi0_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTsi" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_TSI0_MASK" />
          <irq num="TSI0_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="0">
+      <peripheral baseName="UART"     instance="0"        version="uart0_mk10d10_c7816_cea709">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" source="SystemCoreClock" />
          <irq num="UART0_RX_TX_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="1">
+      <peripheral baseName="UART"     instance="1"        version="uart1_mk10d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" source="SystemCoreClock" />
          <irq num="UART1_RX_TX_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="2">
+      <peripheral baseName="UART"     instance="2"        version="uart1_mk10d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" source="SystemBusClock" />
          <irq num="UART2_RX_TX_IRQn" />
       </peripheral>
-      <peripheral baseName="USB"      instance="0">
+      <peripheral baseName="USB"      instance="0"        version="usb0_otg_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_USBOTG_MASK" />
          <irq num="USB0_IRQn" />
       </peripheral>
-      <peripheral baseName="USBDCD"   instance="">
+      <peripheral baseName="USBDCD"   instance=""         version="usbdcd_v1_1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_USBDCD_MASK" />
       </peripheral>
-      <peripheral baseName="VREF"     instance="">
+      <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_VREF_MASK" />
       </peripheral>

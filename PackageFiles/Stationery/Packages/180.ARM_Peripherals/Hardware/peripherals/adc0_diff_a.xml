@@ -1,103 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- ftm.xml -->
+<!-- adc0_diff_a.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Analogue to Digital Converter">
 
-      <choiceOption name="CFG1_ADICLK" description="Clock Source"
+      <choiceOption name="cfg1_adiclk" description="Clock Source"
          toolTip="Selects the clock source for the module">
          <choice value="0" name="Bus clock" />
          <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
          <choice value="2" name="Alternate clock (ALTCLK)" />
          <choice value="3" name="Asynchronous clock (ADACK)" />
-         <choice value="0" name="Default" />
       </choiceOption>
 
-      <choiceOption name="CFG1_MODE" description="Conversion mode selection"
+      <choiceOption name="cfg1_mode" description="Conversion mode selection"
          toolTip="Selects the ADC resolution mode.">
          <choice value="0" name="8-bit single/9-bit differential" />
          <choice value="1" name="12-bit single/13-bit differential" />
          <choice value="2" name="10-bit single/11-bit differential" isDefault="true" />
          <choice value="3" name="16-bit single or differential" />
-         <choice value="2" name="Default" />
       </choiceOption>
 
-      <binaryOption name="CFG1_ADLSMP" description="Sample Time Configuration"
+      <binaryOption name="cfg1_adlsmp" description="Sample Time Configuration"
          toolTip="Selects between different sample times based on the conversion mode selected">
          <choice value="0" name="Short sample time" />
          <choice value="1" name="Long sample time" />
       </binaryOption>
 
-      <choiceOption name="CFG1_ADIV" description="Clock Divide Select"
+      <choiceOption name="cfg1_adiv" description="Clock Divide Select"
          toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
          <choice value="0" name="Input clock" />
          <choice value="1" name="Input clock/2" />
          <choice value="2" name="Input clock/4" />
          <choice value="3" name="Input clock/8" />
-         <choice value="0" name="Default" />
       </choiceOption>
 
-      <binaryOption name="CFG1_ADLPC" description="Low-Power Configuration"
+      <binaryOption name="cfg1_adlpc" description="Low-Power Configuration"
          toolTip="Adjust power consumption">
          <choice value="0" name="Normal power configuration." />
          <choice value="1" name="Low-power configuration (reduced speed)" />
       </binaryOption>
 
-      <choiceOption name="CFG2_ADLSTS" description="Long Sample Time Select"
+      <choiceOption name="cfg2_adlsts" description="Long Sample Time Select"
          toolTip="Selects between the extended sample times when long sample time is selected">
          <choice value="0" name="+20 ADCK cycles; 24 ADCK total" />
          <choice value="1" name="+12 ADCK cycles; 16 ADCK total" />
          <choice value="2" name="+6 ADCK cycles; 10 ADCK total" />
          <choice value="3" name="+2 ADCK cycles; 6 ADCK total" />
-         <choice value="0" name="Default" />
       </choiceOption>
 
-      <binaryOption name="CFG2_ADHSC" description="High-Speed Configuration"
+      <binaryOption name="cfg2_adhsc" description="High-Speed Configuration"
          toolTip="Configures the ADC for very high-speed operation by adding 2\n additional ADCK cycles to total conversion time">
          <choice value="0" name="Normal conversion sequence selected" />
          <choice value="1" name="High-speed conversion sequence selected" />
       </binaryOption>
 
-      <binaryOption name="CFG2_ADACKEN" description="Asynchronous Clock Output Enable"
+      <binaryOption name="cfg2_adacken" description="Asynchronous Clock Output Enable"
          toolTip="Enables the asynchronous clock source irrespective of ADC need">
          <choice value="0" name="Asynchronous clock output disabled" />
          <choice value="1" name="Asynchronous clock output enabled" />
       </binaryOption>
 
-      <choiceOption name="SC2_REFSEL" description="Voltage Reference Selection"
+      <choiceOption name="sc2_refsel" description="Voltage Reference Selection"
          toolTip="Selects the voltage reference source used for conversions.">
          <choice value="0" name="VRefH and VRefl" />
          <choice value="1" name="VAltH and VAltL" />
          <choice value="2" name="Reserved" />
          <choice value="3" name="Reserved" />
-         <choice value="0" name="Default" />
       </choiceOption>
 
-      <binaryOption name="SC2_DMAEN" description="DMA Enable"
+      <binaryOption name="sc2_dmaen" description="DMA Enable"
          toolTip="Enables use of DMA with ADC">
          <choice value="0" name="Disabled" />
          <choice value="1" name="Enabled" />
       </binaryOption>
 
-      <choiceOption name="SC2_COMPARE" description="Compare function"
+      <choiceOption name="sc2_compare" description="Compare function"
          toolTip="Enables comparison of ADC result with CV1 &amp;&amp; CV2\nRange comparisons depend on relation between CV1 &amp;&amp; CV2" >
          <choice value="0b000" name="Disabled" />
          <choice value="0b001" name="ADC&lt;CV1" />
          <choice value="0b101" name="ADC&gt;=CV1" />
          <choice value="0b011" name="(ADC&lt;CV1)||(ADC&gt;CV2) or (CV2&lt;ADC&lt;CV1)" />
          <choice value="0b111" name="(ADC&gt;=CV1)||(ADC&lt;=CV2) or (CV1&lt;=ADC&lt;=CV2)" />
-         <choice value="0b000" name="Default" />
       </choiceOption>
 
-      <binaryOption name="SC2_ADTRG" description="Conversion Trigger Select"
+      <binaryOption name="sc2_adtrg" description="Conversion Trigger Select"
          toolTip="Selects the type of trigger used for initiating a conversion">
          <choice value="0" name="Software trigger (write to SC1A)" />
          <choice value="1" name="Hardware trigger (ADHWT source)" />
       </binaryOption>
 
       <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
-         toolTip="The interrupt handler may be a static member function or\nmay be set by use of the setCallback() method">
+         toolTip="The interrupt handler may be a static member function or\n
+         may be set by use of the setCallback() method">
          <choice value="false" name="No handler installed" />
          <choice value="true" name="Handler installed" />
       </binaryOption>
@@ -105,28 +100,30 @@
       <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
+         
+      <pins/>
    </page>
    <template>
      \t//! Indicates interrupt handler has been installed
      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t CFG1  = 
-     \t    ($(CFG1_ADICLK)&lt;&lt;ADC_CFG1_ADICLK_SHIFT)|
-     \t    ($(CFG1_MODE)&lt;&lt;ADC_CFG1_MODE_SHIFT)|
-     \t    ($(CFG1_ADLSMP)&lt;&lt;ADC_CFG1_ADLSMP_SHIFT)|
-     \t    ($(CFG1_ADIV)&lt;&lt;ADC_CFG1_ADIV_SHIFT)|
-     \t    ($(CFG1_ADLPC)&lt;&lt;ADC_CFG1_ADLPC_SHIFT);\n\n
+     \t    ADC_CFG1_ADICLK($(cfg1_adiclk))|
+     \t    ADC_CFG1_MODE($(cfg1_mode))|
+     \t    ADC_CFG1_ADLSMP($(cfg1_adlsmp))|
+     \t    ADC_CFG1_ADIV($(cfg1_adiv))|
+     \t    ADC_CFG1_ADLPC($(cfg1_adlpc));\n\n
      \t//! Default value for ADCx_CFG2 register
      \t static constexpr uint32_t CFG2  = 
-     \t     ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
-     \t    ($(CFG2_ADLSTS)&lt;&lt;ADC_CFG2_ADLSTS_SHIFT)|
-     \t    ($(CFG2_ADHSC)&lt;&lt;ADC_CFG2_ADHSC_SHIFT)|
-     \t    ($(CFG2_ADACKEN)&lt;&lt;ADC_CFG2_ADACKEN_SHIFT);\n\n
+     \t    ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
+     \t    ADC_CFG2_ADLSTS($(cfg2_adlsts))|
+     \t    ADC_CFG2_ADHSC($(cfg2_adhsc))|
+     \t    ADC_CFG2_ADACKEN($(cfg2_adacken));\n\n
      \tstatic constexpr uint32_t SC2  =
-     \t    ($(SC2_REFSEL)&lt;&lt;ADC_SC2_REFSEL_SHIFT)|
-     \t    ($(SC2_DMAEN)&lt;&lt;ADC_SC2_DMAEN_SHIFT)|
-     \t    ($(SC2_COMPARE)&lt;&lt;ADC_SC2_ACREN_SHIFT)|
-     \t    ($(SC2_ADTRG)&lt;&lt;ADC_SC2_ADTRG_SHIFT);\n\n
+     \t    ADC_SC2_REFSEL($(sc2_refsel))|
+     \t    ADC_SC2_DMAEN($(sc2_dmaen))|
+     \t    ADC_SC2_ACREN($(sc2_compare))|
+     \t    ADC_SC2_ADTRG($(sc2_adtrg));\n\n
      \t//! Default IRQ level\n
      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
    </template>

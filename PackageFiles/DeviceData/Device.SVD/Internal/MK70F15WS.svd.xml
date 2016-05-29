@@ -29,12 +29,12 @@
 <!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE3_FILT2_RST.svd.xml">
 <!ENTITY LMEM         SYSTEM "peripherals/LMEM_0.svd.xml">
 <!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0.svd.xml">
-<!ENTITY MCG          SYSTEM "peripherals/MCG_MKF12.svd.xml">
+<!ENTITY MCG          SYSTEM "peripherals/MCG_MK_DUALPLL.svd.xml">
 <!ENTITY MCM          SYSTEM "peripherals/MCM_MK61F15WS.svd.xml">
 <!ENTITY MPU          SYSTEM "peripherals/MPU_MK10F12_16R.svd.xml">
 <!ENTITY NFC          SYSTEM "peripherals/NFC_0.svd.xml">
 <!ENTITY NV           SYSTEM "peripherals/NV_MK2.svd.xml">
-<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK_X.svd.xml">
+<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK.svd.xml">
 <!ENTITY PDB0         SYSTEM "peripherals/PDB0_4CH_2TRIG_2DAC_4PO.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MK10D5.svd.xml">
@@ -44,7 +44,7 @@
 <!ENTITY RFVBAT       SYSTEM "peripherals/RFVBAT_0.svd.xml">
 <!ENTITY RNG          SYSTEM "peripherals/RNG_0.svd.xml">
 <!ENTITY RTC          SYSTEM "peripherals/RTC_MK61F15WS.svd.xml">
-<!ENTITY SDHC         SYSTEM "peripherals/SDHC_MK10DZ10.svd.xml">
+<!ENTITY SDHC0        SYSTEM "peripherals/SDHC0_MK10DZ10.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MK70F15.svd.xml">
 <!ENTITY SMC          SYSTEM "peripherals/SMC_MK61F15WS.svd.xml">
 <!ENTITY SPI0         SYSTEM "peripherals/SPI0_MK65F18.svd.xml">
@@ -142,7 +142,7 @@
 &RFVBAT;
 &RNG;
 &RTC;
-&SDHC;
+&SDHC0;
 &SIM;
 &SMC;
 &SPI0;

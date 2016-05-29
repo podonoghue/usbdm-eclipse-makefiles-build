@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- ftm.xml -->
+<!-- spi0_mk65f18.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Serial Peripheral Interface">
@@ -8,10 +8,9 @@
       <choiceOption name="MODE" description="Mode"
          toolTip="Communication mode">
          <choice value="0" name="Mode 0: CPOL=0, CPHA=0" />
-         <choice value="1" name="Mode 1: CPOL=0, CPHA=1" />
+         <choice value="1" name="Mode 1: CPOL=0, CPHA=1" isDefault="true" />
          <choice value="2" name="Mode 2: CPOL=1, CPHA=0" />
          <choice value="3" name="Mode 3: CPOL=1, CPHA=1" />
-         <choice value="1" name="Default" />
       </choiceOption>
 
       <intOption name="SPEED" description="Speed"
@@ -23,14 +22,17 @@
          <choice value="0" name="MSB first" />
          <choice value="1" name="LSB first" />
       </binaryOption>
-
+         
+      <pins/>
    </page>
    <template>
       #ifdef SPI_CTAR_LSBFE_SHIFT\n
       \t//! Default communication mode: order, clock phase and clock polarity\n
-      \tstatic constexpr uint32_t modeValue = ($(LSBFE)&lt;&lt;SPI_CTAR_LSBFE_SHIFT)|($(MODE)&lt;&lt;SPI_CTAR_CPHA_SHIFT);\n\n
+      \tstatic constexpr uint32_t modeValue = 
+      \t   ($(LSBFE)&lt;&lt;SPI_CTAR_LSBFE_SHIFT)|($(MODE)&lt;&lt;SPI_CTAR_CPHA_SHIFT);\n\n
       #endif\n
       \t//! Default speed (Hz)\n
-      \tstatic constexpr uint32_t speed = $(SPEED);\n\n
+      \tstatic constexpr uint32_t speed = 
+      \t   $(SPEED);\n\n
    </template>
 </root>
