@@ -116,6 +116,10 @@
       \t   CMP_CR0_FILTER_CNT($(cmp_cr0_filter_cnt))     | // Filter Sample Count
       \t   CMP_CR0_HYSTCTR($(cmp_cr0_hystctr));         // Comparator hard block hysteresis control\n\n
       
+      \t#ifndef CMP_CR1_TRIGM
+      \t#define CMP_CR1_TRIGM(x) 0
+      \t#endif\n\n
+
       \t//! CMP Control Register 1\n
       \tstatic constexpr uint32_t CMP_CR1 =
       \t   CMP_CR1_SE($(cmp_cr1_se))    | // Sample Enable

@@ -39,7 +39,7 @@
    
  <!ELEMENT peripherals (peripheral*) >
    
- <!ELEMENT peripheral (handler?,clock*,irq*,dma?) >
+ <!ELEMENT peripheral (handler?,clock*,irq*,dma?,param*) >
    <!ATTLIST peripheral baseName        CDATA #REQUIRED>
    <!ATTLIST peripheral instance        CDATA #REQUIRED>
    <!ATTLIST peripheral version         CDATA #IMPLIED>
@@ -89,4 +89,8 @@
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice name         CDATA        #REQUIRED>
    <!ATTLIST choice value        CDATA        #REQUIRED>
+
+<!ELEMENT param EMPTY >
+   <!ATTLIST param key          CDATA        #REQUIRED>
+   <!ATTLIST param value        CDATA        #REQUIRED>
    

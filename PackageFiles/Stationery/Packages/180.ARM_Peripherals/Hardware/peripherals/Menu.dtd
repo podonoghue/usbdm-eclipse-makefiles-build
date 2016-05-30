@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Root fileElement -->
-<!ELEMENT root (xi:include|((page|menu*),validate*,projectActionList,template)) >
+<!ELEMENT root (xi:include|((page|menu*),validate*,projectActionList?,template)) >
    <!ATTLIST root xmlns:xi CDATA #IMPLIED>
 
 <!ELEMENT page ((intOption|choiceOption|binaryOption|stringOption|aliasOption|xi:include|menu)*, pins?) >

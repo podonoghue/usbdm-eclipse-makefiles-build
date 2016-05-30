@@ -196,6 +196,10 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk_ics48m">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <param key="/MCG/coreFreq" value="120MHz" />
+         <param key="/MCG/busFreq"  value="60MHz" />
+         <param key="/MCG/flashFreq" value="25MHz" />
+         <param key="/MCG/flexFreq" value="50MHz" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_div">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />

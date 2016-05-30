@@ -610,19 +610,19 @@ Devices using this peripheral:
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M">
-      <param type="long" value="180000000" /> <!-- Core         -->
-      <param type="long" value="60000000" />  <!-- Bus          -->
-      <param type="long" value="28000000" />  <!-- Flash        -->
-      <param type="long" value="60000000" />  <!-- FlexBus      -->
-      <param type="long" value="8000000" />   <!-- pllInMin     -->
-      <param type="long" value="16000000" />  <!-- pllInMax     -->
-      <param type="long" value="90000000" />  <!-- pllOutMin    -->
-      <param type="long" value="180000000" /> <!-- pllOutMax    -->
-      <param type="long" value="1" />         <!-- prDivMin     -->
-      <param type="long" value="8" />         <!-- prDivMax     -->
-      <param type="long" value="16" />        <!-- vDivMin      -->
-      <param type="long" value="47" />        <!-- vDivMax      -->
-      <param type="long" value="2" />         <!-- pllPostDiv   -->
+      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
+      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
+      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
+      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
+      <param type="long" value="8000000" />        <!-- pllInMin     -->
+      <param type="long" value="16000000" />       <!-- pllInMax     -->
+      <param type="long" value="90000000" />       <!-- pllOutMin    -->
+      <param type="long" value="180000000" />      <!-- pllOutMax    -->
+      <param type="long" value="1" />              <!-- prDivMin     -->
+      <param type="long" value="8" />              <!-- prDivMax     -->
+      <param type="long" value="16" />             <!-- vDivMin      -->
+      <param type="long" value="47" />             <!-- vDivMax      -->
+      <param type="long" value="2" />              <!-- pllPostDiv   -->
    </validate>
 
    <projectActionList id = "mcg_mk65f18" >

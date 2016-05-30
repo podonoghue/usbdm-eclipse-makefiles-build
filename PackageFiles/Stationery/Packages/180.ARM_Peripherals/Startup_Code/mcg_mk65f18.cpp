@@ -138,6 +138,10 @@ constexpr uint8_t clockTransitionTable[8][8] = {
          /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
    };
 
+#ifndef SIM_CLKDIV1_OUTDIV3
+#define SIM_CLKDIV1_OUTDIV3(x) 0
+#endif
+
 /**
  * Transition from current clock mode to mode given
  *

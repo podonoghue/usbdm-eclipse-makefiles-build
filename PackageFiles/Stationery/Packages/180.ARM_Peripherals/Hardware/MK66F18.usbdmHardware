@@ -258,6 +258,10 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <param key="/MCG/coreFreq" value="180MHz" />
+         <param key="/MCG/busFreq"  value="60MHz" />
+         <param key="/MCG/flashFreq" value="28MHz" />
+         <param key="/MCG/flexFreq" value="60MHz" />
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
