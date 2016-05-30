@@ -211,7 +211,7 @@ Control extended Boot features on these devices
 #endif
 
 __attribute__ ((section(".security_information")))
-extern const SecurityInfo securityInfo = {
+const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,

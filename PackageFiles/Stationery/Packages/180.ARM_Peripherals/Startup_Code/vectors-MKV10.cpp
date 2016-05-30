@@ -92,7 +92,7 @@ Control extended Boot features on these devices
 #define FOPT_VALUE (0x2D|0xC2)
 
 __attribute__ ((section(".security_information")))
-extern const SecurityInfo securityInfo = {
+const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* fprot    */ 0xFFFFFFFF,
     /* fsec     */ FSEC_VALUE,

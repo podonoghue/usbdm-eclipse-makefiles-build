@@ -2,7 +2,7 @@
  *  @file Vectors.cpp 
  *  Derived from  Vectors-mk.cpp
  *
- *  Vectors and security for Kinetis MKxxx
+ *  Generic vectors and security for Kinetis MKxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -177,7 +177,7 @@ Control extended Boot features on these devices
 #define FOPT_VALUE (0x7|0xF8)
 
 __attribute__ ((section(".security_information")))
-extern const SecurityInfo securityInfo = {
+const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,

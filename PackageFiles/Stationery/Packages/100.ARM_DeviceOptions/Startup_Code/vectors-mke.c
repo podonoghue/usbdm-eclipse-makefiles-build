@@ -42,7 +42,7 @@ typedef struct {
     <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
   </h>
  */
-#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
+#define BACKDOOR_VALUE {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, }
 /*
    <h> Flash Region Protect (NV_FDPROT)
       <i> Each bit protects a 1/8 region of the flash memory.
@@ -99,7 +99,7 @@ typedef struct {
 #define FOPT_VALUE (0xFF)
 
 __attribute__ ((section(".security_information")))
-extern const SecurityInfo securityInfo = {
+const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* reseved  */ 0xFFFFFFFF,
     /* eeprot   */ EEPROT_VALUE,

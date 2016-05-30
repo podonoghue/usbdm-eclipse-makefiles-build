@@ -42,7 +42,7 @@ typedef struct {
     <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
   </h>
  */
-#define BACKDOOR_VALUE {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, }
+#define BACKDOOR_VALUE {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, }
 /*
    <h> Program Flash Region Protect (NV_FPROT0-3)
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
@@ -207,7 +207,7 @@ Control extended Boot features on these devices
 #endif
 
 __attribute__ ((section(".security_information")))
-extern const SecurityInfo securityInfo = {
+const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,
