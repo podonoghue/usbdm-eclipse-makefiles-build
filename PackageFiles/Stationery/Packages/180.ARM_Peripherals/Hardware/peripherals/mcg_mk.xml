@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- mgc.xml -->
-
+<!-- mgc_mk.xml -->
+<!--
+Devices using this peripheral: 
+      MK10D5
+      MK10D7
+      MK10D10
+      MK11D5
+      MK11DA5
+      MK11D5WS
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK21D5
+      MK21DA5
+      MK21D5WS
+      MK21F12
+      MK21FA12
+      MK22D5
+      MK22F12
+      MK22FA12
+      MK30D7
+      MK30D10
+      MK40D7
+      MK40D10
+      MK50D7
+      MK50D10
+      MK51D7
+      MK51D10
+      MK52D10
+      MK53D10
+      MK60D10
+      MKW21D5
+      MKW22D5
+      MKW24D5
+-->
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="MCG" description="Multipurpose Clock Generator" >
       <menu name="Clock monitors" description="Clock monitors">
-      
          <binaryOption name="mcg_c6_cme0" 
             description="Clock Monitor Enable"
             toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
@@ -423,6 +456,16 @@
                   Must be &lt;= Bus Clock frequency."
          value="24000000" />
    
+      <menu name="Hardware bugs" description="">
+         <binaryOption name="ERRATA_E2448" 
+            description="ERRATA_E2448 fix"
+            toolTip="Indicates need for special handling of CLKDIV1 register due to hardware bug\n
+            Only applies to some early devices" >
+            <choice value="0" name="No special handling" />
+            <choice value="1" name="Special handing" />
+         </binaryOption>
+      </menu>
+
       <menu name="Device Parameters" description="Register values">
          <menu name="MCG_C1" description="MCG Control Register 1">
             <choiceOption name="mcg_c1_clks"
@@ -572,7 +615,15 @@
       <param type="long" value="1" />         <!-- pllPostDiv   -->
    </validate>
 
+   <projectActionList id = "mcg_mk" >
+      <copy source="Project_Headers/mcg_mk.h"      target="Project_Headers/mcg.h"  replace="true" derived="true" />
+      <copy source="Startup_Code/mcg_mk.cpp"       target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+   </projectActionList>
+         
    <template>
+      \t//! Indicates need for special handling of CLKDIV1 register
+      \tstatic constexpr int ERRATA_E2448 = $(ERRATA_E2448);\n\n
+      
       \t//! Indicates interrupt handler has been installed
       \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
 

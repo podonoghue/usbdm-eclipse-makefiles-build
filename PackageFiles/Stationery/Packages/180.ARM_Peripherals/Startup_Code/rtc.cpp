@@ -37,7 +37,7 @@ extern "C"
 int settimeofday(const struct timeval *tp, const struct timezone *tzp) {
    (void)tzp;
    // Start RTC
-   USBDM::Rtc::enable();
+   USBDM::Rtc::initialise();
    USBDM::Rtc::setTime(tp->tv_sec);
    return 0;
 }

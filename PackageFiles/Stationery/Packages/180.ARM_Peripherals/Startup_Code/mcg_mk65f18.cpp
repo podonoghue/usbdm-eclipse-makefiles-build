@@ -1,15 +1,11 @@
 /*
- * clock-MK22F512M12.cpp
+ * @file mcg.cpp (Derived from mcg-MK66M18.cpp)
  *
- *  Used for MK22FN512M12
- *
- * Based on K22P121M120SF7RM
+ * Based on K66P144M180SF5RMV2
  *   3 Oscillators (OSC0, RTC, IRC48M)
  *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
- *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
+ *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/7, VDIV=x16-x47)
  *
- * Used with:
- *   clock_private-MK64M12.h
  *
  *  Created on: 04/03/2012
  *      Author: podonoghue
@@ -21,18 +17,21 @@
 #include "stdbool.h"
 #include "pin_mapping.h"
 #include "rtc.h"
-
-using namespace USBDM;
-
-// Some MCUs call OSC0 just OSC
-#ifndef OSC0
-#define OSC0 OSC
-#endif
+#include "mcg.h"
+#include "osc.h"
 
 extern "C" uint32_t SystemCoreClock;
 extern "C" uint32_t SystemBusClock;
 
-/*!
+namespace USBDM {
+
+/** Callback for programmatically set handler */
+MCGCallbackFunction Mcg::callback = {0};
+
+/** Current clock mode (FEI out of reset) */
+McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
+
+/**
  * Switch to/from high speed run mode
  * Changes the CPU clock frequency/1, and bus clock frequency /2
  * If the clock is set up for 120 MHz this will be the highest performance possible.
@@ -40,7 +39,7 @@ extern "C" uint32_t SystemBusClock;
  * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
  * the Core clock divider needs to be changed.
  */
-void hsRunMode(bool enable) {
+void Mcg::hsRunMode(bool enable) {
    SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
 
    if (enable) {
@@ -50,17 +49,20 @@ void hsRunMode(bool enable) {
          __asm__("nop");
       }
       // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(USBDM::McgInfo::SIM_CLKDIV1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
+      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(McgInfo::SIM_CLKDIV1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
    }
    else {
       // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = USBDM::McgInfo::SIM_CLKDIV1;
+      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
       SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
    }
    SystemCoreClockUpdate();
 }
 
-static void doClockGating() {
+/**
+ * Do default clock gating
+ */
+void Mcg::doClockGating() {
 
    /*!
     * SOPT1 Clock multiplexing
@@ -124,27 +126,24 @@ static void doClockGating() {
    SystemCoreClockUpdate();
 }
 
-/** Current clock mode (FEI out of reset) */
-McgInfo::ClockMode currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
-
-static constexpr uint8_t clockTransitionTable[8][8] = {
-      /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
-      /* ClockMode_FEI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_FEE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_FBI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_BLPI, McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_BLPI, */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI, },
-      /* ClockMode_FBE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
-      /* ClockMode_BLPE, */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
-      /* ClockMode_PBE,  */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
-      /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
-};
+constexpr uint8_t clockTransitionTable[8][8] = {
+         /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
+         /* ClockMode_FEI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+         /* ClockMode_FEE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+         /* ClockMode_FBI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_BLPI, McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
+         /* ClockMode_BLPI, */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI, },
+         /* ClockMode_FBE,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
+         /* ClockMode_BLPE, */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
+         /* ClockMode_PBE,  */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
+         /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PEE, },
+   };
 
 /**
  * Transition from current clock mode to mode given
  *
- * @param to CLock mode to transition to
+ * @param to Clock mode to transition to
  */
-int clockTransition(McgInfo::ClockMode to) {
+int Mcg::clockTransition(McgInfo::ClockMode to) {
    constexpr volatile MCG_Type* mcg = (volatile MCG_Type*)McgInfo::basePtr;
 
    // Set conservative clock dividers
@@ -295,73 +294,12 @@ int clockTransition(McgInfo::ClockMode to) {
    return 0;
 }
 
-static void osc_initialise() {
-#ifdef USBDM_OSC0_IS_DEFINED
-   {
-      constexpr volatile OSC_Type* osc = (volatile OSC_Type*)Osc0Info::basePtr;
-
-      // XTAL/EXTAL Pins
-      USBDM::Osc0Info::initPCRs();
-
-      // Configure the Crystal Oscillator
-      osc->CR  = USBDM::Osc0Info::OSC_CR;
-#ifdef OSC_DIV_ERPS_MASK
-      osc->DIV = USBDM::Osc0Info::OSC_DIV;
-#endif
-   }
-#endif // USBDM_OSC0_IS_DEFINED
-}
-
-static void rtc_initialise() {
-#ifdef USBDM_RTC_IS_DEFINED
-   Rtc::enable();
-#endif // USBDM_RTC_IS_DEFINED
-}
-
-/*! @brief Sets up the clock out of RESET
- *
- */
-extern "C"
-void clock_initialise(void) {
-
-   currentClockMode = McgInfo::ClockMode::ClockMode_None;
-
-   osc_initialise();
-   rtc_initialise();
-
-   if (McgInfo::clockMode == McgInfo::ClockMode::ClockMode_None) {
-      // No clock setup
-      doClockGating();
-      return;
-   }
-
-   if (McgInfo::MCG_C7&&MCG_C7_OSCSEL_MASK) {
-      // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
-      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
-   }
-
-   // Set PLL PRDIV0 etc
-   MCG->C5  = McgInfo::MCG_C5;
-
-   // Select OSCCLK Source
-   MCG->C7 = McgInfo::MCG_C7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
-
-   // Set Fast Internal Clock divider
-   MCG->SC = McgInfo::MCG_SC;
-
-   // Transition to desired clock mode
-   clockTransition(McgInfo::clockMode);
-
-   doClockGating();
-}
-
-/*!
- * @brief Update SystemCoreClock variable
+/**
+ * Update SystemCoreClock variable
  *
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
-void SystemCoreClockUpdate(void) {
+void Mcg::SystemCoreClockUpdate(void) {
    uint32_t oscerclk = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
       case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = Osc0Info::oscclk_clock; break;
@@ -374,6 +312,7 @@ void SystemCoreClockUpdate(void) {
             // External reference clock is selected
             SystemCoreClock = oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
             if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
+			   // High divisors
                if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
                   SystemCoreClock /= 20;
                }
@@ -404,11 +343,68 @@ void SystemCoreClockUpdate(void) {
          SystemCoreClock = oscerclk;
          break;
       case MCG_S_CLKST(3) : // PLL
-         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
+         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+16);
          SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
-         SystemCoreClock *= 10;
+         SystemCoreClock *= 5;
          break;
    }
    SystemBusClock    = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
    SystemCoreClock   = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
 }
+
+/**
+ * Sets up the clock out of RESET
+ */
+void Mcg::initialise(void) {
+
+   currentClockMode = McgInfo::ClockMode::ClockMode_None;
+
+   if (McgInfo::clockMode == McgInfo::ClockMode::ClockMode_None) {
+      // No clock setup
+      doClockGating();
+      return;
+   }
+
+   if (McgInfo::MCG_C7&&MCG_C7_OSCSEL_MASK) {
+      // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
+      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
+   }
+
+   // Set PLL PRDIV0 etc
+   MCG->C5  = McgInfo::MCG_C5;
+
+   // Select OSCCLK Source
+   MCG->C7 = McgInfo::MCG_C7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+
+   // Set Fast Internal Clock divider
+   MCG->SC = McgInfo::MCG_SC;
+
+   // Transition to desired clock mode
+   clockTransition(McgInfo::clockMode);
+
+   doClockGating();
+}
+
+} // end namespace USBDM
+
+/**
+ * Sets up the clock out of RESET
+ */
+extern "C"
+void clock_initialise(void) {
+
+#ifdef USBDM_OSC0_IS_DEFINED
+   USBDM::Osc0::initialise();
+#endif
+
+#ifdef USBDM_RTC_IS_DEFINED
+   USBDM::Rtc::initialise();
+#endif
+
+#ifdef USBDM_MCG_IS_DEFINED
+   USBDM::Mcg::initialise();
+#endif
+
+}
+

@@ -282,6 +282,11 @@ Devices using this vector table:
             <value>56</value>
          </interrupt>
          <interrupt>
+            <name>MCG</name>
+            <description>Digital to Analogue Converter</description>
+            <value>57</value>
+         </interrupt>
+         <interrupt>
             <name>LPTMR0</name>
             <description>Low Power Timer</description>
             <value>58</value>

@@ -11,7 +11,7 @@ using namespace USBDM;
 /**
  * Demonstrates use of the PWM outputs
  *
- * Uses PWM to change the brightness of 2 LEDs
+ * Uses PWM to change the brightness of a LED
  *
  */
 
@@ -32,7 +32,6 @@ static void delay(void) {
  */
 // Connection mapping - change as required
 using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
-using LED2 = $(demo.cpp.pwm.led2:Ftm0Channel<1>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"
@@ -52,8 +51,7 @@ template<> void TpmIrq_T<Tpm1Info>::irqHandler() {
 #endif
 
 int main() {
-   LED1::enable();
-   LED2::enable();
+   LED::enable();
 
    // Change PWM period
 //   LED1::configure(1000);
@@ -61,11 +59,11 @@ int main() {
 
    for(;;) {
       for (int i=0; i<=100; i++) {
-         LED1::setDutyCycle(i);
+         LED::setDutyCycle(i);
          delay();
       }
-      for (int i=0; i<=100; i++) {
-         LED2::setDutyCycle(i);
+      for (int i=100; i>=0; i--) {
+         LED::setDutyCycle(i);
          delay();
       }
    }

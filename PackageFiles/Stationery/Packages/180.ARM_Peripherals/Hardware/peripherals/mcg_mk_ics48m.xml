@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- mgc.xml -->
-
+<!-- mcg_mk_ics48m.xml -->
+<!--
+Devices using this peripheral: 
+      MK65F18
+      MK66F18
+--> 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="MCG" description="Multipurpose Clock Generator" >
       <menu name="Clock monitors" description="Clock monitors">
@@ -581,6 +585,11 @@
       <param type="long" value="1" />         <!-- pllPostDiv   -->
    </validate>
 
+   <projectActionList id = "mcg_mk_ics48m" >
+      <copy source="Project_Headers/mcg_mk_ics48m.h"   target="Project_Headers/mcg.h"  replace="true" derived="true" />
+      <copy source="Startup_Code/mcg_mk_ics48m.cpp"    target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+   </projectActionList>
+         
    <template>
       \t//! Indicates interrupt handler has been installed
       \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n

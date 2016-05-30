@@ -31,7 +31,7 @@ public:
     * Initialise rtc to default settings\n
     * Configures all  rtc pins
     */
-   static void enable() {
+   static void initialise() {
 
       // Configure pins
       Info::initPCRs();

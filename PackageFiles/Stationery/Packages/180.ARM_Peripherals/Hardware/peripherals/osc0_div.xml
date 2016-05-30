@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
 <!-- osc0_div.xml -->
-
+<!--
+Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
+      MK22F25612
+      MK22F51212
+      MK65F18
+      MK66F18
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
+      MKV40F15
+      MKV43F15
+      MKV44F15
+      MKV45F15
+      MKV46F15
+-->
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Oscillator">
 
@@ -108,6 +125,10 @@
       <pins />
    </page>
 
+   <projectActionList id = "osc_files" >
+      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">
    </validate>

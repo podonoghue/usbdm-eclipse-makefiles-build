@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Root fileElement -->
-<!ELEMENT root (xi:include|((page|menu*),validate*,template)) >
+<!ELEMENT root (xi:include|((page|menu*),validate*,projectActionList,template)) >
    <!ATTLIST root xmlns:xi CDATA #IMPLIED>
 
 <!ELEMENT page ((intOption|choiceOption|binaryOption|stringOption|aliasOption|xi:include|menu)*, pins?) >
@@ -78,4 +78,37 @@
    <!ATTLIST param value CDATA         #REQUIRED>
 
 <!ELEMENT pins EMPTY >
+
+<!-- List of actions to be applied to a project -->
+<!ELEMENT projectActionList ((deleteResource|copy)*) >
+   <!ATTLIST projectActionList id    ID     #REQUIRED>
+   <!ATTLIST projectActionList root  CDATA  #IMPLIED>
+   
+<!-- Exclude/include source file in Eclipse project -->
+<!ELEMENT excludeSourceFile EMPTY >
+   <!ATTLIST excludeSourceFile target  CDATA         #REQUIRED>
+   <!ATTLIST excludeSourceFile excluded (true|false) "true" >
+
+<!-- Exclude/include source folder in Eclipse project -->
+<!ELEMENT excludeSourceFolder EMPTY >
+   <!ATTLIST excludeSourceFolder target  CDATA         #REQUIRED>
+   <!ATTLIST excludeSourceFolder excluded (true|false) "true" >
+
+<!-- Remove file from Eclipse project -->
+<!ELEMENT deleteResource EMPTY >
+   <!ATTLIST deleteResource target  CDATA         #REQUIRED>
+
+ <!ELEMENT createFolder EMPTY >
+   <!ATTLIST createFolder target  CDATA #REQUIRED>
+   <!ATTLIST createFolder type    (source|include|normal) "normal">
+
+<!-- File to be copied to a project -->
+<!ELEMENT copy EMPTY >
+   <!ATTLIST copy source  					CDATA #REQUIRED>
+   <!ATTLIST copy target  					CDATA #REQUIRED>
+   <!ATTLIST copy type    					CDATA #IMPLIED>
+   <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
+   <!ATTLIST copy macroReplacement  	(true|false) "true">
+   <!ATTLIST copy replace              (true|false) "false">
+   <!ATTLIST copy derived              (true|false) "false">
    

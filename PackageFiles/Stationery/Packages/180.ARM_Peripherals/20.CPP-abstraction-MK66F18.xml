@@ -25,7 +25,6 @@
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
-      <constant id="cpp.peripheral.internal.rtc"    value="true" />
       <constant id="cpp.peripheral.internal.spi"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
@@ -58,7 +57,6 @@
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
-         <copy source="Startup_Code/clock-&DEVICE_FILE;.cpp"               target="Startup_Code/clock.cpp" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

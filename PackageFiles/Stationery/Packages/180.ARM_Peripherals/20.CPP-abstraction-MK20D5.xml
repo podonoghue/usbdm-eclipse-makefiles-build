@@ -24,7 +24,6 @@
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
-      <constant id="cpp.peripheral.internal.rtc"    value="true" />
       <constant id="cpp.peripheral.internal.spi"    value="true" />
 
       <variable id="projectOptionValue.CPP-abstraction" 
@@ -47,6 +46,7 @@
          <deleteResource target="Sources/leds.c" />
          <deleteResource target="Sources/main.c" />
          <deleteResource target="Startup_Code/vectors.c" />
+         <deleteResource target="Startup_Code/clock.c" />
          <createFolder   target="Snippets" />
          <copy source="Startup_Code/vectors-&DEVICE_FAMILY;.cpp"           target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
@@ -56,7 +56,6 @@
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
-         <copy source="Startup/clock-MKxx.cpp"                             target="Startup/clock.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>
