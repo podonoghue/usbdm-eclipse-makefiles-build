@@ -4,6 +4,9 @@
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="OSC0" description="Oscillator">
+   
+      <aliasOption key="system_mcgir_clock" />
+   
       <choiceOption name="XXXX" description="YYYYY"
          toolTip="ZZZZZZZ">
          <choice value="0" name="AAAA" />

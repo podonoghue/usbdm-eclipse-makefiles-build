@@ -103,7 +103,7 @@ typedef struct {
 #define FOPT_VALUE (0xFF)
 
 __attribute__ ((section(".security_information")))
-const SecurityInfo securityInfo = {
+extern const SecurityInfo securityInfo = {
     /* backdoor */ BACKDOOR_VALUE,
     /* reseved  */ 0xFFFFFFFF,
     /* eeprot   */ EEPROT_VALUE,

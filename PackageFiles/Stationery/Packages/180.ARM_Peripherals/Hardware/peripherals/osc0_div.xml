@@ -125,17 +125,20 @@ Devices using this peripheral:
       <pins />
    </page>
 
-   <projectActionList id = "osc_files" >
-      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  replace="true"  derived="true" />
-   </projectActionList>
-         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">
    </validate>
 
+   <projectActionList id = "osc_files" >
+      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <template>
       \t//! Frequency of OSC Clock or Crystal\n
       \tstatic constexpr uint32_t oscclk_clock = $(oscclk_clock)UL;\n\n
+      
+      \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
+      \tstatic constexpr uint32_t osc32kclk_clock = $(oscclk_clock)UL;\n\n
       
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t OSC_CR =

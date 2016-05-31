@@ -110,7 +110,7 @@
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t RTC_CR =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
-      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Enables RTC 32kHz Clock Output
+      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
       \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode
       \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
       \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
