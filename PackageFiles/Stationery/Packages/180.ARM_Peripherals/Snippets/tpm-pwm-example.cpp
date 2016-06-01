@@ -31,7 +31,7 @@ static void delay(void) {
  *
  */
 // Connection mapping - change as required
-using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
+using LED = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"

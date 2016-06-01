@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- uart_def.xml -->
+<!--
+Devices using this peripheral: 
+-->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <page name="_instance" description="UART">
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
+      <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" />
+   
+      <pins/>
+   </page>
+
+   <projectActionList id = "uart_files">
+      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
+   <template>
+   \t//! Clock source for peripheral
+   \tstatic constexpr uint32_t &amp;clockSource = $(clockSource);\n\n
+
+   </template>
+</root>

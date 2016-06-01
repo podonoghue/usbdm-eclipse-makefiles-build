@@ -139,8 +139,8 @@ public:
 
       // Common registers
       tmr->CNT     = 0;
-      tmr->MOD     = Info::PERIOD;
-      tmr->SC      = Info::SC;
+      tmr->MOD     = Info::period;
+      tmr->SC      = Info::sc;
 
       if (tmr->SC & FTM_SC_TOF_MASK) {
          // Enable interrupts
@@ -165,11 +165,11 @@ public:
       tmr->SC      = mode;
       if (mode == tpm_centreAlign) {
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC   = Info::SC|TPM_SC_CPWMS_MASK;
+         tmr->SC   = Info::sc|TPM_SC_CPWMS_MASK;
       }
       else {
          // Left aligned PWM without CPWMS selected
-         tmr->SC   = Info::SC;
+         tmr->SC   = Info::sc;
       }
       setPeriod(period);
 
@@ -210,7 +210,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = Info::SC|TPM_SC_CPWMS_MASK;
+         tmr->SC  = Info::sc|TPM_SC_CPWMS_MASK;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -221,7 +221,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = Info::SC;
+         tmr->SC  = Info::sc;
       }
    }
 

@@ -48,6 +48,10 @@ __attribute__((weak))
 void software_init_hook (void) {
 }
 
+#ifdef __NO_STARTFILES__
+#warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
+#endif
+
 /*!
  *  @brief Low-level initialize the system
  *
@@ -62,19 +66,16 @@ void SystemInitLowLevel(void) {
    /* Set the interrupt vector table position */
    SCB_VTOR = (uint32_t)__vector_table;
 
-   // Enable trapping of divide by zero and unaligned access
-   SCB_CCR |= SCB_CCR_DIV_0_TRP_MASK;
+   // Enable trapping of divide by zero
+   SCB_CCR |= SCB_CCR_DIV_0_TRP_Msk;
 }
-
-#ifdef __NO_STARTFILES__
-#warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
-#endif
 
 /**
  * @brief Initialize the system
  *
  * Setup the microcontroller system.
  */
+__attribute__ ((constructor))
 void SystemInit(void) {
    /* This is generic initialization code */
    /* It may not be correct for a specific target */

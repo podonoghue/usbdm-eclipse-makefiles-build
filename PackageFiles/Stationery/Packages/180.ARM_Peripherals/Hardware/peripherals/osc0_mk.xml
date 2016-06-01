@@ -184,7 +184,7 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t osc32kclk_clock = $(osc32kclk_clock)UL;\n\n
       
       \t//! Oscillator control register\n
-      \tstatic constexpr uint32_t OSC_CR =
+      \tstatic constexpr uint32_t osc_cr =
       \t   OSC_CR_ERCLKEN($(osc_cr_erclken)) |
       \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) |
       \t   OSC_CR_SCP($(osc_cr_scp));\n\n      

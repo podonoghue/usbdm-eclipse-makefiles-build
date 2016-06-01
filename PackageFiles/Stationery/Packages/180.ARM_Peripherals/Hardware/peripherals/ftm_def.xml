@@ -36,7 +36,7 @@
          <choice value="1" name="Enabled" />
       </binaryOption>
 
-      <intOption name="PERIOD" description="Period of timer"
+      <intOption name="period" description="Period of timer"
          toolTip="Default period of the timer"
          value="10000" min="0" max="65535" />
          
@@ -47,24 +47,30 @@
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
          
       <pins/>
    </page>
+   
+   <projectActionList id = "ftm_2ch_def" >
+      <copy source="Project_Headers/ftm.h"         target="Project_Headers/ftm.h"         replace="true" derived="true" />
+      <copy source="Snippets/ftm-pwm-example.cpp"  target="Snippets/ftm-pwm-example.cpp"  replace="true" derived="true" />
+   </projectActionList>
+         
    <template>
       \t//! Default value for SC register\n
-      \tstatic constexpr uint32_t SC  = 
+      \tstatic constexpr uint32_t sc  = 
       \t    FTM_SC_CPWMS($(sc_cpwms))|
       \t    FTM_SC_TOIE(($(IRQ_HANDLER)|$(sc_toie)))|
       \t    FTM_SC_CLKS($(sc_clks))|
       \t    FTM_SC_PS($(sc_ps));\n\n
       
       \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t PERIOD =  $(PERIOD);\n\n
+      \tstatic constexpr uint32_t period =  $(period);\n\n
       
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
 </root>

@@ -123,9 +123,9 @@ public:
       __DMB();
 
       // Set mode to default
-      adc->CFG1 = Info::CFG1;
-      adc->CFG2 = Info::CFG2;
-      adc->SC2  = Info::SC2;
+      adc->CFG1 = Info::cfg1;
+      adc->CFG2 = Info::cfg2;
+      adc->SC2  = Info::sc2;
 
       if (Info::irqHandlerInstalled) {
          // Enable timer interrupts
@@ -154,13 +154,13 @@ public:
     * @note This affects all channels on the ADC
     */
    static void setMode(uint32_t mode = resolution_16bit_se) {
-      adc->CFG1 = (Info::CFG1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
+      adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
    }
 
    /**
     * Configure ADC
     */
-   static void configure(uint32_t cfg1=Info::CFG1, uint32_t cfg2=Info::CFG2, uint32_t sc2=Info::SC2) {
+   static void configure(uint32_t cfg1=Info::cfg1, uint32_t cfg2=Info::cfg2, uint32_t sc2=Info::sc2) {
       // Set mode
       adc->CFG1 = cfg1;
       adc->CFG2 = cfg2;

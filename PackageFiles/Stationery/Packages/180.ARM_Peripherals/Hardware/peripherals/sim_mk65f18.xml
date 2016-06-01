@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!-- sim_mk65f18.xml -->
+<!--
+Devices using this peripheral: 
+-->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+   <page name="_instance" description="SIM">
+   
+      <choiceOption name="sim_sopt1_osc32ksel" 
+         description="ERCLK32K source"
+         toolTip="Clock source of External 32k Reference Clock [ERCLK32K]">
+         <choice value="0"  name="System oscillator in low range (OSC32KCLK)" />
+         <choice value="1"  name="Reserved" />
+         <choice value="2"  name="RTC 32kHz clock" isDefault="true" />
+         <choice value="3"  name="LPO 1kHz clock" />
+      </choiceOption>
+      
+      <binaryOption name="sim_sopt2_rtcclkoutsel" 
+         description="RTC clock out select [RTC_CLKOUT pin]"
+         toolTip="Clock output on the RTC_CLKOUT pin">
+         <choice value="0"  name="RTC 1 Hz clock" />
+         <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
+      </binaryOption>
+
+      <choiceOption name="sim_sopt2_lpuartsrc" 
+         description="LPUART clock source select"
+         toolTip="Selects the clock source for the LPUART transmit and receive clock">
+         <choice value="0"  name="Disabled" isDefault="true" />
+         <choice value="1"  name="PLL/FLL clock after division by CLKDIV3" />
+         <choice value="2"  name="OSCERCLK clock" />
+         <choice value="3"  name="MCGIRCLK clock" />
+      </choiceOption>
+
+      <choiceOption name="sim_sopt2_tpmsrc" 
+         description="TPM clock source select"
+         toolTip="Selects the clock source for the TPM counter clock">
+         <choice value="0"  name="Disabled" isDefault="true" />
+         <choice value="1"  name="PLL/FLL clock after division by CLKDIV3" />
+         <choice value="2"  name="OSCERCLK clock" />
+         <choice value="3"  name="MCGIRCLK clock" />
+      </choiceOption>
+
+      <choiceOption name="sim_sopt2_usbsrc" 
+         description="USB clock source select"
+         toolTip="Selects the clock source for the TPM counter clock">
+         <choice value="0"  name="External bypass clock (USB_CLKIN)" isDefault="true" />
+         <choice value="1"  name="PLL/FLL clock" isDefault="true" />
+      </choiceOption>
+
+      <choiceOption name="sim_sopt2_pllfllsel" 
+         description="PLL/FLL clock select (to LPUART, TPM etc.)"
+         toolTip="Selects the clock for various peripherals.">
+         <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
+         <choice value="1"  name="MCGPLLCLK clock" />
+         <choice value="2"  name="USB1 PFD clock (some devices only)" />
+         <choice value="3"  name="IRC48 MHz clock (some devices only)" />
+      </choiceOption>
+
+      <menu name="sim_clkdiv1" description="Clock Dividers">
+         <intOption name="sim_clkdiv1_outdiv1" 
+            constant="true"
+            description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
+            toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
+                     Divides MCGOUT Clock to generate system_core_clock"
+            value="1" offset="-1" min="1" max="16" />
+      
+         <intOption name="sim_clkdiv1_outdiv2" 
+            constant="true"
+            description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
+            toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
+               Divides MCGOUT Clock to generate system_bus_clock\n
+               MCGOUTCLK clock is source. Default /2"
+            value="1" offset="-1" min="1" max="16" />
+      
+         <intOption name="sim_clkdiv1_outdiv3" 
+            constant="true"
+            description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
+            toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
+                     Divides MCGOUT Clock to generate system_flexbus_clock\n
+                     MCGOUTCLK clock is source. Default /2"
+            value="1" offset="-1" min="1" max="16" />
+      
+         <intOption name="sim_clkdiv1_outdiv4" 
+            constant="true"
+            description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
+            toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
+                     Divides MCGOUT Clock to generate system_flash_clock\n
+                     MCGOUTCLK clock is source. Default /4"
+            value="4" offset="-1" min="1" max="16" />
+      </menu>
+      <choiceOption name="sim_clkdiv2_usb"
+         description="USB clock divider" 
+         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+         is the USB clock source.">
+         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+      </choiceOption>
+
+      <choiceOption name="sim_clkdiv3_pllfll"
+         description="PLL/FLL clock divider" 
+         toolTip="Selects the clock divider for various peripherals.">
+         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+      </choiceOption>
+
+   </page>
+
+   <projectActionList id = "sim_files" >
+   </projectActionList>
+         
+   <template>
+      \t//! System Options Register 1
+      \tstatic constexpr uint32_t sim_sopt1 = 
+      \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel)); // 32K oscillator clock select\n\n
+      
+      \t//! System Options Register 2
+      \tstatic constexpr uint32_t sim_sopt2 = 
+      \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel)) | // RTC clock out select
+      \t   SIM_SOPT2_LPUARTSRC($(sim_sopt2_lpuartsrc)) |    // LPUART clock source select
+      \t   SIM_SOPT2_TPMSRC($(sim_sopt2_tpmsrc)) |       // TPM clock source select
+      \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |       // USB clock source select
+      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel));     // PLL/FLL clock select\n\n
+
+      \t//! System Clock Divider Register 1
+      \tstatic constexpr uint32_t sim_clkdiv1 = 
+      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Core/system clock
+      \t#ifdef SIM_CLKDIV1_OUTDIV3
+      \t   SIM_CLKDIV1_OUTDIV3($(sim_clkdiv1_outdiv3))|  // FlexBus clock (if present)
+      \t#endif
+      \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
+      \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
+      
+      \t//! System Clock Divider Register 2
+      \tstatic constexpr uint32_t sim_clkdiv2 = 
+      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
+      
+      \t//! System Clock Divider Register 3
+      \tstatic constexpr uint32_t sim_clkdiv3 = 
+      \t   $(sim_clkdiv3_pllfll);  // PLLFLL clock divider divisor &amp; fraction \n\n
+      
+   </template>
+</root>

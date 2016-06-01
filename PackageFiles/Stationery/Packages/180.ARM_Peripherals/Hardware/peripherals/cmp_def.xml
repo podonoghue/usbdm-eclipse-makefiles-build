@@ -97,19 +97,23 @@
          <choice value="true" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
          
       <pins/>
    </page>
    
+   <projectActionList id = "adc_files" >
+      <!--  copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  replace="true"  derived="true" / -->
+   </projectActionList>
+   
    <template>
       \t//! Indicates interrupt handler has been installed
       \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
       
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
       
       \t//! CMP Control Register 0\n
       \tstatic constexpr uint32_t CMP_CR0 =

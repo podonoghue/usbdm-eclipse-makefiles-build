@@ -3,5 +3,5 @@
 <!-- ftm0_8ch_icrst.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="ftm_8ch_def.xml"/>
+<xi:include href="ftm_def.xml"/>
 </root>

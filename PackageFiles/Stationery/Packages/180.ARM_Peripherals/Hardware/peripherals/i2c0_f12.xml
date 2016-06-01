@@ -3,22 +3,5 @@
 <!-- i2c0_f12.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="_instance" description="Inter-Integrated-Circuit">
-
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
-         toolTip="Polling or interrupts may be used to update the state machine">
-         <choice value="0" name="Use polling" />
-         <choice value="1" name="Use interrupts" />
-      </binaryOption>
-
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
-         toolTip="Sets the priority level used to configure the NVIC"
-         value="0" min="0" max="15" />
-
-      <pins/>
-   </page>
-   <template>
-       \t//! Default IRQ level\n
-       \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
-   </template>
+<xi:include href="i2c_def.xml"/>
 </root>

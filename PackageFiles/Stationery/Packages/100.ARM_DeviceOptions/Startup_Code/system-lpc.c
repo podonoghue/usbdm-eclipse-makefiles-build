@@ -75,7 +75,7 @@ void SystemInitLowLevel(void) {
    SCB_VTOR = (uint32_t)__vector_table;
 
    // Enable trapping of divide by zero
-   SCB_CCR |= SCB_CCR_DIV_0_TRP_MASK;
+   SCB_CCR |= SCB_CCR_DIV_0_TRP_Msk;
 }
 
 /**
@@ -83,6 +83,7 @@ void SystemInitLowLevel(void) {
  *
  * Setup the microcontroller system.
  */
+__attribute__ ((constructor))
 void SystemInit(void) {
    /* This is generic initialization code */
    /* It may not be correct for a specific target */
@@ -98,7 +99,7 @@ void SystemInit(void) {
 
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
    /* Initialise FPU if present & in use */
-   asm (
+   __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"
          "                             \n"
          "  LDR.W R0, =CPACR           \n"  // CPACR address

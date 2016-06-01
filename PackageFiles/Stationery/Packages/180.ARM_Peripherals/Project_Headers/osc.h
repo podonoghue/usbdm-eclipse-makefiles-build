@@ -41,17 +41,17 @@ public:
       Info::initPCRs();
 
       // Configure Osc
-      osc->CR  = Info::OSC_CR;
+      osc->CR  = Info::osc_cr;
 
       // Assume these clocks are always available as
       // Osc may also be enabled by MCG as erc_clock
       oscclkUndivided = Info::oscclk_clock;
       osc32kclk       = Info::osc32kclk_clock;
 
-      if (Osc0Info::OSC_CR&&OSC_CR_ERCLKEN_MASK) {
+      if (Osc0Info::osc_cr&&OSC_CR_ERCLKEN_MASK) {
    #ifdef OSC_DIV_ERPS
-         osc->DIV  = Info::OSC_DIV;
-         oscclk    = Info::oscclk_clock/(1<<((Info::OSC_CR&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT));
+         osc->DIV  = Info::osc_div;
+         oscclk    = Info::oscclk_clock/(1<<((Info::osc_cr&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT));
    #else
          oscclk     = Info::oscclk_clock;
    #endif

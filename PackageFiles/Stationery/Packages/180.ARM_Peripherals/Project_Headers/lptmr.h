@@ -86,15 +86,15 @@ public:
       __DMB();
 
       // Disable timer
-      lptmr->CSR  = Info::CSR;
+      lptmr->CSR  = Info::csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
-      lptmr->PSR  = Info::PSR;
+      lptmr->PSR  = Info::psr;
       // Interval/Compare value
-      lptmr->CMR  = Info::PERIOD;
+      lptmr->CMR  = Info::period;
       // Enable timer
       lptmr->CSR |= LPTMR_CSR_TEN_MASK;
 
-      if (Info::CSR & LPTMR_CSR_TIE_MASK) {
+      if (Info::csr & LPTMR_CSR_TIE_MASK) {
          // Enable timer interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
@@ -110,7 +110,7 @@ public:
     *  @param csr       Control Status Register
     *  @param psr       Prescale Register
     */
-   static void configure(uint16_t interval, uint32_t csr=Info::CSR, uint32_t psr=Info::PSR) {
+   static void configure(uint16_t interval, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK

@@ -75,7 +75,7 @@
          <choice value="true" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" 
+      <intOption name="irqLevel" 
          description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
@@ -102,13 +102,13 @@
       \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
       
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
       
       \t//! Frequency of RTC External Clock or Crystal\n
       \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
       
       \t//! Oscillator control register\n
-      \tstatic constexpr uint32_t RTC_CR =
+      \tstatic constexpr uint32_t rtc_cr =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
       \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
       \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode

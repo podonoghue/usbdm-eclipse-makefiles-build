@@ -7,21 +7,21 @@
 
       <intOption name="LDVAL" description="Reload value [0-65535]"
          toolTip="Value loaded in timer register on roll-over"
-         value="0" min="0" max="65535" />
+         value="10000" min="0" max="65535" />
 
-      <binaryOption name="MCR_FRZ" description="Freeze in debug mode"
+      <binaryOption name="mcr_frz" description="Freeze in debug mode"
          toolTip="Controls whether the timer continues to run in debug mode">
          <choice value="0" name="Timers continue to run in debug mode" />
          <choice value="1" name="Timers are stopped in Debug mode" />
       </binaryOption>
 
-      <binaryOption name="TCTRL_CHN1" description="Chain timers 1-0"
+      <binaryOption name="tctrl_ch1" description="Chain timers 1-0"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" />
          <choice value="1" name="Timers are chained" />
       </binaryOption>
 
-      <binaryOption name="TCTRL_CHN3" description="Chain timers 3-2"
+      <binaryOption name="tctrl_ch3" description="Chain timers 3-2"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" />
          <choice value="1" name="Timers are chained" />
@@ -34,12 +34,20 @@
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
    </page>
    <template>
-       \t//! Default IRQ level\n
-       \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \t//! Default value for PIT->SC register\n
+      \tstatic constexpr uint32_t loadValue  = 
+      \t   $(LDVAL);\n\n
+      
+      \t//! PIT operation in debug mode\n
+      \tstatic constexpr uint32_t mcrValue = 
+      \t   PIT_MCR_FRZ($(mcr_frz));\n\n
+      
+      \t//! Default IRQ level\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
 </root>

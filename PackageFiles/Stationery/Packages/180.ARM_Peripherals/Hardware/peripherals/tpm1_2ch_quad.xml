@@ -4,7 +4,10 @@
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Flex timer">
-      <choiceOption name="SC_CMOD" description="Clock Source"
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
+      <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
+      
+      <choiceOption name="sc_cmod" description="Clock Source"
          toolTip="Selects the clock source for the module">
          <choice value="0" name="Disabled" />
          <choice value="1" name="System clock" isDefault="true" />
@@ -12,7 +15,7 @@
          <choice value="3" name="External clock" />
       </choiceOption>
 
-      <choiceOption name="SC_PS" description="Clock prescaler"
+      <choiceOption name="sc_ps" description="Clock prescaler"
          toolTip="Selects the prescaler for the module">
          <choice value="0" name="Divide by 1" />
          <choice value="1" name="Divide by 2" />
@@ -24,7 +27,7 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption name="PERIOD" description="Period of timer"
+      <intOption name="period" description="Period of timer"
          toolTip="Default period of the timer"
          value="10000" min="0" max="65535" />
          
@@ -35,21 +38,28 @@
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
          
       <pins/>
    </page>
+   <projectActionList id = "tpm1_2ch_quad" >
+      <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          replace="true" derived="true" />
+      <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   replace="true" derived="true"/>
+   </projectActionList>
+         
    <template>
       \t//! Default value for SC register\n
-      \tstatic constexpr uint32_t SC  = 
+      \tstatic constexpr uint32_t sc  = 
       \t    ($(IRQ_HANDLER)&lt;&lt;TPM_SC_TOIE_SHIFT)|
-      \t    TPM_SC_CMOD($(SC_CMOD))|
-      \t    TPM_SC_PS($(SC_PS));\n\n
+      \t    TPM_SC_CMOD($(sc_cmod))|
+      \t    TPM_SC_PS($(sc_ps));\n\n
+      
       \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t PERIOD =  $(PERIOD);\n\n
+      \tstatic constexpr uint32_t period =  $(period);\n\n
+      
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
 </root>

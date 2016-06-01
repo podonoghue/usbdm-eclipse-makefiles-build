@@ -17,7 +17,7 @@ void SystemCoreClockUpdate(void) {
 
 /* This is overridden if actual clock code is provided */
 __attribute__((__weak__))
-uint32_t SystemBusClock  = 8000000;
+uint32_t SystemBusClock = 8000000;
 __attribute__((__weak__))
 uint32_t SystemCoreClock = 4000000;
 
@@ -119,6 +119,7 @@ void SystemInitLowLevel(void) {
  *
  * Setup the microcontroller system.
  */
+__attribute__ ((constructor))
 void SystemInit(void) {
    /* This is generic initialization code */
    /* It may not be correct for a specific target */

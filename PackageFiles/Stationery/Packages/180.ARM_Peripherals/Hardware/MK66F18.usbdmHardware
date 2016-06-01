@@ -255,6 +255,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART0_MASK" />
          <irq num="LPUART0_RX_TX_IRQn" />
+         <param key="clockSource"   value="SystemBusClock" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
@@ -304,6 +305,9 @@
       <peripheral baseName="SDRAMC"   instance=""         version="sdramc_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdramc" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_SDRAMC_MASK" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mk65f18">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

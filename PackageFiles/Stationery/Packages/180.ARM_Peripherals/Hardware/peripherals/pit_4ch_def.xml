@@ -55,10 +55,17 @@
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
    </page>
+   
+   <projectActionList id = "lptmr0_0" >
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
+      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" />
+      <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"        replace="true" derived="true" />
+   </projectActionList>
+         
    <template>
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
@@ -69,6 +76,6 @@
       \t   PIT_MCR_FRZ($(mcr_frz));\n\n
       
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
 </root>

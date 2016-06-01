@@ -97,34 +97,39 @@
          <choice value="true" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
          
       <pins/>
    </page>
+   
+   <projectActionList id = "adc_files" >
+      <copy source="Project_Headers/adc.h"  target="Project_Headers/adc.h"  replace="true"  derived="true" />
+   </projectActionList>
+   
    <template>
      \t//! Indicates interrupt handler has been installed
      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
      \t//! Default value for ADCx_CFG1 register
-     \tstatic constexpr uint32_t CFG1  = 
+     \tstatic constexpr uint32_t cfg1  = 
      \t    ADC_CFG1_ADICLK($(cfg1_adiclk))|
      \t    ADC_CFG1_MODE($(cfg1_mode))|
      \t    ADC_CFG1_ADLSMP($(cfg1_adlsmp))|
      \t    ADC_CFG1_ADIV($(cfg1_adiv))|
      \t    ADC_CFG1_ADLPC($(cfg1_adlpc));\n\n
      \t//! Default value for ADCx_CFG2 register
-     \t static constexpr uint32_t CFG2  = 
+     \t static constexpr uint32_t cfg2  = 
      \t    ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
      \t    ADC_CFG2_ADLSTS($(cfg2_adlsts))|
      \t    ADC_CFG2_ADHSC($(cfg2_adhsc))|
      \t    ADC_CFG2_ADACKEN($(cfg2_adacken));\n\n
-     \tstatic constexpr uint32_t SC2  =
+     \tstatic constexpr uint32_t sc2  =
      \t    ADC_SC2_REFSEL($(sc2_refsel))|
      \t    ADC_SC2_DMAEN($(sc2_dmaen))|
      \t    ADC_SC2_ACREN($(sc2_compare))|
      \t    ADC_SC2_ADTRG($(sc2_adtrg));\n\n
      \t//! Default IRQ level\n
-     \tstatic constexpr uint32_t irqLevel =  $(IRQ_LEVEL);\n\n
+     \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
 </root>

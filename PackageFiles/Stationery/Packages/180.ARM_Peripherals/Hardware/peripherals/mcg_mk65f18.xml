@@ -174,15 +174,7 @@ Devices using this peripheral:
          <aliasOption key="/RTC/rtcclk_clock" constant="false" />
          <aliasOption key="/RTC/rtc_cr_scp"   constant="false" /> 
          <aliasOption key="/RTC/rtc_cr_clko"  constant="false" />
-   
-         <choiceOption name="sim_sopt1_osc32ksel" 
-            description="ERCLK32K source"
-            toolTip="Clock source of External 32k Reference Clock [ERCLK32K]">
-            <choice value="0"  name="System oscillator in low range (OSC32KCLK)" />
-            <choice value="1"  name="Reserved" />
-            <choice value="2"  name="RTC 32kHz clock" />
-            <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
-         </choiceOption>
+         <aliasOption key="/SIM/sim_sopt1_osc32ksel" constant="false" />
 
          <intOption name="system_erclk32k_clock" 
             units="Hz"
@@ -191,12 +183,7 @@ Devices using this peripheral:
             value="32000"
             constant="true" />
    
-         <binaryOption name="sim_sopt2_rtcclkoutsel" 
-            description="RTC clock out select [RTC_CLKOUT pin]"
-            toolTip="Clock output on the RTC_CLKOUT pin">
-            <choice value="0"  name="RTC 1 Hz clock" isDefault="true" />
-            <choice value="1"  name="RTC 32.768kHz clock" />
-         </binaryOption>
+         <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
 
          <intOption name="system_rtc_clkout"
             constant="true"
@@ -413,12 +400,7 @@ Devices using this peripheral:
             value="16" />
       </menu>
 
-      <binaryOption name="sim_sopt2_pllfllsel" 
-         description="PLL/FLL clock select"
-         toolTip="Selects the MCGPLLCLK or MCGFLLCLK clock for various peripherals.">
-         <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
-         <choice value="1"  name="MCGPLLCLK clock" />
-      </binaryOption>
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" />
 
       <intOption name="system_peripheral_clock"
          constant="true"
@@ -576,36 +558,10 @@ Devices using this peripheral:
          </menu>
 
          <menu name="SIM_CLKDIV1" description="Clock Dividers">
-            <intOption name="sim_clkdiv1_outdiv1" 
-               constant="true"
-               description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
-               toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
-                        Divides MCGOUT Clock to generate system_core_clock"
-               value="1" offset="-1" min="1" max="16" />
-         
-            <intOption name="sim_clkdiv1_outdiv2" 
-               constant="true"
-               description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
-               toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
-                  Divides MCGOUT Clock to generate system_bus_clock\n
-                  MCGOUTCLK clock is source. Default /2"
-               value="1" offset="-1" min="1" max="16" />
-         
-            <intOption name="sim_clkdiv1_outdiv3" 
-               constant="true"
-               description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
-               toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
-                        Divides MCGOUT Clock to generate system_flexbus_clock\n
-                        MCGOUTCLK clock is source. Default /2"
-               value="1" offset="-1" min="1" max="16" />
-         
-            <intOption name="sim_clkdiv1_outdiv4" 
-               constant="true"
-               description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
-               toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
-                        Divides MCGOUT Clock to generate system_flash_clock\n
-                        MCGOUTCLK clock is source. Default /4"
-               value="4" offset="-1" min="1" max="16" />
+            <aliasOption key="/SIM/sim_clkdiv1_outdiv1" />
+            <aliasOption key="/SIM/sim_clkdiv1_outdiv2" />
+            <aliasOption key="/SIM/sim_clkdiv1_outdiv3" />
+            <aliasOption key="/SIM/sim_clkdiv1_outdiv4" />
          </menu>
       </menu>
       
@@ -616,7 +572,7 @@ Devices using this peripheral:
          <choice value="true" name="Handler installed" />
       </binaryOption>
 
-      <intOption name="IRQ_LEVEL" description="IRQ Level in NVIC [0-15]"
+      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
          toolTip="Sets the priority level used to configure the NVIC"
          value="0" min="0" max="15" />
    </page>
@@ -641,6 +597,7 @@ Devices using this peripheral:
    <projectActionList id = "mcg_mk65f18" >
       <copy source="Project_Headers/mcg_mk65f18.h" target="Project_Headers/mcg.h"  replace="true" derived="true" />
       <copy source="Startup_Code/mcg_mk65f18.cpp"  target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+      <copy source="Snippets/test-mcg.cpp"         target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
          
@@ -649,7 +606,7 @@ Devices using this peripheral:
       \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
 
       \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel = $(IRQ_LEVEL);\n\n
+      \tstatic constexpr uint32_t irqLevel = $(irqLevel);\n\n
 
       \tenum ClockMode {
       \t   ClockMode_None = -1,
@@ -666,7 +623,7 @@ Devices using this peripheral:
       \t//! Clock Mode
       \tstatic constexpr ClockMode clockMode = $(clock_mode);\n\n
 
-      \t//! Frequency of Frequency of Internal 48MHz Clock\n
+      \t//! Frequency of Frequency of Internal 48MHz Clock
       \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz])
@@ -720,34 +677,14 @@ Devices using this peripheral:
       \t   MCG_C8_LOLRE($(mcg_c8_lolre))  | // LOLRE  PLL Loss of Lock Reset Enable
       \t   MCG_C8_CME1($(mcg_c8_cme1));    // CME1   Clock Monitor Enable 1\n\n
       
-      \t//! Control Register 9\n
+      \t//! Control Register 9
       \tstatic constexpr uint32_t MCG_C9 =
       \t   MCG_C9_PLL_CME($(mcg_c9_pll_cme))   | // PLL_CME MCG External PLL Clock Monitor Enable
       \t   MCG_C9_PLL_LOCRE($(mcg_c9_pll_locre));  // PLL_LOCRE   MCG External PLL Loss of Clock Reset Enable
       
-      \t//! Control Register 11\n
+      \t//! Control Register 11
       \tstatic constexpr uint32_t MCG_C11 =
       \t   MCG_C11_PLLCS($(mcg_c11_pllcs)); // PLLCS PLL Clock Select
 
-      \t//! Clock divider
-      \tstatic constexpr uint32_t SIM_CLKDIV1 = 
-      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4)) | // SIM_CLKDIV1_OUTDIV4
-      \t#ifdef SIM_CLKDIV1_OUTDIV3
-      \t   SIM_CLKDIV1_OUTDIV3($(sim_clkdiv1_outdiv3)) | // SIM_CLKDIV1_OUTDIV3
-      \t#endif
-      \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2)) | // SIM_CLKDIV1_OUTDIV2
-      \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // SIM_CLKDIV1_OUTDIV1\n\n
-      
-      \t//! SIM SOPT1 OSC32KSEL
-      \tstatic constexpr uint32_t sim_sopt1_osc32ksel = 
-      \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));\n\n
-      
-      \t//! SIM SOPT2_RTCCLKOUTSEL
-      \tstatic constexpr uint32_t sim_sopt2_rtcclkoutsel = 
-      \t   SIM_SOPT2_RTCCLKOUTSEL$(sim_sopt2_rtcclkoutsel));\n\n
-      
-      \t//! SIM SIM_SOPT2_PLLFLLSEL
-      \tstatic constexpr uint32_t sim_sopt2_pllfllsel = 
-      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel));\n\n
    </template>
 </root>

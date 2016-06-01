@@ -31,6 +31,19 @@ extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
+volatile uint32_t SystemMcgirClock;
+volatile uint32_t SystemMcgffClock;
+volatile uint32_t SystemMcgFllClock;
+volatile uint32_t SystemMcgPllClock;
+volatile uint32_t SystemMcgOutClock;
+volatile uint32_t SystemCoreClock;
+volatile uint32_t SystemBusClock;
+volatile uint32_t SystemPeripheralClock;
+volatile uint32_t SystemOscerClock;
+volatile uint32_t SystemErclk32kClock;
+volatile uint32_t SystemLpoClock;
+volatile uint32_t SystemRtcClock;
+
 /** Callback for programmatically set handler */
 MCGCallbackFunction Mcg::callback = {0};
 
@@ -55,11 +68,11 @@ void Mcg::hsRunMode(bool enable) {
          __asm__("nop");
       }
       // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(McgInfo::SIM_CLKDIV1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
+      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(SimInfo::sim_clkdiv1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
    }
    else {
       // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
+      SIM->CLKDIV1 = SimInfo::sim_clkdiv1;
       SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
    }
    SystemCoreClockUpdate();
@@ -70,34 +83,15 @@ void Mcg::hsRunMode(bool enable) {
  */
 void Mcg::doClockGating() {
 
-   /*!
-    * SOPT1 Clock multiplexing
-    */
-#if defined(SIM_SOPT1_OSC32KSEL_MASK) // ERCLK32K source
-   SIM->SOPT1 = (SIM->SOPT1&~SIM_SOPT1_OSC32KSEL_MASK)|McgInfo::sim_sopt1_osc32ksel;
-#endif
+   // SOPT1 Clock multiplexing
+   SIM->SOPT1 = SimInfo::sim_sopt1;
 
-   /*!
-    * SOPT2 Clock multiplexing
-    */
-#if defined(SIM_SOPT2_RTCCLKOUTSEL_MASK)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RTCCLKOUTSEL_MASK)|McgInfo::sim_sopt2_rtcclkoutsel;
-#endif
+   // SOPT2 Clock multiplexing
+   SIM->SOPT2 = SimInfo::sim_sopt2;
 
-#if defined(SIM_SOPT2_PLLFLLSEL_MASK)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|McgInfo::sim_sopt2_pllfllsel;
-#endif
-
-#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TIMESRC_MASK) && defined(SIM_SOPT2_TIMESRC_M) // Ethernet time-stamp clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TIMESRC_MASK)|SIM_SOPT2_TIMESRC_M;
-#endif
-
-#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
+   // SIM CLKDIV3
+#ifdef SIM_CLKDIV3_PLLFLLDIV_MASK
+   SIM->CLKDIV3 = SimInfo::sim_clkdiv3;
 #endif
 
 #ifdef SIM_SCGC4_USBOTG_MASK
@@ -105,24 +99,16 @@ void Mcg::doClockGating() {
    SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
 #endif
 
-#if defined(SIM_SOPT2_USBSRC_MASK) && defined(SIM_SOPT2_USBSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBSRC_MASK)|SIM_SOPT2_USBSRC_M;
+#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
 #endif
 
-#if defined(SIM_SOPT2_USBFSRC_MASK) && defined(SIM_SOPT2_USBFSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBFSRC_MASK)|SIM_SOPT2_USBFSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_PLLFLLSEL_MASK) && defined(SIM_SOPT2_PLLFLLSEL_M) // Peripheral clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|SIM_SOPT2_PLLFLLSEL_M;
+#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
 #endif
 
 #if defined(SIM_SOPT2_UART0SRC_MASK) && defined(SIM_SOPT2_UART0SRC_M) // UART0 clock
    SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_UART0SRC_MASK)|SIM_SOPT2_UART0SRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TPMSRC_MASK) && defined(SIM_SOPT2_TPMSRC_M) // TPM clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TPMSRC_MASK)|SIM_SOPT2_TPMSRC_M;
 #endif
 
 #if defined(SIM_SOPT2_CLKOUTSEL_MASK) && defined(SIM_SOPT2_CLKOUTSEL_M)
@@ -301,7 +287,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
          }
       } while (currentClockMode != to);
 
-      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
+      SIM->CLKDIV1 = SimInfo::sim_clkdiv1;
    }
 
    SystemCoreClockUpdate();

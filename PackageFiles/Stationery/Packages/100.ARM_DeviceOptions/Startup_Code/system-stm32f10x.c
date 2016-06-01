@@ -225,6 +225,7 @@ void SystemInitLowLevel(void) {
   * @param  None
   * @retval None
   */
+__attribute__ ((constructor))
 void SystemInit (void)
 {
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */

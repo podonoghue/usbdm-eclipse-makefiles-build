@@ -49,7 +49,7 @@ public:
       *clockReg  |= Info::clockMask;
       __DMB();
 
-      if ((Info::RTC_CR&RTC_CR_OSCE_MASK) == 0) {
+      if ((Info::rtc_cr&RTC_CR_OSCE_MASK) == 0) {
          // RTC disabled
          rtc->CR       = 0;
          rtcclkUngated = 0;
@@ -69,7 +69,7 @@ public:
 
          // Configure oscillator
          // Note - on KL25 this will disable the standard oscillator
-         rtc->CR  = Info::RTC_CR;
+         rtc->CR  = Info::rtc_cr;
 
          // Wait startup time
          for (int i=0; i<100000; i++) {
@@ -90,10 +90,10 @@ public:
       }
 
       // Update settings
-      rtc->CR  = Info::RTC_CR;
+      rtc->CR  = Info::rtc_cr;
 
       rtcclkUngated = Info::rtcclk_clock;
-      rtcclk        = (RtcInfo::RTC_CR&RTC_CR_CLKO_MASK)?0:Info::rtcclk_clock;
+      rtcclk        = (RtcInfo::rtc_cr&RTC_CR_CLKO_MASK)?0:Info::rtcclk_clock;
    }
 
    /*
