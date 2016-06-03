@@ -8,7 +8,10 @@ Devices using this peripheral:
    <page name="_instance" description="UART">
       <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
       <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" />
-   
+      <aliasOption key="/SIM/system_lpuart_clock" />
+      <stringOption name="clockSource" constant="true" 
+         description="Clock source for LPUART" 
+         value="system_lpuart_clock" />
       <pins/>
    </page>
 
@@ -18,7 +21,7 @@ Devices using this peripheral:
          
    <template>
    \t//! Clock source for peripheral
-   \tstatic constexpr uint32_t &amp;clockSource = $(clockSource);\n\n
+   \tstatic constexpr volatile uint32_t &amp;clockSource = $(clockSource);\n\n
 
    </template>
 </root>

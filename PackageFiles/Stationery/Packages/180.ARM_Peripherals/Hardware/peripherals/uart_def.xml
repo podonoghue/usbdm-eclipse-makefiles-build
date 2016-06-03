@@ -7,16 +7,17 @@ Devices using this peripheral:
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="UART">
       <aliasOption key="clockSource" />
+   
       <pins/>
    </page>
 
-   <projectActionList id = "uart_files" >
+   <projectActionList id = "uart_files">
       <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template>
    \t//! Clock source for peripheral
-   \tstatic constexpr uint32_t &amp;clockSource = $(clockSource);\n\n
+   \tstatic constexpr volatile uint32_t &amp;clockSource = $(clockSource);\n\n
 
    </template>
 </root>

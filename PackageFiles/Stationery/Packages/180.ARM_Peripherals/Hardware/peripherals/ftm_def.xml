@@ -4,7 +4,7 @@
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Flex timer">
-      <choiceOption name="sc_clks" description="Clock Source"
+      <choiceOption name="ftm_sc_clks" description="Clock Source"
          toolTip="Selects the clock source for the module">
          <choice value="0" name="Disabled" />
          <choice value="1" name="System clock" isDefault="true" />
@@ -12,7 +12,7 @@
          <choice value="3" name="External clock" />
       </choiceOption>
 
-      <choiceOption name="sc_ps" description="Clock prescaler"
+      <choiceOption name="ftm_sc_ps" description="Clock prescaler"
          toolTip="Selects the prescaler for the module">
          <choice value="0" name="Divide by 1" />
          <choice value="1" name="Divide by 2" />
@@ -24,13 +24,13 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <binaryOption name="sc_cpwms" description="Center-Aligned PWM Select"
+      <binaryOption name="ftm_sc_cpwms" description="Center-Aligned PWM Select"
          toolTip="Selects CPWM mode\nThis mode configures the FTM to operate in Up-Down Counting mode.">
          <choice value="0" name="Left-aligned (count up)" />
          <choice value="1" name="Centre-aligned (count up-down)" />
       </binaryOption>
 
-      <binaryOption name="sc_toie" description="Timer Overflow Interrupt Enable"
+      <binaryOption name="ftm_sc_toie" description="Timer Overflow Interrupt Enable"
          toolTip="Enables FTM overflow interrupts.">
          <choice value="0" name="Disabled" />
          <choice value="1" name="Enabled" />
@@ -40,7 +40,7 @@
          toolTip="Default period of the timer"
          value="10000" min="0" max="65535" />
          
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -62,10 +62,10 @@
    <template>
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
-      \t    FTM_SC_CPWMS($(sc_cpwms))|
-      \t    FTM_SC_TOIE(($(IRQ_HANDLER)|$(sc_toie)))|
-      \t    FTM_SC_CLKS($(sc_clks))|
-      \t    FTM_SC_PS($(sc_ps));\n\n
+      \t    FTM_SC_CPWMS($(ftm_sc_cpwms))|
+      \t    FTM_SC_TOIE(($(irqHandler)|$(ftm_sc_toie)))|
+      \t    FTM_SC_CLKS($(ftm_sc_clks))|
+      \t    FTM_SC_PS($(ftm_sc_ps));\n\n
       
       \t//! Default Timer Period\n
       \tstatic constexpr uint32_t period =  $(period);\n\n

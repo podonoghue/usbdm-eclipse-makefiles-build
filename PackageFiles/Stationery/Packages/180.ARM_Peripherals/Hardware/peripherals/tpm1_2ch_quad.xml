@@ -6,8 +6,9 @@
    <page name="_instance" description="Flex timer">
       <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
       <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
+      <aliasOption key="/SIM/system_tpm_clock" />
       
-      <choiceOption name="sc_cmod" description="Clock Source"
+      <choiceOption name="tpm_sc_cmod" description="Clock Source"
          toolTip="Selects the clock source for the module">
          <choice value="0" name="Disabled" />
          <choice value="1" name="System clock" isDefault="true" />
@@ -15,7 +16,7 @@
          <choice value="3" name="External clock" />
       </choiceOption>
 
-      <choiceOption name="sc_ps" description="Clock prescaler"
+      <choiceOption name="tpm_sc_ps" description="Clock prescaler"
          toolTip="Selects the prescaler for the module">
          <choice value="0" name="Divide by 1" />
          <choice value="1" name="Divide by 2" />
@@ -31,7 +32,7 @@
          toolTip="Default period of the timer"
          value="10000" min="0" max="65535" />
          
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -52,9 +53,9 @@
    <template>
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
-      \t    ($(IRQ_HANDLER)&lt;&lt;TPM_SC_TOIE_SHIFT)|
-      \t    TPM_SC_CMOD($(sc_cmod))|
-      \t    TPM_SC_PS($(sc_ps));\n\n
+      \t    ($(irqHandler)&lt;&lt;TPM_SC_TOIE_SHIFT)|
+      \t    TPM_SC_CMOD($(tpm_sc_cmod))|
+      \t    TPM_SC_PS($(tpm_sc_ps));\n\n
       
       \t//! Default Timer Period\n
       \tstatic constexpr uint32_t period =  $(period);\n\n

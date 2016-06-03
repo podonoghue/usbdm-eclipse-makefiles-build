@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- sim_mk65f18.xml -->
+<!-- sim_mk22f51512.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -36,7 +36,7 @@ Devices using this peripheral:
          toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
          <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
          <choice value="1"  name="MCGPLLCLK clock" />
-         <choice value="2"  name="USB1 PFD clock" />
+         <choice value="2"  name="Reserved" />
          <choice value="3"  name="IRC48 MHz clock" />
       </choiceOption>
 
@@ -46,32 +46,11 @@ Devices using this peripheral:
          description="Peripheral Clock frequency"
          toolTip="Frequency of Peripheral Clock available to various peripherals"  />
          
-      <choiceOption name="sim_clkdiv3_pllfll"
-         description="Peripheral clock post-divider" 
-         toolTip="Selects the post PLL/FLL clock divider for various peripherals (LPUART, TPM)">
-         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-      </choiceOption>
-
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
          toolTip="Selects the clock source for the LPUART transmit and receive clock">
          <choice value="0"  name="Disabled" />
-         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV3" />
+         <choice value="1"  name="MCGFLLCLK, MCGPLLCLK or IRC48MCLK (see SOPT_PLLFLLSEL)" />
          <choice value="2"  name="OSCERCLK clock" />
          <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
       </choiceOption>
@@ -81,38 +60,6 @@ Devices using this peripheral:
          units="Hz"
          description="LPUART Clock frequency"
          toolTip="Frequency of clock to LPUART"
-         value="0" />
-   
-      <choiceOption name="sim_sopt2_tpmsrc" 
-         description="TPM Clock source"
-         toolTip="Selects the clock source for the TPM counter clock">
-         <choice value="0"  name="Disabled" isDefault="true" />
-         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV3" />
-         <choice value="2"  name="OSCERCLK clock" />
-         <choice value="3"  name="MCGIRCLK clock" />
-      </choiceOption>
-
-      <intOption name="system_tpm_clock" 
-         constant="true"
-         units="Hz"
-         description="TPM Clock frequency"
-         toolTip="Frequency of clock to TPM"
-         value="0" />
-   
-      <choiceOption name="sim_sopt2_sdhcsrc" 
-         description="SDHC Clock select"
-         toolTip="Selects the clock source for the SDHC clock">
-         <choice value="0"  name="Core/system clock"  isDefault="true" />
-         <choice value="1"  name="Peripheral Clock" />
-         <choice value="2"  name="OSCERCLK clock" />
-         <choice value="3"  name="External bypass clock (SDHC0_CLKIN)" />
-      </choiceOption>
-
-      <intOption name="system_sdhc_clock" 
-         constant="true"
-         units="Hz"
-         description="SDHC Clock frequency (not implemented)"
-         toolTip="Frequency of clock to SDHC"
          value="0" />
    
       <choiceOption name="sim_sopt2_usbsrc" 
@@ -162,22 +109,6 @@ Devices using this peripheral:
          <choice value="5"  name="RTC 32.768kHz clock" />
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="IRC 48 MHz clock" />
-      </choiceOption>
-
-      <binaryOption name="sim_sopt2_rmiisrc" 
-         description="RMII clock source select"
-         toolTip="Selects the clock source for the Ethernet RMII interface">
-         <choice value="0"  name="EXTAL clock" isDefault="true" />
-         <choice value="1"  name="External bypass clock (ENET_1588_CLKIN)." />
-      </binaryOption>
-
-      <choiceOption name="sim_sopt2_timesrc" 
-         description="IEEE 1588 timestamp clock source select"
-         toolTip="Selects the clock source for the Ethernet RMII interface">
-         <choice value="0"  name="Core/system clock." isDefault="true" />
-         <choice value="1"  name="Peripheral Clock" />
-         <choice value="3"  name="OSCERCLK Clock" />
-         <choice value="4"  name="External bypass clock (ENET_1588_CLKIN)." />
       </choiceOption>
 
       <menu name="sim_clkdiv1" description="Clock Dividers">
@@ -261,11 +192,7 @@ Devices using this peripheral:
       
       \t//! System Options Register 2
       \tstatic constexpr uint32_t sopt2 = 
-      \t   SIM_SOPT2_SDHCSRC($(sim_sopt2_sdhcsrc)) |       // SDHC clock source select
       \t   SIM_SOPT2_LPUARTSRC($(sim_sopt2_lpuartsrc)) |     // LPUART clock source select
-      \t   SIM_SOPT2_TPMSRC($(sim_sopt2_tpmsrc)) |        // TPM clock source select
-      \t   SIM_SOPT2_TIMESRC($(sim_sopt2_timesrc)) |       // IEEE 1588 timestamp clock source select
-      \t   SIM_SOPT2_RMIISRC($(sim_sopt2_rmiisrc)) |       // Ethernet RMII clock source select
       \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
       \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
@@ -281,10 +208,6 @@ Devices using this peripheral:
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
-      
-      \t//! System Clock Divider Register 3
-      \tstatic constexpr uint32_t clkdiv3 = 
-      \t   $(sim_clkdiv3_pllfll);  // PLLFLL clock divider divisor &amp; fraction \n\n
       
    </template>
 </root>

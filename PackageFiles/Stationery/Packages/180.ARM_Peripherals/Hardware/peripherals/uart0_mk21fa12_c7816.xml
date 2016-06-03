@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- lpuart0_0x400c4000.xml -->
+<!-- uart0_mk21fa12_c7816.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="lpuart_def.xml"/>
+<xi:include href="uart_def.xml"/>
 </root>

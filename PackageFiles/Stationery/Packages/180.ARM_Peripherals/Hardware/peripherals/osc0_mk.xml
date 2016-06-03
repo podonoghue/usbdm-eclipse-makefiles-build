@@ -81,6 +81,20 @@ Devices using this peripheral:
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Oscillator">
 
+
+      <intOption name="osc_input_freq"
+         units="Hz"
+         description="Frequency of External Crystal or Clock"
+         toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
+         value="8000000" />
+
+      <binaryOption name="erefs0"
+         description="External Reference Select" 
+         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+         <choice value="0" name="External clock" />
+         <choice value="1" name="Oscillator" isDefault="true" />
+      </binaryOption>
+
       <binaryOption name="osc_cr_erclken"
          description="External Reference Enable"
          toolTip="Enables and makes available the clock as OSCERCLK peripheral clock source\n
@@ -90,32 +104,33 @@ Devices using this peripheral:
       </binaryOption>
       
       <intOption name="oscclk_clock"
+         constant="true"
          units="Hz"
          description="Frequency of OSC Clock or Crystal [OSCCLK]"
          toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
          value="8000000" />
 
-      <!-- intOption name="oscRange"
-         description="Frequency of OSC Clock or Crystal [OSCCLK]"
-         toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
-         value="0" / -->
+      <choiceOption name="range_out"
+         constant="true"
+         description="Frequency Range Select"
+         toolTip="This range value is determined from the Oscillator frequency.\n
+         It some cases it will be unused and a range value suited to the FLL is used instead.">
+         <choice value="0" name="Low range" />
+         <choice value="1" name="High range" />
+         <choice value="2" name="Very High range" />
+         <choice value="0" name="Unconstrained by Oscillator" />
+      </choiceOption>
 
       <choiceOption name="range"
          constant="true"
          description="Frequency Range Select"
          toolTip="Selects the frequency range for the crystal oscillator\n
-                  May affect the choice of divider for FLL input clock">
+            and/or divider for FLL input clock">
          <choice value="0" name="Low range" />
          <choice value="1" name="High range" />
          <choice value="2" name="Very High range" />
+         <choice value="0" name="Unused" />
       </choiceOption>
-
-      <binaryOption name="erefs0"
-         description="External Reference Select" 
-         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
-         <choice value="0" name="External clock" />
-         <choice value="1" name="Oscillator" isDefault="true" />
-      </binaryOption>
 
       <binaryOption name="hgo0"
          description="Oscillator Gain" 
@@ -184,7 +199,7 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t osc32kclk_clock = $(osc32kclk_clock)UL;\n\n
       
       \t//! Oscillator control register\n
-      \tstatic constexpr uint32_t osc_cr =
+      \tstatic constexpr uint32_t cr =
       \t   OSC_CR_ERCLKEN($(osc_cr_erclken)) |
       \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) |
       \t   OSC_CR_SCP($(osc_cr_scp));\n\n      

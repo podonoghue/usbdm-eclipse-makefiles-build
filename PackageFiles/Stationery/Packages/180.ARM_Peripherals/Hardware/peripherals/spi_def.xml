@@ -5,7 +5,11 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Serial Peripheral Interface">
    
-      <choiceOption name="mode" description="Mode"
+      <intOption name="speed" description="Speed of interface"
+         toolTip="Speed of transmission"
+         value="100000" min="0" max="10000000" />
+
+      <choiceOption name="spi_mode" description="Mode"
          toolTip="Communication mode">
          <choice value="0" name="Mode 0: CPOL=0, CPHA=0" />
          <choice value="1" name="Mode 1: CPOL=0, CPHA=1" isDefault="true" />
@@ -13,11 +17,7 @@
          <choice value="3" name="Mode 3: CPOL=1, CPHA=1" />
       </choiceOption>
 
-      <intOption name="speed" description="Speed of interface"
-         toolTip="Speed of transmission"
-         value="100000" min="0" max="10000000" />
-
-      <binaryOption name="lsbfe" description="Transmission order"
+      <binaryOption name="spi_lsbfe" description="Transmission order"
          toolTip="Transmission order">
          <choice value="0" name="MSB first" />
          <choice value="1" name="LSB first" />
@@ -34,9 +34,9 @@
    <template>
       #ifdef SPI_CTAR_LSBFE_SHIFT\n
       \t//! Default communication mode: order, clock phase and clock polarity\n
-      \tstatic constexpr uint32_t modeValue = 
-      \t   SPI_CTAR_LSBFE($(lsbfe))| // LSB or MSB first
-      \t   SPI_CTAR_CPHA($(mode));   // Mode (CPOL+CPHA)
+      \tstatic constexpr uint32_t ctar = 
+      \t   SPI_CTAR_LSBFE($(spi_lsbfe))| // LSB or MSB first
+      \t   SPI_CTAR_CPHA($(spi_mode));   // Mode (CPOL+CPHA)
       #endif\n\n
       
       \t//! Default speed (Hz)\n

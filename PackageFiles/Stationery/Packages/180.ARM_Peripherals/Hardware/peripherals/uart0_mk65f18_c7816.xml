@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- uart1_mk10d5.xml -->
+<!-- uart0_mk65f18_c7816.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="uart_def.xml"/>

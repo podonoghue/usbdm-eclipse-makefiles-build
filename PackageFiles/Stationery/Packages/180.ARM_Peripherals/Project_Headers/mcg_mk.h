@@ -99,7 +99,7 @@ public:
       }
    }
 
-   public:
+public:
    /**
     * MCG interrupt handler -  Calls MCG callback
     */

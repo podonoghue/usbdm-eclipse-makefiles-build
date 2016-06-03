@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "Menu.dtd" >
-<!-- lpuart0_0x400c4000.xml -->
+<!-- lpuart0_0x4002a000.xml -->
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="lpuart_def.xml"/>

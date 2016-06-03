@@ -255,14 +255,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART0_MASK" />
          <irq num="LPUART0_RX_TX_IRQn" />
-         <param key="clockSource"   value="SystemBusClock" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
-         <param key="flashFreq"     value="28MHz" />
-         <param key="coreFreq"      value="180MHz" />
-         <param key="busFreq"       value="60MHz" />
-         <param key="flexFreq"      value="60MHz" />
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -308,6 +303,10 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+         <param key="flashFreq"     value="28MHz" />
+         <param key="coreFreq"      value="180MHz" />
+         <param key="busFreq"       value="60MHz" />
+         <param key="flexFreq"      value="60MHz" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

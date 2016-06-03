@@ -5,7 +5,7 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Low power timer">
    
-      <choiceOption name="psr_pcs" description="Clock Source"
+      <choiceOption name="lptmr_psr_pcs" description="Clock Source"
          toolTip="Low Power Timer clock source">
          <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
          <choice value="1" name="Low power oscillator (LPO - 1kHz)" />
@@ -13,7 +13,7 @@
          <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" />
       </choiceOption>
 
-      <choiceOption name="psr_prescaler" description="Prescaler Value"
+      <choiceOption name="lptmr_psr_prescaler" description="Prescaler Value"
          toolTip="Configures the size of the Prescaler in Time Counter mode or\nwidth of the glitch filter in Pulse Counter mode">
          <choice value="0"  name="Prescaler = 2, no glitch filter" />
          <choice value="1"  name="Prescaler = 4, 2 clock glitch filter" />
@@ -33,32 +33,32 @@
          <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
       </choiceOption>
 
-      <binaryOption name="psr_pbyp" description="Prescaler Bypass"
+      <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
          toolTip="When PBYP is set:\n- The selected prescaler clock in Time Counter mode or\n  the selected input source in Pulse Counter mode, directly clocks the CNR.\nWhen PBYP is clear:\n- The CNR is clocked by the output of the prescaler/glitch filter">
          <choice value="0" name="Prescaler/glitch filter is enabled" />
          <choice value="1" name="Prescaler/glitch filter is bypassed" />
       </binaryOption>
       
-      <choiceOption name="csr_tps" description="Timer Pin Select"
+      <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
          toolTip="Configures the input source to be used in Pulse Counter mode.\nThe input connections vary by device">
          <choice value="0" name="CMP0 output" />
          <choice value="1" name="LPTMR_ALT1 pin" />
          <choice value="2" name="LPTMR_ALT2 pin" />
       </choiceOption>
       
-      <binaryOption name="csr_tms" description="Timer Mode Select"
+      <binaryOption name="lptmr_csr_tms" description="Timer Mode Select"
          toolTip="Configures the mode of the LPTMR">
          <choice value="0" name="Time Counter mode" />
          <choice value="1" name="Pulse Counter mode" />
       </binaryOption>
       
-      <binaryOption name="csr_tfc" description="Timer Free-Running Counter"
+      <binaryOption name="lptmr_csr_tfc" description="Timer Free-Running Counter"
          toolTip="When clear, TFC configures the CNR to reset whenever TCF is set.\nWhen set, TFC configures the CNR to reset on overflow">
          <choice value="0" name="CNR is reset whenever TCF is set" />
          <choice value="1" name="CNR is reset on overflow" />
       </binaryOption>
       
-      <binaryOption name="csr_tpp" description="Timer Pin Polarity"
+      <binaryOption name="lptmr_csr_tpp" description="Timer Pin Polarity"
          toolTip="Configures the polarity of the input source in Pulse Counter mode">
          <choice value="0" name="Active-high source, rising-edge increments CNR" />
          <choice value="1" name="Active-low source,  falling-edge increments CNR" />
@@ -68,7 +68,7 @@
          toolTip="Default period for timer"
          value="10000" min="0" max="65535" />
          
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -90,17 +90,17 @@
    <template>
        \t//! Default PSR value\n
        \tstatic constexpr uint32_t psr = 
-       \t   LPTMR_PSR_PRESCALE($(psr_prescaler))|
-       \t   LPTMR_PSR_PBYP($(psr_pbyp))|
-       \t   LPTMR_PSR_PCS($(psr_pcs));\n\n
+       \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
+       \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
+       \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
        
        \t//! Default CSR value\n
        \tstatic constexpr uint32_t csr = 
-       \t   LPTMR_CSR_TIE($(IRQ_HANDLER))|
-       \t   LPTMR_CSR_TMS($(csr_tms))|
-       \t   LPTMR_CSR_TFC($(csr_tfc))|
-       \t   LPTMR_CSR_TPP($(csr_tpp))|
-       \t   LPTMR_CSR_TPS($(csr_tps));\n\n
+       \t   LPTMR_CSR_TIE($(irqHandler))|
+       \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
+       \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
+       \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
+       \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
        
        \t//! Default Timer period\n
        \tstatic constexpr uint32_t period = $(period);\n\n

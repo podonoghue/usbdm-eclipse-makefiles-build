@@ -5,7 +5,7 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Inter-Integrated-Circuit">
 
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="Polling or interrupts may be used to update the state machine">
          <choice value="0" name="Use polling" />
          <choice value="1" name="Use interrupts" />

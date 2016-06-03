@@ -5,18 +5,39 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Real-time Clock">
 
+      <intOption name="rtc_input_freq"
+         units="Hz"
+         description="Frequency of External Crystal"
+         toolTip="Frequency of external crystal XTAL32/EXTAL32 [Typically 32768 Hz]"
+         value="32768" />
+
       <binaryOption name="rtc_cr_osce"
-         description="Enable 32kHz oscillator [RTC_32K]"
-         toolTip="Enable 32kHz oscillator">
+         description="Enable RTC oscillator"
+         toolTip="Enable 32kHz RTC oscillator">
          <choice value="0" name="Disabled" />
          <choice value="1" name="Enabled" isDefault="true" />
       </binaryOption>
       
       <intOption name="rtcclk_clock"
+         constant="true"
          units="Hz"
-         description="Frequency of RTC External Clock or Crystal"
-         toolTip="Frequency of external crystal or clock on XTAL32/EXTAL32 [Typically 32768 Hz]"
+         description="Frequency of RTC Clock"
+         toolTip="RTC Clock only available if enabled"
          value="32768" />
+
+      <binaryOption name="rtc_cr_clko"
+         description="Enable RTC 32kHz Clock Output"
+         toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
+         <choice value="1" name="Clock not output to peripherals" />
+         <choice value="0" name="Clock is output to peripherals" isDefault="true" />
+      </binaryOption>
+         
+      <intOption name="rtcclk_gated_clock"
+         constant="true"
+         units="Hz"
+         description="Frequency of RTC Peripheral Clock"
+         toolTip="RTC clock available to peripherals"
+         value="0" />
          
       <choiceOption name="rtc_cr_scp"
          description="Oscillator load capacitance"
@@ -39,13 +60,6 @@
          <choice value="15" name="30 pF" />
       </choiceOption>
 
-      <binaryOption name="rtc_cr_clko"
-         description="RTC 32kHz Clock Output"
-         toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
-         <choice value="1" name="The 32kHz clock is not output to other peripherals" />
-         <choice value="0" name="The 32kHz clock is output to other peripherals" isDefault="true" />
-      </binaryOption>
-         
       <binaryOption name="rtc_cr_um" 
          description="Update Mode"
          toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\nWhen set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
@@ -67,7 +81,15 @@
          <choice value="1" name="Wakeup pin is enabled" />
       </binaryOption>
       
-      <binaryOption name="IRQ_HANDLER" 
+      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
+      
+      <intOption name="rtc_clkout"
+         constant="true"
+         units="Hz"
+         description="RTC clock out [RTC_CLKOUT pin]"
+         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+
+      <binaryOption name="irqHandler" 
          description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method" >
@@ -99,7 +121,7 @@
          
    <template>
       \t//! Indicates interrupt handler has been installed
-      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
+      \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
       
       \t//! Default IRQ level\n
       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
@@ -108,7 +130,7 @@
       \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
       
       \t//! Oscillator control register\n
-      \tstatic constexpr uint32_t rtc_cr =
+      \tstatic constexpr uint32_t cr =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
       \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
       \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode

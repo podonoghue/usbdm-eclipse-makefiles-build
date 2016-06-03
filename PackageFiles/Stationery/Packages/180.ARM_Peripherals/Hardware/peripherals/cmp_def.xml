@@ -90,11 +90,11 @@
          toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
          value="0" min="0" max="255" />
          
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
-         may be set by use of the setCallback() method" >
-         <choice value="false" name="No handler installed" />
-         <choice value="true" name="Handler installed" />
+         may be set by use of the setCallback() method">
+         <choice value="0" name="No handler installed" />
+         <choice value="1" name="Handler installed" />
       </binaryOption>
 
       <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
@@ -104,19 +104,19 @@
       <pins/>
    </page>
    
-   <projectActionList id = "adc_files" >
+   <projectActionList id = "cmp_files" >
       <!--  copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  replace="true"  derived="true" / -->
    </projectActionList>
    
    <template>
       \t//! Indicates interrupt handler has been installed
-      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
+      \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
       
       \t//! Default IRQ level\n
       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
       
       \t//! CMP Control Register 0\n
-      \tstatic constexpr uint32_t CMP_CR0 =
+      \tstatic constexpr uint32_t cr0 =
       \t   CMP_CR0_FILTER_CNT($(cmp_cr0_filter_cnt))     | // Filter Sample Count
       \t   CMP_CR0_HYSTCTR($(cmp_cr0_hystctr));         // Comparator hard block hysteresis control\n\n
       
@@ -125,7 +125,7 @@
       \t#endif\n\n
 
       \t//! CMP Control Register 1\n
-      \tstatic constexpr uint32_t CMP_CR1 =
+      \tstatic constexpr uint32_t cr1 =
       \t   CMP_CR1_SE($(cmp_cr1_se))    | // Sample Enable
       \t   CMP_CR1_WE($(cmp_cr1_we))    | // Windowing Enable
       \t   CMP_CR1_TRIGM($(cmp_cr1_trigm)) | // Trigger Mode Enable
@@ -136,8 +136,7 @@
       \t   CMP_CR1_EN($(cmp_cr1_en));     // Comparator Module Enable\n\n
       
       \t//! CMP Filter Period Register\n
-      \tstatic constexpr uint32_t CMP_FPR =
+      \tstatic constexpr uint32_t fpr =
       \t   CMP_FPR_FILT_PER($(cmp_fpr_filt_per)); // Filter Sample Period\n\n
-      
    </template>
 </root>

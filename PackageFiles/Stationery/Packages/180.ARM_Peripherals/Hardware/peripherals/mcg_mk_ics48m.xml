@@ -62,12 +62,14 @@ Devices using this peripheral:
 
       <menu name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
          <intOption name="system_slow_irc_clock"
+            origin="SLOW IRC"
             units="Hz"
             description="Frequency of Slow Internal Reference [SIRC] Clock"
             toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
             value="32768" />
    
          <intOption name="system_fast_irc_clock"
+            origin="FAST IRC"
             units="Hz"
             description="Frequency of Fast Internal Reference [FIRC] Clock"
             toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
@@ -108,7 +110,7 @@ Devices using this peripheral:
             <choice value="1" name="IR enabled in STOP" />
          </binaryOption>
 
-         <intOption name="system_mcgir_clock" 
+         <intOption name="system_mcgirclk_clock" 
             units="Hz"
             description="Frequency of Internal Reference [MCGIRCLK] "
             toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
@@ -127,6 +129,7 @@ Devices using this peripheral:
             constant="true" />
    
          <intOption name="system_usb_clkin_clock" 
+            origin="USB Clock In pin"
             units="Hz"
             description="Frequency of External USB Clock"
             toolTip="Externally provided clock for USB on USB_CLKIN" 
@@ -134,6 +137,7 @@ Devices using this peripheral:
             constant="true" />
 
          <intOption name="system_low_power_clock"
+            origin="LPO Clock"
             units="Hz"
             description="Frequency of Internal Low Power Oscillator [LPO] Clock"
             toolTip="Dependent on device. [Typically ~1kHz]" 
@@ -142,40 +146,13 @@ Devices using this peripheral:
       </menu>  
       
       <menu name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-         <aliasOption key="/OSC0/osc_cr_erclken" constant="false" />
-         <aliasOption key="/OSC0/oscclk_clock" constant="false" />
+         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
          <aliasOption key="/OSC0/erefs0" constant="false" />
-         <aliasOption key="/OSC0/hgo0"   constant="false" />
-         <aliasOption key="/OSC0/osc_cr_scp" constant="false" />
-         <aliasOption key="/OSC0/osc_cr_erefsten" constant="false" />
-         <aliasOption key="/OSC0/range" constant="true" />
-         <aliasOption key="/OSC0/osc_div_erps" constant="false" optional="true" />
-         <aliasOption key="/OSC0/system_oscerclk_undiv_clock" constant="true"  optional="true" />
-         <aliasOption key="/OSC0/system_oscerclk_clock" constant="true" />
       </menu>
 
       <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-         <aliasOption key="/RTC/rtc_cr_osce"  constant="false" />
-         <aliasOption key="/RTC/rtcclk_clock" constant="false" />
-         <aliasOption key="/RTC/rtc_cr_scp"   constant="false" /> 
-         <aliasOption key="/RTC/rtc_cr_clko"  constant="false" />
-         <aliasOption key="/SIM/sim_sopt1_osc32ksel" constant="false" />
-
-         <intOption name="system_erclk32k_clock" 
-            units="Hz"
-            description="Frequency of External 32k Reference Clock [ERCLK32K]"
-            toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
-            value="32000"
-            constant="true" />
-   
-         <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
-
-         <intOption name="system_rtc_clkout"
-            constant="true"
-            units="Hz"
-            description="RTC clock out [RTC_CLKOUT pin]"
-            toolTip="Clock frequency on the RTC_CLKOUT pin"  />
-            
+         <aliasOption key="/RTC/rtc_input_freq"  constant="false" />
+         <aliasOption key="/RTC/rtcclk_clock" />
       </menu>
 
       <choiceOption name="mcg_c7_oscsel" 
@@ -183,7 +160,7 @@ Devices using this peripheral:
          toolTip="Selects the MCG FLL/PLL external reference clock source">
          <choice value="0" name="Main System Oscillator (OSCCLK0)" />
          <choice value="1" name="32 kHz RTC Oscillator (RTC_32K)" />
-         <choice value="2" name="48 MHz Internal Oscillator (IRC48MCLK)" />
+         <choice value="2" name="48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
       </choiceOption>
    
       <intOption name="mcg_erc_clock" 
@@ -258,6 +235,8 @@ Devices using this peripheral:
             <choice value="1" name="FLL Active" />
          </binaryOption>
 
+         <aliasOption key="/OSC0/range" />
+         
          <choiceOption name="mcg_c1_frdiv"
             constant="true"
             description="FLL External Reference Divider"
@@ -282,7 +261,7 @@ Devices using this peripheral:
             toolTip="Frequency of input to FLL"
             value="32000" />
    
-         <intOption name="fllTargetFrequency" 
+         <intOption name="system_mcgfllclk_clock" 
             units="Hz"
             description="FLL Output clock frequency"
             toolTip="Used for main MCGOUTCLK system clock if FEI or FEE mode is selected"
@@ -318,74 +297,76 @@ Devices using this peripheral:
       
       </menu>
       
-      <menu name="PLL" description="PLL Settings">
-         <binaryOption name="pll_enabled"
+      <menu name="PLL0" description="PLL0 Settings">
+         <binaryOption name="pll0Enabled"
             constant="true"
-            description="PLL State"
+            description="PLL0 State"
             toolTip="Determined from clock mode selected or enabled by mcg_c5_pllclken" >
             <choice value="0" name="PLL Inactive" />
             <choice value="1" name="PLL Active" />
          </binaryOption>
       
          <binaryOption name="mcg_c5_pllclken" 
-            description="PLL Enable"
-            toolTip="Enables the PLL independent of PLLS and enables the PLL clock for use as MCGPLLCLK">
+            description="PLL0 Enable"
+            toolTip="Enables PLL0 independent of PLLS">
             <choice value="0" name="PLL active as needed" />
             <choice value="1" name="PLL forced active" />
          </binaryOption>
 
-         <intOption name="pllInputFrequency" 
+         <intOption name="pll0InputFrequency" 
             constant="true"
             units="Hz"
-            description="PLL Input clock frequency"
+            description="PLL0 Input clock frequency"
             toolTip="Frequency of input to PLL"
             value="32000" />
    
-         <intOption name="pllTargetFrequency" 
+         <intOption name="pll0OutputFrequency" 
             units="Hz"
-            description="PLL Output clock frequency"
+            description="PLL0 Output clock frequency"
             toolTip="Used for main MCGOUTCLK system clock if PEE mode is selected"
             value="120000000"/>
             
          <binaryOption name="mcg_c5_pllsten" 
             description="PLL Stop Enable"
-            toolTip="Enables the PLL Clock during Normal Stop">
-            <choice value="0" name="PLL is disabled in any Stop mode" />
-            <choice value="1" name="PLL is enabled in Normal Stop mode" />
+            toolTip="Enables the PLL0 Clock during Normal Stop">
+            <choice value="0" name="PLL0 is disabled in any Stop mode" />
+            <choice value="1" name="PLL0 is enabled in Normal Stop mode" />
          </binaryOption>
 
          <intOption name="mcg_c5_prdiv0"
             constant="true" 
-            description="PLL External Reference Divider"
-            toolTip="Determines the amount to divide down the external reference clock for the PLL\n
-                     This value is calculated from PLL input and output clock frequencies"
+            description="PLL0 External Reference Divider"
+            toolTip="Determines the amount to divide down the external reference clock for PLL0\n
+                     This value is calculated from PLL0 input and output clock frequencies"
             value="1" />
             
          <intOption name="mcg_c6_vdiv0" 
             constant="true"
-            description="VCO Divider (VDIV0)"
-            toolTip="Determines the multiplication factor for the reference clock of the PLL.\n
-                     This value is calculated from PLL input and output clock frequencies"
+            description="PLL0 VCO Divider (VDIV0)"
+            toolTip="Determines the multiplication factor for the reference clock for PLL0.\n
+                     This value is calculated from PLL0 input and output clock frequencies"
             value="24" />
       </menu>
 
-      <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" />
-
-      <intOption name="system_peripheral_clock"
+      <intOption name="system_mcgpllclk_clock" 
          constant="true"
          units="Hz"
-         description="System Peripheral Clock [PLLFLLCLK]"
-         toolTip="Clock frequency of clock for various peripherals"  />
+         description="PLL Output clock frequency"
+         toolTip="Output of PLL available for MGCOUT or peripheral clock"
+         value="96000000" />
          
-      <aliasOption name="system_mcgir_clock" />
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" />
+      <aliasOption key="/SIM/system_peripheral_clock" />
+         
+      <aliasOption name="system_mcgirclk_clock" />
       <aliasOption name="system_mcgffclk_clock" />
       <aliasOption name="system_irc48m_clock" />
       <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/system_oscerclk_clock" />
-      <aliasOption name="system_erclk32k_clock" />
+      <aliasOption key="/SIM/system_erclk32k_clock" />
       <aliasOption name="system_low_power_clock" />
 
-      <choiceOption name="system_mcgout_clock_source"
+      <choiceOption name="system_mcgoutclk_clock_source"
          description="System MCG Output Clock source [MCGOUTCLK]"
          toolTip="Source of MCG Output Clock\n
          Determined by current clock mode"
@@ -396,40 +377,17 @@ Devices using this peripheral:
             <choice value="1" name="MCGERCLK" />
       </choiceOption>
       
-      <intOption name="system_mcgout_clock" 
+      <intOption name="system_mcgoutclk_clock" 
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
                   Derived from slow IRC, fast IRC, ERC, FLL or PLL"
          value="120000000" constant="true" />
    
-      <intOption name="system_core_clock" 
-         units="Hz"
-         description="System Core Clock"
-         toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-         value="120000000" />
-   
-      <intOption name="system_bus_clock" 
-         units="Hz"
-         description="System Bus Clock"
-         toolTip="Clocks the bus slaves and peripherals\n
-                  Must be &lt;= Core Clock frequency and an integer divisor"
-         value="60000000" />
-   
-      <intOption name="system_flexbus_clock" 
-         units="Hz"
-         description="System Flexbus Clock"
-         toolTip="Clocks the flexbus interface\n
-                  Must be &lt;= Bus Clock frequency"
-         value="60000000" />
-   
-      <intOption name="system_flash_clock" 
-         units="Hz"
-         description="System Flash Clock"
-         toolTip="Clocks the flash memory\n
-                  Must be an integer divisor of the Core Clock.\n
-                  Must be &lt;= Bus Clock frequency."
-         value="24000000" />
+      <aliasOption key="/SIM/system_core_clock" constant="false" />
+      <aliasOption key="/SIM/system_bus_clock" constant="false" />
+      <aliasOption key="/SIM/system_flexbus_clock" constant="false" />
+      <aliasOption key="/SIM/system_flash_clock" constant="false" />
    
       <menu name="Device Parameters" description="Register values">
          <menu name="MCG_C1" description="MCG Control Register 1">
@@ -516,16 +474,9 @@ Devices using this peripheral:
             <aliasOption name="mcg_c8_lolre" />
             <aliasOption name="mcg_c8_cme1" />
          </menu>
-      
-         <menu name="SIM_CLKDIV1" description="Clock Dividers">
-            <aliasOption key="/SIM/sim_clkdiv1_outdiv1" />
-            <aliasOption key="/SIM/sim_clkdiv1_outdiv2" />
-            <aliasOption key="/SIM/sim_clkdiv1_outdiv3" />
-            <aliasOption key="/SIM/sim_clkdiv1_outdiv4" />
-         </menu>
       </menu>
       
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="false" name="No handler installed" />
@@ -539,10 +490,6 @@ Devices using this peripheral:
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M">
-      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
-      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
-      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
-      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
       <param type="long" value="2000000" />        <!-- pllInMin     -->
       <param type="long" value="4000000" />        <!-- pllInMax     -->
       <param type="long" value="48000000" />       <!-- pllOutMin    -->
@@ -554,7 +501,7 @@ Devices using this peripheral:
       <param type="long" value="1" />              <!-- pllPostDiv   -->
    </validate>
 
-   <projectActionList id = "mcg_mk_ics48m" >
+   <projectActionList id = "mcg" >
       <copy source="Project_Headers/mcg_mk_ics48m.h"   target="Project_Headers/mcg.h"  replace="true" derived="true" />
       <copy source="Startup_Code/mcg_mk_ics48m.cpp"    target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
       <copy source="Snippets/test-mcg.cpp"         target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
@@ -563,7 +510,7 @@ Devices using this peripheral:
          
    <template>
       \t//! Indicates interrupt handler has been installed
-      \tstatic constexpr bool irqHandlerInstalled = $(IRQ_HANDLER);\n\n
+      \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
 
       \t//! Default IRQ level\n
       \tstatic constexpr uint32_t irqLevel = $(irqLevel);\n\n
@@ -593,13 +540,13 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
       
       \t//! Control Register 1
-      \tstatic constexpr uint32_t MCG_C1 =
+      \tstatic constexpr uint32_t c1 =
       \t   MCG_C1_FRDIV($(mcg_c1_frdiv))   | // FRDIV    FLL External Reference Divider
       \t   MCG_C1_IRCLKEN($(mcg_c1_irclken)) | // IRCLEN   Internal Reference Clock Enable
       \t   MCG_C1_IREFSTEN($(mcg_c1_irefsten)); // IREFSTEN Internal Reference Stop Enable\n\n
       
       \t//! Control Register 2
-      \tstatic constexpr uint32_t MCG_C2 =
+      \tstatic constexpr uint32_t c2 =
       \t   MCG_C2_LOCRE0($(mcg_c2_locre0)) | // LOLRE0  Loss of Clock Reset Enable
       \t   MCG_C2_RANGE0($(/OSC0/range)) | // RANGE   Frequency Range Select
       \t   MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
@@ -607,32 +554,32 @@ Devices using this peripheral:
       \t   MCG_C2_IRCS($(mcg_c2_ircs));    // IRCS    Internal Reference Clock Select\n\n
       
       \t//! Control Register 4
-      \tstatic constexpr uint32_t MCG_C4 =
+      \tstatic constexpr uint32_t c4 =
       \t   MCG_C4_DMX32($(mcg_c4_dmx32))     | // DMX32    DCO lock range
       \t   MCG_C4_DRST_DRS($(mcg_c4_drst_drs));   // DRST_DRS DCO Range Select\n\n
       
       \t//! Control Register 5
-      \tstatic constexpr uint32_t MCG_C5 =
+      \tstatic constexpr uint32_t c5 =
       \t   MCG_C5_PLLCLKEN0($(mcg_c5_pllclken))  | // PLLCLKEN0 PLL Clock Enable
       \t   MCG_C5_PLLSTEN0($(mcg_c5_pllsten))   | // PLLSTEN0  PLL Stop Enable
       \t   MCG_C5_PRDIV0($(mcg_c5_prdiv0));     // PRDIV0    PLL External Reference Divider\n\n
       
       \t//! Control Register 6
-      \tstatic constexpr uint32_t MCG_C6 =
+      \tstatic constexpr uint32_t c6 =
       \t   MCG_C6_LOLIE0($(mcg_c6_lolie0)) | // LOLIE0 Loss of Lock interrupt Enable
       \t   MCG_C6_CME0($(mcg_c6_cme0))   | // CME0   Clock Monitor Enable
       \t   MCG_C6_VDIV0($(mcg_c6_vdiv0));   // VDIV0  PLL VCO Divider\n\n
       
       \t//! Status and Control Register
-      \tstatic constexpr uint32_t MCG_SC =
+      \tstatic constexpr uint32_t sc =
       \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)); // FCRDIV Internal Clock Reference Divider\n\n
       
       \t//! Control Register 7
-      \tstatic constexpr uint32_t MCG_C7 =
+      \tstatic constexpr uint32_t c7 =
       \t   MCG_C7_OSCSEL($(mcg_c7_oscsel)); // OSCSEL MCG OSC Clock Select\n\n
       
       \t//! Control Register 8
-      \tstatic constexpr uint32_t MCG_C8 =
+      \tstatic constexpr uint32_t c8 =
       \t   MCG_C8_LOCRE1($(mcg_c8_locre1)) | // LOCRE1 RTC Loss of Clock Reset Enable
       \t   MCG_C8_LOLRE($(mcg_c8_lolre))  | // LOLRE  PLL Loss of Lock Reset Enable
       \t   MCG_C8_CME1($(mcg_c8_cme1));    // CME1   Clock Monitor Enable 1\n\n

@@ -205,10 +205,6 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
-         <param key="flashFreq"     value="25MHz" />
-         <param key="coreFreq"      value="120MHz" />
-         <param key="busFreq"       value="60MHz" />
-         <param key="flexFreq"      value="50MHz" />
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -237,6 +233,13 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mk22fa12">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+         <param key="flashFreq"     value="25MHz" />
+         <param key="coreFreq"      value="120MHz" />
+         <param key="busFreq"       value="60MHz" />
+         <param key="flexFreq"      value="50MHz" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk21f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

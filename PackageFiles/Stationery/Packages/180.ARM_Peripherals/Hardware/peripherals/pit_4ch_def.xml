@@ -5,50 +5,50 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
    <page name="_instance" description="Programmable Interrupt Timer">
 
-      <intOption name="LDVAL" description="Reload value [0-65535]"
+      <intOption name="pit_ldval" description="Reload value [0-65535]"
          toolTip="Value loaded in timer register on roll-over"
          value="10000" min="0" max="65535" />
 
-      <binaryOption name="mcr_frz" description="Freeze in debug mode"
+      <binaryOption name="pit_mcr_frz" description="Freeze in debug mode"
          toolTip="Controls whether the timer continues to run in debug mode">
          <choice value="0" name="Timers continue to run in debug mode" />
          <choice value="1" name="Timers are stopped in Debug mode" />
       </binaryOption>
 
-      <binaryOption name="tctrl_ch1" description="Chain timers 1-0"
+      <binaryOption name="pit_tctrl_ch1" description="Chain timers 1-0"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" />
          <choice value="1" name="Timers are chained" />
       </binaryOption>
 
-      <binaryOption name="tctrl_ch3" description="Chain timers 3-2"
+      <binaryOption name="pit_tctrl_ch3" description="Chain timers 3-2"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" />
          <choice value="1" name="Timers are chained" />
       </binaryOption>
 
-      <binaryOption name="IRQ0_HANDLER" description="Handler for channel 0"
+      <binaryOption name="irq0Handler" description="Handler for channel 0"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <binaryOption name="IRQ1_HANDLER" description="Handler for channel 1"
+      <binaryOption name="irq1Handler" description="Handler for channel 1"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <binaryOption name="IRQ2_HANDLER" description="Handler for channel 2"
+      <binaryOption name="irq2Handler" description="Handler for channel 2"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
          <choice value="1" name="Handler installed" />
       </binaryOption>
 
-      <binaryOption name="IRQ3_HANDLER" description="Handler for channel 3"
+      <binaryOption name="irq3Handler" description="Handler for channel 3"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />
@@ -69,11 +69,11 @@
    <template>
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
-      \t   $(LDVAL);\n\n
+      \t   $(pit_ldval);\n\n
       
       \t//! PIT operation in debug mode\n
-      \tstatic constexpr uint32_t mcrValue = 
-      \t   PIT_MCR_FRZ($(mcr_frz));\n\n
+      \tstatic constexpr uint32_t mcr = 
+      \t   PIT_MCR_FRZ($(pit_mcr_frz));\n\n
       
       \t//! Default IRQ level\n
       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n

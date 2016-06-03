@@ -20,6 +20,7 @@
    <!ATTLIST intOption constant     (false|true) "false">
    <!ATTLIST intOption name         ID          #REQUIRED>
    <!ATTLIST intOption key          CDATA        #IMPLIED>
+   <!ATTLIST intOption origin       CDATA        #IMPLIED>
    <!ATTLIST intOption description  CDATA        #REQUIRED>
    <!ATTLIST intOption toolTip      CDATA        "">
    <!ATTLIST intOption value        CDATA        "0">
@@ -42,6 +43,7 @@
    <!ATTLIST stringOption constant     (false|true) "false">
    <!ATTLIST stringOption name         ID           #REQUIRED>
    <!ATTLIST stringOption key          CDATA        #IMPLIED>
+   <!ATTLIST stringOption origin       CDATA        #IMPLIED>
    <!ATTLIST stringOption description  CDATA        #REQUIRED>
    <!ATTLIST stringOption toolTip      CDATA        "">
    <!ATTLIST stringOption value        CDATA        "0">
@@ -50,6 +52,7 @@
    <!ATTLIST choiceOption constant     (false|true) "false">
    <!ATTLIST choiceOption name         ID           #REQUIRED>
    <!ATTLIST choiceOption key          CDATA        #IMPLIED>
+   <!ATTLIST choiceOption origin       CDATA        #IMPLIED>
    <!ATTLIST choiceOption description  CDATA        #REQUIRED>
    <!ATTLIST choiceOption toolTip      CDATA        "">
    <!ATTLIST choiceOption units        (None|Hz|Seconds)    "None">
@@ -63,6 +66,7 @@
    <!ATTLIST binaryOption constant     (false|true) "false">
    <!ATTLIST binaryOption name         ID           #REQUIRED>
    <!ATTLIST binaryOption key          CDATA        #IMPLIED>
+   <!ATTLIST binaryOption origin       CDATA        #IMPLIED>
    <!ATTLIST binaryOption description  CDATA        #REQUIRED>
    <!ATTLIST binaryOption toolTip      CDATA        "">
 

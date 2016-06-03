@@ -31,6 +31,19 @@ extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
+volatile uint32_t SystemMcgirClock;
+volatile uint32_t SystemMcgffClock;
+volatile uint32_t SystemMcgFllClock;
+volatile uint32_t SystemMcgPllClock;
+volatile uint32_t SystemMcgOutClock;
+volatile uint32_t SystemCoreClock;
+volatile uint32_t SystemBusClock;
+volatile uint32_t SystemPeripheralClock;
+volatile uint32_t SystemOscerClock;
+volatile uint32_t SystemErclk32kClock;
+volatile uint32_t SystemLpoClock;
+volatile uint32_t SystemRtcClock;
+
 /** Callback for programmatically set handler */
 MCGCallbackFunction Mcg::callback = {0};
 
@@ -55,11 +68,11 @@ void Mcg::hsRunMode(bool enable) {
          __asm__("nop");
       }
       // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(McgInfo::SIM_CLKDIV1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
+      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(SimInfo::clkdiv1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
    }
    else {
       // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
+      SIM->CLKDIV1 = SimInfo::clkdiv1;
       SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
    }
    SystemCoreClockUpdate();
@@ -70,34 +83,18 @@ void Mcg::hsRunMode(bool enable) {
  */
 void Mcg::doClockGating() {
 
-   /*!
-    * SOPT1 Clock multiplexing
-    */
-#if defined(SIM_SOPT1_OSC32KSEL_MASK) // ERCLK32K source
-   SIM->SOPT1 = (SIM->SOPT1&~SIM_SOPT1_OSC32KSEL_MASK)|McgInfo::sim_sopt1_osc32ksel;
+   // SOPT1 Clock multiplexing
+   SIM->SOPT1 = SimInfo::sopt1;
+
+   // SOPT2 Clock multiplexing
+   SIM->SOPT2 = SimInfo::sopt2;
+
+#ifdef SIM_CLKDIV2_USBDIV_MASK
+   SIM->CLKDIV2 = SimInfo::clkdiv2;
 #endif
 
-   /*!
-    * SOPT2 Clock multiplexing
-    */
-#if defined(SIM_SOPT2_RTCCLKOUTSEL_MASK)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RTCCLKOUTSEL_MASK)|McgInfo::sim_sopt2_rtcclkoutsel;
-#endif
-
-#if defined(SIM_SOPT2_PLLFLLSEL_MASK)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|McgInfo::sim_sopt2_pllfllsel;
-#endif
-
-#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TIMESRC_MASK) && defined(SIM_SOPT2_TIMESRC_M) // Ethernet time-stamp clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TIMESRC_MASK)|SIM_SOPT2_TIMESRC_M;
-#endif
-
-#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
+#ifdef SIM_CLKDIV3_PLLFLLDIV_MASK
+   SIM->CLKDIV3 = SimInfo::clkdiv3;
 #endif
 
 #ifdef SIM_SCGC4_USBOTG_MASK
@@ -105,24 +102,12 @@ void Mcg::doClockGating() {
    SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
 #endif
 
-#if defined(SIM_SOPT2_USBSRC_MASK) && defined(SIM_SOPT2_USBSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBSRC_MASK)|SIM_SOPT2_USBSRC_M;
+#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
 #endif
 
-#if defined(SIM_SOPT2_USBFSRC_MASK) && defined(SIM_SOPT2_USBFSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBFSRC_MASK)|SIM_SOPT2_USBFSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_PLLFLLSEL_MASK) && defined(SIM_SOPT2_PLLFLLSEL_M) // Peripheral clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|SIM_SOPT2_PLLFLLSEL_M;
-#endif
-
-#if defined(SIM_SOPT2_UART0SRC_MASK) && defined(SIM_SOPT2_UART0SRC_M) // UART0 clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_UART0SRC_MASK)|SIM_SOPT2_UART0SRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TPMSRC_MASK) && defined(SIM_SOPT2_TPMSRC_M) // TPM clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TPMSRC_MASK)|SIM_SOPT2_TPMSRC_M;
+#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
 #endif
 
 #if defined(SIM_SOPT2_CLKOUTSEL_MASK) && defined(SIM_SOPT2_CLKOUTSEL_M)
@@ -181,12 +166,12 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
          case McgInfo::ClockMode_None:
          case McgInfo::ClockMode_FEI: // From FEE, FBI, FBE or reset(FEI)
 
-            mcg->C2 = McgInfo::MCG_C2;
+            mcg->C2 = McgInfo::c2;
 
             mcg->C1 =
                   MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
                   MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;               // FRDIV, IRCLKEN, IREFSTEN
 
             // Wait for S_IREFST to indicate FLL Reference has switched to IRC
             do {
@@ -199,14 +184,14 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
             } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
 
             // Set FLL Parameters
-            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|McgInfo::MCG_C4;
+            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|McgInfo::c4;
             break;
 
          case McgInfo::ClockMode_FEE: // from FEI, FBI or FBE
             mcg->C1 =
                   MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of FLL is selected
                   MCG_C1_IREFS(0)          | // IREFS    = 0     -> External reference clock is FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;           // FRDIV, IRCLKEN, IREFSTEN
 
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             do {
@@ -224,10 +209,10 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
             mcg->C1 =
                   MCG_C1_CLKS(1)           | // CLKS     = 1     -> Internal reference clock is selected
                   MCG_C1_IREFS(1)          | // IREFS    = 1     -> Slow IRC for FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;           // FRDIV, IRCLKEN, IREFSTEN
 
             // Clear LP
-            mcg->C2 = McgInfo::MCG_C2;
+            mcg->C2 = McgInfo::c2;
 
             // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
             do {
@@ -237,15 +222,15 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
 
          case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
             // Clear LP
-            mcg->C2 = McgInfo::MCG_C2;
+            mcg->C2 = McgInfo::c2;
 
             mcg->C1 =
                   MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
                   MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;           // FRDIV, IRCLKEN, IREFSTEN
 
             // Select FLL as MCG clock source
-            mcg->C6  = McgInfo::MCG_C6;
+            mcg->C6  = McgInfo::c6;
 
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             do {
@@ -262,15 +247,15 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
 
          case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
             // Clear LP
-            mcg->C2 = McgInfo::MCG_C2;
+            mcg->C2 = McgInfo::c2;
 
             mcg->C1 =
                   MCG_C1_CLKS(2)           | // CLKS     = 2     -> External reference clock is selected
                   MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;           // FRDIV, IRCLKEN, IREFSTEN
 
             // Select PLL as MCG clock source
-            mcg->C6  = McgInfo::MCG_C6|MCG_C6_PLLS_MASK;
+            mcg->C6  = McgInfo::c6|MCG_C6_PLLS_MASK;
             externalClockInUse = true;
             break;
 
@@ -278,7 +263,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
             mcg->C1 =
                   MCG_C1_CLKS(0)           | // CLKS     = 0     -> Output of PLLCS is selected
                   MCG_C1_IREFS(0)          | // IREFS    = 1     -> Slow IRC for FLL source
-                  McgInfo::MCG_C1;           // FRDIV, IRCLKEN, IREFSTEN
+                  McgInfo::c1;           // FRDIV, IRCLKEN, IREFSTEN
             externalClockInUse = true;
             break;
 
@@ -286,11 +271,11 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
             externalClockInUse = true;
          case McgInfo::ClockMode_BLPI: // from FBI
             // Set LP
-            mcg->C2 = McgInfo::MCG_C2|MCG_C2_LP_MASK;
+            mcg->C2 = McgInfo::c2|MCG_C2_LP_MASK;
             break;
          }
          // Wait for oscillator stable (if used)
-         if (externalClockInUse && (McgInfo::MCG_C2&MCG_C2_EREFS0_MASK)) {
+         if (externalClockInUse && (McgInfo::c2&MCG_C2_EREFS0_MASK)) {
             do {
                __asm__("nop");
             } while ((MCG->S & MCG_S_OSCINIT0_MASK) == 0);
@@ -301,7 +286,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
          }
       } while (currentClockMode != to);
 
-      SIM->CLKDIV1 = McgInfo::SIM_CLKDIV1;
+      SIM->CLKDIV1 = SimInfo::clkdiv1;
    }
 
    SystemCoreClockUpdate();
@@ -407,20 +392,25 @@ void Mcg::initialise(void) {
       return;
    }
 
-   if (McgInfo::MCG_C7&&MCG_C7_OSCSEL_MASK) {
+#ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
+   if (McgInfo::c7&&MCG_C7_OSCSEL_MASK) {
       // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
       SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
       USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
    }
+#endif
 
    // Set PLL PRDIV0 etc
-   MCG->C5  = McgInfo::MCG_C5;
+   MCG->C5  = McgInfo::c5;
+
+   // Set PLL VDIV0 etc
+   MCG->C6  = McgInfo::c6;
 
    // Select OSCCLK Source
-   MCG->C7 = McgInfo::MCG_C7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+   MCG->C7 = McgInfo::c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 
    // Set Fast Internal Clock divider
-   MCG->SC = McgInfo::MCG_SC;
+   MCG->SC = McgInfo::sc;
 
    // Transition to desired clock mode
    clockTransition(McgInfo::clockMode);

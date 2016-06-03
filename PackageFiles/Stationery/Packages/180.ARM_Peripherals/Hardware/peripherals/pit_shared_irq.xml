@@ -27,7 +27,7 @@
          <choice value="1" name="Timers are chained" />
       </binaryOption>
 
-      <binaryOption name="IRQ_HANDLER" description="Handler for IRQ"
+      <binaryOption name="irqHandler" description="Handler for IRQ"
          toolTip="The interrupt handler may be a static member function or\n
          may be set by use of the setCallback() method">
          <choice value="0" name="No handler installed" />

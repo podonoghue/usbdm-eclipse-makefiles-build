@@ -4,5 +4,5 @@
 
 <!-- TODO Basically remove PLL  -->
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_def.xml"/>
+<xi:include href="mcg_mk_ics48m.xml"/>
 </root>
