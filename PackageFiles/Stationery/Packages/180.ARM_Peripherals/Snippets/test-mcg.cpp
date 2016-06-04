@@ -23,8 +23,8 @@ using Led   = USBDM::GpioC<3>;
 
 int main() {
 
-   printf(" SystemCoreClock = %ld\n", SystemCoreClock);
-   printf(" SystemBusClock  = %ld\n", SystemBusClock);
+   printf(" SystemCoreClock = %ld\n", ::SystemCoreClock);
+   printf(" SystemBusClock  = %ld\n", ::SystemBusClock);
 
    printf(" USBDM::SystemCoreClock       = %ld\n", USBDM::SystemCoreClock);
    printf(" USBDM::SystemBusClock        = %ld\n", USBDM::SystemBusClock);

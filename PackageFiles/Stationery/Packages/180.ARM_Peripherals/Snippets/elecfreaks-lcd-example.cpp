@@ -55,8 +55,6 @@ void drawCursor(Lcd *lcd, int x, int y, int colour) {
 int main() {
    // Instantiate SPI interface class
    Spi *spi = new $(demo.cpp.external.spi:Spi0)();
-   // Set higher speed to improve LCD draw rate
-   spi->setSpeed(1000000);
    // Instantiate LCD interface class
    Lcd *lcd = new Lcd(spi);
 

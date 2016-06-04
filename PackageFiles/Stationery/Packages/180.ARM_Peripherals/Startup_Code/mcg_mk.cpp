@@ -109,6 +109,36 @@ MCGCallbackFunction Mcg::callback = {0};
 /** Current clock mode (FEI out of reset) */
 McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
 
+#ifdef SMC_PMPROT_AHSRUN_MASK
+/**
+ * Switch to/from high speed run mode
+ * Changes the CPU clock frequency/1, and bus clock frequency /2
+ * If the clock is set up for 120 MHz this will be the highest performance possible.
+ *
+ * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
+ * the Core clock divider needs to be changed.
+ */
+void Mcg::hsRunMode(bool enable) {
+   SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
+
+   if (enable) {
+      SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
+      while ((SMC->PMSTAT & 0x80) == 0) {
+         // Wait for mode change
+         __asm__("nop");
+      }
+      // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
+      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(SimInfo::clkdiv1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
+   }
+   else {
+      // Set the SIM _CLKDIV dividers (CPU normal)
+      SIM->CLKDIV1 = SimInfo::clkdiv1;
+      SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
+   }
+   SystemCoreClockUpdate();
+}
+#endif
+
 /**
  * Do default clock gating
  */
@@ -135,10 +165,6 @@ void Mcg::doClockGating() {
 
 #if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
    SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TIMESRC_MASK) && defined(SIM_SOPT2_TIMESRC_M) // Ethernet time-stamp clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TIMESRC_MASK)|SIM_SOPT2_TIMESRC_M;
 #endif
 
 #if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
@@ -321,7 +347,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
          }
       } while (currentClockMode != to);
 
-      setSysDividers(McgInfo::SIM_CLKDIV1);
+      setSysDividers(SimInfo::clkdiv1);
    }
 
    SystemCoreClockUpdate();
@@ -341,8 +367,8 @@ void Mcg::SystemCoreClockUpdate(void) {
 
    uint32_t mcg_erc_clock = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case (0<<MCG_C7_OSCSEL_SHIFT) : mcg_erc_clock = Osc0::oscclkUndivided; break;
-      case (1<<MCG_C7_OSCSEL_SHIFT) : mcg_erc_clock = Rtc::rtcclk; break;
+      case MCG_C7_OSCSEL(0) : mcg_erc_clock = Osc0::oscclkUndivided; break;
+      case MCG_C7_OSCSEL(1) : mcg_erc_clock = Rtc::rtcclk; break;
    }
    if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
       // External reference clock is selected

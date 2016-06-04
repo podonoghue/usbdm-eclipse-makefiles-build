@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/05
+ * @date     2016/06
  *
  *******************************************************************************************************/
 
@@ -3926,7 +3926,7 @@ typedef struct {                                /*       SMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SPI0 (file:SPI0_MKL16Z4_FIFO)        ================ */
+/* ================           SPI0 (file:SPI0_MKL_16Bit)           ================ */
 /* ================================================================================ */
 
 /**
@@ -4028,6 +4028,9 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_C1_SSOE_MASK                         (0x01UL << SPI_C1_SSOE_SHIFT)                       /*!< SPI0_C1: SSOE Mask                      */
 #define SPI_C1_SSOE_SHIFT                        1                                                   /*!< SPI0_C1: SSOE Position                  */
 #define SPI_C1_SSOE(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_SSOE_SHIFT))&SPI_C1_SSOE_MASK) /*!< SPI0_C1                                 */
+#define SPI_C1_MODE_MASK                         (0x03UL << SPI_C1_MODE_SHIFT)                       /*!< SPI0_C1: MODE Mask                      */
+#define SPI_C1_MODE_SHIFT                        2                                                   /*!< SPI0_C1: MODE Position                  */
+#define SPI_C1_MODE(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_MODE_SHIFT))&SPI_C1_MODE_MASK) /*!< SPI0_C1                                 */
 #define SPI_C1_CPHA_MASK                         (0x01UL << SPI_C1_CPHA_SHIFT)                       /*!< SPI0_C1: CPHA Mask                      */
 #define SPI_C1_CPHA_SHIFT                        2                                                   /*!< SPI0_C1: CPHA Position                  */
 #define SPI_C1_CPHA(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_CPHA_SHIFT))&SPI_C1_CPHA_MASK) /*!< SPI0_C1                                 */
@@ -4124,61 +4127,16 @@ typedef struct {                                /*       SPI0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           SPI1 (file:SPI1_MKL16Z4)             ================ */
+/* ================           SPI1 (derived from SPI0)             ================ */
 /* ================================================================================ */
 
 /**
  * @brief Serial Peripheral Interface
  */
-/**
-* @addtogroup SPI_structs_GROUP SPI struct
-* @brief Struct for SPI
-* @{
-*/
-typedef struct {                                /*       SPI1 Structure                                               */
-   __IO uint8_t   S;                            /**< 0000: Status register                                              */
-   __IO uint8_t   BR;                           /**< 0001: Baud rate register                                           */
-   __IO uint8_t   C2;                           /**< 0002: Control register 2                                           */
-   __IO uint8_t   C1;                           /**< 0003: Control register 1                                           */
-   __IO uint8_t   ML;                           /**< 0004: Match register low                                           */
-   __IO uint8_t   MH;                           /**< 0005: Match register high                                          */
-   __IO uint8_t   DL;                           /**< 0006: Data register low                                            */
-   __IO uint8_t   DH;                           /**< 0007: Data register high                                           */
-   __I  uint16_t  RESERVED0;                   
-   __IO uint8_t   CI;                           /**< 000A: Clear interrupt register                                     */
-   __IO uint8_t   C3;                           /**< 000B: Control register 3                                           */
-} SPI1_Type;
-
-/**
- * @} */ /* End group SPI_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'SPI1' Position & Mask macros                        ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup SPI_Register_Masks_GROUP SPI Register Masks
-* @brief Register Masks for SPI
-* @{
-*/
-/* ------- S Bit Fields                             ------ */
-/* ------- BR Bit Fields                            ------ */
-/* ------- C2 Bit Fields                            ------ */
-/* ------- C1 Bit Fields                            ------ */
-/* ------- ML Bit Fields                            ------ */
-/* ------- MH Bit Fields                            ------ */
-/* ------- DL Bit Fields                            ------ */
-/* ------- DH Bit Fields                            ------ */
-/* ------- CI Bit Fields                            ------ */
-/* ------- C3 Bit Fields                            ------ */
-/**
- * @} */ /* End group SPI_Register_Masks_GROUP 
- */
 
 /* SPI1 - Peripheral instance base addresses */
 #define SPI1_BasePtr                   0x40077000UL //!< Peripheral base address
-#define SPI1                           ((SPI1_Type *) SPI1_BasePtr) //!< Freescale base pointer
+#define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 

@@ -572,14 +572,17 @@ Devices using this peripheral:
       <param type="long" value="2" />              <!-- pllPostDiv   -->
    </validate>
 
-   <projectActionList id = "mcg_mk65f18" >
-      <copy source="Project_Headers/mcg_mk65f18.h" target="Project_Headers/mcg.h"  replace="true" derived="true" />
-      <copy source="Startup_Code/mcg_mk65f18.cpp"  target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
-      <copy source="Snippets/test-mcg.cpp"         target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
+   <projectActionList id = "mcg" >
+      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true" derived="true" />
+      <copy source="Startup_Code/mcg_mk65f18.cpp"      target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+      <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
          
    <template>
+      \t//! Not present on these devices
+      \tstatic constexpr int ERRATA_E2448 = 0;\n\n
+      
       \t//! Indicates interrupt handler has been installed
       \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
 

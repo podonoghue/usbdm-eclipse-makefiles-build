@@ -10,7 +10,6 @@
 
 #include "derivative.h"
 #include "system.h"
-#include "clock_configure.h"
 #include "gps.h"
  /*
  * *****************************

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/05
+ * @date     2016/06
  *
  *******************************************************************************************************/
 
@@ -95,6 +95,7 @@ typedef enum {
   USB0_IRQn                     =  53,   /**<  69 Universal Serial Bus                                                             */
   USBDCD_IRQn                   =  54,   /**<  70 USB Device Charger Detection                                                     */
   DAC0_IRQn                     =  56,   /**<  72 Digital to Analogue Converter                                                    */
+  MCG_IRQn                      =  57,   /**<  73 Digital to Analogue Converter                                                    */
   LPTMR0_IRQn                   =  58,   /**<  74 Low Power Timer                                                                  */
   PORTA_IRQn                    =  59,   /**<  75 General Purpose Input/Output                                                     */
   PORTB_IRQn                    =  60,   /**<  76 General Purpose Input/Output                                                     */
@@ -209,6 +210,7 @@ extern void PDB0_IRQHandler(void);             /**< Programmable Delay Block    
 extern void USB0_IRQHandler(void);             /**< Universal Serial Bus                                                             */
 extern void USBDCD_IRQHandler(void);           /**< USB Device Charger Detection                                                     */
 extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
+extern void MCG_IRQHandler(void);              /**< Digital to Analogue Converter                                                    */
 extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
 extern void PORTA_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
 extern void PORTB_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
@@ -11339,7 +11341,7 @@ typedef struct {                                /*       SMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SPI0 (file:SPI0_MK65F18)             ================ */
+/* ================           SPI0 (file:SPI0_MK_PCSIS6_PCSSE)       ================ */
 /* ================================================================================ */
 
 /**
@@ -11465,6 +11467,9 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_CTAR_LSBFE_MASK                      (0x01UL << SPI_CTAR_LSBFE_SHIFT)                    /*!< SPI0_CTAR: LSBFE Mask                   */
 #define SPI_CTAR_LSBFE_SHIFT                     24                                                  /*!< SPI0_CTAR: LSBFE Position               */
 #define SPI_CTAR_LSBFE(x)                        (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_LSBFE_SHIFT))&SPI_CTAR_LSBFE_MASK) /*!< SPI0_CTAR                               */
+#define SPI_CTAR_MODE_MASK                       (0x03UL << SPI_CTAR_MODE_SHIFT)                     /*!< SPI0_CTAR: MODE Mask                    */
+#define SPI_CTAR_MODE_SHIFT                      25                                                  /*!< SPI0_CTAR: MODE Position                */
+#define SPI_CTAR_MODE(x)                         (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_MODE_SHIFT))&SPI_CTAR_MODE_MASK) /*!< SPI0_CTAR                               */
 #define SPI_CTAR_CPHA_MASK                       (0x01UL << SPI_CTAR_CPHA_SHIFT)                     /*!< SPI0_CTAR: CPHA Mask                    */
 #define SPI_CTAR_CPHA_SHIFT                      25                                                  /*!< SPI0_CTAR: CPHA Position                */
 #define SPI_CTAR_CPHA(x)                         (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_CPHA_SHIFT))&SPI_CTAR_CPHA_MASK) /*!< SPI0_CTAR                               */
@@ -11478,6 +11483,9 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_CTAR_DBR_SHIFT                       31                                                  /*!< SPI0_CTAR: DBR Position                 */
 #define SPI_CTAR_DBR(x)                          (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_DBR_SHIFT))&SPI_CTAR_DBR_MASK) /*!< SPI0_CTAR                               */
 /* ------- CTAR_SLAVE Bit Fields                    ------ */
+#define SPI_CTAR_SLAVE_MODE_MASK                 (0x03UL << SPI_CTAR_SLAVE_MODE_SHIFT)               /*!< SPI0_CTAR_SLAVE: MODE Mask              */
+#define SPI_CTAR_SLAVE_MODE_SHIFT                25                                                  /*!< SPI0_CTAR_SLAVE: MODE Position          */
+#define SPI_CTAR_SLAVE_MODE(x)                   (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_SLAVE_MODE_SHIFT))&SPI_CTAR_SLAVE_MODE_MASK) /*!< SPI0_CTAR_SLAVE                         */
 #define SPI_CTAR_SLAVE_CPHA_MASK                 (0x01UL << SPI_CTAR_SLAVE_CPHA_SHIFT)               /*!< SPI0_CTAR_SLAVE: CPHA Mask              */
 #define SPI_CTAR_SLAVE_CPHA_SHIFT                25                                                  /*!< SPI0_CTAR_SLAVE: CPHA Position          */
 #define SPI_CTAR_SLAVE_CPHA(x)                   (((uint32_t)(((uint32_t)(x))<<SPI_CTAR_SLAVE_CPHA_SHIFT))&SPI_CTAR_SLAVE_CPHA_MASK) /*!< SPI0_CTAR_SLAVE                         */

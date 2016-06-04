@@ -16,8 +16,8 @@ Devices using this peripheral:
    </projectActionList>
          
    <template>
-   \t//! Clock source for peripheral
-   \tstatic constexpr volatile uint32_t &amp;clockSource = $(clockSource);\n\n
-
+   \tstatic uint32_t getClockFrequency() {
+   \t  return $(clockSource);
+   \t}\n\n
    </template>
 </root>

@@ -1,10 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MK11DA5
-      MK21DA5
+      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "SPI0_MK11DA5" ?>
+         <?sourceFile "SPI0_MKV_PCSIS5" ?>
          <name>SPI0</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
@@ -33,6 +33,11 @@ Devices using this peripheral:
          <addressBlock>
             <offset>0x7C</offset>
             <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x13C</offset>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -418,6 +423,35 @@ Select MSB or LSB first mode</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CPHA</name>
                      <description>Clock phase\n
 Determine when output data changes and input data is captured relative to the clock</description>
@@ -498,6 +532,35 @@ Allows the baud rate to be doubled but the duty cycle depends on the Baud Rate P
                <resetValue>0x78000000</resetValue>
                <fields>
                   <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CPHA</name>
                      <description>Clock Phase\n
 Determine when output data changes and input data is captured relative to the clock</description>
@@ -541,7 +604,7 @@ Defines inactive state of the CLK</description>
 The number of bits transferred per frame is equal to the FMSZ field value plus 1.\n
 The minimum valid FMSZ field value is 3</description>
                      <bitOffset>27</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
@@ -840,7 +903,7 @@ Enables TCF flag in the SR to generate an interrupt request</description> <bitOf
                      <name>PCS</name>
                      <description>Select which PCS signals are to be asserted for the transfer</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>6</bitWidth>
+                     <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1017,6 +1080,39 @@ Determines if PCS remains asserted between transfers</description>
                      <name>RXDATA</name>
                      <description>Receive Data</description>
                      <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SREX</name>
+               <description>Status register Extended</description>
+               <addressOffset>0x13C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CMDNXTPTR</name>
+                     <description>Command Next Pointer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CMDCTR</name>
+                     <description>CMD FIFO Counter</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TXCTR4</name>
+                     <description>TX FIFO Counter[4]</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXCTR4</name>
+                     <description>RX FIFO Counter[4]</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
                   </field>
                </fields>
             </register>

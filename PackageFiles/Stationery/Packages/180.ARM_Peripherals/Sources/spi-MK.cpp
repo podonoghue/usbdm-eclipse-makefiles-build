@@ -32,13 +32,13 @@ namespace USBDM {
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed
  */
-void Spi::setSpeed(uint32_t frequency) {
+void Spi::setSpeed(uint32_t frequency, uint32_t clockFrequency) {
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
    for (int pbr = 3; pbr >= 0; pbr--) {
       for (int br = 15; br >= 0; br--) {
-         uint32_t calculatedFrequency = SystemBusClock/(pbrFactors[pbr]*brFactors[br]);
+         uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
          if (calculatedFrequency > frequency) {
             // Too high stop looking here
             break;

@@ -1,5 +1,5 @@
 /**
- * @file      mcg.h (derived from mcg_mk.h)
+ * @file      mcg.h
  *
  * @brief    Abstraction layer for MCG interface
  *
@@ -137,6 +137,18 @@ public:
    static void finalise() {
       clockTransition(McgInfo::ClockMode_FEI);
    }
+
+   /**
+    * Switch to/from high speed run mode
+    * Changes the CPU clock frequency/1, and bus clock frequency /2
+    * If the clock is set up for 120 MHz this will be the highest performance possible.
+    *
+    * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
+    * the Core clock divider needs to be changed.
+    *
+    * @param enable True to switch to HSRUN mode
+    */
+   static void hsRunMode(bool enable);
 
    /**
     * Sets up the clock out of RESET

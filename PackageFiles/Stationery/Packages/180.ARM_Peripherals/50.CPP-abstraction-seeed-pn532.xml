@@ -25,11 +25,6 @@
             name="PN532 NFC C++ interface" 
             description="Adds a CPP abstraction layer for Seeed Studio PN532 NFC shield" 
             checkGroup="group-spi-peripheral-options" >
-            <enableWhen>
-               <and>
-                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-               </and>
-            </enableWhen>
          </variable>
    
          <!-- LCD CPP abstraction layer -->

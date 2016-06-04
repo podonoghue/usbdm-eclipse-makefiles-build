@@ -3,7 +3,7 @@
  *
  * Based on K22P121M120SF7RM
  *   3 Oscillators (OSC0, RTC, IRC48M)
- *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
+ *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, /1536)
  *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
  *
  *  Created on: 04/03/2012
@@ -44,12 +44,72 @@ volatile uint32_t SystemErclk32kClock;
 volatile uint32_t SystemLpoClock;
 volatile uint32_t SystemRtcClock;
 
+typedef void (*set_sys_dividers_asm_t)(uint32_t simClkDiv1);
+
+//! Change SIM->CLKDIV1 value
+//!
+//! @param simClkDiv1 - new SIM->CLKDIV1 value
+//!
+//! @note This routine must be copied to RAM. It is a workaround for errata e2448.
+//! Flash prefetch must be disabled when the flash clock divider is changed.
+//! This cannot be performed while executing out of flash.
+//! There must be a short delay after the clock dividers are changed before prefetch
+//! can be re-enabled.
+//!
+//! @note This routine must be placed in ROM immediately before setSysDividersStub()
+//!
+static void setSysDividers_asm(uint32_t simClkDiv1) {
+   (void) simClkDiv1;
+   __asm__ volatile (
+       "    .equ   FMC_PFAPR_VALUE,0xffFF0000   \n"
+       "    .equ   FMC_PFAPR_ADDR,0x4001F000    \n"
+       "    .equ   SIM_CLKDIV1_ADDR,0x40048044  \n"
+       "     movw  r1,#FMC_PFAPR_ADDR&0xFFFF    \n" // Point R1 @FMC_PFAPR
+       "     movt  r1,#FMC_PFAPR_ADDR/65536     \n"
+       "     ldr   r2,[r1,#0]                   \n" // R2 = original FMC_PFAPR
+       "     movw  r3,#FMC_PFAPR_VALUE&0xFFFF   \n" // R3 = mask for new FMC_PFAPR
+       "     movt  r3,#FMC_PFAPR_VALUE>>16      \n"
+       "     orr   r3,r3,r2                     \n" // Merge with existing (Disable Flash pre-fetch)
+       "     str   r3,[r1,#0]                   \n" // Write back to FMC_PFAPR
+
+       "     movw  r0,#SIM_CLKDIV1_ADDR&0xFFFF  \n" // Point R0 @SIM->CLKDIV1
+       "     movt  r0,#SIM_CLKDIV1_ADDR/65536   \n"
+       "     str   %[value],[r0,#0]             \n" // SIM->CLKDIV1 = simClkDiv
+       "     movw  r3,#100                      \n" // Wait a while
+       "loop:                                   \n"
+       "     subs  r3,r3,#1                     \n"
+       "     bhi   loop                         \n"
+       "                                        \n"
+       "     str   r2,[r1,#0]                   \n" // Restore original FMC_PFAPR
+         :: [value] "r" (simClkDiv1) : "r0", "r1", "r2", "r3"
+      );
+}
+
+/**
+ *  Change SIM->CLKDIV1 value
+ *
+ * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
+ *
+ * @note This routine must be placed in ROM immediately following setSysDividers_asm()
+ */
+void setSysDividersStub(uint32_t simClkDiv1) {
+   uint8_t space[100]; // Space for RAM copy of setSysDividers_asm()
+   set_sys_dividers_asm_t fp = (set_sys_dividers_asm_t)((uint32_t)space|1);
+
+   // Copy routine to RAM (stack)
+   memcpy(space, (void*)((uint32_t)setSysDividers_asm&~1), ((uint32_t)setSysDividersStub)-((uint32_t)setSysDividers_asm));
+
+   // Call the function on the stack
+   (*fp)(simClkDiv1);
+}
+
 /** Callback for programmatically set handler */
 MCGCallbackFunction Mcg::callback = {0};
 
 /** Current clock mode (FEI out of reset) */
 McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
 
+#ifdef SMC_PMPROT_AHSRUN_MASK
 /**
  * Switch to/from high speed run mode
  * Changes the CPU clock frequency/1, and bus clock frequency /2
@@ -77,6 +137,7 @@ void Mcg::hsRunMode(bool enable) {
    }
    SystemCoreClockUpdate();
 }
+#endif
 
 /**
  * Do default clock gating
@@ -146,7 +207,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
    constexpr volatile MCG_Type* mcg = (volatile MCG_Type*)McgInfo::basePtr;
 
    // Set conservative clock dividers
-   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5);
+   setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
 
    if (to != McgInfo::ClockMode_None) {
       int transitionCount = 0;
@@ -286,7 +347,7 @@ int Mcg::clockTransition(McgInfo::ClockMode to) {
          }
       } while (currentClockMode != to);
 
-      SIM->CLKDIV1 = SimInfo::clkdiv1;
+      setSysDividers(SimInfo::clkdiv1);
    }
 
    SystemCoreClockUpdate();
@@ -306,9 +367,9 @@ void Mcg::SystemCoreClockUpdate(void) {
 
    uint32_t mcg_erc_clock = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case (0<<MCG_C7_OSCSEL_SHIFT) : mcg_erc_clock = Osc0::oscclkUndivided; break;
-      case (1<<MCG_C7_OSCSEL_SHIFT) : mcg_erc_clock = Rtc::rtcclk; break;
-      case (2<<MCG_C7_OSCSEL_SHIFT) : mcg_erc_clock = McgInfo::irc48m_clock; break;
+      case MCG_C7_OSCSEL(0) : mcg_erc_clock = Osc0::oscclkUndivided; break;
+      case MCG_C7_OSCSEL(1) : mcg_erc_clock = Rtc::rtcclk; break;
+      case MCG_C7_OSCSEL(2) : mcg_erc_clock = McgInfo::irc48m_clock; break;
    }
    if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
       // External reference clock is selected

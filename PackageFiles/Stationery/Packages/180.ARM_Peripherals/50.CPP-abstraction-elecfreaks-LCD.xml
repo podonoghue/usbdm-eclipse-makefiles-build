@@ -23,11 +23,6 @@
             name="Elecfreaks LCD interface" 
             description="Adds a CPP abstraction layer for Elecfreaks LCD" 
             checkGroup="group-spi-peripheral-options" >
-            <enableWhen>
-               <and>
-                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-               </and>
-            </enableWhen>
          </variable>
    
          <!-- LCD CPP abstraction layer -->

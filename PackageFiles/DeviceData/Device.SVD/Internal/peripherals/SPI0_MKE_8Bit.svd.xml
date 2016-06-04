@@ -11,7 +11,7 @@ Devices using this peripheral:
       SKEAZN642
 -->
       <peripheral>
-         <?sourceFile "SPI0_MKE02Z2" ?>
+         <?sourceFile "SPI0_MKE_8Bit" ?>
          <name>SPI0</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
@@ -87,6 +87,35 @@ In master mode when MODFEN=1 see below for SS pin usage:</description>
                            <name>0b1</name>
                            <description>Automatic SS output</description>
                            <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

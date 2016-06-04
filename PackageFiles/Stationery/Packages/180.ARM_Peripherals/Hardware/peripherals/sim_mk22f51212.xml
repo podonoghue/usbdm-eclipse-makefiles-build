@@ -176,10 +176,10 @@ Devices using this peripheral:
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
-      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
-      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
-      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
-      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
+      <param type="long" value="120000000" />    <!-- Core         -->
+      <param type="long" value="60000000" />     <!-- Bus          -->
+      <param type="long" value="30000000" />     <!-- Flash        -->
+      <param type="long" value="26670000" />     <!-- FlexBus      -->
    </validate>
 
    <projectActionList id = "sim_files" >

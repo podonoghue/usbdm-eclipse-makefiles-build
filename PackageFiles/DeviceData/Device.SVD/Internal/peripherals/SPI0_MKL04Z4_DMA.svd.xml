@@ -88,6 +88,35 @@ In master mode when MODFEN=1 see below for SS pin usage:</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CPHA</name>
                      <description>Clock phase\n
 Determine when output data changes and input data is captured relative to the clock</description>

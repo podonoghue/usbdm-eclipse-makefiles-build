@@ -80,6 +80,19 @@ Devices using this peripheral:
          toolTip="Frequency of clock to USB full speed controller"
          value="0" />
    
+      <choiceOption name="sim_sopt2_clkoutsel" 
+         description="CLKOUT select"
+         toolTip="Selects the clock to output on the CLKOUT pin." >
+         <choice value="0"  name="Reserved" />
+         <choice value="1"  name="Reserved" />
+         <choice value="2"  name="Flash clock" />
+         <choice value="3"  name="LPO clock (1 kHz)" />
+         <choice value="4"  name="MCGIRCLK"  isDefault="true"/>
+         <choice value="5"  name="RTC 32.768kHz clock" />
+         <choice value="6"  name="OSCERCLK0" />
+         <choice value="7"  name="Reserved" />
+      </choiceOption>
+
       <menu name="sim_clkdiv1" description="Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1" 
             constant="true"

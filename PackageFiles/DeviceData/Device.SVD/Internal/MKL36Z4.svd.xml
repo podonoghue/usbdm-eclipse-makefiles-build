@@ -33,8 +33,7 @@
 <!ENTITY SCB          SYSTEM "peripherals/SCB_CM0.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MKL34Z4.svd.xml">
 <!ENTITY SMC          SYSTEM "peripherals/SMC_MKL04Z4.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKL16Z4_FIFO.svd.xml">
-<!ENTITY SPI1         SYSTEM "peripherals/SPI1_MKL16Z4.svd.xml">
+<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKL_16Bit.svd.xml">
 <!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
 <!ENTITY TPM0         SYSTEM "peripherals/TPM0_6CH.svd.xml">
 <!ENTITY TPM1         SYSTEM "peripherals/TPM1_6CH.svd.xml">
@@ -105,7 +104,7 @@
 &SIM;
 &SMC;
 &SPI0;
-&SPI1;
+<peripheral derivedFrom="SPI0"><name>SPI1</name><prependToName>SPI1</prependToName><baseAddress>0x40077000</baseAddress></peripheral>
 &SYST;
 &TPM0;
 &TPM1;

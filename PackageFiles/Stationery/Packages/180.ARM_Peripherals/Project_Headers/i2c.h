@@ -295,7 +295,7 @@ public:
 /** Used by ISR to obtain handle of object */
 template<class Info> I2c *I2c_T<Info>::thisPtr = 0;
 
-#if defined(USBDM_I2C1_IS_DEFINED)
+#if defined(USBDM_I2C0_IS_DEFINED)
 /**
  * @brief Class representing the I2C0 interface
  *

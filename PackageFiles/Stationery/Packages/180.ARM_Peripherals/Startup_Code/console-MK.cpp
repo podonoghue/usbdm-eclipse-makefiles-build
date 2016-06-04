@@ -10,7 +10,27 @@
 #include "uart.h"
 #include "console.h"
 
-using Console = USBDM::Uart0;
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+/*
+<o0> Choice of UART for console
+   <0=> USBDM::Uart0
+   <1=> USBDM::Uart1
+   <2=> USBDM::Uart2
+   <3=> USBDM::Uart3
+   <3=> USBDM::Uart4
+   <3=> USBDM::Uart5
+   <1=> Default
+   <info>Not all listed UARTs may be available
+*/
+#define CONSOLE $(demo.cpp.console:USBDM::Uart##0)
+
+//*** <<< end of configuration section >>>    ***
+
+// Maps console to UART used
+using  Console = CONSOLE;
+
+// Console instance
 static Console *console = nullptr;
 
 /*

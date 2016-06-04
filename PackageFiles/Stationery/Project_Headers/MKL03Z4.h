@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/05
+ * @date     2016/06
  *
  *******************************************************************************************************/
 
@@ -3063,7 +3063,7 @@ typedef struct {                                /*       SMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SPI0 (file:SPI0_MKL03Z4)             ================ */
+/* ================           SPI0 (file:SPI0_MKL_8Bit)            ================ */
 /* ================================================================================ */
 
 /**
@@ -3081,7 +3081,7 @@ typedef struct {                                /*       SPI0 Structure         
    __IO uint8_t   C1;                           /**< 0003: Control register 1                                           */
    __IO uint8_t   M;                            /**< 0004: Match Register                                               */
    __I  uint8_t   RESERVED0;                   
-   __IO uint8_t   D;                            /**< 0006: Data Register                                                */
+   __IO uint8_t   D;                            /**< 0006: Data register                                                */
 } SPI_Type;
 
 /**
@@ -3140,6 +3140,9 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_C1_SSOE_MASK                         (0x01UL << SPI_C1_SSOE_SHIFT)                       /*!< SPI0_C1: SSOE Mask                      */
 #define SPI_C1_SSOE_SHIFT                        1                                                   /*!< SPI0_C1: SSOE Position                  */
 #define SPI_C1_SSOE(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_SSOE_SHIFT))&SPI_C1_SSOE_MASK) /*!< SPI0_C1                                 */
+#define SPI_C1_MODE_MASK                         (0x03UL << SPI_C1_MODE_SHIFT)                       /*!< SPI0_C1: MODE Mask                      */
+#define SPI_C1_MODE_SHIFT                        2                                                   /*!< SPI0_C1: MODE Position                  */
+#define SPI_C1_MODE(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_MODE_SHIFT))&SPI_C1_MODE_MASK) /*!< SPI0_C1                                 */
 #define SPI_C1_CPHA_MASK                         (0x01UL << SPI_C1_CPHA_SHIFT)                       /*!< SPI0_C1: CPHA Mask                      */
 #define SPI_C1_CPHA_SHIFT                        2                                                   /*!< SPI0_C1: CPHA Position                  */
 #define SPI_C1_CPHA(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_CPHA_SHIFT))&SPI_C1_CPHA_MASK) /*!< SPI0_C1                                 */

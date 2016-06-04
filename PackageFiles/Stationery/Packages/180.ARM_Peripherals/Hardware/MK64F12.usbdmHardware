@@ -30,7 +30,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_2mask">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock reg="SCGC6"         mask="SIM_SCGC6_FLEXCAN_MASK" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FLEXCAN0_MASK" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_pstm7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
@@ -152,7 +152,7 @@
       </peripheral>
       <peripheral baseName="FB"       instance=""         version="fb_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
-         <clock reg="SCGC7"         mask="SIM_SCGC7_FB_MASK" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_feprot_fdprot">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -263,7 +263,7 @@
       </peripheral>
       <peripheral baseName="RNG"      instance=""         version="rng_1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
-         <clock reg="SCGC6"         mask="SIM_SCGC6_RNG_MASK" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_RNGA_MASK" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />

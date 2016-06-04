@@ -502,13 +502,16 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "mcg" >
-      <copy source="Project_Headers/mcg_mk_ics48m.h"   target="Project_Headers/mcg.h"  replace="true" derived="true" />
+      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true" derived="true" />
       <copy source="Startup_Code/mcg_mk_ics48m.cpp"    target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
-      <copy source="Snippets/test-mcg.cpp"         target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
+      <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
          
    <template>
+      \t//! Not present on these devices
+      \tstatic constexpr int ERRATA_E2448 = 0;\n\n
+      
       \t//! Indicates interrupt handler has been installed
       \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
 

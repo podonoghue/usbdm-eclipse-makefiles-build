@@ -25,11 +25,6 @@
             name="NRF24L01 C++ interface" 
             description="Adds a CPP abstraction layer for NRF24L01 wireless module" 
             checkGroup="group-spi-peripheral-options" >
-            <enableWhen>
-               <and>
-                  <requirement idRef="projectOptionValue.CPP-abstraction-SPI"/>
-               </and>
-            </enableWhen>
          </variable>
    
          <!-- NRF24L01 CPP abstraction layer -->

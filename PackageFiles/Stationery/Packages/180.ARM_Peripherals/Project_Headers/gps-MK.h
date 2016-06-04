@@ -20,7 +20,6 @@
  */
 #include "derivative.h"
 #include "hardware.h"
-#include "clock_configure.h"
 
 namespace USBDM {
 

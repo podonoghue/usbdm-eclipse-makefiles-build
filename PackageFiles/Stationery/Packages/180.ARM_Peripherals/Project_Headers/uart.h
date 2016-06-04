@@ -38,23 +38,14 @@ class Uart {
 
 protected:
    UART_Type *uart;            //!< UART hardware instance
-   uint32_t   clockFrequency;  //!< Frequency of UART clock (SystemCoreClock or SystemBusClock)
 
    /**
     * Construct UART interface
     *
     * @param uart             Base address of UART hardware
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     *
     */
-   Uart(UART_Type *uart, uint32_t clockFrequency) : uart(uart), clockFrequency(clockFrequency) {
-   }
-
-   /**
-    * Initialise interface
-    */
-   void init() {
-      setBaudRate(DEFAULT_BAUD_RATE);
+   Uart(UART_Type *uart) : uart(uart) {
    }
 
    /**
@@ -62,9 +53,10 @@ protected:
     *
     * This is calculated from processor frequency and given bits-per-second
     *
-    * @param baudrate - Interface speed in bits-per-second
+    * @param baudrate       - Interface speed in bits-per-second
+    * @param clockFrequency - Frequency of UART clock
     */
-   void setBaudRate(uint32_t baudrate) {
+   void setBaudRate(uint32_t baudrate, unsigned clockFrequency) {
 
       // Disable UART before changing registers
       uart->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK);
@@ -133,6 +125,16 @@ public:
       uart->D = ch;
    }
    /*
+    * Transmits a '\0' terminated string over the UART (blocking)
+    *
+    * @param s - String to send
+    */
+   void tx(const char *s) {
+      while (*s != '\0') {
+         tx(*s++);
+      }
+   }
+   /*
     * Receives a single character over the UART (blocking)
     *
     * @return - character received
@@ -192,15 +194,16 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart_T(unsigned baudrate, unsigned clockFrequency) : Uart(reinterpret_cast<UART_Type*>(Info::basePtr), clockFrequency) {
+   Uart_T(unsigned baudrate) : Uart(reinterpret_cast<UART_Type*>(Info::basePtr)) {
       // Enable clock to UART interface
       *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
 
       // Configure pins
       Info::initPCRs();
-
-      init();
       setBaudRate(baudrate);
+   }
+   void setBaudRate(unsigned baudrate) {
+      Uart::setBaudRate(baudrate, Info::getClockFrequency());
    }
 };
 
@@ -232,7 +235,7 @@ public:
  */
 class Uart0 : public Uart_T<Uart0Info> {
 public:
-   Uart0(unsigned baud=DEFAULT_BAUD_RATE, unsigned clockFrequency=Uart0Info::clockSource) : Uart_T(baud, clockFrequency) {
+   Uart0(unsigned baud=DEFAULT_BAUD_RATE) : Uart_T(baud) {
    }
 };
 #endif
@@ -271,7 +274,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart1(unsigned baudrate=DEFAULT_BAUD_RATE, unsigned clockFrequency=Uart1Info::clockSource) : Uart_T(baudrate, clockFrequency) {
+   Uart1(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }
 };
 #endif
@@ -310,7 +313,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart2(unsigned baudrate=DEFAULT_BAUD_RATE, unsigned clockFrequency=Uart2Info::clockSource) : Uart_T(baudrate, clockFrequency) {
+   Uart2(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }
 };
 #endif
@@ -349,7 +352,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart3(unsigned baudrate=DEFAULT_BAUD_RATE, unsigned clockFrequency=Uart3Info::clockSource) : Uart_T(baudrate, clockFrequency) {
+   Uart3(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }
 };
 #endif
@@ -388,7 +391,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart4(unsigned baudrate=DEFAULT_BAUD_RATE, unsigned clockFrequency=Uart4Info::clockSource) : Uart_T(baudrate, clockFrequency) {
+   Uart4(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }
 };
 #endif

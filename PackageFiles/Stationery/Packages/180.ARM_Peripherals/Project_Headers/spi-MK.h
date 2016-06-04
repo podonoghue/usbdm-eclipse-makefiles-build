@@ -72,12 +72,23 @@ public:
    /**
     * Sets Communication speed for SPI
     *
-    * @param frequency => Frequency in Hz (0 => use default value)
+    * @param frequency      => Frequency in Hz (0 => use default value)
+    * @param clockFrequency => Frequency of SPI clock (usually buss clock)
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
     */
-   void setSpeed(uint32_t frequency);
+   void setSpeed(uint32_t frequency, uint32_t clockFrequency);
+
+   /**
+    * Sets Communication speed for SPI
+    *
+    * @param frequency      => Frequency in Hz (0 => use default value)
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    * Note: This will only have effect the next time a CTAR is changed
+    */
+   void virtual setSpeed(uint32_t frequency) = 0;
 
    /**
     * Sets Communication mode for SPI
@@ -174,6 +185,18 @@ public:
    virtual void disablePins() {
       // Configure SPI pins to mux=0
       Info::clearPCRs();
+   }
+
+   /**
+    * Sets Communication speed for SPI
+    *
+    * @param frequency      => Frequency in Hz (0 => use default value)
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    * Note: This will only have effect the next time a CTAR is changed
+    */
+   void setSpeed(uint32_t frequency) {
+      Spi::setSpeed(frequency, Info::getClockFrequency());
    }
 
    /**

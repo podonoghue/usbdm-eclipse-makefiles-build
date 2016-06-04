@@ -533,9 +533,9 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "mcg" >
-      <copy source="Project_Headers/mcg_mk.h"      target="Project_Headers/mcg.h"  replace="true" derived="true" />
-      <copy source="Startup_Code/mcg_mk.cpp"       target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
-      <copy source="Snippets/test-mcg.cpp"         target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
+      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true" derived="true" />
+      <copy source="Startup_Code/mcg_mk.cpp"           target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+      <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
          

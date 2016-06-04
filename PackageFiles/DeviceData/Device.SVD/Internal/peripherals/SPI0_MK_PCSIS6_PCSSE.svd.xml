@@ -1,12 +1,17 @@
 <!--
 Devices using this peripheral: 
+      MK21F12
+      MK22F12
+      MK22F51212
+      MK22FA12
+      MK24F25612
       MK61F15WS
       MK65F18
       MK66F18
       MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "SPI0_MK65F18" ?>
+         <?sourceFile "SPI0_MK_PCSIS6_PCSSE" ?>
          <name>SPI0</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
@@ -198,12 +203,12 @@ Controls whether the Rx FIFO discards new data when overflowing</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PCS5/ PCSS is used as the Peripheral Chip Select[5] signal</description>
+                           <description>PCS5/PCSS is used as Chip Select signal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PCS5/ PCSS is used as an active-low PCS Strobe signal</description>
+                           <description>PCS5/PCSS is used as active-low PCS Strobe signal</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -438,6 +443,35 @@ Select MSB or LSB first mode</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CPHA</name>
                      <description>Clock phase\n
 Determine when output data changes and input data is captured relative to the clock</description>
@@ -517,6 +551,35 @@ Allows the baud rate to be doubled but the duty cycle depends on the Baud Rate P
                <addressOffset>0xC</addressOffset>
                <resetValue>0x78000000</resetValue>
                <fields>
+                  <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                   <field>
                      <name>CPHA</name>
                      <description>Clock Phase\n

@@ -23,7 +23,6 @@ void report(MMA845x *accelerometer) {
 
    accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
-   waitMS(400);
 }
 
 int main() {
@@ -38,8 +37,11 @@ int main() {
 
    printf("Before simple calibration (make sure the device is level!)\n");
    report(accelerometer);
+   waitMS(400);
    report(accelerometer);
+   waitMS(400);
    report(accelerometer);
+   waitMS(400);
 
    accelerometer->calibrateAccelerometer();
 
@@ -49,6 +51,7 @@ int main() {
    printf("After calibration\n");
    for(;;) {
       report(accelerometer);
+      waitMS(400);
    }
 }
 

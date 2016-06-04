@@ -24,6 +24,7 @@
          </applyWhen>
 
          <!-- Definitions used by example programs -->
+         <constant id="demo.cpp.console"            value="USBDM::Uart##1" />   <!-- Console for I/O -->
          <constant id="demo.cpp.led"                value="USBDM::GpioA&lt;1&gt;" /> <!-- Digital I/O generic LED -->
          <constant id="demo.cpp.pwm.led1"           value="ftm_LED_RED" />      <!-- FTM/TPM to LED -->
          <constant id="demo.cpp.pwm.led2"           value="ftm_LED_GREEN" />    <!-- FTM/TPM to LED -->

@@ -3,7 +3,7 @@ Devices using this peripheral:
       MKL03Z4
 -->
       <peripheral>
-         <?sourceFile "SPI0_MKL03Z4" ?>
+         <?sourceFile "SPI0_MKL_8Bit" ?>
          <name>SPI0</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
@@ -37,19 +37,20 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>MODF</name>
-                     <description>Master Mode Fault Flag</description>
+                     <description>Master mode fault flag\n
+MODF is set if the SPI is configured as a master and the slave select input goes low, \n
+indicating some other SPI device is also configured as a master</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No mode fault error</description>
+                           <description>No mode fault</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mode fault error detected</description>
+                           <description>Mode fault error</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -59,7 +60,6 @@ Devices using this peripheral:
                      <description>Transmit Buffer Empty Flag</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -75,37 +75,38 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>SPMF</name>
-                     <description>Match Flag</description>
+                     <description>Match flag\n
+SPMF is set after SPRF is 1 when the value in the receive data buffer matches the value in the MH:ML registers.\n
+To clear the flag, read SPMF when it is set and then write a 1 to it</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Value in the receive data buffer does not match the value in the M register</description>
+                           <description>No match</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Value in the receive data buffer matches the value in the M register</description>
+                           <description>Match</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SPRF</name>
-                     <description>Read Buffer/FIFO Full Flag</description>
+                     <description>Read buffer/FIFO full flag\nIndicates Buffer/FIFO is full</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No data available</description>
+                           <description>Buffer/FIFO not full</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Data available</description>
+                           <description>Buffer/FIFO full</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -331,134 +332,152 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>LSBFE</name>
-                     <description>LSB First (shifter direction)</description>
+                     <description>LSB first (shifter direction)\n
+Controls whether serial data transfers start with most-significant or least-significant bit</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSB first transfer</description>
+                           <description>MSB first</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>LSB first transfer</description>
+                           <description>LSB first</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SSOE</name>
-                     <description>Slave Select Output Enable</description>
+                     <description>Slave select output enable\n
+This bit only has effect when MODFEN=1 and in master node.\n
+In slave mode, SS pin function is slave select input irrespective of this bit.\n
+In master mode when MODFEN=0 SS pin function is general-purpose I/O\n
+In master mode when MODFEN=1 see below for SS pin usage:</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>When C2[MODFEN] is 0: In master mode, SS pin function is general-purpose I/O (not SPI). In slave mode, SS pin function is slave select input. When C2[MODFEN] is 1: In master mode, SS pin function is SS input for mode fault. In slave mode, SS pin function is slave select input</description>
+                           <description>Fault mode input</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>When C2[MODFEN] is 0: In master mode, SS pin function is general-purpose I/O (not SPI). In slave mode, SS pin function is slave select input. When C2[MODFEN] is 1: In master mode, SS pin function is automatic SS output. In slave mode: SS pin function is slave select input</description>
+                           <description>Automatic SS output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>MODE</name>
+                     <?ignoreOverlap?>
+                     <description>Clock Phase and Polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Mode 0: CPOL=0, CPHA=0</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Mode 1: CPOL=0, CPHA=1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Mode 2: CPOL=1, CPHA=0</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Mode 3: CPOL=1, CPHA=1</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CPHA</name>
-                     <description>Clock Phase</description>
+                     <description>Clock phase\n
+Determine when output data changes and input data is captured relative to the clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>First edge on SPSCK occurs at the middle of the first cycle of a data transfer</description>
+                           <description>Data captured on leading edge\t- Data changes on following edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>First edge on SPSCK occurs at the start of the first cycle of a data transfer</description>
+                           <description>Data changes on the leading edge\t - Data captured on following edge</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CPOL</name>
-                     <description>Clock Polarity</description>
+                     <description>Clock polarity\n
+Defines inactive state of the CLK</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Active-high SPI clock (idles low)</description>
+                           <description>Inactive is low\t- Leading edge is rising (idles low)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Active-low SPI clock (idles high)</description>
+                           <description>Inactive is high\t- Leading edge is falling (idles high)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MSTR</name>
-                     <description>Master/Slave Mode Select</description>
+                     <description>Master/slave mode select</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>module configured as a slave SPI device</description>
+                           <description>Slave device</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>module configured as a master SPI device</description>
+                           <description>Master device</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SPTIE</name>
-                     <description>Transmit Interrupt Enable</description>
+                     <description>Transmit interrupt enable</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupts from SPTEF inhibited (use polling)</description>
+                           <description>Interrupts disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>When SPTEF is 1, hardware interrupt requested</description>
+                           <description>Interrupts enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SPE</name>
-                     <description>System Enable</description>
+                     <description>System enable</description>
                      <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>system inactive</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>system enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SPIE</name>
-                     <description>Interrupt Enable for SPRF and MODF</description>
-                     <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -473,6 +492,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="SPE" > <name>SPIE</name> <description>Interrupt Enable for SPRF and MODF</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -491,7 +511,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>D</name>
-               <description>Data Register</description>
+               <description>Data register\n
+Input and output register for SPI data</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>

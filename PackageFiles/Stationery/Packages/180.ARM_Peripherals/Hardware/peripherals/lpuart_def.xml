@@ -9,19 +9,31 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
       <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" />
       <aliasOption key="/SIM/system_lpuart_clock" />
-      <stringOption name="clockSource" constant="true" 
-         description="Clock source for LPUART" 
-         value="system_lpuart_clock" />
       <pins/>
    </page>
 
    <projectActionList id = "uart_files">
-      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template>
-   \t//! Clock source for peripheral
-   \tstatic constexpr volatile uint32_t &amp;clockSource = $(clockSource);\n\n
-
+      \tstatic uint32_t getClockFrequency() {
+      \t   switch(SIM->SOPT2&amp;SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   default:
+      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
+      \t   case SIM_SOPT2_LPUARTSRC(1):
+      \t#ifdef SIM_CLKDIV3_PLLFLLFRAC_MASK
+      \t      {
+      \t      int  pllfllfrac  = (SIM-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLFRAC_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLFRAC_SHIFT;
+      \t      int  pllflldiv   = (SIM-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLDIV_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLDIV_SHIFT;
+      \t      return (SystemPeripheralClock*(pllfllfrac+1))/(pllflldiv+1);
+      \t      }
+      \t#else
+      \t      return SystemPeripheralClock;
+      \t#endif
+      \t   case SIM_SOPT2_LPUARTSRC(2): return SystemOscerClock;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return SystemMcgirClock;
+      \t   }
+      \t}\n\n
    </template>
 </root>
