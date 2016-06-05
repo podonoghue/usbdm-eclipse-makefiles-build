@@ -4,6 +4,18 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low power timer">
 
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="Hz"/>
+    
+   <floatOption name="clockPeriod" 
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+    
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
       toolTip="Low Power Timer clock source">
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
@@ -13,7 +25,8 @@
    </choiceOption>
 
    <choiceOption name="lptmr_psr_prescaler" description="Prescaler Value"
-      toolTip="Configures the size of the Prescaler in Time Counter mode or\nwidth of the glitch filter in Pulse Counter mode">
+      toolTip="Configures the size of the Prescaler in Time Counter mode or\n
+         width of the glitch filter in Pulse Counter mode">
       <choice value="0"  name="Prescaler = 2, no glitch filter" />
       <choice value="1"  name="Prescaler = 4, 2 clock glitch filter" />
       <choice value="2"  name="Prescaler = 8, 4 clock glitch filter" />
@@ -33,13 +46,18 @@
    </choiceOption>
 
    <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
-      toolTip="When PBYP is set:\n- The selected prescaler clock in Time Counter mode or\n  the selected input source in Pulse Counter mode, directly clocks the CNR.\nWhen PBYP is clear:\n- The CNR is clocked by the output of the prescaler/glitch filter">
+      toolTip="When PBYP is set:\n
+      - The selected prescaler clock in Time Counter mode or\n
+        the selected input source in Pulse Counter mode, directly clocks the CNR.\n
+        When PBYP is clear:\n
+      - The CNR is clocked by the output of the prescaler/glitch filter">
       <choice value="0" name="Prescaler/glitch filter is enabled" />
       <choice value="1" name="Prescaler/glitch filter is bypassed" />
    </binaryOption>
    
    <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
-      toolTip="Configures the input source to be used in Pulse Counter mode.\nThe input connections vary by device">
+      toolTip="Configures the input source to be used in Pulse Counter mode.\n
+      The input connections vary by device">
       <choice value="0" name="CMP0 output" />
       <choice value="1" name="LPTMR_ALT1 pin" />
       <choice value="2" name="LPTMR_ALT2 pin" />
@@ -52,7 +70,8 @@
    </binaryOption>
    
    <binaryOption name="lptmr_csr_tfc" description="Timer Free-Running Counter"
-      toolTip="When clear, TFC configures the CNR to reset whenever TCF is set.\nWhen set, TFC configures the CNR to reset on overflow">
+      toolTip="When clear, TFC configures the CNR to reset whenever TCF is set.\n
+      When set, TFC configures the CNR to reset on overflow">
       <choice value="0" name="CNR is reset whenever TCF is set" />
       <choice value="1" name="CNR is reset on overflow" />
    </binaryOption>
@@ -63,12 +82,15 @@
       <choice value="1" name="Active-low source,  falling-edge increments CNR" />
    </binaryOption>
    
-   <intOption name="period" description="Period"
-      toolTip="Default period for timer"
-      value="10000" min="0" max="65535" />
+   <intOption name="lptmr_cmr" description="Timer Compare Register"
+      toolTip="Default value for comparison" />
       
    <xi:include href="_irqOption.xml"/>
       
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
+   </validate>
+
    <projectActionList id = "lptmr0_0" >
       <copy source="Project_Headers/lptmr.h"     target="Project_Headers/lptmr.h"      replace="true" derived="true" />
       <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   replace="true" derived="true"/>
@@ -88,8 +110,8 @@
        \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
        \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
        
-       \t//! Default Timer period\n
-       \tstatic constexpr uint32_t period = $(period);\n\n
+       \t//! Default Timer Compare value\n
+       \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
    </template>
 
    <pins/>

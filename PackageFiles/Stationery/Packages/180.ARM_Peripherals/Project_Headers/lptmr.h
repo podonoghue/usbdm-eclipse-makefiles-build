@@ -107,7 +107,7 @@ public:
     *  @param csr       Control Status Register
     *  @param psr       Prescale Register
     */
-   static void configure(uint16_t period=Info::period, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
+   static void configure(uint16_t period=Info::cmr, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
