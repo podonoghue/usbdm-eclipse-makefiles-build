@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Hardware.dtd">
+<!DOCTYPE root SYSTEM "_hardware.dtd">
 <!-- MKL43Z4.usbdmHardware -->
 <!-- 
    Generated from MKL43Z4.csv
@@ -179,12 +179,12 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="0"        version="spi0_mkl16z4_fifo">
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="1"        version="spi1_mkl16z4">
+      <peripheral baseName="SPI"      instance="1"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI1_MASK" />
          <irq num="SPI1_IRQn" />

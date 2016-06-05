@@ -49,7 +49,19 @@ public:
     * @param theCallback The function to call from stub ISR
     */
    static void setCallback(LPTMRCallbackFunction theCallback) {
+#ifdef DEBUG_BUILD
+      assert(Info::irqHandlerInstalled);
+#endif
       callback = theCallback;
+
+      // Enable interrupts in LPTMR
+      lptmr->CSR |= LPTMR_CSR_TIE_MASK|LPTMR_CSR_TCF_MASK;
+
+      // Set priority level
+      NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+
+      // Enable interrupts in NVIC
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**
@@ -75,7 +87,7 @@ protected:
 public:
    /**
     * Enable LPTMR\n
-    * Includes initialising any pins used
+    * Includes initialising clock and any pins used
     */
    static void enable() {
       // Configure pins
@@ -85,38 +97,23 @@ public:
       *clockReg |= Info::clockMask;
       __DMB();
 
-      // Disable timer
-      lptmr->CSR  = Info::csr;
-      // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
-      lptmr->PSR  = Info::psr;
-      // Interval/Compare value
-      lptmr->CMR  = Info::period;
-      // Enable timer
-      lptmr->CSR |= LPTMR_CSR_TEN_MASK;
-
-      if (Info::csr & LPTMR_CSR_TIE_MASK) {
-         // Enable timer interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
-      }
+      configure();
    }
 
    /**
     *  Configure the LPTMR
     *
-    *  @param interval  Interval for the timer in timer ticks
+    *  @param period    Period for the timer in timer ticks
     *  @param csr       Control Status Register
     *  @param psr       Prescale Register
     */
-   static void configure(uint16_t interval, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
+   static void configure(uint16_t period=Info::period, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
       lptmr->PSR  = psr;
-      // Interval/Compare value
-      lptmr->CMR  = interval;
+      // Period/Compare value
+      lptmr->CMR  = period;
       // Enable timer
       lptmr->CSR |= LPTMR_CSR_TEN_MASK;
 

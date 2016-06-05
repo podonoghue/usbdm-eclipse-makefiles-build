@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- i2c0_def.xml -->
 
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="_instance" description="Inter-Integrated-Circuit">
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
-      <binaryOption name="irqHandler" description="Handler for IRQ"
-         toolTip="Polling or interrupts may be used to update the state machine">
-         <choice value="0" name="Use polling" />
-         <choice value="1" name="Use interrupts" />
-      </binaryOption>
-
-      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
-         toolTip="Sets the priority level used to configure the NVIC"
-         value="0" min="0" max="15" />
-
-      <pins/>
-   </page>
+   <xi:include href="_irqOption.xml"/>
    
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"  target="Project_Headers/i2c.h"  replace="true"  derived="true" />
       <copy source="Sources/i2c.cpp"        target="Sources/i2c.cpp"        replace="true"  derived="true" />
    </projectActionList>
-   
-   <template>
-       \t//! Default IRQ level\n
-       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
-   </template>
-</root>
+    
+   <pins/>
+</devicePage>

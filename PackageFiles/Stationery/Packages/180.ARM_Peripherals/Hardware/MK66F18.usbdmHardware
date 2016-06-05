@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Hardware.dtd">
+<!DOCTYPE root SYSTEM "_hardware.dtd">
 <!-- MK66F18.usbdmHardware -->
 <!-- 
    Generated from MK66F18.csv
@@ -308,17 +308,17 @@
          <param key="busFreq"       value="60MHz" />
          <param key="flexFreq"      value="60MHz" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="0"        version="spi0_mk65f18">
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="1"        version="spi0_mk65f18">
+      <peripheral baseName="SPI"      instance="1"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI1_MASK" />
          <irq num="SPI1_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="2"        version="spi0_mk65f18">
+      <peripheral baseName="SPI"      instance="2"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_SPI2_MASK" />
          <irq num="SPI2_IRQn" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- ftm1_2ch_icrst.xml -->
 
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="ftm_def.xml"/>
-</root>
+</fragment>

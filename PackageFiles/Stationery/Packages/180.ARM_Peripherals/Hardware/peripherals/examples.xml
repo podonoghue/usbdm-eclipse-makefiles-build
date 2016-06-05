@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- examples.xml -->
 
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="OSC0" description="Oscillator">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+   <menu name="OSC0" description="Oscillator">
    
       <aliasOption key="system_mcgir_clock" />
    
@@ -23,8 +23,5 @@
 
       <intOption name="xxxx" description="yyyyyy" toolTip="yyyyyyy"
          value="4000000" constant="true" />
-   </page>
-   
-      <template>
-      </template>
-</root>
+   </menu>
+</fragment>

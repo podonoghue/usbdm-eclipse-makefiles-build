@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Hardware.dtd">
+<!DOCTYPE root SYSTEM "_hardware.dtd">
 <!-- MKL25Z4.usbdmHardware -->
 <!-- 
    Generated from MKL25Z4.csv

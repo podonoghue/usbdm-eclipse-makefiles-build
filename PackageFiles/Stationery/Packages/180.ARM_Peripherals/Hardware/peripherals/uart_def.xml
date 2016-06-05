@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- uart_def.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="_instance" description="UART">
-      <aliasOption key="clockSource" />
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+
+   <aliasOption key="clockSource" />
    
-      <pins/>
-   </page>
+   <xi:include href="_irqOption.xml"/>
 
    <projectActionList id = "uart_files">
       <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
@@ -20,4 +19,6 @@ Devices using this peripheral:
    \t  return $(clockSource);
    \t}\n\n
    </template>
-</root>
+
+   <pins/>
+</devicePage>

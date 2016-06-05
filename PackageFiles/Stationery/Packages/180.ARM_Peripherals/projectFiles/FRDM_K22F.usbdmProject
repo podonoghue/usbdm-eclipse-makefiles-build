@@ -219,10 +219,7 @@
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/system_oscerclk_clock"                 value="8.0MHz" />
    <item key="/OSC0/system_oscerclk_undiv_clock"           value="8.0MHz" />
-   <item key="/PIT/irq0Handler"                            value="false" />
-   <item key="/PIT/irq1Handler"                            value="false" />
-   <item key="/PIT/irq2Handler"                            value="false" />
-   <item key="/PIT/irq3Handler"                            value="false" />
+   <item key="/PIT/irqHandler"                             value="false" />
    <item key="/PIT/irqLevel"                               value="0" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/PIT/pit_mcr_frz"                            value="false" />
@@ -263,13 +260,23 @@
    <item key="/SIM/system_lpuart_clock"                    value="8.0MHz" />
    <item key="/SIM/system_peripheral_clock"                value="48.0MHz" />
    <item key="/SIM/system_usbfs_clock"                     value="48.0MHz" />
-   <item key="/SPI0/speed"                                 value="100000" />
+   <item key="/SPI0/irqHandler"                            value="false" />
+   <item key="/SPI0/irqLevel"                              value="0" />
+   <item key="/SPI0/speed"                                 value="100.0kHz" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="1" />
-   <item key="/SPI1/speed"                                 value="100000" />
+   <item key="/SPI1/irqHandler"                            value="false" />
+   <item key="/SPI1/irqLevel"                              value="0" />
+   <item key="/SPI1/speed"                                 value="100.0kHz" />
    <item key="/SPI1/spi_lsbfe"                             value="false" />
    <item key="/SPI1/spi_mode"                              value="1" />
    <item key="/UART0/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART0/irqHandler"                           value="false" />
+   <item key="/UART0/irqLevel"                             value="0" />
    <item key="/UART1/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART1/irqHandler"                           value="false" />
+   <item key="/UART1/irqLevel"                             value="0" />
    <item key="/UART2/clockSource"                          value="SystemBusClock" />
+   <item key="/UART2/irqHandler"                           value="false" />
+   <item key="/UART2/irqLevel"                             value="0" />
 </section>

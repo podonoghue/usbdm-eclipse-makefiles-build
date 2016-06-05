@@ -160,7 +160,7 @@
    <item key="/MCG/mcg_c6_cme0"                            value="false" />
    <item key="/MCG/mcg_c6_lolie0"                          value="false" />
    <item key="/MCG/mcg_c6_plls"                            value="true" />
-   <item key="/MCG/mcg_c6_vdiv0"                           value="30" />
+   <item key="/MCG/mcg_c6_vdiv0"                           value="24" />
    <item key="/MCG/mcg_c7_oscsel"                          value="0" />
    <item key="/MCG/mcg_c8_cme1"                            value="false" />
    <item key="/MCG/mcg_c8_locre1"                          value="false" />
@@ -169,15 +169,15 @@
    <item key="/MCG/mcg_sc_fcrdiv"                          value="0" />
    <item key="/MCG/pll0Enabled"                            value="true" />
    <item key="/MCG/pll0InputFrequency"                     value="4.0MHz" />
-   <item key="/MCG/pll0OutputFrequency"                    value="120.0MHz" />
+   <item key="/MCG/pll0OutputFrequency"                    value="96.0MHz" />
    <item key="/MCG/system_fast_irc_clock"                  value="4.0MHz" />
    <item key="/MCG/system_low_power_clock"                 value="1.0kHz" />
    <item key="/MCG/system_mcgffclk_clock"                  value="31.250kHz" />
    <item key="/MCG/system_mcgfllclk_clock"                 value="96.0MHz" />
    <item key="/MCG/system_mcgirclk_clock"                  value="32.768kHz" />
-   <item key="/MCG/system_mcgoutclk_clock"                 value="120.0MHz" />
+   <item key="/MCG/system_mcgoutclk_clock"                 value="96.0MHz" />
    <item key="/MCG/system_mcgoutclk_clock_source"          value="0" />
-   <item key="/MCG/system_mcgpllclk_clock"                 value="120.0MHz" />
+   <item key="/MCG/system_mcgpllclk_clock"                 value="96.0MHz" />
    <item key="/MCG/system_slow_irc_clock"                  value="32.768kHz" />
    <item key="/MCG/system_usb_clkin_clock"                 value="48.0MHz" />
    <item key="/OSC0/erefs0"                                value="true" />
@@ -191,10 +191,7 @@
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/system_oscerclk_clock"                 value="8.0MHz" />
-   <item key="/PIT/irq0Handler"                            value="false" />
-   <item key="/PIT/irq1Handler"                            value="false" />
-   <item key="/PIT/irq2Handler"                            value="false" />
-   <item key="/PIT/irq3Handler"                            value="false" />
+   <item key="/PIT/irqHandler"                             value="false" />
    <item key="/PIT/irqLevel"                               value="0" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/PIT/pit_mcr_frz"                            value="false" />
@@ -216,26 +213,34 @@
    <item key="/SIM/coreFreq"                               value="50MHz" />
    <item key="/SIM/flashFreq"                              value="25MHz" />
    <item key="/SIM/flexFreq"                               value="50MHz" />
-   <item key="/SIM/sim_clkdiv1_outdiv1"                    value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv2"                    value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv4"                    value="6" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="6" />
+   <item key="/SIM/sim_clkdiv1_outdiv1"                    value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv2"                    value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4"                    value="4" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="4" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="4" />
    <item key="/SIM/sim_sopt2_pllfllsel"                    value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="true" />
    <item key="/SIM/sim_sopt2_usbsrc"                       value="1" />
-   <item key="/SIM/system_bus_clock"                       value="40.0MHz" />
-   <item key="/SIM/system_core_clock"                      value="40.0MHz" />
+   <item key="/SIM/system_bus_clock"                       value="48.0MHz" />
+   <item key="/SIM/system_core_clock"                      value="48.0MHz" />
    <item key="/SIM/system_erclk32k_clock"                  value="32.768kHz" />
-   <item key="/SIM/system_flash_clock"                     value="20.0MHz" />
+   <item key="/SIM/system_flash_clock"                     value="24.0MHz" />
    <item key="/SIM/system_flexbus_clock"                   value="60.0MHz" />
-   <item key="/SIM/system_peripheral_clock"                value="120.0MHz" />
+   <item key="/SIM/system_peripheral_clock"                value="96.0MHz" />
    <item key="/SIM/system_usbfs_clock"                     value="48.0MHz" />
-   <item key="/SPI0/speed"                                 value="100000" />
+   <item key="/SPI0/irqHandler"                            value="false" />
+   <item key="/SPI0/irqLevel"                              value="0" />
+   <item key="/SPI0/speed"                                 value="100.0kHz" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
-   <item key="/SPI0/spi_mode"                              value="1" />
+   <item key="/SPI0/spi_mode"                              value="0" />
    <item key="/UART0/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART0/irqHandler"                           value="false" />
+   <item key="/UART0/irqLevel"                             value="0" />
    <item key="/UART1/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART1/irqHandler"                           value="false" />
+   <item key="/UART1/irqLevel"                             value="0" />
    <item key="/UART2/clockSource"                          value="SystemBusClock" />
+   <item key="/UART2/irqHandler"                           value="false" />
+   <item key="/UART2/irqLevel"                             value="0" />
 </section>

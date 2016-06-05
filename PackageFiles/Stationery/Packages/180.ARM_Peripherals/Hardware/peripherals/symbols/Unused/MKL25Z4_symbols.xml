@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- MKL25Z4_symbols.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+         <!-- Definitions used by example programs -->
+         <constant id="demo.cpp.led"                value="USBDM::GpioB&lt;18&gt;" /> <!-- Digital I/O generic LED -->
+         <constant id="demo.cpp.pwm.led1"        value="tpm_LED_RED" />      <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.led2"      value="tpm_LED_GREEN" />    <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.red.led"            value="gpio_LED_RED" />     <!-- Digital I/O to LED -->
+         <constant id="demo.cpp.green.led"          value="gpio_LED_GREEN" />   <!-- Digital I/O to LED -->
+         <constant id="demo.cpp.blue.led"           value="gpio_LED_BLUE" />    <!-- Digital I/O to LED -->
+         <constant id="demo.cpp.joystick.x"         value="adc_A2" />           <!-- Analogue I/O (Arduino) -->
+         <constant id="demo.cpp.joystick.y"         value="adc_A1" />           <!-- Analogue I/O (Arduino) -->
+         <constant id="demo.cpp.joystick.k"         value="gpio_A0" />          <!-- Digital I/O from switch (Arduino) -->
+         <constant id="demo.cpp.external.switch"    value="gpio_A0" />          <!-- Digital I/O from switch (Arduino) -->
+         <constant id="demo.cpp.external.led"       value="gpio_A1" />          <!-- Digital I/O to LED (Arduino) -->
+         <constant id="demo.cpp.external.gps"       value="Gps2" />             <!-- GPS module connected by serial -->
+         <constant id="demo.cpp.external.spi"       value="Spi0" />             <!-- SPI interface to off-board device -->
+         <constant id="demo.cpp.external.i2c"       value="I2c1" />             <!-- I2C interface to off-board device -->
+         <constant id="demo.cpp.mma845x.i2c"        value="I2c0" />             <!-- I2C interface to MMA845x -->
+         <constant id="demo.cpp.fx0s8700cq.i2c"     value="I2c1" />             <!-- I2C interface to FX0S8700CQ -->
+         <constant id="demo.cpp.mag3110.i2c"        value="I2c1" />             <!-- I2C interface to MAG3110 -->
+         <constant id="demo.cpp.spi.dma"            value="new USBDM::DMAChannel0(), new USBDM::DMAChannel1()" />
+         <constant id="demo.cpp.nrf24l01.spi"       value="Spi0Gpio" />         <!-- SPI interface to NRF24101 module -->
+         <constant id="demo.cpp.nrf24l01.cs_n"      value="GpioD&lt;0&gt;" />   <!-- CS* connection to NRF24101 module -->
+         <constant id="demo.cpp.nrf24l01.ce"        value="GpioD&lt;5&gt;" />   <!-- CE* connection to NRF24101 module -->
+         <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />  <!-- IRQ* connection from NRF24101 module -->
+</fragment>

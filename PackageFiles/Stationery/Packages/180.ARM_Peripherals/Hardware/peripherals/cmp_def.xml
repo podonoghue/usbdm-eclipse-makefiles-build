@@ -1,120 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- Cmp_def.xml -->
 
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="_instance" description="Comparitor">
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
    
-      <choiceOption name="cmp_cr0_filter_cnt" 
-         description="Filter Sample Count"
-         toolTip="Represents the number of consecutive samples that must agree prior\n
-         to the comparator ouput filter accepting a new output state.">
-         <choice value="0" name="Filter is disabled" />
-         <choice value="1" name="1 sample must agree" />
-         <choice value="2" name="2 sample must agree" />
-         <choice value="3" name="3 sample must agree" />
-         <choice value="4" name="4 sample must agree" />
-         <choice value="5" name="5 sample must agree" />
-         <choice value="6" name="6 sample must agree" />
-         <choice value="7" name="7 sample must agree" />
-      </choiceOption>
+   <choiceOption name="cmp_cr0_filter_cnt" 
+      description="Filter Sample Count"
+      toolTip="Represents the number of consecutive samples that must agree prior\n
+      to the comparator ouput filter accepting a new output state.">
+      <choice value="0" name="Filter is disabled" />
+      <choice value="1" name="1 sample must agree" />
+      <choice value="2" name="2 sample must agree" />
+      <choice value="3" name="3 sample must agree" />
+      <choice value="4" name="4 sample must agree" />
+      <choice value="5" name="5 sample must agree" />
+      <choice value="6" name="6 sample must agree" />
+      <choice value="7" name="7 sample must agree" />
+   </choiceOption>
 
-      <choiceOption name="cmp_cr0_hystctr" 
-         description="Comparator hard block hysteresis control"
-         toolTip="Defines the programmable hysteresis level.\n
-         The hysteresis values associated with each level are device specific">
-         <choice value="0" name="Level 0" />
-         <choice value="1" name="Level 1" />
-         <choice value="2" name="Level 2" />
-         <choice value="3" name="Level 3" />
-      </choiceOption>
+   <choiceOption name="cmp_cr0_hystctr" 
+      description="Comparator hard block hysteresis control"
+      toolTip="Defines the programmable hysteresis level.\n
+      The hysteresis values associated with each level are device specific">
+      <choice value="0" name="Level 0" />
+      <choice value="1" name="Level 1" />
+      <choice value="2" name="Level 2" />
+      <choice value="3" name="Level 3" />
+   </choiceOption>
 
-      <binaryOption name="cmp_cr1_se" 
-         description="Sample Enable"
-         toolTip="Sampling mode enabled">
-         <choice value="0" name="Sampling mode is disabled" />
-         <choice value="1" name="Sampling mode is enabled" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_se" 
+      description="Sample Enable"
+      toolTip="Sampling mode enabled">
+      <choice value="0" name="Sampling mode is disabled" />
+      <choice value="1" name="Sampling mode is enabled" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_we" 
-         description="Windowing Enable"
-         toolTip="Windowing mode enabled">
-         <choice value="0" name="Windowing mode is disabled" />
-         <choice value="1" name="Windowing mode is enabled" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_we" 
+      description="Windowing Enable"
+      toolTip="Windowing mode enabled">
+      <choice value="0" name="Windowing mode is disabled" />
+      <choice value="1" name="Windowing mode is enabled" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_trigm" 
-         description="Trigger Mode Enable"
-         toolTip="CMP and DAC are configured to CMP Trigger mode">
-         <choice value="0" name="Trigger mode is disabled" />
-         <choice value="1" name="Trigger mode is enabled" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_trigm" 
+      description="Trigger Mode Enable"
+      toolTip="CMP and DAC are configured to CMP Trigger mode">
+      <choice value="0" name="Trigger mode is disabled" />
+      <choice value="1" name="Trigger mode is enabled" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_pmode" 
-         description="Power Mode Select"
-         toolTip="Selects trade-off between speed and power consumption">
-         <choice value="0" name="Low-Speed (LS) Comparison mode" />
-         <choice value="1" name="High-Speed (HS) Comparison mode" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_pmode" 
+      description="Power Mode Select"
+      toolTip="Selects trade-off between speed and power consumption">
+      <choice value="0" name="Low-Speed (LS) Comparison mode" />
+      <choice value="1" name="High-Speed (HS) Comparison mode" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_inv" 
-         description="Comparator Invert"
-         toolTip="Allows selection of the polarity of the analog comparator function.">
-         <choice value="0" name="Not inverted" />
-         <choice value="1" name="Inverted" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_inv" 
+      description="Comparator Invert"
+      toolTip="Allows selection of the polarity of the analog comparator function.">
+      <choice value="0" name="Not inverted" />
+      <choice value="1" name="Inverted" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_cos" 
-         description="Comparator Output Select"
-         toolTip="">
-         <choice value="0" name="Set the filtered comparator output (CMPO) to equal COUT" />
-         <choice value="1" name="Set the unfiltered comparator output (CMPO) to equal COUTA" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_cos" 
+      description="Comparator Output Select"
+      toolTip="">
+      <choice value="0" name="Set the filtered comparator output (CMPO) to equal COUT" />
+      <choice value="1" name="Set the unfiltered comparator output (CMPO) to equal COUTA" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_ope" 
-         description="Comparator Output Pin Enable"
-         toolTip="">
-         <choice value="0" name="CMPO is not available on CMPO pin" />
-         <choice value="1" name="CMPO is available on CMPO pin" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_ope" 
+      description="Comparator Output Pin Enable"
+      toolTip="">
+      <choice value="0" name="CMPO is not available on CMPO pin" />
+      <choice value="1" name="CMPO is available on CMPO pin" />
+   </binaryOption>
 
-      <binaryOption name="cmp_cr1_en" 
-         description="Comparator Module Enable"
-         toolTip="Enables the Analog Comparator module">
-         <choice value="0" name="Analog Comparator is disabled" />
-         <choice value="1" name="Analog Comparator is enabled" />
-      </binaryOption>
+   <binaryOption name="cmp_cr1_en" 
+      description="Comparator Module Enable"
+      toolTip="Enables the Analog Comparator module">
+      <choice value="0" name="Analog Comparator is disabled" />
+      <choice value="1" name="Analog Comparator is enabled" />
+   </binaryOption>
 
-      <intOption name="cmp_fpr_filt_per"
-         description="Filter Sample Period"
-         toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
-         value="0" min="0" max="255" />
-         
-      <binaryOption name="irqHandler" description="Handler for IRQ"
-         toolTip="The interrupt handler may be a static member function or\n
-         may be set by use of the setCallback() method">
-         <choice value="0" name="No handler installed" />
-         <choice value="1" name="Handler installed" />
-      </binaryOption>
-
-      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
-         toolTip="Sets the priority level used to configure the NVIC"
-         value="0" min="0" max="15" />
-         
-      <pins/>
-   </page>
-   
+   <intOption name="cmp_fpr_filt_per"
+      description="Filter Sample Period"
+      toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
+      value="0" min="0" max="255" />
+      
+   <xi:include href="_irqOption.xml"/>         
    <projectActionList id = "cmp_files" >
       <!--  copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  replace="true"  derived="true" / -->
    </projectActionList>
    
    <template>
-      \t//! Indicates interrupt handler has been installed
-      \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
-      
-      \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
-      
       \t//! CMP Control Register 0\n
       \tstatic constexpr uint32_t cr0 =
       \t   CMP_CR0_FILTER_CNT($(cmp_cr0_filter_cnt))     | // Filter Sample Count
@@ -139,4 +119,7 @@
       \tstatic constexpr uint32_t fpr =
       \t   CMP_FPR_FILT_PER($(cmp_fpr_filt_per)); // Filter Sample Period\n\n
    </template>
-</root>
+
+   <pins/>
+   
+</devicePage>

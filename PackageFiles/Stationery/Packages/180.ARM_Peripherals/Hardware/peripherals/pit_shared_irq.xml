@@ -1,43 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Menu.dtd" >
+<!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- PitSharedIrq.xml -->
 
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-   <page name="_instance" description="Programmable Interrupt Timer">
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
-      <intOption name="LDVAL" description="Reload value [0-65535]"
-         toolTip="Value loaded in timer register on roll-over"
-         value="10000" min="0" max="65535" />
+   <intOption name="LDVAL" description="Reload value [0-65535]"
+      toolTip="Value loaded in timer register on roll-over"
+      value="10000" min="0" max="65535" />
 
-      <binaryOption name="mcr_frz" description="Freeze in debug mode"
-         toolTip="Controls whether the timer continues to run in debug mode">
-         <choice value="0" name="Timers continue to run in debug mode" />
-         <choice value="1" name="Timers are stopped in Debug mode" />
-      </binaryOption>
+   <binaryOption name="mcr_frz" description="Freeze in debug mode"
+      toolTip="Controls whether the timer continues to run in debug mode">
+      <choice value="0" name="Timers continue to run in debug mode" />
+      <choice value="1" name="Timers are stopped in Debug mode" />
+   </binaryOption>
 
-      <binaryOption name="tctrl_ch1" description="Chain timers 1-0"
-         toolTip="Controls whether the timer channels are chained to creater a larger counter">
-         <choice value="0" name="Timers are not chained" />
-         <choice value="1" name="Timers are chained" />
-      </binaryOption>
+   <binaryOption name="tctrl_ch1" description="Chain timers 1-0"
+      toolTip="Controls whether the timer channels are chained to creater a larger counter">
+      <choice value="0" name="Timers are not chained" />
+      <choice value="1" name="Timers are chained" />
+   </binaryOption>
 
-      <binaryOption name="tctrl_ch3" description="Chain timers 3-2"
-         toolTip="Controls whether the timer channels are chained to creater a larger counter">
-         <choice value="0" name="Timers are not chained" />
-         <choice value="1" name="Timers are chained" />
-      </binaryOption>
+   <binaryOption name="tctrl_ch3" description="Chain timers 3-2"
+      toolTip="Controls whether the timer channels are chained to creater a larger counter">
+      <choice value="0" name="Timers are not chained" />
+      <choice value="1" name="Timers are chained" />
+   </binaryOption>
 
-      <binaryOption name="irqHandler" description="Handler for IRQ"
-         toolTip="The interrupt handler may be a static member function or\n
-         may be set by use of the setCallback() method">
-         <choice value="0" name="No handler installed" />
-         <choice value="1" name="Handler installed" />
-      </binaryOption>
-
-      <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
-         toolTip="Sets the priority level used to configure the NVIC"
-         value="0" min="0" max="15" />
-   </page>
+   <xi:include href="_irqOption.xml"/>      
    <template>
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
@@ -46,8 +35,6 @@
       \t//! PIT operation in debug mode\n
       \tstatic constexpr uint32_t mcrValue = 
       \t   PIT_MCR_FRZ($(mcr_frz));\n\n
-      
-      \t//! Default IRQ level\n
-      \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    </template>
-</root>
+   
+</devicePage>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "Hardware.dtd">
+<!DOCTYPE root SYSTEM "_hardware.dtd">
 <!-- MK22F12810.usbdmHardware -->
 <!-- 
    Generated from MK22F12810.csv
@@ -209,12 +209,12 @@
          <param key="busFreq"       value="50MHz" />
          <param key="flexFreq"      value="0MHz" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="0"        version="spi0_mk10d10">
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="1"        version="spi0_mk10d10">
+      <peripheral baseName="SPI"      instance="1"        version="spi0_mk_pcsis6">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI1_MASK" />
          <irq num="SPI1_IRQn" />
