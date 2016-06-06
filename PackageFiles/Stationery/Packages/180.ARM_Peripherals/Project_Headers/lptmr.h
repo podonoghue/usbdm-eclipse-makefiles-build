@@ -134,6 +134,88 @@ public:
       NVIC_DisableIRQ(Info::irqNums[0]);
       *clockReg &= ~Info::clockMask;
    }
+
+   /**
+    * Converts a time in microseconds to number of ticks
+    *
+    * @param time Time in microseconds
+    * @return Time in ticks
+    *
+    * @note Assumes prescale has been chosen appropriately.
+    * @note Rudimentary range checking only.
+    */
+   static uint32_t convertMicrosecondsToTicks(int time) {
+
+      // Calculate period
+      uint32_t tickRate = Info::getClockFrequency();
+      uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
+
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+      return rv;
+   }
+   /**
+    * Converts a time in milliseconds to number of ticks
+    *
+    * @param time Time in milliseconds
+    * @return Time in ticks
+    *
+    * @note Assumes prescale has been chosen appropriately.
+    * @note Rudimentary range checking only.
+    */
+   static uint32_t convertMillisecondsToTicks(int time) {
+
+      // Calculate period
+      uint32_t tickRate = Info::getClockFrequency();
+      uint64_t rv       = ((uint64_t)time*tickRate)/1000;
+
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+      return rv;
+   }
+
+   /**
+    * Converts a time in seconds to number of ticks
+    *
+    * @param time Time in seconds (float!)
+    * @return Time in ticks
+    *
+    * @note Uses floating point
+    */
+   static uint32_t convertSecondsToTicks(float time) {
+
+      // Calculate period
+      float    tickRate = Info::getClockFrequencyF();
+      uint64_t rv       = (time*tickRate);
+
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+#endif
+      return rv;
+   }
 };
 
 template<class Info> LPTMRCallbackFunction Lptmr_T<Info>::callback = 0;

@@ -9,6 +9,8 @@ Devices using this peripheral:
    <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" />
    <aliasOption key="/SIM/system_lpuart_clock" />
 
+   <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc" constant="false" optional="true"/>
+
    <projectActionList id = "uart_files">
       <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />
    </projectActionList>

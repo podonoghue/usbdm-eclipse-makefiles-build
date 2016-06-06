@@ -49,6 +49,9 @@ int main() {
    // May need to change prescaler to get useful delays
    Lptmr0::enable();
    
+//   Lptmr0::configure(Lptmr0::convertMicrosecondsToTicks(1000));
+   Lptmr0::configure(Lptmr0::convertSecondsToTicks(.001));
+
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically
    Lptmr0::setCallback(flash);

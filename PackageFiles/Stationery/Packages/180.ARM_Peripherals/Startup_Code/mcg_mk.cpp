@@ -139,49 +139,6 @@ void Mcg::hsRunMode(bool enable) {
 }
 #endif
 
-/**
- * Do default clock gating
- */
-void Mcg::doClockGating() {
-
-   // SOPT1 Clock multiplexing
-   SIM->SOPT1 = SimInfo::sopt1;
-
-   // SOPT2 Clock multiplexing
-   SIM->SOPT2 = SimInfo::sopt2;
-
-#ifdef SIM_CLKDIV2_USBDIV_MASK
-   SIM->CLKDIV2 = SimInfo::clkdiv2;
-#endif
-
-#ifdef SIM_CLKDIV3_PLLFLLDIV_MASK
-   SIM->CLKDIV3 = SimInfo::clkdiv3;
-#endif
-
-#ifdef SIM_SCGC4_USBOTG_MASK
-   // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
-   SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
-#endif
-
-#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
-#endif
-
-#if defined(SIM_SOPT2_CLKOUTSEL_MASK) && defined(SIM_SOPT2_CLKOUTSEL_M)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK)|SIM_SOPT2_CLKOUTSEL_M;
-#endif
-
-#if defined(SIM_CLKDIV2_USBDIV_MASK) && defined(SIM_CLKDIV2_USBFRAC_MASK) && defined(SIM_CLKDIV2_USB_M)
-   SIM->CLKDIV2 = (SIM->CLKDIV2&~(SIM_CLKDIV2_USBDIV_MASK|SIM_CLKDIV2_USBFRAC_MASK)) | SIM_CLKDIV2_USB_M;
-#endif
-
-   SystemCoreClockUpdate();
-}
-
 constexpr uint8_t clockTransitionTable[8][8] = {
          /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
          /* ClockMode_FEI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
@@ -448,7 +405,7 @@ void Mcg::initialise(void) {
 
    if (McgInfo::clockMode == McgInfo::ClockMode::ClockMode_None) {
       // No clock setup
-      doClockGating();
+      SimInfo::initRegs();
       return;
    }
 
@@ -475,7 +432,9 @@ void Mcg::initialise(void) {
    // Transition to desired clock mode
    clockTransition(McgInfo::clockMode);
 
-   doClockGating();
+   SimInfo::initRegs();
+
+   SystemCoreClockUpdate();
 }
 
 } // end namespace USBDM

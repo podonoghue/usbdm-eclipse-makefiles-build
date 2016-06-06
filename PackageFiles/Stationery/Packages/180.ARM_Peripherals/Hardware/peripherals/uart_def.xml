@@ -8,6 +8,9 @@ Devices using this peripheral:
 
    <aliasOption key="clockSource" />
    
+   <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" constant="false" optional="true"/>
+   <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" constant="false" optional="true"/>
+
    <xi:include href="_irqOption.xml"/>
 
    <projectActionList id = "uart_files">

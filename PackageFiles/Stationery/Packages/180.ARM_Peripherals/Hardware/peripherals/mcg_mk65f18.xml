@@ -446,7 +446,7 @@ Devices using this peripheral:
 
    <aliasOption key="/SIM/system_core_clock" constant="false" />
    <aliasOption key="/SIM/system_bus_clock" constant="false" />
-   <aliasOption key="/SIM/system_flexbus_clock" constant="false" />
+   <aliasOption key="/SIM/system_flexbus_clock" constant="false" optional="true"/>
    <aliasOption key="/SIM/system_flash_clock" constant="false" />
 
    <xi:include href="_irqOption.xml"/>
@@ -587,7 +587,7 @@ Devices using this peripheral:
       \t//! Clock Mode
       \tstatic constexpr ClockMode clockMode = $(clock_mode);\n\n
 
-      \t//! Frequency of Frequency of Internal 48MHz Clock
+      \t//! Frequency of Internal 48MHz Clock
       \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz])

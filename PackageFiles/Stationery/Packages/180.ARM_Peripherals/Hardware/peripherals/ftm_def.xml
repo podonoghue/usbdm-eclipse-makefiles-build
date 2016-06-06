@@ -3,6 +3,31 @@
 <!-- ftm_2ch_def.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src" constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src" constant="false" optional="true" />
+
+   <intOption name="ftmExternalClock" description="FTM External clock"
+      toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
+      value="0" />
+      
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="Hz"/>
+    
+   <floatOption name="clockPeriod" 
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+    
    <choiceOption name="ftm_sc_clks" description="Clock Source"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
@@ -40,12 +65,63 @@
       value="10000" min="0" max="65535" />
       
    <xi:include href="_irqOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate">
+   </validate>
+
    <projectActionList id = "ftm_2ch_def" >
       <copy source="Project_Headers/ftm.h"         target="Project_Headers/ftm.h"         replace="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"  target="Snippets/ftm-pwm-example.cpp"  replace="true" derived="true" />
    </projectActionList>
          
    <template>
+      \t//! Default Timer Period\n
+      \tstatic constexpr uint32_t FtmExternalClock =  $(ftmExternalClock);\n\n
+      
+      \t/**
+      \t * Gets clock frequency of FTM
+      \t *
+      \t * @return Frequency as a float in Hz
+      \t */
+      \tstatic float getClockFrequencyF() {
+      \t
+      \t   /** Pointer to hardware */
+      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
+      \t
+      \t   float freq;
+      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
+      \t   default:
+      \t   case FTM_SC_CLKS(0): freq = 0;                break;
+      \t   case FTM_SC_CLKS(1): freq = SystemBusClock;   break;
+      \t   case FTM_SC_CLKS(2): freq = SystemMcgffClock; break;
+      \t   case FTM_SC_CLKS(3): freq = FtmExternalClock; break;
+      \t   }
+      \t   return freq/(1UL&lt;&lt;(long)((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
+      
+      \t}\n\n
+      
+      \t/**
+      \t * Gets clock frequency of FTM
+      \t *
+      \t * @return Frequency as a uint32_t in Hz (may underflow)
+      \t */
+      \tstatic uint32_t getClockFrequency() {
+      \t
+      \t   /** Pointer to hardware */
+      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
+      \t
+      \t   uint32_t freq;
+      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
+      \t   default:
+      \t   case FTM_SC_CLKS(0): freq = SystemMcgirClock;    break;
+      \t   case FTM_SC_CLKS(1): freq = SystemLpoClock;      break;
+      \t   case FTM_SC_CLKS(2): freq = SystemErclk32kClock; break;
+      \t   case FTM_SC_CLKS(3): freq = SystemOscerClock;    break;
+      \t   }
+      \t   return freq/(1UL&lt;&lt;(long)((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
+      \t}\n\n
+
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
       \t    FTM_SC_CPWMS($(ftm_sc_cpwms))|

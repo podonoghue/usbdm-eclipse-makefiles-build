@@ -224,5 +224,45 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
       
+      \tstatic void initRegs() {
+      \t
+      \t   // SOPT1 Clock multiplexing
+      \t   SIM->SOPT1 = SimInfo::sopt1;
+      \t   
+      \t   // SOPT2 Clock multiplexing
+      \t   SIM->SOPT2 = SimInfo::sopt2;
+      \t   
+      \t   // SOPT4 Clock multiplexing
+      \t   SIM->SOPT4 = SimInfo::sopt4;
+      \t   
+      \t   #ifdef SIM_CLKDIV2_USBDIV_MASK
+      \t      SIM->CLKDIV2 = SimInfo::clkdiv2;
+      \t   #endif
+      \t   
+      \t   #ifdef SIM_CLKDIV3_PLLFLLDIV_MASK
+      \t      SIM->CLKDIV3 = SimInfo::clkdiv3;
+      \t   #endif
+      \t   
+      \t   #ifdef SIM_SCGC4_USBOTG_MASK
+      \t      // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
+      \t      SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
+      \t   #endif
+      \t   
+      \t   #if defined(SIM_SOPT2_SDHCSRC_MASK) &amp;&amp; defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
+      \t      SIM->SOPT2 = (SIM->SOPT2&amp;~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
+      \t   #endif
+      \t   
+      \t   #if defined(SIM_SOPT2_RMIISRC_MASK) &amp;&amp; defined(SIM_SOPT2_RMIISRC_M) // RMII clock
+      \t      SIM->SOPT2 = (SIM->SOPT2&amp;~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
+      \t   #endif
+      \t   
+      \t   #if defined(SIM_SOPT2_CLKOUTSEL_MASK) &amp;&amp; defined(SIM_SOPT2_CLKOUTSEL_M)
+      \t      SIM->SOPT2 = (SIM->SOPT2&amp;~SIM_SOPT2_CLKOUTSEL_MASK)|SIM_SOPT2_CLKOUTSEL_M;
+      \t   #endif
+      \t   
+      \t   #if defined(SIM_CLKDIV2_USBDIV_MASK) &amp;&amp; defined(SIM_CLKDIV2_USBFRAC_MASK) &amp;&amp; defined(SIM_CLKDIV2_USB_M)
+      \t      SIM->CLKDIV2 = (SIM->CLKDIV2&amp;~(SIM_CLKDIV2_USBDIV_MASK|SIM_CLKDIV2_USBFRAC_MASK)) | SIM_CLKDIV2_USB_M;
+      \t   #endif
+      \t}
    </template>
 </devicePage>

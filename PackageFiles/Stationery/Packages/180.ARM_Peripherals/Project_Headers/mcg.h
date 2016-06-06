@@ -74,11 +74,6 @@ public:
    static int clockTransition(McgInfo::ClockMode to);
 
    /**
-    * Do default clock gating
-    */
-   static void doClockGating();
-
-   /**
     * Update SystemCoreClock variable
     *
     * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.

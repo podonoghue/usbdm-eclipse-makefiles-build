@@ -14,7 +14,7 @@
 
 /*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
 /*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
-using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
+using RED_LED   = gpio_LED_RED;
 
 /*
  * Security information

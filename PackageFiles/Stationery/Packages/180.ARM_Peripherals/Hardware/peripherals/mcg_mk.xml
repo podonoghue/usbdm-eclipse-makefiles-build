@@ -406,7 +406,7 @@ Devices using this peripheral:
 
    <aliasOption key="/SIM/system_core_clock" constant="false" />
    <aliasOption key="/SIM/system_bus_clock" constant="false" />
-   <aliasOption key="/SIM/system_flexbus_clock" constant="false" />
+   <aliasOption key="/SIM/system_flexbus_clock" constant="false" optional="true"/>
    <aliasOption key="/SIM/system_flash_clock" constant="false" />
 
    <xi:include href="_irqOption.xml"/>

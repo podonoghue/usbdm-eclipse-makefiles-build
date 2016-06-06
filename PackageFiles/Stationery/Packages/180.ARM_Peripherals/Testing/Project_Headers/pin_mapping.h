@@ -778,11 +778,56 @@ public:
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
 
+   //! Default Timer Period
+   static constexpr uint32_t FtmExternalClock =  7;
+
+   /**
+    * Gets clock frequency of FTM
+    *
+    * @return Frequency as a float in Hz
+    */
+   static float getClockFrequencyF() {
+   
+      /** Pointer to hardware */
+      static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(basePtr);
+   
+      float freq;
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
+      default:
+      case FTM_SC_CLKS(0): freq = 0;                break;
+      case FTM_SC_CLKS(1): freq = SystemBusClock;   break;
+      case FTM_SC_CLKS(2): freq = SystemMcgffClock; break;
+      case FTM_SC_CLKS(3): freq = FtmExternalClock; break;
+      }
+      return freq/(1UL<<(long)((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
+   }
+
+   /**
+    * Gets clock frequency of FTM
+    *
+    * @return Frequency as a uint32_t in Hz (may underflow)
+    */
+   static uint32_t getClockFrequency() {
+   
+      /** Pointer to hardware */
+      static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(basePtr);
+   
+      uint32_t freq;
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
+      default:
+      case FTM_SC_CLKS(0): freq = SystemMcgirClock;    break;
+      case FTM_SC_CLKS(1): freq = SystemLpoClock;      break;
+      case FTM_SC_CLKS(2): freq = SystemErclk32kClock; break;
+      case FTM_SC_CLKS(3): freq = SystemOscerClock;    break;
+      }
+      return freq/(1UL<<(long)((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
+   }
+
    //! Default value for SC register
    static constexpr uint32_t sc  = 
        FTM_SC_CPWMS(0)|
        FTM_SC_TOIE(0)|
-       FTM_SC_CLKS(1)|
+       FTM_SC_CLKS(2)|
        FTM_SC_PS(0);
 
    //! Default Timer Period
@@ -908,6 +953,51 @@ public:
 
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
+
+   //! Default Timer Period
+   static constexpr uint32_t FtmExternalClock =  0;
+
+   /**
+    * Gets clock frequency of FTM
+    *
+    * @return Frequency as a float in Hz
+    */
+   static float getClockFrequencyF() {
+   
+      /** Pointer to hardware */
+      static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(basePtr);
+   
+      float freq;
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
+      default:
+      case FTM_SC_CLKS(0): freq = 0;                break;
+      case FTM_SC_CLKS(1): freq = SystemBusClock;   break;
+      case FTM_SC_CLKS(2): freq = SystemMcgffClock; break;
+      case FTM_SC_CLKS(3): freq = FtmExternalClock; break;
+      }
+      return freq/(1UL<<(long)((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
+   }
+
+   /**
+    * Gets clock frequency of FTM
+    *
+    * @return Frequency as a uint32_t in Hz (may underflow)
+    */
+   static uint32_t getClockFrequency() {
+   
+      /** Pointer to hardware */
+      static constexpr volatile FTM_Type *ftm = reinterpret_cast<volatile FTM_Type *>(basePtr);
+   
+      uint32_t freq;
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
+      default:
+      case FTM_SC_CLKS(0): freq = SystemMcgirClock;    break;
+      case FTM_SC_CLKS(1): freq = SystemLpoClock;      break;
+      case FTM_SC_CLKS(2): freq = SystemErclk32kClock; break;
+      case FTM_SC_CLKS(3): freq = SystemOscerClock;    break;
+      }
+      return freq/(1UL<<(long)((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
+   }
 
    //! Default value for SC register
    static constexpr uint32_t sc  = 
@@ -1432,23 +1522,69 @@ public:
    static constexpr bool irqHandlerInstalled = false;
 
    //! Default IRQ level
-   static constexpr uint32_t irqLevel =  12;
+   static constexpr uint32_t irqLevel =  0;
+
+   /**
+    * Gets clock frequency of LPTMR
+    *
+    * @return Frequency as a float in Hz
+    */
+   static float getClockFrequencyF() {
+      /** Pointer to hardware */
+      static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast<volatile LPTMR_Type *>(basePtr);
+   
+      float freq;
+      switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
+      default:
+      case LPTMR_PSR_PCS(0): freq = SystemMcgirClock;    break;
+      case LPTMR_PSR_PCS(1): freq = SystemLpoClock;      break;
+      case LPTMR_PSR_PCS(2): freq = SystemErclk32kClock; break;
+      case LPTMR_PSR_PCS(3): freq = SystemOscerClock;    break;
+      }
+      if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
+         return freq;
+      }
+      return freq/(1UL<<(long)(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+   }
+
+   /**
+    * Gets clock frequency of LPTMR
+    *
+    * @return Frequency as a uint32_t in Hz (may underflow)
+    */
+   static uint32_t getClockFrequency() {
+      /** Pointer to hardware */
+      static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast<volatile LPTMR_Type *>(basePtr);
+   
+      uint32_t freq;
+      switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
+      default:
+      case LPTMR_PSR_PCS(0): freq = SystemMcgirClock;    break;
+      case LPTMR_PSR_PCS(1): freq = SystemLpoClock;      break;
+      case LPTMR_PSR_PCS(2): freq = SystemErclk32kClock; break;
+      case LPTMR_PSR_PCS(3): freq = SystemOscerClock;    break;
+      }
+      if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
+         return freq;
+      }
+      return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+   }
 
    //! Default PSR value
    static constexpr uint32_t psr = 
       LPTMR_PSR_PRESCALE(0)|
-      LPTMR_PSR_PBYP(0)|
-      LPTMR_PSR_PCS(0);
+      LPTMR_PSR_PBYP(1)|
+      LPTMR_PSR_PCS(3);
 
    //! Default CSR value
    static constexpr uint32_t csr = 
       LPTMR_CSR_TMS(0)|
       LPTMR_CSR_TFC(0)|
-      LPTMR_CSR_TPP(0)|
+      LPTMR_CSR_TPP(1)|
       LPTMR_CSR_TPS(0);
 
-   //! Default Timer period
-   static constexpr uint32_t period = 10000;
+   //! Default Timer Compare value
+   static constexpr uint32_t cmr = 100;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 3;
@@ -1524,7 +1660,7 @@ public:
    static constexpr ClockMode clockMode = ClockMode_PEE;
 
    //! Frequency of Slow Internal Reference Clock [~32kHz])
-   static constexpr uint32_t system_slow_irc_clock = 32768UL;
+   static constexpr uint32_t system_slow_irc_clock = 32000UL;
 
    //! Frequency of Fast Internal Reference Clock [~4MHz])
    static constexpr uint32_t system_fast_irc_clock = 4000000UL;
@@ -1558,7 +1694,7 @@ public:
    static constexpr uint32_t c6 =
       MCG_C6_LOLIE0(0) | // LOLIE0 Loss of Lock interrupt Enable
       MCG_C6_CME0(0)   | // CME0   Clock Monitor Enable
-      MCG_C6_VDIV0(0);   // VDIV0  PLL VCO Divider
+      MCG_C6_VDIV0(6);   // VDIV0  PLL VCO Divider
 
    //! Status and Control Register
    static constexpr uint32_t sc =
@@ -1915,16 +2051,66 @@ public:
       SIM_SOPT2_CLKOUTSEL(4) |     // CLKOUT pin clock source select
       SIM_SOPT2_RTCCLKOUTSEL(1);   // RTC clock out select
 
+   //! System Options Register 4
+   static constexpr uint32_t sopt4 = 
+      SIM_SOPT4_FTM0TRG0SRC(1) |   // FlexTimer 0 Hardware Trigger 0 Source Select
+      SIM_SOPT4_FTM1CLKSEL(1)  |   // FlexTimer 1 External Clock Pin Select
+      SIM_SOPT4_FTM0CLKSEL(1)  |   // FlexTimer 0 External Clock Pin Select
+      SIM_SOPT4_FTM1CH0SRC(1)  |   // FTM1 channel 0 input capture source select
+      SIM_SOPT4_FTM1FLT0(0)    |   // FlexTimer 1 Fault 0 Select
+      SIM_SOPT4_FTM0FLT1(0)    |   // FlexTimer 0 Fault 1 Select
+      SIM_SOPT4_FTM0FLT0(0);       // FlexTimer 0 Fault 0 Select
+
    //! System Clock Divider Register 1
    static constexpr uint32_t clkdiv1 = 
-      SIM_CLKDIV1_OUTDIV4(3)|  // Core/system clock
-      SIM_CLKDIV1_OUTDIV2(1)|  // Bus clock
-      SIM_CLKDIV1_OUTDIV1(1);  // Core/system clock 
+      SIM_CLKDIV1_OUTDIV4(5)|  // Core/system clock
+      SIM_CLKDIV1_OUTDIV2(2)|  // Bus clock
+      SIM_CLKDIV1_OUTDIV1(2);  // Core/system clock 
 
    //! System Clock Divider Register 2
    static constexpr uint32_t clkdiv2 = 
-      2;  // USB clock divider divisor & fraction 
+      9;  // USB clock divider divisor & fraction 
 
+   void initRegs() {
+   
+      // SOPT1 Clock multiplexing
+      SIM->SOPT1 = SimInfo::sopt1;
+      
+      // SOPT2 Clock multiplexing
+      SIM->SOPT2 = SimInfo::sopt2;
+      
+      // SOPT4 Clock multiplexing
+      SIM->SOPT4 = SimInfo::sopt4;
+      
+      #ifdef SIM_CLKDIV2_USBDIV_MASK
+         SIM->CLKDIV2 = SimInfo::clkdiv2;
+      #endif
+      
+      #ifdef SIM_CLKDIV3_PLLFLLDIV_MASK
+         SIM->CLKDIV3 = SimInfo::clkdiv3;
+      #endif
+      
+      #ifdef SIM_SCGC4_USBOTG_MASK
+         // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
+         SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      #endif
+      
+      #if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
+         SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
+      #endif
+      
+      #if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
+         SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
+      #endif
+      
+      #if defined(SIM_SOPT2_CLKOUTSEL_MASK) && defined(SIM_SOPT2_CLKOUTSEL_M)
+         SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK)|SIM_SOPT2_CLKOUTSEL_M;
+      #endif
+      
+      #if defined(SIM_CLKDIV2_USBDIV_MASK) && defined(SIM_CLKDIV2_USBFRAC_MASK) && defined(SIM_CLKDIV2_USB_M)
+         SIM->CLKDIV2 = (SIM->CLKDIV2&~(SIM_CLKDIV2_USBDIV_MASK|SIM_CLKDIV2_USBFRAC_MASK)) | SIM_CLKDIV2_USB_M;
+      #endif
+}
 };
 
 /** 
@@ -1982,7 +2168,7 @@ public:
 
    //! Default speed (Hz)
    static constexpr uint32_t speed = 
-      100000;
+      10000000;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 8;

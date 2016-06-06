@@ -6,91 +6,185 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <choiceOption name="sim_sopt1_osc32ksel" 
-      description="ERCLK32K source"
-      toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
-         Used by LPTMR">
-      <choice value="0"  name="System oscillator in low range (OSC32KCLK)" />
-      <choice value="1"  name="Reserved" />
-      <choice value="2"  name="RTC 32kHz clock" isDefault="true" />
-      <choice value="3"  name="LPO 1kHz clock" />
-   </choiceOption>
+   <menu name="SOPT1" description="RTC pins">
+      <choiceOption name="sim_sopt1_osc32ksel" 
+         description="ERCLK32K source"
+         toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
+            Used by LPTMR">
+         <choice value="0"  name="System oscillator in low range (OSC32KCLK)" />
+         <choice value="1"  name="Reserved" />
+         <choice value="2"  name="RTC 32kHz clock" isDefault="true" />
+         <choice value="3"  name="LPO 1kHz clock" />
+      </choiceOption>
+      
+      <intOption name="system_erclk32k_clock" 
+         units="Hz"
+         description="Frequency of External 32k Reference Clock [ERCLK32K]"
+         toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
+         value="32000"
+         constant="true" />
+   </menu>
+
+   <menu name="SOPT2" description="Clock Gating">
+      
+      <binaryOption name="sim_sopt2_rtcclkoutsel" 
+         description="RTC clock out select [RTC_CLKOUT pin]"
+         toolTip="Clock output on the RTC_CLKOUT pin">
+         <choice value="0"  name="RTC 1 Hz clock" />
+         <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
+      </binaryOption>
    
-   <intOption name="system_erclk32k_clock" 
-      units="Hz"
-      description="Frequency of External 32k Reference Clock [ERCLK32K]"
-      toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
-      value="32000"
-      constant="true" />
-      
-   <binaryOption name="sim_sopt2_rtcclkoutsel" 
-      description="RTC clock out select [RTC_CLKOUT pin]"
-      toolTip="Clock output on the RTC_CLKOUT pin">
-      <choice value="0"  name="RTC 1 Hz clock" />
-      <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
-   </binaryOption>
+      <choiceOption name="sim_sopt2_pllfllsel" 
+         description="Peripheral Clock select"
+         toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
+         <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
+         <choice value="1"  name="MCGPLLCLK clock" />
+      </choiceOption>
+   
+      <intOption name="system_peripheral_clock"
+         constant="true"
+         units="Hz"
+         description="Peripheral Clock frequency"
+         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
+         
+      <choiceOption name="sim_sopt2_usbsrc" 
+         description="USB clock source select"
+         toolTip="Selects the source for the USB clock">
+         <choice value="0"  name="External bypass clock (USB_CLKIN)" />
+         <choice value="1"  name="Peripheral Clock clock divided by SIM_CLKDIV2" isDefault="true" />
+      </choiceOption>
+   
+      <choiceOption name="sim_clkdiv2_usb"
+         description="USB clock divider" 
+         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+         is the USB clock source.">
+         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+      </choiceOption>
+   
+      <intOption name="system_usbfs_clock" 
+         constant="true"
+         units="Hz"
+         description="USB Full Speed Clock"
+         toolTip="Frequency of clock to USB full speed controller"
+         value="0" />
+   
+      <choiceOption name="sim_sopt2_clkoutsel" 
+         description="CLKOUT select"
+         toolTip="Selects the clock to output on the CLKOUT pin." >
+         <choice value="0"  name="Reserved" />
+         <choice value="1"  name="Reserved" />
+         <choice value="2"  name="Flash clock" />
+         <choice value="3"  name="LPO clock (1 kHz)" />
+         <choice value="4"  name="MCGIRCLK"  isDefault="true"/>
+         <choice value="5"  name="RTC 32.768kHz clock" />
+         <choice value="6"  name="OSCERCLK0" />
+         <choice value="7"  name="Reserved" />
+      </choiceOption>
+   </menu>
 
-   <choiceOption name="sim_sopt2_pllfllsel" 
-      description="Peripheral Clock select"
-      toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
-      <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
-      <choice value="1"  name="MCGPLLCLK clock" />
-   </choiceOption>
-
-   <intOption name="system_peripheral_clock"
-      constant="true"
-      units="Hz"
-      description="Peripheral Clock frequency"
-      toolTip="Frequency of Peripheral Clock available to various peripherals"  />
-      
-   <choiceOption name="sim_sopt2_usbsrc" 
-      description="USB clock source select"
-      toolTip="Selects the source for the USB clock">
-      <choice value="0"  name="External bypass clock (USB_CLKIN)" />
-      <choice value="1"  name="Peripheral Clock clock divided by SIM_CLKDIV2" isDefault="true" />
-   </choiceOption>
-
-   <choiceOption name="sim_clkdiv2_usb"
-      description="USB clock divider" 
-      toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-      is the USB clock source.">
-      <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-      <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-      <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-      <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-      <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-      <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-      <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-      <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-      <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-      <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-      <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-      <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-      <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-      <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-      <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-      <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-   </choiceOption>
-
-   <intOption name="system_usbfs_clock" 
-      constant="true"
-      units="Hz"
-      description="USB Full Speed Clock"
-      toolTip="Frequency of clock to USB full speed controller"
-      value="0" />
-
-   <choiceOption name="sim_sopt2_clkoutsel" 
-      description="CLKOUT select"
-      toolTip="Selects the clock to output on the CLKOUT pin." >
-      <choice value="0"  name="Reserved" />
-      <choice value="1"  name="Reserved" />
-      <choice value="2"  name="Flash clock" />
-      <choice value="3"  name="LPO clock (1 kHz)" />
-      <choice value="4"  name="MCGIRCLK"  isDefault="true"/>
-      <choice value="5"  name="RTC 32.768kHz clock" />
-      <choice value="6"  name="OSCERCLK0" />
-      <choice value="7"  name="Reserved" />
-   </choiceOption>
+   <menu name="SOPT4" description="FTM pins">
+   
+      <binaryOption name="sim_sopt4_ftm0trg0src" 
+         description="FlexTimer 0 Hardware Trigger 0 Source Select"
+         toolTip="Selects the source of FTM0 hardware trigger 0" >
+         <choice value="0"  name="HSCMP0 output drives FTM0 hardware trigger 0" isDefault="true" />
+         <choice value="1"  name="FTM1 channel match drives FTM0 hardware trigger 0" />
+      </binaryOption>
+   
+      <binaryOption name="sim_sopt4_ftm1clksel" 
+         description="FTM1 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the FTM1 module.">
+         <choice value="0"  name="FTM_CLK0 pin" isDefault="true" />
+         <choice value="1"  name="FTM_CLK1 pin" />
+      </binaryOption>
+   
+      <binaryOption name="sim_sopt4_ftm0clksel" 
+         description="FTM0 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the FTM0 module.">
+         <choice value="0"  name="FTM_CLK0 pin" isDefault="true" />
+         <choice value="1"  name="FTM_CLK1 pin" />
+      </binaryOption>
+   
+      <choiceOption name="sim_sopt4_ftm1ch0src" 
+         description="FTM1 channel 0 input capture source select"
+         toolTip="Selects the source for FTM1 channel 0 input capture\n
+            NOTE: When the FTM is not in input capture mode, clear this field">
+         <choice value="0" name="FTM1_CH0 signal"  isDefault="true"/>
+         <choice value="1" name="CMP0 output" />
+         <choice value="2" name="CMP1 output" />
+         <choice value="3" name="USB start of frame pulse" />
+      </choiceOption>
+   
+      <binaryOption name="sim_sopt4_ftm1flt0" 
+         description="FTM1 Fault 0 Select"
+         toolTip="Selects the source of FTM1 fault 0" >
+         <choice value="0"  name="FTM1_FLT0 pin" isDefault="true" />
+         <choice value="1"  name="CMP0 output" />
+      </binaryOption>
+   
+      <binaryOption name="sim_sopt4_ftm0flt1" 
+         description="FTM0 Fault 1 Select"
+         toolTip="Selects the source of FTM0 fault 1" >
+         <choice value="0"  name="FTM0_FLT1 pin" isDefault="true" />
+         <choice value="1"  name="CMP1 output" />
+      </binaryOption>
+   
+      <binaryOption name="sim_sopt4_ftm0flt0" 
+         description="FTM0 Fault 0 Select"
+         toolTip="Selects the source of FTM0 fault 0" >
+         <choice value="0"  name="FTM0_FLT0 pin" isDefault="true" />
+         <choice value="1"  name="CMP0 output" />
+      </binaryOption>
+   </menu>
+   
+   <menu name="SOPT5" description="UART pins">
+      <binaryOption name="sim_sopt5_uart0txsrc" 
+         description="UART 0 transmit data source select"
+         toolTip="Selects the source for the UART 0 transmit data.">
+         <choice value="0" name="UART0_TX pin" isDefault="true" />
+         <choice value="1" name="UART0_TX pin modulated with FTM1 channel 0 output" />
+      </binaryOption>
+   
+      <choiceOption name="sim_sopt5_uart0rxsrc" 
+         description="UART 0 receive data source select"
+         toolTip="Selects the source for the UART 0 receive data.">
+         <choice value="0" name="UART0_RX pin" isDefault="true" />
+         <choice value="1" name="CMP0 output" />
+         <choice value="2" name="CMP1 output" />
+         <choice value="3" name="Reserved" />
+      </choiceOption>
+   
+      <binaryOption name="sim_sopt5_uart1txsrc" 
+         description="UART 1 transmit data source select"
+         toolTip="Selects the source for the UART 1 transmit data.">
+         <choice value="0" name="UART1_TX pin" isDefault="true" />
+         <choice value="1" name="UART1_TX pin modulated with FTM1 channel 0 output" />
+      </binaryOption>
+   
+      <choiceOption name="sim_sopt5_uart1rxsrc" 
+         description="UART 1 receive data source select"
+         toolTip="Selects the source for the UART 1 receive data">
+         <choice value="0" name="UART1_RX pin" isDefault="true" />
+         <choice value="1" name="CMP0 output" />
+         <choice value="2" name="CMP1 output" />
+         <choice value="3" name="Reserved" />
+      </choiceOption>
+   </menu>
 
    <menu name="sim_clkdiv1" description="Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
@@ -130,13 +224,6 @@ Devices using this peripheral:
                Must be &lt;= Core Clock frequency and an integer divisor"
       value="60000000" />
 
-   <intOption name="system_flexbus_clock" 
-      units="Hz"
-      description="System Flexbus Clock"
-      toolTip="Clocks the flexbus interface\n
-               Must be &lt;= Bus Clock frequency"
-      value="60000000" />
-
    <intOption name="system_flash_clock" 
       units="Hz"
       description="System Flash Clock"
@@ -153,6 +240,9 @@ Devices using this peripheral:
       <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
    </validate>
 
+   <projectActionList id = "sim_files" >
+   </projectActionList>
+         
    <template>
       \t//! System Options Register 1
       \tstatic constexpr uint32_t sopt1 = 
@@ -165,6 +255,23 @@ Devices using this peripheral:
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
 
+      \t//! System Options Register 4
+      \tstatic constexpr uint32_t sopt4 = 
+      \t   SIM_SOPT4_FTM0TRG0SRC($(sim_sopt4_ftm0trg0src)) |   // FlexTimer 0 Hardware Trigger 0 Source Select
+      \t   SIM_SOPT4_FTM1CLKSEL($(sim_sopt4_ftm1clksel))  |   // FlexTimer 1 External Clock Pin Select
+      \t   SIM_SOPT4_FTM0CLKSEL($(sim_sopt4_ftm0clksel))  |   // FlexTimer 0 External Clock Pin Select
+      \t   SIM_SOPT4_FTM1CH0SRC($(sim_sopt4_ftm1ch0src))  |   // FTM1 channel 0 input capture source select
+      \t   SIM_SOPT4_FTM1FLT0($(sim_sopt4_ftm1flt0))    |   // FlexTimer 1 Fault 0 Select
+      \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
+      \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
+
+      \t//! System Options Register 5
+      \tstatic constexpr uint32_t sopt5 = 
+      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |   // UART 0 transmit data source select
+      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |   // UART 0 receive data source select
+      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |   // UART 1 transmit data source select
+      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));    // UART 1 receive data source select\n\n
+   
       \t//! System Clock Divider Register 1
       \tstatic constexpr uint32_t clkdiv1 = 
       \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Core/system clock
@@ -175,5 +282,26 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
       
+      \tstatic void initRegs() {
+      \t   
+      \t   #ifdef SIM_SCGC4_USBOTG_MASK
+      \t   // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
+      \t   SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
+      \t   #endif
+      \t
+      \t   // SOPT1 Clock multiplexing
+      \t   SIM->SOPT1 = sopt1;
+      \t   
+      \t   // SOPT2 Clock multiplexing
+      \t   SIM->SOPT2 = sopt2;
+      \t   
+      \t   // SOPT4 Clock multiplexing
+      \t   SIM->SOPT4 = sopt4;
+      \t   
+      \t   // SOPT5 Clock multiplexing
+      \t   SIM->SOPT5 = sopt5;
+      \t   
+      \t   SIM->CLKDIV2 = clkdiv2;
+      \t}
    </template>
 </devicePage>

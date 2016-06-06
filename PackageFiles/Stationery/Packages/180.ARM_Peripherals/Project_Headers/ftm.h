@@ -206,8 +206,8 @@ public:
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK) != 0;
 
       // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
-      uint64_t period = ((uint64_t)per*tickRate)/1000000;
+      uint32_t tickRate = Info::getClockFrequency();
+      uint64_t period   = ((uint64_t)per*tickRate)/1000000;
 
       // Disable FTM so register changes are immediate
       tmr->SC = FTM_SC_CLKS(0);
@@ -247,12 +247,41 @@ public:
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
+      uint32_t tickRate = Info::getClockFrequency();
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
 #ifdef DEBUG_BUILD
-      assert(rv > 0xFFFFUL);
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
+         __BKPT();
+      }
+#endif
+      return rv;
+   }
+
+   /**
+    * Converts a time in microseconds to number of ticks
+    *
+    * @param time Time in microseconds
+    * @return Time in ticks
+    *
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    */
+   static uint32_t convertSecondsToTicks(float time) {
+
+      // Calculate period
+      float    tickRate = Info::getClockFrequencyF();
+      uint64_t rv       = time*tickRate;
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
          __BKPT();
       }
 #endif
@@ -270,11 +299,15 @@ public:
    static uint32_t convertTicksToMicroseconds(int time) {
 
       // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&FTM_SC_PS_MASK));
+      uint32_t tickRate = Info::getClockFrequency()/(1<<(tmr->SC&FTM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*1000000)/tickRate;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
          __BKPT();
       }
 #endif
