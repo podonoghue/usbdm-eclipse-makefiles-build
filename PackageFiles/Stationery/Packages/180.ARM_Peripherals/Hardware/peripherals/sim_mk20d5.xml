@@ -24,9 +24,12 @@ Devices using this peripheral:
          value="32000"
          constant="true" />
    </menu>
-
+   <template>
+      \t//! System Options Register 1
+      \tstatic constexpr uint32_t sopt1 = 
+      \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select\n\n
+   </template>
    <menu name="SOPT2" description="Clock Gating">
-      
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
          toolTip="Clock output on the RTC_CLKOUT pin">
@@ -54,28 +57,6 @@ Devices using this peripheral:
          <choice value="1"  name="Peripheral Clock clock divided by SIM_CLKDIV2" isDefault="true" />
       </choiceOption>
    
-      <choiceOption name="sim_clkdiv2_usb"
-         description="USB clock divider" 
-         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-         is the USB clock source.">
-         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-      </choiceOption>
-   
       <intOption name="system_usbfs_clock" 
          constant="true"
          units="Hz"
@@ -88,15 +69,31 @@ Devices using this peripheral:
          toolTip="Selects the clock to output on the CLKOUT pin." >
          <choice value="0"  name="Reserved" />
          <choice value="1"  name="Reserved" />
-         <choice value="2"  name="Flash clock" />
+         <choice value="2"  name="Flash clock" isDefault="true" />
          <choice value="3"  name="LPO clock (1 kHz)" />
-         <choice value="4"  name="MCGIRCLK"  isDefault="true"/>
+         <choice value="4"  name="MCGIRCLK" />
          <choice value="5"  name="RTC 32.768kHz clock" />
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="Reserved" />
       </choiceOption>
-   </menu>
 
+      <binaryOption name="sim_sopt2_ptd7pad" 
+         description="PTD7 pad drive strength"
+         toolTip="Controls the output drive strength of the PTD7 pin\n
+	    by selecting either one or two pads to drive it." >
+         <choice value="0"  name="Single-pad drive strength" isDefault="true" />
+         <choice value="1"  name="Double-pad drive strength" />
+      </binaryOption>   
+   </menu>
+   <template>
+      \t//! System Options Register 2
+      \tstatic constexpr uint32_t sopt2 = 
+      \t   SIM_SOPT2_PTD7PAD($(sim_sopt2_ptd7pad)) |       // PTD7 pad drive strength
+      \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
+      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
+      \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
+      \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
+   </template>
    <menu name="SOPT4" description="FTM pins">
    
       <binaryOption name="sim_sopt4_ftm0trg0src" 
@@ -109,15 +106,15 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt4_ftm1clksel" 
          description="FTM1 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM1 module.">
-         <choice value="0"  name="FTM_CLK0 pin" isDefault="true" />
-         <choice value="1"  name="FTM_CLK1 pin" />
+         <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
+         <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm0clksel" 
          description="FTM0 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM0 module.">
-         <choice value="0"  name="FTM_CLK0 pin" isDefault="true" />
-         <choice value="1"  name="FTM_CLK1 pin" />
+         <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
+         <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
    
       <choiceOption name="sim_sopt4_ftm1ch0src" 
@@ -151,7 +148,17 @@ Devices using this peripheral:
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    </menu>
-   
+   <template>
+      \t//! System Options Register 4
+      \tstatic constexpr uint32_t sopt4 = 
+      \t   SIM_SOPT4_FTM0TRG0SRC($(sim_sopt4_ftm0trg0src)) |   // FlexTimer 0 Hardware Trigger 0 Source Select
+      \t   SIM_SOPT4_FTM1CLKSEL($(sim_sopt4_ftm1clksel))  |   // FlexTimer 1 External Clock Pin Select
+      \t   SIM_SOPT4_FTM0CLKSEL($(sim_sopt4_ftm0clksel))  |   // FlexTimer 0 External Clock Pin Select
+      \t   SIM_SOPT4_FTM1CH0SRC($(sim_sopt4_ftm1ch0src))  |   // FTM1 channel 0 input capture source select
+      \t   SIM_SOPT4_FTM1FLT0($(sim_sopt4_ftm1flt0))    |   // FlexTimer 1 Fault 0 Select
+      \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
+      \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
+   </template>
    <menu name="SOPT5" description="UART pins">
       <binaryOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
@@ -185,8 +192,58 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
    </menu>
-
-   <menu name="sim_clkdiv1" description="Clock Dividers">
+   <template>
+      \t//! System Options Register 5
+      \tstatic constexpr uint32_t sopt5 = 
+      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |    // UART 0 transmit data source select
+      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |    // UART 0 receive data source select
+      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |    // UART 1 transmit data source select
+      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));     // UART 1 receive data source select\n\n
+   </template>
+   <menu name="SOPT7" description="ADC pins">
+      <binaryOption name="sim_sopt7_adc0alttrgen" 
+         description="ADC0 alternate trigger enable"
+         toolTip="Enable alternative conversion triggers for ADC0">
+         <choice value="0" name="PDB trigger selected" isDefault="true" />
+         <choice value="1" name="Alternate trigger selected" />
+      </binaryOption>
+   
+      <binaryOption name="sim_sopt7_adc0pretrgsel" 
+         description="ADC0 pretrigger select"
+         toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
+         <choice value="0" name="Pre-trigger A" isDefault="true" />
+         <choice value="1" name="Pre-trigger B" />
+      </binaryOption>
+   
+      <choiceOption name="sim_sopt7_adc0trgsel" 
+         description="ADC0 trigger select"
+         toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
+         <choice value="0"  name="PDB external trigger pin input (PDB0_EXTRG)" isDefault="true" />
+         <choice value="1"  name="High speed comparator 0 output" />
+         <choice value="2"  name="High speed comparator 1 output" />
+         <choice value="3"  name="Reserved" />
+         <choice value="4"  name="PIT trigger 0" />
+         <choice value="5"  name="PIT trigger 1" />
+         <choice value="6"  name="PIT trigger 2" />
+         <choice value="7"  name="PIT trigger 3" />
+         <choice value="8"  name="FTM0 trigger" />
+         <choice value="9"  name="FTM1 trigger" />
+         <choice value="10" name="Reserved" />
+         <choice value="11" name="Reserved" />
+         <choice value="12" name="RTC alarm" />
+         <choice value="13" name="RTC seconds" />
+         <choice value="14" name="Low-power timer trigger" />
+         <choice value="15" name="Reserved" />
+      </choiceOption>
+   </menu>
+   <template>
+      \t//! System Options Register 7
+      \tstatic constexpr uint32_t sopt7 = 
+      \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
+      \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
+      \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
+   </template>
+   <menu name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
          constant="true"
          description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
@@ -210,6 +267,41 @@ Devices using this peripheral:
                   MCGOUTCLK clock is source. Default /4"
          value="4" offset="-1" min="1" max="16" />
    </menu>
+   <template>
+      \t//! System Clock Divider Register 1
+      \tstatic constexpr uint32_t clkdiv1 = 
+      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Flash clock
+      \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
+      \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
+   </template>
+   <menu name="CLKDIV2" description="USB Clock Dividers">
+      <choiceOption name="sim_clkdiv2_usb"
+         description="USB clock divider" 
+         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+         is the USB clock source.">
+         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+      </choiceOption>
+   </menu>   
+   <template>
+      \t//! System Clock Divider Register 2
+      \tstatic constexpr uint32_t clkdiv2 = 
+      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
+   </template>
    
    <intOption name="system_core_clock" 
       units="Hz"
@@ -244,63 +336,19 @@ Devices using this peripheral:
    </projectActionList>
          
    <template>
-      \t//! System Options Register 1
-      \tstatic constexpr uint32_t sopt1 = 
-      \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel)); // 32K oscillator clock select\n\n
-      
-      \t//! System Options Register 2
-      \tstatic constexpr uint32_t sopt2 = 
-      \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
-      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
-      \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
-      \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
-
-      \t//! System Options Register 4
-      \tstatic constexpr uint32_t sopt4 = 
-      \t   SIM_SOPT4_FTM0TRG0SRC($(sim_sopt4_ftm0trg0src)) |   // FlexTimer 0 Hardware Trigger 0 Source Select
-      \t   SIM_SOPT4_FTM1CLKSEL($(sim_sopt4_ftm1clksel))  |   // FlexTimer 1 External Clock Pin Select
-      \t   SIM_SOPT4_FTM0CLKSEL($(sim_sopt4_ftm0clksel))  |   // FlexTimer 0 External Clock Pin Select
-      \t   SIM_SOPT4_FTM1CH0SRC($(sim_sopt4_ftm1ch0src))  |   // FTM1 channel 0 input capture source select
-      \t   SIM_SOPT4_FTM1FLT0($(sim_sopt4_ftm1flt0))    |   // FlexTimer 1 Fault 0 Select
-      \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
-      \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
-
-      \t//! System Options Register 5
-      \tstatic constexpr uint32_t sopt5 = 
-      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |   // UART 0 transmit data source select
-      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |   // UART 0 receive data source select
-      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |   // UART 1 transmit data source select
-      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));    // UART 1 receive data source select\n\n
-   
-      \t//! System Clock Divider Register 1
-      \tstatic constexpr uint32_t clkdiv1 = 
-      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Core/system clock
-      \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
-      \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
-      
-      \t//! System Clock Divider Register 2
-      \tstatic constexpr uint32_t clkdiv2 = 
-      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
-      
       \tstatic void initRegs() {
       \t   
       \t   #ifdef SIM_SCGC4_USBOTG_MASK
-      \t   // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
+      \t   // The USB interface must be disabled for clock changes to have effect
       \t   SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
       \t   #endif
       \t
-      \t   // SOPT1 Clock multiplexing
       \t   SIM->SOPT1 = sopt1;
-      \t   
-      \t   // SOPT2 Clock multiplexing
       \t   SIM->SOPT2 = sopt2;
-      \t   
-      \t   // SOPT4 Clock multiplexing
       \t   SIM->SOPT4 = sopt4;
-      \t   
-      \t   // SOPT5 Clock multiplexing
       \t   SIM->SOPT5 = sopt5;
-      \t   
+      \t
+      \t   SIM->CLKDIV1 = clkdiv1;
       \t   SIM->CLKDIV2 = clkdiv2;
       \t}
    </template>

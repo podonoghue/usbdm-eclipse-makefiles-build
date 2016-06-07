@@ -156,7 +156,7 @@ public:
          __BKPT();
       }
       if (rv == 0) {
-         // Attempt to set too long a period
+         // Attempt to set too short a period
          __BKPT();
       }
 #endif
@@ -183,7 +183,7 @@ public:
          __BKPT();
       }
       if (rv == 0) {
-         // Attempt to set too long a period
+         // Attempt to set too short a period
          __BKPT();
       }
 #endif

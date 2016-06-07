@@ -18,6 +18,7 @@
 #include <stddef.h>
 #include <assert.h>
 #include "derivative.h"
+#include <cmath>
 
 /*
  * Default port information
@@ -166,12 +167,12 @@ public:
     * Configure Timer operation\n
     * Used to change configuration after enabling interface
     *
-    * @param period  Period in us
+    * @param period  Period in ticks
     * @param mode    Mode of operation see @ref Ftm_Mode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(int period /* us */, Ftm_Mode mode=ftm_leftAlign) {
+   static void configure(int period /* ticks */, Ftm_Mode mode=ftm_leftAlign) {
 
       tmr->SC      = mode;
       if (mode == ftm_centreAlign) {
@@ -182,7 +183,7 @@ public:
          // Left aligned PWM without CPWMS selected
          tmr->SC   = Info::sc;
       }
-      setPeriod(period);
+      setPeriodInTicks(period);
 
       if (tmr->SC & FTM_SC_TOIE_MASK) {
          // Enable interrupts
@@ -196,18 +197,43 @@ public:
    /**
     * Set period
     *
-    * @param per Period in us
+    * @param per Period in seconds as a float
+    *
+    * @note Adjusts FTM pre-scaler to appropriate value.
+    *
+    * @return true => success, false => failed to find suitable values
+    */
+   static bool setPeriod(float period) {
+      float inputClock = Info::getInputClockFrequency();
+      int prescaleFactor=1;
+      int prescale=0;
+      while (prescale<=7) {
+         float clock = inputClock/prescaleFactor;
+         uint32_t mod = round(period*clock);
+         if (mod <= 65535) {
+            uint32_t sc = tmr->SC;
+            tmr->SC    = 0;
+            tmr->MOD   = mod;
+            tmr->SC    = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescale);
+            return true;
+         }
+         prescale++;
+         prescaleFactor <<= 1;
+      }
+      return false;
+   }
+
+   /**
+    * Set period
+    *
+    * @param per Period in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setPeriod(int per) {
+   static void setPeriodInTicks(int period) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK) != 0;
-
-      // Calculate period
-      uint32_t tickRate = Info::getClockFrequency();
-      uint64_t period   = ((uint64_t)per*tickRate)/1000000;
 
       // Disable FTM so register changes are immediate
       tmr->SC = FTM_SC_CLKS(0);

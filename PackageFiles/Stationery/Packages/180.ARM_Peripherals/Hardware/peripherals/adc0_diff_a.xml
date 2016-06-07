@@ -88,7 +88,11 @@
       <choice value="0" name="Software trigger (write to SC1A)" />
       <choice value="1" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
-
+   <menu name="Advanced" description="Advanced Options" >
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
+   </menu>
    <xi:include href="_irqOption.xml"/>
       
    <projectActionList id = "adc_files" >

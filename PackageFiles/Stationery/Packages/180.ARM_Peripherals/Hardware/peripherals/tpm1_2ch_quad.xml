@@ -28,6 +28,11 @@
       <choice value="7" name="Divide by 128" />
    </choiceOption>
 
+   <menu name="Advanced" description="Advanced options">
+      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" constant="false" optional="true"/>
+   </menu>
+   
    <intOption name="period" description="Period of timer"
       toolTip="Default period of the timer"
       value="10000" min="0" max="65535" />
