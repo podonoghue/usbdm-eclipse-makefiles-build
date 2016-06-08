@@ -165,6 +165,14 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
 
    //TODO move!
+#ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
+   if (clockInfo.c7&&MCG_C7_OSCSEL_MASK) {
+      // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
+      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
+   }
+#endif
+
    // Set PLL PRDIV0 etc
    MCG->C5  = clockInfo.c5;
 
@@ -425,14 +433,6 @@ void Mcg::initialise(void) {
       SimInfo::initRegs();
       return;
    }
-
-#ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
-   if (McgInfo::c7&&MCG_C7_OSCSEL_MASK) {
-      // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
-      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
-   }
-#endif
 
    // Transition to desired clock mode
    clockTransition(McgInfo::clockInfo[0]);
