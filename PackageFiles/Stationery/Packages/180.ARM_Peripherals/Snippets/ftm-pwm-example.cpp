@@ -26,13 +26,12 @@ static void delay(void) {
  * This example is not supported on all targets as PWM feature may not be available
  * on the pins connected to the LEDs (e.g. K64F).
  *
- * The mapping of pins in pin_mapping.h may need to be changed to map PWM to LEDs as
+ * The mapping of pins may need to be changed to map PWM to LEDs as
  * preference was given to mapping to external pins on board (e.g. KL25Z).
  *
  */
 // Connection mapping - change as required
 using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
-using LED2 = $(demo.cpp.pwm.led2:Ftm0Channel<1>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"
@@ -51,21 +50,28 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 }
 #endif
 
+constexpr float us = 1e-6;
+constexpr float ms = 1e-3;
+
 int main() {
    LED1::enable();
-   LED2::enable();
 
-   // Change PWM period
-//   LED1::configure(1000);
-//   LED2::configure(1000);
+   /*
+    * Change PWM period
+    * Note - Setting the period of LED1 affects all channels on the same FTM
+    */
+   if (LED1::setPeriod(5*us) != E_NO_ERROR) {
+      puts(getErrorMessage());
+      __BKPT();
+   }
 
    for(;;) {
-      for (int i=0; i<=100; i++) {
+      for (int i=1; i<=99; i++) {
          LED1::setDutyCycle(i);
          delay();
       }
-      for (int i=0; i<=100; i++) {
-         LED2::setDutyCycle(i);
+      for (int i=99; i>0; i--) {
+         LED1::setDutyCycle(i);
          delay();
       }
    }

@@ -43,14 +43,18 @@ template<> void Lptmr_T<Lptmr0Info>::irqHandler() {
 }
 #endif
 
+static constexpr float us = 1e-6;
+static constexpr float ms = 1e-3;
+
 int main() {
    RED_LED::setOutput();
 
-   // May need to change prescaler to get useful delays
    Lptmr0::enable();
    
-//   Lptmr0::configure(Lptmr0::convertMicrosecondsToTicks(1000));
-   Lptmr0::configure(Lptmr0::convertSecondsToTicks(.001));
+   if (Lptmr0::setPeriod(8*ms) != E_NO_ERROR) {
+      puts(getErrorMessage());
+      __BKPT();
+   }
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically

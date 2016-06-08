@@ -15,7 +15,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "pin_mapping.h"
+#include "hardware.h"
 
 namespace USBDM {
 

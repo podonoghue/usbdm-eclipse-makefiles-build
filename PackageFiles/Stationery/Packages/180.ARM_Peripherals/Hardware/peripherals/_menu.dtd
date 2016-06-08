@@ -89,6 +89,7 @@
    <!ATTLIST binaryOption toolTip      CDATA        "">
 
 <!ELEMENT template (#PCDATA)>
+   <!ATTLIST template name CDATA "" >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>

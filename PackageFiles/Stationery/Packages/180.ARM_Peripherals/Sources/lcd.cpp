@@ -69,7 +69,7 @@
 #include <ctype.h>
 #include <stddef.h>
 #include "derivative.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 #include "utilities.h"
 #include "lcd.h"
 #include "fonts.h"

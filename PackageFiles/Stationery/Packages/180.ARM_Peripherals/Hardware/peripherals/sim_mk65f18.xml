@@ -760,8 +760,7 @@ Devices using this peripheral:
       <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
    </validate>
 
-   <projectActionList id = "sim_files" >
-   </projectActionList>
+   <xi:include href="_simFiles.xml"/>
          
    <template>
       \tstatic void initRegs() {

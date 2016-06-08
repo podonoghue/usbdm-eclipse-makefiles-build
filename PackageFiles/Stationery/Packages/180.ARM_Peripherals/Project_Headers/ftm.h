@@ -130,6 +130,10 @@ typedef void (*FTMCallbackFunction)(void);
 template<class Info>
 class FtmBase_T {
 
+private:
+   /** Minimum resolution required when setting interval */
+   static constexpr int MINIMUM_RESOLUTION = 100;
+
 protected:
    static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(Info::basePtr);
    static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
@@ -200,27 +204,35 @@ public:
     * @param per Period in seconds as a float
     *
     * @note Adjusts FTM pre-scaler to appropriate value.
+    *       This will affect all channels on the FTM
     *
     * @return true => success, false => failed to find suitable values
     */
-   static bool setPeriod(float period) {
+   static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
       int prescaleFactor=1;
-      int prescale=0;
-      while (prescale<=7) {
-         float clock = inputClock/prescaleFactor;
-         uint32_t mod = round(period*clock);
-         if (mod <= 65535) {
-            uint32_t sc = tmr->SC;
-            tmr->SC    = 0;
-            tmr->MOD   = mod;
-            tmr->SC    = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescale);
-            return true;
+      int prescalerValue=0;
+      while (prescalerValue<=7) {
+         float    clock = inputClock/prescaleFactor;
+         uint32_t mod   = round(period*clock);
+         if (mod < MINIMUM_RESOLUTION) {
+            // Too short a period for 1% resolution
+            return setErrrCode(E_TOO_SMALL);
          }
-         prescale++;
+         if (mod <= 65535) {
+            // Clear SC so immediate effect on prescale change
+            uint32_t sc = tmr->SC&~FTM_SC_PS_MASK;
+            tmr->SC     = 0;
+            __DSB();
+            tmr->MOD    = mod;
+            tmr->SC     = sc|FTM_SC_PS(prescalerValue);
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
          prescaleFactor <<= 1;
       }
-      return false;
+      // Too long a period
+      return setErrrCode(E_TOO_LARGE);
    }
 
    /**

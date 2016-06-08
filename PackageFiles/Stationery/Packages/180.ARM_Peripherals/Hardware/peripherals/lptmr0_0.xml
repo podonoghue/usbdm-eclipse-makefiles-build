@@ -16,6 +16,12 @@
       toolTip="Determined from timer clock source and prescaler"
       units="s"/>
     
+   <floatOption name="maximumPeriod" 
+      constant="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+    
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
       toolTip="Low Power Timer clock source">
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
@@ -44,7 +50,6 @@
       <choice value="14" name="Prescaler = 32768, 16384 clock glitch filter" />
       <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
    </choiceOption>
-
    <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
       toolTip="When PBYP is set:\n
       - The selected prescaler clock in Time Counter mode or\n
@@ -54,6 +59,16 @@
       <choice value="0" name="Prescaler/glitch filter is enabled" />
       <choice value="1" name="Prescaler/glitch filter is bypassed" />
    </binaryOption>
+   <template>
+      \t//! Default Timer Compare value\n
+      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
+      
+      \t//! Default PSR value\n
+      \tstatic constexpr uint32_t psr = 
+      \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
+      \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
+      \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
+   </template>
    
    <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
@@ -81,6 +96,15 @@
       <choice value="0" name="Active-high source, rising-edge increments CNR" />
       <choice value="1" name="Active-low source,  falling-edge increments CNR" />
    </binaryOption>
+   <template>
+      \t//! Default CSR value\n
+      \tstatic constexpr uint32_t csr = 
+      \t   LPTMR_CSR_TIE($(irqEnabled))|
+      \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
+      \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
+      \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
+      \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
+   </template>
    
    <intOption name="lptmr_cmr" description="Timer Compare Register"
       toolTip="Default value for comparison" />
@@ -108,6 +132,24 @@
       
    <template>
       \t/**
+      \t * Gets input clock frequency of LPTMR
+      \t *
+      \t * @return Frequency as an uint32_t in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   /** Pointer to hardware */
+      \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
+      \t
+      \t   switch(lptmr-&gt;PSR&amp;LPTMR_PSR_PCS_MASK) {
+      \t   default:
+      \t   case LPTMR_PSR_PCS(0): return SystemMcgirClock;
+      \t   case LPTMR_PSR_PCS(1): return SystemLpoClock;
+      \t   case LPTMR_PSR_PCS(2): return SystemErclk32kClock;
+      \t   case LPTMR_PSR_PCS(3): return SystemOscerClock;
+      \t   }
+      \t}\n\n
+      
+      \t/**
       \t * Gets clock frequency of LPTMR
       \t *
       \t * @return Frequency as a float in Hz
@@ -116,18 +158,11 @@
       \t   /** Pointer to hardware */
       \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
       \t
-      \t   float freq;
-      \t   switch(lptmr-&gt;PSR&amp;LPTMR_PSR_PCS_MASK) {
-      \t   default:
-      \t   case LPTMR_PSR_PCS(0): freq = SystemMcgirClock;    break;
-      \t   case LPTMR_PSR_PCS(1): freq = SystemLpoClock;      break;
-      \t   case LPTMR_PSR_PCS(2): freq = SystemErclk32kClock; break;
-      \t   case LPTMR_PSR_PCS(3): freq = SystemOscerClock;    break;
-      \t   }
+      \t   float freq = getInputClockFrequency();
       \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
-      \t   return freq/(1UL&lt;&lt;(long)(((lptmr-&gt;PSR&amp;LPTMR_PSR_PRESCALE_MASK)&gt;&gt;LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t   return freq/(1&lt;&lt;(((lptmr-&gt;PSR&amp;LPTMR_PSR_PRESCALE_MASK)&gt;&gt;LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
       
       \t/**
@@ -139,35 +174,12 @@
       \t   /** Pointer to hardware */
       \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
       \t
-      \t   uint32_t freq;
-      \t   switch(lptmr-&gt;PSR&amp;LPTMR_PSR_PCS_MASK) {
-      \t   default:
-      \t   case LPTMR_PSR_PCS(0): freq = SystemMcgirClock;    break;
-      \t   case LPTMR_PSR_PCS(1): freq = SystemLpoClock;      break;
-      \t   case LPTMR_PSR_PCS(2): freq = SystemErclk32kClock; break;
-      \t   case LPTMR_PSR_PCS(3): freq = SystemOscerClock;    break;
-      \t   }
+      \t   uint32_t freq = getInputClockFrequency();
       \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
       \t   return freq/(1&lt;&lt;(((lptmr-&gt;PSR&amp;LPTMR_PSR_PRESCALE_MASK)&gt;&gt;LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
-
-      \t//! Default PSR value\n
-      \tstatic constexpr uint32_t psr = 
-      \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
-      \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
-      \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
-       
-      \t//! Default CSR value\n
-      \tstatic constexpr uint32_t csr = 
-      \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
-      \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
-      \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
-      \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
-       
-      \t//! Default Timer Compare value\n
-      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
    </template>
 
    <pins/>

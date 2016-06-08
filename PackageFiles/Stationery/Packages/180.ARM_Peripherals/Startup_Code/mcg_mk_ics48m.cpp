@@ -14,7 +14,7 @@
 #include "system.h"
 #include "utilities.h"
 #include "stdbool.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 #include "rtc.h"
 #include "mcg.h"
 #include "osc.h"

@@ -11,7 +11,7 @@
  *   Arduino D13 = SCK\n\n
  *
  * It may be necessary to change pin mappings to use this example.\n
- * Open @ref pin_mapping.h file in the Configuration Editor to change these.\n\n
+ * Open @refConfigure.usbdmProject to change these.\n\n
  *
  * Refer to the individual files for license conditions as they vary.
  *

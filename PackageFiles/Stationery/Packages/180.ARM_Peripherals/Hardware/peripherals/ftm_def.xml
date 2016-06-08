@@ -6,28 +6,33 @@
 
    <intOption name="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
-      value="0" />
+      value="0" min="0" units="Hz"/>
       
    <floatOption name="clockFrequency" 
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       units="Hz"/>
-    
    <floatOption name="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       units="s"/>
-    
-   <choiceOption name="ftm_sc_clks" description="Clock Source"
+   <floatOption name="maximumPeriod" 
+      constant="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+   <intOption name="period" description="Period of timer"
+      toolTip="Default period of the timer"
+      value="10000" min="0" max="65535" />     
+   <choiceOption name="ftm_sc_clks" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
       <choice value="1" name="System clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
       <choice value="3" name="External clock" />
    </choiceOption>
-
    <choiceOption name="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1" />
@@ -39,18 +44,31 @@
       <choice value="6" name="Divide by 64" />
       <choice value="7" name="Divide by 128" />
    </choiceOption>
-
-   <binaryOption name="ftm_sc_cpwms" description="Center-Aligned PWM Select"
+   <binaryOption name="ftm_sc_cpwms" 
+      description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\nThis mode configures the FTM to operate in Up-Down Counting mode.">
       <choice value="0" name="Left-aligned (count up)" />
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
-
    <binaryOption name="ftm_sc_toie" description="Timer Overflow Interrupt Enable"
       toolTip="Enables FTM overflow interrupts.">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
+   <template>
+      \t//! Timer external input frequency \n
+      \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
+      
+      \t//! Default Timer Period\n
+      \tstatic constexpr uint32_t period = $(period);\n\n
+
+      \t//! Default value for SC register\n
+      \tstatic constexpr uint32_t sc  = 
+      \t    FTM_SC_CPWMS($(ftm_sc_cpwms))| // Centre-Aligned PWM Select
+      \t    FTM_SC_CLKS($(ftm_sc_clks))|  // Clock Mode Selection
+      \t    FTM_SC_TOIE($(ftm_sc_toie))|  // Timer Overflow Interrupt Enable
+      \t    FTM_SC_PS($(ftm_sc_ps));    // Prescale Factor Selection \n\n
+   </template>
 
    <menu name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  constant="false" optional="true" />
@@ -72,10 +90,6 @@
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" constant="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" constant="false" optional="true"/>
    </menu>
-   <intOption name="period" description="Period of timer"
-      toolTip="Default period of the timer"
-      value="10000" min="0" max="65535" />
-      
    <xi:include href="_irqOption.xml"/>
 
    <validate
@@ -88,11 +102,26 @@
    </projectActionList>
          
    <template>
-      \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   /** Pointer to hardware */
+      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
+      \t
+      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
+      \t   default:
+      \t   case FTM_SC_CLKS(0): return 0;
+      \t   case FTM_SC_CLKS(1): return SystemBusClock;
+      \t   case FTM_SC_CLKS(2): return SystemMcgffClock;
+      \t   case FTM_SC_CLKS(3): return ftmExternalClock;
+      \t   }
+      \t}\n\n
       
       \t/**
-      \t * Gets clock frequency of FTM
+      \t * Get clock frequency
       \t *
       \t * @return Frequency as a float in Hz
       \t */
@@ -100,20 +129,12 @@
       \t   /** Pointer to hardware */
       \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
       \t
-      \t   float freq;
-      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
-      \t   default:
-      \t   case FTM_SC_CLKS(0): freq = 0;                break;
-      \t   case FTM_SC_CLKS(1): freq = SystemBusClock;   break;
-      \t   case FTM_SC_CLKS(2): freq = SystemMcgffClock; break;
-      \t   case FTM_SC_CLKS(3): freq = ftmExternalClock; break;
-      \t   }
-      \t   return freq/(1UL&lt;&lt;(long)((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
-      
+      \t   float freq = getInputClockFrequency();
+      \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
       \t}\n\n
       
       \t/**
-      \t * Gets clock frequency of FTM
+      \t * Get clock frequency
       \t *
       \t * @return Frequency as a uint32_t in Hz (may underflow)
       \t */
@@ -121,26 +142,9 @@
       \t   /** Pointer to hardware */
       \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
       \t
-      \t   uint32_t freq;
-      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
-      \t   default:
-      \t   case FTM_SC_CLKS(0): freq = 0;    break;
-      \t   case FTM_SC_CLKS(1): freq = SystemBusClock;   break;
-      \t   case FTM_SC_CLKS(2): freq = SystemMcgffClock; break;
-      \t   case FTM_SC_CLKS(3): freq = ftmExternalClock; break;
-      \t   }
-      \t   return freq/(1UL&lt;&lt;(long)((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
+      \t   uint32_t freq = getInputClockFrequency();
+      \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
       \t}\n\n
-
-      \t//! Default value for SC register\n
-      \tstatic constexpr uint32_t sc  = 
-      \t    FTM_SC_CPWMS($(ftm_sc_cpwms))|
-      \t    FTM_SC_TOIE($(ftm_sc_toie))|
-      \t    FTM_SC_CLKS($(ftm_sc_clks))|
-      \t    FTM_SC_PS($(ftm_sc_ps));\n\n
-      
-      \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t period =  $(period);\n\n
    </template>
 
    <pins/>

@@ -4,6 +4,14 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <binaryOption name="irqEnabled" description="Enable interrupts in initialisation"
+      toolTip="This option would usually be used with:\n
+      - override of the static method of the class, or\n
+      - use of manually installed interrupt handler" >
+      <choice value="false"  name="Interrupts disabled" />
+      <choice value="true"   name="Interrupts enabled" />
+   </binaryOption>
+
    <binaryOption name="irqHandler" description="Install class handler for IRQ"
       toolTip="If enabled ths option allows the handling of interrupts using two methods\n
       - override static method of the class, or\n
@@ -17,6 +25,9 @@
       value="0" min="0" max="15" />
 
    <template>
+       \t//! Install Callback handler\n
+       \tstatic constexpr bool irqEnabled = $(irqEnabled);\n\n
+       
        \t//! Install Callback handler\n
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
        

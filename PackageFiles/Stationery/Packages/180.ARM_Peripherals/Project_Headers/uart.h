@@ -203,7 +203,7 @@ public:
       setBaudRate(baudrate);
    }
    void setBaudRate(unsigned baudrate) {
-      Uart::setBaudRate(baudrate, Info::getClockFrequency());
+      Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
    }
 };
 

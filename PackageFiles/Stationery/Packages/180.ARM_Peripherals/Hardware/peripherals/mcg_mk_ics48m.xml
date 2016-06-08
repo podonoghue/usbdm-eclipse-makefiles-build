@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- mcg_mk_ics48m.xml -->
-<!--
-Devices using this peripheral: 
-      MK65F18
-      MK66F18
---> 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
    <menu name="Clock monitors" description="Clock monitors">
    
@@ -491,8 +486,8 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "mcg" >
-      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true" derived="true" />
-      <copy source="Startup_Code/mcg_mk_ics48m.cpp"    target="Startup_Code/mcg.cpp"   replace="true" derived="true" />
+      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
+      <copy source="Startup_Code/mcg_mk_ics48m.cpp"    target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
@@ -513,9 +508,6 @@ Devices using this peripheral:
       \t   ClockMode_PEE,
       \t};\n\n
       
-      \t//! Clock Mode
-      \tstatic constexpr ClockMode clockMode = $(clock_mode);\n\n
-
       \t//! Frequency of Internal 48MHz Clock
       \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       
@@ -525,50 +517,73 @@ Devices using this peripheral:
       \t//! Frequency of Fast Internal Reference Clock [~4MHz])
       \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
       
-      \t//! Control Register 1
-      \tstatic constexpr uint32_t c1 =
+      \tstruct ClockInfo {
+      \t   //! Clock Mode
+      \t   const ClockMode clockMode:8;
+      \t   //! Control Register 1
+      \t   const uint8_t c1;
+      \t   //! Control Register 2
+      \t   const uint8_t c2;
+      \t   //! Control Register 4
+      \t   const uint8_t c4;
+      \t   //! Control Register 5
+      \t   const uint8_t c5;
+      \t   //! Control Register 6
+      \t   const uint8_t c6;
+      \t   //! Status and Control Register
+      \t   const uint8_t sc;
+      \t   //! Control Register 7
+      \t   const uint8_t c7;
+      \t   //! Control Register 8
+      \t   const uint8_t c8;
+      \t};\n\n
+      
+      \tstatic const ClockInfo clockInfo[];
+   </template>
+   
+   <template name="clockInfo">
+      \tconst McgInfo::ClockInfo McgInfo::clockInfo[1] = {
+      \t   {
+      \t   //! Clock Mode
+      \t   $(clock_mode),\n\n
+      
+      \t   //! Control Register 1
       \t   MCG_C1_FRDIV($(mcg_c1_frdiv))   | // FRDIV    FLL External Reference Divider
       \t   MCG_C1_IRCLKEN($(mcg_c1_irclken)) | // IRCLEN   Internal Reference Clock Enable
-      \t   MCG_C1_IREFSTEN($(mcg_c1_irefsten)); // IREFSTEN Internal Reference Stop Enable\n\n
+      \t   MCG_C1_IREFSTEN($(mcg_c1_irefsten)), // IREFSTEN Internal Reference Stop Enable\n\n
       
-      \t//! Control Register 2
-      \tstatic constexpr uint32_t c2 =
+      \t   //! Control Register 2
       \t   MCG_C2_LOCRE0($(mcg_c2_locre0)) | // LOLRE0  Loss of Clock Reset Enable
       \t   MCG_C2_RANGE0($(/OSC0/range)) | // RANGE   Frequency Range Select
       \t   MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
       \t   MCG_C2_EREFS0($(/OSC0/erefs0)) | // EREFS   External Reference Select
-      \t   MCG_C2_IRCS($(mcg_c2_ircs));    // IRCS    Internal Reference Clock Select\n\n
+      \t   MCG_C2_IRCS($(mcg_c2_ircs)),    // IRCS    Internal Reference Clock Select\n\n
       
-      \t//! Control Register 4
-      \tstatic constexpr uint32_t c4 =
+      \t   //! Control Register 4
       \t   MCG_C4_DMX32($(mcg_c4_dmx32))     | // DMX32    DCO lock range
-      \t   MCG_C4_DRST_DRS($(mcg_c4_drst_drs));   // DRST_DRS DCO Range Select\n\n
+      \t   MCG_C4_DRST_DRS($(mcg_c4_drst_drs)),   // DRST_DRS DCO Range Select\n\n
       
-      \t//! Control Register 5
-      \tstatic constexpr uint32_t c5 =
+      \t   //! Control Register 5
       \t   MCG_C5_PLLCLKEN0($(mcg_c5_pllclken))  | // PLLCLKEN0 PLL Clock Enable
       \t   MCG_C5_PLLSTEN0($(mcg_c5_pllsten))   | // PLLSTEN0  PLL Stop Enable
-      \t   MCG_C5_PRDIV0($(mcg_c5_prdiv0));     // PRDIV0    PLL External Reference Divider\n\n
+      \t   MCG_C5_PRDIV0($(mcg_c5_prdiv0)),     // PRDIV0    PLL External Reference Divider\n\n
       
-      \t//! Control Register 6
-      \tstatic constexpr uint32_t c6 =
+      \t   //! Control Register 6
       \t   MCG_C6_LOLIE0($(mcg_c6_lolie0)) | // LOLIE0 Loss of Lock interrupt Enable
       \t   MCG_C6_CME0($(mcg_c6_cme0))   | // CME0   Clock Monitor Enable
-      \t   MCG_C6_VDIV0($(mcg_c6_vdiv0));   // VDIV0  PLL VCO Divider\n\n
+      \t   MCG_C6_VDIV0($(mcg_c6_vdiv0)),   // VDIV0  PLL VCO Divider\n\n
       
-      \t//! Status and Control Register
-      \tstatic constexpr uint32_t sc =
-      \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)); // FCRDIV Internal Clock Reference Divider\n\n
+      \t   //! Status and Control Register
+      \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)), // FCRDIV Internal Clock Reference Divider\n\n
       
-      \t//! Control Register 7
-      \tstatic constexpr uint32_t c7 =
-      \t   MCG_C7_OSCSEL($(mcg_c7_oscsel)); // OSCSEL MCG OSC Clock Select\n\n
+      \t   //! Control Register 7
+      \t   MCG_C7_OSCSEL($(mcg_c7_oscsel)), // OSCSEL MCG OSC Clock Select\n\n
       
-      \t//! Control Register 8
-      \tstatic constexpr uint32_t c8 =
+      \t   //! Control Register 8
       \t   MCG_C8_LOCRE1($(mcg_c8_locre1)) | // LOCRE1 RTC Loss of Clock Reset Enable
       \t   MCG_C8_LOLRE($(mcg_c8_lolre))  | // LOLRE  PLL Loss of Lock Reset Enable
-      \t   MCG_C8_CME1($(mcg_c8_cme1));    // CME1   Clock Monitor Enable 1\n\n
-      
+      \t   MCG_C8_CME1($(mcg_c8_cme1)),    // CME1   Clock Monitor Enable 1
+      \t   }
+      \t};
    </template>
 </devicePage>

@@ -54,7 +54,7 @@ Devices using this peripheral:
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
          <choice value="0"  name="External bypass clock (USB_CLKIN)" />
-         <choice value="1"  name="Peripheral Clock clock divided by SIM_CLKDIV2" isDefault="true" />
+         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV2" isDefault="true" />
       </choiceOption>
    
       <intOption name="system_usbfs_clock" 
@@ -98,28 +98,28 @@ Devices using this peripheral:
    
       <binaryOption name="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
-         toolTip="Selects the source of FTM0 hardware trigger 0" >
-         <choice value="0"  name="HSCMP0 output drives FTM0 hardware trigger 0" isDefault="true" />
-         <choice value="1"  name="FTM1 channel match drives FTM0 hardware trigger 0" />
+         toolTip="Selects the source of FTM hardware trigger 0" >
+         <choice value="0"  name="HSCMP0 output" isDefault="true" />
+         <choice value="1"  name="FTM1 channel match" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm1clksel" 
-         description="FTM1 External Clock Pin Select"
-         toolTip="Selects the external pin used to drive the clock to the FTM1 module.">
+         description="FlexTimer 1 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the FTM module.">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm0clksel" 
-         description="FTM0 External Clock Pin Select"
-         toolTip="Selects the external pin used to drive the clock to the FTM0 module.">
+         description="FlexTimer 0 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the FTM module.">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
    
       <choiceOption name="sim_sopt4_ftm1ch0src" 
-         description="FTM1 channel 0 input capture source select"
-         toolTip="Selects the source for FTM1 channel 0 input capture\n
+         description="FlexTimer 1 channel 0 input capture source select"
+         toolTip="Selects the source for FTM channel 0 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
          <choice value="0" name="FTM1_CH0 signal"  isDefault="true"/>
          <choice value="1" name="CMP0 output" />
@@ -128,22 +128,22 @@ Devices using this peripheral:
       </choiceOption>
    
       <binaryOption name="sim_sopt4_ftm1flt0" 
-         description="FTM1 Fault 0 Select"
-         toolTip="Selects the source of FTM1 fault 0" >
+         description="FlexTimer 1 Fault 0 Select"
+         toolTip="Selects the source of FTM fault input 0" >
          <choice value="0"  name="FTM1_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm0flt1" 
-         description="FTM0 Fault 1 Select"
-         toolTip="Selects the source of FTM0 fault 1" >
+         description="FlexTimer 0 Fault 1 Select"
+         toolTip="Selects the source of FTM fault input 1" >
          <choice value="0"  name="FTM0_FLT1 pin" isDefault="true" />
          <choice value="1"  name="CMP1 output" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm0flt0" 
-         description="FTM0 Fault 0 Select"
-         toolTip="Selects the source of FTM0 fault 0" >
+         description="FlexTimer 0 Fault 0 Select"
+         toolTip="Selects the source of FTM fault input 0" >
          <choice value="0"  name="FTM0_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
@@ -195,10 +195,10 @@ Devices using this peripheral:
    <template>
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
-      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |    // UART 0 transmit data source select
-      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |    // UART 0 receive data source select
-      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |    // UART 1 transmit data source select
-      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));     // UART 1 receive data source select\n\n
+      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |        // UART 0 transmit data source select
+      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |        // UART 0 receive data source select
+      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |        // UART 1 transmit data source select
+      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));         // UART 1 receive data source select\n\n
    </template>
    <menu name="SOPT7" description="ADC pins">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
@@ -332,8 +332,7 @@ Devices using this peripheral:
       <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
    </validate>
 
-   <projectActionList id = "sim_files" >
-   </projectActionList>
+   <xi:include href="_simFiles.xml"/>
          
    <template>
       \tstatic void initRegs() {

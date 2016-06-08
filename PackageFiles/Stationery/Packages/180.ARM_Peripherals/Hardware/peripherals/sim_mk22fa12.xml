@@ -283,10 +283,10 @@ Devices using this peripheral:
    <template>
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
-      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |    // UART 0 transmit data source select
-      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |    // UART 0 receive data source select
-      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |    // UART 1 transmit data source select
-      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));     // UART 1 receive data source select\n\n
+      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |        // UART 0 transmit data source select
+      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |        // UART 0 receive data source select
+      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |        // UART 1 transmit data source select
+      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));         // UART 1 receive data source select\n\n
    </template>
    <menu name="SOPT7" description="ADC pins">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
@@ -474,8 +474,7 @@ Devices using this peripheral:
       <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
    </validate>
 
-   <projectActionList id = "sim_files" >
-   </projectActionList>
+   <xi:include href="_simFiles.xml"/>
          
    <template>
       \tstatic void initRegs() {
@@ -490,7 +489,6 @@ Devices using this peripheral:
       \t   SIM->SOPT4 = sopt4;
       \t   SIM->SOPT5 = sopt5;
       \t   SIM->SOPT7 = sopt7;
-      \t   SIM->SOPT8 = sopt8;
       \t
       \t   SIM->CLKDIV1 = clkdiv1;
       \t   SIM->CLKDIV2 = clkdiv2;

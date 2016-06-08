@@ -20,8 +20,13 @@ Devices using this peripheral:
    </projectActionList>
          
    <template>
-   \tstatic uint32_t getClockFrequency() {
-   \t  return $(clockSource);
+   \t/**
+   \t * Get input clock frequency
+   \t *
+   \t * @return Input clock frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getInputClockFrequency() {
+   \t   return $(clockSource:SystemBusClock);
    \t}\n\n
    </template>
 

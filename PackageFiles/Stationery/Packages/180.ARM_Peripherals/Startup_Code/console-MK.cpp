@@ -10,7 +10,7 @@
 #include "uart.h"
 #include "console.h"
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+//*** <<< Use Configuration Wizard in Context Menu >>> ***
 
 /*
 <o0> Choice of UART for console

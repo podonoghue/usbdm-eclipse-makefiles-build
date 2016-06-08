@@ -17,7 +17,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 
 namespace USBDM {
 
@@ -73,7 +73,7 @@ protected:
     *
     * @param bps - Interface speed in bits-per-second
     */
-   static uint8_t getBPSValue(uint32_t bps);
+   static uint8_t getBPSValue(uint32_t bps, uint32_t clockFrequency);
 
    /**
     * Start Rx/Tx sequence by sending address byte
@@ -89,8 +89,8 @@ protected:
     *
     * @param bps - Interface speed in bits-per-second
     */
-   void setBPS(uint32_t bps) {
-      i2c->F = getBPSValue(bps);
+   void setBPS(uint32_t bps, uint32_t clockFrequency) {
+      i2c->F = getBPSValue(bps, clockFrequency);
    }
 
 public:
@@ -221,7 +221,7 @@ public:
 
       busHangReset();
       init(myAddress);
-      setBPS(baud);
+      setBPS(baud, Info::getInputClockFrequency());
    }
 
    /**

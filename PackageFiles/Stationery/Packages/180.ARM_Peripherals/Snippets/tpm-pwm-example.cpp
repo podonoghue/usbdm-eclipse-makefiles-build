@@ -26,7 +26,7 @@ static void delay(void) {
  * This example is not supported on all targets as PWM feature may not be available
  * on the pins connected to the LEDs (e.g. K64F).
  *
- * The mapping of pins in pin_mapping.h may need to be changed to map PWM to LEDs as
+ * The mapping of pins in may need to be changed to map PWM to LEDs as
  * preference was given to mapping to external pins on board (e.g. KL25Z).
  *
  */

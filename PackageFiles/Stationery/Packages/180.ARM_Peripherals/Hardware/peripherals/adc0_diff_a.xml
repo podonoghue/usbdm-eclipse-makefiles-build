@@ -93,6 +93,7 @@
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
    </menu>
+
    <xi:include href="_irqOption.xml"/>
       
    <projectActionList id = "adc_files" >

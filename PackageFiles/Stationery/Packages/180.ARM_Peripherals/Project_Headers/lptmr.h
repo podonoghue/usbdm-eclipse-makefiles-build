@@ -17,7 +17,7 @@
  */
 #include "derivative.h"
 #include "system.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 
 namespace USBDM {
 
@@ -37,6 +37,10 @@ typedef void (*LPTMRCallbackFunction)(void);
  */
 template<class Info>
 class Lptmr_T {
+
+private:
+   /** Minimum resolution required when setting interval */
+   static constexpr int MINIMUM_RESOLUTION = 100;
 
 protected:
    /** Callback function for ISR */
@@ -216,6 +220,44 @@ public:
 #endif
       return rv;
    }
+
+   /**
+    * Set period of timer
+    *
+    * @param per Period in seconds as a float
+    *
+    * @note May enable and adjust the pre-scaler to appropriate value.
+    *
+    * @return true => success, false => failed to find suitable values for PBYP & PRESCALE
+    */
+   static ErrorCode setPeriod(float period) {
+      float inputClock = Info::getInputClockFrequency();
+      int      prescaleFactor=1;
+      uint32_t prescalerValue=0;
+      while (prescalerValue<=16) {
+         float    clock = inputClock/prescaleFactor;
+         uint32_t mod   = round(period*clock);
+         if (mod < MINIMUM_RESOLUTION) {
+            // Too short a period for 1% resolution
+            return setErrrCode(E_TOO_SMALL);
+         }
+         if (mod <= 65535) {
+            // Disable LPTMR before prescale change
+            lptmr->CSR &= ~LPTMR_CSR_TEN_MASK;
+            __DSB();
+            lptmr->CMR  = mod;
+            lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+            lptmr->CSR |= LPTMR_CSR_TEN_MASK;
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a period
+      return setErrrCode(E_TOO_LARGE);
+   }
+
+
 };
 
 template<class Info> LPTMRCallbackFunction Lptmr_T<Info>::callback = 0;

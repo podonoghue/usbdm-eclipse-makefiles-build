@@ -30,19 +30,13 @@ const uint16_t I2c::I2C_DIVISORS[] = {
  *
  * @param bps - Interface speed in bits-per-second
  */
-uint8_t I2c::getBPSValue(uint32_t bps) {
+uint8_t I2c::getBPSValue(uint32_t bps, uint32_t clockFrequency) {
    uint8_t  best_mul   = 0;
    uint8_t  best_icr   = (uint8_t)-1u;
    uint16_t best_error = (uint16_t)-1u;
 
-#if defined(MCU_MKL27Z4) || defined(MCU_MKL27Z644)
-   const uint32_t I2C_CLOCK_FREQ = SystemCoreClock;
-#else
-   const uint32_t I2C_CLOCK_FREQ = SystemBusClock;
-#endif
-
    for (uint8_t mul=0; mul<=2; mul++) {
-      uint32_t divisor = (I2C_CLOCK_FREQ>>mul)/bps;
+      uint32_t divisor = (clockFrequency>>mul)/bps;
       for(uint8_t icr=0; icr<(sizeof(I2C_DIVISORS)/sizeof(I2C_DIVISORS[0])); icr++) {
          if (divisor>I2C_DIVISORS[icr]) {
             // Not suitable - try next

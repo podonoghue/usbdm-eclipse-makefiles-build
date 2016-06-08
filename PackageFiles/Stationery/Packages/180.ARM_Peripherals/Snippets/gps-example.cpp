@@ -5,7 +5,7 @@
  * This is a simple example of the use of the C++ library routines for the Global Positing System shield.\n
  *
  * It may be necessary to change pin mappings to use this example.\n
- * Open @ref pin_mapping.h file in the Configuration Editor to change these.\n\n
+ * Open Configure.usbdmProject file to change these.\n\n
  *
  * Refer to the individual files for license conditions as they vary.
  *

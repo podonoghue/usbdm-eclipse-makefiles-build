@@ -13,7 +13,7 @@
  *
  * It may be necessary to change pin mappings to use this example. \n
  * See below for required pin mapping of individual GPIOs used with this module.\n
- * Open @ref pin_mapping.h file in the Configuration Editor to change these.\n\n
+ * Open @ref Configure.usbdmProject to change these.\n\n
  *
  * Refer to the individual files for license conditions as they vary.
  *

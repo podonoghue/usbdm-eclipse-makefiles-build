@@ -71,7 +71,7 @@ public:
     *
     * @param to Clock mode to transition to
     */
-   static int clockTransition(McgInfo::ClockMode to);
+   static int clockTransition(const McgInfo::ClockInfo &to);
 
    /**
     * Update SystemCoreClock variable
@@ -122,15 +122,15 @@ public:
     *
     *  @param mcr       Module Control Register
     */
-   static void configure(McgInfo::ClockMode clockMode=McgInfo::clockMode ) {
-      clockTransition(clockMode);
+   static void configure(int settingNumber=0) {
+      clockTransition(McgInfo::clockInfo[settingNumber]);
    }
 
    /**
     *   Disable the MCG channel
     */
    static void finalise() {
-      clockTransition(McgInfo::ClockMode_FEI);
+      clockTransition(McgInfo::clockInfo[0]);
    }
 
    /**
