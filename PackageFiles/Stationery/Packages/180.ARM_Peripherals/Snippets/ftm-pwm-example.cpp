@@ -45,6 +45,7 @@ namespace USBDM {
 
 template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
    // Your code
+   __asm__("nop");
 }
 
 }

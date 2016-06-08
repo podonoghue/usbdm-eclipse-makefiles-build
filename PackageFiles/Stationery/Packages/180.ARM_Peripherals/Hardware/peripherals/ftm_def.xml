@@ -64,6 +64,7 @@
 
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
+      \t    FTM_SC_TOIE($(irqEnabled))| // Timer Overflow Interrupt Enable
       \t    FTM_SC_CPWMS($(ftm_sc_cpwms))| // Centre-Aligned PWM Select
       \t    FTM_SC_CLKS($(ftm_sc_clks))|  // Clock Mode Selection
       \t    FTM_SC_TOIE($(ftm_sc_toie))|  // Timer Overflow Interrupt Enable
@@ -91,7 +92,7 @@
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" constant="false" optional="true"/>
    </menu>
    <xi:include href="_irqOption.xml"/>
-
+      
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate">
    </validate>
@@ -100,12 +101,12 @@
       <copy source="Project_Headers/ftm.h"         target="Project_Headers/ftm.h"         replace="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"  target="Snippets/ftm-pwm-example.cpp"  replace="true" derived="true" />
    </projectActionList>
-         
+      
    <template>
       \t/**
       \t * Get input clock frequency
       \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
+      \t * @return Input clock frequency as an uint32_t in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t   /** Pointer to hardware */

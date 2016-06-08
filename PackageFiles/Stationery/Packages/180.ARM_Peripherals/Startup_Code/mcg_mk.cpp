@@ -177,7 +177,6 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    // Set Fast Internal Clock divider
    MCG->SC = clockInfo.sc;
 
-
    constexpr volatile MCG_Type* mcg = (volatile MCG_Type*)McgInfo::basePtr;
 
    // Set conservative clock dividers

@@ -9,13 +9,11 @@
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       units="Hz"/>
-    
    <floatOption name="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       units="s"/>
-    
    <floatOption name="maximumPeriod" 
       constant="true"
       description="Maximum period of timer"
@@ -132,9 +130,9 @@
       
    <template>
       \t/**
-      \t * Gets input clock frequency of LPTMR
+      \t * Get input clock frequency
       \t *
-      \t * @return Frequency as an uint32_t in Hz
+      \t * @return Input clock frequency as an uint32_t in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t   /** Pointer to hardware */
@@ -150,7 +148,7 @@
       \t}\n\n
       
       \t/**
-      \t * Gets clock frequency of LPTMR
+      \t * Get clock frequency
       \t *
       \t * @return Frequency as a float in Hz
       \t */
@@ -166,7 +164,7 @@
       \t}\n\n
       
       \t/**
-      \t * Gets clock frequency of LPTMR
+      \t * Get clock frequency
       \t *
       \t * @return Frequency as a uint32_t in Hz (may underflow)
       \t */
