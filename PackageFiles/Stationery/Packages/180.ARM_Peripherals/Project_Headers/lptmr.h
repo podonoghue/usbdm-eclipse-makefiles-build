@@ -224,7 +224,7 @@ public:
    /**
     * Set period of timer
     *
-    * @param per Period in seconds as a float
+    * @param period Period in seconds as a float
     *
     * @note May enable and adjust the pre-scaler to appropriate value.
     *

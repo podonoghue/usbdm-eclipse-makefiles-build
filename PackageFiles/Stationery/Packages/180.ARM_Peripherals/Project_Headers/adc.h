@@ -127,12 +127,25 @@ public:
       adc->CFG2 = Info::cfg2;
       adc->SC2  = Info::sc2;
 
-      if (Info::irqHandlerInstalled) {
-         // Enable timer interrupts
+      enableInterrupts(Info::irqEnabled);
+   }
+
+   /**
+    * Enable/disable interrupts in the NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableInterrupts(bool enable=true) {
+      if (enable) {
+         // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
       }
    }
 
@@ -144,6 +157,7 @@ public:
       adc->CFG1 = 0;
       adc->CFG2 = 0;
       adc->SC2  = 0;
+      enableInterrupts(false);
    }
 
    /**
@@ -232,6 +246,7 @@ public:
     */
    static void setCallback(ADCCallbackFunction theCallback) {
       callback = theCallback;
+      AdcBase_T<Info>::enableInterrupts();
    }
 };
 

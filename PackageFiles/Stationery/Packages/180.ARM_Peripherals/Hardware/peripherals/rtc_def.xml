@@ -96,6 +96,8 @@
       </menu>   
    </menu>
 
+   <pins/>
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcValidate">
    </validate>

@@ -107,7 +107,6 @@ public:
    /**
     * Set callback for ISR
     *
-    * @param channel  The MCG channel to modify
     * @param callback The function to call from stub ISR
     */
    static void setCallback(MCGCallbackFunction callback) {
@@ -120,7 +119,7 @@ public:
    /**
     *  Configure the MCG for given mode
     *
-    *  @param mcr       Module Control Register
+    *  @param settingNumber CLock setting number
     */
    static void configure(int settingNumber=0) {
       clockTransition(McgInfo::clockInfo[settingNumber]);

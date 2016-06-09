@@ -1,6 +1,7 @@
 /**
  * @file     dac.h
- * @brief    Voltage Reference Pin routines
+ *
+ * @brief    Abstraction layer for DAC interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -20,62 +21,104 @@
 #include "hardware.h"
 
 namespace USBDM {
+
 /**
- * @addtogroup DAC_Group Voltage reference
+ * @addtogroup DAC_Group DAC, Digital to Analogue Converter
+ * @brief Abstraction for Digital to Analogue Converter
  * @{
  */
 /**
- * Template class representing a Voltage Reference
+ * Type definition for DAC interrupt call back
+ */
+typedef void (*DACCallbackFunction)(void);
+
+/**
+ * @brief Class representing a Digital to Analogue Converter
  *
- * @tparam info      Information class for DAC
- *
+ * <b>Example</b>
  * @code
- * using vref = Dac_T<VrefInfo>;
+ * using dac = Dac_T<Dac0Info>;
  *
- *  vref::initialise();
+ *  vref::configure();
  *
  * @endcode
  */
 template<class Info>
 class Dac_T {
+protected:
 
-private:
-   static constexpr volatile DAC_Type *dac      = reinterpret_cast<volatile DAC_Type *>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
+   /** Callback functions for ISRs */
+   static DACCallbackFunction callback[Info::irqCount];
 
-#ifdef DEBUG_BUILD
-   // ToDO
-//   static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "Dac_T: DAC signal is not mapped to a pin - Modify Configure.usbdm");
-//   static_assert((Info::info[0].gpioBit != INVALID_PCR),  "Dac_T: Non-existent signal used for DAC ouput");
-//   static_assert((Info::info[0].gpioBit == UNMAPPED_PCR)||(Info::info[0].gpioBit == INVALID_PCR)||(Info::info[0].gpioBit >= 0), "Dac_T: Illegal signal used for DAC");
-#endif
+public:
+   /** DAC interrupt handler -  Calls DAC0 callback */
+   static void irqHandler() {
+      // Clear interrupt flag
+      if (Dac_T::callback[0] != 0) {
+         Dac_T::callback[0]();
+      }
+   }
 
 public:
    /**
-    * Enable the DAC
+    * Set callback for ISR
     *
-    * @param scValue Value for C0 register e.g. DAC_C0_DACEN_MASK|DAC_C0_DACRFS_MASK
+    * @param channel  The DAC channel to modify
+    * @param callback The function to call from stub ISR
     */
-   static void initialise(uint32_t mode=DAC_C0_DACEN_MASK|DAC_C0_DACRFS_MASK) {
-      // Configure pin (if necessary)
-      // ToDo Implement
-//      Info::initPCRs();
-
-      // Enable clock to DAC interface
-      *clockReg |= Info::clockMask;
-
-      // Initialise hardware
-      dac->C0 = mode;
-      dac->C1 = 0;
+   static void setCallback(int channel, DACCallbackFunction callback) {
+      Dac_T::callback[channel] = callback;
    }
 
+protected:
+   /** Pointer to hardware */
+   static constexpr volatile DAC_Type *dac       = reinterpret_cast<volatile DAC_Type*>(Info::basePtr);
+
+   /** Pointer to clock register */
+   static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+
+public:
+   /**
+    *  Configure the DAC with default settings
+    *
+    *  @param c0       Module Control Register 0
+    *  @param c1       Module Control Register 1
+    *  @param c2       Module Control Register 2
+    */
+   static void configure(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
+      // Enable clock
+      *clockReg |= Info::clockMask;
+      __DMB();
+
+      Info::initPCRs();
+
+      // Enable timer
+      dac->C0 = c0|DAC_C0_DACEN_MASK;
+      dac->C1 = c1;
+      dac->C2 = c2;
+   }
+   /**
+    *   Disable the DAC channel
+    */
+   static void finalise(uint8_t channel) {
+      // Enable timer
+      dac->C0 = 0;
+      dac->C1 = 0;
+      *clockReg &= ~Info::clockMask;
+   }
    /**
     * Set DAC output value
     */
    static void setValue(uint16_t value) {
       dac->DATA[0] = value;
    }
+
 };
+
+/**
+ * Callback table for programmatically set handlers
+ */
+template<class Info> DACCallbackFunction Dac_T<Info>::callback[] = {0};
 
 #if defined(USBDM_DAC0_IS_DEFINED)
 using Dac0 = Dac_T<Dac0Info>;

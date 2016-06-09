@@ -4,11 +4,25 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of ADC clock"
+      toolTip="Determined from clock source and prescaler"
+      units="Hz"/>
+
+   <floatOption name="adcInternalClock" 
+      constant="true"
+      description="Frequency of Internal ADC clock"
+      toolTip="Varies with ADLPC and ADHSC"
+      value="2000000"
+      origin="Internal ADC clock"
+      units="Hz"/>
+
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Bus clock" />
       <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
-      <choice value="2" name="Alternate clock (ALTCLK)" />
+      <choice value="2" name="Alternate clock (OSCERCLK)" />
       <choice value="3" name="Asynchronous clock (ADACK)" />
    </choiceOption>
 
@@ -63,7 +77,7 @@
    <choiceOption name="adc_sc2_refsel" description="Voltage Reference Selection"
       toolTip="Selects the voltage reference source used for conversions.">
       <choice value="0" name="VRefH and VRefl" />
-      <choice value="1" name="VAltH and VAltL" />
+      <choice value="1" name="Gnd and VrefOut(1.2V)" />
       <choice value="2" name="Reserved" />
       <choice value="3" name="Reserved" />
    </choiceOption>
@@ -96,6 +110,10 @@
 
    <xi:include href="_irqOption.xml"/>
       
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
+   </validate>
+
    <projectActionList id = "adc_files" >
       <copy source="Project_Headers/adc.h"  target="Project_Headers/adc.h"  replace="true"  derived="true" />
    </projectActionList>

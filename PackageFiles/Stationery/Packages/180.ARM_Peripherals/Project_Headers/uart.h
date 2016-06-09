@@ -26,7 +26,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup UART_Group Universal Asynchronous Receiver/Transmitter
+ * @addtogroup UART_Group UART, Universal Asynchronous Receiver/Transmitter
  * @brief C++ Class allowing access to UART interface
  * @{
  */
@@ -192,7 +192,6 @@ public:
     * Construct UART interface
     *
     * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
    Uart_T(unsigned baudrate) : Uart(reinterpret_cast<UART_Type*>(Info::basePtr)) {
       // Enable clock to UART interface
@@ -272,7 +271,6 @@ public:
     * Construct UART interface
     *
     * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
    Uart1(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }
@@ -311,7 +309,6 @@ public:
     * Construct UART interface
     *
     * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
    Uart2(unsigned baudrate=DEFAULT_BAUD_RATE) : Uart_T(baudrate) {
    }

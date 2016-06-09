@@ -148,5 +148,7 @@
       \t}\n\n
    </template>
 
-   <pins/>
+   <pins />
+   <pins name="FTM" />
+   
 </devicePage>

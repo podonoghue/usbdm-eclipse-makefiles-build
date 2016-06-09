@@ -5,19 +5,19 @@
    <!ATTLIST xi:include href      CDATA        #REQUIRED>
 
 <!-- Root fileElement -->
-<!ELEMENT devicePage ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList)*, pins?) >
+<!ELEMENT devicePage ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList|pins)*) >
    <!ATTLIST devicePage xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST devicePage name         CDATA        #REQUIRED>
    <!ATTLIST devicePage description  CDATA        #REQUIRED>
    <!ATTLIST devicePage toolTip      CDATA        "">
 
-<!ELEMENT menu ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList)*, pins?) >
+<!ELEMENT menu ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList|pins)*) >
    <!ATTLIST menu xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST menu name         CDATA        #REQUIRED>
    <!ATTLIST menu description  CDATA        #REQUIRED>
    <!ATTLIST menu toolTip      CDATA        "">
 
-<!ELEMENT fragment ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList)*, pins?) >
+<!ELEMENT fragment ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|aliasOption|template|validate|projectActionList|pins)*) >
    <!ATTLIST fragment xmlns:xi CDATA         #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
@@ -99,6 +99,7 @@
    <!ATTLIST param value CDATA         #REQUIRED>
 
 <!ELEMENT pins EMPTY >
+   <!ATTLIST pins name CDATA "" >
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant)*) >

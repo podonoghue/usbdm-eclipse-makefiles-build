@@ -23,6 +23,9 @@ enum ErrorCode {
    E_TOO_LARGE,      // Value too large
 };
 
+static constexpr float us = 1E-6;
+static constexpr float ms = 1E-3;
+
 /** Last error set by USBDM code */
 extern ErrorCode errorCode;
 

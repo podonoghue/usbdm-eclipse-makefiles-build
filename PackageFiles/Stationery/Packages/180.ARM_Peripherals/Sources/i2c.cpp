@@ -25,10 +25,12 @@ const uint16_t I2c::I2C_DIVISORS[] = {
 };
 
 /**
- * Set baud factor value for interface
+ * Calculate value for baud rate register of I2C
+ *
  * This is calculated from processor bus frequency and given bps
  *
- * @param bps - Interface speed in bits-per-second
+ * @param bps            - Interface speed in bits-per-second
+ * @param clockFrequency - Frequency of I2C input clock
  */
 uint8_t I2c::getBPSValue(uint32_t bps, uint32_t clockFrequency) {
    uint8_t  best_mul   = 0;

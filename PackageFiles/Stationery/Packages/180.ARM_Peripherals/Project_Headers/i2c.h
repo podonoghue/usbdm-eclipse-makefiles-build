@@ -69,9 +69,10 @@ protected:
    /**
     * Calculate value for baud rate register of I2C
     *
-    * This is calculated from processor frequency and given bits-per-second
+    * This is calculated from processor bus frequency and given bps
     *
-    * @param bps - Interface speed in bits-per-second
+    * @param bps            - Interface speed in bits-per-second
+    * @param clockFrequency - Frequency of I2C input clock
     */
    static uint8_t getBPSValue(uint32_t bps, uint32_t clockFrequency);
 
@@ -87,7 +88,8 @@ protected:
     *
     * This is calculated from processor frequency and given bits-per-second
     *
-    * @param bps - Interface speed in bits-per-second
+    * @param bps            - Interface speed in bits-per-second
+    * @param clockFrequency - Frequency of I2C input clock
     */
    void setBPS(uint32_t bps, uint32_t clockFrequency) {
       i2c->F = getBPSValue(bps, clockFrequency);

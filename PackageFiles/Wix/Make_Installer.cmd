@@ -1,7 +1,7 @@
 @echo off
 cls
-set VERSION=4_12_1_90
-set VERSIONn=4.12.1.90
+set VERSION=4_12_1_100
+set VERSIONn=4.12.1.100
 
 cd
 
