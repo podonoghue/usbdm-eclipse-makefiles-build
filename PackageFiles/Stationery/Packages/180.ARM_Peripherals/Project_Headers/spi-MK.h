@@ -202,7 +202,7 @@ public:
    /**
     * Constructor
     */
-   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::basePtr)) {
+   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::spi)) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
@@ -212,7 +212,7 @@ public:
 #endif
 
       // Enable SPI module clock
-      *reinterpret_cast<volatile uint32_t*>(Info::clockReg) |= Info::clockMask;
+      *Info::clockReg |= Info::clockMask;
       __DMB();
 
       spi->MCR   = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|

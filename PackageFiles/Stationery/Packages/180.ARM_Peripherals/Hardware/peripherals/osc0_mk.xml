@@ -1,83 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- osc0_mk.xml -->
-<!--
-Devices using this peripheral: 
-      MK10D5
-      MK10D7
-      MK10D10
-      MK10DZ10
-      MK10F12
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK12D5
-      MK20D5
-      MK20D7
-      MK20D10
-      MK20DZ10
-      MK20F12
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK21F12
-      MK21FA12
-      MK22D5
-      MK22F12
-      MK22FA12
-      MK24F12
-      MK24F25612
-      MK30D7
-      MK30D10
-      MK30DZ10
-      MK40D7
-      MK40D10
-      MK40DZ10
-      MK50D7
-      MK50D10
-      MK50DZ10
-      MK51D7
-      MK51D10
-      MK51DZ10
-      MK52D10
-      MK52DZ10
-      MK53D10
-      MK53DZ10
-      MK60D10
-      MK60DZ10
-      MK60F12
-      MK60F15
-      MK61F15
-      MK61F15WS
-      MK63F12
-      MK64F12
-      MK70F15
-      MK70F15WS
-      MKL02Z4
-      MKL03Z4
-      MKL04Z4
-      MKL05Z4
-      MKL14Z4
-      MKL15Z4
-      MKL16Z4
-      MKL17Z4
-      MKL24Z4
-      MKL25Z4
-      MKL26Z4
-      MKL27Z4
-      MKL27Z644
-      MKL33Z4
-      MKL34Z4
-      MKL36Z4
-      MKL43Z4
-      MKL46Z4
-      MKV10Z7
-      MKV11Z7
-      MKW01Z4
-      MKW21D5
-      MKW22D5
-      MKW24D5
--->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
 
    <intOption name="osc_input_freq"
@@ -196,9 +119,36 @@ Devices using this peripheral:
       
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t cr =
-      \t   OSC_CR_ERCLKEN($(osc_cr_erclken)) |
-      \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) |
-      \t   OSC_CR_SCP($(osc_cr_scp));\n\n      
+      \t   OSC_CR_ERCLKEN($(osc_cr_erclken))  | // External Reference Enable
+      \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) | // External Reference Stop Enable
+      \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n 
+      
+      \t/**
+      \t * Get OSC clock (internal, assumed available)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic constexpr uint32_t getInternalClock() {
+      \t   return oscclk_clock;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC clock (external, masked by OSC_CR_ERCLKEN)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic uint32_t getExternalClock() {
+      \t   return (osc-&gt;CR&amp;OSC_CR_ERCLKEN_MASK)?getInternalClock():0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC32KCLK clock
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic uint32_t getOsc32kClock() {
+      \t   return osc32kclk_clock;
+      \t}\n\n
    </template>
 
    <pins />

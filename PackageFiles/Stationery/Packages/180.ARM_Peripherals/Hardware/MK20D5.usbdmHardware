@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_hardware.dtd">
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
 <!-- MK20D5.usbdmHardware -->
 <!-- 
    Generated from MK20D5.csv
@@ -120,6 +120,9 @@
       <peripheral baseName="FTFL"     instance=""         version="ftfl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTFL_MASK" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
       <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
@@ -474,8 +477,7 @@
          <mux sel="mux0"          signal="EXTAL0" />
          <mux sel="mux1"          signal="GPIOA_18" />
          <mux sel="mux3"          signal="FTM0_FLT2" />
-         <mux sel="mux4"          signal="FTM0_CLKIN0" />
-         <mux sel="mux4"          signal="FTM1_CLKIN0" />
+         <mux sel="mux4"          signal="FTM_CLKIN0" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -484,8 +486,7 @@
          <mux sel="mux0"          signal="XTAL0" />
          <mux sel="mux1"          signal="GPIOA_19" />
          <mux sel="mux3"          signal="FTM1_FLT0" />
-         <mux sel="mux4"          signal="FTM0_CLKIN1" />
-         <mux sel="mux4"          signal="FTM1_CLKIN1" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
          <mux sel="mux6"          signal="LPTMR0_ALT1" />
          <reset sel="mux0" />
          <default sel="reset" />

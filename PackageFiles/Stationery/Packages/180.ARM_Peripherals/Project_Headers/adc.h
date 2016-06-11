@@ -104,8 +104,8 @@ template<class Info>
 class AdcBase_T {
 
 protected:
-   static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
+   static constexpr volatile ADC_Type *adc      = Info::adc;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
    /**
@@ -187,13 +187,14 @@ public:
     *
     * @param sc1Value SC1 register value including the ADC channel to use
     */
-   static void startConversion(const int sc1Value) {
-#ifdef DEBUG_BUILD
-      static_assert(Info::irqHandlerInstalled, "Interrupt handlers must be enabled when using this function");
-#endif
-
+   static ErrorCode startConversion(const int sc1Value) {
+      if (!Info::irqHandlerInstalled) {
+         return setErrrCode(E_NO_HANDLER);
+      }
       // Trigger conversion with interrupts enabled
       adc->SC1[0] = ADC_SC1_AIEN_MASK|(sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
+
+      return E_NO_ERROR;
    };
 
    /**

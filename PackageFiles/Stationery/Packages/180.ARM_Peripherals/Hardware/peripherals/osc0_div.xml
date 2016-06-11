@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- osc0_div.xml -->
-<!--
-Devices using this peripheral: 
-      MK02F12810
-      MK22F12810
-      MK22F25612
-      MK22F51212
-      MK65F18
-      MK66F18
-      MKV30F12810
-      MKV31F12810
-      MKV31F25612
-      MKV31F51212
-      MKV40F15
-      MKV43F15
-      MKV44F15
-      MKV45F15
-      MKV46F15
--->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
 
    <intOption name="osc_input_freq"
@@ -153,13 +135,42 @@ Devices using this peripheral:
       
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t cr =
-      \t   OSC_CR_ERCLKEN($(osc_cr_erclken)) |
-      \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) |
-      \t   OSC_CR_SCP($(osc_cr_scp));\n\n      
+      \t   OSC_CR_ERCLKEN($(osc_cr_erclken))  | // External Reference Enable
+      \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) | // External Reference Stop Enable
+      \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n 
 
       \t//! OSC Clock divider register\n
       \tstatic constexpr uint32_t div =
-      \t   OSC_DIV_ERPS($(osc_div_erps));   
+      \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n
+      
+      \t/**
+      \t * Get OSC clock (internal, assumed available)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic constexpr uint32_t getInternalClock() {
+      \t   return oscclk_clock;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC clock (external, masked by OSC_CR_ERCLKEN)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic uint32_t getExternalClock() {
+      \t   return (osc-&gt;CR&amp;OSC_CR_ERCLKEN_MASK)?
+      \t      (getInternalClock()//(1&lt;&lt;()osc-&gt;DIV&amp;OSC_DIV_ERPS_MASK)&gt;&gt;OSC_DIV_ERPS_SHIFT)):
+      \t      0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC32KCLK clock
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic uint32_t getOsc32kClock() {
+      \t   return osc32kclk_clock;
+      \t}\n\n
    </template>
 
    <pins />

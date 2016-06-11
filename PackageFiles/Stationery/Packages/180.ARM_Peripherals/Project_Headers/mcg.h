@@ -23,18 +23,20 @@
 
 namespace USBDM {
 
-extern volatile uint32_t SystemMcgirClock;
+/** MCGFFCLK - Fixed frequency clock (input to FLL) */
 extern volatile uint32_t SystemMcgffClock;
+/** MCGOUTCLK - Primary output from MCG, various sources */
 extern volatile uint32_t SystemMcgOutClock;
+/** MCGFLLCLK - Output of FLL */
 extern volatile uint32_t SystemMcgFllClock;
+/** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
+/** Core/System clock (from MCGOUTCLK/CLKDIV) */
 extern volatile uint32_t SystemCoreClock;
+/** Bus clock (from MCGOUTCLK/CLKDIV) */
 extern volatile uint32_t SystemBusClock;
-extern volatile uint32_t SystemPeripheralClock;
-extern volatile uint32_t SystemOscerClock;
-extern volatile uint32_t SystemErclk32kClock;
+/** LPO - Low power oscillator 1kHz clock available in LP modes */
 extern volatile uint32_t SystemLpoClock;
-extern volatile uint32_t SystemRtcClock;
 
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
@@ -63,7 +65,7 @@ private:
    static MCGCallbackFunction callback;
 
    /** Pointer to hardware */
-   static constexpr volatile MCG_Type *mcg = reinterpret_cast<volatile MCG_Type*>(McgInfo::basePtr);
+   static constexpr volatile MCG_Type *mcg = McgInfo::mcg;
 
 public:
    /**

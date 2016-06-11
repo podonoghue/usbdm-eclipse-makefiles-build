@@ -140,6 +140,8 @@
    <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
       <aliasOption key="/RTC/rtc_input_freq"  constant="false" />
       <aliasOption key="/RTC/rtcclk_clock" />
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </menu>
 
    <choiceOption name="mcg_c7_oscsel" 
@@ -443,9 +445,7 @@
       </menu>
       
       <menu name="MCG_C6" description="MCG Control Register 6">
-
          <aliasOption name="mcg_c6_lolie0" />
-         
          <binaryOption name="mcg_c6_plls" 
             constant="true"
             description="FLL/PLL selected as Clock source when CLKS=0"
@@ -453,11 +453,10 @@
             <choice value="0" name="FLL is selected" />
             <choice value="1" name="PLL is selected" />
          </binaryOption>
-         
          <aliasOption name="mcg_c6_cme0" />
          <aliasOption name="mcg_c6_vdiv0" />
       </menu>
-      
+
       <menu name="MCG_SC" description="MCG Status and Control Register" >
          <aliasOption name="mcg_sc_fcrdiv" />
       </menu>
@@ -488,7 +487,7 @@
 
    <projectActionList id = "mcg" >
       <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/mcg_mk.cpp"           target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
+      <copy source="Startup_Code/mcg.cpp"              target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
@@ -509,10 +508,10 @@
       \t   ClockMode_PEE,
       \t};\n\n
       
-      \t//! Frequency of Slow Internal Reference Clock [~32kHz])
+      \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
       
-      \t//! Frequency of Fast Internal Reference Clock [~4MHz])
+      \t//! Frequency of Fast Internal Reference Clock [~4MHz]
       \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
       
       \tstruct ClockInfo {
@@ -537,6 +536,52 @@
       \t};\n\n
       
       \tstatic const ClockInfo clockInfo[];
+
+      \t/**
+      \t * Get MCGERCLK
+      \t *
+      \t * @return MCGERCLK as uint32_t
+      \t */
+      \tstatic uint32_t getErcClock() {
+      \t
+      \t   switch((mcg-&gt;C7&amp;MCG_C7_OSCSEL_MASK)) {
+      \t      default               : return 0;
+      \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getInternalClock();
+      \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
+      \t   }
+      \t}\n\n
+      
+      \t/**
+      \t * Get Internal MCGIRCLK (ungated by MCG_C1_IRCLKEN_MASK)
+      \t *
+      \t * @return MCGIRCLK as uint32_t
+      \t */
+      \tstatic uint32_t getInternalIrcClock() {
+      \t      if (mcg-&gt;C2&amp;MCG_C2_IRCS_MASK) {
+      \t#ifdef MCG_SC_FCRDIV_MASK
+      \t         return (system_fast_irc_clock/(1&lt;&lt;((mcg-&gt;SC&amp;MCG_SC_FCRDIV_MASK)&gt;&gt;MCG_SC_FCRDIV_SHIFT)));
+      \t#else
+      \t         return system_fast_irc_clock;
+      \t#endif
+      \t      }
+      \t      else {
+      \t         return system_slow_irc_clock;
+      \t      }
+      \t}\n\n
+      
+      \t/**
+      \t * Get MCGIRCLK (gated by MCG_C1_IRCLKEN_MASK)
+      \t *
+      \t * @return MCGIRCLK as uint32_t
+      \t */
+      \tstatic uint32_t getIrcClock() {
+      \t   if (mcg-&gt;C1&amp;MCG_C1_IRCLKEN_MASK) {
+      \t      return getInternalIrcClock();
+      \t   }
+      \t   else {
+      \t      return 0;
+      \t   }
+      \t}\n\n
    </template>
    
    <template name="clockInfo">

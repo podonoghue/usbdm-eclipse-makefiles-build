@@ -40,8 +40,8 @@ template<class Info>
 class Vref_T {
 
 private:
-   static constexpr volatile VREF_Type *vref      = reinterpret_cast<volatile VREF_Type *>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
+   static constexpr volatile VREF_Type *vref    = Info::vref;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 #ifdef DEBUG_BUILD
    static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "Vref_T: Vref signal is not mapped to a pin - Modify Configure.usbdm");

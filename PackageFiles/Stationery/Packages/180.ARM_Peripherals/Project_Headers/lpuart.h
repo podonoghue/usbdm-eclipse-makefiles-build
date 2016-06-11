@@ -195,7 +195,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of LPUART clock
     */
-   Lpuart_T(unsigned baudrate) : Lpuart(reinterpret_cast<LPUART_Type*>(Info::basePtr)) {
+   Lpuart_T(unsigned baudrate) : Lpuart(reinterpret_cast<LPUART_Type*>(Info::lpuart)) {
       // Enable clock to UART interface
       *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
 

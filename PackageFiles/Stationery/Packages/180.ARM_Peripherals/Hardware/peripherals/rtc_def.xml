@@ -6,7 +6,7 @@
 
    <intOption name="rtc_input_freq"
       units="Hz"
-      description="Frequency of External Crystal"
+      description="Frequency of External RTC Crystal"
       toolTip="Frequency of external crystal XTAL32/EXTAL32 [Typically 32768 Hz]"
       value="32768" />
 
@@ -120,5 +120,23 @@
       \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
       \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
       \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
+      
+      \t/**
+      \t * Get RTC clock (internal, not masked by RTC_CR_CLKO)
+      \t *
+      \t * @return Clock frequency as uint32_t
+      \t */
+      \tstatic uint32_t getInternalClock() {
+      \t   return (rtc-&gt;CR&amp;RTC_CR_OSCE_MASK)?rtcclk_clock:0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get RTC clock (external, masked by RTC_CR_CLKO)
+      \t *
+      \t * @return Clock frequency as uint32_t
+      \t */
+      \tstatic uint32_t getExternalClock() {
+      \t   return (rtc-&gt;CR&amp;RTC_CR_CLKO_MASK)?0:getInternalClock();
+      \t}\n\n
    </template>
 </devicePage>

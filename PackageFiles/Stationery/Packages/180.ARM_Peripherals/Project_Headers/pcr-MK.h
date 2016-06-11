@@ -64,7 +64,6 @@
 
 namespace USBDM {
 
-extern volatile uint32_t SystemMcgirClock;
 extern volatile uint32_t SystemMcgffClock;
 extern volatile uint32_t SystemMcgFllClock;
 extern volatile uint32_t SystemMcgPllClock;

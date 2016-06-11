@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- PitSharedIrq.xml -->
+<!-- pit_shared_irq.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
-   <intOption name="LDVAL" description="Reload value [0-65535]"
+   <intOption name="pit_ldval" description="Reload value [0-65535]"
       toolTip="Value loaded in timer register on roll-over"
       value="10000" min="0" max="65535" />
 
-   <binaryOption name="mcr_frz" description="Freeze in debug mode"
+   <binaryOption name="pit_mcr_frz" description="Freeze in debug mode"
       toolTip="Controls whether the timer continues to run in debug mode">
       <choice value="0" name="Timers continue to run in debug mode" />
       <choice value="1" name="Timers are stopped in Debug mode" />
    </binaryOption>
 
-   <binaryOption name="tctrl_ch1" description="Chain timers 1-0"
+   <binaryOption name="pit_tctrl_ch1" description="Chain timers 1-0"
       toolTip="Controls whether the timer channels are chained to creater a larger counter">
       <choice value="0" name="Timers are not chained" />
       <choice value="1" name="Timers are chained" />
    </binaryOption>
 
-   <binaryOption name="tctrl_ch3" description="Chain timers 3-2"
+   <binaryOption name="pit_tctrl_ch3" description="Chain timers 3-2"
       toolTip="Controls whether the timer channels are chained to creater a larger counter">
       <choice value="0" name="Timers are not chained" />
       <choice value="1" name="Timers are chained" />
    </binaryOption>
 
-   <xi:include href="_irqOption.xml"/>      
+   <xi:include href="_irqOption.xml"/>
+
+   <projectActionList id = "lptmr0_0" >
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
+      <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" />
+      <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"        replace="true" derived="true" />
+   </projectActionList>
+         
    <template>
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
-      \t   $(LDVAL);\n\n
+      \t   $(pit_ldval);\n\n
       
       \t//! PIT operation in debug mode\n
-      \tstatic constexpr uint32_t mcrValue = 
-      \t   PIT_MCR_FRZ($(mcr_frz));\n\n
+      \tstatic constexpr uint32_t mcr = 
+      \t   PIT_MCR_FRZ($(pit_mcr_frz));\n\n
    </template>
-   
 </devicePage>

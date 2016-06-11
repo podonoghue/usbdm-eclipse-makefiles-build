@@ -21,42 +21,12 @@ Devices using this peripheral:
          
    <template>
       \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t   switch(SIM->SOPT2&amp;SIM_SOPT2_LPUARTSRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return SystemPeripheralClock;
-      \t   case SIM_SOPT2_LPUARTSRC(2): return SystemOscerClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return SystemMcgirClock;
-      \t   }
-      \t}\n\n
-      
-      \t/**
       \t * Get clock frequency
       \t *
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   switch(SIM->SOPT2&amp;SIM_SOPT2_LPUARTSRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
-      \t   case SIM_SOPT2_LPUARTSRC(1):
-      \t#ifdef SIM_CLKDIV3_PLLFLLFRAC_MASK
-      \t      {
-      \t      int  pllfllfrac  = (SIM-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLFRAC_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLFRAC_SHIFT;
-      \t      int  pllflldiv   = (SIM-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLDIV_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLDIV_SHIFT;
-      \t      return (SystemPeripheralClock*(pllfllfrac+1))/(pllflldiv+1);
-      \t      }
-      \t#else
-      \t      return SystemPeripheralClock;
-      \t#endif
-      \t   case SIM_SOPT2_LPUARTSRC(2): return SystemOscerClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return SystemMcgirClock;
-      \t   }
+      \t   return SimInfo::getLpuartClockFrequency();
       \t}\n\n
    </template>
 

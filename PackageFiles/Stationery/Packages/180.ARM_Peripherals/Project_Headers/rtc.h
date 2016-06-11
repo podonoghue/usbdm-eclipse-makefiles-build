@@ -34,8 +34,8 @@ public:
    static uint32_t rtcclkUngated;
 
 protected:
-   static constexpr volatile RTC_Type *rtc      = reinterpret_cast<volatile RTC_Type *>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
+   static constexpr volatile RTC_Type *rtc      = Info::rtc;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
    /**

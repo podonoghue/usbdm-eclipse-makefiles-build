@@ -39,9 +39,9 @@ Devices using this peripheral:
    
       <choiceOption name="sim_sopt2_pllfllsel" 
          description="Peripheral Clock select"
-         toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
+         toolTip="Selects the clock for various peripherals (UART0, TPM etc.)">
          <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
-         <choice value="1"  name="MCGPLLCLK clock" />
+         <choice value="1"  name="MCGPLLCLK clock/2" />
       </choiceOption>
    
       <intOption name="system_peripheral_clock"
@@ -54,7 +54,7 @@ Devices using this peripheral:
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
          <choice value="0"  name="External bypass clock (USB_CLKIN)" />
-         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV2" isDefault="true" />
+         <choice value="1"  name="Peripheral Clock" isDefault="true" />
       </choiceOption>
    
       <intOption name="system_usbfs_clock" 
@@ -64,6 +64,38 @@ Devices using this peripheral:
          toolTip="Frequency of clock to USB full speed controller"
          value="0" />
    
+      <choiceOption name="sim_sopt2_uart0src" 
+         description="UART0 Clock select"
+         toolTip="Selects the clock source for the UART0 transmit and receive clock">
+         <choice value="0"  name="Disabled" />
+         <choice value="1"  name="Peripheral Clock" />
+         <choice value="2"  name="OSCERCLK clock" />
+         <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
+      </choiceOption>
+
+      <intOption name="system_uart0_clock" 
+         constant="true"
+         units="Hz"
+         description="UART0 Clock frequency"
+         toolTip="Frequency of clock to UART0"
+         value="0" />
+
+      <choiceOption name="sim_sopt2_tpmsrc" 
+         description="TPM Clock source"
+         toolTip="Selects the clock source for the TPM counter clock">
+         <choice value="0"  name="Disabled" isDefault="true" />
+         <choice value="1"  name="Peripheral Clock" />
+         <choice value="2"  name="OSCERCLK clock" />
+         <choice value="3"  name="MCGIRCLK clock" />
+      </choiceOption>
+   
+      <intOption name="system_tpm_clock" 
+         constant="true"
+         units="Hz"
+         description="TPM Clock frequency"
+         toolTip="Frequency of clock to TPM"
+         value="0" />
+
       <choiceOption name="sim_sopt2_clkoutsel" 
          description="CLKOUT select"
          toolTip="Selects the clock to output on the CLKOUT pin." >
@@ -76,125 +108,123 @@ Devices using this peripheral:
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="Reserved" />
       </choiceOption>
-
-      <binaryOption name="sim_sopt2_ptd7pad" 
-         description="PTD7 pad drive strength"
-         toolTip="Controls the output drive strength of the PTD7 pin\n
-	    by selecting either one or two pads to drive it." >
-         <choice value="0"  name="Single-pad drive strength" isDefault="true" />
-         <choice value="1"  name="Double-pad drive strength" />
-      </binaryOption>   
    </menu>
    <template>
       \t//! System Options Register 2
       \tstatic constexpr uint32_t sopt2 = 
-      \t   SIM_SOPT2_PTD7PAD($(sim_sopt2_ptd7pad)) |       // PTD7 pad drive strength
+      \t   SIM_SOPT2_UART0SRC($(sim_sopt2_uart0src)) |        // USB clock source select
+      \t   SIM_SOPT2_TPMSRC($(sim_sopt2_tpmsrc)) |        // TPM Clock source select
       \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
       \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
    </template>
-   <menu name="SOPT4" description="FTM pins">
+   <menu name="SOPT4" description="TPM pins">
    
-      <binaryOption name="sim_sopt4_ftm0trg0src" 
-         description="FlexTimer 0 Hardware Trigger 0 Source Select"
-         toolTip="Selects the source of FTM hardware trigger 0" >
-         <choice value="0"  name="HSCMP0 output" isDefault="true" />
-         <choice value="1"  name="FTM1 channel match" />
+      <binaryOption name="sim_sopt4_tpm2clksel" 
+         description="TPM 2 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the TPM module.">
+         <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
+         <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
    
-      <binaryOption name="sim_sopt4_ftm1clksel" 
-         description="FlexTimer 1 External Clock Pin Select"
-         toolTip="Selects the external pin used to drive the clock to the FTM module.">
-         <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
-         <choice value="1"  name="FTM_CLKIN1 pin" />
+      <binaryOption name="sim_sopt4_tpm1clksel" 
+         description="TPM 1 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the TPM module.">
+         <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
+         <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
    
-      <binaryOption name="sim_sopt4_ftm0clksel" 
-         description="FlexTimer 0 External Clock Pin Select"
-         toolTip="Selects the external pin used to drive the clock to the FTM module.">
-         <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
-         <choice value="1"  name="FTM_CLKIN1 pin" />
+      <binaryOption name="sim_sopt4_tpm0clksel" 
+         description="TPM 0 External Clock Pin Select"
+         toolTip="Selects the external pin used to drive the clock to the TPM module.">
+         <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
+         <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
    
-      <choiceOption name="sim_sopt4_ftm1ch0src" 
-         description="FlexTimer 1 channel 0 input capture source select"
-         toolTip="Selects the source for FTM channel 0 input capture\n
-            NOTE: When the FTM is not in input capture mode, clear this field">
-         <choice value="0" name="FTM1_CH0 signal"  isDefault="true"/>
+      <choiceOption name="sim_sopt4_tpm2ch0src" 
+         description="TPM 2 channel 0 input capture source select"
+         toolTip="Selects the source for TPM channel 0 input capture\n
+            NOTE: When the TPM is not in input capture mode, clear this field">
+         <choice value="0" name="TPM2_CH0 signal"  isDefault="true"/>
          <choice value="1" name="CMP0 output" />
-         <choice value="2" name="CMP1 output" />
          <choice value="3" name="USB start of frame pulse" />
       </choiceOption>
    
-      <binaryOption name="sim_sopt4_ftm1flt0" 
-         description="FlexTimer 1 Fault 0 Select"
-         toolTip="Selects the source of FTM fault input 0" >
-         <choice value="0"  name="FTM1_FLT0 pin" isDefault="true" />
-         <choice value="1"  name="CMP0 output" />
-      </binaryOption>
-   
-      <binaryOption name="sim_sopt4_ftm0flt1" 
-         description="FlexTimer 0 Fault 1 Select"
-         toolTip="Selects the source of FTM fault input 1" >
-         <choice value="0"  name="FTM0_FLT1 pin" isDefault="true" />
-         <choice value="1"  name="CMP1 output" />
-      </binaryOption>
-   
-      <binaryOption name="sim_sopt4_ftm0flt0" 
-         description="FlexTimer 0 Fault 0 Select"
-         toolTip="Selects the source of FTM fault input 0" >
-         <choice value="0"  name="FTM0_FLT0 pin" isDefault="true" />
-         <choice value="1"  name="CMP0 output" />
-      </binaryOption>
+      <choiceOption name="sim_sopt4_tpm1ch0src" 
+         description="TPM 1 channel 0 input capture source select"
+         toolTip="Selects the source for TPM channel 0 input capture\n
+            NOTE: When the TPM is not in input capture mode, clear this field">
+         <choice value="0" name="TPM1_CH0 signal"  isDefault="true"/>
+         <choice value="1" name="CMP0 output" />
+      </choiceOption>   
    </menu>
    <template>
       \t//! System Options Register 4
       \tstatic constexpr uint32_t sopt4 = 
-      \t   SIM_SOPT4_FTM0TRG0SRC($(sim_sopt4_ftm0trg0src)) |   // FlexTimer 0 Hardware Trigger 0 Source Select
-      \t   SIM_SOPT4_FTM1CLKSEL($(sim_sopt4_ftm1clksel))  |   // FlexTimer 1 External Clock Pin Select
-      \t   SIM_SOPT4_FTM0CLKSEL($(sim_sopt4_ftm0clksel))  |   // FlexTimer 0 External Clock Pin Select
-      \t   SIM_SOPT4_FTM1CH0SRC($(sim_sopt4_ftm1ch0src))  |   // FTM1 channel 0 input capture source select
-      \t   SIM_SOPT4_FTM1FLT0($(sim_sopt4_ftm1flt0))    |   // FlexTimer 1 Fault 0 Select
-      \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
-      \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
+      \t   SIM_SOPT4_TPM2CLKSEL($(sim_sopt4_tpm2clksel))  |   // TPM 2 External Clock Pin Select
+      \t   SIM_SOPT4_TPM1CLKSEL($(sim_sopt4_tpm1clksel))  |   // TPM 1 External Clock Pin Select
+      \t   SIM_SOPT4_TPM0CLKSEL($(sim_sopt4_tpm0clksel))  |   // TPM 0 External Clock Pin Select
+      \t   SIM_SOPT4_TPM2CH0SRC($(sim_sopt4_tpm1ch0src))  |   // TPM 1 channel 0 input capture source select
+      \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm1ch0src));     // TPM 1 channel 0 input capture source select\n\n
    </template>
    <menu name="SOPT5" description="UART pins">
-      <binaryOption name="sim_sopt5_uart0txsrc" 
+      <binaryOption name="sim_sopt5_uart2ode" description="UART2 Open Drain Enable"
+         toolTip="Enables Open Drain output">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <binaryOption name="sim_sopt5_uart1ode" description="UART1 Open Drain Enable"
+         toolTip="Enables Open Drain output">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <binaryOption name="sim_sopt5_uart0ode" description="UART0 Open Drain Enable"
+         toolTip="Enables Open Drain output">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+
+      <choiceOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data.">
          <choice value="0" name="UART0_TX pin" isDefault="true" />
-         <choice value="1" name="UART0_TX pin modulated with FTM1 channel 0 output" />
-      </binaryOption>
+         <choice value="1" name="UART0_TX pin modulated with TPM1 channel 0 output" />
+         <choice value="2" name="UART0_TX pin modulated with TPM2 channel 0 output" />
+         <choice value="3" name="Reserved" />
+      </choiceOption>
    
       <choiceOption name="sim_sopt5_uart0rxsrc" 
          description="UART 0 receive data source select"
          toolTip="Selects the source for the UART 0 receive data.">
          <choice value="0" name="UART0_RX pin" isDefault="true" />
          <choice value="1" name="CMP0 output" />
-         <choice value="2" name="CMP1 output" />
-         <choice value="3" name="Reserved" />
       </choiceOption>
    
-      <binaryOption name="sim_sopt5_uart1txsrc" 
+      <choiceOption name="sim_sopt5_uart1txsrc" 
          description="UART 1 transmit data source select"
          toolTip="Selects the source for the UART 1 transmit data.">
          <choice value="0" name="UART1_TX pin" isDefault="true" />
-         <choice value="1" name="UART1_TX pin modulated with FTM1 channel 0 output" />
-      </binaryOption>
+         <choice value="1" name="UART1_TX pin modulated with TPM1 channel 0 output" />
+         <choice value="2" name="UART1_TX pin modulated with TPM2 channel 0 output" />
+         <choice value="3" name="Reserved" />
+      </choiceOption>
    
       <choiceOption name="sim_sopt5_uart1rxsrc" 
          description="UART 1 receive data source select"
          toolTip="Selects the source for the UART 1 receive data">
          <choice value="0" name="UART1_RX pin" isDefault="true" />
          <choice value="1" name="CMP0 output" />
-         <choice value="2" name="CMP1 output" />
-         <choice value="3" name="Reserved" />
       </choiceOption>
    </menu>
    <template>
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
+      \t   SIM_SOPT5_UART2ODE($(sim_sopt5_uart2ode)) |        // UART 2 Open Drain Enable
+      \t   SIM_SOPT5_UART1ODE($(sim_sopt5_uart1ode)) |        // UART 1 Open Drain Enable
+      \t   SIM_SOPT5_UART0ODE($(sim_sopt5_uart0ode)) |        // UART 0 Open Drain Enable
       \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |        // UART 0 transmit data source select
       \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |        // UART 0 receive data source select
       \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |        // UART 1 transmit data source select
@@ -204,8 +234,8 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC0">
-         <choice value="0" name="PDB trigger selected" isDefault="true" />
-         <choice value="1" name="Alternate trigger selected" />
+         <choice value="0" name="TPM1 channel 0 (A) and channel 1 (B) triggers" isDefault="true" />
+         <choice value="1" name="Alternate trigger" />
       </binaryOption>
    
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
@@ -218,21 +248,21 @@ Devices using this peripheral:
       <choiceOption name="sim_sopt7_adc0trgsel" 
          description="ADC0 trigger select"
          toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
-         <choice value="0"  name="PDB external trigger pin input (PDB0_EXTRG)" isDefault="true" />
-         <choice value="1"  name="High speed comparator 0 output" />
-         <choice value="2"  name="High speed comparator 1 output" />
+         <choice value="0"  name="External trigger pin input (EXTRG_IN)" isDefault="true" />
+         <choice value="1"  name="CMP 0 output" />
+         <choice value="2"  name="Reserved" />
          <choice value="3"  name="Reserved" />
          <choice value="4"  name="PIT trigger 0" />
          <choice value="5"  name="PIT trigger 1" />
-         <choice value="6"  name="PIT trigger 2" />
-         <choice value="7"  name="PIT trigger 3" />
-         <choice value="8"  name="FTM0 trigger" />
-         <choice value="9"  name="FTM1 trigger" />
-         <choice value="10" name="Reserved" />
+         <choice value="6"  name="Reserved" />
+         <choice value="7"  name="Reserved" />
+         <choice value="8"  name="TPM0 trigger" />
+         <choice value="9"  name="TPM1 trigger" />
+         <choice value="10" name="TPM2 trigger" />
          <choice value="11" name="Reserved" />
          <choice value="12" name="RTC alarm" />
          <choice value="13" name="RTC seconds" />
-         <choice value="14" name="Low-power timer trigger" />
+         <choice value="14" name="LPTMR0" />
          <choice value="15" name="Reserved" />
       </choiceOption>
    </menu>
@@ -251,27 +281,18 @@ Devices using this peripheral:
                   Divides MCGOUT Clock to generate system_core_clock"
          value="1" offset="-1" min="1" max="16" />
    
-      <intOption name="sim_clkdiv1_outdiv2" 
-         constant="true"
-         description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
-         toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
-            Divides MCGOUT Clock to generate system_bus_clock\n
-            MCGOUTCLK clock is source. Default /2"
-         value="1" offset="-1" min="1" max="16" />
-   
       <intOption name="sim_clkdiv1_outdiv4" 
          constant="true"
          description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
          toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
-                  Divides MCGOUT Clock to generate system_flash_clock\n
+                  Divides MCGOUT Clock to generate system_bus_clock\n
                   MCGOUTCLK clock is source. Default /4"
          value="4" offset="-1" min="1" max="16" />
    </menu>
    <template>
       \t//! System Clock Divider Register 1
       \tstatic constexpr uint32_t clkdiv1 = 
-      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Flash clock
-      \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
+      \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Bus/Flash clock
       \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
    </template>
    <menu name="CLKDIV2" description="USB Clock Dividers">
@@ -307,29 +328,18 @@ Devices using this peripheral:
       units="Hz"
       description="System Core Clock"
       toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-      value="120000000" />
+      value="48000000" />
 
    <intOption name="system_bus_clock" 
       units="Hz"
       description="System Bus Clock"
-      toolTip="Clocks the bus slaves and peripherals\n
-               Must be &lt;= Core Clock frequency and an integer divisor"
-      value="60000000" />
-
-   <intOption name="system_flash_clock" 
-      units="Hz"
-      description="System Flash Clock"
-      toolTip="Clocks the flash memory\n
-               Must be an integer divisor of the Core Clock.\n
-               Must be &lt;= Bus Clock frequency."
+      toolTip="Clocks the bus slaves and peripherals"
       value="24000000" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
-      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
-      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
-      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
-      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL">
+      <param type="long" value="48MHz" />    <!-- Core         -->
+      <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>
 
    <xi:include href="_simFiles.xml"/>
@@ -380,7 +390,6 @@ Devices using this peripheral:
       \t   sim-&gt;SOPT5 = sopt5;
       \t
       \t   sim-&gt;CLKDIV1 = clkdiv1;
-      \t   sim-&gt;CLKDIV2 = clkdiv2;
       \t}
    </template>
 </devicePage>

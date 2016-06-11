@@ -81,21 +81,20 @@ public:
 
 protected:
    /** Pointer to hardware */
-   static constexpr volatile PIT_Type *pit       = reinterpret_cast<volatile PIT_Type*>(Info::basePtr);
+   static constexpr volatile PIT_Type *pit       = Info::pit;
 
    /** Pointer to clock register */
-   static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile uint32_t *clockReg  = Info::clockReg;
 
 public:
    /**
-    *  Configure the PIT
+    *  Configure the PIT with default settings
     *
     *  @param mcr       Module Control Register
     */
-   static void configure(uint32_t mcr=Info::mcrValue) {
+   static void configure(uint32_t mcr=Info::mcr) {
       // Enable clock
       *clockReg |= Info::clockMask;
-
       __DMB();
 
       // Enable timer

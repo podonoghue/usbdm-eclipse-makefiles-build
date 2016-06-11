@@ -20,7 +20,7 @@ using adcChannel = Adc0Channel<19>;
 void handler(uint32_t value) {
    // Start next conversion
    adcChannel::startConversion();
-   value = value/1024;
+   value = value/10;
    for (uint i=0; i<75; i++) {
       if (i<value) {
          putchar('X');
@@ -47,6 +47,9 @@ int main(void) {
 //   adcChannel::setMode(USBDM::resolution_8bit_se);
 
    adcChannel::startConversion();
+
+   // Check for error so far
+   checkError();
 
    for(;;) {
    }

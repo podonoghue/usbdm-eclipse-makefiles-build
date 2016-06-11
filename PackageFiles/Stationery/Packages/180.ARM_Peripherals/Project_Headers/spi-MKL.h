@@ -155,17 +155,17 @@ public:
  * @tparam  SpiMOSI        Pcr used for MOSI signal
  * @tparam  Rest...        Pcr used for PCSx (These are initialised but not used)
  */
-template<class info, typename ... Rest>
+template<class Info, typename ... Rest>
 class Spi_T : public Spi {
 
 protected:
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(info::clockReg);
-   static constexpr volatile SPI_Type *spi      = reinterpret_cast<volatile SPI_Type*>(info::basePtr);
+   static constexpr volatile SPI_Type *spi      = Info::spi;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 private:
-   using SpiSCK   = PcrTable_T<info, 0>;
-   using SpiMISO  = PcrTable_T<info, 1>;
-   using SpiMOSI  = PcrTable_T<info, 2>;
+   using SpiSCK   = PcrTable_T<Info, 0>;
+   using SpiMISO  = PcrTable_T<Info, 1>;
+   using SpiMOSI  = PcrTable_T<Info, 2>;
 
 public:
    virtual void enablePins() {
@@ -190,7 +190,7 @@ protected:
       Spi(spi, dmaTxChannel, dmaRxChannel, rxMuxSource) {
 
       // Enable SPI module clock
-      *clockReg |= info::clockMask;
+      *clockReg |= Info::clockMask;
 
       // Configure SPI pins
       enablePins();

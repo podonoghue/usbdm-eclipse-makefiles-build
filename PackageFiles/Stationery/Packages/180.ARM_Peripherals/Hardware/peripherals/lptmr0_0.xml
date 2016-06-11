@@ -135,15 +135,13 @@
       \t * @return Input clock frequency as an uint32_t in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
       \t
       \t   switch(lptmr-&gt;PSR&amp;LPTMR_PSR_PCS_MASK) {
       \t   default:
-      \t   case LPTMR_PSR_PCS(0): return SystemMcgirClock;
+      \t   case LPTMR_PSR_PCS(0): return McgInfo::getIrcClock();
       \t   case LPTMR_PSR_PCS(1): return SystemLpoClock;
-      \t   case LPTMR_PSR_PCS(2): return SystemErclk32kClock;
-      \t   case LPTMR_PSR_PCS(3): return SystemOscerClock;
+      \t   case LPTMR_PSR_PCS(2): return SimInfo::getErc32kClock();
+      \t   case LPTMR_PSR_PCS(3): return Osc0Info::getExternalClock();
       \t   }
       \t}\n\n
       
@@ -153,8 +151,6 @@
       \t * @return Frequency as a float in Hz
       \t */
       \tstatic float getClockFrequencyF() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
       \t
       \t   float freq = getInputClockFrequency();
       \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {
@@ -169,8 +165,6 @@
       \t * @return Frequency as a uint32_t in Hz (may underflow)
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile LPTMR_Type *lptmr = reinterpret_cast&lt;volatile LPTMR_Type *&gt;(basePtr);
       \t
       \t   uint32_t freq = getInputClockFrequency();
       \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {

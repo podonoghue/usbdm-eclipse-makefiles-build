@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- uart_def.xml -->
+<!-- uart1_mkl14z4.xml -->
 <!--
 Devices using this peripheral: 
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
-   <aliasOption key="clockSource" />
+   <stringOption name="clockSource" 
+      description="UART Clock Select"
+      constant="true" 
+      value="SystemBusClock"
+      />
+   
+   <aliasOption key="/SIM/system_bus_clock" />
    
    <menu name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />

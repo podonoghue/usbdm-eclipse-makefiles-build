@@ -72,10 +72,10 @@ public:
 
 protected:
    /** Pointer to hardware */
-   static constexpr volatile DAC_Type *dac       = reinterpret_cast<volatile DAC_Type*>(Info::basePtr);
+   static constexpr volatile DAC_Type *dac       = Info::dac;
 
    /** Pointer to clock register */
-   static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile uint32_t *clockReg  = Info::clockReg;
 
 public:
    /**

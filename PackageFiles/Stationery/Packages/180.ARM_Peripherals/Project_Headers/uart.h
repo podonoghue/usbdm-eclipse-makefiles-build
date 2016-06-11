@@ -37,7 +37,7 @@ namespace USBDM {
 class Uart {
 
 protected:
-   UART_Type *uart;            //!< UART hardware instance
+   volatile UART_Type *uart;            //!< UART hardware instance
 
    /**
     * Construct UART interface
@@ -45,7 +45,7 @@ protected:
     * @param uart             Base address of UART hardware
     *
     */
-   Uart(UART_Type *uart) : uart(uart) {
+   Uart(volatile UART_Type *uart) : uart(uart) {
    }
 
    /**
@@ -146,7 +146,7 @@ public:
          status = uart->S1;
          // Clear & ignore pending errors
          if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-            (void)uart->D;
+            clearError();
          }
       }  while ((status & UART_S1_RDRF_MASK) == 0);
       int ch = uart->D;
@@ -155,7 +155,10 @@ public:
       }
       return ch;
    }
-
+   /*
+    * Clear UART error status
+    */
+   virtual void clearError() = 0;
 };
 
 /**
@@ -193,16 +196,33 @@ public:
     *
     * @param baudrate         Interface speed in bits-per-second
     */
-   Uart_T(unsigned baudrate) : Uart(reinterpret_cast<UART_Type*>(Info::basePtr)) {
+   Uart_T(unsigned baudrate) : Uart(Info::uart) {
       // Enable clock to UART interface
-      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
+      *Info::clockReg |= Info::clockMask;
 
       // Configure pins
       Info::initPCRs();
       setBaudRate(baudrate);
    }
+   /**
+    * Set baud rate
+    *
+    * @param baudrate Baud rate to set
+    */
    void setBaudRate(unsigned baudrate) {
       Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
+   }
+protected:
+   /**
+    * Clear UART error status
+    */
+   virtual void clearError() {
+      if (Uart0Info::statusNeedsWrite) {
+         uart->S1 = 0xFF;
+      }
+      else {
+         (void)uart->D;
+      }
    }
 };
 

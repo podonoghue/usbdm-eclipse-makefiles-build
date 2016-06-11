@@ -23,7 +23,7 @@
       <choice value="0" name="Bus clock" />
       <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
       <choice value="2" name="Alternate clock (OSCERCLK)" />
-      <choice value="3" name="Asynchronous clock (ADACK)" />
+      <choice value="3" name="Asynchronous clock (ADACK)" isDefault="true" />
    </choiceOption>
 
    <choiceOption name="adc_cfg1_mode" description="Conversion mode selection"
@@ -36,27 +36,27 @@
 
    <binaryOption name="adc_cfg1_adlsmp" description="Sample Time Configuration"
       toolTip="Selects between different sample times based on the conversion mode selected">
-      <choice value="0" name="Short sample time" />
+      <choice value="0" name="Short sample time" isDefault="true" />
       <choice value="1" name="Long sample time" />
    </binaryOption>
 
    <choiceOption name="adc_cfg1_adiv" description="Clock Divide Select"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
-      <choice value="0" name="Input clock" />
-      <choice value="1" name="Input clock/2" />
-      <choice value="2" name="Input clock/4" />
-      <choice value="3" name="Input clock/8" />
+      <choice value="0" name="Divide by 1" isDefault="true" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" />
    </choiceOption>
 
    <binaryOption name="adc_cfg1_adlpc" description="Low-Power Configuration"
       toolTip="Adjust power consumption">
-      <choice value="0" name="Normal power configuration." />
+      <choice value="0" name="Normal power configuration." isDefault="true" />
       <choice value="1" name="Low-power configuration (reduced speed)" />
    </binaryOption>
 
    <choiceOption name="adc_cfg2_adlsts" description="Long Sample Time Select"
       toolTip="Selects between the extended sample times when long sample time is selected">
-      <choice value="0" name="+20 ADCK cycles; 24 ADCK total" />
+      <choice value="0" name="+20 ADCK cycles; 24 ADCK total" isDefault="true" />
       <choice value="1" name="+12 ADCK cycles; 16 ADCK total" />
       <choice value="2" name="+6 ADCK cycles; 10 ADCK total" />
       <choice value="3" name="+2 ADCK cycles; 6 ADCK total" />
@@ -64,19 +64,19 @@
 
    <binaryOption name="adc_cfg2_adhsc" description="High-Speed Configuration"
       toolTip="Configures the ADC for very high-speed operation by adding 2\n additional ADCK cycles to total conversion time">
-      <choice value="0" name="Normal conversion sequence selected" />
+      <choice value="0" name="Normal conversion sequence selected" isDefault="true" />
       <choice value="1" name="High-speed conversion sequence selected" />
    </binaryOption>
 
    <binaryOption name="adc_cfg2_adacken" description="Asynchronous Clock Output Enable"
       toolTip="Enables the asynchronous clock source irrespective of ADC need">
-      <choice value="0" name="Asynchronous clock output disabled" />
+      <choice value="0" name="Asynchronous clock output disabled" isDefault="true" />
       <choice value="1" name="Asynchronous clock output enabled" />
    </binaryOption>
 
    <choiceOption name="adc_sc2_refsel" description="Voltage Reference Selection"
       toolTip="Selects the voltage reference source used for conversions.">
-      <choice value="0" name="VRefH and VRefl" />
+      <choice value="0" name="VRefH and VRefl" isDefault="true" />
       <choice value="1" name="Gnd and VrefOut(1.2V)" />
       <choice value="2" name="Reserved" />
       <choice value="3" name="Reserved" />
@@ -84,13 +84,13 @@
 
    <binaryOption name="adc_sc2_dmaen" description="DMA Enable"
       toolTip="Enables use of DMA with ADC">
-      <choice value="0" name="Disabled" />
+      <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
 
    <choiceOption name="adc_sc2_compare" description="Compare function"
       toolTip="Enables comparison of ADC result with CV1 &amp;&amp; CV2\nRange comparisons depend on relation between CV1 &amp;&amp; CV2" >
-      <choice value="0b000" name="Disabled" />
+      <choice value="0b000" name="Disabled" isDefault="true" />
       <choice value="0b001" name="ADC&lt;CV1" />
       <choice value="0b101" name="ADC&gt;=CV1" />
       <choice value="0b011" name="(ADC&lt;CV1)||(ADC&gt;CV2) or (CV2&lt;ADC&lt;CV1)" />
@@ -99,7 +99,7 @@
 
    <binaryOption name="adc_sc2_adtrg" description="Conversion Trigger Select"
       toolTip="Selects the type of trigger used for initiating a conversion">
-      <choice value="0" name="Software trigger (write to SC1A)" />
+      <choice value="0" name="Software trigger (write to SC1A)" isDefault="true" />
       <choice value="1" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
    <menu name="Advanced" description="Advanced Options" >
@@ -116,6 +116,9 @@
 
    <projectActionList id = "adc_files" >
       <copy source="Project_Headers/adc.h"  target="Project_Headers/adc.h"  replace="true"  derived="true" />
+      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       replace="true"  derived="true" />
+      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  replace="true"  derived="true" />
+      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   replace="true"  derived="true" />
    </projectActionList>
    
    <template>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_hardware.dtd">
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
 <!-- MKL25Z4.usbdmHardware -->
 <!-- 
    Generated from MKL25Z4.csv
@@ -86,6 +86,9 @@
             <slot source="AlwaysEnabled3"       num="63" />
          </dma>
       </peripheral>
+      <peripheral baseName="ExternalTrigger" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+      </peripheral>
       <peripheral baseName="FTFA"     instance=""         version="ftfa">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
@@ -133,11 +136,9 @@
       <peripheral baseName="MCG"      instance=""         version="mcg_mkl14z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
       </peripheral>
-      <peripheral baseName="Miscellaneous" instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
-      </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+         <param key="rtcSharesPins" value="1" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
@@ -152,6 +153,9 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl25z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl04z4_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
@@ -964,15 +968,15 @@
          <placement pin="PTE0"          location="D15" />
          <placement pin="PTE1"          location="D14" />
          <placement pin="PTE2"          location="A16" />
-         <placement pin="PTE20"         location="A11" />
-         <placement pin="PTE21"         location="A10" />
-         <placement pin="PTE22"         location="A9" />
-         <placement pin="PTE23"         location="A8" />
+         <placement pin="PTE20"         location="A6" />
+         <placement pin="PTE21"         location="A7" />
+         <placement pin="PTE22"         location="A8" />
+         <placement pin="PTE23"         location="A9" />
          <placement pin="PTE24"         location="ACCEL_SCL" />
          <placement pin="PTE25"         location="ACCEL_SDA" />
-         <placement pin="PTE29"         location="A7" />
+         <placement pin="PTE29"         location="A10" />
          <placement pin="PTE3"          location="A15" />
-         <placement pin="PTE30"         location="A6" />
+         <placement pin="PTE30"         location="A11" />
          <placement pin="PTE31"         location="D30" />
          <placement pin="PTE4"          location="A14" />
          <placement pin="PTE5"          location="A13" />

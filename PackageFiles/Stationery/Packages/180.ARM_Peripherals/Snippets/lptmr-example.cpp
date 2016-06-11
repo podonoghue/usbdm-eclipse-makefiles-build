@@ -43,23 +43,20 @@ template<> void Lptmr_T<Lptmr0Info>::irqHandler() {
 }
 #endif
 
-static constexpr float us = 1e-6;
-static constexpr float ms = 1e-3;
-
 int main() {
    RED_LED::setOutput();
 
    Lptmr0::enable();
    
-   if (Lptmr0::setPeriod(8*ms) != E_NO_ERROR) {
-      puts(getErrorMessage());
-      __BKPT();
-   }
+   Lptmr0::setPeriod(20*ms);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically
    Lptmr0::setCallback(flash);
 #endif
+
+   // Check for errors so far
+   checkError();
 
    for(;;) {
       // This is required so that the CNR visibly updates in debugger

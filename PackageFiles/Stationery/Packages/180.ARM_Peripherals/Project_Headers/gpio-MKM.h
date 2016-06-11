@@ -650,8 +650,8 @@ template<class info, uint8_t adcChannel>
 class Adc_T {
 
 private:
-   static constexpr volatile ADC_Type *adc      = reinterpret_cast<volatile ADC_Type *>(info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(info::clockReg);
+   static constexpr volatile ADC_Type *adc      = info::adc;
+   static constexpr volatile uint32_t *clockReg = info::clockReg;
 
 public:
    using Pcr = PcrTable_T<info, adcChannel, info::pcrValue>;

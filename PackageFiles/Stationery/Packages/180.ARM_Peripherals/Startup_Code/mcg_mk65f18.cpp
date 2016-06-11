@@ -1,10 +1,9 @@
 /*
- * @file mcg.cpp (Derived from mcg-MK66M18.cpp)
+ * @file mcg_mk65f18.cpp
  *
- * Based on K66P144M180SF5RMV2
- *   3 Oscillators (OSC0, RTC, IRC48M)
- *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
- *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/7, VDIV=x16-x47)
+ * Generic MCG (High speed)
+ *   1 FLL (FRDIV=/1-/128, /32-/1024, /1280, 1536)
+ *   1 PLL (VCO PRDIV=/1-/7, VDIV=x16-x47)
  *
  *  Created on: 04/03/2012
  *      Author: podonoghue
@@ -43,7 +42,6 @@ volatile uint32_t SystemPeripheralClock;
 volatile uint32_t SystemOscerClock;
 volatile uint32_t SystemErclk32kClock;
 volatile uint32_t SystemLpoClock;
-volatile uint32_t SystemRtcClock;
 
 typedef void (*set_sys_dividers_asm_t)(uint32_t simClkDiv1);
 
@@ -156,6 +154,10 @@ constexpr uint8_t clockTransitionTable[8][8] = {
 #define SIM_CLKDIV1_OUTDIV3(x) 0
 #endif
 
+#ifndef SIM_CLKDIV1_OUTDIV2
+#define SIM_CLKDIV1_OUTDIV2(x) 0
+#endif
+
 /**
  * Transition from current clock mode to mode given
  *
@@ -174,18 +176,16 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #endif
 
    // Set PLL PRDIV0 etc
-   MCG->C5  = clockInfo.c5;
+   mcg->C5  = clockInfo.c5;
 
    // Set PLL VDIV0 etc
-   MCG->C6  = clockInfo.c6;
+   mcg->C6  = clockInfo.c6;
 
    // Select OSCCLK Source
-   MCG->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+   mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 
    // Set Fast Internal Clock divider
-   MCG->SC = clockInfo.sc;
-
-   constexpr volatile MCG_Type* mcg = (volatile MCG_Type*)McgInfo::basePtr;
+   mcg->SC = clockInfo.sc;
 
    // Set conservative clock dividers
    setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
@@ -320,7 +320,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          if (externalClockInUse && (clockInfo.c2&MCG_C2_EREFS0_MASK)) {
             do {
                __asm__("nop");
-            } while ((MCG->S & MCG_S_OSCINIT0_MASK) == 0);
+            } while ((mcg->S & MCG_S_OSCINIT0_MASK) == 0);
          }
          currentClockMode = next;
          if (transitionCount++>5) {
@@ -346,22 +346,19 @@ void Mcg::SystemCoreClockUpdate(void) {
 
    SystemMcgirClock = (mcg->C1&MCG_C1_IRCLKEN_MASK)?SystemMcgirClockUngated:0;
 
-   uint32_t mcg_erc_clock = 0;
-   switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case MCG_C7_OSCSEL(0) : mcg_erc_clock = Osc0::oscclkUndivided; break;
-      case MCG_C7_OSCSEL(1) : mcg_erc_clock = Rtc::rtcclk; break;
-      case MCG_C7_OSCSEL(2) : mcg_erc_clock = McgInfo::irc48m_clock; break;
-   }
-   if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
-      // External reference clock is selected
-      SystemMcgffClock = mcg_erc_clock/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+   uint32_t mcg_erc_clock = McgInfo::getErcClock();
 
-      if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
+   if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {
+      // External reference clock is selected
+      SystemMcgffClock = mcg_erc_clock/(1<<((mcg->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+
+      if (((mcg->C2&MCG_C2_RANGE0_MASK) != 0) && 
+	     ((mcg->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
          // High divisors - extra division
-         if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
+         if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
             SystemMcgffClock /= 20;
          }
-         else if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
+         else if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
             SystemMcgffClock /= 12;
          }
          else {
@@ -374,16 +371,16 @@ void Mcg::SystemCoreClockUpdate(void) {
       SystemMcgffClock = McgInfo::system_slow_irc_clock;
    }
 
-   uint32_t systemFllClock = SystemMcgffClock * ((MCG->C4&MCG_C4_DMX32_MASK)?732:640) * (((MCG->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
+   uint32_t systemFllClock = SystemMcgffClock * ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) * (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
    uint32_t systemPllClock = 0;
-   systemPllClock  = (mcg_erc_clock/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+16);
-   systemPllClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
+   systemPllClock  = (mcg_erc_clock/10)*(((mcg->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+16);
+   systemPllClock /= ((mcg->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
    systemPllClock *= 5;
 
    SystemMcgPllClock = 0;
    SystemMcgFllClock = 0;
-   switch (MCG->S&MCG_S_CLKST_MASK) {
+   switch (mcg->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
          SystemMcgOutClock = systemFllClock;
          SystemMcgFllClock = systemFllClock;
@@ -405,15 +402,10 @@ void Mcg::SystemCoreClockUpdate(void) {
    SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
    SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
 
-   SystemPeripheralClock = (SIM->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK)?SystemMcgPllClock:SystemMcgFllClock;
+   SystemPeripheralClock = SimInfo::getPeripheralClock();
    SystemOscerClock      = Osc0::oscclkUndivided;
 
-   switch (SIM->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
-   case SIM_SOPT1_OSC32KSEL(0): SystemErclk32kClock = Osc0::osc32kclk; break;
-   case SIM_SOPT1_OSC32KSEL(2): SystemErclk32kClock = Rtc::rtcclk; break;
-   case SIM_SOPT1_OSC32KSEL(3): SystemErclk32kClock = 1000; break;
-   }
-   SystemRtcClock        = (SIM->SOPT2&SIM_SOPT2_RTCCLKOUTSEL_MASK)?Rtc::rtcclk:((Rtc::rtcclkUngated>0)?1:0);
+   SystemErclk32kClock = SimInfo::getErc32kClock();
 
    SystemLpoClock    = 1000;
 

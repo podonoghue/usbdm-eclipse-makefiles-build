@@ -477,21 +477,53 @@ Devices using this peripheral:
    <xi:include href="_simFiles.xml"/>
          
    <template>
+      \t/**
+      \t * Get Peripheral clock frequency
+      \t *
+      \t * @return Clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getPeripheralClock() {
+      \t   
+      \t   switch(sim-&gt;SOPT2&amp;SIM_SOPT2_PLLFLLSEL_MASK) {
+      \t      default:                     return 0;
+      \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
+      \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
+      \t   }
+      \t}\n\n
+
+      \t/**
+      \t * Get ERCLK32K clock frequency
+      \t *
+      \t * @return Clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getErc32kClock() {
+      \t
+      \t   switch(sim-&gt;SOPT1&amp;SIM_SOPT1_OSC32KSEL_MASK) {
+      \t      default                     : return 0;
+      \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
+      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
+      \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
+      \t   }
+      \t}\n\n
+
+      \t/**
+      \t * Initialise SIM registers
+      \t */
       \tstatic void initRegs() {
       \t   
       \t   #ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim-&gt;SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
       \t   #endif
       \t
-      \t   SIM->SOPT1 = sopt1;
-      \t   SIM->SOPT2 = sopt2;
-      \t   SIM->SOPT4 = sopt4;
-      \t   SIM->SOPT5 = sopt5;
-      \t   SIM->SOPT7 = sopt7;
+      \t   sim-&gt;SOPT1 = sopt1;
+      \t   sim-&gt;SOPT2 = sopt2;
+      \t   sim-&gt;SOPT4 = sopt4;
+      \t   sim-&gt;SOPT5 = sopt5;
+      \t   sim-&gt;SOPT7 = sopt7;
       \t
-      \t   SIM->CLKDIV1 = clkdiv1;
-      \t   SIM->CLKDIV2 = clkdiv2;
+      \t   sim-&gt;CLKDIV1 = clkdiv1;
+      \t   sim-&gt;CLKDIV2 = clkdiv2;
       \t}
    </template>
 </devicePage>

@@ -50,7 +50,7 @@
          <deleteResource target="Startup_Code/console.c" />
          <createFolder   target="Snippets" />
          <copy source="Startup_Code/vectors-&DEVICE_FAMILY;.cpp"           target="Startup_Code/vectors.cpp" macroReplacement="false" />
-         <copy source="Startup_Code/console-&DEVICE_FAMILY;.cpp"           target="Startup_Code/console.cpp" />
+         <copy source="Startup_Code/console.cpp"                           target="Startup_Code/console.cpp" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />

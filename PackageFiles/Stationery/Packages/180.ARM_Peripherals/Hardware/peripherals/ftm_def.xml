@@ -109,8 +109,6 @@
       \t * @return Input clock frequency as an uint32_t in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
       \t
       \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
       \t   default:
@@ -127,8 +125,6 @@
       \t * @return Frequency as a float in Hz
       \t */
       \tstatic float getClockFrequencyF() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
       \t
       \t   float freq = getInputClockFrequency();
       \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
@@ -140,8 +136,6 @@
       \t * @return Frequency as a uint32_t in Hz (may underflow)
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   /** Pointer to hardware */
-      \t   static constexpr volatile FTM_Type *ftm = reinterpret_cast&lt;volatile FTM_Type *&gt;(basePtr);
       \t
       \t   uint32_t freq = getInputClockFrequency();
       \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));

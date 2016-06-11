@@ -18,6 +18,7 @@
 #include "derivative.h"
 #include "system.h"
 #include "hardware.h"
+#include "cmath"
 
 namespace USBDM {
 
@@ -52,10 +53,10 @@ public:
     *
     * @param theCallback The function to call from stub ISR
     */
-   static void setCallback(LPTMRCallbackFunction theCallback) {
-#ifdef DEBUG_BUILD
-      assert(Info::irqHandlerInstalled);
-#endif
+   static ErrorCode setCallback(LPTMRCallbackFunction theCallback) {
+      if (!Info::irqHandlerInstalled) {
+         return setErrrCode(E_NO_HANDLER);
+      }
       callback = theCallback;
 
       // Enable interrupts in LPTMR
@@ -66,6 +67,7 @@ public:
 
       // Enable interrupts in NVIC
       NVIC_EnableIRQ(Info::irqNums[0]);
+      return E_NO_ERROR;
    }
 
    /**
@@ -83,10 +85,10 @@ public:
 
 protected:
    /** Pointer to hardware */
-   static constexpr volatile LPTMR_Type *lptmr     = reinterpret_cast<volatile LPTMR_Type *>(Info::basePtr);
+   static constexpr volatile LPTMR_Type *lptmr     = Info::lptmr;
 
    /* Pointer to clock register */
-   static constexpr volatile uint32_t   *clockReg  = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
+   static constexpr volatile uint32_t   *clockReg  = Info::clockReg;
 
 public:
    /**

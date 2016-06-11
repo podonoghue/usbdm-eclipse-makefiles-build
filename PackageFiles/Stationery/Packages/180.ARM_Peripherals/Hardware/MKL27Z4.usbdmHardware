@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_hardware.dtd">
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
 <!-- MKL27Z4.usbdmHardware -->
 <!-- 
    Generated from MKL27Z4.csv
@@ -42,6 +42,9 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
+      </peripheral>
+      <peripheral baseName="ExternalTrigger" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
       <peripheral baseName="FLEXIO"   instance=""         version="flexio_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -110,9 +113,6 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_lite_mkl17z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
-      </peripheral>
-      <peripheral baseName="Miscellaneous" instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />

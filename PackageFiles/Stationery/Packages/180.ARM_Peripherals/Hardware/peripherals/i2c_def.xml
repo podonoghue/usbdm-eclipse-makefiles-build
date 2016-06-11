@@ -6,9 +6,41 @@
 
    <xi:include href="_irqOption.xml"/>
    
+   <stringOption name="clockSource" 
+      description="UART Clock Select"
+      constant="true" 
+      value="SystemBusClock"
+      />
+   
+   <aliasOption key="/SIM/system_bus_clock" />
+   
    <projectActionList id = "i2c_files" >
-      <copy source="Project_Headers/i2c.h"  target="Project_Headers/i2c.h"  replace="true"  derived="true" />
-      <copy source="Sources/i2c.cpp"        target="Sources/i2c.cpp"        replace="true"  derived="true" />
+      <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            replace="true"  derived="true" />
+      <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  replace="true"  derived="true" />
+      
+      <copy source="Snippets/fxos8700cq.h"            target="Snippets/fxos8700cq.h"            replace="true"  derived="true" />
+      <copy source="Snippets/fxos8700cq.cpp"          target="Snippets/fxos8700cq.cpp"          replace="true"  derived="true" />
+      <copy source="Snippets/fxos8700cq-example.cpp"  target="Snippets/fxos8700cq-example.cpp"  replace="true"  derived="true" />
+
+      <copy source="Snippets/hmc5883l.h"              target="Snippets/hmc5883l.h"              replace="true"  derived="true" />
+      <copy source="Snippets/hmc5883l.cpp"            target="Snippets/hmc5883l.cpp"            replace="true"  derived="true" />
+      <copy source="Snippets/hmc5883l-example.cpp"    target="Snippets/hmc5883l-example.cpp"    replace="true"  derived="true" />
+
+      <copy source="Snippets/mag3310.h"               target="Snippets/mag3310.h"               replace="true"  derived="true" />
+      <copy source="Snippets/mag3310.cpp"             target="Snippets/mag3310.cpp"             replace="true"  derived="true" />
+      <copy source="Snippets/mag3310-example.cpp"     target="Snippets/mag3310-example.cpp"     replace="true"  derived="true" />
+
+      <copy source="Snippets/mma845x.h"               target="Snippets/mma845x.h"               replace="true"  derived="true" />
+      <copy source="Snippets/mma845x.cpp"             target="Snippets/mma845x.cpp"             replace="true"  derived="true" />
+      <copy source="Snippets/mma845x-example.cpp"     target="Snippets/mma845x-example.cpp"     replace="true"  derived="true" />
+
+      <copy source="Snippets/mma8491q.h"              target="Snippets/mma8491q.h"              replace="true"  derived="true" />
+      <copy source="Snippets/mma8491q.cpp"            target="Snippets/mma8491q.cpp"            replace="true"  derived="true" />
+      <copy source="Snippets/mma8491q-example.cpp"    target="Snippets/mma8491q-example.cpp"    replace="true"  derived="true" />
+
+      <copy source="Snippets/pca9685.h"               target="Snippets/pca9685.h"               replace="true"  derived="true" />
+      <copy source="Snippets/pca9685.cpp"             target="Snippets/pca9685.cpp"             replace="true"  derived="true" />
+      <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     replace="true"  derived="true" />
    </projectActionList>
     
    <template>

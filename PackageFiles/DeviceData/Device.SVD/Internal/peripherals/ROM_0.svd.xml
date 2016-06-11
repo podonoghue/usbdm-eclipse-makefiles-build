@@ -54,7 +54,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>MARK</name>
-                     <description>no description available</description>
+                     <description>Hardwired</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -68,7 +68,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SYSACCESS</name>
-                     <description>no description available</description>
+                     <description>Hardwired</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -81,11 +81,10 @@ Devices using this peripheral:
                <description>Peripheral ID Register</description>
                <addressOffset>0xFD0</addressOffset>
                <access>read-only</access>
-               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PERIPHID</name>
-                     <description>no description available</description>
+                     <description>Peripheral ID</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -98,7 +97,6 @@ Devices using this peripheral:
                <description>Component ID Register</description>
                <addressOffset>0xFF0</addressOffset>
                <access>read-only</access>
-               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>COMPID</name>

@@ -22,13 +22,8 @@ namespace USBDM {
 template <class Info>
 class Osc {
 
-public:
-   static uint32_t osc32kclk;
-   static uint32_t oscclk;
-   static uint32_t oscclkUndivided;
-
 protected:
-   static constexpr volatile OSC_Type *osc = reinterpret_cast<volatile OSC_Type *>(Info::basePtr);
+   static constexpr volatile OSC_Type *osc = Info::osc;
 
 public:
    /**
@@ -42,29 +37,8 @@ public:
 
       // Configure Osc
       osc->CR  = Info::cr;
-
-      // Assume these clocks are always available as
-      // Osc may also be enabled by MCG as erc_clock
-      oscclkUndivided = Info::oscclk_clock;
-      osc32kclk       = Info::osc32kclk_clock;
-
-      if (Osc0Info::cr&&OSC_CR_ERCLKEN_MASK) {
-   #ifdef OSC_DIV_ERPS
-         osc->DIV  = Info::div;
-         oscclk    = Info::oscclk_clock/(1<<((Info::cr&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT));
-   #else
-         oscclk     = Info::oscclk_clock;
-   #endif
-      }
-      else {
-         oscclk     = 0;
-      }
    }
 };
-
-template <class Info> uint32_t Osc<Info>::osc32kclk = 0;
-template <class Info> uint32_t Osc<Info>::oscclk = 0;
-template <class Info> uint32_t Osc<Info>::oscclkUndivided = 0;
 
 #ifdef USBDM_OSC0_IS_DEFINED
 class Osc0 : public Osc<Osc0Info> {};

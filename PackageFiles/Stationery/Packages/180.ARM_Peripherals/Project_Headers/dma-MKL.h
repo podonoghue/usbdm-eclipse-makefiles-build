@@ -28,7 +28,7 @@ namespace USBDM {
 class DmaChannel {
 
 protected:
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Dmamux0Info::clockReg);
+   static constexpr volatile uint32_t *clockReg = Dmamux0Info::clockReg;
 
 private:
    volatile DMA_Type    *dmac;

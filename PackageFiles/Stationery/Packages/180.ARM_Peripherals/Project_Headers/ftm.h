@@ -135,8 +135,8 @@ private:
    static constexpr int MINIMUM_RESOLUTION = 100;
 
 protected:
-   static constexpr volatile FTM_Type* tmr      = reinterpret_cast<volatile FTM_Type*>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile FTM_Type* tmr      = Info::ftm;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
    /**
@@ -639,8 +639,8 @@ class QuadEncoder_T : public FtmIrq_T<Info> {
 #endif
 
 private:
-   static constexpr volatile FTM_Type *ftm      = reinterpret_cast<volatile FTM_Type *>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile FTM_Type *ftm      = Info::ftm;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
    static void enable() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- mcg_mk65f18.xml -->
+<!-- mgc_mk.xml -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
    <menu name="Clock monitors" description="Clock monitors">
    
@@ -37,21 +37,6 @@
          <choice value="1" name="Reset request" />
       </binaryOption>
 
-      <binaryOption name="mcg_c9_pll_cme" 
-         description="MCG External PLL Clock Monitor Enable"
-         toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
-         <choice value="0" name="PLL clock monitor disabled" />
-         <choice value="1" name="PLL clock monitor enabled" />
-      </binaryOption>
-
-      <binaryOption name="mcg_c9_pll_locre" 
-         description="MCG External PLL Loss of Clock Reset Enable"
-         toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
-                  MCG External PLL clock when the MCG is running in PEE mode">
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
-      
       <binaryOption name="mcg_c6_lolie0" 
          description="Loss of Lock Interrupt Enable"
          toolTip="Determines if an interrupt request is made following a PLL loss of lock indication.\n
@@ -129,14 +114,7 @@
    </menu>
    
    <menu name="Internal" description="Internal Clock Sources"
-      toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
-      <intOption name="system_irc48m_clock" 
-         units="Hz"
-         description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
-         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
-         value="48000000" 
-         constant="true" />
-
+      toolTip="USB_CLKIN, LPO" >
       <intOption name="system_usb_clkin_clock" 
          origin="USB Clock In pin"
          units="Hz"
@@ -166,20 +144,11 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </menu>
 
-   <choiceOption name="mcg_c7_oscsel" 
-      description="MCG External Reference Clock source [OSCSEL]"
-      toolTip="Selects the MCG FLL/PLL external reference clock source">
-      <choice value="0" name="Main System Oscillator (OSCCLK0)" />
-      <choice value="1" name="32 kHz RTC Oscillator (RTC_32K)" />
-      <choice value="2" name="48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
-   </choiceOption>
-
    <intOption name="mcg_erc_clock" 
       units="Hz"
       constant="true"  
       description="MCG External Reference Clock [OSCSELCLK]"
-      toolTip="Derived from the OSCCLK0 (external crystal or clock source on XTAL/EXTAL), \n 
-               RTC_CLOCK(XTAL32/EXTAL32) or IRC48M(Internal 48MHz)"
+      toolTip="External reference clock input to PLL/FLL"
       value="12000000" />
 
    <choiceOption name="clock_mode" 
@@ -308,53 +277,7 @@
    
    </menu>
    
-   <menu name="USB PLL1 (Not implemented)" description="USB PLL1 Settings">
-      <binaryOption name="usbphy_pll_enable" 
-         description="Enable clock output"
-         toolTip="Enables the clock output from the USB PLL.">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
-   
-      <binaryOption name="usbphy_power_enable" 
-         description="Enable clock output"
-         toolTip="Enables the clock output from the USB PLL.">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
-   
-      <binaryOption name="usbphy_pll_en_usb_clks" 
-         description="Enable USB clock output"
-         toolTip="Enables the USB clock output from the USB PHY PLL.">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
-   
-      <choiceOption name="usbphy_pll_sic_div"
-         description="USB PLL feedback loop divider"
-         toolTip="Allows the PLL to be adjusted for input frequencies of 12, 16 or 24 MHz" >
-            <choice value="0" name="24 MHz Crystal" />
-            <choice value="1" name="16 MHz Crystal" />
-            <choice value="2" name="12 MHz Crystal" />
-            <choice value="3" name="Reserved" />
-      </choiceOption>
-   
-      <intOption name="usb1pfdclk_Clock"
-         units="Hz"
-         description="USB1 PLL output frequency"
-         toolTip="Used as input to high speed USB and available as general clock source"
-         value="180000000" max="180000000" />
-   </menu>
-   
    <menu name="PLL0" description="PLL0 Settings">
-      <binaryOption name="mcg_c11_pllcs" 
-         description="PLL Clock Select (Some targets only)"
-         toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
-                  source when CLKS are programmed in PLL Engaged External (PEE) mode.">
-         <choice value="0" name="PLL0 output clock is selected" />
-         <choice value="1" name="External PLL clock (USB1 PFDCLK) is selected" />
-      </binaryOption>
-
       <binaryOption name="pll0Enabled"
          constant="true"
          description="PLL0 State"
@@ -402,7 +325,7 @@
          description="PLL0 VCO Divider (VDIV0)"
          toolTip="Determines the multiplication factor for the reference clock for PLL0.\n
                   This value is calculated from PLL0 input and output clock frequencies"
-         value="16" />
+         value="24" />
    </menu>
 
    <intOption name="system_mcgpllclk_clock" 
@@ -417,7 +340,6 @@
       
    <aliasOption name="system_mcgirclk_clock" />
    <aliasOption name="system_mcgffclk_clock" />
-   <aliasOption name="system_irc48m_clock" />
    <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
    <aliasOption key="/OSC0/system_oscerclk_clock" />
    <aliasOption key="/SIM/system_erclk32k_clock" />
@@ -443,8 +365,6 @@
 
    <aliasOption key="/SIM/system_core_clock" constant="false" />
    <aliasOption key="/SIM/system_bus_clock" constant="false" />
-   <aliasOption key="/SIM/system_flexbus_clock" constant="false" optional="true"/>
-   <aliasOption key="/SIM/system_flash_clock" constant="false" />
 
    <xi:include href="_irqOption.xml"/>
 
@@ -520,52 +440,42 @@
       <menu name="MCG_SC" description="MCG Status and Control Register" >
          <aliasOption name="mcg_sc_fcrdiv" />
       </menu>
-      
-      <menu name="MCG_C7" description="MCG Control Register 7">
-         <aliasOption name="mcg_c7_oscsel" />
-      </menu>
-   
+
       <menu name="MCG_C8" description="MCG Control Register 8">
-         <aliasOption name="mcg_c8_locre1" />
          <aliasOption name="mcg_c8_lolre" />
-         <aliasOption name="mcg_c8_cme1" />
-      </menu>
-   
-      <menu name="MCG_C9" description="MCG Control Register 9">
-         <aliasOption name="mcg_c9_pll_cme" /> 
-         <aliasOption name="mcg_c9_pll_locre" />
-      </menu>
-    
-      <menu name="MCG_C11" description="MCG Control Register 11">
-         <aliasOption name="mcg_c11_pllcs" />
       </menu>
 
+      <menu name="MCG_C9" description="MCG Control Register 8">
+      </menu>
+
+      <menu name="MCG_C10" description="MCG Control Register 8">
+      </menu>
    </menu>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M">
-      <param type="long" value="8000000" />        <!-- pllInMin     -->
-      <param type="long" value="16000000" />       <!-- pllInMax     -->
-      <param type="long" value="90000000" />       <!-- pllOutMin    -->
-      <param type="long" value="180000000" />      <!-- pllOutMax    -->
+      <param type="long" value="2000000" />        <!-- pllInMin     -->
+      <param type="long" value="4000000" />        <!-- pllInMax     -->
+      <param type="long" value="48000000" />       <!-- pllOutMin    -->
+      <param type="long" value="120000000" />      <!-- pllOutMax    -->
       <param type="long" value="1" />              <!-- prDivMin     -->
-      <param type="long" value="8" />              <!-- prDivMax     -->
-      <param type="long" value="16" />             <!-- vDivMin      -->
-      <param type="long" value="47" />             <!-- vDivMax      -->
-      <param type="long" value="2" />              <!-- pllPostDiv   -->
+      <param type="long" value="25" />             <!-- prDivMax     -->
+      <param type="long" value="24" />             <!-- vDivMin      -->
+      <param type="long" value="55" />             <!-- vDivMax      -->
+      <param type="long" value="1" />              <!-- pllPostDiv   -->
    </validate>
 
    <projectActionList id = "mcg" >
       <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/mcg_mk65f18.cpp"      target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
+      <copy source="Startup_Code/mcg_mkl.cpp"          target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
    </projectActionList>
          
    <template>
-      \t//! Not present on these devices
-      \tstatic constexpr int ERRATA_E2448 = 0;\n\n
-      
+      \t//! Indicates need for special handling of CLKDIV1 register
+      \tstatic constexpr int ERRATA_E2448 = $(ERRATA_E2448:0);\n\n
+
       \tenum ClockMode {
       \t   ClockMode_None = -1,
       \t   ClockMode_FEI  = 0,
@@ -577,9 +487,6 @@
       \t   ClockMode_PBE,
       \t   ClockMode_PEE,
       \t};\n\n
-      
-      \t//! Frequency of Internal 48MHz Clock
-      \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
@@ -607,9 +514,9 @@
       \t   //! Control Register 8
       \t   const uint8_t c8;
       \t   //! Control Register 9
-      \t   const uint8_t c8;
-      \t   //! Control Register 11
-      \t   const uint8_t c8;
+      \t   const uint8_t c9;
+      \t   //! Control Register 10
+      \t   const uint8_t c10;
       \t};\n\n
       
       \tstatic const ClockInfo clockInfo[];
@@ -620,13 +527,7 @@
       \t * @return MCGERCLK as uint32_t
       \t */
       \tstatic uint32_t getErcClock() {
-      \t
-      \t   switch((mcg-&gt;C7&amp;MCG_C7_OSCSEL_MASK)) {
-      \t      default               : return 0;
-      \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getInternalClock();
-      \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
-      \t      case MCG_C7_OSCSEL(2) : return RtcInfo::irc48m_clock;
-      \t   }
+      \t   return Osc0Info::getInternalClock();
       \t}\n\n
       
       \t/**
@@ -698,19 +599,16 @@
       \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)), // FCRDIV Internal Clock Reference Divider\n\n
       
       \t   //! Control Register 7
-      \t   MCG_C7_OSCSEL($(mcg_c7_oscsel)), // OSCSEL MCG OSC Clock Select\n\n
+      \t   0, // Reserved\n\n
       
       \t   //! Control Register 8
-      \t   MCG_C8_LOCRE1($(mcg_c8_locre1)) | // LOCRE1 RTC Loss of Clock Reset Enable
-      \t   MCG_C8_LOLRE($(mcg_c8_lolre))  | // LOLRE  PLL Loss of Lock Reset Enable
-      \t   MCG_C8_CME1($(mcg_c8_cme1)),    // CME1   Clock Monitor Enable 1\n\n
+      \t   MCG_C8_LOLRE($(mcg_c8_lolre)),   // LOLRE  PLL Loss of Lock Reset Enable\n\n
       
-      \t//! Control Register 9
-      \t   MCG_C9_PLL_CME($(mcg_c9_pll_cme))   | // PLL_CME MCG External PLL Clock Monitor Enable
-      \t   MCG_C9_PLL_LOCRE($(mcg_c9_pll_locre)),  // PLL_LOCRE   MCG External PLL Loss of Clock Reset Enable
+      \t   //! Control Register 9
+      \t   0, // Reserved\n\n
       
-      \t//! Control Register 11
-      \t   MCG_C11_PLLCS($(mcg_c11_pllcs)), // PLLCS PLL Clock Select
+      \t   //! Control Register 10
+      \t   0, // Reserved
       \t   }
       \t};
    </template>

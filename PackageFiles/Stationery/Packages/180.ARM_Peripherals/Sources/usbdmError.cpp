@@ -4,6 +4,7 @@
  *  Created on: 8 Jun 2016
  *      Author: podonoghue
  */
+#include <stdio.h>
 #include "hardware.h"
 
 namespace USBDM {
@@ -16,6 +17,7 @@ static const char *messages[] = {
       "No error",
       "Too small",
       "Too large",
+      "Interrupt handler not installed",
 };
 
 /**
@@ -29,6 +31,19 @@ const char *getErrorMessage(ErrorCode err) {
       return "Unknown error";
    }
    return messages[err];
+}
+
+/**
+ * Check for error code being set
+ */
+void checkError() {
+   while (errorCode != E_NO_ERROR) {
+#ifdef DEBUG_BUILD
+      puts(getErrorMessage());
+      __BKPT();
+#endif
    }
 
 }
+
+} // end namespace USBDM

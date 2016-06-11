@@ -102,11 +102,11 @@ class DmaChannel_T : public DmaChannel {
 
 protected:
    // Pointer to hardware
-   static constexpr volatile DMA_Type *dmac       = reinterpret_cast<volatile DMA_Type*>(Info::basePtr);
+   static constexpr volatile DMA_Type *dmac       = Info::dmac;
    // Pointer to hardware
    static constexpr volatile DMAMUX_Type *dmacmux = reinterpret_cast<volatile DMAMUX_Type*>(Info::info[channel].dmaMux);
    // Pointer to clock register
-   static constexpr volatile uint32_t *clockReg   = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile uint32_t *clockReg   = Info::clockReg;
    // Pointer to clock register
    static constexpr volatile uint32_t *muxClockReg   = reinterpret_cast<volatile uint32_t*>(DmaMux0Info::clockReg);
    // IRQ Num

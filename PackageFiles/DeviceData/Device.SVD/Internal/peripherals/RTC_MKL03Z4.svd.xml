@@ -292,57 +292,60 @@ Enables the 32kHz clock to be output to other peripherals</description>
                <fields>
                   <field>
                      <name>TIF</name>
-                     <description>Time Invalid Flag</description>
+                     <description>Time Invalid Flag\n
+Indicates if the time is valid</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time is valid</description>
+                           <description>Valid</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time is invalid and time counter is read as zero</description>
+                           <description>Invalid</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TOF</name>
-                     <description>Time Overflow Flag</description>
+                     <description>Time Overflow Flag\n
+Indicates time overflow has occurred</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time overflow has not occurred</description>
+                           <description>No overflow</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time overflow has occurred and time counter is read as zero</description>
+                           <description>Overflow</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TAF</name>
-                     <description>Time Alarm Flag</description>
+                     <description>Time Alarm Flag\n
+Set when alarm time reached</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time alarm has not occurred</description>
+                           <description>No alarm</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time alarm has occurred</description>
+                           <description>Alarm occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -355,12 +358,12 @@ Enables the 32kHz clock to be output to other peripherals</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time counter is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time counter is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -375,36 +378,38 @@ Enables the 32kHz clock to be output to other peripherals</description>
                <fields>
                   <field>
                      <name>TCL</name>
-                     <description>Time Compensation Lock</description>
+                     <description>Time Compensation Lock\n
+Write protects the Time Compensation Register</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Time Compensation Register is locked and writes are ignored</description>
+                           <description>Protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Time Compensation Register is not locked and writes complete as normal</description>
+                           <description>Unprotected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CRL</name>
-                     <description>Control Register Lock</description>
+                     <description>Control Register Lock\n
+Write protects the Control Register</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Control Register is locked and writes are ignored</description>
+                           <description>Protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Control Register is not locked and writes complete as normal</description>
+                           <description>Unprotected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -417,12 +422,12 @@ Enables the 32kHz clock to be output to other peripherals</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Status Register is locked and writes are ignored</description>
+                           <description>Protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Status Register is not locked and writes complete as normal</description>
+                           <description>Unprotected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -95,16 +95,20 @@ public:
     * @param channel  The PIT channel to modify
     * @param callback The function to call from stub ISR
     */
-   static void setCallback(int channel, PITCallbackFunction callback) {
+   static ErrorCode setCallback(int channel, PITCallbackFunction callback) {
+      if (!Info::irqHandlerInstalled) {
+         return setErrrCode(E_NO_HANDLER);
+      }
       Pit_T::callback[channel] = callback;
+      return E_NO_ERROR;
    }
 
 protected:
    /** Pointer to hardware */
-   static constexpr volatile PIT_Type *pit       = reinterpret_cast<volatile PIT_Type*>(Info::basePtr);
+   static constexpr volatile PIT_Type *pit       = Info::pit;
 
    /** Pointer to clock register */
-   static constexpr volatile uint32_t *clockReg  = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile uint32_t *clockReg  = Info::clockReg;
 
 public:
    /**
@@ -112,7 +116,7 @@ public:
     *
     *  @param mcr       Module Control Register
     */
-   static void configure(uint32_t mcr=Info::mcrValue) {
+   static void configure(uint32_t mcr=Info::mcr) {
       // Enable clock
       *clockReg |= Info::clockMask;
       __DMB();

@@ -43,7 +43,7 @@ public:
    enum I2C_State { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
 
 protected:
-   I2C_Type           *i2c;                 //!< I2C hardware instance
+   volatile I2C_Type  *i2c;                 //!< I2C hardware instance
    I2C_State           state;               //!< State of current transaction
    const I2c_Mode      mode;                //!< Mode of operation (i2c_interrupt/i2c_polled)
    uint16_t            rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
@@ -63,7 +63,7 @@ protected:
     * @param mode Mode of operation (i2c_interrupt or i2c_polled)
     *
     */
-   I2c(I2C_Type *i2c, I2c_Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
+   I2c(volatile I2C_Type *i2c, I2c_Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
    }
 
    /**
@@ -213,7 +213,7 @@ public:
     * @param mode       Mode of operation
     * @param myAddress  Address of this device on bus (not currently used)
     */
-   I2c_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(reinterpret_cast<I2C_Type*>(Info::basePtr), mode) {
+   I2c_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
 
 #ifdef DEBUG_BUILD
    // Check pin assignments
@@ -234,7 +234,7 @@ public:
    void init(const uint8_t myAddress) {
 
       // Enable clock to I2C interface
-      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
+      *Info::clockReg |= Info::clockMask;
 
       thisPtr = this;
 

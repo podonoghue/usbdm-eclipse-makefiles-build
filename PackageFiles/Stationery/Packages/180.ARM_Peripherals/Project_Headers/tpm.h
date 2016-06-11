@@ -120,8 +120,8 @@ template<class Info>
 class TpmBase_T {
 
 protected:
-   static constexpr volatile TPM_Type* tmr      = reinterpret_cast<volatile TPM_Type*>(Info::basePtr);
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t*>(Info::clockReg);
+   static constexpr volatile TPM_Type* tmr      = Info::tpm;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
    /**
@@ -142,7 +142,7 @@ public:
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
 
-      if (tmr->SC & FTM_SC_TOF_MASK) {
+      if (tmr->SC & TPM_SC_TOF_MASK) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
@@ -328,16 +328,16 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * Example
  * @code
  * // Instantiate the timer channel (for TPM0 channel 6)
- * using ftm0_ch6 = USBDM::Tpm0Channel<6>;
+ * using tpm0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * ftm0_ch6.initialise(200, PwmIO::tpm_leftAlign);
+ * tpm0_ch6.initialise(200, PwmIO::tpm_leftAlign);
  *
  * // Change period (in ticks)
- * ftm0_ch6.setPeriod(500);
+ * tpm0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * ftm0_ch6.setDutyCycle(45);
+ * tpm0_ch6.setDutyCycle(45);
  * @endcode
  *
  * @tparam channel TPM timer channel
@@ -370,7 +370,7 @@ using Tpm0 = TpmIrq_T<Tpm0Info>;
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm1Channel : public TpmBase_T<Tpm1Info>, CheckSignal<Ftm1Info, channel> {
+class Tpm1Channel : public TpmBase_T<Tpm1Info>, CheckSignal<Tpm1Info, channel> {
 public:
    static void setDutyCycle(int dutyCycle) {
       TpmBase_T::setDutyCycle(dutyCycle, channel);

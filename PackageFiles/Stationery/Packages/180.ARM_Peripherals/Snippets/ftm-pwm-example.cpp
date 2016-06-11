@@ -51,9 +51,6 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 }
 #endif
 
-constexpr float us = 1e-6;
-constexpr float ms = 1e-3;
-
 int main() {
    LED1::enable();
 
@@ -61,10 +58,10 @@ int main() {
     * Change PWM period
     * Note - Setting the period of LED1 affects all channels on the same FTM
     */
-   if (LED1::setPeriod(5*us) != E_NO_ERROR) {
-      puts(getErrorMessage());
-      __BKPT();
-   }
+   LED1::setPeriod(5*us);
+
+   // Check for error so far
+   checkError();
 
    for(;;) {
       for (int i=1; i<=99; i++) {
