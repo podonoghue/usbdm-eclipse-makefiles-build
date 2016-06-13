@@ -39,7 +39,7 @@
 <!ENTITY TPM1         SYSTEM "peripherals/TPM1_6CH.svd.xml">
 <!ENTITY TSI0         SYSTEM "peripherals/TSI0_MKL05Z4.svd.xml">
 <!ENTITY UART0        SYSTEM "peripherals/UART0_MKL04Z4.svd.xml">
-<!ENTITY UART1        SYSTEM "peripherals/UART1_MKL16Z4.svd.xml">
+<!ENTITY UART1        SYSTEM "peripherals/UART1_MKL14Z4.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
    <name>MKL36Z4</name>

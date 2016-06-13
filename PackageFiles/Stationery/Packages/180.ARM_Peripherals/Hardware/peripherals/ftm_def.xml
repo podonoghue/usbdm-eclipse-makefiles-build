@@ -4,6 +4,8 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
+   
    <intOption name="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
@@ -35,7 +37,7 @@
    </choiceOption>
    <choiceOption name="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1" />
+      <choice value="0" name="Divide by 1" isDefault="true" />
       <choice value="1" name="Divide by 2" />
       <choice value="2" name="Divide by 4" />
       <choice value="3" name="Divide by 8" />
@@ -46,7 +48,8 @@
    </choiceOption>
    <binaryOption name="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"
-      toolTip="Selects CPWM mode\nThis mode configures the FTM to operate in Up-Down Counting mode.">
+      toolTip="Selects CPWM mode\n
+         This mode configures the FTM to operate in Up-Down Counting mode.">
       <choice value="0" name="Left-aligned (count up)" />
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
@@ -55,7 +58,7 @@
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
-   <template>
+   <template><![CDATA[
       \t//! Timer external input frequency \n
       \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
       
@@ -64,45 +67,44 @@
 
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
-      \t    FTM_SC_TOIE($(irqEnabled))| // Timer Overflow Interrupt Enable
       \t    FTM_SC_CPWMS($(ftm_sc_cpwms))| // Centre-Aligned PWM Select
       \t    FTM_SC_CLKS($(ftm_sc_clks))|  // Clock Mode Selection
       \t    FTM_SC_TOIE($(ftm_sc_toie))|  // Timer Overflow Interrupt Enable
       \t    FTM_SC_PS($(ftm_sc_ps));    // Prescale Factor Selection \n\n
-   </template>
+   ]]></template>
 
    <menu name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src" optional="true" constant="false" />
    
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
    </menu>
    <xi:include href="_irqOption.xml"/>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate">
    </validate>
 
-   <projectActionList id = "ftm_2ch_def" >
+   <projectActionList id = "ftm_def" >
       <copy source="Project_Headers/ftm.h"         target="Project_Headers/ftm.h"         replace="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"  target="Snippets/ftm-pwm-example.cpp"  replace="true" derived="true" />
    </projectActionList>
-      
-   <template>
+         
+   <template><![CDATA[
       \t/**
       \t * Get input clock frequency
       \t *
@@ -110,7 +112,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(ftm-&gt;SC&amp;FTM_SC_CLKS_MASK) {
+      \t   switch(ftm->SC&FTM_SC_CLKS_MASK) {
       \t   default:
       \t   case FTM_SC_CLKS(0): return 0;
       \t   case FTM_SC_CLKS(1): return SystemBusClock;
@@ -127,7 +129,7 @@
       \tstatic float getClockFrequencyF() {
       \t
       \t   float freq = getInputClockFrequency();
-      \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
+      \t   return freq/(1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
       \t}\n\n
       
       \t/**
@@ -138,11 +140,10 @@
       \tstatic uint32_t getClockFrequency() {
       \t
       \t   uint32_t freq = getInputClockFrequency();
-      \t   return freq/(1&lt;&lt;((ftm-&gt;SC&amp;FTM_SC_PS_MASK)&gt;&gt;FTM_SC_PS_SHIFT));
+      \t   return freq/(1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
       \t}\n\n
-   </template>
+   ]]></template>
 
-   <pins />
+   <pins/>
    <pins name="FTM" />
-   
 </devicePage>

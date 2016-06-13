@@ -71,8 +71,8 @@
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(EXTAL32)" />
    <item key="/ADC0/adcInternalClock"                      value="5200000.0" />
-   <item key="/ADC0/adc_cfg1_adiclk"                       value="0" />
-   <item key="/ADC0/adc_cfg1_adiv"                         value="3" />
+   <item key="/ADC0/adc_cfg1_adiclk"                       value="3" />
+   <item key="/ADC0/adc_cfg1_adiv"                         value="0" />
    <item key="/ADC0/adc_cfg1_adlpc"                        value="false" />
    <item key="/ADC0/adc_cfg1_adlsmp"                       value="false" />
    <item key="/ADC0/adc_cfg1_mode"                         value="2" />
@@ -83,13 +83,13 @@
    <item key="/ADC0/adc_sc2_compare"                       value="0" />
    <item key="/ADC0/adc_sc2_dmaen"                         value="false" />
    <item key="/ADC0/adc_sc2_refsel"                        value="0" />
-   <item key="/ADC0/clockFrequency"                        value="7500000.0" />
+   <item key="/ADC0/clockFrequency"                        value="5200000.0" />
    <item key="/ADC0/irqEnabled"                            value="false" />
    <item key="/ADC0/irqHandler"                            value="false" />
    <item key="/ADC0/irqLevel"                              value="0" />
    <item key="/ADC1/adcInternalClock"                      value="5200000.0" />
-   <item key="/ADC1/adc_cfg1_adiclk"                       value="0" />
-   <item key="/ADC1/adc_cfg1_adiv"                         value="3" />
+   <item key="/ADC1/adc_cfg1_adiclk"                       value="3" />
+   <item key="/ADC1/adc_cfg1_adiv"                         value="0" />
    <item key="/ADC1/adc_cfg1_adlpc"                        value="false" />
    <item key="/ADC1/adc_cfg1_adlsmp"                       value="false" />
    <item key="/ADC1/adc_cfg1_mode"                         value="2" />
@@ -100,7 +100,7 @@
    <item key="/ADC1/adc_sc2_compare"                       value="0" />
    <item key="/ADC1/adc_sc2_dmaen"                         value="false" />
    <item key="/ADC1/adc_sc2_refsel"                        value="0" />
-   <item key="/ADC1/clockFrequency"                        value="7500000.0" />
+   <item key="/ADC1/clockFrequency"                        value="5200000.0" />
    <item key="/ADC1/irqEnabled"                            value="false" />
    <item key="/ADC1/irqHandler"                            value="false" />
    <item key="/ADC1/irqLevel"                              value="0" />
@@ -154,9 +154,9 @@
    <item key="/DAC0/dac_c0_lpen"                           value="false" />
    <item key="/DAC0/dac_c1_dacbfen"                        value="false" />
    <item key="/DAC0/dac_c1_dacbfmd"                        value="0" />
-   <item key="/DAC0/dac_c1_dacbfup"                        value="1" />
    <item key="/DAC0/dac_c1_dacbfwm"                        value="0" />
    <item key="/DAC0/dac_c1_dmaen"                          value="false" />
+   <item key="/DAC0/dac_c2_dacbfup"                        value="1" />
    <item key="/DAC0/irqEnabled"                            value="false" />
    <item key="/DAC0/irqHandler"                            value="false" />
    <item key="/DAC0/irqLevel"                              value="0" />
@@ -208,12 +208,15 @@
    <item key="/FTM3/irqLevel"                              value="0" />
    <item key="/FTM3/maximumPeriod"                         value="0.0010922666666666667" />
    <item key="/FTM3/period"                                value="10000" />
+   <item key="/I2C0/clockSource"                           value="SystemBusClock" />
    <item key="/I2C0/irqEnabled"                            value="false" />
    <item key="/I2C0/irqHandler"                            value="false" />
    <item key="/I2C0/irqLevel"                              value="0" />
+   <item key="/I2C1/clockSource"                           value="SystemBusClock" />
    <item key="/I2C1/irqEnabled"                            value="false" />
    <item key="/I2C1/irqHandler"                            value="false" />
    <item key="/I2C1/irqLevel"                              value="0" />
+   <item key="/I2C2/clockSource"                           value="SystemBusClock" />
    <item key="/I2C2/irqEnabled"                            value="false" />
    <item key="/I2C2/irqHandler"                            value="false" />
    <item key="/I2C2/irqLevel"                              value="0" />

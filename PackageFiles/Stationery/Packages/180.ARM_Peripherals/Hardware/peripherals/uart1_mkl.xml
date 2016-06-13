@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- uart1_mkl.xml -->
+<!--
+Devices using this peripheral: 
+-->
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+
+   <stringOption name="clockSource" 
+      description="UART Clock Select"
+      constant="true" 
+      value="SystemBusClock"
+      />
+   
+   <aliasOption key="/SIM/system_bus_clock" />
+   
+   <menu name="Advanced" description="Advanced options">
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
+   </menu>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <projectActionList id = "uart_files">
+      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
+   <template><![CDATA[
+   \tstatic constexpr bool statusNeedsWrite = false;\n\n
+      
+   \t/**
+   \t * Get input clock frequency
+   \t *
+   \t * @return Input clock frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getInputClockFrequency() {
+   \t   return $(clockSource:SystemBusClock);
+   \t}\n\n
+   ]]></template>
+
+   <pins/>
+</devicePage>

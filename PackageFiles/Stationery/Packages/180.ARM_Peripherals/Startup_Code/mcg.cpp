@@ -3,7 +3,7 @@
  *
  * Generic MCG
  *    1 FLL (FRDIV=/1-/128, /32-/1024, /1280, /1536)
- *    1 PLL (VCO PRDIV=/1-/24, VDIV=x24-x55)
+ *    1 PLL (VCO PRDIV=/1-/24, VDIV=pll_vdiv_min+x) (pll_vdiv_min=x16,x24)
  *
  *  Created on: 04/03/2012
  *      Author: podonoghue
@@ -176,9 +176,11 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
    // Set PLL VDIV0 etc
    mcg->C6  = clockInfo.c6;
-
+   
+#ifdef MCG_C7_OSCSEL
    // Select OSCCLK Source
    mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+#endif
 
    // Set Fast Internal Clock divider
    mcg->SC = clockInfo.sc;
@@ -366,9 +368,9 @@ void Mcg::SystemCoreClockUpdate(void) {
    uint32_t systemFllClock = SystemMcgffClock * ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) * (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
    uint32_t systemPllClock = 0;
-   systemPllClock  = (mcg_erc_clock/10)*(((mcg->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
+   systemPllClock  = (mcg_erc_clock/10)*(((mcg->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+McgInfo::pll_vdiv_min);
    systemPllClock /= ((mcg->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
-   systemPllClock *= 10;
+   systemPllClock *= (10/McgInfo::pll_post_divider);
 
    SystemMcgPllClock = 0;
    SystemMcgFllClock = 0;
@@ -394,10 +396,10 @@ void Mcg::SystemCoreClockUpdate(void) {
    SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
    SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
 
-   SystemLpoClock        = 1000;
+   SystemLpoClock    = 1000;
 
-   ::SystemBusClock      = SystemBusClock;
-   ::SystemCoreClock     = SystemCoreClock;
+   ::SystemBusClock  = SystemBusClock;
+   ::SystemCoreClock = SystemCoreClock;
 }
 
 /**

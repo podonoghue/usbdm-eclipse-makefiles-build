@@ -19,16 +19,16 @@ Devices using this peripheral:
       <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
       \t/**
       \t * Get clock frequency
       \t *
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return SimInfo::getLpuartClockFrequency();
+      \t   return SimInfo::getLpuartClock();
       \t}\n\n
-   </template>
+   ]]></template>
 
    <pins/>
 </devicePage>

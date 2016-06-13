@@ -351,34 +351,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>UART0SRC</name>
-                     <description>UART0 clock source select</description>
-                     <bitOffset>26</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Clock disabled</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>MCGFLLCLK clock or MCGPLLCLK/2 clock</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>OSCERCLK</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>MCGIRCLK clock</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TPMSRC" > <name>UART0SRC</name> <description>UART0 Clock Source Select</description> <bitOffset>26</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -792,7 +765,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>Reserved</description>
+                           <description>36-pin</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -938,8 +911,13 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>KLx2 Subfamily (low end)</description>
+                           <description>KLx2 Subfamily</description>
                            <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>KLx3 Subfamily</description>
+                           <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
@@ -955,6 +933,11 @@ Devices using this peripheral:
                            <name>0b0110</name>
                            <description>KLx6 Subfamily (advanced analog with I2S)</description>
                            <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>KLx7 Subfamily</description>
+                           <value>0b0111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

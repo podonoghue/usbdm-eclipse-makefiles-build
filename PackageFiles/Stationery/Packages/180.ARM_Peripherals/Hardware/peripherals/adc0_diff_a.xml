@@ -89,7 +89,8 @@
    </binaryOption>
 
    <choiceOption name="adc_sc2_compare" description="Compare function"
-      toolTip="Enables comparison of ADC result with CV1 &amp;&amp; CV2\nRange comparisons depend on relation between CV1 &amp;&amp; CV2" >
+      toolTip="Enables comparison of ADC result with CV1 &amp;&amp; CV2\n
+         Range comparisons depend on relation between CV1 &amp;&amp; CV2" >
       <choice value="0b000" name="Disabled" isDefault="true" />
       <choice value="0b001" name="ADC&lt;CV1" />
       <choice value="0b101" name="ADC&gt;=CV1" />
@@ -121,7 +122,7 @@
       <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   replace="true"  derived="true" />
    </projectActionList>
    
-   <template>
+   <template><![CDATA[
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t cfg1  = 
      \t    ADC_CFG1_ADICLK($(adc_cfg1_adiclk))|
@@ -143,8 +144,7 @@
      \t    ADC_SC2_DMAEN($(adc_sc2_dmaen))|
      \t    ADC_SC2_ACREN($(adc_sc2_compare))|
      \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));\n\n
-     
-   </template>
+   ]]></template>
    
    <pins/>
    

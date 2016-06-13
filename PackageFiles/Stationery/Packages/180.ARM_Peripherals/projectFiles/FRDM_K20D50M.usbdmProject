@@ -72,7 +72,8 @@
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
-   <item key="/ADC0/adc_cfg1_adiclk"                       value="0" />
+   <item key="/ADC0/adcInternalClock"                      value="5200000.0" />
+   <item key="/ADC0/adc_cfg1_adiclk"                       value="3" />
    <item key="/ADC0/adc_cfg1_adiv"                         value="0" />
    <item key="/ADC0/adc_cfg1_adlpc"                        value="false" />
    <item key="/ADC0/adc_cfg1_adlsmp"                       value="false" />
@@ -84,6 +85,7 @@
    <item key="/ADC0/adc_sc2_compare"                       value="0" />
    <item key="/ADC0/adc_sc2_dmaen"                         value="false" />
    <item key="/ADC0/adc_sc2_refsel"                        value="0" />
+   <item key="/ADC0/clockFrequency"                        value="5200000.0" />
    <item key="/ADC0/irqEnabled"                            value="false" />
    <item key="/ADC0/irqHandler"                            value="false" />
    <item key="/ADC0/irqLevel"                              value="0" />
@@ -139,6 +141,7 @@
    <item key="/FTM1/irqLevel"                              value="0" />
    <item key="/FTM1/maximumPeriod"                         value="268.435456" />
    <item key="/FTM1/period"                                value="10000" />
+   <item key="/I2C0/clockSource"                           value="SystemBusClock" />
    <item key="/I2C0/irqEnabled"                            value="false" />
    <item key="/I2C0/irqHandler"                            value="false" />
    <item key="/I2C0/irqLevel"                              value="0" />
@@ -286,4 +289,5 @@
    <item key="/UART2/irqLevel"                             value="0" />
    <item key="/USB0/irqEnabled"                            value="false" />
    <item key="/USB0/irqHandler"                            value="false" />
+   <item key="/USB0/irqLevel"                              value="0" />
 </section>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- uart_def.xml -->
+<!-- uart_mk.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -20,7 +20,7 @@ Devices using this peripheral:
       <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
    \tstatic constexpr bool statusNeedsWrite = false;\n\n
       
    \t/**
@@ -31,7 +31,7 @@ Devices using this peripheral:
    \tstatic uint32_t getInputClockFrequency() {
    \t   return $(clockSource:SystemBusClock);
    \t}\n\n
-   </template>
+   ]]></template>
 
    <pins/>
 </devicePage>

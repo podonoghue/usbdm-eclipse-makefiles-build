@@ -3,5 +3,5 @@
 <!-- spi0_mk21f12.xml.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="spi_def.xml"/>
+<xi:include href="spi_mk.xml"/>
 </fragment>

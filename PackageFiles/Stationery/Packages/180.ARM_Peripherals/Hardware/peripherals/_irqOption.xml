@@ -24,7 +24,7 @@
       toolTip="Sets the priority level used to configure the NVIC"
       value="0" min="0" max="15" />
 
-   <template>
+   <template><![CDATA[
        \t//! Install Callback handler\n
        \tstatic constexpr bool irqEnabled = $(irqEnabled);\n\n
        
@@ -33,6 +33,6 @@
        
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
-   </template>
+   ]]></template>
       
 </fragment>

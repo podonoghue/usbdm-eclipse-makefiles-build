@@ -557,12 +557,13 @@
 
    <projectActionList id = "mcg" >
       <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/mcg_mk65f18.cpp"      target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
+      <copy source="Startup_Code/mcg.cpp"              target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
+      <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
       \t//! Not present on these devices
       \tstatic constexpr int ERRATA_E2448 = 0;\n\n
       
@@ -586,7 +587,13 @@
       
       \t//! Frequency of Fast Internal Reference Clock [~4MHz]
       \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
-      
+
+      \t//! PLL VDIV min value
+      \tstatic constexpr uint32_t pll_vdiv_min = 16;\n\n
+
+      \t//! PLL post divider
+      \tstatic constexpr uint32_t pll_post_divider = 2;\n\n
+
       \tstruct ClockInfo {
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;
@@ -607,9 +614,9 @@
       \t   //! Control Register 8
       \t   const uint8_t c8;
       \t   //! Control Register 9
-      \t   const uint8_t c8;
+      \t   const uint8_t c9;
       \t   //! Control Register 11
-      \t   const uint8_t c8;
+      \t   const uint8_t c11;
       \t};\n\n
       
       \tstatic const ClockInfo clockInfo[];
@@ -621,7 +628,7 @@
       \t */
       \tstatic uint32_t getErcClock() {
       \t
-      \t   switch((mcg-&gt;C7&amp;MCG_C7_OSCSEL_MASK)) {
+      \t   switch((mcg->C7&MCG_C7_OSCSEL_MASK)) {
       \t      default               : return 0;
       \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getInternalClock();
       \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
@@ -635,9 +642,9 @@
       \t * @return MCGIRCLK as uint32_t
       \t */
       \tstatic uint32_t getInternalIrcClock() {
-      \t      if (mcg-&gt;C2&amp;MCG_C2_IRCS_MASK) {
+      \t      if (mcg->C2&MCG_C2_IRCS_MASK) {
       \t#ifdef MCG_SC_FCRDIV_MASK
-      \t         return (system_fast_irc_clock/(1&lt;&lt;((mcg-&gt;SC&amp;MCG_SC_FCRDIV_MASK)&gt;&gt;MCG_SC_FCRDIV_SHIFT)));
+      \t         return (system_fast_irc_clock/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
       \t#else
       \t         return system_fast_irc_clock;
       \t#endif
@@ -653,16 +660,16 @@
       \t * @return MCGIRCLK as uint32_t
       \t */
       \tstatic uint32_t getIrcClock() {
-      \t   if (mcg-&gt;C1&amp;MCG_C1_IRCLKEN_MASK) {
+      \t   if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
       \t      return getInternalIrcClock();
       \t   }
       \t   else {
       \t      return 0;
       \t   }
       \t}\n\n
-   </template>
+   ]]></template>
    
-   <template name="clockInfo">
+   <template name="clockInfo"><![CDATA[
       \tconst McgInfo::ClockInfo McgInfo::clockInfo[1] = {
       \t   {
       \t   //! Clock Mode
@@ -713,5 +720,5 @@
       \t   MCG_C11_PLLCS($(mcg_c11_pllcs)), // PLLCS PLL Clock Select
       \t   }
       \t};
-   </template>
+   ]]></template>
 </devicePage>

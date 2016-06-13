@@ -126,7 +126,7 @@
       <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  replace="true"  derived="true" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
       \t//! Frequency of OSC Clock or Crystal\n
       \tstatic constexpr uint32_t oscclk_clock = $(oscclk_clock)UL;\n\n
       
@@ -158,8 +158,8 @@
       \t * @return Clock frequency as uint32_t in Hz
       \t */
       \tstatic uint32_t getExternalClock() {
-      \t   return (osc-&gt;CR&amp;OSC_CR_ERCLKEN_MASK)?
-      \t      (getInternalClock()//(1&lt;&lt;()osc-&gt;DIV&amp;OSC_DIV_ERPS_MASK)&gt;&gt;OSC_DIV_ERPS_SHIFT)):
+      \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
+      \t      (getInternalClock()//(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
       \t      0;
       \t}\n\n
       
@@ -171,7 +171,7 @@
       \tstatic uint32_t getOsc32kClock() {
       \t   return osc32kclk_clock;
       \t}\n\n
-   </template>
+   ]]></template>
 
    <pins />
 </devicePage>

@@ -31,7 +31,7 @@ static void delay(void) {
  *
  */
 // Connection mapping - change as required
-using LED = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
+using LED = $(demo.cpp.pwm.led1:Tpm0Channel<1>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"
@@ -53,9 +53,12 @@ template<> void TpmIrq_T<Tpm1Info>::irqHandler() {
 int main() {
    LED::enable();
 
-   // Change PWM period
-//   LED1::configure(1000);
-//   LED2::configure(1000);
+   // Note changing LED period affects all channels of TPM
+   // Could use Tpm0::setPeriod(100*ms); to make this more obvious
+   LED::setPeriod(100*ms);
+
+   // Check for errors so far
+   checkError();
 
    for(;;) {
       for (int i=0; i<=100; i++) {

@@ -57,7 +57,7 @@
       <choice value="0" name="Prescaler/glitch filter is enabled" />
       <choice value="1" name="Prescaler/glitch filter is bypassed" />
    </binaryOption>
-   <template>
+   <template><![CDATA[
       \t//! Default Timer Compare value\n
       \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
       
@@ -66,7 +66,7 @@
       \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
       \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
       \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
-   </template>
+   ]]></template>
    
    <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
@@ -94,7 +94,7 @@
       <choice value="0" name="Active-high source, rising-edge increments CNR" />
       <choice value="1" name="Active-low source,  falling-edge increments CNR" />
    </binaryOption>
-   <template>
+   <template><![CDATA[
       \t//! Default CSR value\n
       \tstatic constexpr uint32_t csr = 
       \t   LPTMR_CSR_TIE($(irqEnabled))|
@@ -102,7 +102,7 @@
       \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
       \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
       \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
-   </template>
+   ]]></template>
    
    <intOption name="lptmr_cmr" description="Timer Compare Register"
       toolTip="Default value for comparison" />
@@ -128,7 +128,7 @@
       <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   replace="true" derived="true"/>
    </projectActionList>
       
-   <template>
+   <template><![CDATA[
       \t/**
       \t * Get input clock frequency
       \t *
@@ -136,7 +136,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(lptmr-&gt;PSR&amp;LPTMR_PSR_PCS_MASK) {
+      \t   switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
       \t   default:
       \t   case LPTMR_PSR_PCS(0): return McgInfo::getIrcClock();
       \t   case LPTMR_PSR_PCS(1): return SystemLpoClock;
@@ -153,10 +153,10 @@
       \tstatic float getClockFrequencyF() {
       \t
       \t   float freq = getInputClockFrequency();
-      \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
-      \t   return freq/(1&lt;&lt;(((lptmr-&gt;PSR&amp;LPTMR_PSR_PRESCALE_MASK)&gt;&gt;LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
       
       \t/**
@@ -167,12 +167,12 @@
       \tstatic uint32_t getClockFrequency() {
       \t
       \t   uint32_t freq = getInputClockFrequency();
-      \t   if (lptmr-&gt;PSR&amp;LPTMR_PSR_PBYP_MASK) {
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
-      \t   return freq/(1&lt;&lt;(((lptmr-&gt;PSR&amp;LPTMR_PSR_PRESCALE_MASK)&gt;&gt;LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
-   </template>
+   ]]></template>
 
    <pins/>
 

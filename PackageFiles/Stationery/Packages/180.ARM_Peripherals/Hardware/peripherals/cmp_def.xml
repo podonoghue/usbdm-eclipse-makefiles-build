@@ -94,7 +94,7 @@
       <!--  copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  replace="true"  derived="true" / -->
    </projectActionList>
    
-   <template>
+   <template><![CDATA[
       \t//! CMP Control Register 0\n
       \tstatic constexpr uint32_t cr0 =
       \t   CMP_CR0_FILTER_CNT($(cmp_cr0_filter_cnt))     | // Filter Sample Count
@@ -118,7 +118,7 @@
       \t//! CMP Filter Period Register\n
       \tstatic constexpr uint32_t fpr =
       \t   CMP_FPR_FILT_PER($(cmp_fpr_filt_per)); // Filter Sample Period\n\n
-   </template>
+   ]]></template>
 
    <pins/>
    

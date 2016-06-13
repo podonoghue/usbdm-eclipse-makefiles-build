@@ -931,17 +931,17 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>KLx4 Subfamily</description>
+                           <description>KLx4 Subfamily (basic analog)</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0101</name>
-                           <description>KLx5 Subfamily</description>
+                           <description>KLx5 Subfamily (advanced analog)</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0110</name>
-                           <description>KLx6 Subfamily</description>
+                           <description>KLx6 Subfamily (advanced analog with I2S)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1496,17 +1496,17 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>COP timeout after 25 LPO cycles or 213 bus clock cycles</description>
+                           <description>COP timeout after 2^5 LPO cycles or 213 bus clock cycles</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>COP timeout after 28 LPO cycles or 216 bus clock cycles</description>
+                           <description>COP timeout after 2^8 LPO cycles or 216 bus clock cycles</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>COP timeout after 210 LPO cycles or 218 bus clock cycles</description>
+                           <description>COP timeout after 2^10 LPO cycles or 218 bus clock cycles</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

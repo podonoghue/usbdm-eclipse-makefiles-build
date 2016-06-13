@@ -43,7 +43,7 @@
       <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     replace="true"  derived="true" />
    </projectActionList>
     
-   <template>
+   <template><![CDATA[
       \t/**
       \t * Get input clock frequency
       \t *
@@ -52,6 +52,6 @@
       \tstatic uint32_t getInputClockFrequency() {
       \t   return $(clockSource:SystemBusClock);
       \t}\n\n
-   </template>
+   ]]></template>
    <pins/>
 </devicePage>

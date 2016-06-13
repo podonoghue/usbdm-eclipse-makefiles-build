@@ -395,43 +395,9 @@ Write protects the Time Compensation Register</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CRL</name>
-                     <description>Control Register Lock\n
-Write protects the Control Register</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Protected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Unprotected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRL</name>
-                     <description>Status Register Lock</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Protected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Unprotected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TCL" > <name>CRL</name> <description>Control Register Lock\n
+Write protects the Control Register</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>SRL</name> <description>Status Register Lock</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>LRL</name>
                      <description>Lock Register Lock</description>

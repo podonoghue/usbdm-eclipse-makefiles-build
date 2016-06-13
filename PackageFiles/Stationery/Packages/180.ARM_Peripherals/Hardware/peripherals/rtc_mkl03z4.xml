@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- mgc-def.xml -->
+<!-- rtc_mkl03z4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_mk.xml"/>
+<xi:include href="rtc_def.xml"/>
 </fragment>

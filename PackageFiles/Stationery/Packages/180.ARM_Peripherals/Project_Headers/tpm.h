@@ -18,6 +18,7 @@
 #include <stddef.h>
 #include <assert.h>
 #include "derivative.h"
+#include <cmath>
 
 /*
  * Default port information
@@ -92,7 +93,7 @@ enum Tpm_Mode {
    tpm_leftAlign   = 0,
    //! Centre-aligned PWM
    tpm_centreAlign = TPM_SC_CPWMS_MASK,
-} ;
+};
 
 /**
  * Type definition for TPM interrupt call back
@@ -119,6 +120,10 @@ typedef void (*TPMCallbackFunction)(void);
 template<class Info>
 class TpmBase_T {
 
+private:
+   /** Minimum resolution required when setting interval */
+   static constexpr int MINIMUM_RESOLUTION = 100;
+
 protected:
    static constexpr volatile TPM_Type* tmr      = Info::tpm;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
@@ -134,7 +139,6 @@ public:
 
       // Enable clock to timer
       *clockReg |= Info::clockMask;
-
       __DMB();
 
       // Common registers
@@ -142,20 +146,14 @@ public:
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
 
-      if (tmr->SC & TPM_SC_TOF_MASK) {
-         // Enable interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
-      }
+      enableInterrupts(Info::irqEnabled);
    }
 
    /**
     * Configure Timer operation\n
     * Used to change configuration after enabling interface
     *
-    * @param period  Period in us
+    * @param period  Period in ticks
     * @param mode    Mode of operation see @ref Tpm_Mode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
@@ -171,32 +169,80 @@ public:
          // Left aligned PWM without CPWMS selected
          tmr->SC   = Info::sc;
       }
-      setPeriod(period);
+      setPeriodInTicks(period);
 
-      if (tmr->SC & TPM_SC_TOIE_MASK) {
+      if (Info::irqEnabled) {
+         enableInterrupts();
+      }
+   }
+
+   /**
+    * Enable/disable interrupts in the NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableInterrupts(bool enable=true) {
+      if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
    }
 
    /**
     * Set period
     *
-    * @param per Period in us
+    * @param period Period in seconds as a float
+    *
+    * @note Adjusts TPM pre-scaler to appropriate value.
+    *       This will affect all channels on the TPM
+    *
+    * @return true => success, false => failed to find suitable values
+    */
+   static ErrorCode setPeriod(float period) {
+      float inputClock = Info::getInputClockFrequency();
+      int prescaleFactor=1;
+      int prescalerValue=0;
+      while (prescalerValue<=7) {
+         float    clock = inputClock/prescaleFactor;
+         uint32_t mod   = round(period*clock);
+         if (mod < MINIMUM_RESOLUTION) {
+            // Too short a period for 1% resolution
+            return setErrrCode(E_TOO_SMALL);
+         }
+         if (mod <= 65535) {
+            // Clear SC so immediate effect on prescale change
+            uint32_t sc = tmr->SC&~TPM_SC_PS_MASK;
+            tmr->SC     = 0;
+            __DSB();
+            tmr->MOD    = mod;
+            tmr->SC     = sc|TPM_SC_PS(prescalerValue);
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a period
+      return setErrrCode(E_TOO_LARGE);
+   }
+
+   /**
+    * Set period
+    *
+    * @param period Period in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setPeriod(int per) {
+   static void setPeriodInTicks(int period) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&TPM_SC_CPWMS_MASK) != 0;
-
-      // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
-      uint64_t period = ((uint64_t)per*tickRate)/1000000;
 
       // Disable TPM so register changes are immediate
       tmr->SC = TPM_SC_PS(0);
@@ -236,12 +282,41 @@ public:
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
+      uint32_t tickRate = Info::getClockFrequency();
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
 #ifdef DEBUG_BUILD
-      assert(rv > 0xFFFFUL);
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
+         __BKPT();
+      }
+#endif
+      return rv;
+   }
+
+   /**
+    * Converts a time in microseconds to number of ticks
+    *
+    * @param time Time in microseconds
+    * @return Time in ticks
+    *
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    */
+   static uint32_t convertSecondsToTicks(float time) {
+
+      // Calculate period
+      float    tickRate = Info::getClockFrequencyF();
+      uint64_t rv       = time*tickRate;
+#ifdef DEBUG_BUILD
+      if (rv > 0xFFFFUL) {
+         // Attempt to set too long a period
+         __BKPT();
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
          __BKPT();
       }
 #endif
@@ -259,16 +334,21 @@ public:
    static uint32_t convertTicksToMicroseconds(int time) {
 
       // Calculate period
-      uint32_t tickRate = SystemBusClock/(1<<(tmr->SC&TPM_SC_PS_MASK));
+      uint32_t tickRate = Info::getClockFrequency()/(1<<(tmr->SC&TPM_SC_PS_MASK));
       uint64_t rv       = ((uint64_t)time*1000000)/tickRate;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          __BKPT();
       }
+      if (rv == 0) {
+         // Attempt to set too short a period
+         __BKPT();
+      }
 #endif
       return rv;
    }
+
    /**
     * Set PWM duty cycle
     *
@@ -303,7 +383,7 @@ public:
     */
    static void irqHandler() {
       if (callback != 0) {
-         callback();
+         callback(TpmBase_T<Info>::tmr);
       }
 	  // Clear interrupt
       TpmBase_T<Info>::tmr->SC &= ~TPM_SC_TOF_MASK;
@@ -312,14 +392,53 @@ public:
    /**
     * Set callback function
     *
-    * @param callback Callback function to execute on interrupt
+    * @param theCallback Callback function to execute on interrupt
     */
    static void setCallback(TPMCallbackFunction theCallback) {
       callback = theCallback;
+      TpmBase_T<Info>::enableInterrupts();
    }
 };
 
 template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
+
+/**
+ * Template class representing a TPM timer channel
+ *
+ * Example
+ * @code
+ * // Instantiate the timer channel (for TPM0 channel 6)
+ * using Tpm0_ch6 = USBDM::TpmChannel<TPM0Info, 6>;
+ *
+ * // Initialise PWM with initial period and alignment
+ * Tpm0_ch6.setMode(200, PwmIO::tpm_leftAlign);
+ *
+ * // Change period (in ticks)
+ * Tpm0_ch6.setPeriod(500);
+ *
+ * // Change duty cycle (in percent)
+ * Tpm0_ch6.setDutyCycle(45);
+ * @endcode
+ *
+ * @tparam channel TPM timer channel
+ */
+template <class Info, int channel>
+class TpmChannel_T : public TpmBase_T<Info>, CheckSignal<Tpm0Info, channel> {
+
+public:
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
+   static void setDutyCycle(int dutyCycle) {
+      TpmBase_T<Info>::setDutyCycle(dutyCycle, channel);
+   }
+
+   static void setPCR(uint32_t pcrValue) {
+      PcrTable_T<Info,  1>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   }
+};
 
 #ifdef USBDM_TPM0_IS_DEFINED
 /**
@@ -328,16 +447,16 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * Example
  * @code
  * // Instantiate the timer channel (for TPM0 channel 6)
- * using tpm0_ch6 = USBDM::Tpm0Channel<6>;
+ * using Tpm0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * tpm0_ch6.initialise(200, PwmIO::tpm_leftAlign);
+ * Tpm0_ch6.setMode(200, PwmIO::tpm_leftAlign);
  *
  * // Change period (in ticks)
- * tpm0_ch6.setPeriod(500);
+ * Tpm0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * tpm0_ch6.setDutyCycle(45);
+ * Tpm0_ch6.setDutyCycle(45);
  * @endcode
  *
  * @tparam channel TPM timer channel

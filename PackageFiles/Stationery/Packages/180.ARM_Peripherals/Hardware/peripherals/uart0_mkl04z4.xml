@@ -1,45 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- uart_mkl04.xml -->
-<!--
-Devices using this peripheral: 
--->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+<!-- uart0_mkl04z4.xml -->
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false"  />
-   <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
-   
-   <menu name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
-   </menu>
-
-   <xi:include href="_irqOption.xml"/>
-
-   <projectActionList id = "uart_files">
-      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
-   </projectActionList>
-         
-   <template>
-      \tstatic constexpr bool statusNeedsWrite = true;\n\n
-      
-      \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t
-      \t   switch(SIM-&gt;SOPT2&amp;SIM_SOPT2_UART0SRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_UART0SRC(0): return 0;
-      \t   case SIM_SOPT2_UART0SRC(1): return SystemPeripheralClock;
-      \t   case SIM_SOPT2_UART0SRC(2): return SystemMcgFllClock;
-      \t   case SIM_SOPT2_UART0SRC(3): return SystemMcgirClock;
-      \t   }
-      \t}\n\n
-   </template>
-
-   <pins/>
-</devicePage>
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="uart0_mkl.xml"/>
+</fragment>

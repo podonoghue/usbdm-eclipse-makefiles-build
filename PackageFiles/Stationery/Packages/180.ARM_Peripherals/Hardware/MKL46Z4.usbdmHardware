@@ -7,7 +7,7 @@
 
 <root version="1.2.0">
    <family name="MKL46Z4">
-      <device name="FRDM_KL46Z4"  manual="KL46P121M48SF4RM" package="FRDM" />
+      <device name="FRDM_KL46Z4"  manual="KL46P121M48SF4RM" package="FRDM_KL46Z4" />
       <device name="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
       <device name="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
       <device name="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
@@ -130,7 +130,7 @@
          <irq num="I2S0_IRQn" />
       </peripheral>
       <peripheral baseName="LCD"      instance=""         version="lcd_mkl">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLcd" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_SLCD_MASK" />
          <irq num="LCD_IRQn" />
       </peripheral>
@@ -150,6 +150,7 @@
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+         <param key="rtcSharesPins" value="1" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
@@ -164,6 +165,9 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl46z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
@@ -195,7 +199,7 @@
       </peripheral>
       <peripheral baseName="TSI"      instance="0"        version="tsi0_mkl05z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTsi" />
-         <clock reg="SCGC5"         mask="SIM_SCGC5_TSI_MASK" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_TSI0_MASK" />
          <irq num="TSI0_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="0"        version="uart0_mkl04z4">
@@ -203,12 +207,12 @@
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
          <irq num="UART0_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="1"        version="uart1_mkl16z4">
+      <peripheral baseName="UART"     instance="1"        version="uart1_mkl14z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" />
          <irq num="UART1_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="2"        version="uart1_mkl16z4">
+      <peripheral baseName="UART"     instance="2"        version="uart1_mkl14z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
          <irq num="UART2_IRQn" />
@@ -1423,7 +1427,7 @@
          <placement pin="VSS5"          location="pE3" />
          <placement pin="VSSA"          location="pF3" />
       </package>
-      <package name="FRDM">
+      <package name="FRDM_KL46Z4">
          <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0" />
          <placement pin="PTA12"         location="D3" />

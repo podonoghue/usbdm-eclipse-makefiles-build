@@ -16,8 +16,8 @@ Devices using this peripheral:
    <projectActionList id = "usb_files">
    </projectActionList>
          
-   <template>
-   </template>
+   <template><![CDATA[
+   ]]></template>
 
    <pins/>
 </devicePage>

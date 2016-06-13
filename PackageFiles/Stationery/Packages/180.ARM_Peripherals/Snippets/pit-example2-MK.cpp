@@ -31,6 +31,7 @@ using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 namespace USBDM {
 
 /*
+ * If using naked handler it must be named exactly as shown
  * MK version - individual handler for each PIT channel
  */
 template<> void Pit_T<PitInfo>::irq0Handler() {
@@ -76,10 +77,13 @@ int main() {
 #endif
 
    // Flash RED @ 1Hz
-   Pit::configureChannel(0, SystemBusClock/2);
+   Pit::configureChannel(0, ::SystemBusClock/2);
 
    // Flash GREEN @ 0.5Hz
-   Pit::configureChannel(1, SystemBusClock);
+   Pit::configureChannel(1, ::SystemBusClock);
+
+   // Check for errors so far
+   checkError();
 
    for(;;) {
       __asm__("nop");

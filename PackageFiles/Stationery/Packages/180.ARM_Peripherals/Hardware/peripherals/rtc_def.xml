@@ -61,21 +61,24 @@
 
    <binaryOption name="rtc_cr_um" 
       description="Update Mode"
-      toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\nWhen set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
+      toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
+         When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
       <choice value="0" name="Registers cannot be written when locked" />
       <choice value="1" name="Registers can be written when locked under limited conditions" />
    </binaryOption>
 
    <binaryOption name="rtc_cr_sup" 
       description="Supervisor access"
-      toolTip="Determines if the RTC register access is available in non-supervisor mode\nNon supported write accesses generate a bus error" >
+      toolTip="Determines if the RTC register access is available in non-supervisor mode\n
+         Non supported write accesses generate a bus error" >
       <choice value="0" name="Non-supervisor mode write accesses are not supported" />
       <choice value="1" name="Non-supervisor mode write accesses are supported" />
    </binaryOption>
 
    <binaryOption name="rtc_cr_wpe" 
       description="Wakeup Pin Enable"
-      toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down\nThe wakeup pin is optional and not available on all devices." >
+      toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down\n
+         The wakeup pin is optional and not available on all devices." >
       <choice value="0" name="Wakeup pin is disabled" />
       <choice value="1" name="Wakeup pin is enabled" />
    </binaryOption>
@@ -108,7 +111,7 @@
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   replace="true"  derived="true" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
       \t//! Frequency of RTC External Clock or Crystal\n
       \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
       
@@ -127,7 +130,7 @@
       \t * @return Clock frequency as uint32_t
       \t */
       \tstatic uint32_t getInternalClock() {
-      \t   return (rtc-&gt;CR&amp;RTC_CR_OSCE_MASK)?rtcclk_clock:0;
+      \t   return (rtc->CR&RTC_CR_OSCE_MASK)?rtcclk_clock:0;
       \t}\n\n
       
       \t/**
@@ -136,7 +139,7 @@
       \t * @return Clock frequency as uint32_t
       \t */
       \tstatic uint32_t getExternalClock() {
-      \t   return (rtc-&gt;CR&amp;RTC_CR_CLKO_MASK)?0:getInternalClock();
+      \t   return (rtc->CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
       \t}\n\n
-   </template>
+   ]]></template>
 </devicePage>

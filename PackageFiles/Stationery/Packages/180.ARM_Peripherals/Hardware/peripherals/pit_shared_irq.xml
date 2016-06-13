@@ -34,7 +34,7 @@
       <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"        replace="true" derived="true" />
    </projectActionList>
          
-   <template>
+   <template><![CDATA[
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
       \t   $(pit_ldval);\n\n
@@ -42,5 +42,5 @@
       \t//! PIT operation in debug mode\n
       \tstatic constexpr uint32_t mcr = 
       \t   PIT_MCR_FRZ($(pit_mcr_frz));\n\n
-   </template>
+   ]]></template>
 </devicePage>

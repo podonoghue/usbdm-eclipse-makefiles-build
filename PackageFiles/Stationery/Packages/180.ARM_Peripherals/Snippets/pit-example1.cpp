@@ -26,8 +26,11 @@ int main() {
 
    Pit::configure();
 
+   // Check for errors so far
+   checkError();
+
    for(;;) {
       RED_LED::toggle();
-      Pit::delay(0, ::SystemBusClock*1);
+      Pit::delay(0, ::SystemBusClock/10);
    }
 }

@@ -33,12 +33,27 @@ Devices using this peripheral:
          <choice value="3"  name="Reserved" />
       </choiceOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 1
       \tstatic constexpr uint32_t sopt1 = 
       \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel)) |    // 32K oscillator clock select
       \t   SIM_SOPT1_OSC32KOUT($(sim_sopt1_osc32kout));     // 32K oscillator clock out pin select\n\n
-   </template>
+
+      \t/**
+      \t * Get ERCLK32K clock frequency
+      \t *
+      \t * @return Clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getErc32kClock() {
+      \t
+      \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+      \t      default                     : return 0;
+      \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
+      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
+      \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
+      \t   }
+      \t}\n\n
+   ]]></template>
    <menu name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -66,7 +81,7 @@ Devices using this peripheral:
          description="LPUART Clock select"
          toolTip="Selects the clock source for the LPUART transmit and receive clock">
          <choice value="0"  name="Disabled" />
-         <choice value="1"  name="MCGFLLCLK, MCGPLLCLK or IRC48MCLK (see SOPT_PLLFLLSEL)" />
+         <choice value="1"  name="Peripheral Clock" />
          <choice value="2"  name="OSCERCLK clock" />
          <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
       </choiceOption>
@@ -105,7 +120,7 @@ Devices using this peripheral:
          <choice value="7"  name="IRC 48 MHz clock" />
       </choiceOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 2
       \tstatic constexpr uint32_t sopt2 = 
       \t   SIM_SOPT2_LPUARTSRC($(sim_sopt2_lpuartsrc)) |     // LPUART clock source select
@@ -113,7 +128,55 @@ Devices using this peripheral:
       \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
-   </template>
+
+      \t/**
+      \t * Get Peripheral clock frequency
+      \t *
+      \t * @return Clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getPeripheralClock() {
+      \t   
+      \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+      \t      default:                     return 0;
+      \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
+      \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
+      \t      case SIM_SOPT2_PLLFLLSEL(3): return McgInfo::irc48m_clock;
+      \t   }
+      \t}\n\n
+
+      \t/**
+      \t * Get LPUART input clock frequency
+      \t *
+      \t * @return Frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getLpuartInputClock() {
+      \t   
+      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   default:
+      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
+      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   }
+      \t}\n\n
+      
+      \t/**
+      \t * Get LPUART clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getLpuartClock() {
+      \t   
+      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   default:
+      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
+      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   }
+      \t}\n\n
+
+   ]]></template>
    <menu name="SOPT4" description="FTM pins">
       <binaryOption name="sim_sopt4_ftm3trg1src" 
          description="FlexTimer 3 Hardware Trigger 1 Source Select"
@@ -234,7 +297,7 @@ Devices using this peripheral:
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 4
       \tstatic constexpr uint32_t sopt4 = 
       \t   SIM_SOPT4_FTM3TRG1SRC($(sim_sopt4_ftm3trg1src)) |   // FlexTimer 3 Hardware Trigger 1 Source Select
@@ -253,7 +316,7 @@ Devices using this peripheral:
       \t   SIM_SOPT4_FTM1FLT0($(sim_sopt4_ftm1flt0))    |   // FlexTimer 1 Fault 0 Select
       \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
       \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
-   </template>
+   ]]></template>
    <menu name="SOPT5" description="UART pins">
       <choiceOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
@@ -300,15 +363,15 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
-      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |        // UART 0 transmit data source select
-      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |        // UART 0 receive data source select
-      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |        // UART 1 transmit data source select
-      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc)) |        // UART 1 receive data source select
-      \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc));     // LPUART 0 receive data source select\n\n
-   </template>
+      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |      // UART 0 transmit data source select
+      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |      // UART 0 receive data source select
+      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
+      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc)) |      // UART 1 receive data source select
+      \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc)); // LPUART 0 receive data source select\n\n
+   ]]></template>
    <menu name="SOPT7" description="ADC pins">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
@@ -380,7 +443,7 @@ Devices using this peripheral:
          <choice value="15" name="Reserved" />
       </choiceOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 7
       \tstatic constexpr uint32_t sopt7 = 
       \t   SIM_SOPT7_ADC1ALTTRGEN($(sim_sopt7_adc1alttrgen)) |    // ADC1 alternate trigger enable
@@ -389,7 +452,7 @@ Devices using this peripheral:
       \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
       \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
       \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
-   </template>
+   ]]></template>
    <menu name="SOPT8" description="FTM pins">
       <binaryOption name="sim_sopt8_ftm3och7src" 
          description="FTM3 channel 7 output source" >
@@ -486,7 +549,7 @@ Devices using this peripheral:
          <choice value="1" name="FTM0_CH0 pin is FTM0 ch 0 output, modulated by FTM1 ch 1" />
       </binaryOption>
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Options Register 8
       \tstatic constexpr uint32_t sopt8 = 
       \t   SIM_SOPT8_FTM3OCH7SRC($(sim_sopt8_ftm3och7src)) |   // FTM3 channel 7 output source
@@ -505,7 +568,7 @@ Devices using this peripheral:
       \t   SIM_SOPT8_FTM0OCH2SRC($(sim_sopt8_ftm0och2src)) |   // FTM0 channel 2 output source
       \t   SIM_SOPT8_FTM0OCH1SRC($(sim_sopt8_ftm0och1src)) |   // FTM0 channel 1 output source
       \t   SIM_SOPT8_FTM0OCH0SRC($(sim_sopt8_ftm0och0src));    // FTM0 channel 0 output source\n\n
-   </template>
+   ]]></template>
    <menu name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
          constant="true"
@@ -538,14 +601,14 @@ Devices using this peripheral:
                   MCGOUTCLK clock is source. Default /4"
          value="4" offset="-1" min="1" max="16" />
    </menu>
-   <template>
+   <template><![CDATA[
       \t//! System Clock Divider Register 1
       \tstatic constexpr uint32_t clkdiv1 = 
       \t   SIM_CLKDIV1_OUTDIV4($(sim_clkdiv1_outdiv4))|  // Flash clock
       \t   SIM_CLKDIV1_OUTDIV3($(sim_clkdiv1_outdiv3))|  // FlexBus clock
       \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
       \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
-   </template>
+   ]]></template>
    <menu name="CLKDIV2" description="USB Clock Dividers">
       <choiceOption name="sim_clkdiv2_usb"
          description="USB clock divider" 
@@ -569,11 +632,11 @@ Devices using this peripheral:
          <choice value="14" name="Divide by 8 (div=7, frac=0)" />
       </choiceOption>
    </menu>   
-   <template>
+   <template><![CDATA[
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
-      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor &amp; fraction \n\n
-   </template>
+      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
+   ]]></template>
    
    <intOption name="system_core_clock" 
       units="Hz"
@@ -613,78 +676,7 @@ Devices using this peripheral:
 
    <xi:include href="_simFiles.xml"/>
          
-   <template>
-      \t/**
-      \t * Get Peripheral clock frequency
-      \t *
-      \t * @return Clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getPeripheralClock() {
-      \t   
-      \t   switch(sim-&gt;SOPT2&amp;SIM_SOPT2_PLLFLLSEL_MASK) {
-      \t      default:                     return 0;
-      \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
-      \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
-      \t      case SIM_SOPT2_PLLFLLSEL(3): return McgInfo::irc48m_clock;
-      \t   }
-      \t}\n\n
-
-      \t/**
-      \t * Get ERCLK32K clock frequency
-      \t *
-      \t * @return Clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getErc32kClock() {
-      \t
-      \t   switch(sim-&gt;SOPT1&amp;SIM_SOPT1_OSC32KSEL_MASK) {
-      \t      default                     : return 0;
-      \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
-      \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
-      \t   }
-      \t}\n\n
-
-      \t/**
-      \t * Get LPUART input clock frequency
-      \t *
-      \t * @return LPUART input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getLpuartInputClockFrequency() {
-      \t   
-      \t   switch(sim-&gt;SOPT2&amp;SIM_SOPT2_LPUARTSRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return SystemOscerClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return SystemMcgirClock;
-      \t   }
-      \t}\n\n
-      
-      \t/**
-      \t * Get LPUART clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getLpuartClockFrequency() {
-      \t   
-      \t   switch(sim-&gt;SOPT2&amp;SIM_SOPT2_LPUARTSRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
-      \t   case SIM_SOPT2_LPUARTSRC(1):
-      \t#ifdef SIM_CLKDIV3_PLLFLLFRAC_MASK
-      \t      {
-      \t      int  pllfllfrac  = (sim-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLFRAC_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLFRAC_SHIFT;
-      \t      int  pllflldiv   = (sim-&gt;CLKDIV3&amp;SIM_CLKDIV3_PLLFLLDIV_MASK)&gt;&gt;SIM_CLKDIV3_PLLFLLDIV_SHIFT;
-      \t      return (SystemPeripheralClock*(pllfllfrac+1))/(pllflldiv+1);
-      \t      }
-      \t#else
-      \t      return SystemPeripheralClock;
-      \t#endif
-      \t   case SIM_SOPT2_LPUARTSRC(2): return SystemOscerClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return SystemMcgirClock;
-      \t   }
-      \t}\n\n
-
+   <template><![CDATA[
       \t/**
       \t * Initialise SIM registers
       \t */
@@ -692,18 +684,18 @@ Devices using this peripheral:
       \t   
       \t   #ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim-&gt;SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
       \t   #endif
       \t
-      \t   sim-&gt;SOPT1 = sopt1;
-      \t   sim-&gt;SOPT2 = sopt2;
-      \t   sim-&gt;SOPT4 = sopt4;
-      \t   sim-&gt;SOPT5 = sopt5;
-      \t   sim-&gt;SOPT7 = sopt7;
-      \t   sim-&gt;SOPT8 = sopt8;
+      \t   sim->SOPT1 = sopt1;
+      \t   sim->SOPT2 = sopt2;
+      \t   sim->SOPT4 = sopt4;
+      \t   sim->SOPT5 = sopt5;
+      \t   sim->SOPT7 = sopt7;
+      \t   sim->SOPT8 = sopt8;
       \t
-      \t   sim-&gt;CLKDIV1 = clkdiv1;
-      \t   sim-&gt;CLKDIV2 = clkdiv2;
+      \t   sim->CLKDIV1 = clkdiv1;
+      \t   sim->CLKDIV2 = clkdiv2;
       \t}
-   </template>
+   ]]></template>
 </devicePage>

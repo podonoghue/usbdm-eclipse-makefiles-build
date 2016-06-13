@@ -21,8 +21,8 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
-using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<18>);
+using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<19>);
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
@@ -31,6 +31,7 @@ using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 namespace USBDM {
 
 /*
+ * If using naked handler it must be named exactly as shown
  * MKL version - shared handler for all PIT channels
  */
 template<> void Pit_T<PitInfo>::irqHandler() {
@@ -77,10 +78,13 @@ int main() {
 #endif
 
    // Flash RED @ 1Hz
-   Pit::configureChannel(0, SystemBusClock/2);
+   Pit::configureChannel(0, ::SystemBusClock/2);
 
    // Flash GREEN @ 0.5Hz
-   Pit::configureChannel(1, SystemBusClock);
+   Pit::configureChannel(1, ::SystemBusClock);
+
+   // Check for errors so far
+   checkError();
 
    for(;;) {
       __asm__("nop");

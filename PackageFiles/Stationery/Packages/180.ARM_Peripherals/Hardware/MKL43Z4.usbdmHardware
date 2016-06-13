@@ -134,7 +134,7 @@
          <irq num="I2S0_IRQn" />
       </peripheral>
       <peripheral baseName="LCD"      instance=""         version="lcd_mkl">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLcd" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_SLCD_MASK" />
          <irq num="LCD_IRQn" />
       </peripheral>
@@ -334,7 +334,7 @@
          <mux sel="mux1"          signal="LLWU_P5" />
          <mux sel="mux2"          signal="I2C0_SCL" />
          <mux sel="mux3"          signal="TPM1_CH0" />
-         <mux sel="mux7"          signal="LCD_P0_fault" />
+         <mux sel="mux7"          signal="LCD_P0" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -346,7 +346,7 @@
          <mux sel="mux1"          signal="GPIOB_1" />
          <mux sel="mux2"          signal="I2C0_SDA" />
          <mux sel="mux3"          signal="TPM1_CH1" />
-         <mux sel="mux7"          signal="LCD_P1_fault" />
+         <mux sel="mux7"          signal="LCD_P1" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -358,7 +358,7 @@
          <mux sel="mux1"          signal="GPIOB_2" />
          <mux sel="mux2"          signal="I2C0_SCL" />
          <mux sel="mux3"          signal="TPM2_CH0" />
-         <mux sel="mux7"          signal="LCD_P2_fault" />
+         <mux sel="mux7"          signal="LCD_P2" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -370,7 +370,7 @@
          <mux sel="mux1"          signal="GPIOB_3" />
          <mux sel="mux2"          signal="I2C0_SDA" />
          <mux sel="mux3"          signal="TPM2_CH1" />
-         <mux sel="mux7"          signal="LCD_P3_fault" />
+         <mux sel="mux7"          signal="LCD_P3" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -382,7 +382,7 @@
          <mux sel="mux3"          signal="LPUART0_RX" />
          <mux sel="mux4"          signal="TPM_CLKIN0" />
          <mux sel="mux5"          signal="SPI1_MISO" />
-         <mux sel="mux7"          signal="LCD_P12_fault" />
+         <mux sel="mux7"          signal="LCD_P12" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -394,7 +394,7 @@
          <mux sel="mux3"          signal="LPUART0_TX" />
          <mux sel="mux4"          signal="TPM_CLKIN1" />
          <mux sel="mux5"          signal="SPI1_MOSI" />
-         <mux sel="mux7"          signal="LCD_P13_fault" />
+         <mux sel="mux7"          signal="LCD_P13" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -404,7 +404,7 @@
          <mux sel="mux1"          signal="GPIOB_18" />
          <mux sel="mux3"          signal="TPM2_CH0" />
          <mux sel="mux4"          signal="I2S0_TX_BCLK" />
-         <mux sel="mux7"          signal="LCD_P14_fault" />
+         <mux sel="mux7"          signal="LCD_P14" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -414,7 +414,7 @@
          <mux sel="mux1"          signal="GPIOB_19" />
          <mux sel="mux3"          signal="TPM2_CH1" />
          <mux sel="mux4"          signal="I2S0_TX_FS" />
-         <mux sel="mux7"          signal="LCD_P15_fault" />
+         <mux sel="mux7"          signal="LCD_P15" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -428,7 +428,7 @@
          <mux sel="mux4"          signal="audioUSB_SOF_OUT" />
          <mux sel="mux5"          signal="CMP0_OUT" />
          <mux sel="mux6"          signal="I2S0_TXD0" />
-         <mux sel="mux7"          signal="LCD_P20_fault" />
+         <mux sel="mux7"          signal="LCD_P20" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -443,7 +443,7 @@
          <mux sel="mux2"          signal="I2C1_SCL" />
          <mux sel="mux4"          signal="TPM0_CH0" />
          <mux sel="mux6"          signal="I2S0_TXD0" />
-         <mux sel="mux7"          signal="LCD_P21_fault" />
+         <mux sel="mux7"          signal="LCD_P21" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -456,7 +456,7 @@
          <mux sel="mux2"          signal="I2C1_SDA" />
          <mux sel="mux4"          signal="TPM0_CH1" />
          <mux sel="mux6"          signal="I2S0_TX_FS" />
-         <mux sel="mux7"          signal="LCD_P22_fault" />
+         <mux sel="mux7"          signal="LCD_P22" />
          <reset sel="mux0" />
          <default sel="mux0" />
       </pin>
@@ -470,7 +470,7 @@
          <mux sel="mux4"          signal="TPM0_CH2" />
          <mux sel="mux5"          signal="CLKOUT" />
          <mux sel="mux6"          signal="I2S0_TX_BCLK" />
-         <mux sel="mux7"          signal="LCD_P23_fault" />
+         <mux sel="mux7"          signal="LCD_P23" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -483,7 +483,7 @@
          <mux sel="mux3"          signal="LPUART1_TX" />
          <mux sel="mux4"          signal="TPM0_CH3" />
          <mux sel="mux5"          signal="I2S0_MCLK" />
-         <mux sel="mux7"          signal="LCD_P24_fault" />
+         <mux sel="mux7"          signal="LCD_P24" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -496,7 +496,7 @@
          <mux sel="mux3"          signal="LPTMR0_ALT2" />
          <mux sel="mux4"          signal="I2S0_RXD0" />
          <mux sel="mux6"          signal="CMP0_OUT" />
-         <mux sel="mux7"          signal="LCD_P25_fault" />
+         <mux sel="mux7"          signal="LCD_P25" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -512,7 +512,7 @@
          <mux sel="mux4"          signal="I2S0_RX_BCLK" />
          <mux sel="mux5"          signal="SPI0_MISO" />
          <mux sel="mux6"          signal="I2S0_MCLK" />
-         <mux sel="mux7"          signal="LCD_P26_fault" />
+         <mux sel="mux7"          signal="LCD_P26" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -526,7 +526,7 @@
          <mux sel="mux3"          signal="audioUSB_SOF_OUT" />
          <mux sel="mux4"          signal="I2S0_RX_FS" />
          <mux sel="mux5"          signal="SPI0_MOSI" />
-         <mux sel="mux7"          signal="LCD_P27_fault" />
+         <mux sel="mux7"          signal="LCD_P27" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -537,7 +537,7 @@
          <mux sel="mux2"          signal="SPI0_SS" />
          <mux sel="mux4"          signal="TPM0_CH0" />
          <mux sel="mux6"          signal="FXIO0_D0" />
-         <mux sel="mux7"          signal="LCD_P40_fault" />
+         <mux sel="mux7"          signal="LCD_P40" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -550,7 +550,7 @@
          <mux sel="mux2"          signal="SPI0_SCK" />
          <mux sel="mux4"          signal="TPM0_CH1" />
          <mux sel="mux6"          signal="FXIO0_D1" />
-         <mux sel="mux7"          signal="LCD_P41_fault" />
+         <mux sel="mux7"          signal="LCD_P41" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -563,7 +563,7 @@
          <mux sel="mux4"          signal="TPM0_CH2" />
          <mux sel="mux5"          signal="SPI0_MISO" />
          <mux sel="mux6"          signal="FXIO0_D2" />
-         <mux sel="mux7"          signal="LCD_P42_fault" />
+         <mux sel="mux7"          signal="LCD_P42" />
          <reset sel="mux0" />
          <default sel="mux1" />
       </pin>
@@ -576,7 +576,7 @@
          <mux sel="mux4"          signal="TPM0_CH3" />
          <mux sel="mux5"          signal="SPI0_MOSI" />
          <mux sel="mux6"          signal="FXIO0_D3" />
-         <mux sel="mux7"          signal="LCD_P43_fault" />
+         <mux sel="mux7"          signal="LCD_P43" />
          <reset sel="mux0" />
          <default sel="mux4" />
       </pin>
@@ -589,7 +589,7 @@
          <mux sel="mux3"          signal="UART2_RX" />
          <mux sel="mux4"          signal="TPM0_CH4" />
          <mux sel="mux6"          signal="FXIO0_D4" />
-         <mux sel="mux7"          signal="LCD_P44_fault" />
+         <mux sel="mux7"          signal="LCD_P44" />
          <reset sel="mux0" />
          <default sel="mux4" />
       </pin>
@@ -603,7 +603,7 @@
          <mux sel="mux3"          signal="UART2_TX" />
          <mux sel="mux4"          signal="TPM0_CH5" />
          <mux sel="mux6"          signal="FXIO0_D5" />
-         <mux sel="mux7"          signal="LCD_P45_fault" />
+         <mux sel="mux7"          signal="LCD_P45" />
          <reset sel="mux0" />
          <default sel="mux4" />
       </pin>
@@ -618,7 +618,7 @@
          <mux sel="mux3"          signal="LPUART0_RX" />
          <mux sel="mux5"          signal="SPI1_MISO" />
          <mux sel="mux6"          signal="FXIO0_D6" />
-         <mux sel="mux7"          signal="LCD_P46_fault" />
+         <mux sel="mux7"          signal="LCD_P46" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -630,7 +630,7 @@
          <mux sel="mux3"          signal="LPUART0_TX" />
          <mux sel="mux5"          signal="SPI1_MOSI" />
          <mux sel="mux6"          signal="FXIO0_D6" />
-         <mux sel="mux7"          signal="LCD_P47_fault" />
+         <mux sel="mux7"          signal="LCD_P47" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -644,7 +644,7 @@
          <mux sel="mux4"          signal="RTC_CLKOUT" />
          <mux sel="mux5"          signal="CMP0_OUT" />
          <mux sel="mux6"          signal="I2C1_SDA" />
-         <mux sel="mux7"          signal="LCD_P48_fault" />
+         <mux sel="mux7"          signal="LCD_P48" />
          <reset sel="mux0" />
          <default sel="mux6" />
       </pin>
@@ -656,7 +656,7 @@
          <mux sel="mux3"          signal="LPUART1_RX" />
          <mux sel="mux5"          signal="SPI1_MISO" />
          <mux sel="mux6"          signal="I2C1_SCL" />
-         <mux sel="mux7"          signal="LCD_P49_fault" />
+         <mux sel="mux7"          signal="LCD_P49" />
          <reset sel="mux0" />
          <default sel="mux6" />
       </pin>
@@ -671,7 +671,7 @@
          <mux sel="mux3"          signal="TPM1_CH0" />
          <mux sel="mux4"          signal="LPUART0_TX" />
          <mux sel="mux6"          signal="FXIO0_D4" />
-         <mux sel="mux7"          signal="LCD_P59_fault" />
+         <mux sel="mux7"          signal="LCD_P59" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -686,7 +686,7 @@
          <mux sel="mux3"          signal="TPM1_CH1" />
          <mux sel="mux4"          signal="LPUART0_RX" />
          <mux sel="mux6"          signal="FXIO0_D5" />
-         <mux sel="mux7"          signal="LCD_P60_fault" />
+         <mux sel="mux7"          signal="LCD_P60" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -780,7 +780,7 @@
          <mux sel="reset"         signal="VCAP1" />
          <mux sel="mux0"          signal="VCAP1" />
          <mux sel="mux1"          signal="GPIOC_23" />
-         <mux sel="mux7"          signal="LCD_P39_fault" />
+         <mux sel="mux7"          signal="LCD_P39" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -788,7 +788,7 @@
          <mux sel="reset"         signal="VCAP2" />
          <mux sel="mux0"          signal="VCAP2" />
          <mux sel="mux1"          signal="GPIOC_22" />
-         <mux sel="mux7"          signal="LCD_P6_fault" />
+         <mux sel="mux7"          signal="LCD_P6" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -816,7 +816,7 @@
          <mux sel="reset"         signal="VLL1" />
          <mux sel="mux0"          signal="VLL1" />
          <mux sel="mux1"          signal="GPIOC_21" />
-         <mux sel="mux7"          signal="LCD_P5_fault" />
+         <mux sel="mux7"          signal="LCD_P5" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
@@ -824,7 +824,7 @@
          <mux sel="reset"         signal="VLL2" />
          <mux sel="mux0"          signal="VLL2" />
          <mux sel="mux1"          signal="GPIOC_20" />
-         <mux sel="mux7"          signal="LCD_P4_fault" />
+         <mux sel="mux7"          signal="LCD_P4" />
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>

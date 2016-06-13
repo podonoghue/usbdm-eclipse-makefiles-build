@@ -2,8 +2,14 @@
 Devices using this peripheral: 
       MKL14Z4
       MKL15Z4
+      MKL16Z4
       MKL24Z4
       MKL25Z4
+      MKL26Z4
+      MKL34Z4
+      MKL36Z4
+      MKL46Z4
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "UART1_MKL14Z4" ?>
@@ -61,18 +67,18 @@ SBNS selects the number of stop bits present in a data frame</description>
                   </field>
                   <field>
                      <name>RXEDGIE</name>
-                     <description>RxD Input Active Edge Interrupt Enable (RXEDGIF)</description>
+                     <description>RxD Input Active Edge Interrupt Enable</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupts disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupts enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -188,7 +194,7 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>9-bit\t- Start + 9 data bits stop</description>
+                           <description>9-bit\t- Start + 9 data bits + stop</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -238,7 +244,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Normal operation\t RxD and TxD use separate pins</description>
+                           <description>Normal operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -314,30 +320,13 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="RE" > <name>TE</name> <description>Transmitter Enable</description> <bitOffset>3</bitOffset> </field>
-                  <field>
-                     <name>ILIE</name>
-                     <description>Idle Line Interrupt Enable\n
-Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Requests disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Requests enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="ILIE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="ILIE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-Controls interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="ILIE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
+		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -450,12 +439,12 @@ Cleared by reading S1 with TC set and then doing one of the following:\n
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Transmit data register (buffer) full</description>
+                           <description>Transmit data buffer is full</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Transmit data register (buffer) empty</description>
+                           <description>Transmit data buffer is empty</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -490,19 +479,18 @@ Cleared by reading S1 with TC set and then doing one of the following:\n
                   </field>
                   <field>
                      <name>LBKDE</name>
-                     <description>LIN Break Detection Enable\n
-Selects a longer break character detection length</description>
+                     <description>LIN Break Detection Enable</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short break</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long break</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -516,12 +504,12 @@ Determines whether the transmit break character is 10, 11, or 12 bits long, or 1
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short Breaks\t- Break character is 10, 11, or 12 bits long</description>
+                           <description>Short</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long Breaks\t- Break character is 13 or 14 bits long</description>
+                           <description>Long</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -536,7 +524,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Idle detect doesn&apos;t set S1.IDLE</description>
+                           <description>Idle chars ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
