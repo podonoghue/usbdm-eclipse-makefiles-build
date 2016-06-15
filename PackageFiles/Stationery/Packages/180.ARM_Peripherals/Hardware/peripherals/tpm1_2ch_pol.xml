@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- tpm1_6ch.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="tpm.xml"/>
+</fragment>

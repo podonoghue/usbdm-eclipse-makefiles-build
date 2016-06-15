@@ -17,8 +17,11 @@
 
 using namespace USBDM;
 
-int main(void) {
 constexpr int DELAY_VALUE = 500;
+
+int main(void) {
+
+//   printf("Starting\n");
 
    SegmentLcd::enable();
 

@@ -24,8 +24,8 @@
 
          <!-- Definitions used by example programs -->
          <constant id="demo.cpp.led"                value="USBDM::GpioB&lt;18&gt;" /> <!-- Digital I/O generic LED -->
-         <constant id="demo.cpp.pwm.led1"        value="tpm_LED_RED" />      <!-- FTM/TPM to LED -->
-         <constant id="demo.cpp.pwm.led2"      value="tpm_LED_GREEN" />    <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.led1"           value="tpm_LED_RED" />      <!-- FTM/TPM to LED -->
+         <constant id="demo.cpp.pwm.led2"           value="tpm_LED_GREEN" />    <!-- FTM/TPM to LED -->
          <constant id="demo.cpp.red.led"            value="gpio_LED_RED" />     <!-- Digital I/O to LED -->
          <constant id="demo.cpp.green.led"          value="gpio_LED_GREEN" />   <!-- Digital I/O to LED -->
          <constant id="demo.cpp.blue.led"           value="gpio_LED_BLUE" />    <!-- Digital I/O to LED -->
@@ -47,9 +47,6 @@
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />  <!-- IRQ* connection from NRF24101 module -->
 
          <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  replace="true" />
-
-         <!-- Example programs -->
-         <!-- copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/ -->
       </projectActionList>
    </projectActionList>
 </root>

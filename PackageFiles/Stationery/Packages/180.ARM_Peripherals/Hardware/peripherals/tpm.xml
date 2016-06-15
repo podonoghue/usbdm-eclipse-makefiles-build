@@ -4,7 +4,7 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" optional="true"/> 
    <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
    <aliasOption key="/SIM/system_tpm_clock" />
 

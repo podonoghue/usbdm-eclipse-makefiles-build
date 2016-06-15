@@ -1,5 +1,5 @@
 /*****************************************************************
- * @file     Segment_LCD.h (derived from segment_lcd-MKL46Z4.c)
+ * @file     Segment_LCD.h (derived from segment_lcd.c)
  *
  * Routines to interface to Segment LCD on FRDM-KL46Z
  *
@@ -27,21 +27,21 @@
 namespace USBDM {
 
 /*
- * s401 Pin KL46 Pin
- * =========================
- *     1    PTD0   LCD_P40   (COM0)
- *     2    PTE4   LCD_P52   (COM1)
- *     3    PTB23  LCD_P19   (COM2)
- *     4    PTB22  LCD_P18   (COM3)
- *
- *     5    PTC17  LCD_P37   (1D/1E/1G/1F)
- *     6    PTB21  LCD_P17   (DP1/1C/1B/1A)
- *     7    PTB7   LCD_P7    (2D/2E/2G/2F)
- *     8    PTB8   LCD_P8    (DP2/2C/2B/2A)
- *     9    PTE5   LCD_P53   (3D/3E/3G/3F)
- *    10    PTC18  LCD_P38   (DP3/3C/3B/3A)
- *    11    PTB10  LCD_P10   (4D/4E/4G/4F)
- *    12    PTB11  LCD_P11   (COL/4C/4B/4A)
+ *     s401 Pin           | KL46 Pin        | KL43 Pin
+ * ===============================================================
+ *     1   (COM0)         | PTD0   LCD_P40  | PTE20  LCD_P59
+ *     2   (COM1)         | PTE4   LCD_P52  | PTE21  LCD_P60
+ *     3   (COM2)         | PTB23  LCD_P19  | PTB18  LCD_P14
+ *     4   (COM3)         | PTB22  LCD_P18  | PTB19  LCD_P15
+ *                        |                 |
+ *     5   (1D/1E/1G/1F)  | PTC17  LCD_P37  | PTC0   LCD_P20
+ *     6   (DP1/1C/1B/1A) | PTB21  LCD_P17  | PTC4   LCD_P24
+ *     7   (2D/2E/2G/2F)  | PTB7   LCD_P7   | PTC6   LCD_P26
+ *     8   (DP2/2C/2B/2A) | PTB8   LCD_P8   | PTC7   LCD_P27
+ *     9   (3D/3E/3G/3F)  | PTE5   LCD_P53  | PTD0   LCD_P40
+ *    10   (DP3/3C/3B/3A) | PTC18  LCD_P38  | PTD2   LCD_P42
+ *    11   (4D/4E/4G/4F)  | PTB10  LCD_P10  | PTD3   LCD_P43
+ *    12   (COL/4C/4B/4A) | PTB11  LCD_P11  | PTD4   LCD_P44
  */
 
 $(/LCD/lcdPins)
@@ -96,32 +96,40 @@ void SegmentLcd::enable(void) {
     */
    // Enable Clock to ports B, C, D and E, and SegLCD Peripheral
 //   SIM->SCGC5 |=  SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK;
+// KL43
 //   PORTB->GPCLR   = PORT_GPCLR_GPWE((1<<7)|(1<<8)|(1<<10)|(1<<11))|PORT_PCR_MUX(0);
 //   PORTB->GPCHR   = PORT_GPCLR_GPWE((1<<(21-16))|(1<<(22-16))|(1<<(23-16)))|PORT_PCR_MUX(0);
 //   PORTC->GPCHR   = PORT_GPCLR_GPWE((1<<(17-16))|(1<<(18-16)))|PORT_PCR_MUX(0);
 //   PORTD->GPCLR   = PORT_GPCLR_GPWE((1<<0))||PORT_PCR_MUX(0);
 //   PORTE->GPCLR   = PORT_GPCLR_GPWE((1<<4)|(1<<5))|PORT_PCR_MUX(0);
+// KL43
+//   PORTB->GPCHR   = PORT_GPCHR_GPWE((1<<(18-16))|(1<<(19-16)))|PORT_PCR_MUX(0);
+//   PORTC->GPCLR   = PORT_GPCLR_GPWE((1<<0)|(1<<4)|(1<<6)|(1<<7))|PORT_PCR_MUX(0);
+//   PORTD->GPCLR   = PORT_GPCLR_GPWE((1<<0)|(1<<2)|(1<<3)|(1<<4))|PORT_PCR_MUX(0);
+//   PORTE->GPCHR   = PORT_GPCHR_GPWE((1<<(20-16))|(1<<(21-16)))|PORT_PCR_MUX(0);
 
    /*
     * Configure LCD_GCR - General Control Register, controls most options in LCD Peripheral
     */
-   lcd->GCR =
-         LCD_GCR_RVEN(0) |      // Clear LCD_GCR_RVEN, disable voltage regulator.
-         LCD_GCR_RVTRIM(0) |    // Set RVTRIM to 0, irrelevant as voltage regulator is disabled, but setting it to a known state.
-         LCD_GCR_CPSEL(1) |     // Set LCD_GCR_CPSEL to use capacitor charge pump.
-         LCD_GCR_LADJ(0x03) |   // Set LCD_GCR_LADJ to 11, slow clock rate = lower power, but higher load capacitance on the LCD requires higher clock speed.
-         LCD_GCR_VSUPPLY(0) |   // Clear LCD_GCR_VSUPPLY, drive VLL3 externally.
-         LCD_GCR_PADSAFE(1) |   // Set LCD_GCR_PADSAFE, leave enabled during configuration process.
-         LCD_GCR_FDCIEN(0) |    // Clear LCD_GCR_FDCIEN, No interrupt from fault detection.
-         LCD_GCR_ALTDIV(3) |    // Set LCD_GCR_ALTDIV to 11, divide alternate clock by 512.  This is assuming an 8MHz External Crystal is used.
-         LCD_GCR_ALTSOURCE(1) | // Set LCD_GCR_ALTSOURCE, Part of setting clock source to OSCERCLK, or external oscillator.
-         LCD_GCR_FFR(1) |       // Set LCD_GCR_FFR, allow an LCD Frame Frequency of 46.6Hz to 146.2Hz.  Disable to change range to 23.3Hz to 73.1Hz.
-         LCD_GCR_LCDDOZE(0) |   // Clear LCD_GCR_LCDDOZE, allows LCD peripheral to run even in doze mode.  Set to disable LCD in doze mode.
-         LCD_GCR_LCDSTP(0) |    // Clear LCD_GCR_LCDSTP, allows LCD peripheral to run even in stop mode.  Set to disable LCD in stop mode.
-         LCD_GCR_LCDEN(0) |     // Clear LCD_GCR_LCDEN, Disables all front and backplane pins.  Leave disabled during configuration process.
-         LCD_GCR_SOURCE(1) |    // Set LCD_GCR_SOURCE, Part of setting clock source to OSCERCLK, or external oscillator.
-         LCD_GCR_LCLK(0x04) |   // Set LCD_GCR_LCLK to 111, LCD Clock prescaler where LCD controller frame frequency = LCD clock/((DUTY  |  1) x 8 x (4 | LCLK[2:0]) x Y), where Y = 2, 2, 3, 3, 4, 5, 8, 16 chosen by module duty cycle config
-         LCD_GCR_DUTY(0x03);    // Set LCD_GCR_DUTY to 011, Have 4 backplane pins, so need a 1/4 duty cycle.
+   lcd->GCR = LcdInfo::gcr | LCD_GCR_PADSAFE(1);
+
+//   lcd->GCR =
+//         LCD_GCR_RVEN(0) |      // Clear LCD_GCR_RVEN, disable voltage regulator.
+//         LCD_GCR_RVTRIM(0) |    // Set RVTRIM to 0, irrelevant as voltage regulator is disabled, but setting it to a known state.
+//         LCD_GCR_CPSEL(1) |     // Set LCD_GCR_CPSEL to use capacitor charge pump.
+//         LCD_GCR_LADJ(0x03) |   // Set LCD_GCR_LADJ to 11, slow clock rate = lower power, but higher load capacitance on the LCD requires higher clock speed.
+//         LCD_GCR_VSUPPLY(0) |   // Clear LCD_GCR_VSUPPLY, drive VLL3 externally.
+//         LCD_GCR_PADSAFE(1) |   // Set LCD_GCR_PADSAFE, leave enabled during configuration process.
+//         LCD_GCR_FDCIEN(0) |    // Clear LCD_GCR_FDCIEN, No interrupt from fault detection.
+//         LCD_GCR_ALTDIV(3) |    // Set LCD_GCR_ALTDIV to 11, divide alternate clock by 512.  This is assuming an 8MHz External Crystal is used.
+//         LCD_GCR_ALTSOURCE(1) | // Set LCD_GCR_ALTSOURCE, Part of setting clock source to OSCERCLK, or external oscillator.
+//         LCD_GCR_FFR(1) |       // Set LCD_GCR_FFR, allow an LCD Frame Frequency of 46.6Hz to 146.2Hz.  Disable to change range to 23.3Hz to 73.1Hz.
+//         LCD_GCR_LCDDOZE(0) |   // Clear LCD_GCR_LCDDOZE, allows LCD peripheral to run even in doze mode.  Set to disable LCD in doze mode.
+//         LCD_GCR_LCDSTP(0) |    // Clear LCD_GCR_LCDSTP, allows LCD peripheral to run even in stop mode.  Set to disable LCD in stop mode.
+//         LCD_GCR_LCDEN(0) |     // Clear LCD_GCR_LCDEN, Disables all front and backplane pins.  Leave disabled during configuration process.
+//         LCD_GCR_SOURCE(1) |    // Set LCD_GCR_SOURCE, Part of setting clock source to OSCERCLK, or external oscillator.
+//         LCD_GCR_LCLK(0x04) |   // Set LCD_GCR_LCLK to 111, LCD Clock prescaler where LCD controller frame frequency = LCD clock/((DUTY  |  1) x 8 x (4 | LCLK[2:0]) x Y), where Y = 2, 2, 3, 3, 4, 5, 8, 16 chosen by module duty cycle config
+//         LCD_GCR_DUTY(0x03);    // Set LCD_GCR_DUTY to 011, Have 4 backplane pins, so need a 1/4 duty cycle.
    /*
     * Configure LCD_SEG_AR  - Auxiliary Register, controls blinking of LCD
     */
@@ -180,7 +188,7 @@ void SegmentLcd::setDPs(int digit, int value) {
 
 /**
  * Displays a hex value in a specified position on the LCD.  \n
- * Will not display error if value is outside of range, but display will not be updated.
+ * Will display error if value is outside of range.
  *
  * @param value    Value to display (0-F)
  * @param position Digit position (left=1 - 4=right)

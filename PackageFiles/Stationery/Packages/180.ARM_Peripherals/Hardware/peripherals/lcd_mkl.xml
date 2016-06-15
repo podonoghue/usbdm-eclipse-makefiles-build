@@ -37,28 +37,45 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <intOption name="lcd_gcr_rvtrim" 
+   <choiceOption name="lcd_gcr_rvtrim" 
       description="Regulated Voltage Trim"
       toolTip="Trims the regulated input voltage.\n
-       Each bit in the register has equal weight.\n
-       The regulated input is changed by 1.5% for each count."
-      min="0" max="15" value="8" />
-   
+         Each bit in the register has equal weight.\n
+         The regulated input is changed by 1.5% for each count.">
+      <choice value="0b0000"  name="0.91" />
+      <choice value="0b1000"  name="0.92" />
+      <choice value="0b0100"  name="0.93" />
+      <choice value="0b1100"  name="0.94" />
+      <choice value="0b0010"  name="0.96" />
+      <choice value="0b1010"  name="0.97" />
+      <choice value="0b0110"  name="0.98" />
+      <choice value="0b1110"  name="0.99" />
+      <choice value="0b0001"  name="1.01" isDefault="true" />
+      <choice value="0b1001"  name="1.02" />
+      <choice value="0b0101"  name="1.03" />
+      <choice value="0b1101"  name="1.05" />
+      <choice value="0b0011"  name="1.06" />
+      <choice value="0b1011"  name="1.07" />
+      <choice value="0b0111"  name="1.08" />
+      <choice value="0b1111"  name="1.09" />
+   </choiceOption>
+
    <binaryOption name="lcd_gcr_cpsel" 
       description="Charge Pump or Resistor Bias Select"
-      toolTip="Selects the LCD controller charge pump or a resistor network\n
-         to supply the LCD voltages VLL1, VLL2, and VLL3">
-      <choice value="0" name="Charge Pump" />
-      <choice value="1" name="Resistor Network" />
+      toolTip="Selects the whether a charge pump or a resistor network is \n
+         used to supply the LCD voltages VLL1, VLL2, and VLL3">
+      <choice value="0" name="Resistor Network" />
+      <choice value="1" name="Charge Pump" />
    </binaryOption>
 
    <choiceOption name="lcd_gcr_ladj" 
-      description="Load Adjust"
-      toolTip="Configures SLCD to handle different LCD glass capacitance">
-      <choice value="0"  name="xxxxx" isDefault="true" />
-      <choice value="1"  name="xxxxx" />
-      <choice value="2"  name="xxxxx" />
-      <choice value="3"  name="xxxxx" />
+      description="Load Adjust (LCD glass capacitance)"
+      toolTip="Configures SLCD to handle different LCD glass capacitance\n
+      This affects the Resistor Divider (CPSEL=0) or Charge Pump (CPSEL=1)">
+      <choice value="0"  name="Resistor &lt;=2000pF, Pump &lt;=8000/4000pF (if FFR)" isDefault="true" />
+      <choice value="1"  name="Resistor &lt;=2000pF, Pump &lt;=4000/2000pF (if FFR)" />
+      <choice value="2"  name="Resistor &lt;=8000pF, Pump &lt;=2000/1000pF (if FFR)" />
+      <choice value="3"  name="Resistor &lt;=8000pF, Pump &lt;=1000/500pF (if FFR)" />
    </choiceOption>
 
    <binaryOption name="lcd_gcr_vsupply" 
@@ -70,9 +87,9 @@
 
    <binaryOption name="lcd_gcr_ffr" 
       description="Fast Frame Rate Select"
-      toolTip="Increases the Frame Clock Frequency.">
-      <choice value="0" name="Standard Frame Rate LCD Frame Freq: 23.3 (min) 73.1 (max)" />
-      <choice value="1" name="Fast Frame Rate (Standard Frame Rate x2) LCD Frame Freq: 46.6 (min) 146.2 (max)" />
+      toolTip="Increases the Frame Clock Frequency." >
+      <choice value="0" name="Standard Frame Rate LCD Frame Freq: 23.3 Hz(min) 73.1 Hz(max)" />
+      <choice value="1" name="Fast Frame Rate (Rate x2) LCD Frame Freq: 46.6 Hz(min) 146.2 Hz(max)" />
    </binaryOption>
 
    <binaryOption name="lcd_gcr_lcddoze" 
@@ -89,15 +106,20 @@
       <choice value="1" name="Disabled" />
    </binaryOption>
 
-   <stringOption name="backplanes" 
+   <numericListOption name="backplanes" 
       description="Pins used for Backplane" 
-      toolTip="Comma separated list of pin numbers in backplane order e.g.  40, 52, 19, 18"
-      value="40, 52, 19, 18" />
+      toolTip="Comma separated list of pin numbers in backplane order e.g.  40, 52, 19, 18\n
+         Number must agree with LCD Duty Select"
+      value="40, 52, 19, 18" 
+      constant="false"
+      min="0" max="60" />
 
-   <stringOption name="frontplanes" 
+   <numericListOption name="frontplanes" 
       description="Pins used for Frontplane" 
       toolTip="Comma separated list of pin numbers in frontplane order e.g.  37, 17, 7, 8, 53, 38, 10, 11"
-      value="37, 17, 7, 8, 53, 38, 10, 11" />
+      value="37, 17, 7, 8, 53, 38, 10, 11" 
+      constant="false" 
+      min="0" max="60" />
 
    <choiceOption name="lcd_gcr_duty" 
       description="LCD duty select"
@@ -122,7 +144,7 @@
 
    <projectActionList id = "lcd_files" >
       <copy source="Project_Headers/segment_lcd.h"         target="Project_Headers/segment_lcd.h"         replace="true"  derived="true" />
-      <copy source="Sources/segment_lcd-MKL46Z4.cpp"       target="Sources/segment_lcd.cpp"               replace="true"  derived="true" />
+      <copy source="Sources/segment_lcd.cpp"               target="Sources/segment_lcd.cpp"               replace="true"  derived="true" />
       <copy source="Snippets/segment-lcd-example.cpp"      target="Snippets/segment-lcd-example.cpp"      replace="true"  derived="true" />
    </projectActionList>
    
@@ -138,7 +160,7 @@
    \t//! System Options Register 1
    \tstatic constexpr uint32_t gcr = 
    \t   LCD_GCR_RVEN($(lcd_gcr_rven)) |         // Regulated Voltage Enable
-   \t   LCD_GCR_RVTRIM($(lcd_gcr_rvtrim)) |       // Regulated Voltage Trim
+   \t   LCD_GCR_RVTRIM($(lcd_gcr_rvtrim)) |  // Regulated Voltage Trim
    \t   LCD_GCR_CPSEL($(lcd_gcr_cpsel)) |        // Charge Pump or Resistor Bias Select
    \t   LCD_GCR_LADJ($(lcd_gcr_ladj)) |         // Load Adjust
    \t   LCD_GCR_VSUPPLY($(lcd_gcr_vsupply)) |      // Voltage Supply Control
@@ -146,7 +168,7 @@
    \t   LCD_GCR_FFR($(lcd_gcr_ffr)) |          // Fast Frame Rate Select
    \t   LCD_GCR_LCDDOZE($(lcd_gcr_lcddoze)) |      // LCD Doze enable
    \t   LCD_GCR_LCDSTP($(lcd_gcr_lcdstp)) |       // LCD Stop enable
-   \t   LCD_GCR_DUTY($(lcd_gcr_duty)) |       // LCD duty select
+   \t   LCD_GCR_DUTY($(lcd_gcr_duty)) |         // LCD duty select
    \t   $(lcd_gcr_clock); // Clock source\n\n
    ]]></template>
    

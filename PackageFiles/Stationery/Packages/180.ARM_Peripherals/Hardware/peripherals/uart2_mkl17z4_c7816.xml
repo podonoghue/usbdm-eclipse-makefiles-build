@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- uart1_mkl14z4.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="uart1_mkl.xml"/>
+</fragment>

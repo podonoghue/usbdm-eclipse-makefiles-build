@@ -164,6 +164,7 @@
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+         <param key="rtcSharesPins" value="1" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
@@ -178,6 +179,9 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl43z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

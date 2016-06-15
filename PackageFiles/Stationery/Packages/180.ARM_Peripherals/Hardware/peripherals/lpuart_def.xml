@@ -6,9 +6,11 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
-   <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" />
-   <aliasOption key="/SIM/system_lpuart_clock" />
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false"  optional="true" /> 
+   <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" optional="true" />
+   <aliasOption key="/SIM/system_lpuart_clock" optional="true"/>
+   <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" constant="false" optional="true" />
+   <aliasOption key="/SIM/system_lpuart$(_instance)_clock" optional="true"/>
 
    <menu name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)txsrc"  constant="false" optional="true" />

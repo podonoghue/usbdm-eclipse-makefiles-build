@@ -54,6 +54,7 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
    ]]></template>
+   
    <menu name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -79,7 +80,7 @@ Devices using this peripheral:
          
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
-         toolTip="Selects the clock source for the LPUART transmit and receive clock">
+         toolTip="Selects the clock source for the transmit and receive clock">
          <choice value="0"  name="Disabled" />
          <choice value="1"  name="Peripheral Clock" />
          <choice value="2"  name="OSCERCLK clock" />
@@ -155,8 +156,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock();
       \t   }
       \t}\n\n
       
