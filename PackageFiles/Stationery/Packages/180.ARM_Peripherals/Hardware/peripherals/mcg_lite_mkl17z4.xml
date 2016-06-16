@@ -91,6 +91,13 @@
    <menu name="HIRC" description="High Speed Internal Clock Sources"
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
+      <intOption name="system_usb_clkin_clock" 
+         origin="USB Clock In pin"
+         units="Hz"
+         description="Frequency of External USB Clock"
+         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         value="48000000" />
+
       <intOption name="system_irc48m_clock" 
          units="Hz"
          description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
@@ -106,14 +113,6 @@
          <choice value="1" name="Always enabled" />
       </binaryOption>
       
-      <intOption name="system_usb_clkin_clock" 
-         origin="USB Clock In pin"
-         units="Hz"
-         description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN" 
-         value="48000000"
-         constant="true" />
-
       <intOption name="system_mcgpclk_clock" 
          constant="true"
          units="Hz"
@@ -138,8 +137,6 @@
    </menu>
 
    <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/RTC/rtc_input_freq"  constant="false" />
-      <aliasOption key="/RTC/rtcclk_clock" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </menu>
@@ -220,13 +217,13 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite">
    </validate>
 
-   <!--  projectActionList id = "mcg" >
+   <projectActionList id = "mcg" >
       <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/mcg_mkl.cpp"          target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
+      <copy source="Startup_Code/mcg_lite.cpp"         target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
-   </projectActionList -->
+   </projectActionList>
          
    <template><![CDATA[
       \t//! Indicates need for special handling of CLKDIV1 register
@@ -262,30 +259,13 @@
       \tstatic const ClockInfo clockInfo[];
 
       \t/**
-      \t * Get MCGERCLK
-      \t *
-      \t * @return MCGERCLK as uint32_t
-      \t */
-      \tstatic uint32_t getErcClock() {
-      \t   return Osc0Info::getInternalClock();
-      \t}\n\n
-      
-      \t/**
       \t * Get Internal MCGIRCLK (ungated by MCG_C1_IRCLKEN_MASK)
       \t *
       \t * @return MCGIRCLK as uint32_t
       \t */
       \tstatic uint32_t getInternalIrcClock() {
-      \t      if (mcg->C2&MCG_C2_IRCS_MASK) {
-      \t#ifdef MCG_SC_FCRDIV_MASK
-      \t         return (system_fast_irc_clock/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
-      \t#else
-      \t         return system_fast_irc_clock;
-      \t#endif
-      \t      }
-      \t      else {
-      \t         return system_slow_irc_clock;
-      \t      }
+      \t   //TODO IRC4/8M/FCRDIV/LIRC_DIV2
+      \t   return 0;
       \t}\n\n
       
       \t/**

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- rtc_merged_osc.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+
+   <menu name="Clock sources" description="Source for the clock used by RTC">
+      <aliasOption key="/OSC0/osc32kclk_clock"        constant="true" />
+      <intOption name="rtcclkin_clock" 
+         description="RTC_CLKIN"
+         toolTip="One of several sources for the RTC input clock"
+         origin="RTC_CLKIN pin"
+         units="Hz"
+         value="32765"
+         min="0"
+         />   
+      <aliasOption key="/MCG/system_low_power_clock"  constant="true" />
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
+      <aliasOption key="/SIM/system_erclk32k_clock"   optional="true"/>
+   </menu>
+   
+   <binaryOption name="rtc_cr_osce"
+      description="Enable RTC oscillator"
+      toolTip="Enable main oscillator as 32kHz RTC oscillator\n
+      Note: this disables OSC control by MCG">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+   
+   <binaryOption name="rtc_cr_clko"
+      description="Enable RTC Clock Output"
+      toolTip="Determines if RTC Clock is available to peripherals" >
+      <choice value="1" name="Clock not output to peripherals" />
+      <choice value="0" name="Clock is output to peripherals" isDefault="true" />
+   </binaryOption>
+      
+   <choiceOption name="rtc_cr_scp"
+      description="Oscillator load capacitance"
+      toolTip="Configures the oscillator load capacitance" >
+      <choice value="0"  name="0 pF" />
+      <choice value="8"  name="2 pF" />
+      <choice value="4"  name="4 pF" />
+      <choice value="12" name="6 pF" />
+      <choice value="2"  name="8 pF" isDefault="true" />
+      <choice value="10" name="10 pF" />
+      <choice value="6"  name="12 pF" />
+      <choice value="14" name="14 pF" />
+      <choice value="1"  name="16 pF" />
+      <choice value="9"  name="18 pF" />
+      <choice value="5"  name="20 pF" />
+      <choice value="13" name="22 pF" />
+      <choice value="3"  name="24 pF" />
+      <choice value="11" name="26 pF" />
+      <choice value="7"  name="28 pF" />
+      <choice value="15" name="30 pF" />
+   </choiceOption>
+
+   <binaryOption name="rtc_cr_um" 
+      description="Update Mode"
+      toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
+         When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
+      <choice value="0" name="Registers cannot be written when locked" />
+      <choice value="1" name="Registers can be written when locked under limited conditions" />
+   </binaryOption>
+
+   <binaryOption name="rtc_cr_sup" 
+      description="Supervisor access"
+      toolTip="Determines if the RTC register access is available in non-supervisor mode\n
+         Non supported write accesses generate a bus error" >
+      <choice value="0" name="Non-supervisor mode write accesses are not supported" />
+      <choice value="1" name="Non-supervisor mode write accesses are supported" />
+   </binaryOption>
+
+   <binaryOption name="rtc_cr_wpe" 
+      description="Wakeup Pin Enable"
+      toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down\n
+         The wakeup pin is optional and not available on all devices." >
+      <choice value="0" name="Wakeup pin is disabled" />
+      <choice value="1" name="Wakeup pin is enabled" />
+   </binaryOption>
+   
+   <intOption name="rtc_1hz_clock" 
+      description="1Hz output from RTC" 
+      origin="RTC 1Hz output"
+      constant="true"
+      units="Hz"/>
+   
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
+   <aliasOption key="/SIM/rtc_clkout" constant="true" />
+
+   <xi:include href="_irqOption.xml"/>
+
+   <menu name="Device Parameters" description="Register values">
+      <menu name="RTC CR" description="Real Time Clock">
+         <aliasOption name="rtc_cr_osce" />
+      </menu>   
+   </menu>
+
+   <pins/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.RtcSharedOscValidate">
+   </validate>
+
+   <projectActionList id = "rtc_files" >
+      <copy source="Project_Headers/rtc.h"       target="Project_Headers/rtc.h"      replace="true"  derived="true" />
+      <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       replace="true"  derived="true" />
+      <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   replace="true"  derived="true" />
+   </projectActionList>
+         
+   <template><![CDATA[
+      \t//! Oscillator control register\n
+      \tstatic constexpr uint32_t cr =
+      \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
+      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
+      \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode
+      \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
+      \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
+      \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
+      
+      \t   static uint32_t rtcclkin_clock = $(rtcclkin_clock)U;
+   ]]></template>
+</devicePage>

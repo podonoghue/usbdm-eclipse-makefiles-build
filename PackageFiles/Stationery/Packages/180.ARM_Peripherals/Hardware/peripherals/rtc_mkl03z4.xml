@@ -3,5 +3,5 @@
 <!-- rtc_mkl03z4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="rtc_def.xml"/>
+<xi:include href="rtc_merged_osc.xml"/>
 </fragment>
