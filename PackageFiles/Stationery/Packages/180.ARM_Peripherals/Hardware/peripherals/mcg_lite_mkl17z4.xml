@@ -25,15 +25,15 @@
       </binaryOption>
 
       <binaryOption name="mcg_c1_irclken"
-         description="Internal Reference [MCGIRCLK] Clock Enable "
-         toolTip="Enables the internal reference clock for use by peripherals as MCGIRCLK">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" isDefault="true"/>
+         description="Internal Reference Clock Enable [MCGIRCLK]"
+         toolTip="Enables the LIRC, even when MCG_Lite is not working at LIRC modes.">
+         <choice value="0" name="Enabled as required by MCG mode" />
+         <choice value="1" name="Always enabled" isDefault="true"/>
       </binaryOption>
 
       <binaryOption name="mcg_c1_irefsten"
-         description="Internal Reference [MCGIRCLK] Stop Enable" 
-         toolTip="Determines if MCGIRCLK is enabled in Stop mode">
+         description="Internal Reference Stop Enable [MCGIRCLK]" 
+         toolTip="Determines if the LIRC is enabled in Stop mode">
          <choice value="0" name="IR disabled in STOP" />
          <choice value="1" name="IR enabled in STOP" />
       </binaryOption>
@@ -85,7 +85,6 @@
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
          value="2000000" 
          constant="true" />
-
    </menu>
    
    <menu name="HIRC" description="High Speed Internal Clock Sources"
@@ -100,16 +99,15 @@
 
       <intOption name="system_irc48m_clock" 
          units="Hz"
-         description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
+         description="Frequency of Internal 48MHz Clock"
          toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
          origin="48MHz clock from IRC48MCLK"
-         value="48000000" 
-         constant="true" />
+         value="48000000" />
 
       <binaryOption name="mcg_mc_hircen" 
-         description="High-frequency IRC Enable"
+         description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode.">
-         <choice value="0" name="Disabled when not in HIRC mode" />
+         <choice value="0" name="Enabled as required by MCG mode" />
          <choice value="1" name="Always enabled" />
       </binaryOption>
       
@@ -148,7 +146,7 @@
          LIRC_8MHZ -  8 MHz low power internal reference clock\n
          LIRC_2MHZ -  2 MHz low power internal reference clock\n
          HIRC            -  48 MHz high speed internal reference clock\n
-         EXT              -  External reference clock" >
+         EXT              -  External reference clock (OSCCLK)" >
       <choice name="No setup (Reset default)"         value="ClockMode_None" />
       <choice name="8 MHz low power IRC (LIRC_8MHz)"  value="ClockMode_LIRC_8M" />
       <choice name="2 MHz low power IRC (LIRC_2MHz)"  value="ClockMode_LIRC_2M" />
@@ -178,6 +176,8 @@
 
    <aliasOption key="/SIM/system_core_clock" constant="false" />
    <aliasOption key="/SIM/system_bus_clock" constant="false" />
+
+   <xi:include href="_irqOption.xml"/>
 
    <menu name="Device Parameters" description="Register values">
       <menu name="MCG_C1" description="MCG Control Register 1">
@@ -226,9 +226,6 @@
    </projectActionList>
          
    <template><![CDATA[
-      \t//! Indicates need for special handling of CLKDIV1 register
-      \tstatic constexpr int ERRATA_E2448 = $(ERRATA_E2448:0);\n\n
-
       \tenum ClockMode {
       \t   ClockMode_None     = -1,
       \t   ClockMode_LIRC_8M  = 0,
@@ -237,12 +234,6 @@
       \t   ClockMode_EXT,
       \t};\n\n
       
-      \t//! Frequency of Slow Internal Reference Clock [~2MHz]
-      \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
-      
-      \t//! Frequency of Fast Internal Reference Clock [~8MHz]
-      \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
-
       \tstruct ClockInfo {
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;
@@ -254,33 +245,88 @@
       \t   const uint8_t sc;
       \t   //! Miscellaneous Control Register
       \t   const uint8_t mc;
-      \t};\n\n
-      
+      \t};
+      \t
+      \t//! Frequency of Slow Internal Reference Clock [~2MHz]
+      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;
+      \t
+      \t//! Frequency of Fast Internal Reference Clock [~8MHz]
+      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;
+      \t
+      \t//! Frequency of High Speed Internal Reference Clock [~48MHz]
+      \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;
+      \t
       \tstatic const ClockInfo clockInfo[];
-
+      \t
       \t/**
-      \t * Get Internal MCGIRCLK (ungated by MCG_C1_IRCLKEN_MASK)
+      \t * Get HIRC_CLK
       \t *
-      \t * @return MCGIRCLK as uint32_t
+      \t * @return frequency in Hz as uint32_t
       \t */
-      \tstatic uint32_t getInternalIrcClock() {
-      \t   //TODO IRC4/8M/FCRDIV/LIRC_DIV2
-      \t   return 0;
-      \t}\n\n
-      
-      \t/**
-      \t * Get MCGIRCLK (gated by MCG_C1_IRCLKEN_MASK)
-      \t *
-      \t * @return MCGIRCLK as uint32_t
-      \t */
-      \tstatic uint32_t getIrcClock() {
-      \t   if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
-      \t      return getInternalIrcClock();
+      \tstatic uint32_t getMcgPclk() {
+      \t   if ((mcg->MC&MCG_MC_HIRCEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(0))) {
+      \t      return system_hirc_clock;
       \t   }
       \t   else {
       \t      return 0;
       \t   }
-      \t}\n\n
+      \t}
+      \t
+      \t/**
+      \t * Get LIRC_CLK
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic uint32_t getLircClk() {
+      \t   if ((mcg->C1&MCG_C1_IRCLKEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(1))) {
+      \t      if (mcg->C2 & MCG_C2_IRCS_MASK) {
+      \t         return system_fast_lirc_clock;
+      \t      }
+      \t      else {
+      \t         return system_slow_lirc_clock;
+      \t      }
+      \t   }
+      \t   else {
+      \t      return 0;
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get LIRC_DIV1_CLK
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic uint32_t getLircDiv1Clk() {
+      \t   return getLircClk()/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT));
+      \t}
+      \t
+      \t/**
+      \t * Get MCGIRCLK
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic uint32_t getMcgIrClk() {
+      \t   return getLircDiv1Clk()/(1<<((mcg->MC&MCG_MC_LIRC_DIV2_MASK)>>MCG_MC_LIRC_DIV2_SHIFT));
+      \t}
+      \t
+      \t/**
+      \t * Get MCGOUTCLK
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic uint32_t getMcgOutclk() {
+      \t   switch (mcg->S&MCG_S_CLKST_MASK) {
+      \t   case MCG_S_CLKST(0): // HIRC
+      \t      return getMcgPclk();
+      \t   case MCG_S_CLKST(1): // LIRC (IRC2Mz/IRC8Mz)/DIV1
+      \t      return getLircDiv1Clk();
+      \t   case MCG_S_CLKST(2): // EXT (IRC48MHz)
+      \t      return Osc0Info::getInternalClock();
+      \t   default:
+      \t   case MCG_S_CLKST(3): // Reserved
+      \t      return 0;
+      \t   }
+      \t}
    ]]></template>
       
    <template name="clockInfo"><![CDATA[
@@ -300,11 +346,11 @@
       \t   MCG_C2_IRCS($(mcg_c2_ircs)),    // IRCS    Internal Reference Clock Select\n\n
       
       \t   //! Status and Control Register
-      \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)), // FCRDIV Internal Clock Reference Divider\n\n
+      \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)), // FCRDIV (LIRC_DIV1) Internal Clock Reference Divider 1\n\n
       
-      \t   //! Control Register 1
-      \t   MCG_MC_HIRCEN($(mcg_mc_hircen)) | // HIRCEN   Internal Reference Clock Enable
-      \t   MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2)), // LIRC_DIV2 Internal Reference Stop Enable\n\n
+      \t   //! Miscellaneous Control Register
+      \t   MCG_MC_HIRCEN($(mcg_mc_hircen)) |    // HIRCEN   Internal Reference Clock Enable
+      \t   MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2)), // LIRC_DIV2 Internal Reference Divider 2\n\n
       
       \t   }
       \t};

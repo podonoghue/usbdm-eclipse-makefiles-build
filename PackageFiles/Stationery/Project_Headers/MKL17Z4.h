@@ -5065,7 +5065,7 @@ typedef struct {                                /*       UART2 Structure        
    };
    __IO uint8_t   WGP7816_T1;                   /**< 003E: 7816 Wait and Guard Parameter Register                       */
    __IO uint8_t   WP7816C_T1;                   /**< 003F: 7816 Wait Parameter Register C                               */
-} UART2_Type;
+} UART_Type;
 
 /**
  * @} */ /* End group UART_structs_GROUP 
@@ -5365,7 +5365,7 @@ typedef struct {                                /*       UART2 Structure        
 
 /* UART2 - Peripheral instance base addresses */
 #define UART2_BasePtr                  0x4006C000UL //!< Peripheral base address
-#define UART2                          ((UART2_Type *) UART2_BasePtr) //!< Freescale base pointer
+#define UART2                          ((UART_Type *) UART2_BasePtr) //!< Freescale base pointer
 #define UART2_BASE_PTR                 (UART2) //!< Freescale style base pointer
 /**
  * @} */ /* End group UART_Peripheral_access_layer_GROUP 

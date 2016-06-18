@@ -220,7 +220,7 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
       \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO SDHC0_CLKIN
       \t   }
       \t}\n\n
@@ -236,7 +236,7 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
       \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO ENET_1588_CLKIN
       \t   }
       \t}\n\n
@@ -252,8 +252,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk();
       \t   }
       \t}\n\n
       
@@ -268,8 +268,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): getDividedPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk;
       \t   }
       \t}\n\n
       \t/**
@@ -283,8 +283,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_TPMSRC(0): return 0;
       \t   case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getExternalClock();
-      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getIrcClock();
+      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClk();
+      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClk();
       \t   }
       \t}\n\n
    ]]></template>

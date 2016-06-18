@@ -4,30 +4,9 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" /> 
-   
    <intOption name="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
-      
-   <floatOption name="clockFrequency" 
-      constant="true"
-      description="Frequency of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="Hz"/>
-   <floatOption name="clockPeriod" 
-      constant="true"
-      description="Period of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
-   <floatOption name="maximumPeriod" 
-      constant="true"
-      description="Maximum period of timer"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
-   <intOption name="period" description="Period of timer"
-      toolTip="Default period of the timer"
-      value="10000" min="0" max="65535" />     
    <choiceOption name="ftm_sc_clks" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
@@ -46,6 +25,24 @@
       <choice value="6" name="Divide by 64" />
       <choice value="7" name="Divide by 128" />
    </choiceOption>
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="Hz"/>
+   <floatOption name="clockPeriod" 
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+   <floatOption name="maximumPeriod" 
+      constant="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      units="s"/>
+   <intOption name="period" description="Period of timer"
+      toolTip="Default period of the timer"
+      value="10000" min="0" max="65535" />     
    <binaryOption name="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n

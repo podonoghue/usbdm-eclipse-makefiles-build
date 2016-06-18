@@ -13,14 +13,14 @@ Devices using this peripheral:
             Used by LPTMR">
          <choice value="0"  name="System oscillator in low range (OSC32KCLK)" />
          <choice value="1"  name="Reserved" />
-         <choice value="2"  name="RTC 32kHz clock" isDefault="true" />
-         <choice value="3"  name="LPO 1kHz clock" />
+         <choice value="2"  name="RTC_CLKIN pin" />
+         <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
       
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
+         toolTip="External reference clock available to come peripherals (usually ~32kHz)" 
          value="32000"
          constant="true" />
    </menu>
@@ -39,7 +39,7 @@ Devices using this peripheral:
       \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
       \t      default                     : return 0;
       \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
+      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
       \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
       \t   }
       \t}\n\n
@@ -53,6 +53,12 @@ Devices using this peripheral:
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
    
+      <intOption name="rtc_clkout"
+      constant="true"
+      units="Hz"
+      description="RTC clock out [RTC_CLKOUT pin]"
+      toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+
       <choiceOption name="sim_sopt2_pllfllsel" 
          description="Peripheral Clock select"
          toolTip="Selects the clock for various peripherals (UART0, TPM etc.)">
@@ -161,8 +167,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_UART0SRC(0): return 0;
       \t   case SIM_SOPT2_UART0SRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_UART0SRC(2): return Osc0Info::getExternalClock();
-      \t   case SIM_SOPT2_UART0SRC(3): return McgInfo::getIrcClock();
+      \t   case SIM_SOPT2_UART0SRC(2): return Osc0Info::getOscerClk();
+      \t   case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClk();
       \t   }
       \t}\n\n
       \t/**
@@ -176,8 +182,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_TPMSRC(0): return 0;
       \t   case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getExternalClock();
-      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getIrcClock();
+      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClk();
+      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClk();
       \t   }
       \t}\n\n
    ]]></template>

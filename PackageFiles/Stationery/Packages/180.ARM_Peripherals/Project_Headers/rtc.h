@@ -29,10 +29,6 @@ typedef void (*RTCCallbackFunction)(uint32_t timeSinceEpoch);
 template <class Info>
 class RtcBase_T {
 
-public:
-   static uint32_t rtcclk;
-   static uint32_t rtcclkUngated;
-
 protected:
    static constexpr volatile RTC_Type *rtc      = Info::rtc;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
@@ -52,8 +48,6 @@ public:
       if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
          // RTC disabled
          rtc->CR       = 0;
-         rtcclkUngated = 0;
-         rtcclk        = 0;
          return;
       }
 
@@ -91,9 +85,6 @@ public:
 
       // Update settings
       rtc->CR  = Info::cr;
-
-      rtcclkUngated = Info::rtcclk_clock;
-      rtcclk        = (RtcInfo::cr&RTC_CR_CLKO_MASK)?0:Info::rtcclk_clock;
    }
 
    /*
@@ -135,9 +126,6 @@ public:
    }
 
 };
-
-template <class Info> uint32_t RtcBase_T<Info>::rtcclk        = 0;
-template <class Info> uint32_t RtcBase_T<Info>::rtcclkUngated = 0;
 
 /**
  * Template class to provide RTC callback

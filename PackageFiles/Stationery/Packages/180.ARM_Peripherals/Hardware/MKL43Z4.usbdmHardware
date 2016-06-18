@@ -223,7 +223,7 @@
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
-         <clock reg="SCGC4"         mask="SIM_SCGC4_VREF0_MASK" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_VREF_MASK" />
       </peripheral>
    </peripherals>
    <pins>

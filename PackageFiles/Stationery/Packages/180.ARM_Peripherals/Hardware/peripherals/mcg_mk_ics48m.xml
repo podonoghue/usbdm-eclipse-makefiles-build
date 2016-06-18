@@ -110,7 +110,6 @@
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
          value="48000000" 
          constant="true" />
-         
    </menu>
    
    <menu name="Internal" description="Internal Clock Sources"
@@ -137,8 +136,8 @@
          toolTip="Dependent on device. [Typically ~1kHz]" 
          value="1000"
          constant="true" />
-   </menu>  
-   
+   </menu>
+
    <menu name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/erefs0" constant="false" />
@@ -163,8 +162,7 @@
       units="Hz"
       constant="true"  
       description="MCG External Reference Clock [OSCSELCLK]"
-      toolTip="Derived from the OSCCLK0 (external crystal or clock source on XTAL/EXTAL), \n 
-               RTC_CLOCK(XTAL32/EXTAL32) or IRC48M(Internal 48MHz)"
+      toolTip="External reference clock input to PLL/FLL"
       value="12000000" />
 
    <choiceOption name="clock_mode" 
@@ -362,16 +360,11 @@
    <aliasOption key="/SIM/system_erclk32k_clock" />
    <aliasOption name="system_low_power_clock" />
 
-   <choiceOption name="system_mcgoutclk_clock_source"
-      description="System MCG Output Clock source [MCGOUTCLK]"
+   <stringOption name="system_mcgoutclk_clock_source" 
+      description="System MCG Output Clock source [MCGOUTCLK]" 
+      constant="true"
       toolTip="Source of MCG Output Clock\n
-      Determined by current clock mode"
-      constant="true" >
-         <choice value="0" name="PLL output" />
-         <choice value="1" name="FLL output" />
-         <choice value="1" name="MCGIRCLK" />
-         <choice value="1" name="MCGERCLK" />
-   </choiceOption>
+      Determined by current clock mode" />
    
    <intOption name="system_mcgoutclk_clock" 
       units="Hz"

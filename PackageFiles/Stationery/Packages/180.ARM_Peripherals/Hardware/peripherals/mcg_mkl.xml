@@ -21,22 +21,6 @@
          <choice value="1" name="Reset request" />
       </binaryOption>
 
-      <binaryOption name="mcg_c8_cme1" 
-         description="RTC Clock Monitor Enable"
-         toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
-                  CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
-         <choice value="0" name="RTC clock monitor disabled" />
-         <choice value="1" name="RTC clock monitor enabled" />
-      </binaryOption>
-      
-      <binaryOption name="mcg_c8_locre1" 
-         description="RTC Loss of Clock Reset Enable"
-         toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                  Only has an affect when CME1 is set." >
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
-
       <binaryOption name="mcg_c6_lolie0" 
          description="Loss of Lock Interrupt Enable"
          toolTip="Determines if an interrupt request is made following a PLL loss of lock indication.\n
@@ -110,7 +94,6 @@
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
          value="48000000" 
          constant="true" />
-         
    </menu>
    
    <menu name="Internal" description="Internal Clock Sources"
@@ -130,16 +113,14 @@
          toolTip="Dependent on device. [Typically ~1kHz]" 
          value="1000"
          constant="true" />
-   </menu>  
-   
+   </menu>
+
    <menu name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/erefs0" constant="false" />
    </menu>
 
    <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/RTC/rtc_input_freq"  constant="false" />
-      <aliasOption key="/RTC/rtcclk_clock" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </menu>
@@ -345,16 +326,11 @@
    <aliasOption key="/SIM/system_erclk32k_clock" />
    <aliasOption name="system_low_power_clock" />
 
-   <choiceOption name="system_mcgoutclk_clock_source"
-      description="System MCG Output Clock source [MCGOUTCLK]"
+   <stringOption name="system_mcgoutclk_clock_source" 
+      description="System MCG Output Clock source [MCGOUTCLK]" 
+      constant="true"
       toolTip="Source of MCG Output Clock\n
-      Determined by current clock mode"
-      constant="true" >
-         <choice value="0" name="PLL output" />
-         <choice value="1" name="FLL output" />
-         <choice value="1" name="MCGIRCLK" />
-         <choice value="1" name="MCGERCLK" />
-   </choiceOption>
+      Determined by current clock mode" />
    
    <intOption name="system_mcgoutclk_clock" 
       units="Hz"
@@ -453,7 +429,7 @@
    </menu>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M">
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MKL">
       <param type="long" value="2000000" />        <!-- pllInMin     -->
       <param type="long" value="4000000" />        <!-- pllInMax     -->
       <param type="long" value="48000000" />       <!-- pllOutMin    -->

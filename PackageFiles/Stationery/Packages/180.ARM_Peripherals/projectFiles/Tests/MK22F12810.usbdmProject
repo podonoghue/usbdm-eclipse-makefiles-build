@@ -84,17 +84,17 @@
    <item key="/DAC0/irqEnabled"                            value="false" />
    <item key="/DAC0/irqHandler"                            value="false" />
    <item key="/DAC0/irqLevel"                              value="0" />
-   <item key="/FTM0/clockFrequency"                        value="3750000.0" />
-   <item key="/FTM0/clockPeriod"                           value="2.6666666666666667E-7" />
-   <item key="/FTM0/ftmExternalClock"                      value="0.0Hz" />
-   <item key="/FTM0/ftm_sc_clks"                           value="1" />
+   <item key="/FTM0/clockFrequency"                        value="100.0" />
+   <item key="/FTM0/clockPeriod"                           value="0.01" />
+   <item key="/FTM0/ftmExternalClock"                      value="100.00Hz" />
+   <item key="/FTM0/ftm_sc_clks"                           value="3" />
    <item key="/FTM0/ftm_sc_cpwms"                          value="false" />
-   <item key="/FTM0/ftm_sc_ps"                             value="3" />
+   <item key="/FTM0/ftm_sc_ps"                             value="0" />
    <item key="/FTM0/ftm_sc_toie"                           value="false" />
    <item key="/FTM0/irqEnabled"                            value="false" />
    <item key="/FTM0/irqHandler"                            value="false" />
    <item key="/FTM0/irqLevel"                              value="0" />
-   <item key="/FTM0/maximumPeriod"                         value="0.017476266666666667" />
+   <item key="/FTM0/maximumPeriod"                         value="655.36" />
    <item key="/FTM0/period"                                value="10000" />
    <item key="/FTM1/clockFrequency"                        value="3.0E7" />
    <item key="/FTM1/clockPeriod"                           value="3.3333333333333334E-8" />

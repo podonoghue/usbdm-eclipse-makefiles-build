@@ -154,8 +154,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk;
       \t   }
       \t}\n\n
       
@@ -170,8 +170,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getExternalClock;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getIrcClock;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk;
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk;
       \t   }
       \t}\n\n
 

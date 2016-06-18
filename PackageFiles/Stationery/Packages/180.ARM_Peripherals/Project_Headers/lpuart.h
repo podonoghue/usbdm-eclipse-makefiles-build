@@ -37,7 +37,7 @@ namespace USBDM {
 class Lpuart {
 
 protected:
-   LPUART_Type *uart;            //!< UART hardware instance
+   volatile LPUART_Type *uart;            //!< UART hardware instance
 
    /**
     * Construct UART interface
@@ -45,7 +45,7 @@ protected:
     * @param uart             Base address of UART hardware
     *
     */
-   Lpuart(LPUART_Type *uart) : uart(uart) {
+   Lpuart(volatile LPUART_Type *uart) : uart(uart) {
    }
 
    /**
@@ -68,8 +68,6 @@ protected:
       // Set Baud rate register
       uart->BAUD = (uart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
             LPUART_BAUD_SBR(scaledBaudValue)|LPUART_BAUD_OSR(overSample-1);
-
-      uart->MODIR = 0;
 
 #if USE_IRQ
       // Enable UART Tx & Rx - with Rx IRQ
@@ -195,9 +193,9 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of LPUART clock
     */
-   Lpuart_T(unsigned baudrate) : Lpuart(reinterpret_cast<LPUART_Type*>(Info::lpuart)) {
+   Lpuart_T(unsigned baudrate) : Lpuart(Info::lpuart) {
       // Enable clock to UART interface
-      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
+      *Info::clockReg |= Info::clockMask;
 
       // Configure pins
       Info::initPCRs();

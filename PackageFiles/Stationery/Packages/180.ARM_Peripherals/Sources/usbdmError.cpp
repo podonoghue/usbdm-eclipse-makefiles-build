@@ -39,7 +39,8 @@ const char *getErrorMessage(ErrorCode err) {
 void checkError() {
    while (errorCode != E_NO_ERROR) {
 #ifdef DEBUG_BUILD
-      puts(getErrorMessage());
+      const char *msg = getErrorMessage();
+      puts(msg);
       __BKPT();
 #endif
    }

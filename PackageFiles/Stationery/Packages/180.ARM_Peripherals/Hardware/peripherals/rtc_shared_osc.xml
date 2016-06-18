@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE root SYSTEM "_menu.dtd" >
-<!-- rtc_merged_osc.xml -->
+<!-- rtc_shared_osc.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
@@ -14,7 +14,7 @@
          value="32765"
          min="0"
          />   
-      <aliasOption key="/MCG/system_low_power_clock"  constant="true" />
+      <aliasOption key="/MCG/system_low_power_clock"  constant="true" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true"/>
    </menu>
@@ -97,6 +97,7 @@
    </menu>
 
    <pins/>
+   <pins name="OSC0"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcSharedOscValidate">
@@ -109,6 +110,9 @@
    </projectActionList>
          
    <template><![CDATA[
+      \t//! Frequency of clock supplied to RTC_CLKIN pin
+      \tstatic constexpr uint32_t rtcclkin_clock = $(rtcclkin_clock)U;\n\n
+      
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t cr =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
@@ -118,6 +122,5 @@
       \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
       \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
       
-      \t   static uint32_t rtcclkin_clock = $(rtcclkin_clock)U;
    ]]></template>
 </devicePage>

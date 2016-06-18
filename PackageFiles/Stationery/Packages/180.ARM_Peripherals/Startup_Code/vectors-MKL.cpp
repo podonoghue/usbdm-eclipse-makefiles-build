@@ -239,7 +239,7 @@ typedef struct {
 
 __attribute__ ((section(".bootloader_configuration")))
 const BootloaderConfiguration bootloaderConfiguration = {
-    /* magic               */ "kcfg",
+    /* magic               */ {'k','c','f','g'}, // = "kcfg",
     /* reserved            */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
     /* enabledPeripherals  */ 0xFF, /* all peripherals */
     /* i2cAddress          */ 0x11,

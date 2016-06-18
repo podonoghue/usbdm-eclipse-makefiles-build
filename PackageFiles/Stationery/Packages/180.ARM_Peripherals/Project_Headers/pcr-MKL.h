@@ -64,18 +64,13 @@
 
 namespace USBDM {
 
-extern volatile uint32_t SystemMcgirClock;
 extern volatile uint32_t SystemMcgffClock;
+extern volatile uint32_t SystemMcgOutClock;
 extern volatile uint32_t SystemMcgFllClock;
 extern volatile uint32_t SystemMcgPllClock;
-extern volatile uint32_t SystemMcgOutClock;
 extern volatile uint32_t SystemCoreClock;
 extern volatile uint32_t SystemBusClock;
-extern volatile uint32_t SystemPeripheralClock;
-extern volatile uint32_t SystemOscerClock;
-extern volatile uint32_t SystemErclk32kClock;
 extern volatile uint32_t SystemLpoClock;
-extern volatile uint32_t SystemRtcClock;
 
 /**
  * @addtogroup PeripheralPinTables Peripheral Information Classes

@@ -339,6 +339,13 @@
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
+      <pin name="PTA20">
+         <mux sel="reset"         signal="RESET_b" />
+         <mux sel="mux0"          signal="RESET_b" />
+         <mux sel="mux1"          signal="GPIOA_20" />
+         <reset sel="mux0" />
+         <default sel="reset" />
+      </pin>
       <pin name="PTB0">
          <mux sel="reset"         signal="ADC0_SE8" />
          <mux sel="reset"         signal="TSI0_CH0" />
@@ -835,13 +842,6 @@
          <reset sel="mux0" />
          <default sel="reset" />
       </pin>
-      <pin name="RESET_b">
-         <mux sel="reset"         signal="RESET_b" />
-         <mux sel="mux0"          signal="RESET_b" />
-         <mux sel="mux1"          signal="GPIOA_20" />
-         <reset sel="mux0" />
-         <default sel="reset" />
-      </pin>
       <pin name="USB0_DM"      isFixed="true">
          <mux sel="fixed"         signal="USB0_DM" />
          <reset sel="fixed" />
@@ -926,6 +926,7 @@
          <placement pin="PTA18"         location="" />
          <placement pin="PTA19"         location="" />
          <placement pin="PTA2"          location="D1/ConTx" />
+         <placement pin="PTA20"         location="" />
          <placement pin="PTA3"          location="" />
          <placement pin="PTA4"          location="D4" />
          <placement pin="PTA5"          location="D5" />
@@ -980,7 +981,6 @@
          <placement pin="PTE31"         location="D30" />
          <placement pin="PTE4"          location="A14" />
          <placement pin="PTE5"          location="A13" />
-         <placement pin="RESET_b"       location="" />
          <placement pin="USB0_DM"       location="" />
          <placement pin="USB0_DP"       location="" />
          <placement pin="VDD1"          location="" />
@@ -1004,6 +1004,7 @@
          <placement pin="PTA18"         location="p32" />
          <placement pin="PTA19"         location="p33" />
          <placement pin="PTA2"          location="p24" />
+         <placement pin="PTA20"         location="p34" />
          <placement pin="PTA3"          location="p25" />
          <placement pin="PTA4"          location="p26" />
          <placement pin="PTA5"          location="p27" />
@@ -1046,7 +1047,6 @@
          <placement pin="PTE29"         location="p17" />
          <placement pin="PTE30"         location="p18" />
          <placement pin="PTE31"         location="p19" />
-         <placement pin="RESET_b"       location="p34" />
          <placement pin="USB0_DM"       location="p6" />
          <placement pin="USB0_DP"       location="p5" />
          <placement pin="VDD1"          location="p3" />
@@ -1074,6 +1074,7 @@
          <placement pin="PTA18"         location="p40" />
          <placement pin="PTA19"         location="p41" />
          <placement pin="PTA2"          location="p28" />
+         <placement pin="PTA20"         location="p42" />
          <placement pin="PTA3"          location="p29" />
          <placement pin="PTA4"          location="p30" />
          <placement pin="PTA5"          location="p31" />
@@ -1128,7 +1129,6 @@
          <placement pin="PTE31"         location="p23" />
          <placement pin="PTE4"          location="p5" />
          <placement pin="PTE5"          location="p6" />
-         <placement pin="RESET_b"       location="p42" />
          <placement pin="USB0_DM"       location="p10" />
          <placement pin="USB0_DP"       location="p9" />
          <placement pin="VDD1"          location="p7" />
@@ -1150,6 +1150,7 @@
          <placement pin="PTA18"         location="p17" />
          <placement pin="PTA19"         location="p18" />
          <placement pin="PTA2"          location="p12" />
+         <placement pin="PTA20"         location="p19" />
          <placement pin="PTA3"          location="p13" />
          <placement pin="PTA4"          location="p14" />
          <placement pin="PTB0"          location="p20" />
@@ -1167,7 +1168,6 @@
          <placement pin="PTD7"          location="p32" />
          <placement pin="PTE0"          location="p1" />
          <placement pin="PTE30"         location="p9" />
-         <placement pin="RESET_b"       location="p19" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VDD2"          location="p15" />
@@ -1184,6 +1184,7 @@
          <placement pin="PTA18"         location="p24" />
          <placement pin="PTA19"         location="p25" />
          <placement pin="PTA2"          location="p19" />
+         <placement pin="PTA20"         location="p26" />
          <placement pin="PTA3"          location="p20" />
          <placement pin="PTA4"          location="p21" />
          <placement pin="PTB0"          location="p27" />
@@ -1214,7 +1215,6 @@
          <placement pin="PTE25"         location="p16" />
          <placement pin="PTE29"         location="p13" />
          <placement pin="PTE30"         location="p14" />
-         <placement pin="RESET_b"       location="p26" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VDD1"          location="p1" />

@@ -7,7 +7,7 @@
 
 #include <derivative.h>
 #include "system.h"
-#include "uart.h"
+#include "lpuart.h"
 #include "console.h"
 
 //*** <<< Use Configuration Wizard in Context Menu >>> ***
@@ -23,7 +23,7 @@
    <0=> Default
    <info>Not all listed UARTs may be available
 */
-#define CONSOLE $(demo.cpp.console:USBDM::Uart##0)
+#define CONSOLE $(demo.cpp.console:USBDM::Lpuart##0)
 
 //*** <<< end of configuration section >>>    ***
 

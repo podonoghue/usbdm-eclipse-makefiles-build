@@ -88,12 +88,7 @@ public:
     * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
     */
    static void setSysDividers(uint32_t simClkDiv1) {
-      if (!McgInfo::ERRATA_E2448) {
-         SIM->CLKDIV1 = simClkDiv1;
-      }
-      else {
-         setSysDividersStub(simClkDiv1);
-      }
+      SIM->CLKDIV1 = simClkDiv1;
    }
 
 public:

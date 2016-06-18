@@ -28,7 +28,7 @@ Devices using this peripheral:
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return SimInfo::getLpuartClock();
+      \t   return SimInfo::getLpuart$(_instance)Clock();
       \t}\n\n
    ]]></template>
 

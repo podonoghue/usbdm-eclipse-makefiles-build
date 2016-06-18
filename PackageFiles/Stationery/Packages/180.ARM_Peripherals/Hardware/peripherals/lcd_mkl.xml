@@ -108,7 +108,7 @@
 
    <numericListOption name="backplanes" 
       description="Pins used for Backplane" 
-      toolTip="Comma separated list of pin numbers in backplane order e.g.  40, 52, 19, 18\n
+      toolTip="Comma separated list of pin numbers in backplane order e.g.  40,52,19,18\n
          Number must agree with LCD Duty Select"
       value="40, 52, 19, 18" 
       constant="false"
@@ -116,7 +116,7 @@
 
    <numericListOption name="frontplanes" 
       description="Pins used for Frontplane" 
-      toolTip="Comma separated list of pin numbers in frontplane order e.g.  37, 17, 7, 8, 53, 38, 10, 11"
+      toolTip="Comma separated list of pin numbers in frontplane order e.g.  37,17,7,8,53,38,10,11"
       value="37, 17, 7, 8, 53, 38, 10, 11" 
       constant="false" 
       min="0" max="60" />

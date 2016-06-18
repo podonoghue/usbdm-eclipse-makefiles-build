@@ -217,7 +217,7 @@ protected:
     * Clear UART error status
     */
    virtual void clearError() {
-      if (Uart0Info::statusNeedsWrite) {
+      if (Info::statusNeedsWrite) {
          uart->S1 = 0xFF;
       }
       else {

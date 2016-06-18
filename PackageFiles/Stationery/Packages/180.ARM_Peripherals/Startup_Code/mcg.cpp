@@ -441,7 +441,6 @@ void clock_initialise(void) {
 
 #ifdef USBDM_MCG_IS_DEFINED
    USBDM::Mcg::initialise();
-   USBDM::Mcg::SystemCoreClockUpdate();
 #endif
 
 }

@@ -133,11 +133,11 @@
       \t}\n\n
       
       \t/**
-      \t * Get OSC clock (external, masked by OSC_CR_ERCLKEN)
+      \t * Get OSCERCLK clock (external, masked by OSC_CR_ERCLKEN)
       \t *
       \t * @return Clock frequency as uint32_t in Hz
       \t */
-      \tstatic uint32_t getExternalClock() {
+      \tstatic uint32_t getOscerClk() {
       \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?getInternalClock():0;
       \t}\n\n
       
