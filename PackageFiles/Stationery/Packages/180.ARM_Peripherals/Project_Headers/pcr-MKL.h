@@ -23,46 +23,34 @@
 /*
  * Default port information
  */
-#ifndef FIXED_PORT_CLOCK_REG
-#define FIXED_PORT_CLOCK_REG SCGC5
-#endif
-
-#ifndef FIXED_GPIO_FN
-#define FIXED_GPIO_FN   (1)
-#endif
-
-#ifndef FIXED_ADC_FN
-#define FIXED_ADC_FN    (0)
-#endif
-
-#ifndef PORTA_CLOCK_MASK
-#ifdef SIM_SCGC5_PORTA_MASK
-#define PORTA_CLOCK_MASK  SIM_SCGC5_PORTA_MASK
-#define PORTA_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTB_MASK
-#define PORTB_CLOCK_MASK  SIM_SCGC5_PORTB_MASK
-#define PORTB_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTC_MASK
-#define PORTC_CLOCK_MASK  SIM_SCGC5_PORTC_MASK
-#define PORTC_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTD_MASK
-#define PORTD_CLOCK_MASK  SIM_SCGC5_PORTD_MASK
-#define PORTD_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTE_MASK
-#define PORTE_CLOCK_MASK  SIM_SCGC5_PORTE_MASK
-#define PORTE_CLOCK_REG   SCGC5
-#endif
-#ifdef SIM_SCGC5_PORTF_MASK
-#define PORTF_CLOCK_MASK  SIM_SCGC5_PORTF_MASK
-#define PORTF_CLOCK_REG   SCGC5
-#endif
-#endif
-
 namespace USBDM {
+
+/*
+ * PORT clock masks
+ */
+#ifdef SIM_SCGC5_PORTA_MASK
+constexpr   uint32_t PORTA_CLOCK_MASK         = SIM_SCGC5_PORTA_MASK;
+#endif
+
+#ifdef SIM_SCGC5_PORTB_MASK
+constexpr   uint32_t PORTB_CLOCK_MASK         = SIM_SCGC5_PORTB_MASK;
+#endif
+
+#ifdef SIM_SCGC5_PORTC_MASK
+constexpr   uint32_t PORTC_CLOCK_MASK         = SIM_SCGC5_PORTC_MASK;
+#endif
+
+#ifdef SIM_SCGC5_PORTD_MASK
+constexpr   uint32_t PORTD_CLOCK_MASK         = SIM_SCGC5_PORTD_MASK;
+#endif
+
+#ifdef SIM_SCGC5_PORTE_MASK
+constexpr   uint32_t PORTE_CLOCK_MASK         = SIM_SCGC5_PORTE_MASK;
+#endif
+
+#ifdef SIM_SCGC5_PORTF_MASK
+constexpr   uint32_t PORTF_CLOCK_MASK         = SIM_SCGC5_PORTF_MASK;
+#endif
 
 extern volatile uint32_t SystemMcgffClock;
 extern volatile uint32_t SystemMcgOutClock;
@@ -71,6 +59,26 @@ extern volatile uint32_t SystemMcgPllClock;
 extern volatile uint32_t SystemCoreClock;
 extern volatile uint32_t SystemBusClock;
 extern volatile uint32_t SystemLpoClock;
+
+/*
+ * Enable clock to ports
+ *
+ * @param mask Mask for PORTs to enable
+ */
+static inline void enablePortClocks(uint32_t clockMask) {
+   bmeOr(SIM->SCGC5, clockMask);
+   __DMB();
+};
+
+/*
+ * Disable clock to ports
+ *
+ * @param mask Mask for PORTs to disable
+ */
+static inline void disablePortClocks(uint32_t clockMask) {
+   bmeAnd(SIM->SCGC5, ~clockMask);
+   __DMB();
+};
 
 /**
  * @addtogroup PeripheralPinTables Peripheral Information Classes
@@ -100,10 +108,20 @@ struct PcrInfo {
 };
 
 /**
+ * Assumes all PORT function are mapped to MUX=1
+ */
+static constexpr uint8_t    FIXED_GPIO_FN      = 1;
+/**
+ * Assumes all ADC function are mapped to MUX=0
+ */
+static constexpr uint8_t    FIXED_ADC_FN       = 0;
+
+/**
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
 static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
+
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
@@ -121,6 +139,11 @@ static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_MUX(FIXED_G
  * High drive strength + Pull-up + Open-drain (if available)
  */
 static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
+
+/**
+ * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
+ */
+static constexpr uint32_t  XTAL_DEFAULT_PCR = 0;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -165,7 +188,7 @@ public:
     */
    static void setPCR(uint32_t pcrValue=defPcrValue) {
       if ((pcrAddress != 0) && (bitNum >= 0)) {
-         enableClock();
+         enablePortClocks(clockMask);
 
          // Pointer to PCR register for pin
          constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
@@ -186,21 +209,7 @@ public:
          *pcrReg = (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
       }
    }
-   /**
-    * Enable clock to port
-    */
-   static void enableClock() {
-      bmeOr(SIM->FIXED_PORT_CLOCK_REG, clockMask);
-//      SIM->FIXED_PORT_CLOCK_REG |= clockMask;
-      __DMB();
-   }
-   /**
-    * Disable clock to port
-    */
-   static void disableClock() {
-      bmeAnd(SIM->FIXED_PORT_CLOCK_REG, ~clockMask);
-//      SIM->FIXED_PORT_CLOCK_REG &= ~clockMask;
-   }
+
 };
 
 /**

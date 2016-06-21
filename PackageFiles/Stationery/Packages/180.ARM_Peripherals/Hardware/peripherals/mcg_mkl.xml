@@ -530,7 +530,7 @@
       \t *
       \t * @return MCGIRCLK as uint32_t
       \t */
-      \tstatic uint32_t getIrcClock() {
+      \tstatic uint32_t getMcgIrClock() {
       \t   if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
       \t      return getInternalIrcClock();
       \t   }

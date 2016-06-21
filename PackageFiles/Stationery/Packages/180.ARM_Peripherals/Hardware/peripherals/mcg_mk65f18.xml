@@ -625,7 +625,7 @@
       \t      default               : return 0;
       \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getInternalClock();
       \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
-      \t      case MCG_C7_OSCSEL(2) : return RtcInfo::irc48m_clock;
+      \t      case MCG_C7_OSCSEL(2) : return McgInfo::irc48m_clock;
       \t   }
       \t}\n\n
       
@@ -652,7 +652,7 @@
       \t *
       \t * @return MCGIRCLK as uint32_t
       \t */
-      \tstatic uint32_t getIrcClock() {
+      \tstatic uint32_t getMcgIrClock() {
       \t   if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
       \t      return getInternalIrcClock();
       \t   }

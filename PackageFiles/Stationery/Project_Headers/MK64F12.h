@@ -8642,7 +8642,7 @@ typedef struct {                                /*       SDHC0 Structure        
    __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot Register                                            */
    __I  uint32_t  RESERVED2[13];               
    __I  uint32_t  HOSTVER;                      /**< 00FC: Host Controller Version                                      */
-} SDHC0_Type;
+} SDHC_Type;
 
 /**
  * @} */ /* End group SDHC_structs_GROUP 
@@ -9152,7 +9152,7 @@ typedef struct {                                /*       SDHC0 Structure        
 
 /* SDHC0 - Peripheral instance base addresses */
 #define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
-#define SDHC0                          ((SDHC0_Type *) SDHC0_BasePtr) //!< Freescale base pointer
+#define SDHC0                          ((SDHC_Type *) SDHC0_BasePtr) //!< Freescale base pointer
 #define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
@@ -9614,7 +9614,7 @@ typedef struct {                                /*       SIM Structure          
 */
 
 /* ================================================================================ */
-/* ================           SMC (file:SMC_MK24F12)               ================ */
+/* ================           SMC (file:SMC_MK10D5)                ================ */
 /* ================================================================================ */
 
 /**
@@ -9626,10 +9626,10 @@ typedef struct {                                /*       SIM Structure          
 * @{
 */
 typedef struct {                                /*       SMC Structure                                                */
-   __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection register                               */
-   __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control register                                  */
-   __IO uint8_t   VLLSCTRL;                     /**< 0002: VLLS Control register                                        */
-   __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status register                                   */
+   __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
+   __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
+   __IO uint8_t   VLLSCTRL;                     /**< 0002: VLLS Control Register                                        */
+   __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
 
 /**

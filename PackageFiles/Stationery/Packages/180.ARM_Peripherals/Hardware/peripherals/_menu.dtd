@@ -74,6 +74,7 @@
    <!ATTLIST numericListOption description  CDATA        #REQUIRED>
    <!ATTLIST numericListOption toolTip      CDATA        "">
    <!ATTLIST numericListOption value        CDATA        "0">
+   <!ATTLIST numericListOption size         CDATA        #IMPLIED>
    <!ATTLIST numericListOption min          CDATA        #IMPLIED>
    <!ATTLIST numericListOption max          CDATA        #IMPLIED>
   
@@ -146,7 +147,9 @@
    <!ATTLIST copy derived              (true|false) "false">
    
 <!ELEMENT constant EMPTY >
-   <!ATTLIST constant id           CDATA #REQUIRED>
+   <!ATTLIST constant name         ID           #IMPLIED>
+   <!ATTLIST constant id           CDATA        #IMPLIED>
+   <!ATTLIST constant key          CDATA        #IMPLIED>
    <!ATTLIST constant value        CDATA #REQUIRED>
    <!ATTLIST constant type         (boolean|int|string)  "string" >
    <!ATTLIST constant weak         (true|false)          "false">

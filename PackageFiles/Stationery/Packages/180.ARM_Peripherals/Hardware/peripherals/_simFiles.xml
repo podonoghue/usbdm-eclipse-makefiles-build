@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _irqOption.xml -->
+<!-- _simFiles.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <!-- Convenient location for common files -->
    <projectActionList id = "sim_files" >
       <copy source="Project_Headers/hardware.h"        target="Project_Headers/hardware.h" replace="true"  derived="true" />
       <copy source="Sources/usbdmError.cpp"            target="Sources/usbdmError.cpp"     replace="true"  derived="true" />

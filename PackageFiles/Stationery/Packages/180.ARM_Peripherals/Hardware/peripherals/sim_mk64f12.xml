@@ -178,12 +178,12 @@ Devices using this peripheral:
       \t */
       \tstatic uint32_t getSdhcClock() {
       \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   switch(sim->SOPT2&SIM_SOPT2_SDHCSRC_MASK) {
       \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO SDHC0_CLKIN
+      \t   case SIM_SOPT2_SDHCSRC(0): return SystemCoreClock;
+      \t   case SIM_SOPT2_SDHCSRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_SDHCSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_SDHCSRC(3): return 0; // TODO SDHC0_CLKIN
       \t   }
       \t}\n\n
       
@@ -192,14 +192,14 @@ Devices using this peripheral:
       \t *
       \t * @return Clock frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getSdhcClock() {
+      \tstatic uint32_t getTimeClock() {
       \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   switch(sim->SOPT2&SIM_SOPT2_TIMESRC_MASK) {
       \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO ENET_1588_CLKIN
+      \t   case SIM_SOPT2_TIMESRC(0): return SystemCoreClock;
+      \t   case SIM_SOPT2_TIMESRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_TIMESRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_TIMESRC(3): return 0; // TODO ENET_1588_CLKIN
       \t   }
       \t}\n\n
 
@@ -566,6 +566,10 @@ Devices using this peripheral:
                Must be &lt;= Bus Clock frequency."
       value="24000000" />
 
+   <projectActionList id = "sim" >
+      <copy source="Project_Headers/pcr-MK.h"       target="Project_Headers/pcr.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
       <param type="long" value="$(coreFreq)" />    <!-- Core         -->
@@ -592,8 +596,6 @@ Devices using this peripheral:
       \t   sim->SOPT4 = sopt4;
       \t   sim->SOPT5 = sopt5;
       \t   sim->SOPT7 = sopt7;
-      \t   sim->SOPT8 = sopt8;
-      \t   sim->SOPT9 = sopt9;
       \t
       \t   sim->CLKDIV1 = clkdiv1;
       \t   sim->CLKDIV2 = clkdiv2;

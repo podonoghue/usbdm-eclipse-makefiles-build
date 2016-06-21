@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- smc_mk22f51212.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+
+   <binaryOption name="smc_pmprot_ahsrun" 
+      description="Allow High Speed Run mode" 
+      toolTip="This write-once field allows the MCU to enter High Speed Run mode (HSRUN)." >
+      <choice name="HSRUN are not allowed" value="0" isDefault="true" />
+      <choice name="HSRUN are allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_avlp" 
+      description="Allow very low power modes" 
+      toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
+      <choice name="VLPR, VLPW and VLPS are not allowed" value="0" isDefault="true" />
+      <choice name="VLPR, VLPW and VLPS are allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_alls" 
+      description="Allow low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
+      <choice name="LLS is not allowed" value="0" isDefault="true" />
+      <choice name="LLS is allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_avlls" 
+      description="Allow very low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
+      <choice name="VLLSx is not allowed" value="0" isDefault="true" />
+      <choice name="VLLSx is allowed"     value="1" />
+   </binaryOption>   
+   
+   <choiceOption name="smc_stopctrl_pstopo" 
+      description="Partial Stop Option"
+      toolTip="These bits control whether a Partial Stop mode is entered when STOPM=STOP">
+      <choice value="0" name="STOP - Normal Stop mode" />
+      <choice value="1" name="PSTOP1 - Partial Stop with both system and bus clocks disabled" />
+      <choice value="2" name="PSTOP2 - Partial Stop with system clock disabled and bus clock enabled" />
+      <choice value="3" name="Reserved" />
+   </choiceOption>
+
+   <binaryOption name="smc_stopctrl_porpo" 
+      description="POR Power Option" 
+      toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode." >
+      <choice name="POR detect circuit is enabled in VLLS0"     value="0" isDefault="true" />
+      <choice name="POR detect circuit is disabled in VLLS0" value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_stopctrl_ram2po" 
+      description="RAM2 Power Option" 
+      toolTip="This bit controls powering of RAM partition 2 in VLLS2 mode." >
+      <choice name="RAM2 not powered in VLLS2"     value="0" isDefault="true" />
+      <choice name="RAM2 powered in VLLS2" value="1" />
+   </binaryOption>   
+   
+   <choiceOption name="smc_stopctrl_llsm" 
+      description="LLS or VLLS Mode Control"
+      toolTip="This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx">
+      <choice value="0" name="VLLS0 if PMCTRL[STOPM]=VLLSx, reserved if PMCTRL[STOPM]=LLSx" />
+      <choice value="1" name="VLLS1 if PMCTRL[STOPM]=VLLSx, reserved if PMCTRL[STOPM]=LLSx" />
+      <choice value="2" name="VLLS2 if PMCTRL[STOPM]=VLLSx, LLS2 if PMCTRL[STOPM]=LLSx" />
+      <choice value="3" name="VLLS3 if PMCTRL[STOPM]=VLLSx, LLS3 if PMCTRL[STOPM]=LLSx" />
+      <choice value="4" name="Reserved" />
+      <choice value="5" name="Reserved" />
+      <choice value="6" name="Reserved" />
+      <choice value="7" name="Reserved" />
+   </choiceOption>
+
+   <template><![CDATA[
+      \t// Power Mode Protection Register
+      \tstatic constexpr uint8_t pmprot =  
+      \t   SMC_PMPROT_AHSRUN($(smc_pmprot_ahsrun:0)) |  // Allow High Speed Run mode
+      \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0)) |  // Allow very low power modes
+      \t   SMC_PMPROT_ALLS($(smc_pmprot_alls:0)) |  // Allow low leakage stop mode
+      \t   SMC_PMPROT_AVLLS($(smc_pmprot_avlls:0));  // Allow very low leakage stop mode\n\n
+      
+      \t// VLLS Control Register
+      \tstatic constexpr uint8_t stopctrl =  
+      \t   SMC_STOPCTRL_PSTOPO($(smc_stopctrl_pstopo:0)) |  // Partial Stop Option
+      \t   SMC_STOPCTRL_PORPO($(smc_stopctrl_porpo:0)) |  // POR Power Option
+      \t   SMC_STOPCTRL_RAM2PO($(smc_stopctrl_ram2po:0)) |  // RAM2 Power Option
+      \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
+      
+   ]]></template>
+</devicePage>

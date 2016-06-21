@@ -61,6 +61,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
       </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
+      </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_4ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
@@ -172,6 +175,7 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -212,6 +216,9 @@
          <param key="coreFreq"      value="50MHz" />
          <param key="busFreq"       value="50MHz" />
          <param key="flexFreq"      value="50MHz" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_mk10d5">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

@@ -6,6 +6,8 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
+   <constant name="rtcSharesPins" value="true" />
+   
    <menu name="SOPT1" description="RTC pins">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
@@ -167,8 +169,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_UART0SRC(0): return 0;
       \t   case SIM_SOPT2_UART0SRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_UART0SRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClk();
+      \t   case SIM_SOPT2_UART0SRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
       \t/**
@@ -182,8 +184,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_TPMSRC(0): return 0;
       \t   case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClk();
+      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
    ]]></template>
@@ -372,9 +374,14 @@ Devices using this peripheral:
    <intOption name="system_bus_clock" 
       units="Hz"
       description="System Bus Clock"
-      toolTip="Clocks the bus slaves and peripherals"
+      toolTip="Clocks the bus slaves and peripherals\n
+               Must be &lt;= Core Clock frequency"
       value="24000000" />
 
+   <projectActionList id = "sim" >
+      <copy source="Project_Headers/pcr-MKL.h"       target="Project_Headers/pcr.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL">
       <param type="long" value="48MHz" />    <!-- Core         -->

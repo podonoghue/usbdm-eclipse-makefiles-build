@@ -216,12 +216,12 @@ Devices using this peripheral:
       \t */
       \tstatic uint32_t getSdhcClock() {
       \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   switch(sim->SOPT2&SIM_SOPT2_SDHCSRC_MASK) {
       \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO SDHC0_CLKIN
+      \t   case SIM_SOPT2_SDHCSRC(0): return SystemCoreClock;
+      \t   case SIM_SOPT2_SDHCSRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_SDHCSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_SDHCSRC(3): return 0; // TODO SDHC0_CLKIN
       \t   }
       \t}\n\n
       
@@ -230,46 +230,46 @@ Devices using this peripheral:
       \t *
       \t * @return Clock frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getSdhcClock() {
+      \tstatic uint32_t getTimeClock() {
       \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      \t   switch(sim->SOPT2&SIM_SOPT2_TIMESRC_MASK) {
       \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return SystemCoreClock;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return 0; // TODO ENET_1588_CLKIN
+      \t   case SIM_SOPT2_TIMESRC(0): return SystemCoreClock;
+      \t   case SIM_SOPT2_TIMESRC(1): return getPeripheralClock();
+      \t   case SIM_SOPT2_TIMESRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_TIMESRC(3): return 0; // TODO ENET_1588_CLKIN
       \t   }
       \t}\n\n
 
       \t/**
-      \t * Get LPUART input clock frequency
+      \t * Get LPUART0 input clock frequency
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getLpuartInputClock() {
+      \tstatic uint32_t getLpuart0InputClock() {
       \t   
       \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
       
       \t/**
-      \t * Get LPUART clock frequency
+      \t * Get LPUART0 clock frequency
       \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getLpuartClock() {
+      \tstatic uint32_t getLpuart0Clock() {
       \t   
       \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): getDividedPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
       \t/**
@@ -283,8 +283,8 @@ Devices using this peripheral:
       \t   default:
       \t   case SIM_SOPT2_TPMSRC(0): return 0;
       \t   case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClk();
+      \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
    ]]></template>
@@ -506,7 +506,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |      // UART 0 receive data source select
       \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
       \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc)) |      // UART 1 receive data source select
-      \t   SIM_SOPT5_LPUART1TXSRC($(sim_sopt5_lpuart0txsrc)) |  // LPUART 1 transmit data source select
+      \t   SIM_SOPT5_LPUART0TXSRC($(sim_sopt5_lpuart0txsrc)) |  // LPUART 1 transmit data source select
       \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc));   // LPUART 0 receive data source select\n\n
    ]]></template>
    <menu name="SOPT7" description="ADC pins">
@@ -748,7 +748,7 @@ Devices using this peripheral:
       \t   SIM_SOPT9_TPM2CLKSEL($(sim_sopt9_tpm2clksel))  |   // TPM2 External Clock Pin Select
       \t   SIM_SOPT9_TPM1CLKSEL($(sim_sopt9_tpm1clksel))  |   // TPM1 External Clock Pin Select
       \t   SIM_SOPT9_TPM2CH0SRC($(sim_sopt9_tpm2ch0src))  |   // TPM2 channel 0 input capture source select
-      \t   SIM_SOPT9_TPM1CH0SRC($(sim_sopt9_tpm1ch0src))  |   // TPM1 channel 0 input capture source select
+      \t   SIM_SOPT9_TPM1CH0SRC($(sim_sopt9_tpm1ch0src));     // TPM1 channel 0 input capture source select\n\n
    ]]></template>
    <menu name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
@@ -874,6 +874,10 @@ Devices using this peripheral:
                Must be &lt;= Bus Clock frequency."
       value="24000000" />
 
+   <projectActionList id = "sim" >
+      <copy source="Project_Headers/pcr-MK.h"       target="Project_Headers/pcr.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
       <param type="long" value="$(coreFreq)" />    <!-- Core         -->

@@ -209,11 +209,11 @@ public:
    /**
     * Construct I2C interface
     *
-    * @param baud
+    * @param bps        Tx/Rx rate
     * @param mode       Mode of operation
     * @param myAddress  Address of this device on bus (not currently used)
     */
-   I2c_T(unsigned baud=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
+   I2c_T(unsigned bps=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
 
 #ifdef DEBUG_BUILD
    // Check pin assignments
@@ -223,7 +223,11 @@ public:
 
       busHangReset();
       init(myAddress);
-      setBPS(baud, Info::getInputClockFrequency());
+      setBPS(bps);
+   }
+
+   void setBPS(uint32_t bps) {
+     I2c::setBPS(bps, Info::getInputClockFrequency());
    }
 
    /**

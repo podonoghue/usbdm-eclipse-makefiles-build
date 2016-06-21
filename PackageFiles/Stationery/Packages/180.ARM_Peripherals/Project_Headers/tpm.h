@@ -423,7 +423,7 @@ template<class Info> TPMCallbackFunction TpmIrq_T<Info>::callback = 0;
  * @tparam channel TPM timer channel
  */
 template <class Info, int channel>
-class TpmChannel_T : public TpmBase_T<Info>, CheckSignal<Tpm0Info, channel> {
+class TpmChannel_T : public TpmBase_T<Info>, CheckSignal<Info, channel> {
 
 public:
    /**

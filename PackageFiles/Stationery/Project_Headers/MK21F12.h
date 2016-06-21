@@ -7956,7 +7956,7 @@ typedef struct {                                /*       SDHC0 Structure        
    __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot Register                                            */
    __I  uint32_t  RESERVED2[13];               
    __I  uint32_t  HOSTVER;                      /**< 00FC: Host Controller Version                                      */
-} SDHC0_Type;
+} SDHC_Type;
 
 /**
  * @} */ /* End group SDHC_structs_GROUP 
@@ -8466,7 +8466,7 @@ typedef struct {                                /*       SDHC0 Structure        
 
 /* SDHC0 - Peripheral instance base addresses */
 #define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
-#define SDHC0                          ((SDHC0_Type *) SDHC0_BasePtr) //!< Freescale base pointer
+#define SDHC0                          ((SDHC_Type *) SDHC0_BasePtr) //!< Freescale base pointer
 #define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 

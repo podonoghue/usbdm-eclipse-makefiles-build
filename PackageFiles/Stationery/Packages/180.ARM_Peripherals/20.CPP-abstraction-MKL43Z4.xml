@@ -44,8 +44,7 @@
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.c" />
-         <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/leds.cpp" />
          <deleteResource target="Startup_Code/vectors.c" />
          <deleteResource target="Startup_Code/clock.c" />
          <deleteResource target="Startup_Code/console.c" />
@@ -62,7 +61,7 @@
          <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"              target="Project_Headers/pcr.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
 
-         <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
 
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
       </projectActionList>

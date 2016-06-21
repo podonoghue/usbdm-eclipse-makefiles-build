@@ -33,14 +33,14 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-EPAPER" />
                </applyWhen>
-               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" />
-               <copy source="Project_Headers/epaper.h"              target="Project_Headers/epaper.h" />
-               <copy source="Project_Headers/epd.h"                 target="Project_Headers/epd.h" />
-               <copy source="Project_Headers/seeed_sld00200p.h"     target="Project_Headers/seeed_sld00200p.h" />
-               <copy source="Project_Headers/gt20l16.h"             target="Project_Headers/gt20l16.h" />
-               <copy source="Sources/epaper.cpp"                    target="Sources/epaper.cpp" />
-               <copy source="Sources/epd.cpp"                       target="Sources/epd.cpp" />
-               <copy source="Sources/gt20l16.cpp"                   target="Sources/gt20l16.cpp" />
+               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" replace="true"/>
+               <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 replace="true"/>
+               <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    replace="true"/>
+               <copy source="Snippets/seeed_sld00200p.h"            target="Snippets/seeed_sld00200p.h"        replace="true"/>
+               <copy source="Snippets/gt20l16.h"                    target="Snippets/gt20l16.h"                replace="true"/>
+               <copy source="Snippets/epaper.cpp"                   target="Snippets/epaper.cpp"               replace="true"/>
+               <copy source="Snippets/epd.cpp"                      target="Snippets/epd.cpp"                  replace="true"/>
+               <copy source="Snippets/gt20l16.cpp"                  target="Snippets/gt20l16.cpp"              replace="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>
                </projectOption>

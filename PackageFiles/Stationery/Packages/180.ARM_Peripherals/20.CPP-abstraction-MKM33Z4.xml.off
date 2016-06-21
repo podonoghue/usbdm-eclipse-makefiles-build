@@ -54,8 +54,7 @@
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.c" />
-         <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/leds.cpp" />
          <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
          <copy source="Startup_Code/vectors-mkm.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
@@ -65,7 +64,7 @@
          <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
-         <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>

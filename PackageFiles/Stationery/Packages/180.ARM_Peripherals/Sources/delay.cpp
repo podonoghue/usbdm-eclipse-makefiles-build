@@ -71,6 +71,8 @@ void waitMS(uint32_t msToWait) {
    waitTicks(((uint64_t)msToWait * SystemCoreClock) / 1000);
 }
 
+#ifdef __cplusplus
+
 /**
  * Routine to wait for an event with timeout
  *
@@ -130,6 +132,7 @@ bool waitMS(uint32_t msToWait, bool testFn(void)) {
    // Convert duration to ticks
    return waitTicks(((uint64_t)msToWait * SystemCoreClock) / 1000, testFn);
 }
+#endif // __cplusplus
 
 #else
 #include "cmsis_os.h"

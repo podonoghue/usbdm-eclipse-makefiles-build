@@ -120,7 +120,7 @@ After any system reset, this field is cleared by hardware on any successful writ
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Reseved</description>
+                           <description>Reserved</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -306,7 +306,6 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
 When debug is enabled, the PMSTAT will not update to STOP or VLPS\n
 When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>7</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000001</name>

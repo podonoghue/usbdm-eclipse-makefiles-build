@@ -24,4 +24,11 @@
       <intOption name="xxxx" description="yyyyyy" toolTip="yyyyyyy"
          value="4000000" constant="true" />
    </menu>
+   
+   
+   <template><![CDATA[
+      \tpe1 = \n
+      \n
+   ]]></template>
+   
 </fragment>

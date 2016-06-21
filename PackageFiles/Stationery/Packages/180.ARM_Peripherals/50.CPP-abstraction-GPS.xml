@@ -38,9 +38,9 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-GPS" />
                   </and>
                </applyWhen>
-               <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp" />
-               <copy source="Project_Headers/gps-MK.h"     target="Project_Headers/gps.h" />
-               <copy source="Sources/gps-MK.cpp"           target="Sources/gps.cpp" />
+               <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp"  replace="true"/>
+               <copy source="Snippets/gps-MK.h"            target="Snippets/gps.h"            replace="true" />
+               <copy source="Snippets/gps-MK.cpp"          target="Snippets/gps.cpp"          replace="true" />
             </projectActionList>
          </projectActionList>
          
@@ -56,9 +56,9 @@
                      <variableRef idRef="projectOptionValue.CPP-abstraction-GPS" />
                   </and>
                </applyWhen>
-               <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp" />
-               <copy source="Project_Headers/gps-MKL.h"    target="Project_Headers/gps.h" />
-               <copy source="Sources/gps-MKL.cpp"          target="Sources/gps.cpp" />
+               <copy source="Snippets/gps-example.cpp"     target="Snippets/gps-example.cpp"  replace="true" />
+               <copy source="Snippets/gps-MKL.h"           target="Snippets/gps.h"            replace="true" />
+               <copy source="Snippets/gps-MKL.cpp"         target="Snippets/gps.cpp"          replace="true" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

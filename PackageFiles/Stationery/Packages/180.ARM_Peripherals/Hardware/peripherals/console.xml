@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- i2c0_def.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+
+   <choiceOption name="console_device" 
+   description="UART to use for console"
+   toolTip="Not all UARTs listed may be available on a particular device" >
+   <choice name="Lpuart 0" value="USBDM::Lpuart0" />
+   <choice name="Lpuart 1" value="USBDM::Lpuart1" />
+   <choice name="Lpuart 2" value="USBDM::Lpuart2" />
+   <choice name="Uart 0" value="USBDM::Uart0" isDefault="true" />
+   <choice name="Uart 1" value="USBDM::Uart1" />
+   <choice name="Uart 2" value="USBDM::Uart2" />
+   <choice name="Uart 3" value="USBDM::Uart3" />
+   <choice name="Uart 4" value="USBDM::Uart4" />
+   <choice name="Uart 5" value="USBDM::Uart5" />
+   </choiceOption>
+   
+   <projectActionList id = "i2c_files" >
+      <copy source="Project_Headers/console.h"  target="Project_Headers/console.h"  replace="true"  derived="true" />
+      <copy source="Startup_Code/console.cpp"   target="Startup_Code/console.cpp"   replace="true"  derived="true" />
+   </projectActionList>
+    
+   <template><![CDATA[
+      \t/** Console device*/
+      \t Using Console = $(console_device);\n\n
+   ]]></template>
+
+   <pins name="LPUART0"/>
+   <pins name="LPUART1"/>
+   <pins name="LPUART2"/>
+   <pins name="UART0"/>
+   <pins name="UART1"/>
+   <pins name="UART2"/>
+   <pins name="UART3"/>
+   <pins name="UART4"/>
+   <pins name="UART5"/>
+</devicePage>

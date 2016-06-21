@@ -30,6 +30,9 @@
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
       </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
+      </peripheral>
       <peripheral baseName="DAC"      instance="0"        version="dac0_2ch_fifo_mkl17">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
@@ -95,6 +98,7 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -129,6 +133,12 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl27z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

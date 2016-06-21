@@ -1,5 +1,5 @@
 /*
- * @file mcg.cpp (derived from mcg_mkl.cpp)
+ * @file mcg.cpp (derived from mcg_lite.cpp)
  *
  * Based on KL25
  *    1 FLL (FRDIV=/1-/128, /32-/1024, /1280, /1536)
@@ -228,7 +228,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
  */
 void Mcg::SystemCoreClockUpdate(void) {
 
-   SystemMcgOutClock = McgInfo::getMcgOutclk();
+   SystemMcgOutClock = McgInfo::getMcgOutClock();
 
    SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
    SystemBusClock    = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1);

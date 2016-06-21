@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!-- smc_mk10d5.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+
+   <binaryOption name="smc_pmprot_avlp" 
+      description="Allow very low power modes" 
+      toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
+      <choice name="VLPR, VLPW and VLPS are not allowed" value="0" isDefault="true" />
+      <choice name="VLPR, VLPW and VLPS are allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_alls" 
+      description="Allow low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
+      <choice name="LLS is not allowed" value="0" isDefault="true" />
+      <choice name="LLS is allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_avlls" 
+      description="Allow very low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
+      <choice name="VLLSx is not allowed" value="0" isDefault="true" />
+      <choice name="VLLSx is allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmctrl_lpwui" 
+      description="Low Power Wake Up on Interrupt" 
+      toolTip="Causes the SMC to exit to normal RUN mode when any active \n
+         MCU interrupt occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
+      <choice name="The system remains in a VLP mode on an interrupt"     value="0" />
+      <choice name="The system exits to normal RUN mode on an interrupt"  value="1" isDefault="true" />
+   </binaryOption>   
+      
+   <binaryOption name="smc_vllsctrl_porpo" 
+      description="POR Power Option" 
+      toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode." >
+      <choice name="POR detect circuit is enabled in VLLS0"     value="0" isDefault="true" />
+      <choice name="POR detect circuit is not enabled in VLLS0" value="1" />
+   </binaryOption>   
+   
+   <choiceOption name="smc_vllsctrl_vllsm" 
+      description="VLLS Mode Control"
+      toolTip="This field controls which VLLS sub-mode to enter if STOPM = VLLS">
+      <choice value="0" name="VLLS0" />
+      <choice value="1" name="VLLS1" />
+      <choice value="2" name="VLLS2" />
+      <choice value="3" name="VLLS3" />
+      <choice value="4" name="Reserved" />
+      <choice value="5" name="Reserved" />
+      <choice value="6" name="Reserved" />
+      <choice value="7" name="Reserved" />
+   </choiceOption>
+
+   <template><![CDATA[
+      \t// Power Mode Protection Register
+      \tstatic constexpr uint8_t pmprot =  
+      \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0)) |  // Allow very low power modes
+      \t   SMC_PMPROT_ALLS($(smc_pmprot_alls:0)) |  // Allow low leakage stop mode
+      \t   SMC_PMPROT_AVLLS($(smc_pmprot_avlls:0));  // Allow very low leakage stop mode\n\n
+      
+      \t// Power Mode Control Register
+      \tstatic constexpr uint8_t pmctrl =  
+      \t   SMC_PMCTRL_LPWUI($(smc_pmctrl_lpwui:0));   // Low Power Wake Up on Interrupt\n\n
+      
+      \t// VLLS Control Register
+      \tstatic constexpr uint8_t vllsctrl =  
+      \t   SMC_VLLSCTRL_PORPO($(smc_vllsctrl_porpo:0)) |  // POR Power Option
+      \t   SMC_VLLSCTRL_VLLSM($(smc_vllsctrl_vllsm:0));   // VLLS Mode Control\n\n
+      
+   ]]></template>
+</devicePage>

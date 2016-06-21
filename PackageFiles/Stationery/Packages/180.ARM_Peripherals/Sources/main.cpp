@@ -1,8 +1,9 @@
 /*
  ============================================================================
- * main-MK.c
+ * @file    main.cpp (180.ARM_Peripherals)
+ * @brief   Basic C++ demo using GPIO class
  *
- *  Created on: 04/12/2012
+ *  Created on: 10/1/2016
  *      Author: podonoghue
  ============================================================================
  */
@@ -10,45 +11,36 @@
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
+#include "delay.h"
 
 /**
  * See more examples in Snippets directory
  *
+ * Using a ADC channel
  *  using adcChannel = USBDM::Adc0Channel<6>;
  *  adcChannel::setMode(USBDM::resolution_16bit_se);
  *  int value = adcChannel::readAnalogue();
- *
+ * Using a timer channel
  *  using ftmChannel = USBDM::Ftm0Channel<0>;
  *  ftmChannel::configure(1000, USBDM::ftm_leftAlign);
  *  ftmChannel::setDutyCycle(25);
  *
  */
 
-// Simple delay - not for real programs!
-static void delay(void) {
-   for(int i=0; i<400000; i++) {
-      __asm__("nop");
-   }
-}
-
-// LED connections
-#define RED_LED   USBDM::gpio_$(demo.cpp.red.led)
-#define GREEN_LED USBDM::gpio_$(demo.cpp.green.led)
+// LED connection - change as required
+using Led   = $(demo.cpp.led:USBDM::GpioB<3>);
 
 int main() {
-   RED_LED::setOutput();
-   GREEN_LED::setOutput();
-   RED_LED::set();
-   GREEN_LED::set();
+//   printf("Starting\n");
+
+//   printf("SystemBusClock  = %ld\n", SystemBusClock);
+//   printf("SystemCoreClock = %ld\n", SystemCoreClock);
+
+   Led::setOutput();
    for(;;) {
-      RED_LED::toggle();
-      delay();
-      RED_LED::toggle();
-      delay();
-      GREEN_LED::toggle();
-      delay();
-      GREEN_LED::toggle();
-      delay();
+      Led::toggle();
+      USBDM::waitMS(100);
+//      printf("Tick\n");
    }
    return 0;
 }

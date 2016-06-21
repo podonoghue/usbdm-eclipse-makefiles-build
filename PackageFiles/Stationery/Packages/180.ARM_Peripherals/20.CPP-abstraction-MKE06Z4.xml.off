@@ -41,8 +41,7 @@
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.c" />
-         <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/leds.cpp" />
          <createFolder   target="Snippets" />
          <copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/>
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
@@ -52,7 +51,7 @@
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
          <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" />
          <copy source="Sources/gpio-&DEVICE_FILE;.cpp"                     target="Sources/gpio.cpp" />
-         <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

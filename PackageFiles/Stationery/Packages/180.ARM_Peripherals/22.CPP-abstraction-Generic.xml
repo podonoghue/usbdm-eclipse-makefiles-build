@@ -32,16 +32,14 @@
 
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.c" />
-         <deleteResource target="Sources/main.c" />
-         <deleteResource target="Sources/main.cpp" />
+         <deleteResource target="Sources/leds.cpp" />
          <createFolder   target="Snippets" />
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Project_Headers/gpio-Generic.h"                     target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/gpio_defs-&DEVICE_SUB_FAMILY;.h"    target="Project_Headers/gpio.h" />
          <copy source="Project_Headers/pin_mapping-&FILE_NAME;.h"          target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/main-basic.cpp"                             target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

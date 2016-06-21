@@ -2,6 +2,10 @@
 Devices using this peripheral: 
       MK10D5
       MK20D5
+      MK24F12
+      MK24F25612
+      MK63F12
+      MK64F12
 -->
       <peripheral>
          <?sourceFile "SMC_MK10D5" ?>

@@ -20,10 +20,13 @@
 
 #ifdef __cplusplus
 namespace USBDM {
-#endif
-
 // Mask for maximum timer value
 static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
+#else
+// Mask for maximum timer value
+#define TIMER_MASK ((1UL<<24)-1UL)
+#include <stdbool.h>
+#endif
 
 /**
  * Convert Milliseconds to timer ticks
@@ -73,6 +76,7 @@ void waitUS(uint32_t usToWait);
  */
 void waitMS(uint32_t msToWait);
 
+#ifdef __cplusplus
 /**
  * Routine to wait for an event with timeout
  *
@@ -97,7 +101,6 @@ bool waitUS(uint32_t usToWait, bool testFn(void));
  */
 bool waitMS(uint32_t msToWait, bool testFn(void));
 
-#ifdef __cplusplus
 } // End namespace USBDM
 #endif
 

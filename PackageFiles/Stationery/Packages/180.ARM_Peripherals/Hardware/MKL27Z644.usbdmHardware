@@ -7,7 +7,7 @@
 
 <root version="1.2.0">
    <family name="MKL27Z644">
-      <device name="FRDM_KL27Z"   manual="KL27P64M48SF2RM" package="FRDM" />
+      <device name="FRDM_KL27Z"   manual="KL27P64M48SF2RM" package="FRDM_KL27Z" />
       <device name="MKL27Z32VFM4" manual="KL27P64M48SF2RM" package="QFN_32" />
       <device name="MKL27Z32VFT4" manual="KL27P64M48SF2RM" package="QFN_48" />
       <device name="MKL27Z32VLH4" manual="KL27P64M48SF2RM" package="LQFP_64" />
@@ -33,6 +33,9 @@
       <peripheral baseName="CRC"      instance=""         version="crc_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
+      </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -91,6 +94,7 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -126,6 +130,12 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl27z644">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_mkl27z644">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
@@ -857,7 +867,7 @@
          <placement pin="VSS3"          location="E3" />
          <placement pin="VSSA"          location="F3" />
       </package>
-      <package name="FRDM">
+      <package name="FRDM_KL27Z">
          <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0" />
          <placement pin="PTA12"         location="D2" />

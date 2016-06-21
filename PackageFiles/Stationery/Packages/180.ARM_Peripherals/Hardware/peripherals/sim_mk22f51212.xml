@@ -133,7 +133,7 @@ Devices using this peripheral:
       \t/**
       \t * Get Peripheral clock frequency
       \t *
-      \t * @return Clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getPeripheralClock() {
       \t   
@@ -146,34 +146,34 @@ Devices using this peripheral:
       \t}\n\n
 
       \t/**
-      \t * Get LPUART input clock frequency
+      \t * Get LPUART0 input clock frequency
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getLpuartInputClock() {
+      \tstatic uint32_t getLpuart0InputClock() {
       \t   
       \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk();
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
       
       \t/**
-      \t * Get LPUART clock frequency
+      \t * Get LPUART0 clock frequency
       \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getLpuartClock() {
+      \tstatic uint32_t getLpuart0Clock() {
       \t   
       \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       \t   default:
       \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
       \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClk;
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClk;
+      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClock();
+      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
 
@@ -667,6 +667,10 @@ Devices using this peripheral:
                Must be &lt;= Bus Clock frequency."
       value="24000000" />
 
+   <projectActionList id = "sim" >
+      <copy source="Project_Headers/pcr-MK.h"    target="Project_Headers/pcr.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
       <param type="long" value="120000000" />    <!-- Core         -->

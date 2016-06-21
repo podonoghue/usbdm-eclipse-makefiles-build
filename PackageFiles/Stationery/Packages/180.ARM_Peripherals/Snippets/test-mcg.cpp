@@ -26,17 +26,20 @@ int main() {
    printf(" SystemCoreClock = %ld\n", ::SystemCoreClock);
    printf(" SystemBusClock  = %ld\n", ::SystemBusClock);
 
+   // These clocks are updated when the clock configuration changes
    printf(" USBDM::SystemCoreClock       = %ld\n", USBDM::SystemCoreClock);
    printf(" USBDM::SystemBusClock        = %ld\n", USBDM::SystemBusClock);
-   printf(" USBDM::SystemMcgirClock      = %ld\n", McgInfo::getIrcClock());
    printf(" USBDM::SystemMcgffClock      = %ld\n", USBDM::SystemMcgffClock);
    printf(" USBDM::SystemMcgFllClock     = %ld\n", USBDM::SystemMcgFllClock);
    printf(" USBDM::SystemMcgPllClock     = %ld\n", USBDM::SystemMcgPllClock);
    printf(" USBDM::SystemMcgOutClock     = %ld\n", USBDM::SystemMcgOutClock);
-   printf(" USBDM::SystemPeripheralClock = %ld\n", SimInfo::getPeripheralClock());
-   printf(" USBDM::SystemOscerClock      = %ld\n", Osc0Info::getExternalClock());
-   printf(" USBDM::SystemErclk32kClock   = %ld\n", SimInfo::getErc32kClock());
    printf(" USBDM::SystemLpoClock        = %ld\n", USBDM::SystemLpoClock);
+
+   // These clocks are determined dynamically
+   printf(" USBDM::SystemMcgirClock      = %ld\n", USBDM::McgInfo::getMcgIrClock());
+   printf(" USBDM::SystemPeripheralClock = %ld\n", USBDM::SimInfo::getPeripheralClock());
+   printf(" USBDM::SystemOscerClock      = %ld\n", USBDM::Osc0Info::getOscerClock());
+   printf(" USBDM::SystemErclk32kClock   = %ld\n", USBDM::SimInfo::getErc32kClock());
 
    for(;;){
 

@@ -279,8 +279,6 @@ public:
    /**
     * Initiates a conversion but does not wait for it to complete\n
     * Intended for use with interrupts
-    *
-    * @param channel The ADC channel to use
     */
    static void startConversion() {
       AdcBase_T::startConversion(ADC_SC1_ADCH(channel)&~ADC_SC1_DIFF_MASK);
@@ -320,8 +318,6 @@ public:
    /**
     * Initiates a conversion but does not wait for it to complete\n
     * Intended for use with interrupts
-    *
-    * @param channel The ADC channel to use
     */
    static void startConversion() {
       AdcBase_T::startConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
@@ -388,8 +384,6 @@ public:
    /**
     * Initiates a conversion but does not wait for it to complete\n
     * Intended for use with interrupts
-    *
-    * @param channel The ADC channel to use
     */
    static void startConversion() {
       AdcBase_T::startConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);

@@ -71,6 +71,7 @@
    <item key="/CMP0/irqEnabled"                            value="false" />
    <item key="/CMP0/irqHandler"                            value="false" />
    <item key="/CMP0/irqLevel"                              value="0" />
+   <item key="/Console/console_device"                     value="3" />
    <item key="/DAC0/dac_c0_dacbbien"                       value="false" />
    <item key="/DAC0/dac_c0_dacbtien"                       value="false" />
    <item key="/DAC0/dac_c0_dacbwien"                       value="false" />
@@ -112,7 +113,7 @@
    <item key="/LPTMR0/irqHandler"                          value="false" />
    <item key="/LPTMR0/irqLevel"                            value="0" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
-   <item key="/LPTMR0/lptmr_cmrFrequency"                  value="0.0Hz" />
+   <item key="/LPTMR0/lptmr_cmrFrequency"                  value="0" />
    <item key="/LPTMR0/lptmr_cmrPeriod"                     value="0.0" />
    <item key="/LPTMR0/lptmr_csr_tfc"                       value="false" />
    <item key="/LPTMR0/lptmr_csr_tms"                       value="false" />
@@ -123,7 +124,7 @@
    <item key="/LPTMR0/lptmr_psr_prescaler"                 value="0" />
    <item key="/LPTMR0/maximumPeriod"                       value="4.0" />
    <item key="/MCG/clock_mode"                             value="6" />
-   <item key="/MCG/fllInputFrequency"                      value="31.250kHz" />
+   <item key="/MCG/fllInputFrequency"                      value="31250" />
    <item key="/MCG/fll_enabled"                            value="false" />
    <item key="/MCG/irqEnabled"                             value="false" />
    <item key="/MCG/irqHandler"                             value="false" />
@@ -145,36 +146,34 @@
    <item key="/MCG/mcg_c6_lolie0"                          value="false" />
    <item key="/MCG/mcg_c6_plls"                            value="true" />
    <item key="/MCG/mcg_c6_vdiv0"                           value="24" />
-   <item key="/MCG/mcg_c8_cme1"                            value="false" />
-   <item key="/MCG/mcg_c8_locre1"                          value="false" />
    <item key="/MCG/mcg_c8_lolre"                           value="false" />
-   <item key="/MCG/mcg_erc_clock"                          value="8.0000MHz" />
+   <item key="/MCG/mcg_erc_clock"                          value="8000000" />
    <item key="/MCG/mcg_sc_fcrdiv"                          value="0" />
    <item key="/MCG/pll0Enabled"                            value="true" />
-   <item key="/MCG/pll0InputFrequency"                     value="4.0000MHz" />
-   <item key="/MCG/pll0OutputFrequency"                    value="96.000MHz" />
-   <item key="/MCG/system_fast_irc_clock"                  value="4.0000MHz" />
-   <item key="/MCG/system_low_power_clock"                 value="1.0000kHz" />
-   <item key="/MCG/system_mcgffclk_clock"                  value="31.250kHz" />
-   <item key="/MCG/system_mcgfllclk_clock"                 value="95.945MHz" />
-   <item key="/MCG/system_mcgirclk_clock"                  value="32.768kHz" />
-   <item key="/MCG/system_mcgoutclk_clock"                 value="96.000MHz" />
-   <item key="/MCG/system_mcgoutclk_clock_source"          value="0" />
-   <item key="/MCG/system_mcgpllclk_clock"                 value="96.000MHz" />
-   <item key="/MCG/system_slow_irc_clock"                  value="32.768kHz" />
-   <item key="/MCG/system_usb_clkin_clock"                 value="48.000MHz" />
+   <item key="/MCG/pll0InputFrequency"                     value="4000000" />
+   <item key="/MCG/pll0OutputFrequency"                    value="96000000" />
+   <item key="/MCG/system_fast_irc_clock"                  value="4000000" />
+   <item key="/MCG/system_low_power_clock"                 value="1000" />
+   <item key="/MCG/system_mcgffclk_clock"                  value="31250" />
+   <item key="/MCG/system_mcgfllclk_clock"                 value="95945000" />
+   <item key="/MCG/system_mcgirclk_clock"                  value="32768" />
+   <item key="/MCG/system_mcgoutclk_clock"                 value="96000000" />
+   <item key="/MCG/system_mcgoutclk_clock_source"          value="PLL output" />
+   <item key="/MCG/system_mcgpllclk_clock"                 value="96000000" />
+   <item key="/MCG/system_slow_irc_clock"                  value="32768" />
+   <item key="/MCG/system_usb_clkin_clock"                 value="48000000" />
    <item key="/OSC0/erefs0"                                value="true" />
    <item key="/OSC0/hgo0"                                  value="false" />
-   <item key="/OSC0/osc32kclk_clock"                       value="0.0Hz" />
+   <item key="/OSC0/osc32kclk_clock"                       value="0" />
    <item key="/OSC0/osc_cr_erclken"                        value="true" />
    <item key="/OSC0/osc_cr_erefsten"                       value="false" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
-   <item key="/OSC0/osc_input_freq"                        value="8.0000MHz" />
-   <item key="/OSC0/oscclk_clock"                          value="8.0000MHz" />
+   <item key="/OSC0/osc_input_freq"                        value="8000000" />
+   <item key="/OSC0/oscclk_clock"                          value="8000000" />
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/rtcSharesPins"                         value="1" />
-   <item key="/OSC0/system_oscerclk_clock"                 value="8.0000MHz" />
+   <item key="/OSC0/system_oscerclk_clock"                 value="8000000" />
    <item key="/PIT/irqEnabled"                             value="false" />
    <item key="/PIT/irqHandler"                             value="false" />
    <item key="/PIT/irqLevel"                               value="0" />
@@ -185,16 +184,16 @@
    <item key="/RTC/irqEnabled"                             value="false" />
    <item key="/RTC/irqHandler"                             value="false" />
    <item key="/RTC/irqLevel"                               value="0" />
-   <item key="/RTC/rtc_clkout"                             value="0.0Hz" />
+   <item key="/RTC/rtc_1hz_clock"                          value="1" />
    <item key="/RTC/rtc_cr_clko"                            value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="false" />
    <item key="/RTC/rtc_cr_scp"                             value="4" />
    <item key="/RTC/rtc_cr_sup"                             value="false" />
    <item key="/RTC/rtc_cr_um"                              value="false" />
    <item key="/RTC/rtc_cr_wpe"                             value="false" />
-   <item key="/RTC/rtc_input_freq"                         value="32.768kHz" />
-   <item key="/RTC/rtcclk_clock"                           value="32.768kHz" />
-   <item key="/RTC/rtcclk_gated_clock"                     value="0.0Hz" />
+   <item key="/RTC/rtcclkin_clock"                         value="32765" />
+   <item key="/SIM/rtcSharesPins"                          value="true" />
+   <item key="/SIM/rtc_clkout"                             value="8000000" />
    <item key="/SIM/sim_clkdiv1_outdiv1"                    value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv4"                    value="2" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="3" />
@@ -219,23 +218,23 @@
    <item key="/SIM/sim_sopt7_adc0alttrgen"                 value="false" />
    <item key="/SIM/sim_sopt7_adc0pretrgsel"                value="false" />
    <item key="/SIM/sim_sopt7_adc0trgsel"                   value="0" />
-   <item key="/SIM/system_bus_clock"                       value="24.000MHz" />
-   <item key="/SIM/system_core_clock"                      value="48.000MHz" />
-   <item key="/SIM/system_erclk32k_clock"                  value="1.0000kHz" />
-   <item key="/SIM/system_peripheral_clock"                value="48.000MHz" />
-   <item key="/SIM/system_tpm_clock"                       value="48.000MHz" />
-   <item key="/SIM/system_uart0_clock"                     value="48.000MHz" />
-   <item key="/SIM/system_usbfs_clock"                     value="48.000MHz" />
+   <item key="/SIM/system_bus_clock"                       value="24000000" />
+   <item key="/SIM/system_core_clock"                      value="48000000" />
+   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
+   <item key="/SIM/system_peripheral_clock"                value="48000000" />
+   <item key="/SIM/system_tpm_clock"                       value="48000000" />
+   <item key="/SIM/system_uart0_clock"                     value="48000000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
    <item key="/SPI0/irqEnabled"                            value="false" />
    <item key="/SPI0/irqHandler"                            value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />
-   <item key="/SPI0/speed"                                 value="10.000MHz" />
+   <item key="/SPI0/speed"                                 value="10000000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="0" />
    <item key="/SPI1/irqEnabled"                            value="false" />
    <item key="/SPI1/irqHandler"                            value="false" />
    <item key="/SPI1/irqLevel"                              value="0" />
-   <item key="/SPI1/speed"                                 value="10.000MHz" />
+   <item key="/SPI1/speed"                                 value="10000000" />
    <item key="/SPI1/spi_lsbfe"                             value="false" />
    <item key="/SPI1/spi_mode"                              value="0" />
    <item key="/TPM0/clockFrequency"                        value="4.8E7" />
@@ -245,7 +244,7 @@
    <item key="/TPM0/irqLevel"                              value="0" />
    <item key="/TPM0/maximumPeriod"                         value="0.0013653333333333334" />
    <item key="/TPM0/period"                                value="10000" />
-   <item key="/TPM0/tpmExternalClock"                      value="0.0Hz" />
+   <item key="/TPM0/tpmExternalClock"                      value="0" />
    <item key="/TPM0/tpm_sc_cmod"                           value="1" />
    <item key="/TPM0/tpm_sc_cpwms"                          value="false" />
    <item key="/TPM0/tpm_sc_ps"                             value="0" />
@@ -257,7 +256,7 @@
    <item key="/TPM1/irqLevel"                              value="0" />
    <item key="/TPM1/maximumPeriod"                         value="0.0013653333333333334" />
    <item key="/TPM1/period"                                value="10000" />
-   <item key="/TPM1/tpmExternalClock"                      value="0.0Hz" />
+   <item key="/TPM1/tpmExternalClock"                      value="0" />
    <item key="/TPM1/tpm_sc_cmod"                           value="1" />
    <item key="/TPM1/tpm_sc_cpwms"                          value="false" />
    <item key="/TPM1/tpm_sc_ps"                             value="0" />
@@ -269,7 +268,7 @@
    <item key="/TPM2/irqLevel"                              value="0" />
    <item key="/TPM2/maximumPeriod"                         value="0.0013653333333333334" />
    <item key="/TPM2/period"                                value="10000" />
-   <item key="/TPM2/tpmExternalClock"                      value="0.0Hz" />
+   <item key="/TPM2/tpmExternalClock"                      value="0" />
    <item key="/TPM2/tpm_sc_cmod"                           value="1" />
    <item key="/TPM2/tpm_sc_cpwms"                          value="false" />
    <item key="/TPM2/tpm_sc_ps"                             value="0" />

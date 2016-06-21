@@ -354,7 +354,7 @@ When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00100000</name>
-                           <description>Reserved</description>
+                           <description>LLS</description>
                            <value>0b00100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -364,7 +364,7 @@ When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10000000</name>
-                           <description>Reserved</description>
+                           <description>HSRUN</description>
                            <value>0b10000000</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -7,7 +7,7 @@
 
 <root version="1.2.0">
    <family name="MKL46Z4">
-      <device name="FRDM_KL46Z4"  manual="KL46P121M48SF4RM" package="FRDM_KL46Z4" />
+      <device name="FRDM_KL46Z4"  manual="KL46P121M48SF4RM" package="FRDM_KL46Z" />
       <device name="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
       <device name="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
       <device name="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
@@ -29,6 +29,9 @@
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
+      </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
       <peripheral baseName="DAC"      instance="0"        version="dac0_2ch_mkl05">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
@@ -139,6 +142,7 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -150,7 +154,6 @@
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
-         <param key="rtcSharesPins" value="1" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
@@ -168,6 +171,9 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkl46z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
@@ -1427,7 +1433,7 @@
          <placement pin="VSS5"          location="pE3" />
          <placement pin="VSSA"          location="pF3" />
       </package>
-      <package name="FRDM_KL46Z4">
+      <package name="FRDM_KL46Z">
          <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0" />
          <placement pin="PTA12"         location="D3" />

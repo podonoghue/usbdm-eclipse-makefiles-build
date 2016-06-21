@@ -35,7 +35,22 @@
          </applyWhen>
          <projectActionList>
             <applyWhen >
-               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+	       <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <variableRef idRef="hasCCNature" condition="isTrue" />
+	       </and>
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds.c"                target="Sources/leds.cpp" />
+            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+         <projectActionList>
+            <applyWhen >
+	       <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+	       </and>
             </applyWhen>
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
@@ -44,7 +59,7 @@
          </projectActionList>
       </projectActionList>
    
-      <!-- Blinky example for Freedom board -->
+      <!-- Blinky example for Freedom board MKL -->
       <projectActionList id="FRDM-Blinky-MKL" >
          <applyWhen>
             <and>
@@ -57,7 +72,22 @@
          </applyWhen>
          <projectActionList>
             <applyWhen >
-               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+               <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <variableRef idRef="hasCCNature" condition="isTrue" />
+               </and>
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds.c"                target="Sources/leds.cpp" />
+            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+         <projectActionList>
+            <applyWhen >
+               <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+               </and>
             </applyWhen>
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
@@ -66,7 +96,7 @@
          </projectActionList>
       </projectActionList>
    
-      <!-- Blinky example for Freedom board -->
+      <!-- Blinky example for Freedom board MKE -->
       <projectActionList id="FRDM-Blinky-MKE" >
          <applyWhen>
             <and>
@@ -78,8 +108,23 @@
             </and>
          </applyWhen>
          <projectActionList>
+            <applyWhen>
+	           <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <variableRef idRef="hasCCNature" condition="isTrue" />
+	           </and>
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds-mke.c"            target="Sources/leds.cpp" />
+            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+         <projectActionList>
             <applyWhen >
-               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+               <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+               </and>
             </applyWhen>
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
@@ -88,7 +133,7 @@
          </projectActionList>
       </projectActionList>
    
-      <!-- Blinky example for Freedom board -->
+      <!-- Blinky example for Freedom board MKM -->
       <projectActionList id="FRDM-Blinky-MKM" >
          <applyWhen>
             <and>
@@ -100,8 +145,23 @@
             </and>
          </applyWhen>
          <projectActionList>
+            <applyWhen>
+               <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <variableRef idRef="hasCCNature" condition="isTrue" />
+                </and>
+            </applyWhen>
+            <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
+            <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
+            <copy source="Sources/leds-mkm.c"            target="Sources/leds.cpp" />
+            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+         <projectActionList>
             <applyWhen >
-               <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+               <and>
+                  <variableRef idRef="projectOptionValue.FRDM-Blinky" />
+                  <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+               </and>
             </applyWhen>
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
