@@ -3,10 +3,13 @@
 
 #.SILENT :
 
+include /usr/share/java/java_defaults.mk
+
 MAJOR_VERSION := 4
 MINOR_VERSION := 12
 MICRO_VERSION := 1
 USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
+
 
 #===========================================================
 # Where to find private libraries on linux
@@ -302,7 +305,7 @@ ifeq ($(UNAME_S),Windows)
    JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
    JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
 else
-   JAVA_INC := -I/usr/lib/jvm/default-java/include
+   JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif
 
 #=============================================================

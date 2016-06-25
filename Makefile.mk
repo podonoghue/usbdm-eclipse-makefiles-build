@@ -1,4 +1,5 @@
 include Common.mk
+
 export TARGET_BINDIR TARGET_LIBDIR BITNESS BUILDDIR_SUFFIX VSUFFIX
 
 # Built on both Windows and Linux
