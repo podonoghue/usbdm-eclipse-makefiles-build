@@ -30,7 +30,10 @@ extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
-$(/MCG/clockInfo)
+   const McgInfo::ClockInfo McgInfo::clockInfo[$(/MCG/McgInfoSize)] = {
+$(/MCG/McgClockInfoEntries://Not found)
+   };
+
 volatile uint32_t SystemMcgffClock;
 volatile uint32_t SystemMcgFllClock;
 volatile uint32_t SystemMcgPllClock;

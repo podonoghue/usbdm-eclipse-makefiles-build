@@ -54,9 +54,9 @@ public:
       stat_lls    = SMC_PMSTAT_PMSTAT(0x20),
       stat_vlls   = SMC_PMSTAT_PMSTAT(0x40),
    };
+
    /**
     * Initialise SMC to default settings\n
-    * Configures all SMC pins
     */
    static void initialise() {
       smc->PMPROT   = Info::pmprot;
@@ -66,7 +66,7 @@ public:
    /**
     * Enter Power Mode
     *
-    * @param mode Power mode e.g. runm_run
+    * @param mode Power mode e.g. runm_vlpr
     */
    static bool enterPowerMode(uint8_t mode) {
       smc->PMCTRL = Info::pmctrl|mode;

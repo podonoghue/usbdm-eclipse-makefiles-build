@@ -2,7 +2,14 @@
 <!DOCTYPE root SYSTEM "_menu.dtd" >
 <!-- mgc_mk.xml -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
-   <menu name="Clock monitors" description="Clock monitors">
+
+   <intOption name="McgInfoSize" 
+      description="Number of Clock settings"
+      toolTip="Number of clock configurations available"
+      min="1" max="5" value="1" />
+      
+   <menu name="Clock monitors" 
+      description="Clock monitors" >
    
       <binaryOption name="mcg_c6_cme0" 
          description="Clock Monitor Enable"
@@ -502,6 +509,10 @@
       \t   ClockMode_PEE,
       \t};\n\n
       
+      \tenum ModeFlags {
+      \t   Mode_LP  = (1<<0),
+      \t};\n\n
+      
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
       
@@ -517,6 +528,8 @@
       \tstruct ClockInfo {
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;
+      \t   //! Mode flags
+      \t   const uint8_t modeFlags;
       \t   //! Control Register 1
       \t   const uint8_t c1;
       \t   //! Control Register 2
@@ -535,7 +548,8 @@
       \t   const uint8_t c8;
       \t};\n\n
       
-      \tstatic const ClockInfo clockInfo[];
+      // Various clock configurations
+      \tstatic const ClockInfo clockInfo[$(McgInfoSize)];\n\n
 
       \t/**
       \t * Get MCGERCLK
@@ -582,13 +596,16 @@
       \t      return 0;
       \t   }
       \t}\n\n
+      
    ]]></template>
-   
-   <template name="clockInfo"><![CDATA[
-      \tconst McgInfo::ClockInfo McgInfo::clockInfo[1] = {
+      
+   <template name="McgClockInfoEntries" dim="McgInfoSize" ><![CDATA[
       \t   {
       \t   //! Clock Mode
       \t   $(clock_mode),\n\n
+      
+      \t   //! Mode flags
+      \t   $(mode_flags:0),\n\n
       
       \t   //! Control Register 1
       \t   MCG_C1_FRDIV($(mcg_c1_frdiv))   | // FRDIV    FLL External Reference Divider
@@ -626,7 +643,7 @@
       \t   MCG_C8_LOCRE1($(mcg_c8_locre1)) | // LOCRE1 RTC Loss of Clock Reset Enable
       \t   MCG_C8_LOLRE($(mcg_c8_lolre))  | // LOLRE  PLL Loss of Lock Reset Enable
       \t   MCG_C8_CME1($(mcg_c8_cme1)),    // CME1   Clock Monitor Enable 1
-      \t   }
-      \t};
+      \t   },
    ]]></template>
+   
 </devicePage>

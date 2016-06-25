@@ -29,7 +29,7 @@
 using  Console = $(/Console/console_device:USBDM::Uart0);
 
 // Console instance
-static Console *console = nullptr;
+Console *console = nullptr;
 
 /*
  * Initialises the Console
