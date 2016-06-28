@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- adc0_diff_a.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
@@ -103,11 +103,11 @@
       <choice value="0" name="Software trigger (write to SC1A)" isDefault="true" />
       <choice value="1" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
-   <menu name="Advanced" description="Advanced Options" >
+   <category name="Advanced" description="Advanced Options" >
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
-   </menu>
+   </category>
 
    <xi:include href="_irqOption.xml"/>
       

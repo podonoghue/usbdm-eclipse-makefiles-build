@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- mgc_mkl.xml -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
-   <menu name="Clock monitors" description="Clock monitors">
+   <category name="Clock monitors" description="Clock monitors">
    
       <binaryOption name="mcg_c6_cme0" 
          description="Clock Monitor Enable"
@@ -36,9 +36,9 @@
          <choice value="0" name="Interrupt request" />
          <choice value="1" name="Reset request" />
       </binaryOption>
-   </menu>
+   </category>
 
-   <menu name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
+   <category name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
          units="Hz"
@@ -94,9 +94,9 @@
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
          value="48000000" 
          constant="true" />
-   </menu>
+   </category>
    
-   <menu name="Internal" description="Internal Clock Sources"
+   <category name="Internal" description="Internal Clock Sources"
       toolTip="USB_CLKIN, LPO" >
       <intOption name="system_usb_clkin_clock" 
          origin="USB Clock In pin"
@@ -113,17 +113,17 @@
          toolTip="Dependent on device. [Typically ~1kHz]" 
          value="1000"
          constant="true" />
-   </menu>
+   </category>
 
-   <menu name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/erefs0" constant="false" />
-   </menu>
+   </category>
 
-   <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
-   </menu>
+   </category>
 
    <intOption name="mcg_erc_clock" 
       units="Hz"
@@ -187,7 +187,7 @@
       <choice name="Bypassed low power external (BLPE)"  value="ClockMode_BLPE" />
    </choiceOption>
 
-   <menu name="FLL" description="FLL Settings">
+   <category name="FLL" description="FLL Settings">
       <binaryOption name="fll_enabled"
          constant="true"
          description="FLL State"
@@ -256,9 +256,9 @@
          Derived from External Reference Clock or Slow IRC"
          value="12000000" />
    
-   </menu>
+   </category>
    
-   <menu name="PLL0" description="PLL0 Settings">
+   <category name="PLL0" description="PLL0 Settings">
       <binaryOption name="pll0Enabled"
          constant="true"
          description="PLL0 State"
@@ -307,7 +307,7 @@
          toolTip="Determines the multiplication factor for the reference clock for PLL0.\n
                   This value is calculated from PLL0 input and output clock frequencies"
          value="24" />
-   </menu>
+   </category>
 
    <intOption name="system_mcgpllclk_clock" 
       constant="true"
@@ -344,8 +344,8 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <menu name="Device Parameters" description="Register values">
-      <menu name="MCG_C1" description="MCG Control Register 1">
+   <category name="Device Parameters" description="Register values">
+      <category name="MCG_C1" description="MCG Control Register 1">
          <choiceOption name="mcg_c1_clks"
             constant="true"
             description="MCGOUTCLK Clock Source Select"
@@ -369,9 +369,9 @@
    
          <aliasOption name="mcg_c1_irclken" />
          <aliasOption name="mcg_c1_irefsten" />
-      </menu>
+      </category>
       
-      <menu name="MCG_C2" description="MCG Control Register 2">
+      <category name="MCG_C2" description="MCG Control Register 2">
          <aliasOption name="mcg_c2_locre0" />
          <aliasOption key="/OSC0/range" />
          <aliasOption key="/OSC0/hgo0" />
@@ -387,20 +387,20 @@
          </binaryOption>
    
          <aliasOption name="mcg_c2_ircs" />
-      </menu>
+      </category>
       
-      <menu name="MCG_C4" description="MCG Control Register 4">
+      <category name="MCG_C4" description="MCG Control Register 4">
          <aliasOption name="mcg_c4_dmx32" />
          <aliasOption name="mcg_c4_drst_drs" />
-      </menu>
+      </category>
       
-      <menu name="MCG_C5" description="MCG Control Register 5">
+      <category name="MCG_C5" description="MCG Control Register 5">
          <aliasOption name="mcg_c5_pllclken" />
          <aliasOption name="mcg_c5_pllsten" /> 
          <aliasOption name="mcg_c5_prdiv0" />
-      </menu>
+      </category>
       
-      <menu name="MCG_C6" description="MCG Control Register 6">
+      <category name="MCG_C6" description="MCG Control Register 6">
          <aliasOption name="mcg_c6_lolie0" />
          <binaryOption name="mcg_c6_plls" 
             constant="true"
@@ -411,22 +411,22 @@
          </binaryOption>
          <aliasOption name="mcg_c6_cme0" />
          <aliasOption name="mcg_c6_vdiv0" />
-      </menu>
+      </category>
 
-      <menu name="MCG_SC" description="MCG Status and Control Register" >
+      <category name="MCG_SC" description="MCG Status and Control Register" >
          <aliasOption name="mcg_sc_fcrdiv" />
-      </menu>
+      </category>
 
-      <menu name="MCG_C8" description="MCG Control Register 8">
+      <category name="MCG_C8" description="MCG Control Register 8">
          <aliasOption name="mcg_c8_lolre" />
-      </menu>
+      </category>
 
-      <menu name="MCG_C9" description="MCG Control Register 8">
-      </menu>
+      <category name="MCG_C9" description="MCG Control Register 8">
+      </category>
 
-      <menu name="MCG_C10" description="MCG Control Register 8">
-      </menu>
-   </menu>
+      <category name="MCG_C10" description="MCG Control Register 8">
+      </category>
+   </category>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MKL">

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- mgc_lite.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
-   <menu name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]" >
+   <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
          units="Hz"
@@ -86,9 +86,9 @@
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
          value="2000000" 
          constant="true" />
-   </menu>
+   </category>
    
-   <menu name="HIRC" description="High Speed Internal Clock Sources"
+   <category name="HIRC" description="High Speed Internal Clock Sources"
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
       <intOption name="system_usb_clkin_clock" 
@@ -118,9 +118,9 @@
          description="MCGPCLK Output clock frequency"
          toolTip="Output of HIRC available as peripheral clock"
          value="48000000" />
-   </menu>  
+   </category>  
    
-   <menu name="LPO" description="Internal Clock Sources" >
+   <category name="LPO" description="Internal Clock Sources" >
       <intOption name="system_low_power_clock"
          origin="LPO Clock"
          units="Hz"
@@ -128,17 +128,17 @@
          toolTip="Dependent on device. [Typically ~1kHz]" 
          value="1000"
          constant="true" />
-   </menu>
+   </category>
 
-   <menu name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/erefs0" constant="false" />
-   </menu>
+   </category>
 
-   <menu name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
-   </menu>
+   </category>
 
    <choiceOption name="clock_mode" 
       description="Default Clock Mode"
@@ -180,8 +180,8 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <menu name="Device Parameters" description="Register values">
-      <menu name="MCG_C1" description="MCG Control Register 1">
+   <category name="Device Parameters" description="Register values">
+      <category name="MCG_C1" description="MCG Control Register 1">
          <choiceOption name="mcg_c1_clks"
             constant="true"
             description="MCGOUTCLK Clock Source Select"
@@ -194,25 +194,25 @@
          </choiceOption>
          <aliasOption name="mcg_c1_irclken" />
          <aliasOption name="mcg_c1_irefsten" />
-      </menu>
+      </category>
       
-      <menu name="MCG_C2" description="MCG Control Register 2">
+      <category name="MCG_C2" description="MCG Control Register 2">
          <aliasOption key="/OSC0/range" />
          <aliasOption key="/OSC0/hgo0" />
          <aliasOption key="/OSC0/erefs0" />
          <aliasOption name="mcg_c2_ircs" />
-      </menu>
+      </category>
       
-      <menu name="MCG_SC" description="MCG Status and Control Register" >
+      <category name="MCG_SC" description="MCG Status and Control Register" >
          <aliasOption name="mcg_sc_fcrdiv" />
-      </menu>
+      </category>
 
-      <menu name="MCG_MC" description="MCG Miscellaneous Control Register" >
+      <category name="MCG_MC" description="MCG Miscellaneous Control Register" >
          <aliasOption name="mcg_mc_hircen" />         
          <aliasOption name="mcg_mc_lirc_div2" />         
-      </menu>
+      </category>
 
-   </menu>
+   </category>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite">

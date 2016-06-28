@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- examples.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="OSC0" description="Oscillator">
+   <category name="OSC0" description="Oscillator">
    
       <aliasOption key="system_mcgir_clock" />
    
@@ -23,7 +23,7 @@
 
       <intOption name="xxxx" description="yyyyyy" toolTip="yyyyyyy"
          value="4000000" constant="true" />
-   </menu>
+   </category>
    
    
    <template><![CDATA[

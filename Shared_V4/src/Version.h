@@ -6,12 +6,12 @@
 #define USBDM_VERSION_MAJOR  4       //!< DLL Major version #
 #define USBDM_VERSION_MINOR  12      //!< DLL Minor version #
 #define USBDM_VERSION_MICRO  1       //!< DLL Micro version #
-#define USBDM_VERSION_NANO   100      //!< DLL Nano version #
+#define USBDM_VERSION_NANO   110      //!< DLL Nano version #
 
 #ifdef LOG
-#define USBDM_VERSION_STRING "4.12.1.100-Debug" //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.110-Debug" //!< Version as string
 #else
-#define USBDM_VERSION_STRING "4.12.1.100"       //!< Version as string
+#define USBDM_VERSION_STRING "4.12.1.110"       //!< Version as string
 #endif
 
 //! The version of the GDI standard implemented

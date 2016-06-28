@@ -248,6 +248,25 @@
    <item key="/I2C3/irqEnabled"                            value="false" />
    <item key="/I2C3/irqHandler"                            value="false" />
    <item key="/I2C3/irqLevel"                              value="0" />
+   <item key="/LLWU/irqEnabled"                            value="false" />
+   <item key="/LLWU/irqHandler"                            value="false" />
+   <item key="/LLWU/irqLevel"                              value="0" />
+   <item key="/LLWU/llwu_filt1_filte"                      value="0" />
+   <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_filt2_filte"                      value="0" />
+   <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_filt3_filte"                      value="0" />
+   <item key="/LLWU/llwu_filt3_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_filt4_filte"                      value="0" />
+   <item key="/LLWU/llwu_filt4_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_me_wume0"                         value="false" />
+   <item key="/LLWU/llwu_me_wume1"                         value="false" />
+   <item key="/LLWU/llwu_me_wume2"                         value="false" />
+   <item key="/LLWU/llwu_me_wume3"                         value="false" />
+   <item key="/LLWU/llwu_me_wume4"                         value="false" />
+   <item key="/LLWU/llwu_me_wume5"                         value="false" />
+   <item key="/LLWU/llwu_me_wume7"                         value="false" />
+   <item key="/LLWU/llwu_pins"                             value="" />
    <item key="/LPTMR0/clockFrequency"                      value="16384.0" />
    <item key="/LPTMR0/clockPeriod"                         value="6.103515625E-5" />
    <item key="/LPTMR0/irqEnabled"                          value="false" />
@@ -429,6 +448,14 @@
    <item key="/SIM/system_sdhc_clock"                      value="0" />
    <item key="/SIM/system_tpm_clock"                       value="30000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SMC/smc_pmprot_ahsrun"                      value="false" />
+   <item key="/SMC/smc_pmprot_alls"                        value="false" />
+   <item key="/SMC/smc_pmprot_avlls"                       value="false" />
+   <item key="/SMC/smc_pmprot_avlp"                        value="false" />
+   <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
+   <item key="/SMC/smc_stopctrl_porpo"                     value="false" />
+   <item key="/SMC/smc_stopctrl_pstopo"                    value="0" />
+   <item key="/SMC/smc_stopctrl_ram2po"                    value="false" />
    <item key="/SPI0/irqEnabled"                            value="false" />
    <item key="/SPI0/irqHandler"                            value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />

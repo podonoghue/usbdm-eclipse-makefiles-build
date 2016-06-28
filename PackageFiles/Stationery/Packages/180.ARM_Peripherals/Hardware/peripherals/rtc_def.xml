@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- rtc.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
@@ -93,11 +93,11 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <menu name="Device Parameters" description="Register values">
-      <menu name="RTC CR" description="Real Time Clock">
+   <category name="Device Parameters" description="Register values">
+      <category name="RTC CR" description="Real Time Clock">
          <aliasOption name="rtc_cr_osce" />
-      </menu>   
-   </menu>
+      </category>   
+   </category>
 
    <pins/>
 

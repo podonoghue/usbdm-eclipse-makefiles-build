@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- sim_mk65f18.xml -->
 <!--
 Devices using this peripheral: 
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <menu name="SOPT1" description="RTC pins">
+   <category name="SOPT1" description="RTC pins">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
          toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
@@ -23,7 +23,7 @@ Devices using this peripheral:
          toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32000"
          constant="true" />
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 1
       \tstatic constexpr uint32_t sopt1 = 
@@ -45,7 +45,7 @@ Devices using this peripheral:
       \t}\n\n
    ]]></template>
    
-   <menu name="SOPT2" description="Clock Gating">
+   <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
          toolTip="Clock output on the RTC_CLKOUT pin">
@@ -167,7 +167,7 @@ Devices using this peripheral:
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="IRC 48 MHz clock" />
       </choiceOption>
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 2
       \tstatic constexpr uint32_t sopt2 = 
@@ -288,7 +288,7 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
    ]]></template>
-   <menu name="SOPT4" description="FTM pins">
+   <category name="SOPT4" description="FTM pins">
       <binaryOption name="sim_sopt4_ftm3trg1src" 
          description="FlexTimer 3 Hardware Trigger 1 Source Select"
          toolTip="Selects the source of FTM hardware trigger 1" >
@@ -421,7 +421,7 @@ Devices using this peripheral:
          <choice value="0"  name="FTM0_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 4
       \tstatic constexpr uint32_t sopt4 = 
@@ -444,7 +444,7 @@ Devices using this peripheral:
       \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
       \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
    ]]></template>
-   <menu name="SOPT5" description="UART pins">
+   <category name="SOPT5" description="UART pins">
       <choiceOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data.">
@@ -498,7 +498,7 @@ Devices using this peripheral:
          <choice value="2" name="CMP1 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
@@ -509,7 +509,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_LPUART0TXSRC($(sim_sopt5_lpuart0txsrc)) |  // LPUART 1 transmit data source select
       \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc));   // LPUART 0 receive data source select\n\n
    ]]></template>
-   <menu name="SOPT7" description="ADC pins">
+   <category name="SOPT7" description="ADC pins">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC0">
@@ -579,7 +579,7 @@ Devices using this peripheral:
          <choice value="14" name="Low-power timer trigger" />
          <choice value="15" name="TPM2 channel 0 (A pretrigger) and channel 1 (B pretrigger)" />
       </choiceOption>
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 7
       \tstatic constexpr uint32_t sopt7 = 
@@ -590,7 +590,7 @@ Devices using this peripheral:
       \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
       \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
    ]]></template>
-   <menu name="SOPT8" description="FTM pins">
+   <category name="SOPT8" description="FTM pins">
       <binaryOption name="sim_sopt8_ftm3och7src" 
          description="FTM3 channel 7 output source" >
          <choice value="0" name="FTM3_CH7 pin is FTM3 ch 7 output" />
@@ -685,7 +685,7 @@ Devices using this peripheral:
          <choice value="0" name="FTM0_CH0 pin is FTM0 ch 0 output" />
          <choice value="1" name="FTM0_CH0 pin is FTM0 ch 0 output, modulated by FTM1 ch 1" />
       </binaryOption>
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 8
       \tstatic constexpr uint32_t sopt8 = 
@@ -706,7 +706,7 @@ Devices using this peripheral:
       \t   SIM_SOPT8_FTM0OCH1SRC($(sim_sopt8_ftm0och1src)) |   // FTM0 channel 1 output source
       \t   SIM_SOPT8_FTM0OCH0SRC($(sim_sopt8_ftm0och0src));    // FTM0 channel 0 output source\n\n
    ]]></template>
-   <menu name="SOPT9" description="TPM pins">
+   <category name="SOPT9" description="TPM pins">
       <binaryOption name="sim_sopt9_tpm2clksel" 
          description="Low Power Timer 2 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the TPM module.">
@@ -741,7 +741,7 @@ Devices using this peripheral:
          <choice value="3" name="USB start of frame pulse" />
       </choiceOption>
    
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Options Register 9
       \tstatic constexpr uint32_t sopt9 = 
@@ -750,7 +750,7 @@ Devices using this peripheral:
       \t   SIM_SOPT9_TPM2CH0SRC($(sim_sopt9_tpm2ch0src))  |   // TPM2 channel 0 input capture source select
       \t   SIM_SOPT9_TPM1CH0SRC($(sim_sopt9_tpm1ch0src));     // TPM1 channel 0 input capture source select\n\n
    ]]></template>
-   <menu name="CLKDIV1" description="System Clock Dividers">
+   <category name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
          constant="true"
          description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
@@ -781,7 +781,7 @@ Devices using this peripheral:
                   Divides MCGOUT Clock to generate system_flash_clock\n
                   MCGOUTCLK clock is source. Default /4"
          value="4" offset="-1" min="1" max="16" />
-   </menu>
+   </category>
    <template><![CDATA[
       \t//! System Clock Divider Register 1
       \tstatic constexpr uint32_t clkdiv1 = 
@@ -790,7 +790,7 @@ Devices using this peripheral:
       \t   SIM_CLKDIV1_OUTDIV2($(sim_clkdiv1_outdiv2))|  // Bus clock
       \t   SIM_CLKDIV1_OUTDIV1($(sim_clkdiv1_outdiv1));  // Core/system clock \n\n
    ]]></template>
-   <menu name="CLKDIV2" description="USB Clock Dividers">
+   <category name="CLKDIV2" description="USB Clock Dividers">
       <choiceOption name="sim_clkdiv2_usb"
          description="USB clock divider" 
          toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
@@ -812,13 +812,13 @@ Devices using this peripheral:
          <choice value="12" name="Divide by 7 (div=6, frac=0)" />
          <choice value="14" name="Divide by 8 (div=7, frac=0)" />
       </choiceOption>
-   </menu>   
+   </category>   
    <template><![CDATA[
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
    ]]></template>
-   <menu name="CLKDIV3" description="Peripehral Clock Dividers">
+   <category name="CLKDIV3" description="Peripehral Clock Dividers">
       <choiceOption name="sim_clkdiv3_pllfll"
          description="Peripheral clock post-divider" 
          toolTip="Selects the post PLL/FLL clock divider for various peripherals (LPUART, TPM)">
@@ -839,7 +839,7 @@ Devices using this peripheral:
          <choice value="12" name="Divide by 7 (div=6, frac=0)" />
          <choice value="14" name="Divide by 8 (div=7, frac=0)" />
       </choiceOption>
-   </menu>   
+   </category>   
    <template><![CDATA[
       \t//! System Clock Divider Register 3
       \tstatic constexpr uint32_t clkdiv3 = 

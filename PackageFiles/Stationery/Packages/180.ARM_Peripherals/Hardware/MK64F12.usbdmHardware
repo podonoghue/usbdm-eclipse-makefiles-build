@@ -367,66 +367,55 @@
          <mux sel="fixed"         signal="ADC0_DM0" />
          <mux sel="fixed"         signal="ADC1_DM3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC0_DM1"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
          <mux sel="fixed"         signal="ADC1_DP3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC0_DP1"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC0_SE16"    isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE16" />
          <mux sel="fixed"         signal="CMP1_IN2" />
          <mux sel="fixed"         signal="ADC0_SE21" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC1_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DM0" />
          <mux sel="fixed"         signal="ADC0_DM3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC1_DM1"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DM1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC1_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DP0" />
          <mux sel="fixed"         signal="ADC0_DP3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC1_DP1"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DP1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="ADC1_SE16"    isFixed="true">
          <mux sel="fixed"         signal="ADC1_SE16" />
          <mux sel="fixed"         signal="CMP2_IN2" />
          <mux sel="fixed"         signal="ADC0_SE22" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="DAC0_OUT"     isFixed="true">
          <mux sel="fixed"         signal="DAC0_OUT" />
          <mux sel="fixed"         signal="CMP1_IN3" />
          <mux sel="fixed"         signal="ADC0_SE23" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="DAC1_OUT"     isFixed="true">
          <mux sel="fixed"         signal="DAC1_OUT" />
@@ -434,102 +423,82 @@
          <mux sel="fixed"         signal="CMP2_IN3" />
          <mux sel="fixed"         signal="ADC1_SE23" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="RESET_n"      isFixed="true">
          <mux sel="fixed"         signal="RESET_b" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="RTC_WAKEUP_b" isFixed="true">
          <mux sel="fixed"         signal="RTC_WAKEUP_b" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
          <mux sel="fixed"         signal="USB0_DM" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="USB0_DP"      isFixed="true">
          <mux sel="fixed"         signal="USB0_DP" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VBAT"         isFixed="true">
          <mux sel="fixed"         signal="VBAT" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD1"         isFixed="true">
          <mux sel="fixed"         signal="VDD1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD2"         isFixed="true">
          <mux sel="fixed"         signal="VDD2" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD3"         isFixed="true">
          <mux sel="fixed"         signal="VDD3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD4"         isFixed="true">
          <mux sel="fixed"         signal="VDD4" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD5"         isFixed="true">
          <mux sel="fixed"         signal="VDD5" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD6"         isFixed="true">
          <mux sel="fixed"         signal="VDD6" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD7"         isFixed="true">
          <mux sel="fixed"         signal="VDD7" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD8"         isFixed="true">
          <mux sel="fixed"         signal="VDD8" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDD9"         isFixed="true">
          <mux sel="fixed"         signal="VDD9" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VDDA"         isFixed="true">
          <mux sel="fixed"         signal="VDDA" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VOUT33"       isFixed="true">
          <mux sel="fixed"         signal="VOUT33" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VREFH"        isFixed="true">
          <mux sel="fixed"         signal="VREFH" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VREFL"        isFixed="true">
          <mux sel="fixed"         signal="VREFL" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VREF_OUT"     isFixed="true">
          <mux sel="fixed"         signal="VREF_OUT" />
@@ -537,76 +506,60 @@
          <mux sel="fixed"         signal="CMP0_IN5" />
          <mux sel="fixed"         signal="ADC1_SE18" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VREGIN"       isFixed="true">
          <mux sel="fixed"         signal="VREGIN" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS1"         isFixed="true">
          <mux sel="fixed"         signal="VSS1" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS2"         isFixed="true">
          <mux sel="fixed"         signal="VSS2" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS2a"        isFixed="true">
          <mux sel="fixed"         signal="VSS2a" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS3"         isFixed="true">
          <mux sel="fixed"         signal="VSS3" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS4"         isFixed="true">
          <mux sel="fixed"         signal="VSS4" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS5"         isFixed="true">
          <mux sel="fixed"         signal="VSS5" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS6"         isFixed="true">
          <mux sel="fixed"         signal="VSS6" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS7"         isFixed="true">
          <mux sel="fixed"         signal="VSS7" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS8"         isFixed="true">
          <mux sel="fixed"         signal="VSS8" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSS9"         isFixed="true">
          <mux sel="fixed"         signal="VSS9" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="VSSA"         isFixed="true">
          <mux sel="fixed"         signal="VSSA" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="XTAL32"       isFixed="true">
          <mux sel="fixed"         signal="XTAL32" />
          <reset sel="fixed" />
-         <default sel="fixed" />
       </pin>
       <pin name="PTA0">
-         <mux sel="reset"         signal="JTAG_TCLK" />
-         <mux sel="reset"         signal="SWD_CLK" />
          <mux sel="mux1"          signal="GPIOA_0" />
          <mux sel="mux2"          signal="UART0_CTS_b" />
          <mux sel="mux2"          signal="UART0_COL_b" />
@@ -614,51 +567,38 @@
          <mux sel="mux7"          signal="JTAG_TCLK" />
          <mux sel="mux7"          signal="SWD_CLK" />
          <reset sel="mux7" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA1">
-         <mux sel="reset"         signal="JTAG_TDI" />
          <mux sel="mux1"          signal="GPIOA_1" />
          <mux sel="mux2"          signal="UART0_RX" />
          <mux sel="mux3"          signal="FTM0_CH6" />
          <mux sel="mux7"          signal="JTAG_TDI" />
          <reset sel="mux7" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA2">
-         <mux sel="reset"         signal="JTAG_TDO" />
-         <mux sel="reset"         signal="TRACE_SWO" />
          <mux sel="mux1"          signal="GPIOA_2" />
          <mux sel="mux2"          signal="UART0_TX" />
          <mux sel="mux3"          signal="FTM0_CH7" />
          <mux sel="mux7"          signal="JTAG_TDO" />
          <mux sel="mux7"          signal="TRACE_SWO" />
          <reset sel="mux7" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA3">
-         <mux sel="reset"         signal="JTAG_TMS" />
-         <mux sel="reset"         signal="SWD_DIO" />
          <mux sel="mux1"          signal="GPIOA_3" />
          <mux sel="mux2"          signal="UART0_RTS_b" />
          <mux sel="mux3"          signal="FTM0_CH0" />
          <mux sel="mux7"          signal="JTAG_TMS" />
          <mux sel="mux7"          signal="SWD_DIO" />
          <reset sel="mux7" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA4">
-         <mux sel="reset"         signal="NMI_b" />
          <mux sel="mux1"          signal="GPIOA_4" />
          <mux sel="mux1"          signal="LLWU_P3" />
          <mux sel="mux3"          signal="FTM0_CH1" />
          <mux sel="mux7"          signal="NMI_b" />
          <reset sel="mux7" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA5">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_5" />
          <mux sel="mux2"          signal="USB_CLKIN" />
          <mux sel="mux3"          signal="FTM0_CH2" />
@@ -667,73 +607,55 @@
          <mux sel="mux5"          signal="CMP2_OUT" />
          <mux sel="mux6"          signal="I2S0_TX_BCLK" />
          <mux sel="mux7"          signal="JTAG_TRST_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA6">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_6" />
          <mux sel="mux3"          signal="FTM0_CH3" />
          <mux sel="mux5"          signal="CLKOUT" />
          <mux sel="mux7"          signal="TRACE_CLKOUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA7">
-         <mux sel="reset"         signal="ADC0_SE10" />
          <mux sel="mux0"          signal="ADC0_SE10" />
          <mux sel="mux1"          signal="GPIOA_7" />
          <mux sel="mux3"          signal="FTM0_CH4" />
          <mux sel="mux7"          signal="TRACE_D3" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA8">
-         <mux sel="reset"         signal="ADC0_SE11" />
          <mux sel="mux0"          signal="ADC0_SE11" />
          <mux sel="mux1"          signal="GPIOA_8" />
          <mux sel="mux3"          signal="FTM1_CH0" />
          <mux sel="mux6"          signal="FTM1_QD_PHA" />
          <mux sel="mux7"          signal="TRACE_D2" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA9">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_9" />
          <mux sel="mux3"          signal="FTM1_CH1" />
          <mux sel="mux4"          signal="MII0_RXD3" />
          <mux sel="mux6"          signal="FTM1_QD_PHB" />
          <mux sel="mux7"          signal="TRACE_D1" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA10">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_10" />
          <mux sel="mux3"          signal="FTM2_CH0" />
          <mux sel="mux4"          signal="MII0_RXD2" />
          <mux sel="mux6"          signal="FTM2_QD_PHA" />
          <mux sel="mux7"          signal="TRACE_D0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA11">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_11" />
          <mux sel="mux3"          signal="FTM2_CH1" />
          <mux sel="mux4"          signal="MII0_RXCLK" />
          <mux sel="mux5"          signal="I2C2_SDA" />
          <mux sel="mux6"          signal="FTM2_QD_PHB" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA12">
-         <mux sel="reset"         signal="CMP2_IN0" />
          <mux sel="mux0"          signal="CMP2_IN0" />
          <mux sel="mux1"          signal="GPIOA_12" />
          <mux sel="mux2"          signal="CAN0_TX" />
@@ -744,10 +666,8 @@
          <mux sel="mux6"          signal="I2S0_TXD0" />
          <mux sel="mux7"          signal="FTM1_QD_PHA" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA13">
-         <mux sel="reset"         signal="CMP2_IN1" />
          <mux sel="mux0"          signal="CMP2_IN1" />
          <mux sel="mux1"          signal="GPIOA_13" />
          <mux sel="mux1"          signal="LLWU_P4" />
@@ -759,11 +679,8 @@
          <mux sel="mux6"          signal="I2S0_TX_FS" />
          <mux sel="mux7"          signal="FTM1_QD_PHB" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA14">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_14" />
          <mux sel="mux2"          signal="SPI0_PCS0" />
          <mux sel="mux3"          signal="UART0_TX" />
@@ -772,24 +689,18 @@
          <mux sel="mux5"          signal="I2C2_SCL" />
          <mux sel="mux6"          signal="I2S0_RX_BCLK" />
          <mux sel="mux7"          signal="I2S0_TXD1" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA15">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_15" />
          <mux sel="mux2"          signal="SPI0_SCK" />
          <mux sel="mux3"          signal="UART0_RX" />
          <mux sel="mux4"          signal="RMII0_TXEN" />
          <mux sel="mux4"          signal="MII0_TXEN" />
          <mux sel="mux6"          signal="I2S0_RXD0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA16">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_16" />
          <mux sel="mux2"          signal="SPI0_SOUT" />
          <mux sel="mux3"          signal="UART0_CTS_b" />
@@ -798,11 +709,9 @@
          <mux sel="mux4"          signal="MII0_TXD0" />
          <mux sel="mux6"          signal="I2S0_RX_FS" />
          <mux sel="mux7"          signal="I2S0_RXD1" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA17">
-         <mux sel="reset"         signal="ADC1_SE17" />
          <mux sel="mux0"          signal="ADC1_SE17" />
          <mux sel="mux1"          signal="GPIOA_17" />
          <mux sel="mux2"          signal="SPI0_SIN" />
@@ -811,84 +720,59 @@
          <mux sel="mux4"          signal="MII0_TXD1" />
          <mux sel="mux6"          signal="I2S0_MCLK" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA18">
-         <mux sel="reset"         signal="EXTAL0" />
          <mux sel="mux0"          signal="EXTAL0" />
          <mux sel="mux1"          signal="GPIOA_18" />
          <mux sel="mux3"          signal="FTM0_FLT2" />
          <mux sel="mux4"          signal="FTM_CLKIN0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA19">
-         <mux sel="reset"         signal="XTAL0" />
          <mux sel="mux0"          signal="XTAL0" />
          <mux sel="mux1"          signal="GPIOA_19" />
          <mux sel="mux3"          signal="FTM1_FLT0" />
          <mux sel="mux4"          signal="FTM_CLKIN1" />
          <mux sel="mux6"          signal="LPTMR0_ALT1" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTA24">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_24" />
          <mux sel="mux4"          signal="MII0_TXD2" />
          <mux sel="mux6"          signal="FB_A29" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA25">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_25" />
          <mux sel="mux4"          signal="MII0_TXCLK" />
          <mux sel="mux6"          signal="FB_A28" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA26">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_26" />
          <mux sel="mux4"          signal="MII0_TXD3" />
          <mux sel="mux6"          signal="FB_A27" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA27">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_27" />
          <mux sel="mux4"          signal="MII0_CRS" />
          <mux sel="mux6"          signal="FB_A26" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA28">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_28" />
          <mux sel="mux4"          signal="MII0_TXER" />
          <mux sel="mux6"          signal="FB_A25" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTA29">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOA_29" />
          <mux sel="mux4"          signal="MII0_COL" />
          <mux sel="mux6"          signal="FB_A24" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB0">
-         <mux sel="reset"         signal="ADC0_SE8" />
-         <mux sel="reset"         signal="ADC1_SE8" />
          <mux sel="mux0"          signal="ADC0_SE8" />
          <mux sel="mux0"          signal="ADC1_SE8" />
          <mux sel="mux1"          signal="GPIOB_0" />
@@ -899,11 +783,8 @@
          <mux sel="mux4"          signal="MII0_MDIO" />
          <mux sel="mux6"          signal="FTM1_QD_PHA" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB1">
-         <mux sel="reset"         signal="ADC0_SE9" />
-         <mux sel="reset"         signal="ADC1_SE9" />
          <mux sel="mux0"          signal="ADC0_SE9" />
          <mux sel="mux0"          signal="ADC1_SE9" />
          <mux sel="mux1"          signal="GPIOB_1" />
@@ -913,10 +794,8 @@
          <mux sel="mux4"          signal="MII0_MDC" />
          <mux sel="mux6"          signal="FTM1_QD_PHB" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB2">
-         <mux sel="reset"         signal="ADC0_SE12" />
          <mux sel="mux0"          signal="ADC0_SE12" />
          <mux sel="mux1"          signal="GPIOB_2" />
          <mux sel="mux2"          signal="I2C0_SCL" />
@@ -924,10 +803,8 @@
          <mux sel="mux4"          signal="ENET0_1588_TMR0" />
          <mux sel="mux6"          signal="FTM0_FLT3" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB3">
-         <mux sel="reset"         signal="ADC0_SE13" />
          <mux sel="mux0"          signal="ADC0_SE13" />
          <mux sel="mux1"          signal="GPIOB_3" />
          <mux sel="mux2"          signal="I2C0_SDA" />
@@ -936,63 +813,47 @@
          <mux sel="mux4"          signal="ENET0_1588_TMR1" />
          <mux sel="mux6"          signal="FTM0_FLT0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB4">
-         <mux sel="reset"         signal="ADC1_SE10" />
          <mux sel="mux0"          signal="ADC1_SE10" />
          <mux sel="mux1"          signal="GPIOB_4" />
          <mux sel="mux4"          signal="ENET0_1588_TMR2" />
          <mux sel="mux6"          signal="FTM1_FLT0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB5">
-         <mux sel="reset"         signal="ADC1_SE11" />
          <mux sel="mux0"          signal="ADC1_SE11" />
          <mux sel="mux1"          signal="GPIOB_5" />
          <mux sel="mux4"          signal="ENET0_1588_TMR3" />
          <mux sel="mux6"          signal="FTM2_FLT0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB6">
-         <mux sel="reset"         signal="ADC1_SE12" />
          <mux sel="mux0"          signal="ADC1_SE12" />
          <mux sel="mux1"          signal="GPIOB_6" />
          <mux sel="mux5"          signal="FB_AD23" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB7">
-         <mux sel="reset"         signal="ADC1_SE13" />
          <mux sel="mux0"          signal="ADC1_SE13" />
          <mux sel="mux1"          signal="GPIOB_7" />
          <mux sel="mux5"          signal="FB_AD22" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB8">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_8" />
          <mux sel="mux3"          signal="UART3_RTS_b" />
          <mux sel="mux5"          signal="FB_AD21" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB9">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_9" />
          <mux sel="mux2"          signal="SPI1_PCS1" />
          <mux sel="mux3"          signal="UART3_CTS_b" />
          <mux sel="mux5"          signal="FB_AD20" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB10">
-         <mux sel="reset"         signal="ADC1_SE14" />
          <mux sel="mux0"          signal="ADC1_SE14" />
          <mux sel="mux1"          signal="GPIOB_10" />
          <mux sel="mux2"          signal="SPI1_PCS0" />
@@ -1000,10 +861,8 @@
          <mux sel="mux5"          signal="FB_AD19" />
          <mux sel="mux6"          signal="FTM0_FLT1" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB11">
-         <mux sel="reset"         signal="ADC1_SE15" />
          <mux sel="mux0"          signal="ADC1_SE15" />
          <mux sel="mux1"          signal="GPIOB_11" />
          <mux sel="mux2"          signal="SPI1_SCK" />
@@ -1011,120 +870,88 @@
          <mux sel="mux5"          signal="FB_AD18" />
          <mux sel="mux6"          signal="FTM0_FLT2" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTB12">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_12" />
          <mux sel="mux2"          signal="UART3_RTS_b" />
          <mux sel="mux3"          signal="FTM1_CH0" />
          <mux sel="mux4"          signal="FTM0_CH4" />
          <mux sel="mux6"          signal="FTM1_QD_PHA" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB13">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_13" />
          <mux sel="mux2"          signal="UART3_CTS_b" />
          <mux sel="mux3"          signal="FTM1_CH1" />
          <mux sel="mux4"          signal="FTM0_CH5" />
          <mux sel="mux6"          signal="FTM1_QD_PHB" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB16">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_16" />
          <mux sel="mux2"          signal="SPI1_SOUT" />
          <mux sel="mux3"          signal="UART0_RX" />
          <mux sel="mux4"          signal="FTM_CLKIN0" />
          <mux sel="mux5"          signal="FB_AD17" />
          <mux sel="mux6"          signal="EWM_IN" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB17">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_17" />
          <mux sel="mux2"          signal="SPI1_SIN" />
          <mux sel="mux3"          signal="UART0_TX" />
          <mux sel="mux4"          signal="FTM_CLKIN1" />
          <mux sel="mux5"          signal="FB_AD16" />
          <mux sel="mux6"          signal="EWM_OUT_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB18">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_18" />
          <mux sel="mux2"          signal="CAN0_TX" />
          <mux sel="mux3"          signal="FTM2_CH0" />
          <mux sel="mux4"          signal="I2S0_TX_BCLK" />
          <mux sel="mux5"          signal="FB_AD15" />
          <mux sel="mux6"          signal="FTM2_QD_PHA" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB19">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_19" />
          <mux sel="mux2"          signal="CAN0_RX" />
          <mux sel="mux3"          signal="FTM2_CH1" />
          <mux sel="mux4"          signal="I2S0_TX_FS" />
          <mux sel="mux5"          signal="FB_OE_b" />
          <mux sel="mux6"          signal="FTM2_QD_PHB" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB20">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_20" />
          <mux sel="mux2"          signal="SPI2_PCS0" />
          <mux sel="mux5"          signal="FB_AD31" />
          <mux sel="mux6"          signal="CMP0_OUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB21">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_21" />
          <mux sel="mux2"          signal="SPI2_SCK" />
          <mux sel="mux5"          signal="FB_AD30" />
          <mux sel="mux6"          signal="CMP1_OUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB22">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_22" />
          <mux sel="mux2"          signal="SPI2_SOUT" />
          <mux sel="mux5"          signal="FB_AD29" />
          <mux sel="mux6"          signal="CMP2_OUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTB23">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOB_23" />
          <mux sel="mux2"          signal="SPI2_SIN" />
          <mux sel="mux3"          signal="SPI0_PCS5" />
          <mux sel="mux5"          signal="FB_AD28" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC0">
-         <mux sel="reset"         signal="ADC0_SE14" />
          <mux sel="mux0"          signal="ADC0_SE14" />
          <mux sel="mux1"          signal="GPIOC_0" />
          <mux sel="mux2"          signal="SPI0_PCS4" />
@@ -1133,10 +960,8 @@
          <mux sel="mux5"          signal="FB_AD14" />
          <mux sel="mux6"          signal="I2S0_TXD1" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC1">
-         <mux sel="reset"         signal="ADC0_SE15" />
          <mux sel="mux0"          signal="ADC0_SE15" />
          <mux sel="mux1"          signal="GPIOC_1" />
          <mux sel="mux1"          signal="LLWU_P6" />
@@ -1146,11 +971,8 @@
          <mux sel="mux5"          signal="FB_AD13" />
          <mux sel="mux6"          signal="I2S0_TXD0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC2">
-         <mux sel="reset"         signal="ADC0_SE4b" />
-         <mux sel="reset"         signal="CMP1_IN0" />
          <mux sel="mux0"          signal="ADC0_SE4b" />
          <mux sel="mux0"          signal="CMP1_IN0" />
          <mux sel="mux1"          signal="GPIOC_2" />
@@ -1160,10 +982,8 @@
          <mux sel="mux5"          signal="FB_AD12" />
          <mux sel="mux6"          signal="I2S0_TX_FS" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC3">
-         <mux sel="reset"         signal="CMP1_IN1" />
          <mux sel="mux0"          signal="CMP1_IN1" />
          <mux sel="mux1"          signal="GPIOC_3" />
          <mux sel="mux1"          signal="LLWU_P7" />
@@ -1173,11 +993,8 @@
          <mux sel="mux5"          signal="CLKOUT" />
          <mux sel="mux6"          signal="I2S0_TX_BCLK" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC4">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_4" />
          <mux sel="mux1"          signal="LLWU_P8" />
          <mux sel="mux2"          signal="SPI0_PCS0" />
@@ -1185,12 +1002,9 @@
          <mux sel="mux4"          signal="FTM0_CH3" />
          <mux sel="mux5"          signal="FB_AD11" />
          <mux sel="mux6"          signal="CMP1_OUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC5">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_5" />
          <mux sel="mux1"          signal="LLWU_P9" />
          <mux sel="mux2"          signal="SPI0_SCK" />
@@ -1199,11 +1013,9 @@
          <mux sel="mux5"          signal="FB_AD10" />
          <mux sel="mux6"          signal="CMP0_OUT" />
          <mux sel="mux7"          signal="FTM0_CH2" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC6">
-         <mux sel="reset"         signal="CMP0_IN0" />
          <mux sel="mux0"          signal="CMP0_IN0" />
          <mux sel="mux1"          signal="GPIOC_6" />
          <mux sel="mux1"          signal="LLWU_P10" />
@@ -1213,10 +1025,8 @@
          <mux sel="mux5"          signal="FB_AD9" />
          <mux sel="mux6"          signal="I2S0_MCLK" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC7">
-         <mux sel="reset"         signal="CMP0_IN1" />
          <mux sel="mux0"          signal="CMP0_IN1" />
          <mux sel="mux1"          signal="GPIOC_7" />
          <mux sel="mux2"          signal="SPI0_SIN" />
@@ -1224,11 +1034,8 @@
          <mux sel="mux4"          signal="I2S0_RX_FS" />
          <mux sel="mux5"          signal="FB_AD8" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC8">
-         <mux sel="reset"         signal="ADC1_SE4b" />
-         <mux sel="reset"         signal="CMP0_IN2" />
          <mux sel="mux0"          signal="ADC1_SE4b" />
          <mux sel="mux0"          signal="CMP0_IN2" />
          <mux sel="mux1"          signal="GPIOC_8" />
@@ -1236,11 +1043,8 @@
          <mux sel="mux4"          signal="I2S0_MCLK" />
          <mux sel="mux5"          signal="FB_AD7" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC9">
-         <mux sel="reset"         signal="ADC1_SE5b" />
-         <mux sel="reset"         signal="CMP0_IN3" />
          <mux sel="mux0"          signal="ADC1_SE5b" />
          <mux sel="mux0"          signal="CMP0_IN3" />
          <mux sel="mux1"          signal="GPIOC_9" />
@@ -1249,10 +1053,8 @@
          <mux sel="mux5"          signal="FB_AD6" />
          <mux sel="mux6"          signal="FTM2_FLT0" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC10">
-         <mux sel="reset"         signal="ADC1_SE6b" />
          <mux sel="mux0"          signal="ADC1_SE6b" />
          <mux sel="mux1"          signal="GPIOC_10" />
          <mux sel="mux2"          signal="I2C1_SCL" />
@@ -1260,10 +1062,8 @@
          <mux sel="mux4"          signal="I2S0_RX_FS" />
          <mux sel="mux5"          signal="FB_AD5" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC11">
-         <mux sel="reset"         signal="ADC1_SE7b" />
          <mux sel="mux0"          signal="ADC1_SE7b" />
          <mux sel="mux1"          signal="GPIOC_11" />
          <mux sel="mux1"          signal="LLWU_P11" />
@@ -1272,96 +1072,69 @@
          <mux sel="mux4"          signal="I2S0_RXD1" />
          <mux sel="mux5"          signal="FB_RW_b" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTC12">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_12" />
          <mux sel="mux3"          signal="UART4_RTS_b" />
          <mux sel="mux5"          signal="FB_AD27" />
          <mux sel="mux6"          signal="FTM3_FLT0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC13">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_13" />
          <mux sel="mux3"          signal="UART4_CTS_b" />
          <mux sel="mux5"          signal="FB_AD26" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC14">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_14" />
          <mux sel="mux3"          signal="UART4_RX" />
          <mux sel="mux5"          signal="FB_AD25" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC15">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_15" />
          <mux sel="mux3"          signal="UART4_TX" />
          <mux sel="mux5"          signal="FB_AD24" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC16">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_16" />
          <mux sel="mux3"          signal="UART3_RX" />
          <mux sel="mux4"          signal="ENET0_1588_TMR0" />
          <mux sel="mux5"          signal="FB_CS5_b" />
          <mux sel="mux5"          signal="FB_TSIZ1" />
          <mux sel="mux5"          signal="FB_BE23_16_BLS15_8_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC17">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_17" />
          <mux sel="mux3"          signal="UART3_TX" />
          <mux sel="mux4"          signal="ENET0_1588_TMR1" />
          <mux sel="mux5"          signal="FB_CS4_b" />
          <mux sel="mux5"          signal="FB_TSIZ0" />
          <mux sel="mux5"          signal="FB_BE31_24_BLS7_0_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC18">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_18" />
          <mux sel="mux3"          signal="UART3_RTS_b" />
          <mux sel="mux4"          signal="ENET0_1588_TMR2" />
          <mux sel="mux5"          signal="FB_TBST_b" />
          <mux sel="mux5"          signal="FB_CS2_b" />
          <mux sel="mux5"          signal="FB_BE15_8_BLS23_16_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTC19">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOC_19" />
          <mux sel="mux3"          signal="UART3_CTS_b" />
          <mux sel="mux4"          signal="ENET0_1588_TMR3" />
          <mux sel="mux5"          signal="FB_CS3_b" />
          <mux sel="mux5"          signal="FB_BE7_0_BLS31_24_b" />
          <mux sel="mux6"          signal="FB_TA_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD0">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_0" />
          <mux sel="mux1"          signal="LLWU_P12" />
          <mux sel="mux2"          signal="SPI0_PCS0" />
@@ -1370,11 +1143,9 @@
          <mux sel="mux5"          signal="FB_ALE" />
          <mux sel="mux5"          signal="FB_CS1_b" />
          <mux sel="mux5"          signal="FB_TS_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD1">
-         <mux sel="reset"         signal="ADC0_SE5b" />
          <mux sel="mux0"          signal="ADC0_SE5b" />
          <mux sel="mux1"          signal="GPIOD_1" />
          <mux sel="mux2"          signal="SPI0_SCK" />
@@ -1382,11 +1153,8 @@
          <mux sel="mux4"          signal="FTM3_CH1" />
          <mux sel="mux5"          signal="FB_CS0_b" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTD2">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_2" />
          <mux sel="mux1"          signal="LLWU_P13" />
          <mux sel="mux2"          signal="SPI0_SOUT" />
@@ -1394,24 +1162,18 @@
          <mux sel="mux4"          signal="FTM3_CH2" />
          <mux sel="mux5"          signal="FB_AD4" />
          <mux sel="mux7"          signal="I2C0_SCL" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD3">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_3" />
          <mux sel="mux2"          signal="SPI0_SIN" />
          <mux sel="mux3"          signal="UART2_TX" />
          <mux sel="mux4"          signal="FTM3_CH3" />
          <mux sel="mux5"          signal="FB_AD3" />
          <mux sel="mux7"          signal="I2C0_SDA" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD4">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_4" />
          <mux sel="mux1"          signal="LLWU_P14" />
          <mux sel="mux2"          signal="SPI0_PCS1" />
@@ -1420,11 +1182,9 @@
          <mux sel="mux5"          signal="FB_AD2" />
          <mux sel="mux6"          signal="EWM_IN" />
          <mux sel="mux7"          signal="SPI1_PCS0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD5">
-         <mux sel="reset"         signal="ADC0_SE6b" />
          <mux sel="mux0"          signal="ADC0_SE6b" />
          <mux sel="mux1"          signal="GPIOD_5" />
          <mux sel="mux2"          signal="SPI0_PCS2" />
@@ -1435,10 +1195,8 @@
          <mux sel="mux6"          signal="EWM_OUT_b" />
          <mux sel="mux7"          signal="SPI1_SCK" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTD6">
-         <mux sel="reset"         signal="ADC0_SE7b" />
          <mux sel="mux0"          signal="ADC0_SE7b" />
          <mux sel="mux1"          signal="GPIOD_6" />
          <mux sel="mux1"          signal="LLWU_P15" />
@@ -1449,103 +1207,74 @@
          <mux sel="mux6"          signal="FTM0_FLT0" />
          <mux sel="mux7"          signal="SPI1_SOUT" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTD7">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_7" />
          <mux sel="mux2"          signal="CMT_IRO" />
          <mux sel="mux3"          signal="UART0_TX" />
          <mux sel="mux4"          signal="FTM0_CH7" />
          <mux sel="mux6"          signal="FTM0_FLT1" />
          <mux sel="mux7"          signal="SPI1_SIN" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD8">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_8" />
          <mux sel="mux2"          signal="I2C0_SCL" />
          <mux sel="mux3"          signal="UART5_RX" />
          <mux sel="mux6"          signal="FB_A16" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD9">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_9" />
          <mux sel="mux2"          signal="I2C0_SDA" />
          <mux sel="mux3"          signal="UART5_TX" />
          <mux sel="mux6"          signal="FB_A17" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD10">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_10" />
          <mux sel="mux3"          signal="UART5_RTS_b" />
          <mux sel="mux6"          signal="FB_A18" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD11">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_11" />
          <mux sel="mux2"          signal="SPI2_PCS0" />
          <mux sel="mux3"          signal="UART5_CTS_b" />
          <mux sel="mux4"          signal="SDHC0_CLKIN" />
          <mux sel="mux6"          signal="FB_A19" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD12">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_12" />
          <mux sel="mux2"          signal="SPI2_SCK" />
          <mux sel="mux3"          signal="FTM3_FLT0" />
          <mux sel="mux4"          signal="SDHC0_D4" />
          <mux sel="mux6"          signal="FB_A20" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD13">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_13" />
          <mux sel="mux2"          signal="SPI2_SOUT" />
          <mux sel="mux4"          signal="SDHC0_D5" />
          <mux sel="mux6"          signal="FB_A21" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD14">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_14" />
          <mux sel="mux2"          signal="SPI2_SIN" />
          <mux sel="mux4"          signal="SDHC0_D6" />
          <mux sel="mux6"          signal="FB_A22" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTD15">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOD_15" />
          <mux sel="mux2"          signal="SPI2_PCS1" />
          <mux sel="mux4"          signal="SDHC0_D7" />
          <mux sel="mux6"          signal="FB_A23" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE0">
-         <mux sel="reset"         signal="ADC1_SE4a" />
          <mux sel="mux0"          signal="ADC1_SE4a" />
          <mux sel="mux1"          signal="GPIOE_0" />
          <mux sel="mux2"          signal="SPI1_PCS1" />
@@ -1555,10 +1284,8 @@
          <mux sel="mux6"          signal="I2C1_SDA" />
          <mux sel="mux7"          signal="RTC_CLKOUT" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE1">
-         <mux sel="reset"         signal="ADC1_SE5a" />
          <mux sel="mux0"          signal="ADC1_SE5a" />
          <mux sel="mux1"          signal="GPIOE_1" />
          <mux sel="mux1"          signal="LLWU_P0" />
@@ -1569,11 +1296,8 @@
          <mux sel="mux6"          signal="I2C1_SCL" />
          <mux sel="mux7"          signal="SPI1_SIN" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE2">
-         <mux sel="reset"         signal="ADC0_DP2" />
-         <mux sel="reset"         signal="ADC1_SE6a" />
          <mux sel="mux0"          signal="ADC0_DP2" />
          <mux sel="mux0"          signal="ADC1_SE6a" />
          <mux sel="mux1"          signal="GPIOE_2" />
@@ -1583,11 +1307,8 @@
          <mux sel="mux4"          signal="SDHC0_DCLK" />
          <mux sel="mux5"          signal="TRACE_D2" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE3">
-         <mux sel="reset"         signal="ADC0_DM2" />
-         <mux sel="reset"         signal="ADC1_SE7a" />
          <mux sel="mux0"          signal="ADC0_DM2" />
          <mux sel="mux0"          signal="ADC1_SE7a" />
          <mux sel="mux1"          signal="GPIOE_3" />
@@ -1597,149 +1318,108 @@
          <mux sel="mux5"          signal="TRACE_D1" />
          <mux sel="mux7"          signal="SPI1_SOUT" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE4">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_4" />
          <mux sel="mux1"          signal="LLWU_P2" />
          <mux sel="mux2"          signal="SPI1_PCS0" />
          <mux sel="mux3"          signal="UART3_TX" />
          <mux sel="mux4"          signal="SDHC0_D3" />
          <mux sel="mux5"          signal="TRACE_D0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE5">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_5" />
          <mux sel="mux2"          signal="SPI1_PCS2" />
          <mux sel="mux3"          signal="UART3_RX" />
          <mux sel="mux4"          signal="SDHC0_D2" />
          <mux sel="mux6"          signal="FTM3_CH0" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE6">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_6" />
          <mux sel="mux2"          signal="SPI1_PCS3" />
          <mux sel="mux3"          signal="UART3_CTS_b" />
          <mux sel="mux4"          signal="I2S0_MCLK" />
          <mux sel="mux6"          signal="FTM3_CH1" />
          <mux sel="mux7"          signal="USB_SOF_OUT" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE7">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_7" />
          <mux sel="mux3"          signal="UART3_RTS_b" />
          <mux sel="mux4"          signal="I2S0_RXD0" />
          <mux sel="mux6"          signal="FTM3_CH2" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE8">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_8" />
          <mux sel="mux2"          signal="I2S0_RXD1" />
          <mux sel="mux3"          signal="UART5_TX" />
          <mux sel="mux4"          signal="I2S0_RX_FS" />
          <mux sel="mux6"          signal="FTM3_CH3" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE9">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_9" />
          <mux sel="mux2"          signal="I2S0_TXD1" />
          <mux sel="mux3"          signal="UART5_RX" />
          <mux sel="mux4"          signal="I2S0_RX_BCLK" />
          <mux sel="mux6"          signal="FTM3_CH4" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE10">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_10" />
          <mux sel="mux3"          signal="UART5_CTS_b" />
          <mux sel="mux4"          signal="I2S0_TXD0" />
          <mux sel="mux6"          signal="FTM3_CH5" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE11">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_11" />
          <mux sel="mux3"          signal="UART5_RTS_b" />
          <mux sel="mux4"          signal="I2S0_TX_FS" />
          <mux sel="mux6"          signal="FTM3_CH6" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE12">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_12" />
          <mux sel="mux4"          signal="I2S0_TX_BCLK" />
          <mux sel="mux6"          signal="FTM3_CH7" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE24">
-         <mux sel="reset"         signal="ADC0_SE17" />
          <mux sel="mux0"          signal="ADC0_SE17" />
          <mux sel="mux1"          signal="GPIOE_24" />
          <mux sel="mux3"          signal="UART4_TX" />
          <mux sel="mux5"          signal="I2C0_SCL" />
          <mux sel="mux6"          signal="EWM_OUT_b" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE25">
-         <mux sel="reset"         signal="ADC0_SE18" />
          <mux sel="mux0"          signal="ADC0_SE18" />
          <mux sel="mux1"          signal="GPIOE_25" />
          <mux sel="mux3"          signal="UART4_RX" />
          <mux sel="mux5"          signal="I2C0_SDA" />
          <mux sel="mux6"          signal="EWM_IN" />
          <reset sel="mux0" />
-         <default sel="reset" />
       </pin>
       <pin name="PTE26">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_26" />
          <mux sel="mux2"          signal="ENET_1588_CLKIN" />
          <mux sel="mux3"          signal="UART4_CTS_b" />
          <mux sel="mux6"          signal="RTC_CLKOUT" />
          <mux sel="mux7"          signal="USB_CLKIN" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE27">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_27" />
          <mux sel="mux3"          signal="UART4_RTS_b" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
       <pin name="PTE28">
-         <mux sel="reset"         signal="Disabled" />
-         <mux sel="mux0"          signal="Disabled" />
          <mux sel="mux1"          signal="GPIOE_28" />
-         <reset sel="mux0" />
-         <default sel="reset" />
+         <reset sel="unassigned" />
       </pin>
    </pins>
    <packages>

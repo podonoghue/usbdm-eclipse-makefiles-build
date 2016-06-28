@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- examples.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-   <menu name="TBD" description="TBD">
-   </menu>
+   <category name="TBD" description="TBD">
+   </category>
 </fragment>

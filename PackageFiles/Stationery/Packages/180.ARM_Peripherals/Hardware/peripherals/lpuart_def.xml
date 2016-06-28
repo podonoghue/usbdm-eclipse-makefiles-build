@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- uart_def.xml -->
 <!--
 Devices using this peripheral: 
@@ -12,10 +12,10 @@ Devices using this peripheral:
    <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" constant="false" optional="true" />
    <aliasOption key="/SIM/system_lpuart$(_instance)_clock" optional="true"/>
 
-   <menu name="Advanced" description="Advanced options">
+   <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)txsrc"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc"  constant="false" optional="true" />
-   </menu>
+   </category>
 
    <projectActionList id = "lpuart_files">
       <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />

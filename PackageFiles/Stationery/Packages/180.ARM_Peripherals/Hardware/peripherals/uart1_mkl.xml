@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- uart1_mkl.xml -->
 <!--
 Devices using this peripheral: 
@@ -14,11 +14,11 @@ Devices using this peripheral:
    
    <aliasOption key="/SIM/system_bus_clock" />
    
-   <menu name="Advanced" description="Advanced options">
+   <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
-   </menu>
+   </category>
 
    <xi:include href="_irqOption.xml"/>
 

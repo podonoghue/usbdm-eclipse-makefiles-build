@@ -311,7 +311,9 @@ public:
       const uint8_t c8;
    };
 
-   static const ClockInfo clockInfo[4];
+// Various clock configurations
+   static const ClockInfo clockInfo[1];
+
    /**
     * Get MCGERCLK
     *
@@ -1920,7 +1922,7 @@ public:
          /*   4: LLWU_P4              = PTA13 (D24)                    */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  13,  PORT_PCR_MUX(1)|pcrValue  },
          /*   5: LLWU_P5              = PTB0 (A5/ACC_SCL)              */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  0,   PORT_PCR_MUX(1)|pcrValue  },
          /*   6: LLWU_P6              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   7: LLWU_P7              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   7: LLWU_P7              = PTC3 (D6/LED_RED)              */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  3,   PORT_PCR_MUX(1)|pcrValue  },
          /*   8: LLWU_P8              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   9: LLWU_P9              = PTC5 (D18)                     */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  5,   PORT_PCR_MUX(1)|pcrValue  },
          /*  10: LLWU_P10             = PTC6 (D19/ACC_INT2)            */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  6,   PORT_PCR_MUX(1)|pcrValue  },
@@ -1939,7 +1941,7 @@ public:
 
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x11U);
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x1U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x860U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x868U);
       ((PORT_Type *)PORTA_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x2010U);
    }
 
@@ -1951,7 +1953,7 @@ public:
 
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x11U);
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x860U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x868U);
       ((PORT_Type *)PORTA_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x2010U);
    }
 
@@ -2897,7 +2899,6 @@ using adc_A3               = const USBDM::Adc0Channel<6>;
  */
 using ftm_D5               = const USBDM::Ftm0Channel<6>;
 using ftm_SWD_DIO          = const USBDM::Ftm0Channel<0>;
-using ftm_A1               = const USBDM::Ftm0Channel<0>;
 /** 
  * End FTM_Group
  * @}
@@ -2918,6 +2919,8 @@ using gpio_A4              = const USBDM::GpioB<1>;
 using gpio_ACC_SDA         = const USBDM::GpioB<1>;
 using gpio_D15             = const USBDM::GpioB<2>;
 using gpio_D14             = const USBDM::GpioB<3>;
+using gpio_D6              = const USBDM::GpioC<3>;
+using gpio_LED_RED         = const USBDM::GpioC<3>;
 using gpio_D18             = const USBDM::GpioC<5>;
 using gpio_D19             = const USBDM::GpioC<6>;
 using gpio_ACC_INT2        = const USBDM::GpioC<6>;
@@ -2958,7 +2961,7 @@ extern void mapAllPins();
  *  EXTAL32                  | EXTAL32                                     | EXTAL32                   | Reserved(EXTAL32)       
  *  PTA0                     | GPIOA_0                                     | SWD_CLK                   | Reserved(SWD)       
  *  PTA1                     | FTM0_CH6                                    | D5                        | -       
- *  PTA2                     | JTAG_TDO/TRACE_SWO                          | D9/LED_BLUE               | Blue LED, LCD_cs*       
+ *  PTA2                     | -                                           | D9/LED_BLUE               | Blue LED, LCD_cs*       
  *  PTA3                     | FTM0_CH0                                    | SWD_DIO                   | Reserved(SWD)       
  *  PTA4                     | GPIOA_4/LLWU_P3                             | D21                       | -       
  *  PTA5                     | GPIOA_5                                     | D2                        | -       
@@ -2975,10 +2978,10 @@ extern void mapAllPins();
  *  PTB18                    | TSI0_CH11                                   | Touch1                    | Touch 1       
  *  PTB19                    | TSI0_CH12                                   | Touch2                    | Touch 2       
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
- *  PTC1                     | FTM0_CH0                                    | A1                        | -       
- *  PTC2                     | ADC0_SE4b/CMP1_IN0/TSI0_CH15                | D10                       | LCD_backlight       
- *  PTC3                     | CMP1_IN1                                    | D6/LED_RED                | Red LED       
- *  PTC4                     | Disabled                                    | D7                        | -       
+ *  PTC1                     | -                                           | A1                        | -       
+ *  PTC2                     | -                                           | D10                       | LCD_backlight       
+ *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
+ *  PTC4                     | -                                           | D7                        | -       
  *  PTC5                     | GPIOC_5/LLWU_P9                             | D18                       | -       
  *  PTC6                     | GPIOC_6/LLWU_P10                            | D19/ACC_INT2              | -       
  *  PTC7                     | GPIOC_7                                     | D20                       | -       
@@ -2992,10 +2995,10 @@ extern void mapAllPins();
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
- *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
+ *  PTD6                     | -                                           | A2                        | -       
  *  PTD7                     | GPIOD_7                                     | D22                       | -       
- *  PTE0                     | Disabled                                    | D1                        | -       
- *  PTE1                     | Disabled                                    | D0                        | -       
+ *  PTE0                     | -                                           | D1                        | -       
+ *  PTE1                     | -                                           | D0                        | -       
  *  RESET_b                  | RESET_b                                     | RESET_b                   | Reserved(Reset*)       
  *  USB0_DM                  | USB0_DM                                     | USB0_DM                   | Reserved(USB_DM)       
  *  USB0_DP                  | USB0_DP                                     | USB0_DP                   | Reserved(USB_DP)       
@@ -3021,8 +3024,8 @@ extern void mapAllPins();
  *    Pin Name               |   Functions                                 |  Location                 |  Description  
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
- *  PTC1                     | FTM0_CH0                                    | A1                        | -       
- *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
+ *  PTC1                     | -                                           | A1                        | -       
+ *  PTD6                     | -                                           | A2                        | -       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
  *  PTB1                     | GPIOB_1                                     | A4/ACC_SDA                | Accelerometer       
  *  PTB0                     | GPIOB_0/LLWU_P5                             | A5/ACC_SCL                | Accelerometer       
@@ -3034,17 +3037,17 @@ extern void mapAllPins();
  *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | A11                       | Photo-transistor       
  *  PTB16                    | UART0_RX                                    | ConRx                     | USB_serial       
  *  PTB17                    | UART0_TX                                    | ConTx                     | USB_serial       
- *  PTE1                     | Disabled                                    | D0                        | -       
- *  PTE0                     | Disabled                                    | D1                        | -       
+ *  PTE1                     | -                                           | D0                        | -       
+ *  PTE0                     | -                                           | D1                        | -       
  *  PTA5                     | GPIOA_5                                     | D2                        | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
  *  PTC8                     | GPIOC_8                                     | D4                        | -       
  *  PTA1                     | FTM0_CH6                                    | D5                        | -       
- *  PTC3                     | CMP1_IN1                                    | D6/LED_RED                | Red LED       
- *  PTC4                     | Disabled                                    | D7                        | -       
+ *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
+ *  PTC4                     | -                                           | D7                        | -       
  *  PTA12                    | GPIOA_12                                    | D8                        | LCD_Reset*       
- *  PTA2                     | JTAG_TDO/TRACE_SWO                          | D9/LED_BLUE               | Blue LED, LCD_cs*       
- *  PTC2                     | ADC0_SE4b/CMP1_IN0/TSI0_CH15                | D10                       | LCD_backlight       
+ *  PTA2                     | -                                           | D9/LED_BLUE               | Blue LED, LCD_cs*       
+ *  PTC2                     | -                                           | D10                       | LCD_backlight       
  *  PTD2                     | SPI0_SOUT                                   | D11                       | LCD_sin       
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       
  *  PTD1                     | SPI0_SCK                                    | D13                       | LCD_sck       
@@ -3090,20 +3093,17 @@ extern void mapAllPins();
  *
  *    Pin Name               |   Functions                                 |  Location                 |  Description  
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
+ *  PTE1                     | -                                           | D0                        | -       
  *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | A11                       | Photo-transistor       
  *  ADC0_DM3                 | ADC0_DM3/ADC0_SE21                          | A9                        | Temperature sensor       
  *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                           | A10                       | -       
  *  ADC0_DP3                 | ADC0_DP3/ADC0_SE3                           | A8                        | -       
- *  PTC2                     | ADC0_SE4b/CMP1_IN0/TSI0_CH15                | D10                       | LCD_backlight       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
- *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
  *  ADC0_SE23                | ADC0_SE23/CMP1_IN3                          | A7                        | -       
- *  PTC3                     | CMP1_IN1                                    | D6/LED_RED                | Red LED       
- *  PTE1                     | Disabled                                    | D0                        | -       
  *  PTA18                    | EXTAL0                                      | EXTAL0                    | Reserved       
  *  EXTAL32                  | EXTAL32                                     | EXTAL32                   | Reserved(EXTAL32)       
- *  PTC1                     | FTM0_CH0                                    | A1                        | -       
+ *  PTA3                     | FTM0_CH0                                    | SWD_DIO                   | Reserved(SWD)       
  *  PTA1                     | FTM0_CH6                                    | D5                        | -       
  *  PTA0                     | GPIOA_0                                     | SWD_CLK                   | Reserved(SWD)       
  *  PTA4                     | GPIOA_4/LLWU_P3                             | D21                       | -       
@@ -3114,6 +3114,7 @@ extern void mapAllPins();
  *  PTB1                     | GPIOB_1                                     | A4/ACC_SDA                | Accelerometer       
  *  PTB2                     | GPIOB_2                                     | D15                       | -       
  *  PTB3                     | GPIOB_3                                     | D14                       | -       
+ *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
  *  PTC5                     | GPIOC_5/LLWU_P9                             | D18                       | -       
  *  PTC6                     | GPIOC_6/LLWU_P10                            | D19/ACC_INT2              | -       
  *  PTC7                     | GPIOC_7                                     | D20                       | -       
@@ -3124,7 +3125,6 @@ extern void mapAllPins();
  *  PTD0                     | GPIOD_0/LLWU_P12                            | D16                       | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
  *  PTD7                     | GPIOD_7                                     | D22                       | -       
- *  PTA2                     | JTAG_TDO/TRACE_SWO                          | D9/LED_BLUE               | Blue LED, LCD_cs*       
  *  RESET_b                  | RESET_b                                     | RESET_b                   | Reserved(Reset*)       
  *  PTD1                     | SPI0_SCK                                    | D13                       | LCD_sck       
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       

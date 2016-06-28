@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "_menu.dtd" >
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- rtc_shared_osc.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
-   <menu name="Clock sources" description="Source for the clock used by RTC">
+   <category name="Clock sources" description="Source for the clock used by RTC">
       <aliasOption key="/OSC0/osc32kclk_clock"        constant="true" />
       <intOption name="rtcclkin_clock" 
          description="RTC_CLKIN"
@@ -17,7 +17,7 @@
       <aliasOption key="/MCG/system_low_power_clock"  constant="true" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true"/>
-   </menu>
+   </category>
    
    <binaryOption name="rtc_cr_osce"
       description="Enable RTC oscillator"
@@ -90,11 +90,11 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <menu name="Device Parameters" description="Register values">
-      <menu name="RTC CR" description="Real Time Clock">
+   <category name="Device Parameters" description="Register values">
+      <category name="RTC CR" description="Real Time Clock">
          <aliasOption name="rtc_cr_osce" />
-      </menu>   
-   </menu>
+      </category>   
+   </category>
 
    <pins/>
    <pins name="OSC0"/>

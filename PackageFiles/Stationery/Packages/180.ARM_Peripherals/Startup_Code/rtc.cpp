@@ -25,7 +25,7 @@
  * @param tp
  * @param tzp
  */
-extern "C"
+extern "C" __attribute__ ((__weak__))
 int _gettimeofday(struct timeval *tp, void *tzp) {
    (void)tzp;
    tp->tv_sec  = USBDM::Rtc::getTime();

@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|pins)" >
+<!ENTITY % structure_items  "((section*)|(tab)*)" >
+<!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
+
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
    <!ATTLIST xi:include href      CDATA        #REQUIRED>
 
 <!-- Root fileElement -->
-<!ELEMENT devicePage ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|template|validate|projectActionList|pins)*) >
+<!ELEMENT devicePage (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
    <!ATTLIST devicePage xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST devicePage name         CDATA        #REQUIRED>
    <!ATTLIST devicePage description  CDATA        #REQUIRED>
    <!ATTLIST devicePage toolTip      CDATA        "">
 
-<!ELEMENT menu ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|template|validate|projectActionList|pins)*) >
-   <!ATTLIST menu xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST menu name         CDATA        #REQUIRED>
-   <!ATTLIST menu description  CDATA        #REQUIRED>
-   <!ATTLIST menu toolTip      CDATA        "">
+<!ELEMENT fragment ANY >
+   <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
 
-<!ELEMENT fragment ((xi:include|menu|devicePage|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|template|validate|projectActionList|pins)*) >
-   <!ATTLIST fragment xmlns:xi CDATA         #IMPLIED>
+<!ELEMENT section (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
+   <!ATTLIST section name         CDATA        #IMPLIED>
+
+<!ELEMENT tab (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
+   <!ATTLIST tab name         CDATA        #REQUIRED>
+
+<!ELEMENT category ((%gui_items;)*) >
+   <!ATTLIST category xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST category name         CDATA        #REQUIRED>
+   <!ATTLIST category description  CDATA        #REQUIRED>
+   <!ATTLIST category toolTip      CDATA        "">
+
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption constant     (false|true) "false">
@@ -36,6 +47,7 @@
    <!ATTLIST intOption max          CDATA        #IMPLIED>
    <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset       CDATA        "0">
+   <!ATTLIST intOption indexedBy    CDATA        #IMPLIED>
   
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption constant     (false|true) "false">
@@ -65,6 +77,7 @@
    <!ATTLIST stringOption description  CDATA        #REQUIRED>
    <!ATTLIST stringOption toolTip      CDATA        "">
    <!ATTLIST stringOption value        CDATA        "0">
+   <!ATTLIST stringOption indexedBy    CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
    <!ATTLIST numericListOption constant     (false|true) "false">
@@ -77,6 +90,7 @@
    <!ATTLIST numericListOption size         CDATA        #IMPLIED>
    <!ATTLIST numericListOption min          CDATA        #IMPLIED>
    <!ATTLIST numericListOption max          CDATA        #IMPLIED>
+   <!ATTLIST numericListOption indexedBy    CDATA        #IMPLIED>
   
 <!ELEMENT choiceOption (choice)+ >
    <!ATTLIST choiceOption constant     (false|true) "false">
@@ -86,19 +100,21 @@
    <!ATTLIST choiceOption description  CDATA        #REQUIRED>
    <!ATTLIST choiceOption toolTip      CDATA        "">
    <!ATTLIST choiceOption units        (None|Hz|Seconds)    "None">
+   <!ATTLIST choiceOption indexedBy    CDATA        #IMPLIED>
   
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value        CDATA        #REQUIRED>
    <!ATTLIST choice name         CDATA        #REQUIRED>
    <!ATTLIST choice isDefault    (false|true) "false">
 
-<!ELEMENT binaryOption (choice, choice, (floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|xi:include|menu)*) >
+<!ELEMENT binaryOption (choice, choice) >
    <!ATTLIST binaryOption constant     (false|true) "false">
    <!ATTLIST binaryOption name         ID           #REQUIRED>
    <!ATTLIST binaryOption key          CDATA        #IMPLIED>
    <!ATTLIST binaryOption origin       CDATA        #IMPLIED>
    <!ATTLIST binaryOption description  CDATA        #REQUIRED>
    <!ATTLIST binaryOption toolTip      CDATA        "">
+   <!ATTLIST binaryOption indexedBy    CDATA        #IMPLIED>
 
 <!ELEMENT template (#PCDATA)>
    <!ATTLIST template name CDATA  "" >
@@ -156,4 +172,5 @@
    <!ATTLIST constant weak         (true|false)          "false">
    <!ATTLIST constant replace      (true|false)          "false">
    
+<!ELEMENT divider EMPTY >
    

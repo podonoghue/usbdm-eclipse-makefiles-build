@@ -20,7 +20,7 @@
    <item key="$signal$PTA18_muxSetting"                    value="mux0" />
    <item key="$signal$PTA19_descriptionSetting"            value="Reserved" />
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux1" />
    <item key="$signal$PTA2_descriptionSetting"             value="Blue LED, LCD_cs*" />
    <item key="$signal$PTA2_muxSetting"                     value="mux1" />
    <item key="$signal$PTA3_descriptionSetting"             value="Reserved(SWD)" />
@@ -65,7 +65,6 @@
    <item key="$signal$PTD4_muxSetting"                     value="mux1" />
    <item key="$signal$PTD5_muxSetting"                     value="mux0" />
    <item key="$signal$PTD6_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD7_muxSetting"                     value="mux1" />
    <item key="$signal$PTE0_muxSetting"                     value="mux1" />
    <item key="$signal$PTE1_muxSetting"                     value="mux1" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset*)" />
@@ -117,6 +116,7 @@
    <item key="/CMP1/irqEnabled"                            value="false" />
    <item key="/CMP1/irqHandler"                            value="false" />
    <item key="/CMP1/irqLevel"                              value="0" />
+   <item key="/Console/baudRate"                           value="19200" />
    <item key="/Console/console_device"                     value="3" />
    <item key="/FTM0/clockFrequency"                        value="375000.0" />
    <item key="/FTM0/clockPeriod"                           value="2.666666666666667E-6" />
@@ -147,7 +147,7 @@
    <item key="/I2C0/irqHandler"                            value="false" />
    <item key="/I2C0/irqLevel"                              value="0" />
    <item key="/LLWU/irqEnabled"                            value="false" />
-   <item key="/LLWU/irqHandler"                            value="true" />
+   <item key="/LLWU/irqHandler"                            value="false" />
    <item key="/LLWU/irqLevel"                              value="0" />
    <item key="/LLWU/llwu_filt1_filte"                      value="1" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="12" />
@@ -180,6 +180,8 @@
    <item key="/LPTMR0/lptmr_psr_prescaler"                 value="0" />
    <item key="/LPTMR0/maximumPeriod"                       value="0.032768" />
    <item key="/MCG/ERRATA_E2448"                           value="false" />
+   <item key="/MCG/LowPower"                               value="true" />
+   <item key="/MCG/McgInfoSize"                            value="1" />
    <item key="/MCG/clock_mode"                             value="6" />
    <item key="/MCG/fllInputFrequency"                      value="31250" />
    <item key="/MCG/fll_enabled"                            value="false" />
