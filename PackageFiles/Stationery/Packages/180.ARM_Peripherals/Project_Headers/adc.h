@@ -189,7 +189,7 @@ public:
     */
    static ErrorCode startConversion(const int sc1Value) {
       if (!Info::irqHandlerInstalled) {
-         return setErrrCode(E_NO_HANDLER);
+         return setErrorCode(E_NO_HANDLER);
       }
       // Trigger conversion with interrupts enabled
       adc->SC1[0] = ADC_SC1_AIEN_MASK|(sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));

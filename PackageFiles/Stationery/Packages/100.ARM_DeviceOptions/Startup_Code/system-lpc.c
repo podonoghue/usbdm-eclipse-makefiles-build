@@ -10,10 +10,6 @@
 #include <stdint.h>
 #include "derivative.h"
 
-#define $(targetDeviceSubFamily)
-
-$(cDeviceParameters)
-
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
@@ -43,7 +39,7 @@ void clock_initialise() {
 
 /* This definition is overridden if UART initialisation is provided */
 __attribute__((__weak__))
-void console_initialise(int baudRate __attribute__((__unused__))) {
+void console_initialise() {
 }
 
 /* This definition is overridden if RTC initialisation is provided */
@@ -92,7 +88,7 @@ void SystemInit(void) {
    clock_initialise();
 
    /* Use UART initialisation - if present */
-   console_initialise(DEFAULT_BAUD_RATE);
+   console_initialise();
 
    /* Use RTC initialisation - if present */
    rtc_initialise();

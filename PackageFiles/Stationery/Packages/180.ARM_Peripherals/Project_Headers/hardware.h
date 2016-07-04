@@ -19,8 +19,10 @@ namespace USBDM {
 
 enum ErrorCode {
    E_NO_ERROR = 0,   // No error
+   E_ERROR,          // General error
    E_TOO_SMALL,      // Value too small
    E_TOO_LARGE,      // Value too large
+   E_ILLEGAL_PARAM,  // Parameter has illegal value
    E_NO_HANDLER,     // No handler installed
 };
 
@@ -31,9 +33,16 @@ static constexpr float ms = 1E-3;
 extern ErrorCode errorCode;
 
 /** Set error code */
-inline static ErrorCode setErrrCode(ErrorCode err) {
+inline static ErrorCode setErrorCode(ErrorCode err) {
    errorCode = err;
    return errorCode;
+}
+
+/**
+ * Clear error code
+ */
+inline void clearError() {
+   errorCode = E_NO_ERROR;
 }
 
 /**
@@ -45,7 +54,8 @@ inline static ErrorCode setErrrCode(ErrorCode err) {
 const char *getErrorMessage(ErrorCode err = errorCode);
 
 /**
- * Check for error code being set
+ * Check for error code being set (drastically!)
+ * This routine does not return if there is an error
  */
 void checkError();
 

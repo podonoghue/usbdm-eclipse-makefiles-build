@@ -15,8 +15,10 @@ ErrorCode errorCode = E_NO_ERROR;
 /** Table of error messages indexed by error code */
 static const char *messages[] = {
       "No error",
+      "General error",
       "Too small",
       "Too large",
+      "Illegal parameter",
       "Interrupt handler not installed",
 };
 
@@ -34,7 +36,8 @@ const char *getErrorMessage(ErrorCode err) {
 }
 
 /**
- * Check for error code being set
+ * Check for error code being set (drastically!)
+ * This routine does not return if there is an error
  */
 void checkError() {
    while (errorCode != E_NO_ERROR) {
@@ -44,7 +47,6 @@ void checkError() {
       __BKPT();
 #endif
    }
-
 }
 
 } // end namespace USBDM

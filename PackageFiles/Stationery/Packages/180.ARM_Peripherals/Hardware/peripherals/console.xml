@@ -18,11 +18,25 @@
       <choice name="Uart 5" value="USBDM::Uart5" />
    </choiceOption>
    
-   <intOption name="baudRate" 
-      description="Default Baud Rate"
-      toolTip="This baud rate is used if none is specified when intialising the UART"
-      value="19200" />
-      
+   <choiceOption name="defaultBaudRate" 
+      description="UART default baud rate"
+      toolTip="Used by default UART setup for stdio">
+      <choice value="110"     name="110" />
+      <choice value="300"     name="300" />
+      <choice value="600"     name="600" />
+      <choice value="1200"    name="1200" />
+      <choice value="2400"    name="2400" />
+      <choice value="4800"    name="4800" />
+      <choice value="9600"    name="9600" />
+      <choice value="14400"   name="14400" />
+      <choice value="19200"   name="19200" />
+      <choice value="28800"   name="28800" />
+      <choice value="38400"   name="38400" />
+      <choice value="56000"   name="56000" />
+      <choice value="57600"   name="57600" />
+      <choice value="115200"  name="115200" isDefault="true" />
+   </choiceOption>
+
    <projectActionList id = "console_files" >
       <copy source="Project_Headers/console.h"  target="Project_Headers/console.h"  replace="true"  derived="true" />
       <copy source="Startup_Code/console.cpp"   target="Startup_Code/console.cpp"   replace="true"  derived="true" />
@@ -32,7 +46,7 @@
       \t/** Console device*/
       \tUsing Console = $(console_device);\n\n
       
-      \tstatic const uint32_t baudRate = $(baudRate)UL;
+      \tstatic const uint32_t defaultBaudRate = $(defaultBaudRate)UL;
    ]]></template>
 
    <pins name="LPUART0"/>

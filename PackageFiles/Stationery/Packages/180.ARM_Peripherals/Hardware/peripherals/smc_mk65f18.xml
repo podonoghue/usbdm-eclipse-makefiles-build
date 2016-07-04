@@ -69,6 +69,10 @@
       <choice value="7" name="Reserved" />
    </choiceOption>
 
+   <projectActionList id = "smc_def" >
+      <copy source="Project_Headers/smc.h"         target="Project_Headers/smc.h"         replace="true" derived="true" />
+   </projectActionList>
+         
    <template><![CDATA[
       \t// Power Mode Protection Register
       \tstatic constexpr uint8_t pmprot =  

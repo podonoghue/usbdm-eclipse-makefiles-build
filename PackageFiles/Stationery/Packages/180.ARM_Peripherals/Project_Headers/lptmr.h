@@ -55,7 +55,7 @@ public:
     */
    static ErrorCode setCallback(LPTMRCallbackFunction theCallback) {
       if (!Info::irqHandlerInstalled) {
-         return setErrrCode(E_NO_HANDLER);
+         return setErrorCode(E_NO_HANDLER);
       }
       callback = theCallback;
 
@@ -241,7 +241,7 @@ public:
          uint32_t mod   = round(period*clock);
          if (mod < MINIMUM_RESOLUTION) {
             // Too short a period for 1% resolution
-            return setErrrCode(E_TOO_SMALL);
+            return setErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
             // Disable LPTMR before prescale change
@@ -256,7 +256,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrrCode(E_TOO_LARGE);
+      return setErrorCode(E_TOO_LARGE);
    }
 
 

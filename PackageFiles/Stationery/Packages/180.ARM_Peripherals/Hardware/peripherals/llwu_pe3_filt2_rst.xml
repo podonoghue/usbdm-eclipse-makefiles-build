@@ -98,6 +98,11 @@
 
    <pins/>
 
+   <projectActionList id = "llwu_def" >
+      <copy source="Project_Headers/llwu.h"     target="Project_Headers/llwu.h"     replace="true" derived="true" />
+      <copy source="Snippets/llwu-example.cpp"  target="Snippets/llwu-example.cpp"  replace="true" derived="true" />
+   </projectActionList>
+         
    <template><![CDATA[
       \t// LLWU Pin Enable registers
       \tstatic constexpr uint8_t pe1 = $(llwu_pe1:0);

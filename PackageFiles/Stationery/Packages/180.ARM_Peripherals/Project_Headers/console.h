@@ -22,19 +22,23 @@ extern "C" {
 #endif
 
 /**
- * Initialises the UART
- *
- * @param baudRate - the baud rate to use e.g. @ref DEFAULT_BAUD_RATE
+ * Initialises the Console
  */
-void console_initialise(int baudRate);
+void console_initialise();
 /**
- * Transmits a single character over the UART (blocking)
+ * Set Console baud rate
+ *
+ * @param baudRate - the baud rate to use
+ */
+void console_setBaudRate(int baudRate);
+/**
+ * Transmits a single character over the Console (blocking)
  *
  * @param ch - character to send
  */
 void console_txChar(int ch);
 /**
- * Receives a single character over the UART (blocking)
+ * Receives a single character over the Console (blocking)
  *
  * @return - character received
  */

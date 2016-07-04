@@ -106,12 +106,19 @@ inline static void initDefaultUart()  {
 #endif
 
 /*
- * Initialises the LPUART
- *
- * @param baudrate - the baud rate to use e.g. 19200
+ * Initialises the Console with default settings
  */
-void console_initialise(int baudrate) {
+void console_initialise() {
    initDefaultUart();
+   console_setBaudRate(DEFAULT_BAUD_RATE);
+}
+
+/**
+ * Set Console baud rate
+ *
+ * @param baudRate - the baud rate to use e.g. 19200
+ */
+void console_initialise(int baudRate) {
 
    #define OVERSAMPLE (16)
 

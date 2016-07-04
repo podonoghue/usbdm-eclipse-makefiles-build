@@ -56,6 +56,8 @@
          <copy source="Startup_Code/vectors-&DEVICE_FAMILY;.cpp"           target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Startup_Code/console.cpp"                           target="Startup_Code/console.cpp" />
 
+         <copy source="Project_Headers/system.h"                           target="Project_Headers/system.h" replace="true" derived="true" />
+
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"              target="Project_Headers/pcr.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />

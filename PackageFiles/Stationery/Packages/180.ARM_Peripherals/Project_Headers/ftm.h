@@ -153,7 +153,6 @@ public:
 
       // Common registers
       tmr->CNTIN   = 0;
-      tmr->CNT     = 0;
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
 
@@ -169,7 +168,7 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(int period /* ticks */, Ftm_Mode mode=ftm_leftAlign) {
+   static void configure(uint32_t period /* ticks */, Ftm_Mode mode=ftm_leftAlign) {
 
       tmr->SC      = mode;
       if (mode == ftm_centreAlign) {
@@ -225,7 +224,7 @@ public:
          uint32_t mod   = round(period*clock);
          if (mod < MINIMUM_RESOLUTION) {
             // Too short a period for 1% resolution
-            return setErrrCode(E_TOO_SMALL);
+            return setErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
             // Clear SC so immediate effect on prescale change
@@ -240,7 +239,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrrCode(E_TOO_LARGE);
+      return setErrorCode(E_TOO_LARGE);
    }
 
    /**
@@ -250,7 +249,7 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void setPeriodInTicks(int period) {
+   static ErrorCode setPeriodInTicks(uint32_t period) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK) != 0;
@@ -262,7 +261,7 @@ public:
 #ifdef DEBUG_BUILD
       if (period > 2*0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         return setErrorCode(E_TOO_LARGE);
       }
 #endif
          tmr->MOD = (uint32_t)(period/2);
@@ -273,7 +272,7 @@ public:
 #ifdef DEBUG_BUILD
       if (period > 0x10000UL) {
          // Attempt to set too long a period
-         __BKPT();
+         return setErrorCode(E_TOO_LARGE);
       }
 #endif
          tmr->MOD = (uint32_t)(period-1);
@@ -298,11 +297,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too short a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -324,11 +323,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too short a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -350,11 +349,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too short a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -427,8 +426,6 @@ public:
     * @param channel Timer channel
     */
    static void setDutyCycle(int dutyCycle, int channel) {
-      tmr->CONTROLS[channel].CnSC = ftm_pwmHighTruePulses;
-
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
          tmr->CONTROLS[channel].CnV  = (dutyCycle*tmr->MOD)/100;
       }
@@ -436,6 +433,34 @@ public:
          tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
       }
    }
+
+   /**
+    * Set PWM high time in ticks
+    * Assumes value is less than period
+    *
+    * @param highTime   PWM high time in ticks
+    * @param channel    Timer channel
+    */
+   static ErrorCode setHighTime(uint32_t highTime, int channel) {
+#ifdef DEBUG_BUILD
+      if (highTime > tmr->MOD) {
+         return setErrorCode(E_TOO_LARGE);
+      }
+#endif
+      tmr->CONTROLS[channel].CnV  = highTime;
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Set PWM high time in seconds
+    *
+    * @param highTime   PWM high time in seconds
+    * @param channel    Timer channel
+    */
+   static ErrorCode setHighTime(float highTime, int channel) {
+      return setHighTime(convertSecondsToTicks(highTime), channel);
+   }
+
 };
 
 /**
@@ -497,6 +522,31 @@ template <class Info, int channel>
 class FtmChannel_T : public FtmBase_T<Info>, CheckSignal<Ftm0Info, channel> {
 
 public:
+
+   /**
+    * Enable channel (and set mode)\n
+    * Bug - re-enables FTM every time a channel is enabled\n
+    * Use enableChannel() to avoid this
+    *
+    * Enabled FTM as well
+    */
+   static void enable(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
+      FtmBase_T<Info>::enable();
+      FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
+   }
+
+   /**
+    * Enable channel (and set mode)
+    *
+    * Doesn't affect FTM
+    */
+   static void enableChannel(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
+      FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
+   }
+
+   static void setPCR(uint32_t pcrValue) {
+      PcrTable_T<Info,  channel>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   }
    /**
     * Set PWM duty cycle
     *
@@ -505,10 +555,25 @@ public:
    static void setDutyCycle(int dutyCycle) {
       FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
-
-   static void setPCR(uint32_t pcrValue) {
-      PcrTable_T<Info,  1>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   /**
+    * Set PWM high time in ticks\n
+    * Assumes value is less than period
+    *
+    * @param highTime   PWM high time in ticks
+    */
+   static ErrorCode setHighTime(uint32_t highTime) {
+      return FtmBase_T<Info>::setHighTime(highTime, channel);
    }
+
+   /**
+    * Set PWM high time in seconds
+    *
+    * @param highTime   PWM high time in seconds
+    */
+   static ErrorCode setHighTime(float highTime) {
+      return FtmBase_T<Info>::setHighTime(highTime, channel);
+   }
+
 };
 
 #ifdef USBDM_FTM0_IS_DEFINED
@@ -533,18 +598,8 @@ public:
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm0Channel : public FtmBase_T<Ftm0Info>, CheckSignal<Ftm0Info, channel> {
+class Ftm0Channel : public FtmChannel_T<Ftm0Info, channel> {};
 
-public:
-   /**
-    * Set PWM duty cycle
-    *
-    * @param dutyCycle  Duty-cycle as percentage
-    */
-   static void setDutyCycle(int dutyCycle) {
-      FtmBase_T::setDutyCycle(dutyCycle, channel);
-   }
-};
 /**
  * Class representing FTM0
  */
@@ -560,12 +615,7 @@ using Ftm0 = FtmIrq_T<Ftm0Info>;
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm1Channel : public FtmBase_T<Ftm1Info>, CheckSignal<Ftm1Info, channel> {
-public:
-   static void setDutyCycle(int dutyCycle) {
-      FtmBase_T::setDutyCycle(dutyCycle, channel);
-   }
-};
+class Ftm1Channel : public FtmChannel_T<Ftm1Info, channel> {};
 
 /**
  * Class representing FTM1
@@ -582,12 +632,7 @@ using Ftm1 = FtmIrq_T<Ftm1Info>;
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm2Channel : public FtmBase_T<Ftm2Info>, CheckSignal<Ftm2Info, channel> {
-public:
-   static void setDutyCycle(int dutyCycle) {
-      FtmBase_T::setDutyCycle(dutyCycle, channel);
-   }
-};
+class Ftm2Channel : public FtmBase_T<Ftm2Info, channel> {};
 
 /**
  * Class representing FTM2
@@ -604,12 +649,7 @@ using Ftm2 = FtmIrq_T<Ftm2Info>;
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm3Channel : public FtmBase_T<Ftm3Info>, CheckSignal<Ftm3Info, channel> {
-public:
-   static void setDutyCycle(int dutyCycle) {
-      FtmBase_T::setDutyCycle(dutyCycle, channel);
-   }
-};
+class Ftm3Channel : public FtmBase_T<Ftm3Info, channel> {};
 
 /**
  * Class representing FTM0

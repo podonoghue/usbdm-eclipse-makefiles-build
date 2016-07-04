@@ -31,16 +31,32 @@ using  Console = $(/Console/console_device:USBDM::Uart0);
 // Console instance
 Console *console = nullptr;
 
+// Default baud rate for console
+constexpr int defaultBaudRate = $(/Console/defaultBaudRate:USBDM::Uart0);
+
 /*
  * Initialises the Console
  *
  * @param baudrate - the baud rate to use e.g. DEFAULT_BAUD_RATE
  */
 extern "C"
-void console_initialise(int baudRate) {
+void console_initialise() {
    if (console == nullptr) {
-      console = new Console(baudRate);
+      console = new Console(defaultBaudRate);
    }
+}
+
+/*
+ * Set Console baud rate
+ *
+ * @param baudRate - the baud rate to use
+ */
+extern "C"
+void console_setBaudRate(int baudRate = defaultBaudRate) {
+   if (console == nullptr) {
+      return;
+   }
+   console->setBaudRate(baudRate);
 }
 
 /*

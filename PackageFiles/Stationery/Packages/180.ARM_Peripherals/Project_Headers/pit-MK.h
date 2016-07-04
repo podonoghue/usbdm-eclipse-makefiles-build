@@ -97,7 +97,7 @@ public:
     */
    static ErrorCode setCallback(int channel, PITCallbackFunction callback) {
       if (!Info::irqHandlerInstalled) {
-         return setErrrCode(E_NO_HANDLER);
+         return setErrorCode(E_NO_HANDLER);
       }
       Pit_T::callback[channel] = callback;
       return E_NO_ERROR;

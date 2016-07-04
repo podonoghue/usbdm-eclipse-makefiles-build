@@ -9,6 +9,25 @@ Devices using this peripheral:
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false"  />
    <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
    
+   <choiceOption name="defaultBaudRate" 
+      description="UART default baud rate"
+      toolTip="Used by default UART setup for stdio">
+      <choice value="110"     name="110" />
+      <choice value="300"     name="300" />
+      <choice value="600"     name="600" />
+      <choice value="1200"    name="1200" />
+      <choice value="2400"    name="2400" />
+      <choice value="4800"    name="4800" />
+      <choice value="9600"    name="9600" />
+      <choice value="14400"   name="14400" />
+      <choice value="19200"   name="19200" />
+      <choice value="28800"   name="28800" />
+      <choice value="38400"   name="38400" />
+      <choice value="56000"   name="56000" />
+      <choice value="57600"   name="57600" />
+      <choice value="115200"  name="115200" isDefault="true" />
+   </choiceOption>
+
    <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
@@ -24,6 +43,8 @@ Devices using this peripheral:
    <template><![CDATA[
    \tstatic constexpr bool statusNeedsWrite = true;\n\n
       
+   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);\n\n
+
    \t/**
    \t * Get input clock frequency
    \t *

@@ -214,7 +214,7 @@ public:
          uint32_t mod   = round(period*clock);
          if (mod < MINIMUM_RESOLUTION) {
             // Too short a period for 1% resolution
-            return setErrrCode(E_TOO_SMALL);
+            return setErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
             // Clear SC so immediate effect on prescale change
@@ -229,7 +229,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrrCode(E_TOO_LARGE);
+      return setErrorCode(E_TOO_LARGE);
    }
 
    /**

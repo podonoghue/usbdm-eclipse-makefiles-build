@@ -77,6 +77,4 @@ int main() {
       xOld = x;
       yOld = y;
    }
-   for(;;) {
-   }
 }
