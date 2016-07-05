@@ -116,8 +116,8 @@
    <item key="/CMP1/irqEnabled"                            value="false" />
    <item key="/CMP1/irqHandler"                            value="false" />
    <item key="/CMP1/irqLevel"                              value="0" />
-   <item key="/Console/console_device"                     value="3" />
-   <item key="/Console/defaultBaudRate"                    value="8" />
+   <item key="/Console/console_device"                     value="0" />
+   <item key="/Console/defaultBaudRate"                    value="13" />
    <item key="/FTM0/clockFrequency"                        value="375000.0" />
    <item key="/FTM0/clockPeriod"                           value="2.666666666666667E-6" />
    <item key="/FTM0/ftmExternalClock"                      value="0" />
@@ -235,6 +235,26 @@
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/system_oscerclk_clock"                 value="8000000" />
+   <item key="/PDB0/irqEnabled"                            value="false" />
+   <item key="/PDB0/irqHandler"                            value="false" />
+   <item key="/PDB0/irqLevel"                              value="0" />
+   <item key="/PDB0/pdb_chc1_bb"                           value="0" />
+   <item key="/PDB0/pdb_chc1_en"                           value="0" />
+   <item key="/PDB0/pdb_chc1_tos"                          value="0" />
+   <item key="/PDB0/pdb_chdly0"                            value="65535" />
+   <item key="/PDB0/pdb_chdly1"                            value="65535" />
+   <item key="/PDB0/pdb_idly"                              value="4000000" />
+   <item key="/PDB0/pdb_mod"                               value="4000000" />
+   <item key="/PDB0/pdb_podly_dly1"                        value="4000000" />
+   <item key="/PDB0/pdb_podly_dly2"                        value="4000000" />
+   <item key="/PDB0/pdb_poen"                              value="0" />
+   <item key="/PDB0/pdb_sc_dmaen"                          value="false" />
+   <item key="/PDB0/pdb_sc_ldmod"                          value="0" />
+   <item key="/PDB0/pdb_sc_mult"                           value="0" />
+   <item key="/PDB0/pdb_sc_pdbeie"                         value="false" />
+   <item key="/PDB0/pdb_sc_pdbie"                          value="false" />
+   <item key="/PDB0/pdb_sc_prescaler"                      value="0" />
+   <item key="/PDB0/pdb_sc_trgsel"                         value="0" />
    <item key="/PIT/irqEnabled"                             value="false" />
    <item key="/PIT/irqHandler"                             value="false" />
    <item key="/PIT/irqLevel"                               value="0" />
@@ -301,6 +321,24 @@
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="0" />
+   <item key="/TSI0/tsi_gencs_erie"                        value="false" />
+   <item key="/TSI0/tsi_gencs_esor"                        value="false" />
+   <item key="/TSI0/tsi_gencs_lpclks"                      value="0" />
+   <item key="/TSI0/tsi_gencs_lpscnitv"                    value="7" />
+   <item key="/TSI0/tsi_gencs_nscn"                        value="8" />
+   <item key="/TSI0/tsi_gencs_ps"                          value="3" />
+   <item key="/TSI0/tsi_gencs_stm"                         value="true" />
+   <item key="/TSI0/tsi_gencs_stpe"                        value="false" />
+   <item key="/TSI0/tsi_gencs_tsiie"                       value="false" />
+   <item key="/TSI0/tsi_pen_lpsp"                          value="5" />
+   <item key="/TSI0/tsi_pen_pen"                           value="6144" />
+   <item key="/TSI0/tsi_scanc_amclks"                      value="0" />
+   <item key="/TSI0/tsi_scanc_ampsc"                       value="3" />
+   <item key="/TSI0/tsi_scanc_extchrg"                     value="16" />
+   <item key="/TSI0/tsi_scanc_refchrg"                     value="16" />
+   <item key="/TSI0/tsi_scanc_smod"                        value="8" />
+   <item key="/TSI0/tsi_threshold_hthh"                    value="12288" />
+   <item key="/TSI0/tsi_threshold_lthh"                    value="4096" />
    <item key="/UART0/clockSource"                          value="SystemCoreClock" />
    <item key="/UART0/defaultBaudRate"                      value="8" />
    <item key="/UART0/irqEnabled"                           value="false" />

@@ -213,7 +213,7 @@
          <param key="busFreq"       value="50MHz" />
          <param key="flexFreq"      value="0MHz" />
       </peripheral>
-      <peripheral baseName="SMC"      instance=""         version="smc_mk02f12810">
+      <peripheral baseName="SMC"      instance=""         version="smc_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6">

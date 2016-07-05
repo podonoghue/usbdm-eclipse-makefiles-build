@@ -84,6 +84,7 @@
    <item key="/CMP0/irqHandler"                            value="false" />
    <item key="/CMP0/irqLevel"                              value="0" />
    <item key="/Console/console_device"                     value="0" />
+   <item key="/Console/defaultBaudRate"                    value="13" />
    <item key="/DAC0/dac_c0_dacbbien"                       value="false" />
    <item key="/DAC0/dac_c0_dacbtien"                       value="false" />
    <item key="/DAC0/dac_c0_dacbwien"                       value="false" />
@@ -105,8 +106,8 @@
    <item key="/I2C1/irqEnabled"                            value="false" />
    <item key="/I2C1/irqHandler"                            value="false" />
    <item key="/I2C1/irqLevel"                              value="0" />
-   <item key="/LCD/backplanes"                             value="59,60,14,15," />
-   <item key="/LCD/frontplanes"                            value="20,24,26,27,40,42,43,44," />
+   <item key="/LCD/backplanes"                             value="59,60,14,15" />
+   <item key="/LCD/frontplanes"                            value="20,24,26,27,40,42,43,44" />
    <item key="/LCD/lcdClock"                               value="32768.0" />
    <item key="/LCD/lcd_gcr_altdiv"                         value="0" />
    <item key="/LCD/lcd_gcr_clock"                          value="0" />
@@ -293,32 +294,11 @@
    <item key="/TPM2/tpm_sc_ps"                             value="0" />
    <item key="/TPM2/tpm_sc_toie"                           value="false" />
    <item key="/UART2/clockSource"                          value="SystemBusClock" />
+   <item key="/UART2/defaultBaudRate"                      value="13" />
    <item key="/UART2/irqEnabled"                           value="false" />
    <item key="/UART2/irqHandler"                           value="false" />
    <item key="/UART2/irqLevel"                             value="0" />
    <item key="/USB0/irqEnabled"                            value="false" />
    <item key="/USB0/irqHandler"                            value="false" />
    <item key="/USB0/irqLevel"                              value="0" />
-   <item key="demo.cpp.blue.led"                           value="gpio_LED_BLUE" />
-   <item key="demo.cpp.external.gps"                       value="Gps2" />
-   <item key="demo.cpp.external.i2c"                       value="I2c1" />
-   <item key="demo.cpp.external.led"                       value="gpio_A1" />
-   <item key="demo.cpp.external.spi"                       value="Spi0" />
-   <item key="demo.cpp.external.switch"                    value="gpio_A0" />
-   <item key="demo.cpp.fx0s8700cq.i2c"                     value="I2c1" />
-   <item key="demo.cpp.green.led"                          value="gpio_LED_GREEN" />
-   <item key="demo.cpp.joystick.k"                         value="gpio_A0" />
-   <item key="demo.cpp.joystick.x"                         value="adc_A2" />
-   <item key="demo.cpp.joystick.y"                         value="adc_A1" />
-   <item key="demo.cpp.led"                                value="USBDM::GpioD&lt;5&gt;" />
-   <item key="demo.cpp.mag3110.i2c"                        value="I2c0" />
-   <item key="demo.cpp.mma845x.i2c"                        value="I2c0" />
-   <item key="demo.cpp.nrf24l01.ce"                        value="GpioD&lt;5&gt;" />
-   <item key="demo.cpp.nrf24l01.cs_n"                      value="GpioD&lt;0&gt;" />
-   <item key="demo.cpp.nrf24l01.irq"                       value="GpioA&lt;13&gt;" />
-   <item key="demo.cpp.nrf24l01.spi"                       value="Spi0Gpio" />
-   <item key="demo.cpp.pwm.led1"                           value="tpm_LED_RED" />
-   <item key="demo.cpp.pwm.led2"                           value="tpm_LED_GREEN" />
-   <item key="demo.cpp.red.led"                            value="gpio_LED_RED" />
-   <item key="demo.cpp.spi.dma"                            value="new USBDM::DMAChannel0(), new USBDM::DMAChannel1()" />
 </section>

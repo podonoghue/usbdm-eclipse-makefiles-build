@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- tsi0.xml -->
+<!--
+   Devices using this peripheral:
+-->
+<devicePage
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   name="_instance"
+   description="TSI">
+   
+   <binaryOption
+      name="tsi_gencs_stpe"
+      description="TSI STOP Enable"
+      toolTip="Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})" >
+      <choice value="0" name="Disabled in low power" isDefault="true" />
+      <choice value="1" name="Enabled in low power" />
+   </binaryOption>
+   <binaryOption
+      name="tsi_gencs_stm"
+      description="Scan Trigger Mode"
+      toolTip="Selects between software and hardware triggers" >
+      <choice value="0" name="Software trigger scan" isDefault="true" />
+      <choice value="1" name="Periodical Scan" />
+   </binaryOption>
+   <binaryOption
+      name="tsi_gencs_esor"
+      description="EOS or OOR Interrupt select"
+      toolTip="Selects between End-of-Scan or Out-of-Range Interrupt" >
+      <choice value="0" name="Out-of-Range" />
+      <choice value="1" name="End-of-Scan" isDefault="true"  />
+   </binaryOption>
+   <binaryOption name="tsi_gencs_erie" 
+      description="Error Interrupt Enable" >
+      <choice value="0" name="Interrupt disabled" isDefault="true" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+   <binaryOption name="tsi_gencs_tsiie"
+      description="Touch Sensing Input Interrupt Module Enable" >
+      <choice value="0" name="Interrupt disabled" isDefault="true" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+
+   <choiceOption name="tsi_gencs_ps"
+      description="Electrode Oscillator Prescaler" >
+      <choice value="0" name="Divide by 1" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" isDefault="true" />
+      <choice value="4" name="Divide by 16" />
+      <choice value="5" name="Divide by 32" />
+      <choice value="6" name="Divide by 64" />
+      <choice value="7" name="Divide by 128" />
+   </choiceOption>
+
+   <intOption name="tsi_gencs_nscn" 
+      description="Consecutive Scan number" 
+      toolTip="Number of Consecutive Scans Per Electrode"
+      value="8" 
+      min="1" max="32" />
+
+   <choiceOption name="tsi_gencs_lpscnitv" 
+      description="Low-Power Mode Scan Interval" >
+      <choice value="0" name="1 ms" />
+      <choice value="1" name="5 ms" />
+      <choice value="2" name="10 ms" />
+      <choice value="3" name="15 ms" />
+      <choice value="4" name="20 ms" />
+      <choice value="5" name="30 ms" />
+      <choice value="6" name="40 ms" />
+      <choice value="7" name="50 ms" />
+      <choice value="8" name="75 ms" />
+      <choice value="9" name="100 ms" isDefault="true" />
+      <choice value="10" name="125 ms" />
+      <choice value="11" name="150 ms" />
+      <choice value="12" name="200 ms" />
+      <choice value="13" name="300 ms" />
+      <choice value="14" name="400 ms" />
+      <choice value="15" name="500 ms" />
+   </choiceOption>
+
+   <choiceOption name="tsi_gencs_lpclks" 
+      description="Low-Power Mode Clock Source" >
+      <choice value="0" name="LPOCLK" isDefault="true" />
+      <choice value="1" name="VLPOSCCLK" />
+      <choice value="2" name="Reserved" />
+      <choice value="3" name="Reserved" />
+   </choiceOption>
+
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_gencs = \
+      \t   TSI_GENCS_STPE($(tsi_gencs_stpe))       |  // TSI STOP Enable
+      \t   TSI_GENCS_STM($(tsi_gencs_stm))        |  // Scan Trigger Mode
+      \t   TSI_GENCS_ESOR($(tsi_gencs_esor))       |  // EOS or OOR Interrupt select
+      \t   TSI_GENCS_ERIE($(tsi_gencs_erie))       |  // Error Interrupt Enable
+      \t   TSI_GENCS_TSIIE($(tsi_gencs_tsiie))      |  // Touch Sensing Input Interrupt Module Enable
+      \t   TSI_GENCS_PS($(tsi_gencs_ps))         |  // Electrode Oscillator Prescaler
+      \t   TSI_GENCS_NSCN($(tsi_gencs_nscn)-1)     |  // Consecutive Scan number
+      \t   TSI_GENCS_LPSCNITV($(tsi_gencs_lpscnitv))   |  // Low-Power Mode Scan Interval
+      \t   TSI_GENCS_LPCLKS($(tsi_gencs_lpclks));       // Low-Power Mode Clock Source\n\n
+   ]]></template>
+
+   <choiceOption name="tsi_scanc_ampsc"
+      description="Active Mode Prescaler" >
+      <choice value="0" name="Divide by 1" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" isDefault="true" />
+      <choice value="4" name="Divide by 16" />
+      <choice value="5" name="Divide by 32" />
+      <choice value="6" name="Divide by 64" />
+      <choice value="7" name="Divide by 128" />
+   </choiceOption>
+
+   <choiceOption name="tsi_scanc_amclks" 
+      description="Active Mode Clock Source" >
+      <choice value="0" name="LPOSCCLK" isDefault="true" />
+      <choice value="1" name="MCGIRCLK" />
+      <choice value="2" name="OSCERCLK" />
+      <choice value="3" name="Reserved" />
+   </choiceOption>
+
+   <intOption name="tsi_scanc_smod" 
+      description="Scan Period Modulus" 
+      toolTip="Modulus == 0 indicates continuous mode"
+      value="8" 
+      min="0" max="255" />
+
+   <intOption name="tsi_scanc_extchrg" 
+      description="External Oscillator Charge Current select" 
+      toolTip="Charge current in uA"
+      value="16" 
+      min="2" max="32" step="2" />
+
+   <intOption name="tsi_scanc_refchrg" 
+      description="Reference Oscillator Charge Current select" 
+      toolTip="Charge current in uA"
+      value="16" 
+      min="2" max="32" step="2" />
+
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_scanc = \
+      \t   TSI_SCANC_AMPSC($(tsi_scanc_ampsc))           |  // Active Mode Prescaler
+      \t   TSI_SCANC_AMCLKS($(tsi_scanc_amclks))          |  // Active Mode Clock Source
+      \t   TSI_SCANC_SMOD($(tsi_scanc_smod))            |  // Scan Period Modulus
+      \t   TSI_SCANC_EXTCHRG(($(tsi_scanc_extchrg)/2)-1)  |  // External Oscillator Charge Current select
+      \t   TSI_SCANC_REFCHRG(($(tsi_scanc_refchrg)/2)-1);    // Reference Oscillator Charge Current select\n\n
+   ]]></template>
+
+   <bitmaskOption name="tsi_pen_pen" 
+      description="Pins enable pin as TSI inputs" 
+      toolTip="Bitmask representing the sleected pins"
+      value="0"
+      bitmask="0xFFFF" />
+
+   <intOption name="tsi_pen_lpsp" 
+      description="Low Power Scan Pin" 
+      toolTip="Selects a pin to be active in low power mode"
+      min="0" max="15" value="0" />
+
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_pen = \
+      \t   ($(tsi_pen_pen)) |    // Pins enable pin as TSI inputs
+      \t   TSI_PEN_LPSP($(tsi_pen_lpsp));    // Low Power Scan Pin\n\n
+   ]]></template>
+
+   <intOption name="tsi_threshold_lthh" 
+      description="Low Power Channel Low Threshold value" 
+      toolTip="Determines the low threshold for the channel active in low power mode"
+      min="0" max="15625" value="0" />
+
+   <intOption name="tsi_threshold_hthh" 
+      description="Low Power Channel High Threshold value" 
+      toolTip="Determines the high threshold for the channel active in low power mode"
+      min="0" max="15625" value="0" />
+
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_threshold = \
+      \t   TSI_THRESHOLD_LTHH($(tsi_threshold_lthh)) |   // Low Power Channel Low Threshold value
+      \t   TSI_THRESHOLD_HTHH($(tsi_threshold_hthh));    // Low Power Channel High Threshold value\n\n
+   ]]></template>
+
+   <projectActionList id="tsi_files">
+      <copy
+         source="Project_Headers/tsi.h" target="Project_Headers/tsi.h" replace="true" derived="true" />
+   </projectActionList>
+
+   <pins />
+
+</devicePage>

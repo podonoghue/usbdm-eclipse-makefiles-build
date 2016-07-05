@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|pins)" >
+<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|pins)" >
 <!ENTITY % structure_items  "((section*)|(tab)*)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
@@ -48,6 +48,17 @@
    <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset       CDATA        "0">
    <!ATTLIST intOption indexedBy    CDATA        #IMPLIED>
+  
+<!ELEMENT bitmaskOption EMPTY >
+   <!ATTLIST bitmaskOption constant      (false|true) "false">
+   <!ATTLIST bitmaskOption name          ID          #REQUIRED>
+   <!ATTLIST bitmaskOption key           CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption origin        CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption description   CDATA        #REQUIRED>
+   <!ATTLIST bitmaskOption toolTip       CDATA        "">
+   <!ATTLIST bitmaskOption value         CDATA        "0">
+   <!ATTLIST bitmaskOption bitmask       CDATA        "0xFFFF">
+   <!ATTLIST bitmaskOption indexedBy     CDATA        #IMPLIED>
   
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption constant     (false|true) "false">

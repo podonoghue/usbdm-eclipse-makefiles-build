@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- vref_def.xml -->
+<!--
+Devices using this peripheral: 
+-->
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="VREF">
+
+   <projectActionList id = "vref_files">
+      <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
+   <template><![CDATA[
+   ]]></template>
+
+   <pins/>
+</devicePage>

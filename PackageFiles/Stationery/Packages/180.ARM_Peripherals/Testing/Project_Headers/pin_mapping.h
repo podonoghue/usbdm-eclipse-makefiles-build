@@ -560,7 +560,7 @@ public:
          /*   4: ADC0_SE4b            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   5: ADC0_SE5b            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   6: ADC0_SE6b            = PTD5 (A3)                      */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  5,   PORT_PCR_MUX(0)|pcrValue  },
-         /*   7: ADC0_SE7b            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   7: ADC0_SE7b            = PTD6 (A2)                      */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  6,   PORT_PCR_MUX(0)|pcrValue  },
          /*   8: ADC0_SE8             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   9: ADC0_SE9             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  10: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
@@ -568,7 +568,7 @@ public:
          /*  12: ADC0_SE12            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  13: ADC0_SE13            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  14: ADC0_SE14            = PTC0 (A0)                      */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  0,   PORT_PCR_MUX(0)|pcrValue  },
-         /*  15: ADC0_SE15            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*  15: ADC0_SE15            = PTC1 (A1)                      */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  1,   PORT_PCR_MUX(0)|pcrValue  },
          /*  16: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*  17: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*  18: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
@@ -585,8 +585,8 @@ public:
    static void initPCRs() {
       enablePortClocks(PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
 
-      ((PORT_Type *)PORTD_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x20U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      ((PORT_Type *)PORTD_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x60U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
    /**
@@ -595,8 +595,8 @@ public:
    static void clearPCRs() {
       enablePortClocks(PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
 
-      ((PORT_Type *)PORTD_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x20U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      ((PORT_Type *)PORTD_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x60U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
    class InfoDP {
@@ -933,13 +933,13 @@ public:
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
          /*   0: RESET_b              = RESET_b (RESET_b)              */  { 0, 0, 0, FIXED_NO_PCR, 0 },
-         /*   1: JTAG_TCLK            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   2: SWD_CLK              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   1: JTAG_TCLK            = PTA0 (SWD_CLK)                 */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  0,   PORT_PCR_MUX(7)|pcrValue  },
+         /*   2: SWD_CLK              = PTA0 (SWD_CLK)                 */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  0,   PORT_PCR_MUX(7)|pcrValue  },
          /*   3: JTAG_TDI             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   4: JTAG_TDO             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   5: TRACE_SWO            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   6: JTAG_TMS             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   7: SWD_DIO              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   6: JTAG_TMS             = PTA3 (SWD_DIO)                 */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  3,   PORT_PCR_MUX(7)|pcrValue  },
+         /*   7: SWD_DIO              = PTA3 (SWD_DIO)                 */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  3,   PORT_PCR_MUX(7)|pcrValue  },
          /*   8: NMI_b                = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   9: JTAG_TRST_b          = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
    };
@@ -948,12 +948,18 @@ public:
     * Initialise pins used by peripheral
     */
    static void initPCRs() {
+      enablePortClocks(PORTA_CLOCK_MASK);
+
+      ((PORT_Type *)PORTA_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(7)|PORT_GPCLR_GPWE(0x9U);
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
+      enablePortClocks(PORTA_CLOCK_MASK);
+
+      ((PORT_Type *)PORTA_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x9U);
    }
 
 };
@@ -1319,13 +1325,13 @@ public:
    static constexpr PcrInfo  info[] = {
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
-         /*   0: FTM0_CH0             = PTA3 (SWD_DIO)                 */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  3,   PORT_PCR_MUX(3)|pcrValue  },
+         /*   0: FTM0_CH0             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   1: FTM0_CH1             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   2: FTM0_CH2             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   3: FTM0_CH3             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   4: FTM0_CH4             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   5: FTM0_CH5             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   6: FTM0_CH6             = PTA1 (D5)                      */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  1,   PORT_PCR_MUX(3)|pcrValue  },
+         /*   6: FTM0_CH6             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   7: FTM0_CH7             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
    };
 
@@ -1333,18 +1339,12 @@ public:
     * Initialise pins used by peripheral
     */
    static void initPCRs() {
-      enablePortClocks(PORTA_CLOCK_MASK);
-
-      ((PORT_Type *)PORTA_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(3)|PORT_GPCLR_GPWE(0xAU);
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
-      enablePortClocks(PORTA_CLOCK_MASK);
-
-      ((PORT_Type *)PORTA_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xAU);
    }
 
    class InfoFAULT {
@@ -1413,7 +1413,7 @@ public:
    //! Default value for SC register
    static constexpr uint32_t sc  = 
        FTM_SC_CPWMS(0)| // Centre-Aligned PWM Select
-       FTM_SC_CLKS(2)|  // Clock Mode Selection
+       FTM_SC_CLKS(1)|  // Clock Mode Selection
        FTM_SC_TOIE(0)|  // Timer Overflow Interrupt Enable
        FTM_SC_PS(7);    // Prescale Factor Selection 
 
@@ -1884,9 +1884,9 @@ public:
 
    // Module wake ups
    static constexpr uint8_t me =  
-      LLWU_ME_WUME0(0) |  // LPTMR
+      LLWU_ME_WUME0(1) |  // LPTMR
       LLWU_ME_WUME1(0) |  // CMP0
-      LLWU_ME_WUME2(1) |  // CMP1
+      LLWU_ME_WUME2(0) |  // CMP1
       LLWU_ME_WUME3(0) |  // CMP2/3 (if present)
       LLWU_ME_WUME4(0) |  // TSI0 (if present)
       LLWU_ME_WUME5(0) |  // RTC Alarm
@@ -1895,17 +1895,17 @@ public:
 
    // Pin Filter 1 register
    static constexpr uint8_t filt1 = 
-      LLWU_FILT_FILTE(2) |   // Digital Filter On External Pin
-      LLWU_FILT_FILTSEL(2);  // Filter Pin Select
+      LLWU_FILT_FILTE(1) |   // Digital Filter On External Pin
+      LLWU_FILT_FILTSEL(12);  // Filter Pin Select
 
    // Pin Filter 2 register
    static constexpr uint8_t filt2 =
-      LLWU_FILT_FILTE(2) |   // Digital Filter On External Pin
-      LLWU_FILT_FILTSEL(5);  // Filter Pin Select
+      LLWU_FILT_FILTE(0) |   // Digital Filter On External Pin
+      LLWU_FILT_FILTSEL(0);  // Filter Pin Select
 
    // LLWU Reset Enable register
    static constexpr uint8_t rst =
-      LLWU_RST_LLRSTE(false) |  // Low-Leakage Mode RESET Enable
+      LLWU_RST_LLRSTE(true) |  // Low-Leakage Mode RESET Enable
       LLWU_RST_RSTFILT(false);  // Digital Filter On RESET Pin
 
    //! Number of signals available in info table
@@ -1915,7 +1915,7 @@ public:
    static constexpr PcrInfo  info[] = {
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
-         /*   0: LLWU_P0              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   0: LLWU_P0              = PTE1 (D0)                      */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  1,   PORT_PCR_MUX(1)|pcrValue  },
          /*   1: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*   2: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*   3: LLWU_P3              = PTA4 (D21)                     */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  4,   PORT_PCR_MUX(1)|pcrValue  },
@@ -1923,7 +1923,7 @@ public:
          /*   5: LLWU_P5              = PTB0 (A5/ACC_SCL)              */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  0,   PORT_PCR_MUX(1)|pcrValue  },
          /*   6: LLWU_P6              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   7: LLWU_P7              = PTC3 (D6/LED_RED)              */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  3,   PORT_PCR_MUX(1)|pcrValue  },
-         /*   8: LLWU_P8              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   8: LLWU_P8              = PTC4 (D7)                      */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  4,   PORT_PCR_MUX(1)|pcrValue  },
          /*   9: LLWU_P9              = PTC5 (D18)                     */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  5,   PORT_PCR_MUX(1)|pcrValue  },
          /*  10: LLWU_P10             = PTC6 (D19/ACC_INT2)            */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  6,   PORT_PCR_MUX(1)|pcrValue  },
          /*  11: LLWU_P11             = PTC11 (D17/ACC_INT1)           */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  11,  PORT_PCR_MUX(1)|pcrValue  },
@@ -1937,11 +1937,12 @@ public:
     * Initialise pins used by peripheral
     */
    static void initPCRs() {
-      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTB_CLOCK_MASK|PORTD_CLOCK_MASK);
+      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTB_CLOCK_MASK|PORTE_CLOCK_MASK|PORTD_CLOCK_MASK);
 
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x11U);
+      ((PORT_Type *)PORTE_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x2U);
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x1U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x868U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x878U);
       ((PORT_Type *)PORTA_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x2010U);
    }
 
@@ -1949,11 +1950,12 @@ public:
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
-      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTB_CLOCK_MASK|PORTD_CLOCK_MASK);
+      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTB_CLOCK_MASK|PORTE_CLOCK_MASK|PORTD_CLOCK_MASK);
 
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x11U);
+      ((PORT_Type *)PORTE_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x2U);
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x868U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x878U);
       ((PORT_Type *)PORTA_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x2010U);
    }
 
@@ -2001,7 +2003,7 @@ public:
    static constexpr uint32_t psr = 
       LPTMR_PSR_PRESCALE(0)|
       LPTMR_PSR_PBYP(0)|
-      LPTMR_PSR_PCS(3);
+      LPTMR_PSR_PCS(0);
 
    //! Default CSR value
    static constexpr uint32_t csr = 
@@ -2122,6 +2124,50 @@ public:
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = {PDB0_IRQn};
+
+   // Template:pdb0_1ch_2trig_0dac_2po
+
+   //! Install Callback handler
+   static constexpr bool irqEnabled = false;
+
+   //! Install Callback handler
+   static constexpr bool irqHandlerInstalled = false;
+
+   //! Default IRQ level
+   static constexpr uint32_t irqLevel =  0;
+
+   static constexpr uint32_t pdb_sc = 
+      PDB_PDB_MULT(0) |      // Multiplication Factor Select for Prescaler
+      PDB_PDB_PDBIE(0) |     // PDB Interrupt Enable
+      PDB_PDB_TRGSEL(0) |    // Trigger Input Source Select
+      PDB_PDB_PRESCALER(0) | // Prescaler Divider Select
+      PDB_PDB_DMAEN(0) |     // DMA Enable
+      PDB_PDB_PDBEIE(0) |    // PDB Sequence Error Interrupt Enable
+      PDB_PDB_LDMOD(0);      // Load Mode Select
+
+   static constexpr uint32_t pdb_mod = 
+      PDB_MOD_MOD(4000000);  // PDB Modulus
+
+   static constexpr uint32_t pdb_idly = 
+      PDB_IDLY_IDLY(4000000);  // PDB Modulus
+
+   static constexpr uint32_t pdb_chc1 = 
+      PDB_CHC1_BB(0) |   // Channel Pre-Trigger Back-to-Back Operation Enable
+      PDB_CHC1_TOS(0) |  // Channel Pre-Trigger Output Select
+      PDB_CHC1_EN(0);    // Channel Pre-Trigger Enable
+
+   static constexpr uint32_t pdb_chdly0 = 
+      PDB_CHDLY0_DLY(65535);  // PDB Modulus
+
+   static constexpr uint32_t pdb_chdly1 = 
+      PDB_CHDLY1_DLY(65535);  // PDB Modulus
+
+   static constexpr uint32_t pdb_poen = 
+      PDB_POEN_POEN(0);   // PDB Pulse-Out Enable
+
+   static constexpr uint32_t pdb_chc1 = 
+      PDB_PODLY_DLY1(4000000) |  // PDB Pulse-Out Delay 1
+      PDB_PODLY_DLY1(4000000);   // PDB Pulse-Out Delay 2
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 1;
@@ -2277,9 +2323,9 @@ public:
 
    // Power Mode Protection Register
    static constexpr uint8_t pmprot =  
-      SMC_PMPROT_AVLP(0) |  // Allow very low power modes
-      SMC_PMPROT_ALLS(0) |  // Allow low leakage stop mode
-      SMC_PMPROT_AVLLS(0);  // Allow very low leakage stop mode
+      SMC_PMPROT_AVLP(1) |  // Allow very low power modes
+      SMC_PMPROT_ALLS(1) |  // Allow low leakage stop mode
+      SMC_PMPROT_AVLLS(1);  // Allow very low leakage stop mode
 
    // Power Mode Control Register
    static constexpr uint8_t pmctrl =  
@@ -2287,8 +2333,8 @@ public:
 
    // VLLS Control Register
    static constexpr uint8_t vllsctrl =  
-      SMC_VLLSCTRL_PORPO(0) |  // POR Power Option
-      SMC_VLLSCTRL_VLLSM(0);   // VLLS Mode Control
+      SMC_VLLSCTRL_PORPO(1) |  // POR Power Option
+      SMC_VLLSCTRL_VLLSM(2);   // VLLS Mode Control
 
 };
 
@@ -2422,6 +2468,34 @@ public:
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = {TSI0_IRQn};
 
+   // Template:tsi0_mk
+
+   static constexpr uint32_t tsi_gencs = \
+      TSI_GENCS_STPE(0)       |  // TSI STOP Enable
+      TSI_GENCS_STM(1)        |  // Scan Trigger Mode
+      TSI_GENCS_ESOR(0)       |  // EOS or OOR Interrupt select
+      TSI_GENCS_ERIE(0)       |  // Error Interrupt Enable
+      TSI_GENCS_TSIIE(0)      |  // Touch Sensing Input Interrupt Module Enable
+      TSI_GENCS_PS(3)         |  // Electrode Oscillator Prescaler
+      TSI_GENCS_NSCN(8-1)     |  // Consecutive Scan number
+      TSI_GENCS_LPSCNITV(7)   |  // Low-Power Mode Scan Interval
+      TSI_GENCS_LPCLKS(0);       // Low-Power Mode Clock Source
+
+   static constexpr uint32_t tsi_scanc = \
+      TSI_SCANC_AMPSC(3)           |  // Active Mode Prescaler
+      TSI_SCANC_AMCLKS(0)          |  // Active Mode Clock Source
+      TSI_SCANC_SMOD(8)            |  // Scan Period Modulus
+      TSI_SCANC_EXTCHRG((16/2)-1)  |  // External Oscillator Charge Current select
+      TSI_SCANC_REFCHRG((16/2)-1);    // Reference Oscillator Charge Current select
+
+   static constexpr uint32_t tsi_pen = \
+      (6144) |    // Pins enable pin as TSI inputs
+      TSI_PEN_LPSP(5);    // Low Power Scan Pin
+
+   static constexpr uint32_t tsi_threshold = \
+      TSI_THRESHOLD_LTHH(4096) |   // Low Power Channel Low Threshold value
+      TSI_THRESHOLD_HTHH(12288);    // Low Power Channel High Threshold value
+
    //! Number of signals available in info table
    static constexpr int numSignals  = 16;
 
@@ -2443,7 +2517,7 @@ public:
          /*  11: TSI0_CH11            = PTB18 (Touch1)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  18,  PORT_PCR_MUX(0)|pcrValue  },
          /*  12: TSI0_CH12            = PTB19 (Touch2)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  19,  PORT_PCR_MUX(0)|pcrValue  },
          /*  13: TSI0_CH13            = PTC0 (A0)                      */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  0,   PORT_PCR_MUX(0)|pcrValue  },
-         /*  14: TSI0_CH14            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*  14: TSI0_CH14            = PTC1 (A1)                      */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  1,   PORT_PCR_MUX(0)|pcrValue  },
          /*  15: TSI0_CH15            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
    };
 
@@ -2454,7 +2528,7 @@ public:
       enablePortClocks(PORTC_CLOCK_MASK|PORTB_CLOCK_MASK);
 
       ((PORT_Type *)PORTB_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0xCU);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
    /**
@@ -2464,7 +2538,7 @@ public:
       enablePortClocks(PORTC_CLOCK_MASK|PORTB_CLOCK_MASK);
 
       ((PORT_Type *)PORTB_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0xCU);
-      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
 };
@@ -2514,6 +2588,8 @@ public:
    static constexpr uint32_t irqLevel =  0;
 
    static constexpr bool statusNeedsWrite = false;
+
+   static constexpr uint32_t defaultBaudRate = 19200;
 
    /**
     * Get input clock frequency
@@ -2595,6 +2671,8 @@ public:
 
    static constexpr bool statusNeedsWrite = false;
 
+   static constexpr uint32_t defaultBaudRate = 19200;
+
    /**
     * Get input clock frequency
     *
@@ -2667,6 +2745,8 @@ public:
    static constexpr uint32_t irqLevel =  0;
 
    static constexpr bool statusNeedsWrite = false;
+
+   static constexpr uint32_t defaultBaudRate = 19200;
 
    /**
     * Get input clock frequency
@@ -2834,6 +2914,8 @@ public:
    //! Number of IRQs for hardware
    static constexpr uint32_t irqCount  = 0;
 
+   // Template:vref_c
+
    //! Number of signals available in info table
    static constexpr int numSignals  = 1;
 
@@ -2887,20 +2969,11 @@ using adc_A8               = const USBDM::Adc0Channel<3>;
 //using adc_A8               = const USBDM::Adc0Channel<3>;
 using adc_A7               = const USBDM::Adc0Channel<23>;
 using adc_A0               = const USBDM::Adc0Channel<14>;
+using adc_A1               = const USBDM::Adc0Channel<15>;
 using adc_A3               = const USBDM::Adc0Channel<6>;
+using adc_A2               = const USBDM::Adc0Channel<7>;
 /** 
  * End ADC_Group
- * @}
- */
-/**
- * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
- * @brief Pins used for PWM, Input capture and Output compare
- * @{
- */
-using ftm_D5               = const USBDM::Ftm0Channel<6>;
-using ftm_SWD_DIO          = const USBDM::Ftm0Channel<0>;
-/** 
- * End FTM_Group
  * @}
  */
 /**
@@ -2908,7 +2981,9 @@ using ftm_SWD_DIO          = const USBDM::Ftm0Channel<0>;
  * @brief Pins used for Digital Input/Output
  * @{
  */
-using gpio_SWD_CLK         = const USBDM::GpioA<0>;
+using gpio_D5              = const USBDM::GpioA<1>;
+using gpio_D9              = const USBDM::GpioA<2>;
+using gpio_LED_BLUE        = const USBDM::GpioA<2>;
 using gpio_D21             = const USBDM::GpioA<4>;
 using gpio_D2              = const USBDM::GpioA<5>;
 using gpio_D8              = const USBDM::GpioA<12>;
@@ -2919,8 +2994,10 @@ using gpio_A4              = const USBDM::GpioB<1>;
 using gpio_ACC_SDA         = const USBDM::GpioB<1>;
 using gpio_D15             = const USBDM::GpioB<2>;
 using gpio_D14             = const USBDM::GpioB<3>;
+using gpio_D10             = const USBDM::GpioC<2>;
 using gpio_D6              = const USBDM::GpioC<3>;
 using gpio_LED_RED         = const USBDM::GpioC<3>;
+using gpio_D7              = const USBDM::GpioC<4>;
 using gpio_D18             = const USBDM::GpioC<5>;
 using gpio_D19             = const USBDM::GpioC<6>;
 using gpio_ACC_INT2        = const USBDM::GpioC<6>;
@@ -2933,7 +3010,8 @@ using gpio_ACC_INT1        = const USBDM::GpioC<11>;
 using gpio_D16             = const USBDM::GpioD<0>;
 using gpio_D3              = const USBDM::GpioD<4>;
 using gpio_LED_GREEN       = const USBDM::GpioD<4>;
-using gpio_D22             = const USBDM::GpioD<7>;
+using gpio_D1              = const USBDM::GpioE<0>;
+using gpio_D0              = const USBDM::GpioE<1>;
 /** 
  * End GPIO_Group
  * @}
@@ -2959,10 +3037,10 @@ extern void mapAllPins();
  *  ADC0_DP3                 | ADC0_DP3/ADC0_SE3                           | A8                        | -       
  *  ADC0_SE23                | ADC0_SE23/CMP1_IN3                          | A7                        | -       
  *  EXTAL32                  | EXTAL32                                     | EXTAL32                   | Reserved(EXTAL32)       
- *  PTA0                     | GPIOA_0                                     | SWD_CLK                   | Reserved(SWD)       
- *  PTA1                     | FTM0_CH6                                    | D5                        | -       
- *  PTA2                     | -                                           | D9/LED_BLUE               | Blue LED, LCD_cs*       
- *  PTA3                     | FTM0_CH0                                    | SWD_DIO                   | Reserved(SWD)       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                           | SWD_CLK                   | Reserved(SWD)       
+ *  PTA1                     | GPIOA_1                                     | D5                        | -       
+ *  PTA2                     | GPIOA_2                                     | D9/LED_BLUE               | Blue LED, LCD_cs*       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                            | SWD_DIO                   | Reserved(SWD)       
  *  PTA4                     | GPIOA_4/LLWU_P3                             | D21                       | -       
  *  PTA5                     | GPIOA_5                                     | D2                        | -       
  *  PTA12                    | GPIOA_12                                    | D8                        | LCD_Reset*       
@@ -2978,10 +3056,10 @@ extern void mapAllPins();
  *  PTB18                    | TSI0_CH11                                   | Touch1                    | Touch 1       
  *  PTB19                    | TSI0_CH12                                   | Touch2                    | Touch 2       
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
- *  PTC1                     | -                                           | A1                        | -       
- *  PTC2                     | -                                           | D10                       | LCD_backlight       
+ *  PTC1                     | ADC0_SE15/TSI0_CH14                         | A1                        | -       
+ *  PTC2                     | GPIOC_2                                     | D10                       | LCD_backlight       
  *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
- *  PTC4                     | -                                           | D7                        | -       
+ *  PTC4                     | GPIOC_4/LLWU_P8                             | D7                        | -       
  *  PTC5                     | GPIOC_5/LLWU_P9                             | D18                       | -       
  *  PTC6                     | GPIOC_6/LLWU_P10                            | D19/ACC_INT2              | -       
  *  PTC7                     | GPIOC_7                                     | D20                       | -       
@@ -2995,10 +3073,10 @@ extern void mapAllPins();
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
- *  PTD6                     | -                                           | A2                        | -       
- *  PTD7                     | GPIOD_7                                     | D22                       | -       
- *  PTE0                     | -                                           | D1                        | -       
- *  PTE1                     | -                                           | D0                        | -       
+ *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
+ *  PTD7                     | -                                           | D22                       | -       
+ *  PTE0                     | GPIOE_0                                     | D1                        | -       
+ *  PTE1                     | GPIOE_1/LLWU_P0                             | D0                        | -       
  *  RESET_b                  | RESET_b                                     | RESET_b                   | Reserved(Reset*)       
  *  USB0_DM                  | USB0_DM                                     | USB0_DM                   | Reserved(USB_DM)       
  *  USB0_DP                  | USB0_DP                                     | USB0_DP                   | Reserved(USB_DP)       
@@ -3024,8 +3102,8 @@ extern void mapAllPins();
  *    Pin Name               |   Functions                                 |  Location                 |  Description  
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
- *  PTC1                     | -                                           | A1                        | -       
- *  PTD6                     | -                                           | A2                        | -       
+ *  PTC1                     | ADC0_SE15/TSI0_CH14                         | A1                        | -       
+ *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
  *  PTB1                     | GPIOB_1                                     | A4/ACC_SDA                | Accelerometer       
  *  PTB0                     | GPIOB_0/LLWU_P5                             | A5/ACC_SCL                | Accelerometer       
@@ -3037,17 +3115,17 @@ extern void mapAllPins();
  *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | A11                       | Photo-transistor       
  *  PTB16                    | UART0_RX                                    | ConRx                     | USB_serial       
  *  PTB17                    | UART0_TX                                    | ConTx                     | USB_serial       
- *  PTE1                     | -                                           | D0                        | -       
- *  PTE0                     | -                                           | D1                        | -       
+ *  PTE1                     | GPIOE_1/LLWU_P0                             | D0                        | -       
+ *  PTE0                     | GPIOE_0                                     | D1                        | -       
  *  PTA5                     | GPIOA_5                                     | D2                        | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
  *  PTC8                     | GPIOC_8                                     | D4                        | -       
- *  PTA1                     | FTM0_CH6                                    | D5                        | -       
+ *  PTA1                     | GPIOA_1                                     | D5                        | -       
  *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
- *  PTC4                     | -                                           | D7                        | -       
+ *  PTC4                     | GPIOC_4/LLWU_P8                             | D7                        | -       
  *  PTA12                    | GPIOA_12                                    | D8                        | LCD_Reset*       
- *  PTA2                     | -                                           | D9/LED_BLUE               | Blue LED, LCD_cs*       
- *  PTC2                     | -                                           | D10                       | LCD_backlight       
+ *  PTA2                     | GPIOA_2                                     | D9/LED_BLUE               | Blue LED, LCD_cs*       
+ *  PTC2                     | GPIOC_2                                     | D10                       | LCD_backlight       
  *  PTD2                     | SPI0_SOUT                                   | D11                       | LCD_sin       
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       
  *  PTD1                     | SPI0_SCK                                    | D13                       | LCD_sck       
@@ -3059,15 +3137,15 @@ extern void mapAllPins();
  *  PTC6                     | GPIOC_6/LLWU_P10                            | D19/ACC_INT2              | -       
  *  PTC7                     | GPIOC_7                                     | D20                       | -       
  *  PTA4                     | GPIOA_4/LLWU_P3                             | D21                       | -       
- *  PTD7                     | GPIOD_7                                     | D22                       | -       
+ *  PTD7                     | -                                           | D22                       | -       
  *  PTC9                     | GPIOC_9                                     | D23                       | -       
  *  PTA13                    | GPIOA_13/LLWU_P4                            | D24                       | -       
  *  PTC10                    | GPIOC_10                                    | D25                       | -       
  *  PTA18                    | EXTAL0                                      | EXTAL0                    | Reserved       
  *  EXTAL32                  | EXTAL32                                     | EXTAL32                   | Reserved(EXTAL32)       
  *  RESET_b                  | RESET_b                                     | RESET_b                   | Reserved(Reset*)       
- *  PTA0                     | GPIOA_0                                     | SWD_CLK                   | Reserved(SWD)       
- *  PTA3                     | FTM0_CH0                                    | SWD_DIO                   | Reserved(SWD)       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                           | SWD_CLK                   | Reserved(SWD)       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                            | SWD_DIO                   | Reserved(SWD)       
  *  PTB18                    | TSI0_CH11                                   | Touch1                    | Touch 1       
  *  PTB19                    | TSI0_CH12                                   | Touch2                    | Touch 2       
  *  USB0_DM                  | USB0_DM                                     | USB0_DM                   | Reserved(USB_DM)       
@@ -3093,19 +3171,20 @@ extern void mapAllPins();
  *
  *    Pin Name               |   Functions                                 |  Location                 |  Description  
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
- *  PTE1                     | -                                           | D0                        | -       
+ *  PTD7                     | -                                           | D22                       | -       
  *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | A11                       | Photo-transistor       
  *  ADC0_DM3                 | ADC0_DM3/ADC0_SE21                          | A9                        | Temperature sensor       
  *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                           | A10                       | -       
  *  ADC0_DP3                 | ADC0_DP3/ADC0_SE3                           | A8                        | -       
  *  PTD5                     | ADC0_SE6b                                   | A3                        | -       
+ *  PTD6                     | ADC0_SE7b                                   | A2                        | -       
  *  PTC0                     | ADC0_SE14/TSI0_CH13                         | A0                        | -       
+ *  PTC1                     | ADC0_SE15/TSI0_CH14                         | A1                        | -       
  *  ADC0_SE23                | ADC0_SE23/CMP1_IN3                          | A7                        | -       
  *  PTA18                    | EXTAL0                                      | EXTAL0                    | Reserved       
  *  EXTAL32                  | EXTAL32                                     | EXTAL32                   | Reserved(EXTAL32)       
- *  PTA3                     | FTM0_CH0                                    | SWD_DIO                   | Reserved(SWD)       
- *  PTA1                     | FTM0_CH6                                    | D5                        | -       
- *  PTA0                     | GPIOA_0                                     | SWD_CLK                   | Reserved(SWD)       
+ *  PTA1                     | GPIOA_1                                     | D5                        | -       
+ *  PTA2                     | GPIOA_2                                     | D9/LED_BLUE               | Blue LED, LCD_cs*       
  *  PTA4                     | GPIOA_4/LLWU_P3                             | D21                       | -       
  *  PTA5                     | GPIOA_5                                     | D2                        | -       
  *  PTA12                    | GPIOA_12                                    | D8                        | LCD_Reset*       
@@ -3114,7 +3193,9 @@ extern void mapAllPins();
  *  PTB1                     | GPIOB_1                                     | A4/ACC_SDA                | Accelerometer       
  *  PTB2                     | GPIOB_2                                     | D15                       | -       
  *  PTB3                     | GPIOB_3                                     | D14                       | -       
+ *  PTC2                     | GPIOC_2                                     | D10                       | LCD_backlight       
  *  PTC3                     | GPIOC_3/LLWU_P7                             | D6/LED_RED                | Red LED       
+ *  PTC4                     | GPIOC_4/LLWU_P8                             | D7                        | -       
  *  PTC5                     | GPIOC_5/LLWU_P9                             | D18                       | -       
  *  PTC6                     | GPIOC_6/LLWU_P10                            | D19/ACC_INT2              | -       
  *  PTC7                     | GPIOC_7                                     | D20                       | -       
@@ -3124,7 +3205,10 @@ extern void mapAllPins();
  *  PTC11                    | GPIOC_11/LLWU_P11                           | D17/ACC_INT1              | -       
  *  PTD0                     | GPIOD_0/LLWU_P12                            | D16                       | -       
  *  PTD4                     | GPIOD_4/LLWU_P14                            | D3/LED_GREEN              | Green LED       
- *  PTD7                     | GPIOD_7                                     | D22                       | -       
+ *  PTE0                     | GPIOE_0                                     | D1                        | -       
+ *  PTE1                     | GPIOE_1/LLWU_P0                             | D0                        | -       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                           | SWD_CLK                   | Reserved(SWD)       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                            | SWD_DIO                   | Reserved(SWD)       
  *  RESET_b                  | RESET_b                                     | RESET_b                   | Reserved(Reset*)       
  *  PTD1                     | SPI0_SCK                                    | D13                       | LCD_sck       
  *  PTD3                     | SPI0_SIN                                    | D12                       | -       

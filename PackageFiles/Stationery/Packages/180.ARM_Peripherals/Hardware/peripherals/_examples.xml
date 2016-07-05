@@ -5,26 +5,37 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    <category name="OSC0" description="Oscillator">
    
-      <aliasOption key="system_mcgir_clock" />
-   
-      <choiceOption name="XXXX" description="YYYYY"
-         toolTip="ZZZZZZZ">
-         <choice value="0" name="Reserved" />
-         <choice value="1" name="Reserved" />
-         <choice value="2" name="Reserved" />
-         <choice value="3" name="Reserved" />
-      </choiceOption>
+   <aliasOption key="system_mcgir_clock" />
 
-      <binaryOption name="XXXXX" description="YYYYY"
-         toolTip="TTTTTTTTTTTT">
-         <choice value="0" name="Reserved" />
-         <choice value="1" name="Reserved" />
-      </binaryOption>
+   <choiceOption name="XXXX" 
+      description="YYYYY"
+      toolTip="ZZZZZZZ">
+      <choice value="0" name="Reserved" />
+      <choice value="1" name="Reserved" />
+      <choice value="2" name="Reserved" />
+      <choice value="3" name="Reserved" />
+   </choiceOption>
 
-      <intOption name="xxxx" description="yyyyyy" toolTip="yyyyyyy"
-         value="4000000" constant="true" />
+   <binaryOption name="XXXXX" 
+      description="YYYYY"
+      toolTip="TTTTTTTTTTTT">
+      <choice value="0" name="Reserved" />
+      <choice value="1" name="Reserved" />
+   </binaryOption>
+
+   <intOption name="xxxx" 
+      description="yyyyyy" 
+      toolTip="yyyyyyy"
+      value="4000000" 
+      constant="true" />
+      
    </category>
    
+   <bitmaskOption name="XXX" 
+      description="YYYYYY" 
+      toolTip="ZZZZZZZZZZZZZZZZ"
+      value="0"
+      bitmask="0xFF" />
    
    <template><![CDATA[
       \tpe1 = \n
