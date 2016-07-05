@@ -259,10 +259,10 @@ public:
 
       if (centreAlign) {
 #ifdef DEBUG_BUILD
-      if (period > 2*0xFFFFUL) {
-         // Attempt to set too long a period
-         return setErrorCode(E_TOO_LARGE);
-      }
+         if (period > 2*0xFFFFUL) {
+            // Attempt to set too long a period
+            return setErrorCode(E_TOO_LARGE);
+         }
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
@@ -270,15 +270,17 @@ public:
       }
       else {
 #ifdef DEBUG_BUILD
-      if (period > 0x10000UL) {
-         // Attempt to set too long a period
-         return setErrorCode(E_TOO_LARGE);
-      }
+         if (period > 0x10000UL) {
+            // Attempt to set too long a period
+            return setErrorCode(E_TOO_LARGE);
+         }
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
          tmr->SC  = Info::sc;
       }
+      // Too long a period
+      return setErrorCode(E_NO_ERROR);
    }
 
    /**
@@ -632,7 +634,7 @@ using Ftm1 = FtmIrq_T<Ftm1Info>;
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm2Channel : public FtmBase_T<Ftm2Info, channel> {};
+class Ftm2Channel : public FtmChannel_T<Ftm2Info, channel> {};
 
 /**
  * Class representing FTM2
@@ -649,7 +651,7 @@ using Ftm2 = FtmIrq_T<Ftm2Info>;
  * @tparam channel FTM timer channel
  */
 template <int channel>
-class Ftm3Channel : public FtmBase_T<Ftm3Info, channel> {};
+class Ftm3Channel : public FtmChannel_T<Ftm3Info, channel> {};
 
 /**
  * Class representing FTM0
