@@ -1,46 +1,22 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
-      MK10D7
-      MK10D10
-      MK10F12
-      MK20D5
-      MK20D7
-      MK20D10
-      MK20F12
-      MK30D7
-      MK30D10
-      MK40D7
-      MK40D10
-      MK50D7
-      MK50D10
-      MK51D7
-      MK51D10
-      MK52D10
-      MK53D10
-      MK60D10
-      MK60F12
-      MK60F15
-      MK61F15
-      MK61F15WS
-      MK70F15
-      MK70F15WS
+      MKE15D7
 -->
       <peripheral>
-         <?sourceFile "TSI0_MK10D10" ?>
+         <?sourceFile "TSI0_MKE" ?>
          <name>TSI0</name>
          <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>
          <prependToName>TSI0</prependToName>
          <headerStructName>TSI</headerStructName>
-         <baseAddress>0x40045000</baseAddress>
+         <baseAddress>0x40030000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x10</size>
+            <size>0xC</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -325,112 +301,6 @@ Number of Consecutive Scans Per Electrode</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>LPSCNITV</name>
-                     <description>Low-Power Mode Scan Interval</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>1 ms interval</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>5 ms interval</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>10 ms interval</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>15 ms interval</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>20 ms interval</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>30 ms interval</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>40 ms interval</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>50 ms interval</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>75 ms interval</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>100 ms interval</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>125 ms interval</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>150 ms interval</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>200 ms interval</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>300 ms interval</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>400 ms interval</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>500 ms interval</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>LPCLKS</name>
-                     <description>Low-Power Mode Clock Source</description>
-                     <bitOffset>28</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>LPOCLK</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>VLPOSCCLK</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -537,16 +407,57 @@ Input Clock Source division factor</description>
                      <name>EXTCHRG</name>
                      <description>External OSC Charge Current Select</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0bXXXX</name>
+                           <name>0bXXX</name>
                            <description>2*N uA Charge current</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>DVOLT</name>
+                     <description>no description available</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Vp = 1.33 V, Vm = 0.30 V, DV = 1.03 V</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Vp = 1.18 V, Vm = 0.45 V, DV = 0.73 V</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Vp = 1.03 V, Vm = 0.60 V, DV = 0.43 V</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Vp = 0.95 V, Vm = 0.67 V, DV = 0.29 V</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                   <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>Ref OSC Charge Current select</description> <bitOffset>24</bitOffset> </field>
+                  <field>
+                     <name>RW</name>
+                     <description>R/W</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Normal operation</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -600,20 +511,6 @@ Selects which input is active in low-power mode</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WUCNTR</name>
-               <description>Wake-Up Channel Counter Register</description>
-               <addressOffset>0xC</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>WUCNT</name>
-                     <description>Touch Sensing Wake-Up Channel 16-bit Counter Value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
                   </field>
                </fields>
             </register>

@@ -206,7 +206,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -345,7 +345,6 @@ Controls whether the POR detect circuit (for brown-out detection) is enabled in 
 When debug is enabled, the PMSTAT will not update to STOP or VLPS\n
 When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>7</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000001</name>

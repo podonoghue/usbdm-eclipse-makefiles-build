@@ -4,9 +4,9 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "TSI0_MK65F18" ?>
+         <?sourceFile "TSI0_MK65" ?>
          <name>TSI0</name>
-         <description>Touch sense input</description>
+         <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>
          <prependToName>TSI0</prependToName>
          <headerStructName>TSI</headerStructName>
@@ -46,18 +46,19 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CURSW</name>
-                     <description>CURSW</description>
+                     <description>Swap Current Sources\n
+Allows the current source pair to be swapped</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The current source pair are not swapped</description>
+                           <description>Not swapped</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The current source pair are swapped</description>
+                           <description>Swapped</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -89,7 +90,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No scan in progress</description>
+                           <description>No scan active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -107,282 +108,129 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger scan</description>
+                           <description>Software trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware trigger scan</description>
+                           <description>Hardware trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>STPE</name>
-                     <description>TSI STOP Enable</description>
+                     <description>TSI STOP Enable\n
+Controls operation in low power mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TSI is disabled when MCU goes into low power mode</description>
+                           <description>Disabled in low power</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Allows TSI to continue running in all low power modes</description>
+                           <description>Enabled in low power</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TSIIEN</name>
-                     <description>Touch Sensing Input Interrupt Enable</description>
+                     <description>Interrupt Enable</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TSI interrupt is disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>TSI interrupt is enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TSIEN</name>
-                     <description>Touch Sensing Input Module Enable</description>
+                     <description>Module Enable</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TSI module disabled</description>
+                           <description>Module disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>TSI module enabled</description>
+                           <description>Module enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>NSCN</name>
-                     <description>NSCN</description>
+                     <description>Consecutive Scan number\n
+Number of Consecutive Scans Per Electrode</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b00000</name>
-                           <description>Once per electrode</description>
-                           <value>0b00000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00001</name>
-                           <description>Twice per electrode</description>
-                           <value>0b00001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00010</name>
-                           <description>3 times per electrode</description>
-                           <value>0b00010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00011</name>
-                           <description>4 times per electrode</description>
-                           <value>0b00011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00100</name>
-                           <description>5 times per electrode</description>
-                           <value>0b00100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00101</name>
-                           <description>6 times per electrode</description>
-                           <value>0b00101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00110</name>
-                           <description>7 times per electrode</description>
-                           <value>0b00110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00111</name>
-                           <description>8 times per electrode</description>
-                           <value>0b00111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01000</name>
-                           <description>9 times per electrode</description>
-                           <value>0b01000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01001</name>
-                           <description>10 times per electrode</description>
-                           <value>0b01001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01010</name>
-                           <description>11 times per electrode</description>
-                           <value>0b01010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01011</name>
-                           <description>12 times per electrode</description>
-                           <value>0b01011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01100</name>
-                           <description>13 times per electrode</description>
-                           <value>0b01100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01101</name>
-                           <description>14 times per electrode</description>
-                           <value>0b01101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01110</name>
-                           <description>15 times per electrode</description>
-                           <value>0b01110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01111</name>
-                           <description>16 times per electrode</description>
-                           <value>0b01111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10000</name>
-                           <description>17 times per electrode</description>
-                           <value>0b10000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10001</name>
-                           <description>18 times per electrode</description>
-                           <value>0b10001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10010</name>
-                           <description>19 times per electrode</description>
-                           <value>0b10010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10011</name>
-                           <description>20 times per electrode</description>
-                           <value>0b10011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10100</name>
-                           <description>21 times per electrode</description>
-                           <value>0b10100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10101</name>
-                           <description>22 times per electrode</description>
-                           <value>0b10101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10110</name>
-                           <description>23 times per electrode</description>
-                           <value>0b10110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10111</name>
-                           <description>24 times per electrode</description>
-                           <value>0b10111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11000</name>
-                           <description>25 times per electrode</description>
-                           <value>0b11000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11001</name>
-                           <description>26 times per electrode</description>
-                           <value>0b11001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11010</name>
-                           <description>27 times per electrode</description>
-                           <value>0b11010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11011</name>
-                           <description>28 times per electrode</description>
-                           <value>0b11011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11100</name>
-                           <description>29 times per electrode</description>
-                           <value>0b11100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11101</name>
-                           <description>30 times per electrode</description>
-                           <value>0b11101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11110</name>
-                           <description>31 times per electrode</description>
-                           <value>0b11110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11111</name>
-                           <description>32 times per electrode</description>
-                           <value>0b11111</value>
+                           <name>0bXXXXX</name>
+                           <description>(N+1) per electrode</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PS</name>
-                     <description>PS</description>
+                     <description>Prescaler for Electrode Oscillator Frequency</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Electrode Oscillator Frequency divided by 1</description>
+                           <description>Divided by 1</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>Electrode Oscillator Frequency divided by 2</description>
+                           <description>Divided by 2</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Electrode Oscillator Frequency divided by 4</description>
+                           <description>Divided by 4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Electrode Oscillator Frequency divided by 8</description>
+                           <description>Divided by 8</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Electrode Oscillator Frequency divided by 16</description>
+                           <description>Divided by 16</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>Electrode Oscillator Frequency divided by 32</description>
+                           <description>Divided by 32</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Electrode Oscillator Frequency divided by 64</description>
+                           <description>Divided by 64</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>Electrode Oscillator Frequency divided by 128</description>
+                           <description>Divided by 128</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -466,28 +314,28 @@ Devices using this peripheral:
                   <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>REFCHRG</description> <bitOffset>21</bitOffset> </field>
                   <field>
                      <name>MODE</name>
-                     <description>TSI analog modes setup and status bits</description>
+                     <description>TSI analogue modes setup and status bits</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0000</name>
-                           <description>Set TSI in capacitive sensing(non-noise detection) mode</description>
+                           <description>Capacitive sensing</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>Set TSI analog to work in single threshold noise detection mode and the frequency limitation circuit is disabled</description>
+                           <description>Single threshold noise detection without frequency limitation</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Set TSI analog to work in single threshold noise detection mode and the frequency limitation circuit is enabled to work in higher frequencies operations</description>
+                           <description>Single threshold noise detection with frequency limitation</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Set TSI analog to work in automatic noise detection mode</description>
+                           <description>Automatic noise detection mode</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -500,12 +348,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Out-of-range interrupt is allowed</description>
+                           <description>Out-of-range interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>End-of-scan interrupt is allowed</description>
+                           <description>End-of-scan interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -532,7 +380,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>SWTS</name>
-                     <description>Software Trigger Start</description>
+                     <description>Software Trigger Start\n
+Used to start a scan to determine which channel is specified by TSI_DATA.TSICH</description>
                      <bitOffset>22</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>write-only</access>
@@ -544,25 +393,26 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Start a scan to determine which channel is specified by TSI_DATA[TSICH]</description>
+                           <description>Start scan</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>DMAEN</name>
-                     <description>DMA Transfer Enabled</description>
+                     <description>DMA Transfer Enabled\n
+Select between DMA and Interrupt request</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt is selected when the interrupt enable bit is set and the corresponding TSI events assert</description>
+                           <description>Interrupt request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA transfer request is selected when the interrupt enable bit is set and the corresponding TSI events assert</description>
+                           <description>DMA transfer request</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -574,84 +424,9 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Channel 0</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Channel 1</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Channel 2</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Channel 3</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Channel 4</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Channel 5</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Channel 6</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Channel 7</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>Channel 8</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>Channel 9</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Channel 10</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>Channel 11</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>Channel 12</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>Channel 13</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Channel 14</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Channel 15</description>
-                           <value>0b1111</value>
+                           <name>0bXXXX</name>
+                           <description>Channel #</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -664,13 +439,13 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>THRESL</name>
-                     <description>TSI Wakeup Channel Low-threshold</description>
+                     <description>Wakeup Channel Low-threshold</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
                   <field>
                      <name>THRESH</name>
-                     <description>TSI Wakeup Channel High-threshold</description>
+                     <description>Wakeup Channel High-threshold</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>

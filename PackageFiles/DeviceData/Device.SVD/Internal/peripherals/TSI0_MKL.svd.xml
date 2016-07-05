@@ -10,7 +10,7 @@ Devices using this peripheral:
       MKW01Z4
 -->
       <peripheral>
-         <?sourceFile "TSI0_MKL05Z4" ?>
+         <?sourceFile "TSI0_MKL" ?>
          <name>TSI0</name>
          <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>

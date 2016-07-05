@@ -1,6 +1,12 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
+      MK22F25612
       MK22F51212
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
       MKV31F51212
 -->
       <peripheral>
@@ -215,7 +221,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>High Speed Run mode (HSRUN)</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -241,22 +247,22 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>VLLS0</description>
+                           <description>VLLS0/LLSx reserved</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>VLLS1</description>
+                           <description>VLLS1/LLSx reserved</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>VLLS2</description>
+                           <description>VLLS2/LLS2(if available)</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>VLLS3</description>
+                           <description>VLLS3/LLS3(if available)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -200,7 +200,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -281,7 +281,6 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
 When debug is enabled, the PMSTAT will not update to STOP or VLPS\n
 When a PSTOP mode is enabled, the PMSTAT will not update to STOP or VLPS</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>7</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000001</name>

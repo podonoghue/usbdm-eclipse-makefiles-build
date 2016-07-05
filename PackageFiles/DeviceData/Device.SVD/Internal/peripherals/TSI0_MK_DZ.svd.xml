@@ -11,7 +11,7 @@ Devices using this peripheral:
       MK60DZ10
 -->
       <peripheral>
-         <?sourceFile "TSI0_MK10DZ10" ?>
+         <?sourceFile "TSI0_MK_DZ" ?>
          <name>TSI0</name>
          <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>
