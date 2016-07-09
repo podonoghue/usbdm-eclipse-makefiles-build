@@ -99,7 +99,7 @@
       </category>   
    </category>
 
-   <pins/>
+   <signals/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcValidate">

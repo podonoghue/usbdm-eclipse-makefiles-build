@@ -6,12 +6,6 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
 
-   <xi:include href="_irqOption.xml"/>
-
-   <projectActionList id = "pdb_files">
-      <copy source="Project_Headers/pdb.h"  target="Project_Headers/pdb.h"  replace="true"  derived="true" />
-   </projectActionList>
-         
    <choiceOption name="pdb_sc_mult" 
       description="Multiplication Factor Select for Prescaler"
       toolTip="This bit selects the multiplication factor of the prescaler divider for the counter clock.">
@@ -34,21 +28,21 @@ Devices using this peripheral:
       toolTip="Selects the trigger input source for the PDB.\n
          The trigger input source can be internal or external (EXTRG pin),\n
          or the software trigger" >
-      <choice value="0"  name="Trigger-In 0 is selected" />
-      <choice value="1"  name="Trigger-In 1 is selected" />
-      <choice value="2"  name="Trigger-In 2 is selected" />
-      <choice value="3"  name="Trigger-In 3 is selected" />
-      <choice value="4"  name="Trigger-In 4 is selected" />
-      <choice value="5"  name="Trigger-In 5 is selected" />
-      <choice value="6"  name="Trigger-In 6 is selected" />
-      <choice value="7"  name="Trigger-In 7 is selected" />
-      <choice value="8"  name="Trigger-In 8 is selected" />
-      <choice value="9"  name="Trigger-In 9 is selected" />
-      <choice value="10" name="Trigger-In 10 is selected" />
-      <choice value="11" name="Trigger-In 11 is selected" />
-      <choice value="12" name="Trigger-In 12 is selected" />
-      <choice value="13" name="Trigger-In 13 is selected" />
-      <choice value="14" name="Trigger-In 14 is selected" />
+      <choice value="0"  name="External Trigger (PDB0_EXTRG)" />
+      <choice value="1"  name="CMP 0" />
+      <choice value="2"  name="CMP 1" />
+      <choice value="3"  name="Reserved" />
+      <choice value="4"  name="PIT Ch 0 Output" />
+      <choice value="5"  name="PIT Ch 1 Output" />
+      <choice value="6"  name="PIT Ch 2 Output" />
+      <choice value="7"  name="PIT Ch 3 Output" />
+      <choice value="8"  name="FTM0 Init and Ext Trigger Outputs" />
+      <choice value="9"  name="FTM1 Init and Ext Trigger Outputs" />
+      <choice value="10" name="Reserved" />
+      <choice value="11" name="Reserved" />
+      <choice value="12" name="RTC Alarm" />
+      <choice value="13" name="RTC Seconds" />
+      <choice value="14" name="LPTMR" />
       <choice value="15" name="Software trigger is selected" />
    </choiceOption>
 
@@ -133,19 +127,24 @@ Devices using this peripheral:
          of configuration and results registers. Application code must only enable the back-to-back\n
          operation of the PDB pre-triggers at the leading of the back-to-back connection chain."
       value="0"
-      bitmask="0xFF" />
+      bitmask="0x3" 
+      bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
 
    <bitmaskOption name="pdb_ch0_c1_tos" 
-      description="Channel 0 Pre-Trigger Output Select" 
-      toolTip="These bits select the PDB ADC pre-trigger outputs"
+      description="Channel 0 Pre-Trigger Delay Enable" 
+      toolTip="These bits enable the PDB ADC pre-trigger delay\n
+         If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
+         If enabled, the pre-trigger is further delayed until the count reaches the channel delay register value"
       value="0"
-      bitmask="0xFF" />
+      bitmask="0x3" 
+      bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
    
    <bitmaskOption name="pdb_ch0_c1_en" 
       description="Channel 0 Pre-Trigger Enable" 
       toolTip="These bits enable the PDB ADC pre-trigger outputs"
       value="0"
-      bitmask="0xFF" />
+      bitmask="0x3" 
+      bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
    
    <template><![CDATA[
    \tstatic constexpr uint32_t pdb_ch0_c1 = // Channel[0] Control Register 1
@@ -180,7 +179,9 @@ Devices using this peripheral:
       description="PDB Pulse-Out Enable" 
       toolTip="These bits enable the pulse output"
       value="0"
-      bitmask="0xFF" />
+      bitmask="0x3" 
+      bitList="CMP0,CMP1" 
+      />
    
    <template><![CDATA[
    \tstatic constexpr uint32_t pdb_poen = 
@@ -205,6 +206,29 @@ Devices using this peripheral:
    \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2));   // Delay 2\n\n
    ]]></template>
 
+   <intOption name="pdb_po1_dly_dly1" 
+      description="PDB Pulse-Out 1 Delay 1" 
+      toolTip="These bits specify the delay 1 value for the PDB Pulse-Out.\n
+         Pulse-Out goes high when the PDB counter is equal to the DLY1"
+      value="0" min="0" max="65535" />
 
-   <pins/>
+   <intOption name="pdb_po1_dly_dly2" 
+      description="PDB Pulse-Out 1 Delay 2" 
+      toolTip="These bits specify the delay 2 value for the PDB Pulse-Out.\n
+         Pulse-Out goes low when the PDB counter is equal to the DLY2"
+      value="0" min="0" max="65535" />
+
+   <template><![CDATA[
+   \tstatic constexpr uint32_t pdb_po1_dly =   // PDB Pulse Output[1] Delays
+   \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1
+   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2));   // Delay 2\n\n
+   ]]></template>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <projectActionList id = "pdb_files">
+      <copy source="Project_Headers/pdb.h"  target="Project_Headers/pdb.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
+   <signals/>
 </devicePage>

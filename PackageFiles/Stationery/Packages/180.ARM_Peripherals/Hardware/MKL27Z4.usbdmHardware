@@ -117,6 +117,7 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_lite_mkl17z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <irq num="MCG_IRQn" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />

@@ -49,13 +49,13 @@
       \tstatic const uint32_t defaultBaudRate = $(defaultBaudRate)UL;
    ]]></template>
 
-   <pins name="LPUART0"/>
-   <pins name="LPUART1"/>
-   <pins name="LPUART2"/>
-   <pins name="UART0"/>
-   <pins name="UART1"/>
-   <pins name="UART2"/>
-   <pins name="UART3"/>
-   <pins name="UART4"/>
-   <pins name="UART5"/>
+   <signals name="LPUART0"/>
+   <signals name="LPUART1"/>
+   <signals name="LPUART2"/>
+   <signals name="UART0"/>
+   <signals name="UART1"/>
+   <signals name="UART2"/>
+   <signals name="UART3"/>
+   <signals name="UART4"/>
+   <signals name="UART5"/>
 </devicePage>

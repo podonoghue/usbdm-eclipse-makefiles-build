@@ -35,7 +35,7 @@
    
    <numericListOption name="llwu_pins" 
       description="Pins enabled for wakeup" 
-      toolTip="Enables these pins to wakeup the processor\n
+      toolTip="Enables these signals to wakeup the processor\n
          Comma separated list of pin numbers e.g. 1,7,9,10"
       value="" 
       constant="false" 
@@ -56,7 +56,7 @@
    <intOption 
       name="llwu_filt1_filtsel" 
       description="Filter 1 Pin Select" 
-      toolTip="Selects 1 of the external pins to be muxed into the filter"
+      toolTip="Selects 1 of the external signals to be muxed into the filter"
       min="0" max="15" />
       
    <choiceOption 
@@ -73,12 +73,12 @@
    <intOption 
       name="llwu_filt2_filtsel" 
       description="Filter 2 Pin Select" 
-      toolTip="Selects 1 of the external pins to be muxed into the filter"
+      toolTip="Selects 1 of the external signals to be muxed into the filter"
       min="0" max="15" />
 
    <xi:include href="_irqOption.xml"/>
 
-   <pins/>
+   <signals/>
 
    <projectActionList id = "llwu_def" >
       <copy source="Project_Headers/llwu.h"     target="Project_Headers/llwu.h"     replace="true" derived="true" />

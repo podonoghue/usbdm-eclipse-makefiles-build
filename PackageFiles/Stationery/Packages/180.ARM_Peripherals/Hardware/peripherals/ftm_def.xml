@@ -142,6 +142,6 @@
       \t}\n\n
    ]]></template>
 
-   <pins/>
-   <pins name="FTM" />
+   <signals/>
+   <signals name="FTM" />
 </devicePage>

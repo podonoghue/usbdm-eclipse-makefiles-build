@@ -9910,14 +9910,19 @@ typedef struct {                                /*       TSI0 Structure         
    __IO uint32_t  PEN;                          /**< 0008: Pin Enable Register                                          */
    __IO uint32_t  STATUS;                       /**< 000C: Status Register                                              */
    __I  uint32_t  RESERVED0[60];               
-   __I  uint32_t  CNTR1;                        /**< 0100: Counter Register 1                                           */
-   __I  uint32_t  CNTR3;                        /**< 0104: Counter Register 3                                           */
-   __I  uint32_t  CNTR5;                        /**< 0108: Counter Register 5                                           */
-   __I  uint32_t  CNTR7;                        /**< 010C: Counter Register 7                                           */
-   __I  uint32_t  CNTR9;                        /**< 0110: Counter Register 9                                           */
-   __I  uint32_t  CNTR11;                       /**< 0114: Counter Register 11                                          */
-   __I  uint32_t  CNTR13;                       /**< 0118: Counter Register 13                                          */
-   __I  uint32_t  CNTR15;                       /**< 011C: Counter Register 15                                          */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      struct {                                  /**< 0000: (size=0020)                                                  */
+      __I  uint32_t  CNTR1;                     /**< 0100: Counter Register 1                                           */
+      __I  uint32_t  CNTR3;                     /**< 0104: Counter Register 3                                           */
+      __I  uint32_t  CNTR5;                     /**< 0108: Counter Register 5                                           */
+      __I  uint32_t  CNTR7;                     /**< 010C: Counter Register 7                                           */
+      __I  uint32_t  CNTR9;                     /**< 0110: Counter Register 9                                           */
+      __I  uint32_t  CNTR11;                    /**< 0114: Counter Register 11                                          */
+      __I  uint32_t  CNTR13;                    /**< 0118: Counter Register 13                                          */
+      __I  uint32_t  CNTR15;                    /**< 011C: Counter Register 15                                          */
+      };
+      __I  uint16_t  CNTR[16];                  /**< 0100: Counter Register                                             */
+   };
    __IO uint32_t  THRESHLD[16];                 /**< 0120: Channel  Threshold Register                                  */
 } TSI_Type;
 
@@ -10164,6 +10169,10 @@ typedef struct {                                /*       TSI0 Structure         
 #define TSI_CNTR_CTN_MASK                        (0xFFFFUL << TSI_CNTR_CTN_SHIFT)                    /*!< TSI0_CNTR: CTN Mask                     */
 #define TSI_CNTR_CTN_SHIFT                       16                                                  /*!< TSI0_CNTR: CTN Position                 */
 #define TSI_CNTR_CTN(x)                          (((uint32_t)(((uint32_t)(x))<<TSI_CNTR_CTN_SHIFT))&TSI_CNTR_CTN_MASK) /*!< TSI0_CNTR                               */
+/* ------- CNTR Bit Fields                          ------ */
+#define TSI_CNTR_CNT_MASK                        (0xFFFFUL << TSI_CNTR_CNT_SHIFT)                    /*!< TSI0_CNTR: CNT Mask                     */
+#define TSI_CNTR_CNT_SHIFT                       0                                                   /*!< TSI0_CNTR: CNT Position                 */
+#define TSI_CNTR_CNT(x)                          (((uint16_t)(((uint16_t)(x))<<TSI_CNTR_CNT_SHIFT))&TSI_CNTR_CNT_MASK) /*!< TSI0_CNTR                               */
 /* ------- THRESHLD Bit Fields                      ------ */
 #define TSI_THRESHLD_HTHH_MASK                   (0xFFFFUL << TSI_THRESHLD_HTHH_SHIFT)               /*!< TSI0_THRESHLD: HTHH Mask                */
 #define TSI_THRESHLD_HTHH_SHIFT                  0                                                   /*!< TSI0_THRESHLD: HTHH Position            */

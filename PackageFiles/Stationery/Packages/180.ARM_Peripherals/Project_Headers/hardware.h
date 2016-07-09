@@ -17,6 +17,9 @@
  */
 namespace USBDM {
 
+static constexpr float us = 1E-6;
+static constexpr float ms = 1E-3;
+
 enum ErrorCode {
    E_NO_ERROR = 0,   // No error
    E_ERROR,          // General error
@@ -26,24 +29,8 @@ enum ErrorCode {
    E_NO_HANDLER,     // No handler installed
 };
 
-static constexpr float us = 1E-6;
-static constexpr float ms = 1E-3;
-
 /** Last error set by USBDM code */
-extern ErrorCode errorCode;
-
-/** Set error code */
-inline static ErrorCode setErrorCode(ErrorCode err) {
-   errorCode = err;
-   return errorCode;
-}
-
-/**
- * Clear error code
- */
-inline void clearError() {
-   errorCode = E_NO_ERROR;
-}
+extern volatile ErrorCode errorCode;
 
 /**
  * Get error message from error code or last
@@ -57,7 +44,34 @@ const char *getErrorMessage(ErrorCode err = errorCode);
  * Check for error code being set (drastically!)
  * This routine does not return if there is an error
  */
-void checkError();
+#ifndef DEBUG_BUILD
+inline static ErrorCode checkError() {
+   while (errorCode != E_NO_ERROR) {
+   }
+   return errorCode;
+}
+#else
+extern ErrorCode checkError();
+#endif
+
+/** Set error code */
+inline static ErrorCode setErrorCode(ErrorCode err) {
+   errorCode = err;
+   return errorCode;
+}
+
+/** Set error code and check for error */
+inline static ErrorCode setAndCheckErrorCode(ErrorCode err) {
+   errorCode = err;
+   return checkError();
+}
+
+/**
+ * Clear error code
+ */
+inline void clearError() {
+   errorCode = E_NO_ERROR;
+}
 
 } // End namespace USBDM
 

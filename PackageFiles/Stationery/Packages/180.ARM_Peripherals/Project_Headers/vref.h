@@ -51,11 +51,9 @@ private:
 
 public:
    /**
-    * Enable the voltage reference
-    *
-    * @param scValue Value for SC register e.g. VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MODE_LV(2)
+    * Enable the voltage reference with default settings
     */
-   static void initialise(uint32_t mode=VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MODE_LV(2)) {
+   static void enable() {
       // Configure pin (if necessary)
       Info::initPCRs();
 
@@ -63,12 +61,25 @@ public:
       *clockReg |= Info::clockMask;
 
       // Initialise hardware
-      vref->TRM |= VREF_TRM_CHOPEN_MASK;
-      vref->SC   = mode;
+      vref->TRM  = Info::vref_trm;
+      vref->SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
+
       while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
          // Wait until stable
       }
    }
+   /**
+    * Sets the voltage reference mode
+    *
+    * @param scValue Value for SC register e.g. VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MO`DE_LV(2)
+    */
+   static void setMode(uint32_t scValue=Info::vref_sc|VREF_SC_VREFEN_MASK) {
+      vref->SC   = scValue;
+   }
+
+   /**
+    * Disable Vref
+    */
    static void disable() {
       vref->SC = 0;
       *clockReg &= ~Info::clockMask;

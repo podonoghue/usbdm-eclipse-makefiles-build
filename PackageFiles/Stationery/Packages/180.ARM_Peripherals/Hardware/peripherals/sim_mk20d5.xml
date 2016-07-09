@@ -6,7 +6,7 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <category name="SOPT1" description="RTC pins">
+   <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
          toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
@@ -124,7 +124,7 @@ Devices using this peripheral:
       \t}\n\n
 
    ]]></template>
-   <category name="SOPT4" description="FTM pins">
+   <category name="SOPT4" description="FTM signals">
    
       <binaryOption name="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
@@ -189,7 +189,7 @@ Devices using this peripheral:
       \t   SIM_SOPT4_FTM0FLT1($(sim_sopt4_ftm0flt1))    |   // FlexTimer 0 Fault 1 Select
       \t   SIM_SOPT4_FTM0FLT0($(sim_sopt4_ftm0flt0));       // FlexTimer 0 Fault 0 Select\n\n
    ]]></template>
-   <category name="SOPT5" description="UART pins">
+   <category name="SOPT5" description="UART signals">
       <binaryOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data.">
@@ -230,7 +230,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
       \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));       // UART 1 receive data source select\n\n
    ]]></template>
-   <category name="SOPT7" description="ADC pins">
+   <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC0">

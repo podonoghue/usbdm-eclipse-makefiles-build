@@ -13,6 +13,9 @@
 #include "pin_mapping.h"
 
 /*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+#include "mcg.h"
+#include "ftm.h"
+#include "adc.h"
 /*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 using RED_LED   = gpio_LED_RED;
 
@@ -321,10 +324,8 @@ void UART1_RX_TX_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
 void UART1_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
 void UART2_RX_TX_IRQHandler(void)             WEAK_DEFAULT_HANDLER;
 void UART2_ERR_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
-void ADC0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMP1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
-void FTM0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void FTM1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void CMT_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
 void RTC_Alarm_IRQHandler(void)               WEAK_DEFAULT_HANDLER;
@@ -337,7 +338,6 @@ void PDB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USBDCD_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void TSI0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
-void MCG_IRQHandler(void)                     WEAK_DEFAULT_HANDLER;
 void LPTMR0_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void PORTA_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
 void PORTB_IRQHandler(void)                   WEAK_DEFAULT_HANDLER;
@@ -397,10 +397,10 @@ VectorTable const __vector_table = {
       UART1_ERR_IRQHandler,          /*   35,   19  Serial Communication Interface                                                   */
       UART2_RX_TX_IRQHandler,        /*   36,   20  Serial Communication Interface                                                   */
       UART2_ERR_IRQHandler,          /*   37,   21  Serial Communication Interface                                                   */
-      ADC0_IRQHandler,               /*   38,   22  Analogue to Digital Converter                                                    */
+      USBDM::Adc0::irqHandler,       /*   38,   22  Analogue to Digital Converter                                                    */
       CMP0_IRQHandler,               /*   39,   23  High-Speed Comparator                                                            */
       CMP1_IRQHandler,               /*   40,   24  High-Speed Comparator                                                            */
-      FTM0_IRQHandler,               /*   41,   25  FlexTimer Module                                                                 */
+      USBDM::Ftm0::irqHandler,       /*   41,   25  FlexTimer Module                                                                 */
       FTM1_IRQHandler,               /*   42,   26  FlexTimer Module                                                                 */
       CMT_IRQHandler,                /*   43,   27  Carrier Modulator Transmitter                                                    */
       RTC_Alarm_IRQHandler,          /*   44,   28  Real Time Clock                                                                  */
@@ -413,7 +413,7 @@ VectorTable const __vector_table = {
       USB0_IRQHandler,               /*   51,   35  Universal Serial Bus                                                             */
       USBDCD_IRQHandler,             /*   52,   36  USB Device Charger Detection                                                     */
       TSI0_IRQHandler,               /*   53,   37  Touch Sense Interface                                                            */
-      MCG_IRQHandler,                /*   54,   38  MCG interrupt                                                                    */
+      USBDM::Mcg::irqHandler,        /*   54,   38  MCG interrupt                                                                    */
       LPTMR0_IRQHandler,             /*   55,   39  Low Power Timer                                                                  */
       PORTA_IRQHandler,              /*   56,   40  General Purpose Input/Output                                                     */
       PORTB_IRQHandler,              /*   57,   41  General Purpose Input/Output                                                     */

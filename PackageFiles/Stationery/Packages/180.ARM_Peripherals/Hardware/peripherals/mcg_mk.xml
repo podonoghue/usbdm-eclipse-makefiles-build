@@ -50,6 +50,9 @@
          description="Number of Clock settings"
          toolTip="Number of clock configurations available"
          min="1" max="5" value="1" />
+
+      <xi:include href="_irqOption.xml"/>
+      
    </section>
    <section>
       <tab name="One">
@@ -396,8 +399,6 @@
          <aliasOption key="/SIM/system_bus_clock" constant="false" />
          <aliasOption key="/SIM/system_flexbus_clock" constant="false" optional="true"/>
          <aliasOption key="/SIM/system_flash_clock" constant="false" />
-      
-         <xi:include href="_irqOption.xml"/>
       
          <category name="Hardware bugs" description="">
             <binaryOption name="ERRATA_E2448" 

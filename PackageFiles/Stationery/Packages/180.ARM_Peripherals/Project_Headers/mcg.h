@@ -91,7 +91,26 @@ public:
       SIM->CLKDIV1 = simClkDiv1;
    }
 
-public:
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ(McgInfo::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(McgInfo::irqNums[0], McgInfo::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(McgInfo::irqNums[0]);
+      }
+   }
+
    /**
     * MCG interrupt handler -  Calls MCG callback
     */

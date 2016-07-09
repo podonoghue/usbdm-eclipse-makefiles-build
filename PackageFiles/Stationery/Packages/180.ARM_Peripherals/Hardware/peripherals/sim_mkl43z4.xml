@@ -8,7 +8,7 @@ Devices using this peripheral:
    
    <constant name="rtcSharesPins" value="true" />
    
-   <category name="SOPT1" description="RTC pins">
+   <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
          toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
@@ -236,7 +236,7 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
    ]]></template>
-   <category name="SOPT4" description="TPM pins">
+   <category name="SOPT4" description="TPM signals">
 
       <binaryOption name="sim_sopt4_tpm2clksel" 
          description="TPM 2 External Clock Pin Select"
@@ -286,7 +286,7 @@ Devices using this peripheral:
       \t   SIM_SOPT4_TPM2CH0SRC($(sim_sopt4_tpm1ch0src))  |   // TPM 1 channel 0 input capture source select
       \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm1ch0src));     // TPM 1 channel 0 input capture source select\n\n
    ]]></template>
-   <category name="SOPT5" description="UART pins">
+   <category name="SOPT5" description="UART signals">
       <binaryOption name="sim_sopt5_uart2ode" description="UART2 Open Drain Enable"
          toolTip="Enables Open Drain output">
          <choice value="0" name="Disabled" />
@@ -348,7 +348,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_LPUART1TXSRC($(sim_sopt5_lpuart1txsrc)) |      // LPUART 1 transmit data source select
       \t   SIM_SOPT5_LPUART1RXSRC($(sim_sopt5_lpuart1rxsrc));       // LPUART 1 receive data source select\n\n
    ]]></template>
-   <category name="SOPT7" description="ADC pins">
+   <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC0">

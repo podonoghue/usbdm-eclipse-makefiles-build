@@ -4,33 +4,38 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <binaryOption name="irqEnabled" description="Enable interrupts in initialisation"
+   <!--  binaryOption name="irqEnabled" description="Enable interrupts in initialisation"
       toolTip="This option would usually be used with:\n
       - override of the static method of the class, or\n
       - use of manually installed interrupt handler" >
       <choice value="false"  name="Interrupts disabled" />
       <choice value="true"   name="Interrupts enabled" />
-   </binaryOption>
+   </binaryOption -->
 
-   <binaryOption name="irqHandler" description="Install class handler for IRQ"
+   <!--  template><![CDATA[
+       \t//! Install Callback handler\n
+       \tstatic constexpr bool irqEnabled = $(irqEnabled);\n\n
+   ]]></template -->
+
+
+   <binaryOption name="irqHandlerInstalled" description="Install class handler for IRQ"
       toolTip="If enabled ths option allows the handling of interrupts using two methods\n
-      - override static method of the class, or\n
-      - use of the setCallback() method">
+      - override static method irqHandler() of the class, or\n
+      - use of the setCallback() method to install a handler">
       <choice value="false"  name="No handler installed (Use external handler)" />
       <choice value="true"   name="Handler installed (Use setCallback() or class method)" />
    </binaryOption>
 
+   <template><![CDATA[
+       \t//! Callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlerInstalled);\n\n
+   ]]></template>
+       
    <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC"
       value="0" min="0" max="15" />
 
    <template><![CDATA[
-       \t//! Install Callback handler\n
-       \tstatic constexpr bool irqEnabled = $(irqEnabled);\n\n
-       
-       \t//! Install Callback handler\n
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandler);\n\n
-       
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>

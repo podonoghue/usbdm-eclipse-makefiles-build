@@ -14,10 +14,11 @@ Devices using this peripheral:
    <xi:include href="_irqOption.xml"/>
 
    <projectActionList id = "usb_files">
+      <copy source="Project_Headers/usb.h"  target="Project_Headers/usb.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[
    ]]></template>
 
-   <pins/>
+   <signals/>
 </devicePage>

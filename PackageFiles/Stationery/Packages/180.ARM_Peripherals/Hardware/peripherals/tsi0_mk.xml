@@ -31,7 +31,8 @@
       <choice value="1" name="End-of-Scan" isDefault="true"  />
    </binaryOption>
    <binaryOption name="tsi_gencs_erie" 
-      description="Error Interrupt Enable" >
+      description="Error Interrupt Enable" 
+      toolTip="Caused either by a Short or Overrun Error" >
       <choice value="0" name="Interrupt disabled" isDefault="true" />
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
@@ -148,8 +149,8 @@
    ]]></template>
 
    <bitmaskOption name="tsi_pen_pen" 
-      description="Pins enable pin as TSI inputs" 
-      toolTip="Bitmask representing the sleected pins"
+      description="Pins enabled as TSI inputs" 
+      toolTip="Bitmask representing the sleected signals"
       value="0"
       bitmask="0xFFFF" />
 
@@ -185,6 +186,8 @@
          source="Project_Headers/tsi.h" target="Project_Headers/tsi.h" replace="true" derived="true" />
    </projectActionList>
 
-   <pins />
+   <xi:include href="_irqOption.xml"/>
+
+   <signals />
 
 </devicePage>

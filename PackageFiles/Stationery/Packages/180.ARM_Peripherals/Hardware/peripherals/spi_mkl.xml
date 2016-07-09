@@ -52,5 +52,5 @@
       \t   $(speed);\n\n
    ]]></template>
 
-   <pins/>
+   <signals/>
 </devicePage>

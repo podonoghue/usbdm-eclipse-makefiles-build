@@ -146,6 +146,6 @@
      \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));\n\n
    ]]></template>
    
-   <pins/>
+   <signals/>
    
 </devicePage>

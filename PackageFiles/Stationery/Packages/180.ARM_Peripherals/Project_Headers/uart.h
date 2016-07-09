@@ -188,9 +188,6 @@ public:
  */
 template<class Info> class Uart_T : public Uart {
 public:
-   static class Uart *thisPtr;
-
-public:
    /**
     * Construct UART interface
     *
@@ -226,6 +223,49 @@ protected:
    }
 };
 
+/**
+ * Type definition for UART interrupt call back
+ *
+ *  @param status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
+ */
+typedef void (*UARTCallbackFunction)(uint8_t status);
+
+/**
+ * Template class to provide UART callback
+ */
+template<class Info>
+class UartIrq_T : public Uart_T<Info> {
+
+protected:
+   /** Callback function for ISR */
+   static UARTCallbackFunction callback;
+
+   UartIrq_T(unsigned baud) : Uart_T<Info>(baud) {
+   }
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler(void) {
+      uint8_t status = Info::uart->S1;
+      if (callback != 0) {
+         callback(status);
+      }
+   }
+
+   /**
+    * Set Callback function
+    *
+    *   @param theCallback - Callback function to be executed on UART alarm interrupt
+    */
+   static void setCallback(UARTCallbackFunction theCallback) {
+      callback = theCallback;
+   }
+};
+
+template<class Info> UARTCallbackFunction UartIrq_T<Info>::callback = 0;
+
 #ifdef USBDM_UART0_IS_DEFINED
 /**
  * @brief Class representing UART0 interface
@@ -252,9 +292,9 @@ protected:
  *
  * @tparam Info   Class describing UART hardware
  */
-class Uart0 : public Uart_T<Uart0Info> {
+class Uart0 : public UartIrq_T<Uart0Info> {
 public:
-   Uart0(unsigned baud=Uart0Info::defaultBaudRate) : Uart_T(baud) {
+   Uart0(unsigned baud=Uart0Info::defaultBaudRate) : UartIrq_T(baud) {
    }
 };
 #endif
@@ -285,14 +325,14 @@ public:
  *
  * @tparam Info   Class describing UART hardware
  */
-class Uart1 : public Uart_T<Uart1Info> {
+class Uart1 : public UartIrq_T<Uart1Info> {
 public:
    /**
     * Construct UART interface
     *
     * @param baudrate         Interface speed in bits-per-second
     */
-   Uart1(unsigned baudrate=Uart1Info::defaultBaudRate) : Uart_T(baudrate) {
+   Uart1(unsigned baudrate=Uart1Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
 };
 #endif
@@ -323,14 +363,14 @@ public:
  *
  * @tparam Info   Class describing UART hardware
  */
-class Uart2 : public Uart_T<Uart2Info> {
+class Uart2 : public UartIrq_T<Uart2Info> {
 public:
    /**
     * Construct UART interface
     *
     * @param baudrate         Interface speed in bits-per-second
     */
-   Uart2(unsigned baudrate=Uart2Info::defaultBaudRate) : Uart_T(baudrate) {
+   Uart2(unsigned baudrate=Uart2Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
 };
 #endif
@@ -361,7 +401,7 @@ public:
  *
  * @tparam Info   Class describing UART hardware
  */
-class Uart3 : public Uart_T<Uart3Info> {
+class Uart3 : public UartIrq_T<Uart3Info> {
 public:
    /**
     * Construct UART interface
@@ -369,7 +409,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart3(unsigned baudrate=Uart3Info::defaultBaudRate) : Uart_T(baudrate) {
+   Uart3(unsigned baudrate=Uart3Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
 };
 #endif
@@ -400,7 +440,7 @@ public:
  *
  * @tparam Info   Class describing UART hardware
  */
-class Uart4 : public Uart_T<Uart4Info> {
+class Uart4 : public UartIrq_T<Uart4Info> {
 public:
    /**
     * Construct UART interface
@@ -408,7 +448,7 @@ public:
     * @param baudrate         Interface speed in bits-per-second
     * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
-   Uart4(unsigned baudrate=Uart4Info::defaultBaudRate) : Uart_T(baudrate) {
+   Uart4(unsigned baudrate=Uart4Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
 };
 #endif

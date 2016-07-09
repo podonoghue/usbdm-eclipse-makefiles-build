@@ -13,5 +13,5 @@ Devices using this peripheral:
    <template><![CDATA[
    ]]></template>
 
-   <pins/>
+   <signals/>
 </devicePage>

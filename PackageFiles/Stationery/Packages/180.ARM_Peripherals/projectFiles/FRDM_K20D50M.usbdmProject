@@ -16,9 +16,9 @@
    <item key="$signal$PTA12_descriptionSetting"            value="LCD_Reset*" />
    <item key="$signal$PTA12_muxSetting"                    value="mux1" />
    <item key="$signal$PTA13_muxSetting"                    value="mux1" />
-   <item key="$signal$PTA18_descriptionSetting"            value="Reserved" />
+   <item key="$signal$PTA18_descriptionSetting"            value="Reserved(EXTAL0)" />
    <item key="$signal$PTA18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA19_descriptionSetting"            value="Reserved" />
+   <item key="$signal$PTA19_descriptionSetting"            value="Reserved(XTAL0)" />
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
    <item key="$signal$PTA1_muxSetting"                     value="mux1" />
    <item key="$signal$PTA2_descriptionSetting"             value="Blue LED, LCD_cs*" />
@@ -70,6 +70,7 @@
    <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset*)" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
+   <item key="$signal$VREF_OUT_descriptionSetting"         value="Vref output" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
    <item key="/ADC0/adcInternalClock"                      value="5200000.0" />
    <item key="/ADC0/adc_cfg1_adiclk"                       value="3" />
@@ -91,14 +92,19 @@
    <item key="/CMP0/cmp_cr0_filter_cnt"                    value="0" />
    <item key="/CMP0/cmp_cr0_hystctr"                       value="0" />
    <item key="/CMP0/cmp_cr1_cos"                           value="false" />
-   <item key="/CMP0/cmp_cr1_en"                            value="false" />
    <item key="/CMP0/cmp_cr1_inv"                           value="false" />
    <item key="/CMP0/cmp_cr1_ope"                           value="false" />
    <item key="/CMP0/cmp_cr1_pmode"                         value="false" />
    <item key="/CMP0/cmp_cr1_se"                            value="false" />
    <item key="/CMP0/cmp_cr1_trigm"                         value="false" />
    <item key="/CMP0/cmp_cr1_we"                            value="false" />
+   <item key="/CMP0/cmp_daccr_vrsel"                       value="false" />
    <item key="/CMP0/cmp_fpr_filt_per"                      value="0" />
+   <item key="/CMP0/cmp_muxcr_msel"                        value="1" />
+   <item key="/CMP0/cmp_muxcr_psel"                        value="0" />
+   <item key="/CMP0/cmp_scr_dmaen"                         value="false" />
+   <item key="/CMP0/cmp_scr_ief"                           value="false" />
+   <item key="/CMP0/cmp_scr_ier"                           value="false" />
    <item key="/CMP0/irqEnabled"                            value="false" />
    <item key="/CMP0/irqHandler"                            value="false" />
    <item key="/CMP0/irqLevel"                              value="0" />
@@ -112,12 +118,18 @@
    <item key="/CMP1/cmp_cr1_se"                            value="false" />
    <item key="/CMP1/cmp_cr1_trigm"                         value="false" />
    <item key="/CMP1/cmp_cr1_we"                            value="false" />
+   <item key="/CMP1/cmp_daccr_vrsel"                       value="false" />
    <item key="/CMP1/cmp_fpr_filt_per"                      value="0" />
+   <item key="/CMP1/cmp_muxcr_msel"                        value="0" />
+   <item key="/CMP1/cmp_muxcr_psel"                        value="0" />
+   <item key="/CMP1/cmp_scr_dmaen"                         value="false" />
+   <item key="/CMP1/cmp_scr_ief"                           value="false" />
+   <item key="/CMP1/cmp_scr_ier"                           value="false" />
    <item key="/CMP1/irqEnabled"                            value="false" />
    <item key="/CMP1/irqHandler"                            value="false" />
    <item key="/CMP1/irqLevel"                              value="0" />
-   <item key="/Console/baudRate"                           value="19200" />
    <item key="/Console/console_device"                     value="3" />
+   <item key="/Console/defaultBaudRate"                    value="13" />
    <item key="/FTM0/clockFrequency"                        value="375000.0" />
    <item key="/FTM0/clockPeriod"                           value="2.666666666666667E-6" />
    <item key="/FTM0/ftmExternalClock"                      value="0" />

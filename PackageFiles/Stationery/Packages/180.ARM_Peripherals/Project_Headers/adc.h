@@ -127,15 +127,16 @@ public:
       adc->CFG2 = Info::cfg2;
       adc->SC2  = Info::sc2;
 
-      enableInterrupts(Info::irqEnabled);
+      enableNvicInterrupts();
    }
 
    /**
-    * Enable/disable interrupts in the NVIC
+    * Enable/disable interrupts in NVIC
     *
     * @param enable true to enable, false to disable
     */
-   static void enableInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true) {
+
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
@@ -157,7 +158,6 @@ public:
       adc->CFG1 = 0;
       adc->CFG2 = 0;
       adc->SC2  = 0;
-      enableInterrupts(false);
    }
 
    /**
@@ -235,8 +235,7 @@ public:
          callback(AdcBase_T<Info>::adc->R[0]);
       }
       else {
-         // Dummy read to clear interrupt
-         (void)(AdcBase_T<Info>::adc->R[0]);
+         setAndCheckErrorCode(E_NO_HANDLER);
       }
    }
 
@@ -247,7 +246,6 @@ public:
     */
    static void setCallback(ADCCallbackFunction theCallback) {
       callback = theCallback;
-      AdcBase_T<Info>::enableInterrupts();
    }
 };
 

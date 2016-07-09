@@ -6,12 +6,67 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="VREF">
 
+   <binaryOption name="vref_trm_chopen" 
+      description="Chop oscillator enable"
+      toolTip="This enables the internal chopping operation to minimize the internal analog offset">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <intOption name="vref_trm_trim" 
+      description="Trim bits" 
+      toolTip="These bits change the resulting VREF by approximately ± 0.5 mV for each step"
+      value="32" min="0" max="63" />
+      
    <projectActionList id = "vref_files">
       <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[
+   \tstatic constexpr uint8_t vref_trm = 
+   \t    VREF_TRM_CHOPEN($(vref_trm_chopen)) | // Chop oscillator enable
+   \t    VREF_TRM_TRIM($(vref_trm_trim));   // Trim bits \n\n
    ]]></template>
 
-   <pins/>
+   <binaryOption name="vref_sc_vrefen" 
+      description="Internal Voltage Reference enable"
+      toolTip="This bit is used to enable the bandgap reference within the Voltage Reference module">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption name="vref_sc_regen" 
+      description="Regulator enable"
+      toolTip="This bit is used to enable the internal 1.75 V regulator to produce a constant\n
+         internal voltage supply in order to reduce the sensitivity to external supply noise and variation">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption name="vref_sc_icompen" 
+      description="Second order curvature compensation enable"
+      toolTip="This bit is set during factory trimming of the VREF voltage">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <choiceOption name="vref_sc_mode_lv" 
+      description="Buffer Mode selection"
+      toolTip="These bits select the buffer modes for the Voltage Reference module">
+      <choice value="0" name="Bandgap on only, for stabilization and startup" />
+      <choice value="1" name="High power buffer mode enabled" isDefault="true" />
+      <choice value="2" name="Low-power buffer mode enabled" />
+      <choice value="3" name="Reserved" />
+   </choiceOption>
+
+   <template><![CDATA[
+   \tstatic constexpr uint8_t vref_sc = 
+   \t    VREF_SC_VREFEN($(vref_sc_vrefen)) |   // Internal Voltage Reference enable
+   \t    VREF_SC_REGEN($(vref_sc_regen)) |    // Regulator enable
+   \t    VREF_SC_ICOMPEN($(vref_sc_icompen)) |  // Second order curvature compensation enable
+   \t    VREF_SC_MODE_LV($(vref_sc_mode_lv));   // Buffer Mode selection \n\n
+   ]]></template>
+
+
+   <signals/>
 </devicePage>

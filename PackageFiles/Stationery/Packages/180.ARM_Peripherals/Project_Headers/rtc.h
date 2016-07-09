@@ -75,16 +75,30 @@ public:
          rtc->SR  = RTC_SR_TCE_MASK;
       }
 
-      if (Info::irqHandlerInstalled) {
-         // Enable timer interrupts
+      // Update settings
+      rtc->CR  = Info::cr;
+
+      enableNvicInterrupts();
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+
+      if (enable) {
+         // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
-
-      // Update settings
-      rtc->CR  = Info::cr;
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
    }
 
    /*
@@ -152,6 +166,19 @@ public:
    }
 
    /**
+    * Enable/disable rising edge interrupts
+    *
+    * @param enable True=>enable, False=>disable
+    */
+   static void enableInterrupts(bool enable=true) {
+      if (enable) {
+         RTC->IER   |= RTC_IER_TAIE_MASK;
+      }
+      else {
+         RTC->IER   &= ~RTC_IER_TAIE_MASK;
+      }
+   }
+   /**
     * Set Callback function
     *
     *   @param theCallback - Callback function to be executed on RTC alarm interrupt
@@ -162,14 +189,6 @@ public:
       if (callback != NULL) {
          // Set alarm time
          RtcBase_T<Info>::rtc->TAR   = time;
-         // Enable interrupts from RTC alarm
-         RTC->IER   |= RTC_IER_TAIE_MASK;
-         NVIC_EnableIRQ(Info::irqNums[0]);
-      }
-      else {
-         // Disable interrupts from RTC alarm
-         RTC->IER   &= ~RTC_IER_TAIE_MASK;
-         NVIC_DisableIRQ(Info::irqNums[0]);
       }
    }
 };

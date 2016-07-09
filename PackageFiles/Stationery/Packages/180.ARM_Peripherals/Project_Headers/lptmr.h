@@ -62,14 +62,30 @@ public:
       // Enable interrupts in LPTMR
       lptmr->CSR |= LPTMR_CSR_TIE_MASK|LPTMR_CSR_TCF_MASK;
 
-      // Set priority level
-      NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      enableNvicInterrupts();
 
-      // Enable interrupts in NVIC
-      NVIC_EnableIRQ(Info::irqNums[0]);
       return E_NO_ERROR;
    }
 
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
    /**
     * PIT interrupt handler. \n
     * Calls PIT0 callback

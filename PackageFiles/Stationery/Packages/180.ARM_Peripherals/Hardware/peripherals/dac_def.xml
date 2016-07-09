@@ -104,6 +104,6 @@
       <copy source="Snippets/dac-example.cpp"  target="Snippets/dac-example.cpp"  replace="true" derived="true" />
    </projectActionList>
    
-   <pins/>
+   <signals/>
    
 </devicePage>

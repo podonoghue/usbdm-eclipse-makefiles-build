@@ -106,9 +106,16 @@ enum Ftm_Mode {
 };
 
 /**
- * Type definition for FTM interrupt call back
+ * Type definition for FTM timer overflow interrupt call back
  */
-typedef void (*FTMCallbackFunction)(FTM_Type *);
+typedef void (*FTMToiCallbackFunction)();
+/**
+ * Type definition for FTM channel interrupt call back
+ *
+ * @param status Flags indicating interrupt source channels
+ *
+ */
+typedef void (*FTMCallbackFunction)(int status);
 
 /**
  * Base class representing an FTM
@@ -156,7 +163,7 @@ public:
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
 
-      enableInterrupts(Info::irqEnabled);
+      enableNvicInterrupts();
    }
 
    /**
@@ -182,16 +189,17 @@ public:
       setPeriodInTicks(period);
 
       if (Info::irqEnabled) {
-         enableInterrupts();
+         enableNvicInterrupts();
       }
    }
 
    /**
-    * Enable/disable interrupts in the NVIC
+    * Enable/disable interrupts in NVIC
     *
     * @param enable true to enable, false to disable
     */
-   static void enableInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true) {
+
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
@@ -202,6 +210,20 @@ public:
       else {
          // Disable interrupts
          NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
+
+   /**
+    * Enable/disable Timer Overflow interrupts
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableToiInterrupts(bool enable=true) {
+      if (enable) {
+         tmr->SC |= FTM_SC_TOIE_MASK;
+      }
+      else {
+         tmr->SC &= ~FTM_SC_TOIE_MASK;
       }
    }
 
@@ -404,8 +426,20 @@ public:
       tmr->FLTCTRL |= (1<<inputNum);
       // Enable fault mode
       tmr->MODE    |= FTM_MODE_FAULTM(2);
-      // Enable fault interrupts
-      tmr->MODE    |= FTM_MODE_FAULTIE(Ftm0Info::irqEnabled);
+   }
+
+   /**
+    * Enable/disable fault interrupts
+    *
+    * @param enable True = >enabled, False => disabled
+    */
+   void enableFaultInterrupt(bool enable=true) {
+      if (enable) {
+         tmr->MODE |= FTM_MODE_FAULTIE_MASK;
+      }
+      else {
+         tmr->MODE &= ~FTM_MODE_FAULTIE_MASK;
+      }
    }
 
    /**
@@ -472,7 +506,9 @@ template<class Info>
 class FtmIrq_T : public FtmBase_T<Info> {
 
 protected:
-   /** Callback function for ISR */
+   /** Callback function for TOI ISR */
+   static FTMToiCallbackFunction toiCallback;
+   /** Callback function for Channel ISR */
    static FTMCallbackFunction callback;
 
 public:
@@ -480,25 +516,49 @@ public:
     * IRQ handler
     */
    static void irqHandler() {
-      if (callback != 0) {
-         callback(FtmBase_T<Info>::tmr);
+      if (FtmBase_T<Info>::tmr->SC&FTM_SC_TOF_MASK) {
+         // Clear TOI flag
+         FtmBase_T<Info>::tmr->SC &= ~FTM_SC_TOF_MASK;
+         if (toiCallback != 0) {
+            toiCallback();
+         }
+         else {
+            setAndCheckErrorCode(E_NO_HANDLER);
+         }
       }
-	  // Clear interrupt
-      FtmBase_T<Info>::tmr->SC &= ~FTM_SC_TOF_MASK;
+      uint8_t status = FtmBase_T<Info>::tmr->STATUS;
+      if (status) {
+         // Clear channel event flags
+         FtmBase_T<Info>::tmr->STATUS &= ~status;
+         if (callback != 0) {
+            callback(status);
+         }
+         else {
+            setAndCheckErrorCode(E_NO_HANDLER);
+         }
+      }
    }
 
    /**
-    * Set callback function
+    * Set TOI Callback function
     *
     * @param theCallback Callback function to execute on interrupt
     */
-   static void setCallback(FTMCallbackFunction theCallback) {
+   static void setToiCallback(FTMToiCallbackFunction theCallback) {
+      toiCallback = theCallback;
+   }
+   /**
+    * Set channel Callback function
+    *
+    * @param theCallback Callback function to execute on interrupt
+    */
+   static void setChannelCallback(FTMCallbackFunction theCallback) {
       callback = theCallback;
-      FtmBase_T<Info>::enableInterrupts();
    }
 };
 
-template<class Info> FTMCallbackFunction FtmIrq_T<Info>::callback = 0;
+template<class Info> FTMToiCallbackFunction FtmIrq_T<Info>::toiCallback = 0;
+template<class Info> FTMCallbackFunction    FtmIrq_T<Info>::callback = 0;
 
 /**
  * Template class representing a FTM timer channel
@@ -546,9 +606,25 @@ public:
       FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
+   /**
+    * Enable or disable interrupt from this channel\n
+    * Note: It is necessary to enable interrupts in the FTM as well
+    *
+    * @param enable  True => enable, False => disable
+    */
+   static void enableChannelInterrupts(bool enable=true) {
+      if (enable) {
+         FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
+      }
+      else {
+         FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHIE_MASK;
+      }
+   }
+
    static void setPCR(uint32_t pcrValue) {
       PcrTable_T<Info,  channel>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
+
    /**
     * Set PWM duty cycle
     *

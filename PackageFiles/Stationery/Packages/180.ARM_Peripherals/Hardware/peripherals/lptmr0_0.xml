@@ -68,6 +68,12 @@
       \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
    ]]></template>
    
+   <binaryOption name="lptmr_csr_tie" description="Timer interrupt enable"
+      toolTip="Enables interrupts">
+      <choice value="0" name="Interrupt disabled" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+   
    <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
       The input connections vary by device">
@@ -97,7 +103,7 @@
    <template><![CDATA[
       \t//! Default CSR value\n
       \tstatic constexpr uint32_t csr = 
-      \t   LPTMR_CSR_TIE($(irqEnabled))|
+      \t   LPTMR_CSR_TIE($(lptmr_csr_tie))|
       \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
       \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
       \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
@@ -174,6 +180,6 @@
       \t}\n\n
    ]]></template>
 
-   <pins/>
+   <signals/>
 
 </devicePage>

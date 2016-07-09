@@ -59,6 +59,9 @@ public:
       if (Pit_T::callback[0] != 0) {
          Pit_T::callback[0]();
       }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
    }
    /** PIT interrupt handler -  Calls PIT1 callback */
    static void irq1Handler() {
@@ -67,6 +70,9 @@ public:
 
       if (Pit_T::callback[1] != 0) {
          Pit_T::callback[1]();
+      }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
       }
    }
    /** PIT interrupt handler -  Calls PIT2 callback */
@@ -77,6 +83,9 @@ public:
       if (Pit_T::callback[2] != 0) {
          Pit_T::callback[2]();
       }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
    }
    /** PIT interrupt handler -  Calls PIT3 callback */
    static void irq3Handler() {
@@ -86,21 +95,34 @@ public:
       if (Pit_T::callback[3] != 0) {
          Pit_T::callback[3]();
       }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
    }
 
 public:
+   /**
+    * Enable/disable channel interrupts
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableInterrupts(int channel, bool enable=true) {
+      if (enable) {
+         pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
+      }
+      else {
+         pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+      }
+   }
+
    /**
     * Set callback for ISR
     *
     * @param channel  The PIT channel to modify
     * @param callback The function to call from stub ISR
     */
-   static ErrorCode setCallback(int channel, PITCallbackFunction callback) {
-      if (!Info::irqHandlerInstalled) {
-         return setErrorCode(E_NO_HANDLER);
-      }
+   static void setCallback(int channel, PITCallbackFunction callback) {
       Pit_T::callback[channel] = callback;
-      return E_NO_ERROR;
    }
 
 protected:
@@ -112,18 +134,40 @@ protected:
 
 public:
    /**
-    *  Configure the PIT with default settings
+    *  Enable the PIT with default settings
     *
     *  @param mcr       Module Control Register
     */
-   static void configure(uint32_t mcr=Info::mcr) {
+   static void enable(uint32_t mcr=Info::mcr) {
       // Enable clock
       *clockReg |= Info::clockMask;
       __DMB();
 
       // Enable timer
       pit->MCR = mcr;
+
+      enableNvicInterrupts();
    }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
+
    /**
     *   Disable the PIT channel
     */

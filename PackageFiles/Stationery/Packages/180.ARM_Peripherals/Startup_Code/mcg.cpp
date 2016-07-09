@@ -423,6 +423,8 @@ void Mcg::initialise(void) {
 
    SimInfo::initRegs();
 
+   enableNvicInterrupts();
+
    SystemCoreClockUpdate();
 }
 

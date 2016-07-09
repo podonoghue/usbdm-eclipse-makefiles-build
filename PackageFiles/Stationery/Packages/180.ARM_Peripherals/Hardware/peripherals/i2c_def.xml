@@ -53,5 +53,5 @@
       \t   return $(clockSource:SystemBusClock);
       \t}\n\n
    ]]></template>
-   <pins/>
+   <signals/>
 </devicePage>

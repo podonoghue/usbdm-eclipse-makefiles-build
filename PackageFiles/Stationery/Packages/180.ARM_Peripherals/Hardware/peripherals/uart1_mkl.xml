@@ -60,5 +60,5 @@ Devices using this peripheral:
    \t}\n\n
    ]]></template>
 
-   <pins/>
+   <signals/>
 </devicePage>

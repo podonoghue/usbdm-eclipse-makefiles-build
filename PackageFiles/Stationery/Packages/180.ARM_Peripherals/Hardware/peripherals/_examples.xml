@@ -42,4 +42,10 @@
       \n
    ]]></template>
    
+   <template><![CDATA[
+      \t//! xxxxxxx
+      \tstatic constexpr bool irqHandlerInstalled = 
+      \t   $(irqHandlerInstalled);\n\n
+   ]]></template>
+   
 </fragment>

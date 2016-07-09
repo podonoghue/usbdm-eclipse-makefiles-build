@@ -183,6 +183,7 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mkv30">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <irq num="MCG_IRQn" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_div">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />

@@ -96,8 +96,8 @@
       </category>   
    </category>
 
-   <pins/>
-   <pins name="OSC0"/>
+   <signals/>
+   <signals name="OSC0"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcSharedOscValidate">

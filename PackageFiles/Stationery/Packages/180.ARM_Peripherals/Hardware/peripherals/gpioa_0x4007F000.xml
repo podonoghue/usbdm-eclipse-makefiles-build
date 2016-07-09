@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- gpio_0x4007F000.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="gpio_def.xml"/>
+</fragment>

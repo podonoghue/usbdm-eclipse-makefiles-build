@@ -30,14 +30,14 @@ template <class Info>
 class LlwuBase_T {
 
 protected:
-   static constexpr volatile LLWU_Type *llwu     = Info::llwu;
+   static constexpr volatile LLWU_Type *llwu = Info::llwu;
 
 public:
    /**
     * Initialise LLWU to default settings\n
     * Configures all LLWU pins
     */
-   static void initialise() {
+   static void enable() {
 
       // Configure pins
       Info::initPCRs();
@@ -54,14 +54,27 @@ public:
 
       llwu->RST   = Info::rst;
 
-      if (Info::irqHandlerInstalled) {
-         // Enable timer interrupts
+      enableNvicInterrupts();
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+
+      if (enable) {
+         // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
-
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
    }
 };
 
@@ -83,6 +96,9 @@ public:
       if (callback != 0) {
          callback();
       }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
    }
 
    /**
@@ -92,14 +108,6 @@ public:
     */
    static void setCallback(LLWUCallbackFunction theCallback) {
       callback = theCallback;
-      if (callback != NULL) {
-         // Enable interrupts from LLWU alarm
-         NVIC_EnableIRQ(Info::irqNums[0]);
-      }
-      else {
-         // Disable interrupts from LLWU alarm
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
    }
 };
 

@@ -135,8 +135,8 @@
       <choice value="7"  name="Use 8 backplane (1/8 duty cycle)" />
    </choiceOption>
 
-   <pins/>
-   <pins name="LCD_POWER"/>
+   <signals/>
+   <signals name="LCD_POWER"/>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LcdValidate">

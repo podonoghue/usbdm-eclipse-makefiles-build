@@ -10,7 +10,7 @@
 namespace USBDM {
 
 /** Last error set by USBDM code */
-ErrorCode errorCode = E_NO_ERROR;
+volatile ErrorCode errorCode = E_NO_ERROR;
 
 /** Table of error messages indexed by error code */
 static const char *messages[] = {
@@ -35,18 +35,19 @@ const char *getErrorMessage(ErrorCode err) {
    return messages[err];
 }
 
+#ifdef DEBUG_BUILD
 /**
  * Check for error code being set (drastically!)
  * This routine does not return if there is an error
  */
-void checkError() {
+ErrorCode checkError() {
    while (errorCode != E_NO_ERROR) {
-#ifdef DEBUG_BUILD
       const char *msg = getErrorMessage();
       puts(msg);
       __BKPT();
-#endif
    }
+   return errorCode;
 }
+#endif
 
 } // end namespace USBDM

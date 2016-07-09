@@ -241,6 +241,7 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk_ics48m">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <irq num="MCG_IRQn" />
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />

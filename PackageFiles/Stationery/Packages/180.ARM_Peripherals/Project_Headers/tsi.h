@@ -22,9 +22,9 @@ namespace USBDM {
 /**
  * Type definition for TSI interrupt call back
  *
- *  @param timeSinceEpoch - Time since the epoch in seconds
+ *  @param status - Interrupt flags e.g. TSI_GENCS_EOSF_MASK, TSI_GENCS_OVRF_MASK, TSI_GENCS_EXTERF_MASK
  */
-typedef void (*TSICallbackFunction)();
+typedef void (*TSICallbackFunction)(uint8_t status);
 
 template <class Info>
 class TsiBase_T {
@@ -38,16 +38,96 @@ public:
     * Initialise TSI to default settings\n
     * Configures all TSI pins
     */
-   static void initialise() {
-      clockReg |= Info::clockMask;
+   static void enable() {
+      *clockReg |= Info::clockMask;
       __DMB();
 
       Info::initPCRs();
 
-      tsi->GENCS     = Info::tsi_gencs;
+      tsi->GENCS     = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
       tsi->SCANC     = Info::tsi_scanc;
       tsi->THRESHOLD = Info::tsi_threshold;
       tsi->PEN       = Info::tsi_pen;
+
+      enableNvicInterrupts(Info::irqHandlerInstalled);
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableNvicInterrupts(bool enable) {
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ(Info::irqNums[0]);
+
+         // Set priority level
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
+   /**
+    * Enable/disable error interrupts
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableErrorInterrupts(bool enable=true) {
+      if (enable) {
+         tsi->GENCS |= TSI_GENCS_ERIE_MASK;
+      }
+      else {
+         tsi->GENCS &= ~TSI_GENCS_ERIE_MASK;
+      }
+   }
+   /**
+    * Enable/disable touch sensing interrupts
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableTsiInterrupts(bool enable=true) {
+      if (enable) {
+         tsi->GENCS |= TSI_GENCS_TSIIE_MASK;
+      }
+      else {
+         tsi->GENCS &= ~TSI_GENCS_TSIIE_MASK;
+      }
+   }
+
+   /**
+    * Get channel count value
+    *
+    * @param channel Channel number
+    *
+    * @return 16-bit count value
+    */
+   static uint16_t getCount(int channel) {
+      return Info::tsi->CNTR[channel];
+   }
+
+   /**
+    * Start configured scan
+    */
+   static void startScan() {
+      // Clear flags and start scan
+      Info::tsi->GENCS |= TSI_GENCS_SWTS_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK;
+   }
+
+   /**
+    * Start configured scan and wait for completion
+    */
+   static ErrorCode startScanAndWait() {
+      // Clear flags and start scan
+      Info::tsi->GENCS |= TSI_GENCS_SWTS_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK;
+
+      // Wait for complete flag or err
+      while ((Info::tsi->GENCS&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK)) == 0) {
+      }
+
+      return (Info::tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK))?E_ERROR:E_NO_ERROR;
    }
 };
 
@@ -66,32 +146,20 @@ public:
     * IRQ handler
     */
    static void irqHandler(void) {
+      uint8_t status = TsiBase_T<Info>::tsi->GENCS&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK);
       if (callback != 0) {
-         callback();
+         TsiBase_T<Info>::tsi->GENCS |= status;
+         callback(status);
       }
-      TsiBase_T<Info>::tsi->GENCS  &= Info::tsi_gencs|TSI_GENCS_TSIIE_MASK;
    }
 
    /**
     * Set Callback function
     *
     *   @param theCallback - Callback function to be executed on TSI alarm interrupt
-    *   @param time        - Time to set alarm for (time since the epoch in seconds)
     */
-   static void setCallback(TSICallbackFunction theCallback, uint32_t time) {
+   static void setCallback(TSICallbackFunction theCallback) {
       callback = theCallback;
-      if (callback != NULL) {
-         // Set alarm time
-         TsiBase_T<Info>::tsi->TAR   = time;
-         // Enable interrupts from TSI alarm
-         TsiBase_T<Info>::tsi->GENCS   |= TSI_GENCS_TSIIE_MASK;
-         NVIC_EnableIRQ(Info::irqNums[0]);
-      }
-      else {
-         // Disable interrupts from TSI alarm
-         TsiBase_T<Info>::tsi->GENCS   &= ~TSI_GENCS_TSIIE_MASK;
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
    }
 };
 
@@ -102,6 +170,14 @@ template<class Info> TSICallbackFunction TsiIrq_T<Info>::callback = 0;
  * Class representing TSI
  */
 using Tsi = TsiIrq_T<TsiInfo>;
+
+#endif
+
+#ifdef USBDM_TSI0_IS_DEFINED
+/**
+ * Class representing TSI
+ */
+using Tsi0 = TsiIrq_T<Tsi0Info>;
 
 #endif
 

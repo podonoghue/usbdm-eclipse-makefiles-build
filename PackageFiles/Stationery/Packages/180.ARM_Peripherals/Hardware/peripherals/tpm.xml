@@ -81,6 +81,7 @@
       <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
    </category>
+
    <xi:include href="_irqOption.xml"/>
 
    <validate
@@ -132,6 +133,6 @@
       \t}\n\n
    ]]></template>
 
-   <pins/>
-   <pins name="TPM"/>
+   <signals/>
+   <signals name="TPM"/>
 </devicePage>
