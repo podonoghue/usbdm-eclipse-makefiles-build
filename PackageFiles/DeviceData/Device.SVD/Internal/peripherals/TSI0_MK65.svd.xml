@@ -291,22 +291,22 @@ Number of Consecutive Scans Per Electrode</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>DV = 1.026 V; VP = 1.328 V; Vm = 0.302 V</description>
+                           <description>dV = 1.026 V; Vp = 1.328 V; Vm = 0.302 V</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>DV = 0.592 V; VP = 1.111 V; Vm = 0.519 V</description>
+                           <description>dV = 0.592 V; Vp = 1.111 V; Vm = 0.519 V</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>DV = 0.342 V; VP = 0.986 V; Vm = 0.644 V</description>
+                           <description>dV = 0.342 V; Vp = 0.986 V; Vm = 0.644 V</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>DV = 0.197 V; VP = 0.914 V; Vm = 0.716 V</description>
+                           <description>dV = 0.197 V; Vp = 0.914 V; Vm = 0.716 V</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -363,6 +363,18 @@ Number of Consecutive Scans Per Electrode</description>
                      <description>Out of Range Flag</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not Out-of-range</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Out-of-range</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>

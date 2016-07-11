@@ -5,7 +5,9 @@ Devices using this peripheral:
       MK60F12
       MK60F15
       MK61F15
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "SMC_MK10F12" ?>
@@ -227,38 +229,40 @@ Causes the SMC to exit to normal RUN mode when any active MCU interrupt occurs w
                </fields>
             </register>
             <register>
-               <name>VLLSCTRL</name>
-               <description>VLLS Control Register</description>
+               <name>STOPCTRL</name>
+               <description>Stop Control Register\n
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0x3</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>VLLSM</name>
-                     <description>VLLS Mode Control
-This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
+                     <name>LLSM</name>
+                     <description>LLS or VLLS Mode Control
+This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>VLLS0</description>
+                           <description>VLLS0/LLSx reserved</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>VLLS1</description>
+                           <description>VLLS1/LLSx reserved</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>VLLS2</description>
+                           <description>VLLS2/LLS2(if available)</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>VLLS3</description>
+                           <description>VLLS3/LLS3(if available)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -283,8 +287,13 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="LLSM" > <name>VLLSM</name> <?ignoreOverlap?> <?hide?> </field>
                </fields>
             </register>
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name> <?hide?> <?doDerivedMacros?> <description>VLLS Control Register
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field
+(Freescale old name)</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

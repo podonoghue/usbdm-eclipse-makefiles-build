@@ -195,7 +195,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -205,7 +205,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
             <register>
                <name>STOPCTRL</name>
                <description>Stop Control Register\n
-The STOPCTRL register provides various control bits allowing the user to fine tune
+Provides various control bits allowing the user to fine tune
 power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
@@ -213,7 +213,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>VLLSM</name>
+                     <name>LLSM</name>
                      <description>VLLS Mode Control
 This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
@@ -231,7 +231,7 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Reserved</description>
+                           <description>VLLS2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -329,6 +329,10 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                   </field>
                </fields>
             </register>
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name> <?hide?> <?doDerivedMacros?> <description>VLLS Control Register
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field
+(Freescale old name)</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

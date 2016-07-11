@@ -103,7 +103,7 @@ After any system reset, this field is cleared by hardware on any successful writ
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Reserved</description>
+                           <description>Low-Leakage Stop (LLSx)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -175,7 +175,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -185,7 +185,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
             <register>
                <name>STOPCTRL</name>
                <description>Stop Control Register\n
-The STOPCTRL register provides various control bits allowing the user to fine tune
+Provides various control bits allowing the user to fine tune
 power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
@@ -193,7 +193,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>VLLSM</name>
+                     <name>LLSM</name>
                      <description>VLLS Mode Control
 This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
@@ -241,6 +241,7 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="LLSM" > <name>VLLSM</name> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>PORPO</name>
                      <description>POR Power Option\n
