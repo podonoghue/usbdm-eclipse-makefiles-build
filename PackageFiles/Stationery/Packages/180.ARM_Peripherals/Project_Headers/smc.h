@@ -33,6 +33,15 @@ protected:
    static constexpr volatile SMC_Type *smc     = Info::smc;
 
 public:
+
+#ifndef SMC_PMCTRL_LPWUI
+#define SMC_PMCTRL_LPWUI 0 // Not all target support this
+#endif
+
+   enum {
+      wake_onInt  = SMC_PMCTRL_LPWUI,
+   };
+
    enum {
       runm_run    = SMC_PMCTRL_RUNM(0),
       runm_vlpr   = SMC_PMCTRL_RUNM(2),
@@ -66,11 +75,23 @@ public:
    /**
     * Enter Power Mode
     *
-    * @param mode Power mode e.g. runm_vlpr
+    * @param mode Power mode e.g. wake_onInt + runm_vlpr
     */
-   static bool enterPowerMode(uint8_t mode) {
-      smc->PMCTRL = Info::pmctrl|mode;
-      return true;
+   static ErrorCode enterPowerMode(uint8_t mode) {
+      smc->PMCTRL = mode;
+      //TODO - wait for entry and check error?
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Enter Stop Mode
+    *
+    * @param mode Power mode e.g. wake_onInt + stopm_vlps
+    */
+   static ErrorCode enterStopMode(uint8_t mode) {
+      smc->PMCTRL = mode;
+      //TODO - wait for entry and check error?
+      return E_NO_ERROR;
    }
 
    /**

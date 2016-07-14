@@ -47,7 +47,6 @@ public:
 
       if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
          // RTC disabled
-         rtc->CR       = 0;
          return;
       }
 

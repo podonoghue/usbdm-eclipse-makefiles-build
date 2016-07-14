@@ -188,12 +188,12 @@ void SegmentLcd::setDPs(int digit, int value) {
 
 /**
  * Displays a hex value in a specified position on the LCD.  \n
- * Will display error if value is outside of range.
+ * Will display error if position is outside of range.
  *
- * @param value    Value to display (0-F)
+ * @param value    Value to display (0-F), -1 => blank
  * @param position Digit position (left=1 - 4=right)
  */
-void SegmentLcd::set(uint8_t value, uint8_t position) {
+void SegmentLcd::set(int value, int position) {
 
    typedef struct {
       uint8_t m1;
@@ -223,6 +223,10 @@ void SegmentLcd::set(uint8_t value, uint8_t position) {
       // Display "Err" if trying to access a digit that does not exist
       SegmentLcd::displayError(0x01);
    }
+   else if (value<0) {
+      lcd->WF[frontplanePins[((2*position)-2)]] = 0;
+      lcd->WF[frontplanePins[((2*position)-1)]] = 0;
+   }
    else {
       lcd->WF[frontplanePins[((2*position)-2)]] = segmentData[value].m1;
       lcd->WF[frontplanePins[((2*position)-1)]] = segmentData[value].m2;
@@ -232,7 +236,7 @@ void SegmentLcd::set(uint8_t value, uint8_t position) {
 /**
  * Displays a 4 digit decimal number
  *
- * @param value Value to display (0-9999)
+ * @param value Value to display (0000-9999)
  */
 void SegmentLcd::displayDecimal(uint16_t value){
 
@@ -249,9 +253,38 @@ void SegmentLcd::displayDecimal(uint16_t value){
 }
 
 /**
+ * Displays a 4 digit decimal number leading zero suppression
+ *
+ * @param value Value to display (0-9999)
+ */
+void SegmentLcd::displayDecimalLz(uint16_t value){
+
+   if (value > 9999) {
+      // Display "Err" if value is greater than 4 digits
+      displayError(0x10);
+   }
+   else{
+      bool leadingZero = true;
+      auto lzero = [&](int digit) {
+         if (digit>0) {
+            leadingZero = false;
+         }
+         if (!leadingZero) {
+            return digit;
+         }
+         return -1;
+      };
+      set(lzero(value/1000),     1);
+      set(lzero((value/100)%10), 2);
+      set(lzero((value/10)%10),  3);
+      set(value%10,              4);
+   }
+}
+
+/**
  * Displays a 4 Digit hex number
  *
- * @param value Value to display (0x0-0xFFFF)
+ * @param value Value to display (0x0000-0xFFFF)
  */
 void SegmentLcd::displayHex(uint16_t Value){
 

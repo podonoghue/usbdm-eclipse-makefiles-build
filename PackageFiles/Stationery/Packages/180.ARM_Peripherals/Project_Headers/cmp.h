@@ -21,7 +21,8 @@
 
 namespace USBDM {
 /**
- * @addtogroup CMP_Group Voltage reference
+ * @addtogroup CMP_Group CMP, Analogue Comparator
+ * @brief Pins used for Analogue Comparator
  * @{
  */
 

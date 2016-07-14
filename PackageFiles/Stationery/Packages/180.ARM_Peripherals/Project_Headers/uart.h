@@ -22,6 +22,7 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "mcg.h"
+#include <cstdio>
 
 namespace USBDM {
 
@@ -51,12 +52,12 @@ protected:
    /**
     * Set baud factor value for interface
     *
-    * This is calculated from processor frequency and given bits-per-second
+    * This is calculated from baud rate and UART clock frequency
     *
     * @param baudrate       - Interface speed in bits-per-second
     * @param clockFrequency - Frequency of UART clock
     */
-   void setBaudRate(uint32_t baudrate, unsigned clockFrequency) {
+   void setBaudRate(uint32_t baudrate, uint32_t clockFrequency) {
 
       // Disable UART before changing registers
       uart->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK);
@@ -79,7 +80,7 @@ protected:
 
       uart->C1 = 0;
 
-#ifdef USE_IRQ
+#if USE_IRQ
       // Enable UART Tx & Rx - with Rx IRQ
       uart->C2 = UART_C2_TE_MASK|UART_C2_RE_MASK|UART_C2_RIE_MASK;
 #else
@@ -87,6 +88,15 @@ protected:
       uart->C2 = UART_C2_TE_MASK|UART_C2_RE_MASK;
 #endif
    }
+
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param baudrate       - Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) = 0;
 
 public:
    /**
@@ -97,7 +107,7 @@ public:
     */
    void transmit(const uint8_t data[], uint16_t size) {
       while (size-->0) {
-         tx(*data++);
+         write(*data++);
       }
    }
 
@@ -109,29 +119,7 @@ public:
     */
    void receive(uint8_t data[], uint16_t size) {
       while (size-->0) {
-         *data++ = rx();
-      }
-   }
-   /*
-    * Transmits a single character over the UART (blocking)
-    *
-    * @param ch - character to send
-    */
-   void tx(int ch) {
-      while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
-         // Wait for Tx buffer empty
-         __asm__("nop");
-      }
-      uart->D = ch;
-   }
-   /*
-    * Transmits a '\0' terminated string over the UART (blocking)
-    *
-    * @param s - String to send
-    */
-   void tx(const char *s) {
-      while (*s != '\0') {
-         tx(*s++);
+         *data++ = readChar();
       }
    }
    /*
@@ -139,7 +127,7 @@ public:
     *
     * @return - character received
     */
-   int rx(void) {
+   int readChar(void) {
       uint8_t status;
       // Wait for Rx buffer full
       do {
@@ -155,6 +143,94 @@ public:
       }
       return ch;
    }
+   /**
+    * Transmit a character
+    *
+    * @param ch - character to send
+    */
+   void write(char ch) {
+      while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
+         // Wait for Tx buffer empty
+         __asm__("nop");
+      }
+      uart->D = ch;
+   }
+   /**
+    * Transmit a C string
+    *
+    * @param str String to print
+    */
+   void write(const char *str) {
+      while (*str != '\0') {
+         write(*str++);
+      }
+   }
+   /**
+    * Transmit a unsigned
+    *
+    * @param value Unsigned to print
+    */
+   void write(unsigned value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%u", value);
+      write(buff);
+   }
+   /**
+    * Transmit a integer
+    *
+    * @param value Integer to print
+    */
+   void write(int value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%d", value);
+      write(buff);
+   }
+   /**
+    * Transmit an unsigned long
+    *
+    * @param value Unsigned long to print
+    */
+   void write(unsigned long value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%lu", value);
+      write(buff);
+   }
+   /**
+    * Transmit a long
+    *
+    * @param value Long to print
+    */
+   void write(long value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%ld", value);
+      write(buff);
+   }
+   /**
+    * Transmit a float
+    *
+    * To use this function it is necessary to enable floating point printing
+    * in the linker options (Support %f format in printf -u _print_float)).
+    *
+    * @param value Float to print
+    */
+   void write(float value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%f", value);
+      write(buff);
+   }
+   /**
+    * Transmit a double
+    *
+    * To use this function it is necessary to enable floating point printing
+    * in the linker options (Support %f format in printf -u _print_float)).
+    *
+    * @param value Double to print
+    */
+   void write(double value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%f", value);
+      write(buff);
+   }
    /*
     * Clear UART error status
     */
@@ -167,7 +243,7 @@ public:
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  UART_0 *uart0 = new USBDM::UART_T<Uart1Info>(DEFAULT_BAUD_RATE, SYSTEM_UART0_CLOCK);
+ *  Uart *uart0 = new USBDM::Uart_T<Uart1Info>(DEFAULT_BAUD_RATE, SYSTEM_UART0_CLOCK);
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -201,10 +277,13 @@ public:
       Info::initPCRs();
       setBaudRate(baudrate);
    }
+
    /**
-    * Set baud rate
+    * Set baud factor value for interface
     *
-    * @param baudrate Baud rate to set
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param baudrate       - Interface speed in bits-per-second
     */
    void setBaudRate(unsigned baudrate) {
       Uart::setBaudRate(baudrate, Info::getInputClockFrequency());

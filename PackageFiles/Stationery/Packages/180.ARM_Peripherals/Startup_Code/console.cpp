@@ -25,14 +25,16 @@
   * Any manual changes will be lost.
   */
 
-// Maps console to UART used
-using  Console = $(/Console/console_device:USBDM::Uart0);
+namespace USBDM {
+
+/**
+ * @addtogroup CONSOLE_Group Console
+ * @brief Console serial interface
+ * @{
+ */
 
 // Console instance
-Console *console = nullptr;
-
-// Default baud rate for console
-constexpr int defaultBaudRate = $(/Console/defaultBaudRate:USBDM::Uart0);
+Console console;
 
 /*
  * Initialises the Console
@@ -41,9 +43,7 @@ constexpr int defaultBaudRate = $(/Console/defaultBaudRate:USBDM::Uart0);
  */
 extern "C"
 void console_initialise() {
-   if (console == nullptr) {
-      console = new Console(defaultBaudRate);
-   }
+   console.setBaudRate(defaultBaudRate);
 }
 
 /*
@@ -53,10 +53,7 @@ void console_initialise() {
  */
 extern "C"
 void console_setBaudRate(int baudRate = defaultBaudRate) {
-   if (console == nullptr) {
-      return;
-   }
-   console->setBaudRate(baudRate);
+   console.setBaudRate(baudRate);
 }
 
 /*
@@ -66,7 +63,7 @@ void console_setBaudRate(int baudRate = defaultBaudRate) {
  */
 extern "C"
 void console_txChar(int ch) {
-   console->tx(ch);
+   console.write((char)ch);
 }
 
 /*
@@ -76,9 +73,15 @@ void console_txChar(int ch) {
  */
 extern "C"
 int console_rxChar(void) {
-   int ch = console->rx();
+   int ch = console.readChar();
    if (ch == '\r') {
       ch = '\n';
    }
    return ch;
 }
+
+/**
+ * @}
+ */
+
+} // End namespace USBDM

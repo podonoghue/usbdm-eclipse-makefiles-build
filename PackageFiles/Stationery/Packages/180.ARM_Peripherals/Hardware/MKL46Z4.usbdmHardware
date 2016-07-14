@@ -1222,8 +1222,8 @@
          <placement pin="PTB1"          location="A1" />
          <placement pin="PTB10"         location="" />
          <placement pin="PTB11"         location="" />
-         <placement pin="PTB16"         location="" />
-         <placement pin="PTB17"         location="" />
+         <placement pin="PTB16"         location="Touch1" />
+         <placement pin="PTB17"         location="Touch2" />
          <placement pin="PTB18"         location="" />
          <placement pin="PTB19"         location="" />
          <placement pin="PTB2"          location="A2" />

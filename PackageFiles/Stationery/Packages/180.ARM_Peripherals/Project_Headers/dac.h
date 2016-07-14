@@ -23,8 +23,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup DAC_Group DAC, Digital to Analogue Converter
- * @brief Abstraction for Digital to Analogue Converter
+ * @addtogroup DAC_Group DAC, Digital-to-Analogue Converter
+ * @brief Pins used for Digital-to-Analogue Converter
  * @{
  */
 /**

@@ -22,6 +22,7 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "mcg.h"
+#include <cstdio>
 
 namespace USBDM {
 
@@ -97,7 +98,7 @@ public:
     */
    void transmit(const uint8_t data[], uint16_t size) {
       while (size-->0) {
-         tx(*data++);
+         write(*data++);
       }
    }
 
@@ -109,29 +110,7 @@ public:
     */
    void receive(uint8_t data[], uint16_t size) {
       while (size-->0) {
-         *data++ = rx();
-      }
-   }
-   /*
-    * Transmits a single character over the UART (blocking)
-    *
-    * @param ch - character to send
-    */
-   void tx(int ch) {
-      while ((uart->STAT & LPUART_STAT_TDRE_MASK) == 0) {
-         // Wait for Tx buffer empty
-         __asm__("nop");
-      }
-      uart->DATA = ch;
-   }
-   /*
-    * Transmits a '\0' terminated string over the UART (blocking)
-    *
-    * @param s - String to send
-    */
-   void tx(const char *s) {
-      while (*s != '\0') {
-         tx(*s++);
+         *data++ = readChar();
       }
    }
    /*
@@ -139,7 +118,7 @@ public:
     *
     * @return - character received
     */
-   int rx(void) {
+   int readChar(void) {
       uint8_t status;
       // Wait for Rx buffer full
       do {
@@ -154,6 +133,94 @@ public:
          ch = '\n';
       }
       return ch;
+   }
+   /**
+    * Transmit a character
+    *
+    * @param ch - character to send
+    */
+   void write(char ch) {
+      while ((uart->STAT & LPUART_STAT_TDRE_MASK) == 0) {
+         // Wait for Tx buffer empty
+         __asm__("nop");
+      }
+      uart->DATA = ch;
+   }
+   /**
+    * Transmit a C string
+    *
+    * @param str String to print
+    */
+   void write(const char *str) {
+      while (*str != '\0') {
+         write(*str++);
+      }
+   }
+   /**
+    * Transmit a unsigned
+    *
+    * @param value Unsigned to print
+    */
+   void write(unsigned value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%u", value);
+      write(buff);
+   }
+   /**
+    * Transmit a integer
+    *
+    * @param value Integer to print
+    */
+   void write(int value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%d", value);
+      write(buff);
+   }
+   /**
+    * Transmit an unsigned long
+    *
+    * @param value Unsigned long to print
+    */
+   void write(unsigned long value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%lu", value);
+      write(buff);
+   }
+   /**
+    * Transmit a long
+    *
+    * @param value Long to print
+    */
+   void write(long value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%ld", value);
+      write(buff);
+   }
+   /**
+    * Transmit a float
+    *
+    * To use this function it is necessary to enable floating point printing
+    * in the linker options (Support %f format in printf -u _print_float)).
+    *
+    * @param value Float to print
+    */
+   void write(float value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%f", value);
+      write(buff);
+   }
+   /**
+    * Transmit a double
+    *
+    * To use this function it is necessary to enable floating point printing
+    * in the linker options (Support %f format in printf -u _print_float)).
+    *
+    * @param value Double to print
+    */
+   void write(double value) {
+      char buff[20];
+      snprintf(buff, sizeof(buff), "%f", value);
+      write(buff);
    }
 };
 
@@ -173,10 +240,10 @@ public:
  *
  *  for(;;) {
  *     // Transmit block
- *     lpuart0->transmit(txDataBuffer, sizeof(txDataBuffer));
+ *     lpuart->transmit(txDataBuffer, sizeof(txDataBuffer));
  *
  *     // Receive block
- *     lpuart0->receive((rxDataBuffer, sizeof(rxDataBuffer));
+ *     lpuart->receive((rxDataBuffer, sizeof(rxDataBuffer));
  *  }
  *  @endcode
  *
@@ -184,14 +251,10 @@ public:
  */
 template<class Info> class Lpuart_T : public Lpuart {
 public:
-   static class Lpuart *thisPtr;
-
-public:
    /**
     * Construct LPUART interface
     *
     * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of LPUART clock
     */
    Lpuart_T(unsigned baudrate) : Lpuart(Info::lpuart) {
       // Enable clock to UART interface
@@ -213,6 +276,49 @@ public:
       Lpuart::setBaudRate(baudrate, Info::getClockFrequency());
    }
 };
+
+/**
+ * Type definition for UART interrupt call back
+ *
+ *  @param status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
+ */
+typedef void (*LPUARTCallbackFunction)(uint8_t status);
+
+/**
+ * Template class to provide UART callback
+ */
+template<class Info>
+class LpuartIrq_T : public Lpuart_T<Info> {
+
+protected:
+   /** Callback function for ISR */
+   static UARTCallbackFunction callback;
+
+   LpuartIrq_T(unsigned baud) : Lpuart_T<Info>(baud) {
+   }
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler(void) {
+      uint8_t status = Info::uart->S1;
+      if (callback != 0) {
+         callback(status);
+      }
+   }
+
+   /**
+    * Set Callback function
+    *
+    *   @param theCallback - Callback function to be executed on UART alarm interrupt
+    */
+   static void setCallback(UARTCallbackFunction theCallback) {
+      callback = theCallback;
+   }
+};
+
+template<class Info> LPUARTCallbackFunction LpuartIrq_T<Info>::callback = 0;
 
 #ifdef USBDM_LPUART0_IS_DEFINED
 /**
@@ -240,9 +346,9 @@ public:
  *
  * @tparam Info   Class describing LPUART hardware
  */
-class Lpuart0 : public Lpuart_T<Lpuart0Info> {
+class Lpuart0 : public LpuartIrq_T<Lpuart0Info> {
 public:
-   Lpuart0(unsigned baud=DEFAULT_BAUD_RATE) : Lpuart_T(baud) {
+   Lpuart0(unsigned baud=Lpuart0Info::defaultBaudRate) : LpuartIrq_T(baud) {
    }
 };
 #endif

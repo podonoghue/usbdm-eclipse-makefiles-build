@@ -49,7 +49,7 @@ public:
       tsi->THRESHOLD = Info::tsi_threshold;
       tsi->PEN       = Info::tsi_pen;
 
-      enableNvicInterrupts(Info::irqHandlerInstalled);
+      enableNvicInterrupts();
    }
 
    /**
@@ -57,7 +57,7 @@ public:
     *
     * @param enable True => enable, False => disable
     */
-   static void enableNvicInterrupts(bool enable) {
+   static void enableNvicInterrupts(bool enable=true) {
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);

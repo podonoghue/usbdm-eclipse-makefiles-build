@@ -11,25 +11,48 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_lpuart_clock" optional="true"/>
    <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" constant="false" optional="true" />
    <aliasOption key="/SIM/system_lpuart$(_instance)_clock" optional="true"/>
+   
+   <choiceOption name="defaultBaudRate" 
+      description="UART default baud rate"
+      toolTip="Used by default UART setup for stdio">
+      <choice value="110"     name="110" />
+      <choice value="300"     name="300" />
+      <choice value="600"     name="600" />
+      <choice value="1200"    name="1200" />
+      <choice value="2400"    name="2400" />
+      <choice value="4800"    name="4800" />
+      <choice value="9600"    name="9600" />
+      <choice value="14400"   name="14400" />
+      <choice value="19200"   name="19200" />
+      <choice value="28800"   name="28800" />
+      <choice value="38400"   name="38400" />
+      <choice value="56000"   name="56000" />
+      <choice value="57600"   name="57600" />
+      <choice value="115200"  name="115200" isDefault="true" />
+   </choiceOption>
 
    <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)txsrc"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc"  constant="false" optional="true" />
    </category>
 
+   <xi:include href="_irqOption.xml"/>
+
    <projectActionList id = "lpuart_files">
       <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getClockFrequency() {
-      \t   return SimInfo::getLpuart$(_instance)Clock();
-      \t}\n\n
+   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);\n\n
+
+   \t/**
+   \t * Get clock frequency
+   \t *
+   \t * @return Input clock frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getClockFrequency() {
+   \t   return SimInfo::getLpuart$(_instance)Clock();
+   \t}\n\n
    ]]></template>
 
    <signals/>

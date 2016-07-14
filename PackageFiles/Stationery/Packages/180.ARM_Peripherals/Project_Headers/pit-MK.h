@@ -104,7 +104,8 @@ public:
    /**
     * Enable/disable channel interrupts
     *
-    * @param enable True => enable, False => disable
+    * @param channel Channel being modified
+    * @param enable  True => enable, False => disable
     */
    static void enableInterrupts(int channel, bool enable=true) {
       if (enable) {
@@ -148,32 +149,33 @@ public:
 
       enableNvicInterrupts();
    }
-
-   /**
-    * Enable/disable interrupts in NVIC
-    *
-    * @param enable True => enable, False => disable
-    */
-   static void enableNvicInterrupts(bool enable=true) {
-      if (enable) {
-         // Enable interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
-   }
-
    /**
     *   Disable the PIT channel
     */
    static void finalise(uint8_t channel) {
       *clockReg &= ~Info::clockMask;
    }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param channel Channel being modified
+    * @param enable True => enable, False => disable
+    */
+   static void enableNvicInterrupts(int channel, bool enable=true) {
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
+
+         // Set priority level
+         NVIC_SetPriority((IRQn_Type)(Info::irqNums[0]+channel), Info::irqLevel);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
+      }
+   }
+
    /**
     *  Configure the PIT channel
     *
@@ -181,19 +183,32 @@ public:
     *  @param interval  Interval in timer ticks (usually bus clock period)
     *  @param tctrl     Timer Control Register value
     */
-   static void configureChannel(const uint8_t channel, uint32_t interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
+   static void configureChannel(const uint8_t channel, int interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
 
       pit->CHANNEL[channel].LDVAL = interval;
       pit->CHANNEL[channel].TCTRL = tctrl;
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
 
-      if (tctrl & PIT_TCTRL_TIE_MASK) {
-         // Enable timer interrupts
-         NVIC_EnableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
-
-         // Set arbitrary priority level
-         NVIC_SetPriority((IRQn_Type)(Info::irqNums[0]+channel), Info::irqLevel);
-      }
+      enableNvicInterrupts(channel);
+   }
+   /**
+    *  Configure the PIT channel
+    *
+    *  @param channel   Channel to configure
+    *  @param interval  Interval in seconds
+    *  @param tctrl     Timer Control Register value
+    */
+   static void configureChannel(const uint8_t channel, float interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
+      configureChannel(channel, (int)round(interval*PitInfo::getClockFrequency()), tctrl);
+   }
+   /**
+    * Set period in seconds
+    *
+    * @param channel Channel being modified
+    * @param interval Interval in seconds
+    */
+   static void setPeriod(int channel, float interval) {
+      pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
    }
    /**
     *   Disable the PIT channel
@@ -204,7 +219,7 @@ public:
       pit->CHANNEL[channel].TCTRL = 0;
 
       // Disable timer interrupts
-      NVIC_DisableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
+      enableNvicInterrupts(channel, false);
    }
    /**
     *  Use a PIT channel to implement a busy-wait delay
@@ -221,6 +236,7 @@ public:
       }
       configureChannel(channel, 0, 0);
    }
+
 };
 
 /**

@@ -13,6 +13,7 @@
 #include "pin_mapping.h"
 
 /*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+#include "pdb.h"
 #include "mcg.h"
 #include "ftm.h"
 #include "adc.h"
@@ -334,7 +335,6 @@ void PIT0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PIT1_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PIT2_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void PIT3_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
-void PDB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USB0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
 void USBDCD_IRQHandler(void)                  WEAK_DEFAULT_HANDLER;
 void TSI0_IRQHandler(void)                    WEAK_DEFAULT_HANDLER;
@@ -409,7 +409,7 @@ VectorTable const __vector_table = {
       PIT1_IRQHandler,               /*   47,   31  Periodic Interrupt Timer                                                         */
       PIT2_IRQHandler,               /*   48,   32  Periodic Interrupt Timer                                                         */
       PIT3_IRQHandler,               /*   49,   33  Periodic Interrupt Timer                                                         */
-      PDB0_IRQHandler,               /*   50,   34  Programmable Delay Block                                                         */
+      USBDM::Pdb0::irqHandler,       /*   50,   34  Programmable Delay Block                                                         */
       USB0_IRQHandler,               /*   51,   35  Universal Serial Bus                                                             */
       USBDCD_IRQHandler,             /*   52,   36  USB Device Charger Detection                                                     */
       TSI0_IRQHandler,               /*   53,   37  Touch Sense Interface                                                            */

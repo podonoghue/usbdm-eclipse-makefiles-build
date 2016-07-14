@@ -21,9 +21,9 @@
 
 namespace USBDM {
 /**
- * @addtogroup VREF_Group Voltage reference
+ * @addtogroup VREF_Group VREF, Voltage Reference
+ * @brief Pins used for Voltage Reference
  * @{
- */
 /**
  * Template class representing a Voltage Reference
  *

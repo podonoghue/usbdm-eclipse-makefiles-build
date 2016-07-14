@@ -8,6 +8,16 @@
       toolTip="Value loaded in timer register on roll-over"
       value="10000" min="0" max="65535" />
 
+   <floatOption name="pit_period" description="Default period of timer"
+      toolTip="Used to calculate the timer load value"
+      derived="true"
+      value="1m" min="0" units="s" />
+
+   <floatOption name="pit_frequency" description="Default frequency of timer"
+      toolTip="Used to calculate the timer load value"
+      derived="true"
+      value="1k" min="0" units="Hz" />
+
    <binaryOption name="pit_mcr_frz" description="Freeze in debug mode"
       toolTip="Controls whether the timer continues to run in debug mode">
       <choice value="0" name="Timers continue to run in debug mode" />
@@ -28,6 +38,10 @@
 
    <xi:include href="_irqOption.xml"/>
 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
+   </validate>
+
    <projectActionList id = "lptmr0_0" >
       <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
       <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" />
@@ -35,6 +49,15 @@
    </projectActionList>
          
    <template><![CDATA[
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getClockFrequency() {
+      \t   return SystemBusClock;
+      \t}\n\n
+   
       \t//! Default value for PIT->SC register\n
       \tstatic constexpr uint32_t loadValue  = 
       \t   $(pit_ldval);\n\n

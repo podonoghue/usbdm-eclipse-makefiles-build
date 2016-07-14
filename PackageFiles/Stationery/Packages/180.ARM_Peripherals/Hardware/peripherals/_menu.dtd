@@ -48,6 +48,7 @@
    <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset       CDATA        "0">
    <!ATTLIST intOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST intOption derived      (false|true) "false">
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption constant      (false|true) "false">
@@ -60,6 +61,7 @@
    <!ATTLIST bitmaskOption bitmask       CDATA        "0xFFFF">
    <!ATTLIST bitmaskOption bitList       CDATA        "">
    <!ATTLIST bitmaskOption indexedBy     CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption derived       (false|true) "false">
   
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption constant     (false|true) "false">
@@ -74,6 +76,7 @@
    <!ATTLIST floatOption min          CDATA        #IMPLIED>
    <!-- Maximum value (displayed value) -->
    <!ATTLIST floatOption max          CDATA        #IMPLIED>
+   <!ATTLIST floatOption derived      (false|true) "false">
   
 <!ELEMENT aliasOption EMPTY >
    <!ATTLIST aliasOption name        IDREF        #IMPLIED>
@@ -90,6 +93,7 @@
    <!ATTLIST stringOption toolTip      CDATA        "">
    <!ATTLIST stringOption value        CDATA        "0">
    <!ATTLIST stringOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST stringOption derived      (false|true) "false">
   
 <!ELEMENT numericListOption EMPTY >
    <!ATTLIST numericListOption constant     (false|true) "false">
@@ -103,6 +107,7 @@
    <!ATTLIST numericListOption min          CDATA        #IMPLIED>
    <!ATTLIST numericListOption max          CDATA        #IMPLIED>
    <!ATTLIST numericListOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST numericListOption derived      (false|true) "false">
   
 <!ELEMENT choiceOption (choice)+ >
    <!ATTLIST choiceOption constant     (false|true) "false">
@@ -113,6 +118,7 @@
    <!ATTLIST choiceOption toolTip      CDATA        "">
    <!ATTLIST choiceOption units        (None|Hz|Seconds)    "None">
    <!ATTLIST choiceOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST choiceOption derived      (false|true) "false">
   
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value        CDATA        #REQUIRED>
@@ -127,6 +133,7 @@
    <!ATTLIST binaryOption description  CDATA        #REQUIRED>
    <!ATTLIST binaryOption toolTip      CDATA        "">
    <!ATTLIST binaryOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST binaryOption derived      (false|true) "false">
 
 <!ELEMENT template (#PCDATA)>
    <!ATTLIST template name CDATA  "" >

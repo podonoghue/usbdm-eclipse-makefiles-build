@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- ftm_2ch_def.xml -->
+<!-- ftm_def.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
+   <intOption name="minimumResolution" description="Minimum resolution for TPM interval"
+      toolTip="This value is used as a minimum value for the timer interval in ticks \n
+         so that a reasonable resolution is available for PWM duty-cycle"
+      value="100" min="0" />
+      
    <intOption name="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
@@ -25,6 +30,7 @@
       <choice value="6" name="Divide by 64" />
       <choice value="7" name="Divide by 128" />
    </choiceOption>
+      
    <floatOption name="clockFrequency" 
       constant="true"
       description="Frequency of timer clock"
@@ -90,6 +96,7 @@
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" constant="false"/>
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
    </category>
+
    <xi:include href="_irqOption.xml"/>
 
    <validate
@@ -103,6 +110,8 @@
    </projectActionList>
          
    <template><![CDATA[
+      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      
       \t/**
       \t * Get input clock frequency
       \t *

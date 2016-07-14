@@ -178,8 +178,6 @@
    <aliasOption key="/SIM/system_core_clock" constant="false" />
    <aliasOption key="/SIM/system_bus_clock" constant="false" />
 
-   <xi:include href="_irqOption.xml"/>
-
    <category name="Device Parameters" description="Register values">
       <category name="MCG_C1" description="MCG Control Register 1">
          <choiceOption name="mcg_c1_clks"
@@ -219,7 +217,7 @@
    </validate>
 
    <projectActionList id = "mcg" >
-      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"      replace="true"  derived="true" />
+      <copy source="Project_Headers/mcg_lite.h"        target="Project_Headers/mcg.h"      replace="true"  derived="true" />
       <copy source="Startup_Code/mcg_lite.cpp"         target="Startup_Code/mcg.cpp"       replace="true"  derived="true" />
       <copy source="Snippets/test-mcgLite.cpp"         target="Snippets/test-mcgLite.cpp"  replace="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />

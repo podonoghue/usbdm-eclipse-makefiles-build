@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- tsi0.xml -->
+<!-- tsi0_mk.xml -->
 <!--
    Devices using this peripheral:
 -->
@@ -182,8 +182,8 @@
    ]]></template>
 
    <projectActionList id="tsi_files">
-      <copy
-         source="Project_Headers/tsi.h" target="Project_Headers/tsi.h" replace="true" derived="true" />
+      <copy source="Project_Headers/tsi_mk.h"     target="Project_Headers/tsi.h" replace="true" derived="true" />
+      <copy source="Snippets/tsi-mk-example.cpp"  target="Snippets/tsi-mk-example.cpp"  replace="true"  derived="true" />
    </projectActionList>
 
    <xi:include href="_irqOption.xml"/>

@@ -18,9 +18,38 @@
 #define UART_H_
 
 #ifdef __cplusplus
+namespace USBDM {
+
+/**
+ * @addtogroup CONSOLE_Group Console
+ * @brief Console serial interface
+ * @{
+ */
+
+// Default baud rate for console
+constexpr int defaultBaudRate = $(/Console/defaultBaudRate:USBDM::Uart0);
+
+// Maps console to UART used
+using  Console = $(/Console/console_device:USBDM::Uart0);
+
+// Console instance
+extern Console console;
+
+/**
+ * @}
+ */
+
+} // End namespace USBDM
+#endif
+
+#ifdef __cplusplus
 extern "C" {
 #endif
 
+/**
+ * The following functions are a C-wrapper used by the C library
+ * low-level stdio support.
+ */
 /**
  * Initialises the Console
  */

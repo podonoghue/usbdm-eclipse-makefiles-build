@@ -108,14 +108,14 @@ enum Ftm_Mode {
 /**
  * Type definition for FTM timer overflow interrupt call back
  */
-typedef void (*FTMToiCallbackFunction)();
+typedef void (*FTMToiCallbackFunction)(FTM_Type *tmr);
 /**
  * Type definition for FTM channel interrupt call back
  *
  * @param status Flags indicating interrupt source channels
  *
  */
-typedef void (*FTMCallbackFunction)(int status);
+typedef void (*FTMCallbackFunction)(FTM_Type *tmr, int status);
 
 /**
  * Base class representing an FTM
@@ -136,10 +136,6 @@ typedef void (*FTMCallbackFunction)(int status);
  */
 template<class Info>
 class FtmBase_T {
-
-private:
-   /** Minimum resolution required when setting interval */
-   static constexpr int MINIMUM_RESOLUTION = 100;
 
 protected:
    static constexpr volatile FTM_Type* tmr      = Info::ftm;
@@ -167,6 +163,16 @@ public:
    }
 
    /**
+    * Check if FTM is enabled\n
+    * Just check for clock enable and clock sourtce selection
+    *
+    * @return True => enabled
+    */
+   static bool isEnabled() {
+      return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & FTM_SC_CLKS_MASK) != 0);
+   }
+
+   /**
     * Configure Timer operation\n
     * Used to change configuration after enabling interface
     *
@@ -188,9 +194,7 @@ public:
       }
       setPeriodInTicks(period);
 
-      if (Info::irqEnabled) {
-         enableNvicInterrupts();
-      }
+      enableNvicInterrupts();
    }
 
    /**
@@ -244,7 +248,7 @@ public:
       while (prescalerValue<=7) {
          float    clock = inputClock/prescaleFactor;
          uint32_t mod   = round(period*clock);
-         if (mod < MINIMUM_RESOLUTION) {
+         if (mod < Info::minimumResolution) {
             // Too short a period for 1% resolution
             return setErrorCode(E_TOO_SMALL);
          }
@@ -276,7 +280,7 @@ public:
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK) != 0;
 
-      // Disable FTM so register changes are immediate
+      // Disable so register changes are immediate
       tmr->SC = FTM_SC_CLKS(0);
 
       if (centreAlign) {
@@ -301,7 +305,7 @@ public:
          // Left aligned PWM without CPWMS selected
          tmr->SC  = Info::sc;
       }
-      // Too long a period
+      // OK period
       return setErrorCode(E_NO_ERROR);
    }
 
@@ -520,7 +524,7 @@ public:
          // Clear TOI flag
          FtmBase_T<Info>::tmr->SC &= ~FTM_SC_TOF_MASK;
          if (toiCallback != 0) {
-            toiCallback();
+            toiCallback(FtmBase_T<Info>::tmr);
          }
          else {
             setAndCheckErrorCode(E_NO_HANDLER);
@@ -531,7 +535,7 @@ public:
          // Clear channel event flags
          FtmBase_T<Info>::tmr->STATUS &= ~status;
          if (callback != 0) {
-            callback(status);
+            callback(FtmBase_T<Info>::tmr, status);
          }
          else {
             setAndCheckErrorCode(E_NO_HANDLER);
@@ -587,20 +591,22 @@ public:
 
    /**
     * Enable channel (and set mode)\n
-    * Bug - re-enables FTM every time a channel is enabled\n
-    * Use enableChannel() to avoid this
+    * Enables owning FTM if not already enabled\n
+    * Also see /ref enableChannel()
     *
     * Enabled FTM as well
     */
    static void enable(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
-      FtmBase_T<Info>::enable();
+      if (!FtmBase_T<Info>::isEnabled()) {
+         // Enable parent FTM if needed
+         FtmBase_T<Info>::enable();
+      }
       FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
    /**
-    * Enable channel (and set mode)
-    *
-    * Doesn't affect FTM
+    * Enable channel (and set mode)\n
+    * Doesn't affect shared settings of owning FTM
     */
    static void enableChannel(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
       FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
@@ -777,8 +783,6 @@ public:
             FTM_QDCTRL_PHBFLTREN_MASK;   // Phase B filter
       ftm->CONF   = FTM_CONF_BDMMODE(3);
       ftm->FILTER = FTM_FILTER_CH0FVAL(3)|FTM_FILTER_CH1FVAL(3);
-
-      FtmBase_T<Info>::enableInterrupts(Info::irqEnabled);
    }
    /**
     * Reset position to zero

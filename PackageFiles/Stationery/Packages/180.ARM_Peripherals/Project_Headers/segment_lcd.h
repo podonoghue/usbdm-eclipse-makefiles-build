@@ -50,12 +50,12 @@ public:
 
    /**
     * Displays a hex value in a specified position on the LCD.  \n
-    * Will not display error if value is outside of range, but display will not be updated.
+    * Will display error if position is outside of range.
     *
-    * @param value    Value to display (0-F)
+    * @param value    Value to display (0-F), -1 => blank
     * @param position Digit position (left=1 - 4=right)
     */
-   static void set(uint8_t value,uint8_t position);
+   static void set(int value, int position);
 
    /**
     * Displays a 4 digit decimal number
@@ -63,6 +63,13 @@ public:
     * @param value Value to display (0-9999)
     */
    static void displayDecimal(uint16_t value);
+
+   /**
+    * Displays a 4 digit decimal number with leading zero suppression
+    *
+    * @param value Value to display (0-9999)
+    */
+   static void displayDecimalLz(uint16_t value);
 
    /**
     * Displays a 4 Digit hex number
