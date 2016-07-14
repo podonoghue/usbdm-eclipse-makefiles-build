@@ -259,7 +259,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
 //         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
 //      }
       long currentPPageAddress = 0;
-      bool isPaged = pagedAddressRadioButton->GetValue();
+      bool isPaged = pagedAddressRadioButton->IsEnabled() && pagedAddressRadioButton->GetValue();
       if (isPaged) {
          // Get current page value
          currentPPageAddress = 0;
@@ -276,7 +276,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
             uint8_t page = (start>>16)&0xFF;
             long int pagedStart = start & 0xFFFF;
             if (((end>>16)&0xFF) != page) {
-               writeStatus("Illegal range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
+               writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
                return BDM_RC_ILLEGAL_PARAMS;
             }
             long int pagedEnd = pagedStart+size-1;
