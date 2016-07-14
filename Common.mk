@@ -3,8 +3,6 @@
 
 #.SILENT :
 
-include /usr/share/java/java_defaults.mk
-
 MAJOR_VERSION := 4
 MINOR_VERSION := 12
 MICRO_VERSION := 1
@@ -54,6 +52,7 @@ else
       TARGET_LIBDIR   ?= ../PackageFiles/lib/x86_64-linux-gnu
       BUILDDIR_SUFFIX ?= .x86_64
    endif
+   include /usr/share/java/java_defaults.mk
 endif
 
 ifeq ($(UNAME_S),Windows)
