@@ -259,7 +259,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
 //         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
 //      }
       long currentPPageAddress = 0;
-      bool isPaged = pagedAddressRadioButton->IsEnabled() && pagedAddressRadioButton->GetValue();
+      bool isPaged = isPagedDevice() && pagedAddressRadioButton->GetValue();
       if (isPaged) {
          // Get current page value
          currentPPageAddress = 0;
@@ -507,7 +507,7 @@ void MemoryDumpDialogue::update() {
       interfaceSpeedControl->Enable(false);
       break;
    }
-   bool pagedAddressMode = pagedAddressRadioButton->IsEnabled() && pagedAddressRadioButton->GetValue();
+   bool pagedAddressMode = isPagedDevice() && pagedAddressRadioButton->GetValue();
    pageRegisterStaticText->Enable(pagedAddressMode);
    pageTextCntrl->Enable(pagedAddressMode);
 
@@ -690,7 +690,7 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    }
    pageTextCntrl->SetValue(wxString::Format("%lX", currentPPageAddress));
 
-   bool enableAddressMode  = (targetType == T_HCS08)||(targetType == T_HCS12);
+   bool enableAddressMode  = isPagedDevice();
    bool enableSpeedControl = (targetType == T_ARM) || (targetType == T_CFVx);
    bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
@@ -699,6 +699,10 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    pagedAddressRadioButton->Enable(enableAddressMode);
    interfaceSpeedControl->Enable(enableSpeedControl);
    populateInterfaceSpeeds();
+}
+
+bool MemoryDumpDialogue::isPagedDevice() {
+   return (targetType == T_HCS08)||(targetType == T_HCS12);
 }
 
 TargetType_t MemoryDumpDialogue::getTargetType() {

@@ -49,6 +49,8 @@ protected:
 
 
   void setTargetType(TargetType_t targetType);
+  bool isPagedDevice();
+
   TargetType_t getTargetType();
   void setVdd(TargetVddSelect_t targetVdd);
   TargetVddSelect_t getVdd();
