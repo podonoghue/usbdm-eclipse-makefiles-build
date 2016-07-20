@@ -59,6 +59,7 @@
      
       <!-- Check for presence of Kinetis Design Studio -->
       <Property Id="P.$(var.ECLIPSE_VER)_INSTALL">
+         <!-- This search is in the WIN64 area because Freescale got it wrong -->
          <RegistrySearch Id="Rs.$(var.ECLIPSE_VER)_INSTALL"
                     Root="HKLM"
                     Win64="yes"

@@ -45,7 +45,7 @@ template<class Info>
 class Pit_T {
 protected:
    /** Default TCTRL value for timer channel */
-   static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK|PIT_TCTRL_TIE_MASK);
+   static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
    /** Callback functions for ISRs */
    static PITCallbackFunction callback[Info::irqCount];
@@ -146,8 +146,9 @@ public:
 
       // Enable timer
       pit->MCR = mcr;
-
-      enableNvicInterrupts();
+      for (int i=0; i<Info::irqCount; i++) {
+         enableNvicInterrupts(i);
+      }
    }
    /**
     *   Disable the PIT channel
@@ -163,16 +164,26 @@ public:
     * @param enable True => enable, False => disable
     */
    static void enableNvicInterrupts(int channel, bool enable=true) {
+      if (channel>=Info::irqCount) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+      IRQn_Type irqNum;
+      switch(channel) {
+      case 0: irqNum = Info::irqNums[0]; break;
+      case 1: irqNum = Info::irqNums[1]; break;
+      case 2: irqNum = Info::irqNums[2]; break;
+      case 3: irqNum = Info::irqNums[3]; break;
+      }
       if (enable) {
          // Enable interrupts
-         NVIC_EnableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
+         NVIC_EnableIRQ(irqNum);
 
          // Set priority level
-         NVIC_SetPriority((IRQn_Type)(Info::irqNums[0]+channel), Info::irqLevel);
+         NVIC_SetPriority(irqNum, Info::irqLevel);
       }
       else {
          // Disable interrupts
-         NVIC_DisableIRQ((IRQn_Type)(Info::irqNums[0]+channel));
+         NVIC_DisableIRQ(irqNum);
       }
    }
 

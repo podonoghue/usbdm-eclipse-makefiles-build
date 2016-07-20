@@ -85,7 +85,7 @@ public:
     *  @param c1       Module Control Register 1
     *  @param c2       Module Control Register 2
     */
-   static void configure(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
+   static void enable(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
       // Enable clock
       *clockReg |= Info::clockMask;
       __DMB();
@@ -108,11 +108,12 @@ public:
    }
    /**
     * Set DAC output value
+    *
+    * @param value 12-bit value to write to DAC
     */
    static void setValue(uint16_t value) {
-      dac->DATA[0] = value;
+      dac->DATA[0] = DAC_DATA_DATA(value);
    }
-
 };
 
 /**

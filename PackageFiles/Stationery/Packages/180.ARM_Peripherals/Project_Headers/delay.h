@@ -29,12 +29,21 @@ static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
 #endif
 
 /**
- * Convert Milliseconds to timer ticks
+ * Convert milliseconds to timer ticks
  *
  * @return Time value in timer ticks
  */
 static inline int64_t convertMSToTicks(uint32_t ms) {
    return ((uint64_t)ms * SystemCoreClock) / 1000;
+}
+
+/**
+ * Convert timer ticks to milliseconds
+ *
+ * @return Time value in timer ticks
+ */
+static inline int64_t convertTicksToMS(uint32_t ticks) {
+   return ((uint64_t)ticks * 1000 / SystemCoreClock);
 }
 
 /**
@@ -76,6 +85,16 @@ void waitUS(uint32_t usToWait);
  */
 void waitMS(uint32_t msToWait);
 
+/**
+ * Simple delay routine
+ *
+ * @param seconds How many seconds to busy-wait
+ *
+ * @note Limited to 2^32 ms (71,582 minutes)
+ * @note Uses busy-waiting based on Systick timer
+ */
+void wait(float seconds);
+
 #ifdef __cplusplus
 /**
  * Routine to wait for an event with timeout
@@ -100,6 +119,18 @@ bool waitUS(uint32_t usToWait, bool testFn(void));
  * Note: Accuracy is affected by execution time of function.
  */
 bool waitMS(uint32_t msToWait, bool testFn(void));
+
+/**
+ * Routine to wait for an event with timeout
+ *
+ * @param seconds  How many seconds to busy-wait
+ * @param testFn   Polling function indicating if waited for event has occurred
+ *
+ * @return Indicate if event occurred: true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
+ */
+bool wait(float seconds, bool testFn(void));
 
 } // End namespace USBDM
 #endif

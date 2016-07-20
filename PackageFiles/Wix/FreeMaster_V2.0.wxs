@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <?define FM_VER="2_0" ?> 
+   <?define FM_ver="2.0" ?> 
+
+   <Fragment>
+      <!--======================================================
+               Directory structure
+      =======================================================-->
+      <DirectoryRef Id='TARGETDIR'>
+         <!-- Freescale FreeMASTER directory structure-->
+         <Directory Id="D.FREEMASTER_V$(var.FM_VER)" Name="NotFound$(var.FM_VER)">
+            <Directory Id="D.FREEMASTER_V$(var.FM_VER)_Plugins" Name="plugins">
+               <Directory Id="D.FREEMASTER_V$(var.FM_VER)_Plugins_bdm" Name="bdm"/>
+            </Directory>
+         </Directory>
+      </DirectoryRef>
+     
+      <!--======================================================
+               Registry searches
+      =======================================================-->
+     
+      <!-- Check for presence of FreeMASTER -->
+      <Property Id="P.FREEMASTER_V$(var.FM_VER)">
+         <RegistrySearch Id="Rs.FREEMASTER_V$(var.FM_VER)"
+                    Root="HKLM"
+                    Win64="no"
+                    Key="SOFTWARE\Freescale\FreeMASTER\$(var.FM_ver)"
+                    Name="Path"
+                    Type="directory" />
+      </Property>
+
+      <!-- Modify default install path for FreeMASTER -->
+      <Property Id="D.FREEMASTER_V$(var.FM_VER)">
+         <RegistrySearchRef Id="Rs.FREEMASTER_V$(var.FM_VER)" />
+      </Property>
+            
+      <!--=================================================================================
+           Actions
+      ==================================================================================-->
+
+      <!-- None -->
+
+      <!--======================================================
+               Components
+      =======================================================-->
+
+      <!-- USBDM Installed Marker -->
+      <DirectoryRef Id="D.FREEMASTER_V$(var.FM_VER)">
+         <Component Id='C.FREEMASTER_V$(var.FM_VER).Marker' Guid='46e06be2-2b72-4c5f-a1f6-8c95dd679569' >
+            <File Id='FREEMASTER_V$(var.FM_VER)' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
+            <!-- Needs these DLLs in EXEs directory as Freemaster already installs old version in Windows directory -->
+            <File Id='FREEMASTER_V$(var.FM_VER)Files4' DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files5' DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <!-- Freemaster Support -->
+      <DirectoryRef Id="D.FREEMASTER_V$(var.FM_VER)_Plugins_bdm">
+         <Component Id='C.FREEMASTER_V$(var.FM_VER).Files' Guid='b11e7e67-d646-473d-b4d5-662a4d12c160' >
+            <File Id='FREEMASTER_V$(var.FM_VER)Files1' DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'  KeyPath='yes'  />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files2' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-arm.4.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
+         </Component>
+      </DirectoryRef>
+
+      <Feature Id='F.FREEMASTER_V$(var.FM_VER)'
+            Title='FreeMASTER V$(var.FM_ver)'
+            Description="USBDM support for FreeMASTER V$(var.FM_ver)."
+            ConfigurableDirectory="D.FREEMASTER_V$(var.FM_VER)"
+            AllowAdvertise="no"
+            Level='100'>
+         <Condition Level='1'>
+            <![CDATA[Installed OR P.FREEMASTER_V$(var.FM_VER)]]>
+         </Condition>
+         <ComponentRef Id='C.FREEMASTER_V$(var.FM_VER).Marker' />
+         <ComponentRef Id='C.FREEMASTER_V$(var.FM_VER).Files' />
+      </Feature>
+
+   </Fragment>
+</Wix>

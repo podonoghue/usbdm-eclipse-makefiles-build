@@ -209,7 +209,7 @@
             Eclipse feature
       =======================================================-->
       <Feature Id='F.$(var.ECLIPSE_VER)'
-            Title='Kinetis Design Studio Plugins'
+            Title='Kinetis Design Studio V3.0 Plugins'
             Description='Add USBDM support to KDS:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
             ConfigurableDirectory="D.$(var.ECLIPSE_VER)_INSTALL"
             AllowAdvertise="no"

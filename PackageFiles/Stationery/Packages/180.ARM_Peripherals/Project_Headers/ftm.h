@@ -108,14 +108,13 @@ enum Ftm_Mode {
 /**
  * Type definition for FTM timer overflow interrupt call back
  */
-typedef void (*FTMToiCallbackFunction)(FTM_Type *tmr);
+typedef void (*FTMCallbackFunction)(volatile FTM_Type *tmr);
 /**
  * Type definition for FTM channel interrupt call back
  *
  * @param status Flags indicating interrupt source channels
- *
  */
-typedef void (*FTMCallbackFunction)(FTM_Type *tmr, int status);
+typedef void (*FTMChannelCallbackFunction)(volatile FTM_Type *tmr, int status);
 
 /**
  * Base class representing an FTM
@@ -158,6 +157,10 @@ public:
       tmr->CNTIN   = 0;
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
+	  //TODO Make configurable
+      tmr->CONF    = FTM_CONF_BDMMODE(1);
+	  //TODO Make configurable
+      tmr->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
 
       enableNvicInterrupts();
    }
@@ -399,7 +402,7 @@ public:
     */
 public:
    template<uint8_t inputNum>
-   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=FTM_FLTCTRL_FFVAL_MASK) {
+   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=(1<<FTM_FLTCTRL_FFVAL_SHIFT)-1) {
 
 #ifdef DEBUG_BUILD
    static_assert((inputNum<Info::InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
@@ -428,7 +431,7 @@ public:
       }
       // Enable fault input
       tmr->FLTCTRL |= (1<<inputNum);
-      // Enable fault mode
+      // Enable fault mode (All channels, manual)
       tmr->MODE    |= FTM_MODE_FAULTM(2);
    }
 
@@ -437,7 +440,7 @@ public:
     *
     * @param enable True = >enabled, False => disabled
     */
-   void enableFaultInterrupt(bool enable=true) {
+   static void enableFaultInterrupt(bool enable=true) {
       if (enable) {
          tmr->MODE |= FTM_MODE_FAULTIE_MASK;
       }
@@ -471,6 +474,22 @@ public:
       }
       else {
          tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+      }
+   }
+
+   /**
+    * Set PWM duty cycle\n
+    * Higher precision float version
+    *
+    * @param dutyCycle  Duty-cycle as percentage (float)
+    * @param channel Timer channel
+    */
+   static void setDutyCycle(float dutyCycle, int channel) {
+      if (tmr->SC&FTM_SC_CPWMS_MASK) {
+         tmr->CONTROLS[channel].CnV  = round((dutyCycle*tmr->MOD)/100.0f);
+      }
+      else {
+         tmr->CONTROLS[channel].CnV  = round((dutyCycle*(tmr->MOD+1))/100.0f);
       }
    }
 
@@ -511,16 +530,28 @@ class FtmIrq_T : public FtmBase_T<Info> {
 
 protected:
    /** Callback function for TOI ISR */
-   static FTMToiCallbackFunction toiCallback;
+   static FTMCallbackFunction toiCallback;
    /** Callback function for Channel ISR */
-   static FTMCallbackFunction callback;
+   static FTMChannelCallbackFunction callback;
+   /** Callback function for Channel Fault */
+   static FTMCallbackFunction faultCallback;
 
 public:
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      if (FtmBase_T<Info>::tmr->SC&FTM_SC_TOF_MASK) {
+      if ((FtmBase_T<Info>::tmr->MODE&FTM_MODE_FAULTIE_MASK) && (FtmBase_T<Info>::tmr->FMS&FTM_FMS_FAULTF_MASK)) {
+         FtmBase_T<Info>::tmr->FMS &= ~FTM_FMS_FAULTF_MASK;
+         if (faultCallback != 0) {
+            faultCallback(FtmBase_T<Info>::tmr);
+         }
+         else {
+            setAndCheckErrorCode(E_NO_HANDLER);
+         }
+      }
+
+      if ((FtmBase_T<Info>::tmr->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          FtmBase_T<Info>::tmr->SC &= ~FTM_SC_TOF_MASK;
          if (toiCallback != 0) {
@@ -537,9 +568,6 @@ public:
          if (callback != 0) {
             callback(FtmBase_T<Info>::tmr, status);
          }
-         else {
-            setAndCheckErrorCode(E_NO_HANDLER);
-         }
       }
    }
 
@@ -548,7 +576,7 @@ public:
     *
     * @param theCallback Callback function to execute on interrupt
     */
-   static void setToiCallback(FTMToiCallbackFunction theCallback) {
+   static void setToiCallback(FTMCallbackFunction theCallback) {
       toiCallback = theCallback;
    }
    /**
@@ -556,13 +584,22 @@ public:
     *
     * @param theCallback Callback function to execute on interrupt
     */
-   static void setChannelCallback(FTMCallbackFunction theCallback) {
+   static void setChannelCallback(FTMChannelCallbackFunction theCallback) {
       callback = theCallback;
+   }
+   /**
+    * Set fault Callback function
+    *
+    * @param theCallback Callback function to execute on interrupt
+    */
+   static void setFaultCallback(FTMCallbackFunction theCallback) {
+      faultCallback = theCallback;
    }
 };
 
-template<class Info> FTMToiCallbackFunction FtmIrq_T<Info>::toiCallback = 0;
-template<class Info> FTMCallbackFunction    FtmIrq_T<Info>::callback = 0;
+template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::toiCallback   = 0;
+template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback = 0;
+template<class Info> FTMChannelCallbackFunction    FtmIrq_T<Info>::callback      = 0;
 
 /**
  * Template class representing a FTM timer channel
@@ -632,14 +669,6 @@ public:
    }
 
    /**
-    * Set PWM duty cycle
-    *
-    * @param dutyCycle  Duty-cycle as percentage
-    */
-   static void setDutyCycle(int dutyCycle) {
-      FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
-   }
-   /**
     * Set PWM high time in ticks\n
     * Assumes value is less than period
     *
@@ -650,12 +679,31 @@ public:
    }
 
    /**
-    * Set PWM high time in seconds
+    * Set PWM high time in seconds\n
+    * Higher precision float version
     *
     * @param highTime   PWM high time in seconds
     */
    static ErrorCode setHighTime(float highTime) {
       return FtmBase_T<Info>::setHighTime(highTime, channel);
+   }
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
+   static void setDutyCycle(int dutyCycle) {
+      FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
+   }
+
+   /**
+    * Set PWM duty cycle
+    *
+    * @param dutyCycle  Duty-cycle as percentage
+    */
+   static void setDutyCycle(float dutyCycle) {
+
+      FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
 
 };
@@ -767,6 +815,9 @@ private:
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 public:
+   /**
+    * Enable quadrature decoding
+    */
    static void enable() {
       Info::InfoQUAD::initPCRs();
 
@@ -778,23 +829,38 @@ public:
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder
-            FTM_QDCTRL_QUADMODE_MASK|    // Count mode
-            FTM_QDCTRL_PHAFLTREN_MASK|   // Phase A filter
-            FTM_QDCTRL_PHBFLTREN_MASK;   // Phase B filter
+            FTM_QDCTRL_QUADMODE(0);      // Quadrature mode
       ftm->CONF   = FTM_CONF_BDMMODE(3);
-      ftm->FILTER = FTM_FILTER_CH0FVAL(3)|FTM_FILTER_CH1FVAL(3);
    }
+   /**
+    * Enable/disables filtering of quadrature inputs
+    *
+    * @param filterValue 0=>disable, 1..15 filter length
+    */
+   static void enableFilter(int filterValue=7) {
+      if (filterValue>0) {
+         ftm->FILTER |= FTM_FILTER_CH0FVAL(filterValue)| FTM_FILTER_CH1FVAL(filterValue);
+         ftm->QDCTRL |= FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK;
+      }
+      else {
+         ftm->QDCTRL &= ~(FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK);
+      }
+   }
+
    /**
     * Reset position to zero
     */
    static void resetPosition() {
+      // Note: writing ANY value clears CNT (cannot set value)
       ftm->CNT = 0;
    }
    /**
     * Get Quadrature encoder position
+    *
+    * @return Signed number representing position relative to reference location
     */
-   static uint16_t getPosition() {
-      return ftm->CNT;
+   static int16_t getPosition() {
+      return (int16_t)(ftm->CNT);
    }
 };
 
