@@ -75,7 +75,8 @@ public:
       }
 
       // Update settings
-      rtc->CR  = Info::cr;
+      rtc->CR   = Info::cr;
+      rtc->IER  = 0;
 
       enableNvicInterrupts();
    }
@@ -86,7 +87,8 @@ public:
     * @param enable true to enable, false to disable
     */
    static void enableNvicInterrupts(bool enable=true) {
-
+      // Clear pending to avoid POR interrupt
+      NVIC_ClearPendingIRQ(Info::irqNums[0]);
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
@@ -165,16 +167,29 @@ public:
    }
 
    /**
-    * Enable/disable rising edge interrupts
+    * Enable/disable RTC Alarm interrupts
     *
     * @param enable True=>enable, False=>disable
     */
-   static void enableInterrupts(bool enable=true) {
+   static void enableAlarmInterrupts(bool enable=true) {
       if (enable) {
          RTC->IER   |= RTC_IER_TAIE_MASK;
       }
       else {
          RTC->IER   &= ~RTC_IER_TAIE_MASK;
+      }
+   }
+   /**
+    * Enable/disable RTC Seconds interrupts
+    *
+    * @param enable True=>enable, False=>disable
+    */
+   static void enableSecondsInterrupts(bool enable=true) {
+      if (enable) {
+         RTC->IER   |= RTC_IER_TSIE_MASK;
+      }
+      else {
+         RTC->IER   &= ~RTC_IER_TSIE_MASK;
       }
    }
    /**
