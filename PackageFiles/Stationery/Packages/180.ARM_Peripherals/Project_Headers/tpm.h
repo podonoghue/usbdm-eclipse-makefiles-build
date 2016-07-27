@@ -162,7 +162,7 @@ public:
     * @return True => enabled
     */
    static bool isEnabled() {
-      return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & FTM_SC_CLKS_MASK) != 0);
+      return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & TPM_SC_CMOD_MASK) != 0);
    }
 
    /**
