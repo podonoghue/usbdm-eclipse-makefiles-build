@@ -80,7 +80,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>Undefined</description>
+                           <description>24 KBytes</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -90,7 +90,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0110</name>
-                           <description>Undefined</description>
+                           <description>48 KBytes</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -100,12 +100,12 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Undefined</description>
+                           <description>96 KBytes</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Undefined</description>
+                           <description>128 KBytes</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -706,12 +706,12 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Unused</description>
+                           <description>Reserved</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Unused</description>
+                           <description>Reserved</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -731,7 +731,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1111</name>
-                           <description>Unused</description>
+                           <description>Reserved</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -833,12 +833,12 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Reserved</description>
+                           <description>121-pin</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Reserved</description>
+                           <description>144-pin</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -848,7 +848,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Reserved</description>
+                           <description>196-pin</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -858,7 +858,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>
-                           <description>Reserved</description>
+                           <description>256-pin</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -876,42 +876,42 @@ Allows extra drive-strength for PTD7</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>K10</description>
+                           <description>K10 or K12 Family</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>K20</description>
+                           <description>K20 or K22 Family</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>K30</description>
+                           <description>K30 Family or K11 Family or K61 Family</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>K40</description>
+                           <description>K40 Family or K21 Family</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Reserved</description>
+                           <description>K60 or K62 Family</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>Reserved</description>
+                           <description>K70 Family</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>K50</description>
+                           <description>KW24 Family</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>K51</description>
+                           <description>Reserved</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
