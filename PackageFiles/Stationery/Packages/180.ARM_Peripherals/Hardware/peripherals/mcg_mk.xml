@@ -10,10 +10,12 @@
          <aliasOption key="/RTC/rtcclk_clock" />
          <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
          <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
-      </category><category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]">
+      </category>
+      
+      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]">
             <aliasOption key="/OSC0/osc_input_freq" constant="false" />
             <aliasOption key="/OSC0/erefs0" constant="false" />
-         </category>
+      </category>
       <category name="Clocks" description="Clock Sources"
          toolTip="SLOW_IRC, FAST_IRC,USB_CLKIN, LPO" >
          <intOption name="system_slow_irc_clock"
