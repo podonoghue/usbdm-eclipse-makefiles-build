@@ -25,14 +25,17 @@ namespace USBDM {
    static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
 
 /**
- * Sets Communication speed for SPI
+ * Calculate communication speed factors for SPI
  *
- * @param frequency => Frequency in Hz
+ * @param frequency      => Communication frequency in Hz
+ * @param clockFrequency => Clock frequency of SPI in Hz
+ *
+ * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed
  */
-void Spi::setSpeed(uint32_t frequency, uint32_t clockFrequency) {
+uint32_t Spi::calculateSpeed(uint32_t frequency, uint32_t clockFrequency) {
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
@@ -48,11 +51,10 @@ void Spi::setSpeed(uint32_t frequency, uint32_t clockFrequency) {
             difference = (frequency - calculatedFrequency);
             bestBR  = br;
             bestPBR = pbr;
-            interfaceFrequency = calculatedFrequency;
          }
       }
    }
-   spiBaudValue = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
+   return SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
 }
 
 /**

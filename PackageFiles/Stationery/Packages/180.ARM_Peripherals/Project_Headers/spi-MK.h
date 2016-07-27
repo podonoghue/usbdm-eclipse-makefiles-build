@@ -45,7 +45,6 @@ class Spi {
 protected:
    volatile  SPI_Type *spi;       //!< SPI hardware
    uint32_t  spiBaudValue;        //!< Current Baud Rate
-   uint32_t  interfaceFrequency;  //!< Interface frequency to use
    uint32_t  pushrMask;           //!< Value to combine with data
 
 protected:
@@ -70,15 +69,30 @@ public:
    virtual void disablePins() = 0;
 
    /**
-    * Sets Communication speed for SPI
+    * Calculate communication speed factors for SPI
     *
-    * @param frequency      => Frequency in Hz (0 => use default value)
-    * @param clockFrequency => Frequency of SPI clock (usually buss clock)
+    * @param frequency      => Communication frequency in Hz
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    *
+    * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * Note: Chooses the highest speed that is not greater than frequency.
-    * Note: This will only have effect the next time a CTAR is changed
+    * Note: Only has effect from when the CTAR value is next changed
     */
-   void setSpeed(uint32_t frequency, uint32_t clockFrequency);
+   static uint32_t calculateSpeed(uint32_t frequency, uint32_t clockFrequency);
+
+   /**
+    * Sets Communication speed for SPI
+    *
+    * @param frequency      => Communication frequency in Hz
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    * Note: Only has effect from when the CTAR value is next changed
+    */
+   void setSpeed(uint32_t frequency, uint32_t clockFrequency) {
+      spiBaudValue = calculateSpeed(frequency, clockFrequency);
+   }
 
    /**
     * Sets Communication speed for SPI
@@ -98,14 +112,6 @@ public:
    void setMode(uint32_t mode) {
       // Sets the default CTAR value with 8 bits
       setCTAR0Value((mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF))|SPI_CTAR_FMSZ(8-1));
-   }
-   /**
-    * Gets current speed of interface
-    *
-    * @return Speed in Hz
-    */
-   uint32_t getSpeed(void) {
-      return interfaceFrequency;
    }
    /**
     * Set value that is combined with data for PUSHR register
@@ -149,7 +155,7 @@ public:
 
    static constexpr uint32_t CTAR_MASK = ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK|SPI_CTAR_DBR_MASK);
 
-   /*! Set SPI.CTAR0 value
+   /** Set SPI.CTAR0 value
     *
     * @param ctar 32-bit CTAR value (excluding baud related settings)
     *     e.g. setCTAR0Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
@@ -158,7 +164,7 @@ public:
       spi->CTAR[0] = spiBaudValue|(ctar&CTAR_MASK);
    }
 
-   /*! Set SPI.CTAR1 value
+   /** Set SPI.CTAR1 value
     *
     * @param ctar 32-bit CTAR value (excluding baud related settings)
     *     e.g. setCTAR1Value(SPI_CTAR_SLAVE_FMSZ(8-1)|SPI_CTAR_CPOL_MASK|SPI_CTAR_CPHA_MASK);
