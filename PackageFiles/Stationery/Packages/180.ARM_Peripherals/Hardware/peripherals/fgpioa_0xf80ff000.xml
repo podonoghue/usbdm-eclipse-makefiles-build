@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- gpioa_0x400FF000.xml -->
+<!-- fgpioa_0xf8000000.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="gpio_def.xml"/>
