@@ -198,12 +198,16 @@ public:
     *   @param theCallback - Callback function to be executed on RTC alarm interrupt
     *   @param time        - Time to set alarm for (time since the epoch in seconds)
     */
-   static void setCallback(RTCCallbackFunction theCallback, uint32_t time) {
+   static void setCallback(RTCCallbackFunction theCallback) {
       callback = theCallback;
-      if (callback != NULL) {
-         // Set alarm time
-         RtcBase_T<Info>::rtc->TAR   = time;
-      }
+   }
+   /**
+    * Set Callback function
+    *
+    *   @param time        - Time to set alarm for (time since the epoch in seconds)
+    */
+   static void setAlarm(uint32_t time) {
+         RtcBase_T<Info>::rtc->TAR = time;
    }
 };
 
