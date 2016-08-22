@@ -232,7 +232,7 @@ private:
     */
    static void setPCRs(uint32_t pcrValue) {
       // Enable clock to GPCLR & GPCHR
-      SIM->FIXED_PORT_CLOCK_REG |= Info::portClockMask;
+      SIM->FIXED_PORT_CLOCK_REG |= Info::clockMask;
 
       // Include the if's as I expect one branch to be removed by optimisation unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
@@ -284,6 +284,14 @@ public:
     */
    static void bitClear(const uint32_t mask) {
       gpio->PCOR = (mask<<right)&MASK;
+   }
+   /**
+    * Toggle bits in field
+    *
+    * @param mask Mask to apply to the field (1 => toggle bit, 0 => unchanged)
+    */
+   static void bitToggle(const uint32_t mask) {
+      gpio->PTOR = (mask<<right)&MASK;
    }
    /**
     * Read field
@@ -635,8 +643,8 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  *
  * @tparam bitNum        Bit number in the port
  */
-
 template<uint8_t bitNum> class GpioE : public Gpio_T<GpioEInfo, bitNum> {};
+
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T
  *
