@@ -196,13 +196,12 @@ public:
     * Set Callback function
     *
     *   @param theCallback - Callback function to be executed on RTC alarm interrupt
-    *   @param time        - Time to set alarm for (time since the epoch in seconds)
     */
    static void setCallback(RTCCallbackFunction theCallback) {
       callback = theCallback;
    }
    /**
-    * Set Callback function
+    * Set alarm time
     *
     *   @param time        - Time to set alarm for (time since the epoch in seconds)
     */
