@@ -80,6 +80,17 @@ enum Adc_Resolution {
 };
 
 /**
+ * ADC Resolutions for use with AnalogueIO::setMode()
+ */
+enum Adc_Averaging {
+	   averaging_off = 0,
+	   averaging_4   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(0),
+	   averaging_8   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(1),
+	   averaging_16  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(2),
+	   averaging_32  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(3),
+};
+
+/**
  * Type definition for ADC interrupt call back
  *
  * @param value Conversion value from channel
@@ -163,12 +174,23 @@ public:
    /**
     * Set conversion mode
     *
-    * @param mode Mode for converter e.g resolution_16bit_se
+    * @param mode Mode for converter e.g. resolution_16bit_se
     *
     * @note This affects all channels on the ADC
     */
    static void setMode(uint32_t mode = resolution_16bit_se) {
       adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
+   }
+
+   /**
+    * Set averaging mode
+    *
+    * @param mode Mode for averaging e.g. averaging_4 etc
+    *
+    * @note This affects all channels on the ADC
+    */
+   static void setAveraging(uint32_t mode = averaging_4) {
+      adc->SC3 = (ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK)&mode;
    }
 
    /**
