@@ -44,15 +44,16 @@ public:
 
       Info::initPCRs();
 
-      enableNvicInterrupts(Info::irqHandlerInstalled);
+      enableNvicInterrupts();
    }
 
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable True => enable, False => disable
+    * @param enable true to enable, false to disable
     */
-   static void enableNvicInterrupts(bool enable) {
+   static void enableNvicInterrupts(bool enable=true) {
+
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
@@ -84,62 +85,34 @@ public:
       usb->OTGICR = mask;
    }
 
-};
-
-/**
- * Template class to provide USB callback
- */
-template<class Info>
-class UsbIrq_T : public UsbBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static USBCallbackFunction callback;
+private:
+   static void handleTokenComplete();
+   static void handleUSBResume();
+   static void handleUSBReset();
+   static void handleStallComplete();
+   static void handleSOFToken();
+   static void handleUSBSuspend();
 
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-      uint8_t status = Info::usb->ISTAT;
-      if (callback != 0) {
-         callback(status);
-      }
-   }
 
+   static void initialise();
    /**
-    * Set Callback function
+    * Handler for USB interrupt
     *
-    *   @param theCallback - Callback function to be executed on USB alarm interrupt
+    * Determines source and dispatches to appropriate routine.
     */
-   static void setCallback(USBCallbackFunction theCallback) {
-      callback = theCallback;
-      if (callback != NULL) {
-         // Enable interrupts from USB alarm
-         NVIC_EnableIRQ(Info::irqNums[0]);
-      }
-      else {
-         // Disable interrupts from USB alarm
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
-   }
+   static void irqHandler(void);
 };
-
-template<class Info> USBCallbackFunction UsbIrq_T<Info>::callback = 0;
-
-#ifdef USBDM_USB_IS_DEFINED
-/**
- * Class representing USB
- */
-using Usb = UsbIrq_T<UsbInfo>;
-
-#endif
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
  * Class representing USB
  */
-using Usb0 = UsbIrq_T<Usb0Info>;
+class Usb0 : public UsbBase_T<Usb0Info> {
+public:
+   static void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer);
+   static void sendUSBResponse( uint8_t size, const uint8_t *buffer);
+};
 
 #endif
 
