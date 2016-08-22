@@ -12,6 +12,7 @@
       <device name="MK22FN512VLH12" manual="K22P121M120SF7RM" package="LQFP_64" />
       <device name="MK22FN512VLL12" manual="K22P121M120SF7RM" package="LQFP_100" />
       <device name="MK22FN512VMP12" manual="K22P121M120SF7RM" package="BGA_64" />
+      <device name="MK22F_Module" manual="K22P121M120SF8RM" package="MK22F_DIPModule" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -1534,6 +1535,69 @@
          <placement pin="VSS5"          location="p47" />
          <placement pin="VSSA"          location="p16" />
          <placement pin="XTAL32"        location="p19" />
+      </package>
+      <package name="MK22F_DIPModule">
+         <placement pin="ADC0_DM0"      location="p10b_An_minus" />
+         <placement pin="ADC0_DP0"      location="p11b_An_plus" />
+         <placement pin="ADC1_DM0"      location="" />
+         <placement pin="ADC1_DP0"      location="" />
+         <placement pin="DAC0_OUT"      location="p14_Vo" />
+         <placement pin="EXTAL32"       location="extal_32kHz" />
+         <placement pin="PTA0"          location="SWD_CLK" />
+         <placement pin="PTA1"          location="SWD_RX" />
+         <placement pin="PTA12"         location="p16_A12" />
+         <placement pin="PTA13"         location="p15_A13" />
+         <placement pin="PTA18"         location="extal_24MHz" />
+         <placement pin="PTA19"         location="xtal_24MHz" />
+         <placement pin="PTA2"          location="SWD_TX" />
+         <placement pin="PTA3"          location="SWD_DIO" />
+         <placement pin="PTA4"          location="p15b_A4" />
+         <placement pin="PTA5"          location="" />
+         <placement pin="PTB0"          location="p17_B0" />
+         <placement pin="PTB1"          location="p18_B1" />
+         <placement pin="PTB16"         location="p12_B16" />
+         <placement pin="PTB17"         location="p13_B17" />
+         <placement pin="PTB18"         location="p12_B16_alt" />
+         <placement pin="PTB19"         location="p13_B17_alt" />
+         <placement pin="PTB2"          location="p17_B0_alt" />
+         <placement pin="PTB3"          location="p18_B1_alt" />
+         <placement pin="PTC0"          location="p19_C0" />
+         <placement pin="PTC1"          location="p20_C1" />
+         <placement pin="PTC10"         location="" />
+         <placement pin="PTC2"          location="p21_C2" />
+         <placement pin="PTC3"          location="p22_C3" />
+         <placement pin="PTC4"          location="p23_C4" />
+         <placement pin="PTC5"          location="p24_C5" />
+         <placement pin="PTC6"          location="p25_C6" />
+         <placement pin="PTC7"          location="p26_C7" />
+         <placement pin="PTC8"          location="" />
+         <placement pin="PTC9"          location="" />
+         <placement pin="PTD0"          location="p2_D0" />
+         <placement pin="PTD1"          location="p3_D1" />
+         <placement pin="PTD2"          location="p4_D2" />
+         <placement pin="PTD3"          location="p5_D3" />
+         <placement pin="PTD4"          location="p6_D4" />
+         <placement pin="PTD5"          location="p7_D5" />
+         <placement pin="PTD6"          location="p8_D6" />
+         <placement pin="PTD7"          location="p9_D7" />
+         <placement pin="PTE0"          location="p10_E0" />
+         <placement pin="PTE1"          location="p11_E1" />
+         <placement pin="RESET_b"       location="p16b_Rst" />
+         <placement pin="USB0_DM"       location="USB0_DM" />
+         <placement pin="USB0_DP"       location="USB0_DP" />
+         <placement pin="VBAT"          location="p14b_Vs" />
+         <placement pin="VDD1"          location="Vdd" />
+         <placement pin="VDD3"          location="Vdd" />
+         <placement pin="VDDA"          location="Vdd" />
+         <placement pin="VOUT33"        location="" />
+         <placement pin="VREFH"         location="p13b_Vr" />
+         <placement pin="VREFL"         location="p12b_Agnd" />
+         <placement pin="VREF_OUT"      location="" />
+         <placement pin="VREGIN"        location="" />
+         <placement pin="VSS1"          location="Gnd" />
+         <placement pin="VSS3"          location="Gnd" />
+         <placement pin="VSSA"          location="p12b_Agnd" />
+         <placement pin="XTAL32"        location="xtal_32kHz" />
       </package>
    </packages>
 </root>
