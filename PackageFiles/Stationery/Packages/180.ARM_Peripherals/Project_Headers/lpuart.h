@@ -27,7 +27,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup LPUART_Group Universal Asynchronous Receiver/Transmitter
+ * @addtogroup LPUART_Group LPUART, Low Power Universal Asynchronous Receiver/Transmitter
  * @brief C++ Class allowing access to UART interface
  * @{
  */
