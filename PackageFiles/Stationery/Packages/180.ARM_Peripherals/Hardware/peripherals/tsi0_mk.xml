@@ -149,20 +149,20 @@
    ]]></template>
 
    <bitmaskOption name="tsi_pen_pen" 
-      description="Pins enabled as TSI inputs" 
-      toolTip="Bitmask representing the sleected signals"
+      description="Channels enabled as TSI inputs" 
+      toolTip="Bitmask representing the selected channels"
       value="0"
       bitmask="0xFFFF" />
 
    <intOption name="tsi_pen_lpsp" 
-      description="Low Power Scan Pin" 
-      toolTip="Selects a pin to be active in low power mode"
+      description="Low Power Scan Channel" 
+      toolTip="Selects a channel to be active in low power mode"
       min="0" max="15" value="0" />
 
    <template><![CDATA[
       \tstatic constexpr uint32_t tsi_pen = \
-      \t   ($(tsi_pen_pen)) |    // Pins enable pin as TSI inputs
-      \t   TSI_PEN_LPSP($(tsi_pen_lpsp));    // Low Power Scan Pin\n\n
+      \t   ($(tsi_pen_pen)) |    // Pins enable channel as TSI inputs
+      \t   TSI_PEN_LPSP($(tsi_pen_lpsp));    // Low Power Scan channel\n\n
    ]]></template>
 
    <intOption name="tsi_threshold_lthh" 
