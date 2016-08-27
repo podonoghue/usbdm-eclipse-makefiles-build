@@ -9,6 +9,12 @@ if [ "$1" = "configure" ]; then
 fi 
 # End automatically added section
 
+# Where to look for KDS
+KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
+
+# Where to look for Eclipse
+ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse* /opt/cpp-neon/eclipse*"
+
 #======================================================
 #  USB Hardware Installation
 #======================================================
@@ -52,8 +58,6 @@ installEclipsePlugins() {
 #  Eclipse Installation
 #======================================================
 installEclipse() {
-
-   local ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse*"
 
    echo 
    echo "Checking for Eclipse directories"
@@ -137,7 +141,6 @@ installKDSInstance() {
 #======================================================
 installKDS() {
 
-   local KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
 
    echo 
    echo "Checking for KDS directories"

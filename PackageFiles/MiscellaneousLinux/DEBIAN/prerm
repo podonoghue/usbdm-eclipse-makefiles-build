@@ -7,6 +7,12 @@ if [ \( "$1" = "upgrade" -o "$1" = "remove" \) -a -L /usr/doc/parted ]; then
 fi
 # End automatically added section
 
+# Where to look for KDS
+KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
+
+# Where to look for Eclipse
+ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse* /opt/cpp-neon/eclipse*"
+
 #======================================================
 #  USB Hardware Removal
 #======================================================
@@ -47,8 +53,6 @@ removeEclipsePlugins() {
 #  Eclipse Removal
 #======================================================
 removeEclipse() {
-
-   local ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse*"
 
    echo 
    echo "Checking for Eclipse directories"
@@ -130,8 +134,6 @@ removeKDSInstance() {
 #  KDS Removal
 #======================================================
 removeKDS() {
-
-   local KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
 
    echo 
    echo "Checking for KDS directories"
