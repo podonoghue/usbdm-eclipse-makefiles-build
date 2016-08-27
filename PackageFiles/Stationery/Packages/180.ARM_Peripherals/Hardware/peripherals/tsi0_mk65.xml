@@ -7,7 +7,7 @@ Devices using this peripheral:
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
 
    <projectActionList id = "tsi_files">
-      <copy source="Project_Headers/tsi_mk.h"  target="Project_Headers/tsi.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/tsi-MK.h"  target="Project_Headers/tsi.h"  replace="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

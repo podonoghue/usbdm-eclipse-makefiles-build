@@ -182,7 +182,7 @@
    ]]></template>
 
    <projectActionList id="tsi_files">
-      <copy source="Project_Headers/tsi_mk.h"     target="Project_Headers/tsi.h" replace="true" derived="true" />
+      <copy source="Project_Headers/tsi-MK.h"     target="Project_Headers/tsi.h" replace="true" derived="true" />
       <copy source="Snippets/tsi-mk-example.cpp"  target="Snippets/tsi-mk-example.cpp"  replace="true"  derived="true" />
    </projectActionList>
 
