@@ -28,21 +28,14 @@ Ubuntu derivative e.g. Mint
 
 sudo apt install git
 
-cd .....WorkDirectory.....
-
-git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git
-
-git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git
-
-cd usbdm-eclipse-makefiles-build
-
-sudo ./linuxPackages
-
-./MakeAll
-
-./CreateDebFile
-
-sudo ./Update
+cd .....WorkDirectory.....  
+git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git  
+git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git  
+cd usbdm-eclipse-makefiles-build  
+sudo ./linuxPackages  
+./MakeAll  
+./CreateDebFile  
+sudo ./Update  
 
 It looks for Eclipse and KDS in several locations.  
 Update usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst, prerm
