@@ -24,11 +24,15 @@ Packages required MinGW, Xerces-3-1-1, TCL, Java JDK, Wix, Windows Installer SDK
 
 To Build under Linux
 =====================
+Ubuntu derivative e.g. Mint
 
-Run LinuxPackages to install the developer version of several packages
+sudo apt install git
+cd .....WorkDirectory.....
+git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git
+git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git
+cd usbdm-eclipse-makefiles-build
+sudo ./linuxPackages
+./MakeAll
+./CreateDebFile
+sudo ./Update
 
-Run MakeAll to build the binaries
-
-Run CreateDebFile to Create the Deb file
-
-Run Update to install the Deb file
