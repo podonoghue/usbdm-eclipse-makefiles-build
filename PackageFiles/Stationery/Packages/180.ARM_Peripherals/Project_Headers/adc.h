@@ -178,8 +178,8 @@ public:
     *
     * @note This affects all channels on the ADC
     */
-   static void setMode(uint32_t mode = resolution_16bit_se) {
-      adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(mode&ADC_CFG1_MODE_MASK);
+   static void setResolution(uint32_t resolution = resolution_16bit_se) {
+      adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(resolution&ADC_CFG1_MODE_MASK);
    }
 
    /**

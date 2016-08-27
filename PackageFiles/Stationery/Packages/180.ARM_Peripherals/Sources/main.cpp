@@ -18,13 +18,15 @@
  *
  * Using a ADC channel
  *  using adcChannel = USBDM::Adc0Channel<6>;
- *  adcChannel::setMode(USBDM::resolution_16bit_se);
+ *  adcChannel::enable();
+ *  adcChannel::setResolution(USBDM::resolution_16bit_se);
+ *  adcChannel::setAveraging(USBDM::averaging_32);
  *  int value = adcChannel::readAnalogue();
+ * 
  * Using a timer channel
  *  using ftmChannel = USBDM::Ftm0Channel<0>;
  *  ftmChannel::configure(1000, USBDM::ftm_leftAlign);
  *  ftmChannel::setDutyCycle(25);
- *
  */
 
 // LED connection - change as required
