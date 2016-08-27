@@ -36,3 +36,5 @@ sudo ./linuxPackages
 ./CreateDebFile
 sudo ./Update
 
+It looks for Eclipse and KDS in several locations.  
+Update usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst, prerm
